@@ -6,6 +6,16 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but still in on its early stages of development.**
 
+### Installation
+
+**Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**
+
+In the project you want to use `Sirens` run:
+
+```
+npm install sirens --save-dev
+```
+
 ### Usage
 
 Require the `sirens` module and open a browser on any object with
@@ -44,17 +54,6 @@ sudo apt install libgtk-3-dev libgirepository1.0-dev gobject-introspection build
 ```
 
 should be enough to run [node-gtk](https://www.npmjs.com/package/node-gtk#installing-and-building) and `sirens`.
-
-
-### Installation
-
-**Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**
-
-In the project you want to use `Sirens` run:
-
-```
-npm install sirens --save-dev
-```
 
 
 ## Development

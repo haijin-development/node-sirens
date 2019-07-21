@@ -1,0 +1,28 @@
+{
+  "name": "sirens",
+  "version": "0.1.0",
+  "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests/specs"
+  },
+  "dependencies": {
+    "node-gtk": "^0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2",
+    "mocha": "^6.1"
+  },
+  "scripts": {
+    "test": "mocha --recursive ./tests/specs/"
+  },
+  "keywords": [
+    "development tools",
+    "GTK3+",
+    "object browser"
+  ],
+  "author": "Martín Rubí",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/haijin-development/node-sirens#readme"
+}

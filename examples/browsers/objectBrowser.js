@@ -1,24 +1,9 @@
 const Sirens = require('../../src/Sirens')
 
-object = {
-    names: ['Lisa'],
-    lastNames: ['Simpson'],
-    addresses: [
-        {
-            streetName: 'Evergreen',
-            number: 742
-        }
-    ],
-
-    getStreetName: () => {
-        return this.streetName
-    },
-}
-
 class Address {
-    constructor() {
-        this.streetName = 'Evergreen'
-        this.number = 742
+    constructor({streetName: streetName, number: number}) {
+        this.streetName = streetName
+        this.number = number
     }
 
     getStreetName() {
@@ -31,13 +16,21 @@ class Address {
 }
 
 class User {
-    constructor() {
-        this.names = ['Lisa']
-        this.lastNames = ['Simpson']
-        this.addresses = [
-            new Address()
-        ]
+    constructor({names: names, lastNames: lastNames, addresses: addresses}) {
+        this.names = names
+        this.lastNames = lastNames
+        this.addresses = addresses
     }
 }
 
-Sirens.browseObject(new User())
+const address = new Address({
+    streetName: 'Evergreen', number: 742
+})
+
+const user = new User({
+    names: ['Lisa'],
+    lastNames: ['Simpson'],
+    addresses: [address]
+})
+
+Sirens.browseObject(user)

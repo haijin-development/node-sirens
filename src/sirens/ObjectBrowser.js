@@ -48,7 +48,7 @@ class ObjectBrowser extends Component {
             evaluationResult = e
         }
 
-        Sirens.browseObject(object)
+        Sirens.browseObject(evaluationResult)
     }
 
     /// Querying

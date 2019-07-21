@@ -1,6 +1,6 @@
 {
   "name": "sirens",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
   "dependencies": {
@@ -21,5 +21,5 @@
   ],
   "author": "Martín Rubí",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/haijin-development/node-sirens#readme"
+  "homepage": "https://github.com/haijin-development/node-sirens"
 }

@@ -24,6 +24,8 @@ const Sirens = require('sirens')
 Sirens.browsePrototypes(object)
 ```
 
+![Object browser](./docs/browsing-object.gif)
+
 ### Pre-requisites
 
 The current version does not work with node > v10.

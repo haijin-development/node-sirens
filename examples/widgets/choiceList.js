@@ -1,4 +1,4 @@
-const Sirens = require('../../src/index')
+const Sirens = require('../../src/Sirens')
 const Component = require('../../src/components/Component')
 const ChoiceModel = require('../../src/models/ChoiceModel')
 

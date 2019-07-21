@@ -1,6 +1,6 @@
 {
   "name": "sirens",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
   "directories": {
@@ -19,7 +19,8 @@
   },
   "keywords": [
     "development tools",
-    "GTK3+",
+    "debugging tools",
+    "gtk3+",
     "object browser"
   ],
   "author": "Martín Rubí",

@@ -1,4 +1,4 @@
-const Sirens = require('../../src/index')
+const Sirens = require('../../src/Sirens')
 
 object = {
     names: ['Lisa'],

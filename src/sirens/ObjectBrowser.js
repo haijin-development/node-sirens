@@ -1,4 +1,4 @@
-const Sirens = require('../index')
+const Sirens = require('../Sirens')
 const Component = require('../components/Component')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 

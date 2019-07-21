@@ -1,5 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const Sirens = require('../index')
+const Sirens = require('../Sirens')
 
 Sirens.initialize()
 

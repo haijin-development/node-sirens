@@ -1,12 +1,8 @@
 {
   "name": "sirens",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
-  "directories": {
-    "example": "examples",
-    "test": "tests/specs"
-  },
   "dependencies": {
     "node-gtk": "^0.3"
   },

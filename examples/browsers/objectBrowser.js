@@ -40,6 +40,4 @@ class User {
     }
 }
 
-Sirens.do( () => {
-    Sirens.browseObject(new User())
-})
+Sirens.browseObject(new User())

@@ -24,13 +24,13 @@ class ObjectBrowser extends Component {
     inspectSelectedObject() {
         const selectedValue = this.getSelectedObject()
 
-        Sirens.browse({object: selectedValue})
+        Sirens.browseObject(selectedValue)
     }
 
     browseSelectedObjectFunctions() {
         const selectedValue = this.getSelectedObject()
 
-        Sirens.browse({prototypes: selectedValue})
+        Sirens.browsePrototypes(selectedValue)
     }
 
     evaluateSelectedCode() {
@@ -48,7 +48,7 @@ class ObjectBrowser extends Component {
             evaluationResult = e
         }
 
-        Sirens.browse({object: evaluationResult })
+        Sirens.browseObject(object)
     }
 
     /// Querying

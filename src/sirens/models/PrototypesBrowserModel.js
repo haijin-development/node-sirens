@@ -95,7 +95,7 @@ class PrototypesBrowserModel {
 
         let currentPrototype = object
 
-        while(currentPrototype !== null) {
+        while(currentPrototype !== null && currentPrototype !== undefined) {
             prototypes.push(currentPrototype)
 
             currentPrototype = Object.getPrototypeOf(currentPrototype)
@@ -124,7 +124,7 @@ class PrototypesBrowserModel {
 
         let currentPrototype = object
 
-        while(currentPrototype !== null) {
+        while(currentPrototype !== null && currentPrototype !== undefined) {
             const ownedProps = this._getOwnedPropsOf(currentPrototype)
 
             props = props.concat(ownedProps)

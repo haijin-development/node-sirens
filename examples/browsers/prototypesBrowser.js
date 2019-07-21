@@ -48,5 +48,5 @@ class User extends Object {
 }
 
 Sirens.do( () => {
-    Sirens.browse({prototypes: new User()})
+    Sirens.browsePrototypes(new User())
 })

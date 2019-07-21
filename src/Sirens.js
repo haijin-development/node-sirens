@@ -1,14 +1,6 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
 class Sirens {
-    static browse({object: object, prototypes: prototype}) {
-        if (prototype !== undefined) {
-            this.browsePrototypes(prototype)
-        } else {
-            this.browseObject(object)
-        }
-    }
-
     static browseObject(object) {
         const ObjectBrowser = require('./sirens/ObjectBrowser')
 
@@ -18,7 +10,7 @@ class Sirens {
     static browsePrototypes(object) {
         const PrototypeBrowser = require('./sirens/PrototypeBrowser')
 
-        PrototypeBrowser.openOn({prototype: prototype})
+        PrototypeBrowser.openOn({prototype: object})
     }
 
     static do(closure) {
@@ -30,11 +22,15 @@ class Sirens {
     }
 
     static initialize() {
-        if(this.gtkWasInitialize === undefined) {
+        if(this.wasInitialized()) {
             this.gtkWasInitialize = true
 
             Gtk.init()
         }
+    }
+
+    static wasInitialized() {
+        return this.gtkWasInitialize === undefined
     }
 
     static registerWindow() {

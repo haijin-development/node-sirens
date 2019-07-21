@@ -41,5 +41,5 @@ class User {
 }
 
 Sirens.do( () => {
-    Sirens.browse({object: object})
+    Sirens.browseObject(new User())
 })

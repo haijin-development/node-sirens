@@ -28,7 +28,11 @@ class PropertyModel {
         if(this.isFunction()) {
             return this.value.toString()
         } else {
-            return JSON.stringify(this.value)
+            try {
+                return JSON.stringify(this.value)
+            } catch(error) {
+                return this.value.toString()
+            }
         }
     }
 }

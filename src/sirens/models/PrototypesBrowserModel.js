@@ -22,7 +22,7 @@ class PrototypesBrowserModel {
 
         this.selectedPropDescription = new ValueModel()
 
-        this.showInherit = new ValueModel({value: true})
+        this.showInherited = new ValueModel({value: false})
         this.showFunctions = new ValueModel({value: true})
         this.showProps = new ValueModel({value: false})
 
@@ -40,7 +40,7 @@ class PrototypesBrowserModel {
             this.onPropSelectionChanged.bind(this)
         )
 
-        this.showInherit.on(
+        this.showInherited.on(
             'value-changed',
             this.updatePrototypeProps.bind(this)
         )
@@ -70,8 +70,8 @@ class PrototypesBrowserModel {
         return this.selectedPropDescription
     }
 
-    getShowInheritModel() {
-        return this.showInherit
+    getshowInheritedModel() {
+        return this.showInherited
     }
 
     getShowFunctionsModel() {
@@ -88,6 +88,10 @@ class PrototypesBrowserModel {
 
     getSelectedProp() {
         return this.selectedPrototypeProps.getSelection()
+    }
+
+    getSelectedPropValue() {
+        return this.getSelectedProp().getValue()
     }
 
     _getPrototypesChainOf(object) {
@@ -116,7 +120,7 @@ class PrototypesBrowserModel {
     }
 
     _getPropsOf(object) {
-        const showInherit = this.showInherit.getValue()
+        const showInherited = this.showInherited.getValue()
         const showFunctions = this.showFunctions.getValue()
         const showProps = this.showProps.getValue()
 
@@ -129,7 +133,7 @@ class PrototypesBrowserModel {
 
             props = props.concat(ownedProps)
 
-            if(showInherit === false) {
+            if(showInherited === false) {
                 break
             }
 

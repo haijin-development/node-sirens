@@ -103,6 +103,9 @@ class ObjectBrowser extends Component {
                                 splitProportion: 2.0/3.0,
                                 showHeaders: false,
                                 clickableHeaders: false,
+                            })
+
+                            tree.handlers({
                                 onAction: component.inspectSelectedObject.bind(component),
                             })
 

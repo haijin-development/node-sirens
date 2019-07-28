@@ -90,6 +90,10 @@ class PrototypesBrowserModel {
         return this.selectedPrototypeProps.getSelection()
     }
 
+    getSelectedPropValue() {
+        return this.getSelectedProp().getValue()
+    }
+
     _getPrototypesChainOf(object) {
         const prototypes = []
 

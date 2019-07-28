@@ -53,27 +53,27 @@ class AbstractView {
     /// Styles
 
     setWidth(value) {
-        let [width, height] = this.getMainHandle().getDefaultSize()
+        const sizeRequest = this.getMainHandle().getSizeRequest()
 
-        width = value
+        sizeRequest.width = value
 
-        this.getMainHandle().setDefaultSize(width, height)
+        this.getMainHandle().setSizeRequest(sizeRequest.width, sizeRequest.height)
     }
 
     getWidth(value) {
-        return this.getMainHandle().getDefaultSize()[0]
+        return this.getMainHandle().getSizeRequest().width
     }
 
     setHeight(value) {
-        let [width, height] = this.getMainHandle().getDefaultSize()
+        const sizeRequest = this.getMainHandle().getSizeRequest()
 
-        height = value
+        sizeRequest.height = value
 
-        this.getMainHandle().setDefaultSize(width, height)
+        this.getMainHandle().setSizeRequest(sizeRequest.width, sizeRequest.height)
     }
 
     getHeight(value) {
-        return this.getMainHandle().getDefaultSize()[1]
+        return this.getMainHandle().getSizeRequest().height
     }
 
     /// Menu

@@ -45,6 +45,32 @@ class WindowView extends View {
         return this.mainHandle.getTitle()
     }
 
+    /// Styles
+
+    setWidth(value) {
+        let [width, height] = this.getMainHandle().getDefaultSize()
+
+        width = value
+
+        this.getMainHandle().setDefaultSize(width, height)
+    }
+
+    getWidth(value) {
+        return this.getMainHandle().getDefaultSize()[0]
+    }
+
+    setHeight(value) {
+        let [width, height] = this.getMainHandle().getDefaultSize()
+
+        height = value
+
+        this.getMainHandle().setDefaultSize(width, height)
+    }
+
+    getHeight(value) {
+        return this.getMainHandle().getDefaultSize()[1]
+    }
+
     /// Events
 
     subscribeToGUISignals(props) {

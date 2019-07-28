@@ -6,6 +6,8 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but still in on its early stages of development.**
 
+![Object browser](./docs/test-driven-development-with-sirens.gif)
+
 ### Installation
 
 **Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**

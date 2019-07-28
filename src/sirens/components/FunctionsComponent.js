@@ -1,6 +1,15 @@
+const Sirens = require('../../Sirens')
 const Component = require('../../components/Component')
 
 class FunctionsComponent extends Component {
+    /// Actions
+
+    browseSelectedProperty() {
+        const selectedPropertyValue = this.getModel().getSelectedPropValue()
+
+        Sirens.browseObject(selectedPropertyValue)
+    }
+
     /// Building
 
     renderWith(builder) {
@@ -14,9 +23,9 @@ class FunctionsComponent extends Component {
                     })
 
                     this.checkBox({
-                        label: 'Show inherit',
+                        label: 'Show inherited',
                         packExpand: false,
-                        model: prototypesModel.getShowInheritModel(),
+                        model: prototypesModel.getshowInheritedModel(),
                     })
 
                     this.checkBox({
@@ -34,6 +43,10 @@ class FunctionsComponent extends Component {
 
                 this.listChoice((list) => {
                     list.model(prototypesModel.getSelectedPrototypePropsModel())
+
+                    list.handlers({
+                        onAction: component.browseSelectedProperty.bind(component),
+                    })
 
                     list.column({
                         label: 'Properties',

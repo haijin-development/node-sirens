@@ -62,6 +62,10 @@ class ObjectBrowserModel {
     selectedValueString() {
         const selectedInstVarValue = this.objectInstanceVariablesTree.getSelectionValue()
 
+        if (typeof selectedInstVarValue == 'function') {
+            return selectedInstVarValue.toString()
+        }
+
         try {
             return JSON.stringify(selectedInstVarValue)
         } catch(error) {

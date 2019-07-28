@@ -148,6 +148,13 @@ class InstanceVariable {
 
         }
 
+        if(this.isFunction()) {
+            description = "function"
+            if (this.value.name !== undefined) {
+                description += " named '" + this.value.name + "'"
+            }
+        }
+
         if(description === null) {
             description = this.value.toString()
         }

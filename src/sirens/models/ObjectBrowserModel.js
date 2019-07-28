@@ -52,13 +52,22 @@ class ObjectBrowserModel {
     /// Events
 
     onInstVarSelectionChanged() {
-        const selectedInstVarValue = this.objectInstanceVariablesTree.getSelectionValue()
-
-        const selectedValueString = JSON.stringify(selectedInstVarValue)
+        const selectedValueString = this.selectedValueString()
 
         this.selectedInstanceVariableText.setValue(selectedValueString)
     }
 
+    /// Dsiplaying
+
+    selectedValueString() {
+        const selectedInstVarValue = this.objectInstanceVariablesTree.getSelectionValue()
+
+        try {
+            return JSON.stringify(selectedInstVarValue)
+        } catch(error) {
+            return selectedInstVarValue.toString()
+        }
+    }
 }
 
 module.exports = ObjectBrowserModel

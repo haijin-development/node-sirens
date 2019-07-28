@@ -14,9 +14,9 @@ class FunctionsComponent extends Component {
                     })
 
                     this.checkBox({
-                        label: 'Show inherit',
+                        label: 'Show inherited',
                         packExpand: false,
-                        model: prototypesModel.getShowInheritModel(),
+                        model: prototypesModel.getshowInheritedModel(),
                     })
 
                     this.checkBox({

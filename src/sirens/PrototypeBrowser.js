@@ -1,3 +1,4 @@
+const Sirens = require('../Sirens')
 const Component = require('../components/Component')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
@@ -11,6 +12,14 @@ class PrototypeBrowser extends Component {
 
     browseSelectedObjectFunctions() {
         const selectedValue = this.getModel().getSelectedInstanceVariables()
+    }
+
+    /// Actions
+
+    browseSelectedPrototype() {
+        const selectedPrototype = this.getModel().getSelectedPrototype()
+
+        Sirens.browsePrototypes(selectedPrototype)
     }
 
     /// Icons
@@ -43,6 +52,10 @@ class PrototypeBrowser extends Component {
 
                             list.styles({
                                 splitProportion: 1.0/2.0,
+                            })
+
+                            list.handlers({
+                                onAction: component.browseSelectedPrototype.bind(component),
                             })
 
                             list.column({

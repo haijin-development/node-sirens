@@ -37,7 +37,7 @@ class PrototypeBrowser extends Component {
             this.window(() => {
                 this.styles({
                     title: 'Prototypes Browser',
-                    width: 400,
+                    width: 500,
                     height: 400,
                 })
 
@@ -51,16 +51,11 @@ class PrototypeBrowser extends Component {
                             list.model(prototypesModel.getPrototypesModel())
 
                             list.styles({
-                                splitProportion: 1.0/2.0,
+                                splitProportion: 1.0/4.0,
                             })
 
                             list.handlers({
                                 onAction: component.browseSelectedPrototype.bind(component),
-                            })
-
-                            list.column({
-                                type: 'icon',
-                                getImageBlock: component.getImageFor.bind(this),
                             })
 
                             list.column({
@@ -74,7 +69,7 @@ class PrototypeBrowser extends Component {
                         this.component(
                             new FunctionsComponent({
                                 model: prototypesModel,
-                                splitProportion: 1.0/2.0,
+                                splitProportion: 3.0/4.0,
                             })
                         )
                     })

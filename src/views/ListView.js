@@ -64,21 +64,10 @@ class ListView extends View {
 
         const col = new Gtk.TreeViewColumn({title: column.getLabel()})
 
-        let renderer = null
-        switch (column.getType()) {
-            case 'icon':
-                renderer = new Gtk.CellRendererPixbuf()
-                col.packStart(renderer, true)
-                col.addAttribute(renderer, 'pixbuf', columnIndex)
-                break
-            case 'number':
-            case 'string':
-            default:
-                renderer = new Gtk.CellRendererText()
-                col.packStart(renderer, true)
-                col.addAttribute(renderer, 'text', columnIndex)
-                break
-        }
+        const renderer = new Gtk.CellRendererText()
+
+        col.packStart(renderer, true)
+        col.addAttribute(renderer, 'text', columnIndex)
 
         this.treeView.appendColumn(col)
     }
@@ -212,20 +201,9 @@ class ListView extends View {
 
             value.init(gtkType)
 
-            switch (column.getType()) {
-                case 'icon':
-                    const iconPath = __dirname + '/../../resources/icons/array.png'
-                    const icon = new Gtk.Image()
-                    icon.setFromFile(iconPath)
-                    value.setObject(icon)
-                    this.listStore.setValue(iter, columnIndex, value)
-                case 'number':
-                case 'string':
-                default:
-                    value.setString(text)
-                    this.listStore.setValue(iter, columnIndex, value)
-                    break
-            }
+            value.setString(text)
+
+            this.listStore.setValue(iter, columnIndex, value)
         })
     }
 

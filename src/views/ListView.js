@@ -37,6 +37,8 @@ class ListView extends View {
 
     setColumns(columns) {
         this.addColumns(columns)
+
+        this.subscribeToGUISignals()
     }
 
     addColumns(columns) {
@@ -79,8 +81,6 @@ class ListView extends View {
         }
 
         this.treeView.appendColumn(col)
-
-        this.subscribeToGUISignals()
     }
 
     getColumnType(type) {
@@ -231,7 +231,7 @@ class ListView extends View {
 
     /// Events
 
-    subscribeToGUISignals(props) {
+    subscribeToGUISignals() {
         if(this.treeView === null) {
             return
         }

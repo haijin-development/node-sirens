@@ -4,7 +4,7 @@ Sirens gives Node.js developers some simple and interactive utilities to ease de
 
 These utilities are written in Node and use GTK3 through [node-gtk](https://www.npmjs.com/package/node-gtk) as its GUI support.
 
-**Note: this project is usable but still in on its early stages of development.**
+**Note: this project is usable but it is still at an early stage of development.**
 
 ![Object browser](./docs/test-driven-development-with-sirens.gif)
 
@@ -12,7 +12,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**
 
-In the project you want to use `Sirens` run:
+Add `Sirens` to the project with
 
 ```
 npm install sirens --save-dev
@@ -28,7 +28,7 @@ const Sirens = require('sirens')
 Sirens.browseObject(object)
 ```
 
-Open a browser on any object properties and methods along its prototypes chain with:
+Open a browser on any object properties and methods along its prototypes chain with
 
 ```
 const Sirens = require('sirens')
@@ -85,7 +85,7 @@ node examples/browsers/objectBrowser.js
 ## References
 
 These utilities are heavily based in the Smalltalk browsers, in particular in the [Object Arts](https://www.object-arts.com/)
-implementation named [Dolphin Smalltalk](https://github.com/dolphinsmalltalk/Dolphin), which I fancy for its
-outstanding beauty, and is an independent port from [Sirens for the Ruby language](https://github.com/haijin-development/ruby-sirens).
+implementation named [Dolphin Smalltalk](https://github.com/dolphinsmalltalk/Dolphin) which I fancy for its
+outstanding beauty, and it's an independent port of [Sirens for the Ruby language](https://github.com/haijin-development/ruby-sirens).
 
-Up to a certain point the graphics code is encapsulated in the `views` layer and it should be possible to switch to any graphics library, be it GTK+ or QT, implementing that layer only.
+The graphics code is encapsulated in the `views` layer and it should be possible to switch to any other graphics library, be it GTK+ or QT, implementing that layer alone.

@@ -254,7 +254,7 @@ class ListView extends View {
             return
         }
 
-        const selectedIndices = this.pathStringToPathIndices(treePath)
+        const selectedIndices = this.getSelectionIndices()
 
         this.onSelectionAction(selectedIndices)
     }

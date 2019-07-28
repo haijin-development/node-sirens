@@ -100,7 +100,11 @@ class ChoicesList extends PrimitiveComponent {
     }
 
     onUserSelectionAction() {
+        if(this.props.onAction === undefined) {
+            return
+        }
 
+        this.props.onAction()
     }
 }
 

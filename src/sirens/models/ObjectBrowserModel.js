@@ -37,7 +37,7 @@ class ObjectBrowserModel {
         return this.objectInstanceVariablesTree
     }
 
-    getSelectedInstanceVariables() {
+    getSelectedInstanceVariableValue() {
         return this.objectInstanceVariablesTree.getSelectionValue()
     }
 
@@ -57,10 +57,10 @@ class ObjectBrowserModel {
         this.selectedInstanceVariableText.setValue(selectedValueString)
     }
 
-    /// Dsiplaying
+    /// Displaying
 
     selectedValueString() {
-        const selectedInstVarValue = this.objectInstanceVariablesTree.getSelectionValue()
+        const selectedInstVarValue = this.getSelectedInstanceVariableValue()
 
         if (typeof selectedInstVarValue == 'function') {
             return selectedInstVarValue.toString()

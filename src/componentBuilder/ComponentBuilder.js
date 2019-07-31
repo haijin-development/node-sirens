@@ -311,6 +311,10 @@ class ComponentBuilder {
         return this.mergeToCurrentProps(props)
     }
 
+    popupMenu(populatePopupMenuBlock) {
+        this.mergeToCurrentProps({populatePopupMenuBlock: populatePopupMenuBlock})
+    }
+
     mergeToCurrentProps(props) {
         this.propsStack[this.propsStack.length - 1] =
             Object.assign(this.getCurrentProps(), props)

@@ -33,9 +33,9 @@ class MenuView {
         this.menuHandle.add(new Gtk.SeparatorMenuItem())
     }
 
-    open({button: button, time: time}) {
+    open() {
         this.menuHandle.showAll()
-        this.menuHandle.popup(null, null, button, time)
+        this.menuHandle.popupAtPointer()
     }
 }
 

@@ -11,7 +11,7 @@ class PrototypeBrowser extends Component {
     /// Actions
 
     browseSelectedObjectFunctions() {
-        const selectedValue = this.getModel().getSelectedInstanceVariables()
+        const selectedValue = this.getModel().getSelectedInstanceVariableValue()
     }
 
     /// Actions

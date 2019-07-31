@@ -5,6 +5,11 @@ const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 class ObjectBrowser extends Component {
     /// Initializing
 
+    /**
+     * Returns a new ObjectBrowserModel.
+     * If the props include a props.object defined the that props.object is the browsed object,
+     * otherwise the browsed object is undefined.
+     */
     defaultModel() {
         return new ObjectBrowserModel(this.props.object)
     }
@@ -12,7 +17,7 @@ class ObjectBrowser extends Component {
     /// Actions
 
     getSelectedObject() {
-        let selectedValue = this.getModel().getSelectedInstanceVariables()
+        let selectedValue = this.getModel().getSelectedInstanceVariableValue()
 
         if(selectedValue === undefined) {
             selectedValue = this.getModel().getRootObject()
@@ -27,14 +32,14 @@ class ObjectBrowser extends Component {
         Sirens.browseObject(selectedValue)
     }
 
-    browseSelectedObjectFunctions() {
+    browseSelectedObjectPrototypes() {
         const selectedValue = this.getSelectedObject()
 
         Sirens.browsePrototypes(selectedValue)
     }
 
     evaluateSelectedCode() {
-        const selectedValue = this.getModel().getSelectedInstanceVariables()
+        const selectedValue = this.getModel().getSelectedInstanceVariableValue()
 
         const selectedText = this.getSelectedText()
 
@@ -79,22 +84,6 @@ class ObjectBrowser extends Component {
                 })
 
                 this.verticalStack( () => {
-                    this.horizontalStack( () => {
-                        this.styles({
-                            packExpand: false
-                        })
-
-                        this.textButton({
-                            text: 'Inspect object',
-                            onClicked: component.inspectSelectedObject.bind(component),
-                        })
-
-                        this.textButton({
-                            text: 'Browse functions',
-                            onClicked: component.browseSelectedObjectFunctions.bind(component),
-                        })
-                    })
-
                     this.verticalSplitter( () => {
                         this.treeChoice( (tree) => {
                             tree.model(browserModel.getObjectInstanceVariablesTree())
@@ -113,6 +102,25 @@ class ObjectBrowser extends Component {
                                 label: '',
                                 getTextBlock: (instVar) => { return instVar.displayString() },
                             })
+
+                            tree.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                                const selectedObject =
+                                    component.getModel().getSelectedInstanceVariableValue()
+
+                                menu.addItem({
+                                    label: 'Browse it',
+                                    enabled: selectedObject !== undefined,
+                                    action: component.inspectSelectedObject.bind(component),
+                                })
+
+                                menu.addSeparator()
+
+                                menu.addItem({
+                                    label: 'Browse its prototype',
+                                    enabled: selectedObject !== undefined,
+                                    action: component.browseSelectedObjectPrototypes.bind(component),
+                                })
+                            })
                         })
 
                         this.text( () => {
@@ -124,26 +132,17 @@ class ObjectBrowser extends Component {
                                 wrapMode: 'wordChar'
                             })
 
-                            this.popupMenu( ({menu: menu, ownerView: textView}) => {
-                                const selectedText = textView.getSelectedText()
-
-                                menu.addSeparator()
+                            this.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                                const selectedObject =
+                                    component.getModel().getSelectedInstanceVariableValue()
 
                                 menu.addItem({
-                                    label: 'Browse it',
-                                    enabled: selectedText !== undefined,
-                                    action: () => {
-                                        component.browseTextSelection({text: selectedText})
-                                    },
+                                    label: 'Inspect selected code',
+                                    enabled: selectedObject !== undefined,
+                                    action: component.evaluateSelectedCode.bind(component),
                                 })
                             })
                         })
-                    })
-
-                    this.textButton({
-                        packExpand: false,
-                        text: 'Evaluate selected code',
-                        onClicked: component.evaluateSelectedCode.bind(component),
                     })
                 })
             })

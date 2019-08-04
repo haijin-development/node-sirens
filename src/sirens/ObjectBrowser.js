@@ -136,6 +136,8 @@ class ObjectBrowser extends Component {
                                 const selectedObject =
                                     component.getModel().getSelectedInstanceVariableValue()
 
+                                menu.addSeparator()
+
                                 menu.addItem({
                                     label: 'Inspect selected code',
                                     enabled: selectedObject !== undefined,

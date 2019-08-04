@@ -54,6 +54,17 @@ class FunctionsComponent extends Component {
                             return propertyModel.getKey()
                         },
                     })
+
+                    list.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                        const selectedObject =
+                            component.getModel().getSelectedPropValue()
+
+                        menu.addItem({
+                            label: 'Browse it',
+                            enabled: selectedObject !== undefined,
+                            action: component.browseSelectedProperty.bind(component),
+                        })
+                    })
                 })
             })
         })

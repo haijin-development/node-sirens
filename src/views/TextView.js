@@ -62,7 +62,7 @@ class TextView extends View {
 
     subscribeToGUISignals() {
         this.textView.on('populate-popup', (menuHandle) => {
-            const menu = new MenuView(menuHandle)
+            const menu = MenuView.newFromGtkWidget(menuHandle)
 
             this.populatePopupMenu({menu: menu})
         })

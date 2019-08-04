@@ -1,5 +1,6 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../Sirens')
+const MenuView = require('./MenuView')
 
 Sirens.initialize()
 
@@ -78,6 +79,16 @@ class AbstractView {
 
     /// Menu
 
+    showPopupMenu() {
+        const menu = new MenuView()
+
+        this.populatePopupMenu({menu: menu})
+
+        if(menu.getItemsCount() > 0) {
+            menu.open()
+        }
+    }
+
     setPopulatePopupMenuBlock(block) {
         this.populatePopupMenuBlock = block
     }
@@ -87,6 +98,8 @@ class AbstractView {
     }
 
     populatePopupMenu({menu: menuView}) {
+        if(this.populatePopupMenuBlock === undefined) return
+
         this.populatePopupMenuBlock({menu: menuView, ownerView: this})
     }
 }

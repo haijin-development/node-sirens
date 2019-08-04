@@ -61,8 +61,10 @@ class TextView extends View {
     /// Events
 
     subscribeToGUISignals() {
-        this.textView.on('populate-popup', (menu) => {
-            console.log('To do: implement GtkMenu wrapper.')
+        this.textView.on('populate-popup', (menuHandle) => {
+            const menu = MenuView.newFromGtkWidget(menuHandle)
+
+            this.populatePopupMenu({menu: menu})
         })
 
         this.textView.getBuffer().on('changed', () => {

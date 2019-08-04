@@ -37,6 +37,10 @@ class ChoicesListBuilder {
         return this.mergeToCurrentProps(props)
     }
 
+    popupMenu(populatePopupMenuBlock) {
+        this.mergeToCurrentProps({populatePopupMenuBlock: populatePopupMenuBlock})
+    }
+
     mergeToCurrentProps(props) {
         this.props = Object.assign(this.props, props)
     }

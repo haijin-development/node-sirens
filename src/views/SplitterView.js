@@ -2,12 +2,6 @@ const Gtk = require('node-gtk').require('Gtk', '3.0')
 const View = require('./View')
 
 class SplitterView extends View {
-    /// Styles
-
-    static acceptedStyles() {
-        return super.acceptedStyles()
-    }
-
     /// Initializing
 
     constructor(...params) {

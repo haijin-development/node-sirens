@@ -40,6 +40,12 @@ class MenuView {
         this.menuHandle = menuHandle
     }
 
+    /// Querying
+
+    getItemsCount() {
+        return this.menuHandle.getChildren().length
+    }
+
     /// Adding
 
     addItem({label: label, enabled: enabled, action: action}) {
@@ -61,8 +67,14 @@ class MenuView {
     }
 
     addSeparator() {
-        this.menuHandle.add(new Gtk.SeparatorMenuItem())
+        const menuSeparatorHandle = new Gtk.SeparatorMenuItem()
+
+        this.menuHandle.add(menuSeparatorHandle)
+
+        menuSeparatorHandle.show()
     }
+
+    /// Operations
 
     open() {
         this.menuHandle.showAll()

@@ -91,7 +91,13 @@ class PrototypesBrowserModel {
     }
 
     getSelectedPropValue() {
-        return this.getSelectedProp().getValue()
+        const selectedProp = this.getSelectedProp()
+
+        if(selectedProp) {
+            return selectedProp.getValue()
+        }
+
+        return undefined
     }
 
     _getPrototypesChainOf(object) {

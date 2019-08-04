@@ -10,12 +10,6 @@ class PrototypeBrowser extends Component {
 
     /// Actions
 
-    browseSelectedObjectFunctions() {
-        const selectedValue = this.getModel().getSelectedInstanceVariableValue()
-    }
-
-    /// Actions
-
     browseSelectedPrototype() {
         const selectedPrototype = this.getModel().getSelectedPrototype()
 
@@ -64,6 +58,18 @@ class PrototypeBrowser extends Component {
                                     return object.constructor.name
                                 },
                             })
+
+                            list.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                                const selectedObject =
+                                    component.getModel().getSelectedPrototype()
+
+                                menu.addItem({
+                                    label: 'Browse it',
+                                    enabled: selectedObject !== undefined,
+                                    action: component.browseSelectedPrototype.bind(component),
+                                })
+                            })
+
                         })
 
                         this.component(

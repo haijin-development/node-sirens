@@ -84,7 +84,9 @@ class AbstractView {
 
         this.populatePopupMenu({menu: menu})
 
-        menu.open()
+        if(menu.getItemsCount() > 0) {
+            menu.open()
+        }
     }
 
     setPopulatePopupMenuBlock(block) {

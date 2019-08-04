@@ -217,6 +217,14 @@ class ListView extends View {
         this.treeView.getSelection().on('changed', this.onSelectedRowChanged.bind(this))
 
         this.treeView.on('row-activated', this.onSelectionActioned.bind(this))
+
+        this.treeView.on('button-press-event', this.onButtonPressed.bind(this))
+    }
+
+    onButtonPressed(event) {
+        if (event.button !== 3) return
+
+        this.showPopupMenu()
     }
 
     onSelectedRowChanged() {

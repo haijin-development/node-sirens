@@ -6,7 +6,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-![Object browser](./docs/test-driven-development-with-sirens.gif)
+![Object browser](./docs/browsing-object.gif)
 
 ### Installation
 
@@ -35,8 +35,6 @@ const Sirens = require('sirens')
 
 Sirens.browsePrototypes(object)
 ```
-
-![Object browser](./docs/browsing-object.gif)
 
 ### Pre-requisites
 

@@ -1,6 +1,6 @@
 const ChoiceModel = require('../../models/ChoiceModel')
 const ValueModel = require('../../models/ValueModel')
-const PropertyModel = require('./PropertyModel')
+const ObjectProperty = require('./ObjectProperty')
 
 class PrototypesBrowserModel {
     /// Initializing
@@ -118,7 +118,7 @@ class PrototypesBrowserModel {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            return new PropertyModel({
+            return new ObjectProperty({
                 key: key,
                 value: object[key]
             })

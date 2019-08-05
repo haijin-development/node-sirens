@@ -1,4 +1,4 @@
-class PropertyModel {
+class ObjectProperty {
     /// Initializing
 
     constructor({key: key, value: value}) {
@@ -37,4 +37,4 @@ class PropertyModel {
     }
 }
 
-module.exports = PropertyModel
+module.exports = ObjectProperty

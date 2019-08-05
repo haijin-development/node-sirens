@@ -1,4 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const callsites = require('callsites')
 
 class Sirens {
     static browseObject(object) {
@@ -14,6 +15,16 @@ class Sirens {
             const PrototypeBrowser = require('./sirens/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
+        })
+    }
+
+    static browseStack(object) {
+        const framesStack = callsites()
+
+        this.do( () => {
+            const StackTraceBrowser = require('./sirens/StackTraceBrowser')
+
+            StackTraceBrowser.openOn({framesStack: framesStack})
         })
     }
 

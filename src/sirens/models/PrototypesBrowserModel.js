@@ -1,6 +1,6 @@
 const ChoiceModel = require('../../models/ChoiceModel')
 const ValueModel = require('../../models/ValueModel')
-const ObjectProperty = require('./ObjectProperty')
+const ObjectProperty = require('../objects/ObjectProperty')
 
 class PrototypesBrowserModel {
     /// Initializing

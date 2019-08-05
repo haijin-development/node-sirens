@@ -1,6 +1,6 @@
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
 const ValueModel = require('../../models/ValueModel')
-const InstanceVariable = require('./InstanceVariable')
+const InstanceVariable = require('../objects/InstanceVariable')
 
 class ObjectBrowserModel {
     /// Initializing
@@ -8,16 +8,20 @@ class ObjectBrowserModel {
     constructor(inspectedObject) {
         this.inspectedObject = inspectedObject
 
-        const root = new InstanceVariable({key: null, value: inspectedObject})
-
         this.objectInstanceVariablesTree = new TreeChoiceModel({
-            roots: [root],
+            roots: this.getInstanceVariablesRootsFrom(inspectedObject),
             getChildrenBlock: this._getChildInstanceVariablesOf.bind(this),
         })
 
         this.selectedInstanceVariableText = new ValueModel()
 
         this.connectModels()
+    }
+
+    getInstanceVariablesRootsFrom(inspectedObject) {
+        const root = new InstanceVariable({key: null, value: inspectedObject})
+
+        return [root]
     }
 
     connectModels() {

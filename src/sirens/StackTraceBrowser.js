@@ -1,5 +1,5 @@
 const Sirens = require('../Sirens')
-const Component = require('../components/Component')
+const Component = require('../gui/components/Component')
 const StackTraceBrowserModel = require('./models/StackTraceBrowserModel')
 
 class StackTraceBrowser extends Component {

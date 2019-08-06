@@ -1,5 +1,5 @@
 const Sirens = require('../Sirens')
-const Component = require('../components/Component')
+const Component = require('../gui/components/Component')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 
 class ObjectBrowser extends Component {

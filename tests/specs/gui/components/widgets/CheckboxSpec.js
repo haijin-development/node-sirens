@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const CheckBox = require('../../../../src/components/widgets/CheckBox')
+const CheckBox = require('../../../../../src/gui/components/widgets/CheckBox')
 
 describe('When using a CheckBox', () => {
     describe('model', () => {

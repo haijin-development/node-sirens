@@ -1,5 +1,5 @@
-const TreeChoiceModel = require('../../models/TreeChoiceModel')
-const ValueModel = require('../../models/ValueModel')
+const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
+const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class ObjectBrowserModel {

@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const ChoicesTree = require('../../../../src/components/widgets/ChoicesTree')
-const Column = require('../../../../src/componentBuilder/Column')
-const TreeChoiceModel = require('../../../../src/models/TreeChoiceModel')
+const ChoicesTree = require('../../../../../src/gui/components/widgets/ChoicesTree')
+const Column = require('../../../../../src/gui/componentBuilder/Column')
+const TreeChoiceModel = require('../../../../../src/gui/models/TreeChoiceModel')
 
 describe('When using a ChoicesTree', () => {
     beforeEach( () => {

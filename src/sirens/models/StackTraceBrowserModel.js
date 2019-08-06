@@ -1,6 +1,6 @@
-const TreeChoiceModel = require('../../models/TreeChoiceModel')
-const ValueModel = require('../../models/ValueModel')
-const ChoiceModel = require('../../models/ChoiceModel')
+const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
+const ValueModel = require('../../gui/models/ValueModel')
+const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
 
 class StackTraceBrowserModel {

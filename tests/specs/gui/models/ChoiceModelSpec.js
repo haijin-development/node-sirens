@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ChoiceModel = require('../../../src/models/ChoiceModel')
+const ChoiceModel = require('../../../../src/gui/models/ChoiceModel')
 const callsites = require('callsites')
 
 describe('When using a ChoiceModel', () => {

@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const ChoicesList = require('../../../../src/components/widgets/ChoicesList')
-const Column = require('../../../../src/componentBuilder/Column')
+const ChoicesList = require('../../../../../src/gui/components/widgets/ChoicesList')
+const Column = require('../../../../../src/gui/componentBuilder/Column')
 
 describe('When using a ChoicesList', () => {
     beforeEach( () => {

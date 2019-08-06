@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const Label = require('../../../../src/components/widgets/Label')
+const Label = require('../../../../../src/gui/components/widgets/Label')
 
 describe('When using a Label', () => {
     describe('model', () => {

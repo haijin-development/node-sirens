@@ -1,6 +1,6 @@
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
 const ValueModel = require('../../models/ValueModel')
-const InstanceVariable = require('../objects/InstanceVariable')
+const ObjectProperty = require('../objects/ObjectProperty')
 
 class ObjectBrowserModel {
     /// Initializing
@@ -19,7 +19,7 @@ class ObjectBrowserModel {
     }
 
     getInstanceVariablesRootsFrom(inspectedObject) {
-        const root = new InstanceVariable({key: null, value: inspectedObject})
+        const root = new ObjectProperty({key: null, value: inspectedObject})
 
         return [root]
     }

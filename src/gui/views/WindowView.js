@@ -1,5 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const Sirens = require('../Sirens')
+const Sirens = require('../../Sirens')
 const View = require('./View')
 
 class WindowView extends View {

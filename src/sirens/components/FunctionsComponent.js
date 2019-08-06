@@ -1,5 +1,5 @@
 const Sirens = require('../../Sirens')
-const Component = require('../../components/Component')
+const Component = require('../../gui/components/Component')
 
 class FunctionsComponent extends Component {
     /// Actions

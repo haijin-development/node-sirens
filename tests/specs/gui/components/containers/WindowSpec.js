@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const Window = require('../../../../src/components/containers/Window')
-const Label = require('../../../../src/components/widgets/Label')
+const Window = require('../../../../../src/gui/components/containers/Window')
+const Label = require('../../../../../src/gui/components/widgets/Label')
 
 describe('When using a Window', () => {
     it('instantiates an empty one', () => {

@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const ChoiceModel = require('../../../../src/models/ChoiceModel')
-const Stack = require('../../../../src/components/containers/Stack')
-const RadioButton = require('../../../../src/components/widgets/RadioButton')
+const ChoiceModel = require('../../../../../src/gui/models/ChoiceModel')
+const Stack = require('../../../../../src/gui/components/containers/Stack')
+const RadioButton = require('../../../../../src/gui/components/widgets/RadioButton')
 
 describe('When using a RadioButton group', () => {
     beforeEach( () => {

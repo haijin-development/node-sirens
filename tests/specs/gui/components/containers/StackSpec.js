@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const Stack = require('../../../../src/components/containers/Stack')
-const Label = require('../../../../src/components/widgets/Label')
+const Stack = require('../../../../../src/gui/components/containers/Stack')
+const Label = require('../../../../../src/gui/components/widgets/Label')
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {

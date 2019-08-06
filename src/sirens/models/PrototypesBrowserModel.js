@@ -1,5 +1,5 @@
-const ChoiceModel = require('../../models/ChoiceModel')
-const ValueModel = require('../../models/ValueModel')
+const ChoiceModel = require('../../gui/models/ChoiceModel')
+const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class PrototypesBrowserModel {

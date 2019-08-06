@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const Model = require('../../../src/models/ValueModel')
+const Model = require('../../../../src/gui/models/ValueModel')
 
 describe('When using a Model', () => {
     describe('when setting and getting its value', () => {

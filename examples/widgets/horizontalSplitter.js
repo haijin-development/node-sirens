@@ -1,5 +1,5 @@
 const Sirens = require('../../src/Sirens')
-const Component = require('../../src/components/Component')
+const Component = require('../../src/gui/components/Component')
 
 class CustomComponent extends Component{
     /// Building

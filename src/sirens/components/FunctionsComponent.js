@@ -50,8 +50,8 @@ class FunctionsComponent extends Component {
 
                     list.column({
                         label: 'Properties',
-                        getTextBlock: (ObjectProperty) => {
-                            return ObjectProperty.getKey()
+                        getTextBlock: (objectProperty) => {
+                            return objectProperty.getKey()
                         },
                     })
 

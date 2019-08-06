@@ -172,9 +172,23 @@ class PrototypesBrowserModel {
     onPropSelectionChanged() {
         const selectedProp = this.getSelectedProp()
 
-        const text = selectedProp === undefined ? '' : selectedProp.displayString()
+        const text = selectedProp === undefined ? '' : this.displayStringOf(selectedProp)
 
         this.selectedPropDescription.setValue(text)
+    }
+
+    /// Displaying
+
+    displayStringOf(objectProperty) {
+        if(objectProperty.isFunction()) {
+            return objectProperty.value.toString()
+        } else {
+            try {
+                return JSON.stringify(objectProperty.value)
+            } catch(error) {
+                return objectProperty.value.toString()
+            }
+        }
     }
 }
 

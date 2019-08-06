@@ -12,11 +12,7 @@ class MenuView {
      * gtkWidget. Don't know if there is a cleaner way to do it.
      */
     static castGtkWidgetToGtkMenu(gtkWidget) {
-        const tmpGtkMenu = new Gtk.Menu()
-
-        gtkMenuMethodsToCopy.forEach( (eachMethod) => {
-            gtkWidget[eachMethod] = tmpGtkMenu[eachMethod].bind(gtkWidget)
-        })
+        gtkWidget.__proto__ = Gtk.Menu.prototype
 
         return gtkWidget
     }

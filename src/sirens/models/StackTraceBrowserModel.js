@@ -2,6 +2,7 @@ const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
+const FunctionDefinition = require('../objects/FunctionDefinition')
 
 class StackTraceBrowserModel {
     /// Initializing
@@ -30,7 +31,7 @@ class StackTraceBrowserModel {
     }
 
     getFunctionSourceCodeModel() {
-
+        return this.functionSourceCode
     }
 
     getSelectedStackFrame() {
@@ -42,7 +43,17 @@ class StackTraceBrowserModel {
     onStackFrameSelectionChanged() {
         const selectedStackFrame = this.getSelectedStackFrame()
 
-        this.functionSourceCode.setValue(selectedStackFrame.toString())
+        const functionDefinition = this.getFunctionDefinitionFrom(selectedStackFrame)
+
+        this.functionSourceCode.setValue(functionDefinition.toSourceCode())
+    }
+
+    getFunctionDefinitionFrom(stackFrame) {
+        return FunctionDefinition.from({
+            file: stackFrame.getFileName(),
+            line: stackFrame.getLineNumber(),
+            colum: stackFrame.getColumnNumber(),
+        })
     }
 
     /// Displaying

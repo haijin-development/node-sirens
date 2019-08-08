@@ -18,27 +18,25 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
     /// Visiting
 
     visitProgram(treeNode) {
-        let functionDefinitions = []
-
         const childNodes = treeNode.body
 
-        childNodes.forEach( (node) => {
-            functionDefinitions = functionDefinitions.concat( this.visit(node) )
-        })
-
-        return functionDefinitions
+        return childNodes.reduce(
+            (functionDefinitions, node) => {
+                return functionDefinitions.concat( this.visit(node) )
+            },
+            []
+        )
     }
 
     visitClassDeclaration(treeNode) {
-        let functionDefinitions = []
-
         const childNodes = treeNode.body.body
 
-        childNodes.forEach( (node) => {
-            functionDefinitions = functionDefinitions.concat( this.visit(node) )
-        })
-
-        return functionDefinitions
+        return childNodes.reduce(
+            (functionDefinitions, node) => {
+                return functionDefinitions.concat( this.visit(node) )
+            },
+            []
+        )
     }
 
     visitMethodDefinition(treeNode) {
@@ -67,6 +65,21 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
     }
 
     visitIdentifier(treeNode) {
+        return []
+    }
+
+    visitVariableDeclaration(treeNode) {
+        const childNodes = treeNode.declarations
+
+        return childNodes.reduce(
+            (functionDefinitions, node) => {
+                return functionDefinitions.concat( this.visit(node) )
+            },
+            []
+        )
+    }
+
+    visitVariableDeclarator(treeNode) {
         return []
     }
 }

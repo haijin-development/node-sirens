@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const esprima = require('esprima')
-const ClassDefinition = require('./ClassDefinition')
+const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
+const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
 
 /*
  * A source file to query javascript definitions.
@@ -40,15 +41,9 @@ class SourceFile {
      * Returns all the class definitions in the file.
      */
     getClassDefinitions() {
-        const parseTree = this.getParsedContents()
+        const collector = new ClassDefinitionsCollector()
 
-        return parseTree.body
-            .filter( (parseNode) => {
-                return parseNode.type === 'ClassDeclaration'
-            })
-            .map( (parseNode) => {
-                return new ClassDefinition(parseNode)
-            })
+        return collector.collectClassDefinitionsIn( this.getParsedContents() )
     }
 
 
@@ -57,9 +52,9 @@ class SourceFile {
      * The functions may be defined in any scope, not just the top most module scope.
      */
     getFunctionDefinitions() {
-        this.dfsWalkTree( (parseNode) => {
-            console.log(parseNode)
-        })
+        const collector = new FunctionDefinitionsCollector()
+
+        return collector.collectFunctionDefinitionsIn( this.getParsedContents() )
     }
 
     /// Parsing
@@ -76,19 +71,6 @@ class SourceFile {
         }
 
         return esprima.parseModule(string, parsingOptions)
-    }
-
-    /*
-     * Walks in Depth First Search each node of the parse tree.
-     *
-     * To do: reimplement using iteration instead of resursion.
-     */
-    dfsWalkTree(block, currentNode = undefined) {
-        if(currentNode === undefined) {
-            currentNode = this.parseTree.body
-        }
-
-        const childNodes = currentNode.childNodes
     }
 }
 

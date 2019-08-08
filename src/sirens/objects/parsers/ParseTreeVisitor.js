@@ -43,6 +43,18 @@ class ParseTreeVisitor {
                 return this.visitIdentifier(treeNode)
                 break
 
+            case 'VariableDeclaration':
+                return this.visitVariableDeclaration(treeNode)
+                break
+
+            case 'VariableDeclarator':
+                return this.visitVariableDeclarator(treeNode)
+                break
+
+            case 'CallExpression':
+                return this.visitCallExpression(treeNode)
+                break
+
             default:
                 throw new Error(`Uknown treeNode type" '${treeNodeType}'`)
         }
@@ -77,6 +89,18 @@ class ParseTreeVisitor {
     }
 
     visitIdentifier(treeNode) {
+        return undefined
+    }
+
+    visitVariableDeclaration(treeNode) {
+        return undefined
+    }
+
+    visitVariableDeclarator(treeNode) {
+        return undefined
+    }
+
+    visitCallExpression(treeNode) {
         return undefined
     }
 }

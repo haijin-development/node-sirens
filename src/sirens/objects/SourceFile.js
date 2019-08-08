@@ -3,6 +3,7 @@ const fs = require('fs')
 const esprima = require('esprima')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
+const Sirens = require('../../Sirens')
 
 /*
  * A source file to query javascript definitions.
@@ -55,6 +56,44 @@ class SourceFile {
         const collector = new FunctionDefinitionsCollector()
 
         return collector.collectFunctionDefinitionsIn( this.getParsedContents() )
+    }
+
+    /// Querying
+
+    getFunctionAt({ line: line, column: column }) {
+        const allFunctions = this.getFunctionDefinitions()
+
+        return allFunctions.find( (functionDefinition, i) => {
+            const startLine = functionDefinition.getStartingLine()
+            const startColumn = functionDefinition.getStartingColumn()
+
+            const endLine = functionDefinition.getEndingLine()
+            const endColumn = functionDefinition.getEndingColumn()
+
+            if( line < startLine || line > endLine ) {
+                return false
+            }
+
+            if( line == startLine && line == endLine ) {
+                if( column < startColumn || column >= endColumn ) {
+                    return false
+                }
+            }
+
+            if( line == startLine ) {
+                if( column < startColumn ) {
+                    return false
+                }                
+            }
+
+            if( line == endLine ) {
+                if( column >= endColumn ) {
+                    return false
+                }
+            }
+
+            return true
+        })
     }
 
     /// Parsing

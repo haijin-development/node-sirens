@@ -21,6 +21,14 @@ class FunctionDefinition {
             return this.parseNode.id.name
         }
     }
+
+    getStartingPosition() {
+        return this.parseNode.loc.start
+    }
+
+    getEndingPosition() {
+        return this.parseNode.loc.end
+    }
 }
 
 module.exports = FunctionDefinition

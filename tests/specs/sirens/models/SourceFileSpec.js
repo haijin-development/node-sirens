@@ -2,6 +2,7 @@ const fs = require('fs')
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const esprima = require('esprima')
+const Sirens = require('../../../../src/Sirens')
 
 const fileContents = `
 class Sample {
@@ -48,13 +49,13 @@ describe('When using a SourceFile', () => {
         expect(classes[1].getClassName()) .to .equal('AnotherSample')
     })
 
-    xit('gets all the functions defined in the module', () => {
+    it('gets all the functions defined in the module', () => {
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(classes.length) .to .equal(3)
+        expect(functions.length) .to .equal(3)
 
-        expect(classes[0].getClassName()) .to .equal('getName')
-        expect(classes[1].getClassName()) .to .equal('modFunction')
-        expect(classes[1].getClassName()) .to .equal('constructor')
+        expect(functions[0].getFunctionName()) .to .equal('getName')
+        expect(functions[1].getFunctionName()) .to .equal('modFunction')
+        expect(functions[2].getFunctionName()) .to .equal('constructor')
     })
 })

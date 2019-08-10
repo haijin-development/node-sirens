@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const Splitter = require('../../../../src/components/containers/Splitter')
-const Label = require('../../../../src/components/widgets/Label')
+const Splitter = require('../../../../../src/gui/components/containers/Splitter')
+const Label = require('../../../../../src/gui/components/widgets/Label')
 
 describe('When using a Splitter', () => {
     describe('horizontal', () => {

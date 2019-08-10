@@ -1,4 +1,4 @@
-class InstanceVariable {
+class ObjectProperty {
     /// Initializing
 
     constructor({key: key, value: value}) {
@@ -18,28 +18,28 @@ class InstanceVariable {
 
     /// Querying
 
-    getChildInstanceVariables() {
+    getChildProperties() {
         if( this.isArray() ) {
-            return this.getArrayInstanceVariables()
+            return this.getArrayIndexedProperties()
         }
 
         if( this.isObject() ) {
-            return this.getObjectInstanceVariables()
+            return this.getObjectProperties()
         }
 
         return []
     }
 
-    getArrayInstanceVariables() {
+    getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return new InstanceVariable({
+            return new ObjectProperty({
                 key: index,
                 value: item
             })
         })
     }
 
-    getObjectInstanceVariables() {
+    getObjectProperties() {
         const instVars = []
 
         const object = this.value
@@ -51,7 +51,7 @@ class InstanceVariable {
                 continue
             }
 
-            const instVar = new InstanceVariable({
+            const instVar = new ObjectProperty({
                 key: key,
                 value: instVarValue
             })
@@ -173,4 +173,4 @@ class InstanceVariable {
     }
 }
 
-module.exports = InstanceVariable
+module.exports = ObjectProperty

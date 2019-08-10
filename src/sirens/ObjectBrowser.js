@@ -1,6 +1,7 @@
 const Sirens = require('../Sirens')
 const Component = require('../gui/components/Component')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
+const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
 class ObjectBrowser extends Component {
     /// Initializing
@@ -15,28 +16,6 @@ class ObjectBrowser extends Component {
     }
 
     /// Actions
-
-    getSelectedObject() {
-        let selectedValue = this.getModel().getSelectedPropertyValue()
-
-        if(selectedValue === undefined) {
-            selectedValue = this.getModel().getRootObject()
-        }
-
-        return selectedValue
-    }
-
-    inspectSelectedObject() {
-        const selectedValue = this.getSelectedObject()
-
-        Sirens.browseObject(selectedValue)
-    }
-
-    browseSelectedObjectPrototypes() {
-        const selectedValue = this.getSelectedObject()
-
-        Sirens.browsePrototypes(selectedValue)
-    }
 
     evaluateSelectedCode() {
         const selectedValue = this.getModel().getSelectedPropertyValue()
@@ -85,43 +64,12 @@ class ObjectBrowser extends Component {
 
                 this.verticalStack( () => {
                     this.verticalSplitter( () => {
-                        this.treeChoice( (tree) => {
-                            tree.model(browserModel.getObjectPropertiesTree())
-
-                            tree.styles({
-                                splitProportion: 2.0/3.0,
-                                showHeaders: false,
-                                clickableHeaders: false,
+                        this.component(
+                            new ObjectPropertiesComponent({
+                                model: browserModel,
+                                splitProportion: 2.0/4.0,
                             })
-
-                            tree.handlers({
-                                onAction: component.inspectSelectedObject.bind(component),
-                            })
-
-                            tree.column({
-                                label: '',
-                                getTextBlock: (instVar) => { return instVar.displayString() },
-                            })
-
-                            tree.popupMenu(({menu: menu, ownerView: ownerView}) => {
-                                const selectedObject =
-                                    component.getModel().getSelectedPropertyValue()
-
-                                menu.addItem({
-                                    label: 'Browse it',
-                                    enabled: selectedObject !== undefined,
-                                    action: component.inspectSelectedObject.bind(component),
-                                })
-
-                                menu.addSeparator()
-
-                                menu.addItem({
-                                    label: 'Browse its prototype',
-                                    enabled: selectedObject !== undefined,
-                                    action: component.browseSelectedObjectPrototypes.bind(component),
-                                })
-                            })
-                        })
+                        )
 
                         this.text( () => {
                             this.model(browserModel.getSelectedPropertyText())

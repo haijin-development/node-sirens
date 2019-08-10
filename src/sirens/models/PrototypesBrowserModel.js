@@ -1,6 +1,6 @@
-const ChoiceModel = require('../../models/ChoiceModel')
-const ValueModel = require('../../models/ValueModel')
-const PropertyModel = require('./PropertyModel')
+const ChoiceModel = require('../../gui/models/ChoiceModel')
+const ValueModel = require('../../gui/models/ValueModel')
+const ObjectProperty = require('../objects/ObjectProperty')
 
 class PrototypesBrowserModel {
     /// Initializing
@@ -118,7 +118,7 @@ class PrototypesBrowserModel {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            return new PropertyModel({
+            return new ObjectProperty({
                 key: key,
                 value: object[key]
             })
@@ -172,9 +172,23 @@ class PrototypesBrowserModel {
     onPropSelectionChanged() {
         const selectedProp = this.getSelectedProp()
 
-        const text = selectedProp === undefined ? '' : selectedProp.displayString()
+        const text = selectedProp === undefined ? '' : this.displayStringOf(selectedProp)
 
         this.selectedPropDescription.setValue(text)
+    }
+
+    /// Displaying
+
+    displayStringOf(objectProperty) {
+        if(objectProperty.isFunction()) {
+            return objectProperty.value.toString()
+        } else {
+            try {
+                return JSON.stringify(objectProperty.value)
+            } catch(error) {
+                return objectProperty.value.toString()
+            }
+        }
     }
 }
 

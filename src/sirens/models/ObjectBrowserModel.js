@@ -1,6 +1,6 @@
-const TreeChoiceModel = require('../../models/TreeChoiceModel')
-const ValueModel = require('../../models/ValueModel')
-const InstanceVariable = require('./InstanceVariable')
+const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
+const ValueModel = require('../../gui/models/ValueModel')
+const ObjectProperty = require('../objects/ObjectProperty')
 
 class ObjectBrowserModel {
     /// Initializing
@@ -8,20 +8,24 @@ class ObjectBrowserModel {
     constructor(inspectedObject) {
         this.inspectedObject = inspectedObject
 
-        const root = new InstanceVariable({key: null, value: inspectedObject})
-
-        this.objectInstanceVariablesTree = new TreeChoiceModel({
-            roots: [root],
-            getChildrenBlock: this._getChildInstanceVariablesOf.bind(this),
+        this.objectPropertiesTree = new TreeChoiceModel({
+            roots: this.getRootPropertiesFrom(inspectedObject),
+            getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.selectedInstanceVariableText = new ValueModel()
+        this.selectedObjectText = new ValueModel()
 
         this.connectModels()
     }
 
+    getRootPropertiesFrom(inspectedObject) {
+        const root = new ObjectProperty({key: null, value: inspectedObject})
+
+        return [root]
+    }
+
     connectModels() {
-        this.objectInstanceVariablesTree.getValue().on(
+        this.objectPropertiesTree.getValue().on(
             'value-changed',
             this.onInstVarSelectionChanged.bind(this)
         )
@@ -30,23 +34,19 @@ class ObjectBrowserModel {
     /// Accessing
 
     getRootObject() {
-        return this.objectInstanceVariablesTree.getRoots()[0].getValue()
+        return this.objectPropertiesTree.getRoots()[0].getValue()
     }
 
-    getObjectInstanceVariablesTree() {
-        return this.objectInstanceVariablesTree
+    getObjectPropertiesTree() {
+        return this.objectPropertiesTree
     }
 
-    getSelectedInstanceVariableValue() {
-        return this.objectInstanceVariablesTree.getSelectionValue()
+    getSelectedPropertyValue() {
+        return this.objectPropertiesTree.getSelectionValue()
     }
 
-    getSelectedInstanceVariableText() {
-        return this.selectedInstanceVariableText
-    }
-
-    _getChildInstanceVariablesOf(instanceVariable) {
-        return instanceVariable.getChildInstanceVariables()
+    getSelectedPropertyText() {
+        return this.selectedObjectText
     }
 
     /// Events
@@ -54,13 +54,13 @@ class ObjectBrowserModel {
     onInstVarSelectionChanged() {
         const selectedValueString = this.selectedValueString()
 
-        this.selectedInstanceVariableText.setValue(selectedValueString)
+        this.selectedObjectText.setValue(selectedValueString)
     }
 
     /// Displaying
 
     selectedValueString() {
-        const selectedInstVarValue = this.getSelectedInstanceVariableValue()
+        const selectedInstVarValue = this.getSelectedPropertyValue()
 
         if (typeof selectedInstVarValue == 'function') {
             return selectedInstVarValue.toString()

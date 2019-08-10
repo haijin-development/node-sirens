@@ -39,8 +39,11 @@ Sirens.browsePrototypes(object)
 Open a browser on the stack call with
 
 ```javascript
-Sirens.browseStack()
+Sirens.browseStack(arguments)
 ```
+
+![Stack browser](./docs/browsing-stack.gif)
+
 
 ### Pre-requisites
 

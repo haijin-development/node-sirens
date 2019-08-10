@@ -14,11 +14,12 @@ class FunctionDefinition {
 
     /// Initializing
 
-    constructor(parseNode) {
+    constructor({parseNode: parseNode, sourceFile: sourceFile}) {
         this.parseNode = parseNode
+        this.sourceFile = sourceFile
     }
 
-    /// Accessing
+    /// Queyring
 
     getFunctionName() {
         if( this.parseNode.type === 'MethodDefinition' ) {
@@ -52,10 +53,14 @@ class FunctionDefinition {
         return this.getEndingPosition().column
     }
 
-    /// Displaying
-
-    toSourceCode() {
-        return this.toString()
+    getOriginalSourceCode({cr: cr}) {
+        return this.sourceFile.getOriginalSourceCode({
+            fromLine: this.getStartingLine(),
+            fromColumn: this.getStartingColumn(),
+            toLine: this.getEndingLine(),
+            toColumn: this.getEndingColumn(),
+            cr: cr
+        })
     }
 }
 

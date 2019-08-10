@@ -7,57 +7,22 @@ class ParseTreeVisitor {
 
     /// Visiting
 
+    /*
+     * Dynamically call a function named 'visit[treeNode.type]'.
+     * In the future generate the source code for each 'visit[...]' function call to make sure
+     * that the implemented 'visit[...]'' functions are always in sync with the existing node types from
+     *      https://esprima.readthedocs.io/en/latest/syntax-tree-format.html
+     */
     visit(treeNode) {
         const treeNodeType = treeNode.type
 
-        switch(treeNodeType) {
-            case 'Program':
-                return this.visitProgram(treeNode)
-                break
+        const treeNodeHandler = 'visit' + treeNodeType
 
-            case 'ClassDeclaration':
-                return this.visitClassDeclaration(treeNode)
-                break
-
-            case 'FunctionDeclaration':
-                return this.visitFunctionDeclaration(treeNode)
-                break
-
-            case 'ExpressionStatement':
-                return this.visitExpressionStatement(treeNode)
-                break
-
-            case 'MethodDefinition':
-                return this.visitMethodDefinition(treeNode)
-                break
-
-            case 'AssignmentExpression':
-                return this.visitAssignmentExpression(treeNode)
-                break
-
-            case 'MemberExpression':
-                return this.visitMemberExpression(treeNode)
-                break
-
-            case 'Identifier':
-                return this.visitIdentifier(treeNode)
-                break
-
-            case 'VariableDeclaration':
-                return this.visitVariableDeclaration(treeNode)
-                break
-
-            case 'VariableDeclarator':
-                return this.visitVariableDeclarator(treeNode)
-                break
-
-            case 'CallExpression':
-                return this.visitCallExpression(treeNode)
-                break
-
-            default:
-                throw new Error(`Uknown treeNode type" '${treeNodeType}'`)
+        if( this[treeNodeHandler] === undefined ) {
+            throw new Error(`Uknown treeNode type" '${treeNodeType}'`)
         }
+
+        return this[treeNodeHandler].call(this, treeNode)
     }
 
     visitProgram(treeNode) {
@@ -101,7 +66,7 @@ class ParseTreeVisitor {
     }
 
     visitCallExpression(treeNode) {
-        return undefined
+        return undefined 
     }
 }
 

@@ -1,5 +1,5 @@
 const Sirens = require('../Sirens')
-const Component = require('../components/Component')
+const Component = require('../gui/components/Component')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
 

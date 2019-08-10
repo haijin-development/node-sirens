@@ -1,10 +1,13 @@
 {
   "name": "sirens",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
   "dependencies": {
-    "node-gtk": "^0.3"
+    "callsites": "^3.1.0",
+    "esprima": "^4.0.1",
+    "node-gtk": "^0.3",
+    "split-lines": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^4.2",

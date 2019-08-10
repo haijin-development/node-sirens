@@ -25,7 +25,11 @@ module.exports = Sample`
 
 const filename = 'tests/samples/index.js'
 
+const absentFilename = 'tests/samples/absentFile.js'
+
 const sourceFile = new SourceFile({ filepath: filename })
+
+const absentSourceFile = new SourceFile({ filepath: absentFilename })
 
 describe('When using a SourceFile', () => {
     it('gets the file path', () => {
@@ -59,6 +63,11 @@ describe('When using a SourceFile', () => {
         expect(functions[2].getFunctionName()) .to .equal('constructor')
     })
 
+    it('answers if the file exists', () => {
+        expect(sourceFile.existsFile()) .to .be .true
+        expect(absentSourceFile.existsFile()) .to .be .false
+    })
+
     describe('when searching for a function definition at a file position', () => {
         it('finds the function definition starting at a line and column number', () => {
             const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 4})
@@ -87,25 +96,25 @@ describe('When using a SourceFile', () => {
         it('does not find the function definition in a line before the starting line', () => {
             const functionDefinition = sourceFile.getFunctionAt({line: 12, column: 1})
 
-            expect(functionDefinition) .to .be .undefined
+            expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition in the staring line but before the starting column', () => {
             const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 3})
 
-            expect(functionDefinition) .to .be .undefined
+            expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition ending in the line but after the ending column', () => {
             const functionDefinition = sourceFile.getFunctionAt({line: 15, column: 5})
 
-            expect(functionDefinition) .to .be .undefined
+            expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition ending after the line', () => {
             const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 1})
 
-            expect(functionDefinition) .to .be .undefined
+            expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
     })
 })
@@ -159,5 +168,16 @@ describe('When using a FunctionDefinition', () => {
 
         expect(sourceCode) .to .equal(exepctedSourceCode)
     })
+})
 
+describe('When using an AbsentFunctionDefinition', () => {
+    it('the starting and ending positions in the file are undefined', () => {
+
+        const functionDefinition = sourceFile.getFunctionAt({line: 100, column: 0})
+
+        expect(functionDefinition.getStartingPosition().line) .to .be .undefined
+        expect(functionDefinition.getEndingPosition().line) .to .be .undefined
+        expect(functionDefinition.getStartingPosition().column) .to .be .undefined
+        expect(functionDefinition.getEndingPosition().column) .to .be .undefined
+    })
 })

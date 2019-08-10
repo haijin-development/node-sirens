@@ -4,6 +4,7 @@ const esprima = require('esprima')
 const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
+const AbsentFunctionDefinition = require('./AbsentFunctionDefinition')
 const Sirens = require('../../Sirens')
 
 /*
@@ -64,10 +65,26 @@ class SourceFile {
 
     /// Querying
 
+    existsFile() {
+        return fs.existsSync(this.filepath)
+    }
+
+    newAbsentFunctionDefinitionAt(line, column) {
+        return new AbsentFunctionDefinition({
+                sourceFile: this,
+                line: line,
+                column: column
+            })
+    }
+
     getFunctionAt({ line: line, column: column }) {
+        if( !this.existsFile() ) {
+            return this.newAbsentFunctionDefinitionAt(line, column)
+        }
+
         const allFunctions = this.getFunctionDefinitions()
 
-        return allFunctions.find( (functionDefinition, i) => {
+        const functionDefinition = allFunctions.find( (functionDefinition, i) => {
             const startLine = functionDefinition.getStartingLine()
             const startColumn = functionDefinition.getStartingColumn()
 
@@ -98,6 +115,12 @@ class SourceFile {
 
             return true
         })
+
+        if( functionDefinition !== undefined ) {
+            return functionDefinition
+        }
+
+        return this.newAbsentFunctionDefinitionAt(line, column)
     }
 
     getOriginalSourceCode({

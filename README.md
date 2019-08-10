@@ -22,7 +22,7 @@ npm install sirens --save-dev
 
 Require the `sirens` module and open a browser on any object with
 
-```
+```javascript
 const Sirens = require('sirens')
 
 Sirens.browseObject(object)
@@ -30,11 +30,20 @@ Sirens.browseObject(object)
 
 Open a browser on any object properties and methods along its prototypes chain with
 
-```
+```javascript
 const Sirens = require('sirens')
 
 Sirens.browsePrototypes(object)
 ```
+
+Open a browser on the stack call with
+
+```javascript
+Sirens.browseStack(arguments)
+```
+
+![Stack browser](./docs/browsing-stack.gif)
+
 
 ### Pre-requisites
 

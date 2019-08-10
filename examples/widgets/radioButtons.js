@@ -1,6 +1,6 @@
 const Sirens = require('../../src/Sirens')
-const Component = require('../../src/components/Component')
-const ChoiceModel = require('../../src/models/ChoiceModel')
+const Component = require('../../src/gui/components/Component')
+const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
 class CustomComponent extends Component{
     /// Building

@@ -17,7 +17,7 @@ class ObjectBrowser extends Component {
     /// Actions
 
     getSelectedObject() {
-        let selectedValue = this.getModel().getSelectedInstanceVariableValue()
+        let selectedValue = this.getModel().getSelectedPropertyValue()
 
         if(selectedValue === undefined) {
             selectedValue = this.getModel().getRootObject()
@@ -39,7 +39,7 @@ class ObjectBrowser extends Component {
     }
 
     evaluateSelectedCode() {
-        const selectedValue = this.getModel().getSelectedInstanceVariableValue()
+        const selectedValue = this.getModel().getSelectedPropertyValue()
 
         const selectedText = this.getSelectedText()
 
@@ -64,7 +64,7 @@ class ObjectBrowser extends Component {
         let selectedText = playgroundComponent.getSelectedText()
 
         if(selectedText == '') {
-            selectedText = this.getModel().getSelectedInstanceVariableText().getValue()
+            selectedText = this.getModel().getSelectedPropertyText().getValue()
         }
 
         return selectedText
@@ -86,7 +86,7 @@ class ObjectBrowser extends Component {
                 this.verticalStack( () => {
                     this.verticalSplitter( () => {
                         this.treeChoice( (tree) => {
-                            tree.model(browserModel.getObjectInstanceVariablesTree())
+                            tree.model(browserModel.getObjectPropertiesTree())
 
                             tree.styles({
                                 splitProportion: 2.0/3.0,
@@ -105,7 +105,7 @@ class ObjectBrowser extends Component {
 
                             tree.popupMenu(({menu: menu, ownerView: ownerView}) => {
                                 const selectedObject =
-                                    component.getModel().getSelectedInstanceVariableValue()
+                                    component.getModel().getSelectedPropertyValue()
 
                                 menu.addItem({
                                     label: 'Browse it',
@@ -124,7 +124,7 @@ class ObjectBrowser extends Component {
                         })
 
                         this.text( () => {
-                            this.model(browserModel.getSelectedInstanceVariableText())
+                            this.model(browserModel.getSelectedPropertyText())
 
                             this.styles({
                                 id: 'playground',
@@ -134,7 +134,7 @@ class ObjectBrowser extends Component {
 
                             this.popupMenu(({menu: menu, ownerView: ownerView}) => {
                                 const selectedObject =
-                                    component.getModel().getSelectedInstanceVariableValue()
+                                    component.getModel().getSelectedPropertyValue()
 
                                 menu.addSeparator()
 

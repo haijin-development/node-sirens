@@ -18,19 +18,19 @@ class ObjectProperty {
 
     /// Querying
 
-    getChildInstanceVariables() {
+    getChildProperties() {
         if( this.isArray() ) {
-            return this.getArrayInstanceVariables()
+            return this.getArrayIndexedProperties()
         }
 
         if( this.isObject() ) {
-            return this.getObjectInstanceVariables()
+            return this.getObjectProperties()
         }
 
         return []
     }
 
-    getArrayInstanceVariables() {
+    getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
             return new ObjectProperty({
                 key: index,
@@ -39,7 +39,7 @@ class ObjectProperty {
         })
     }
 
-    getObjectInstanceVariables() {
+    getObjectProperties() {
         const instVars = []
 
         const object = this.value

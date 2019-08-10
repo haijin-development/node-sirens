@@ -21,10 +21,12 @@ class Sirens {
     static browseStack(object) {
         const framesStack = callsites()
 
+        const allStackedFramesButThisOne = framesStack.slice(1)
+
         this.do( () => {
             const StackTraceBrowser = require('./sirens/StackTraceBrowser')
 
-            StackTraceBrowser.openOn({framesStack: framesStack, object: object})
+            StackTraceBrowser.openOn({framesStack: allStackedFramesButThisOne, object: object})
         })
     }
 

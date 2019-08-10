@@ -1,3 +1,5 @@
+const Sirens = require('../../Sirens')
+
 /*
  * The definition of a javascript function.
  *

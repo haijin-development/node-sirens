@@ -17,6 +17,21 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
 
     /// Visiting
 
+    defaultVisitResult() {
+        return []
+    }
+
+    visit(treeNode) {
+        const result = super.visit(treeNode)
+
+        if( result !== undefined ) {
+            return result
+        }
+
+        return this.defaultVisitResult()
+    }
+
+
     visitProgram(treeNode) {
         const childNodes = treeNode.body
 
@@ -60,14 +75,6 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
         return functionDefinitions
     }
 
-    visitMemberExpression(treeNode) {
-        return []
-    }
-
-    visitIdentifier(treeNode) {
-        return []
-    }
-
     visitVariableDeclaration(treeNode) {
         const childNodes = treeNode.declarations
 
@@ -77,10 +84,6 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
             },
             []
         )
-    }
-
-    visitVariableDeclarator(treeNode) {
-        return []
     }
 }
 

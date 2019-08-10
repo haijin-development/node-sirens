@@ -10,7 +10,7 @@ class ObjectBrowserModel {
 
         this.objectPropertiesTree = new TreeChoiceModel({
             roots: this.getRootPropertiesFrom(inspectedObject),
-            getChildrenBlock: this._getChildPropertiesOf.bind(this),
+            getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
         this.selectedObjectText = new ValueModel()
@@ -47,10 +47,6 @@ class ObjectBrowserModel {
 
     getSelectedPropertyText() {
         return this.selectedObjectText
-    }
-
-    _getChildPropertiesOf(objectProperty) {
-        return objectProperty.getChildProperties()
     }
 
     /// Events

@@ -24,7 +24,7 @@ class Sirens {
         this.do( () => {
             const StackTraceBrowser = require('./sirens/StackTraceBrowser')
 
-            StackTraceBrowser.openOn({framesStack: framesStack})
+            StackTraceBrowser.openOn({framesStack: framesStack, object: object})
         })
     }
 

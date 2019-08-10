@@ -146,4 +146,18 @@ describe('When using a FunctionDefinition', () => {
         expect(functions[1].getEndingPosition().column) .to .equal(1)
         expect(functions[2].getEndingPosition().column) .to .equal(5)
     })
+
+    it('gets the original source code', () => {
+
+        const functions = sourceFile.getFunctionDefinitions()
+
+        let sourceCode = functions[0].getOriginalSourceCode({cr: "\n"})
+
+        const exepctedSourceCode = `getName() {
+        return this.name
+    }`
+
+        expect(sourceCode) .to .equal(exepctedSourceCode)
+    })
+
 })

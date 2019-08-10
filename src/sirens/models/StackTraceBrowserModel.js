@@ -45,7 +45,9 @@ class StackTraceBrowserModel {
 
         const functionDefinition = this.getFunctionDefinitionFrom(selectedStackFrame)
 
-        this.functionSourceCode.setValue(functionDefinition.toSourceCode())
+        const functionSourceCode = functionDefinition.getOriginalSourceCode({cr: "\r"})
+
+        this.functionSourceCode.setValue(functionSourceCode)
     }
 
     getFunctionDefinitionFrom(stackFrame) {

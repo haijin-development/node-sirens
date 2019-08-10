@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const esprima = require('esprima')
+const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
 const Sirens = require('../../Sirens')
@@ -55,7 +56,10 @@ class SourceFile {
     getFunctionDefinitions() {
         const collector = new FunctionDefinitionsCollector()
 
-        return collector.collectFunctionDefinitionsIn( this.getParsedContents() )
+        return collector.collectFunctionDefinitionsIn({
+            treeNode: this.getParsedContents(),
+            sourceFile: this,
+        })
     }
 
     /// Querying
@@ -96,6 +100,41 @@ class SourceFile {
         })
     }
 
+    getOriginalSourceCode({
+        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn, cr = cr
+    }) {
+        /// fromLine and toLine are 1 based whilst slice is 0 based.
+        fromLine = fromLine - 1
+        toLine = toLine - 1
+        if( cr === undefined ) {
+            cr = "\n"
+        }
+
+        const fileContents = this.getFileContents()
+
+        const allLines = splitLines(fileContents)
+
+        const firstLine = allLines[fromLine]
+
+        const middleLines = allLines.slice(fromLine + 1, toLine)
+
+        const lastLine = allLines[toLine]
+
+        if(fromLine === toLine) {
+            return firstLine.slice(fromColumn, toColumn)
+        }
+
+        let sourceCode = ''
+
+        sourceCode += firstLine.slice(fromColumn)
+        sourceCode += cr
+        sourceCode += middleLines.join(cr)
+        sourceCode += cr
+        sourceCode += lastLine.slice(0, toColumn)
+
+        return sourceCode
+    }
+
     /// Parsing
 
     parseFileContents() {
@@ -106,7 +145,11 @@ class SourceFile {
 
     parseString(string) {
         const parsingOptions = {
-            loc: true
+            loc: true,
+            comment: true,
+            tokens: true,
+            tolerant: true,
+            jsx: true,
         }
 
         return esprima.parseModule(string, parsingOptions)

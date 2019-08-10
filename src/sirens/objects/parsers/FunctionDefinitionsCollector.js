@@ -7,11 +7,11 @@ const Sirens = require('../../../Sirens')
  */
 class FunctionDefinitionsCollector extends ParseTreeVisitor {
 
-    collectFunctionDefinitionsIn(treeNode) {
+    collectFunctionDefinitionsIn({treeNode: treeNode, sourceFile: sourceFile}) {
         const functionDeclarations = this.visit(treeNode)
 
         return functionDeclarations.map( (parseNode) => {
-                return new FunctionDefinition(parseNode)
+                return new FunctionDefinition({parseNode: parseNode, sourceFile: sourceFile})
             })
     }
 

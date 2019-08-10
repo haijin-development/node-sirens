@@ -21,7 +21,7 @@ function bottomMost(top, middle) {
         value: 3
     }
 
-    Sirens.browseStack()
+    Sirens.browseStack(arguments)
 }
 
 topMost()

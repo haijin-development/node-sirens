@@ -1,16 +1,16 @@
 const Sirens = require('../Sirens')
 
 /*
- * This is the only behaviour that is statically bound to an instance and therefore could be considered a
- * class according to the classic object oriented paradigm.
+ * This is the only behaviour that is statically bound to an instance and therefore could be considered
+ * a Class, according to the classic object oriented paradigm.
  * 
- * In the O language all instances, with no exceptions, are this kind of objects.
+ * In the O language all instances, with no exceptions, are objects of this kind.
  *
  * An O instance by itself contains only the methods to be able to dynamically add and drop behaviours
  * through classifications.
  *
  * In the O language an O instance has nothing else but its identity, all of its behaviour is
- * is dynamically added after its instantiation though classifications, and those classifications
+ * dynamically added after its instantiation though classifications, and those classifications
  * can be dropped as well.
  */
 const O = function() {
@@ -23,17 +23,42 @@ const O = function() {
      * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
      */
     this.behaveAs = function(classification) {
+        if( this.isBehavingAs(classification) ) {
+            return this
+        }
+
         this.classifications.unshift(classification)
 
         buildPrototypeChainOf(this, this.classifications)
+
+        return this
     }
 
+    /*
+     * Makes this O instance to stop behaving with the behaviour defined in the given classification.
+     * An O instance that drops a classification is exactly the same as if it had not previously
+     * had that classification and there is no way to distinguish bots scenarios.
+     */
     this.dropBehaviour = function(classification) {
+        if( ! this.isBehavingAs(classification) ) {
+            return this
+        }
+
         this.classifications = this.classifications.filter( (eachClassification) => {
             return eachClassification !== classification
         })
 
         buildPrototypeChainOf(this, this.classifications)
+
+        return this
+    }
+
+    /*
+     * Answers true if this O instance is behaving as the given classification, false otherwise.
+     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     */
+    this.isBehavingAs = function(classification) {
+        return this.classifications.includes(classification)
     }
 }
 

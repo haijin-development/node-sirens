@@ -1,112 +1,60 @@
-const Sirens = require('../Sirens')
+const OInstance = require('./OInstance')
+const {lookupPropIn} = require('./implementation/props-lookup')
 
-/*
- * This is the only behaviour that is statically bound to an instance and therefore could be considered
- * a Class, according to the classic object oriented paradigm.
- * 
- * In the O language all instances, with no exceptions, are objects of this kind.
- *
- * An O instance by itself contains only the methods to be able to dynamically add and drop behaviours
- * through classifications.
- *
- * In the O language an O instance has nothing else but its identity, all of its behaviour is
- * dynamically added after its instantiation though classifications, and those classifications
- * can be dropped as well.
- */
-const O = function() {
-    // The ordered collection of the classifications that define the behaviour of this O instance.
-    this.classifications = []
-
-    /*
-     * Makes this O instance to adquire the behaviour defined in the given classification.
-     * If the instance already behaves as the given classification this method does nothing.
-     * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
-     */
-    this.behaveAs = function(classification) {
-        if( this.isBehavingAs(classification) ) {
-            return this
-        }
-
-        this.classifications.unshift(classification)
-
-        buildPrototypeChainOf(this, this.classifications)
-
-        return this
-    }
-
-    /*
-     * Makes this O instance to stop behaving with the behaviour defined in the given classification.
-     * An O instance that drops a classification is exactly the same as if it had not previously
-     * had that classification and there is no way to distinguish bots scenarios.
-     */
-    this.dropBehaviour = function(classification) {
-        if( ! this.isBehavingAs(classification) ) {
-            return this
-        }
-
-        this.classifications = this.classifications.filter( (eachClassification) => {
-            return eachClassification !== classification
-        })
-
-        buildPrototypeChainOf(this, this.classifications)
-
-        return this
-    }
-
-    /*
-     * Answers true if this O instance is behaving as the given classification, false otherwise.
-     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
-     */
-    this.isBehavingAs = function(classification) {
-        return this.classifications.includes(classification)
-    }
+function getProp(receiver, prop) {
+    return lookupPropIn(this, receiver, prop)
 }
 
-// The following methods are defined as functions instead of O class methods to keep
-// O instances protocol clean of utility methods.
+function setProp(target, prop, value, receiver) {
+    target[prop] = value
 
-/*
- * Clones the given classification.
- *
- * The clonning is necessary for the same classification to be part of many different prototypes
- * chains.
- *
- * This is just an implementation artifact to be able to use the javascript prototype chain to
- * perform a method lookip and activation.
- */
-function cloneClassification(classification) {
-    const classificationCopy = {}
-
-    var originalPrototype = Object.getOwnPropertyNames(classification.prototype);
-
-    for( var funcKey in originalPrototype ) {
-        const methodName = originalPrototype[funcKey]
-        const method = classification.prototype[methodName]
-
-        classificationCopy[methodName] = method
-    }
-
-    return classificationCopy
+    return target
 }
 
+function createProxyOn(object) {
+    const handler = {
+        get: getProp,
+        set: setProp,
+    }
+
+    const proxy = new Proxy(object, handler)
+
+    handler.get = handler.get.bind(proxy)
+    handler.set = handler.set.bind(proxy)
+
+    return proxy
+
+}
+
+const O = Object.create(null)
+
 /*
- * Rebuilds the prototype chain of the given object cloning the given classifications.
+ * Creates a new O instance with a OInstance already added.
+ *
+ * Use
+ *
+ *      const object = O.new()
+ *
+ * instead of
+ *
+ *      const object = new O()
+ *
+ * to avoid the created object to have a default prototype since the O language sets the whole
+ * prototype chain.
  */
-function buildPrototypeChainOf(object, classifications) {
-    let currentObject = object
+O.new = function Instance() {
 
-    classifications.forEach( (eachClassification) => {
-        const classificationCopy = cloneClassification(eachClassification)
+    const object = Object.create(null)
 
-        classificationCopy.sourceClassification = eachClassification
+    object.classifications = []
 
-        Object.setPrototypeOf(currentObject, classificationCopy)
+    const oClassification = new OInstance()
 
-        currentObject = classificationCopy
-    })
+    oClassification.sourceClassification = OInstance
 
-    /// Make the last classification in the chain to still behave as an O instance
-    Object.setPrototypeOf(currentObject, O.prototype)
+    object.classifications.unshift(oClassification)
+
+    return createProxyOn(object)
 }
 
 module.exports = O

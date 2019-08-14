@@ -1,0 +1,70 @@
+const Sirens = require('../Sirens')
+const {lookupPropIn} = require('./implementation/props-lookup')
+
+/*
+ * This is the only behaviour that an instance has when its instantiated.
+ * 
+ * An O instance by itself contains only the methods to be able to dynamically add and drop behaviours
+ * through classifications.
+ *
+ * In the O language an O instance has nothing else but its identity, all of its behaviour is
+ * dynamically added after its instantiation though classifications, and those classifications
+ * can be dropped as well.
+ */
+class OInstance {
+    /*
+     * Makes this O instance to adquire the behaviour defined in the given classification.
+     * If the instance already behaves as the given classification this method does nothing.
+     * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
+     */
+    behaveAs(classification) {
+        if( this.isBehavingAs(classification) ) {
+            return this
+        }
+
+        const classificationCopy = new classification()
+
+        classificationCopy.sourceClassification = classification
+
+        this.classifications.unshift(classificationCopy)
+
+        return this
+    }
+
+    /*
+     * Makes this O instance to stop behaving with the behaviour defined in the given classification.
+     * An O instance that drops a classification is exactly the same as if it had not previously
+     * had that classification and there is no way to distinguish bots scenarios.
+     */
+    dropBehaviour(classification) {
+        const filteredClassifications = this.classifications.filter( (eachClassification) => {
+            return eachClassification.sourceClassification !== classification
+        })
+
+        this.classifications = filteredClassifications
+
+        return this
+    }
+
+    /*
+     * Answers true if this O instance is behaving as the given classification, false otherwise.
+     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     */
+    isBehavingAs(aClassification) {
+        const index = this.classifications.findIndex( (eachClassification) => {
+            return eachClassification.sourceClassification === aClassification
+        })
+
+        return index !== -1
+    }
+
+    /*
+     * Answers true if the receiver understands the given message, false otherwise.
+     * An object responds to a message if any of its classifications does.
+     */
+    respondsTo(message) {
+        return this[message] !== undefined
+    }
+}
+
+module.exports = OInstance

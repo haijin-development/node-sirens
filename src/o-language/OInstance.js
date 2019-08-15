@@ -1,5 +1,5 @@
 const Sirens = require('../Sirens')
-const {lookupPropIn} = require('./implementation/props-lookup')
+const MessageDispatcher = require('./implementation/MessageDispatcher')
 
 /*
  * This is the only behaviour that an instance has when its instantiated.
@@ -12,21 +12,23 @@ const {lookupPropIn} = require('./implementation/props-lookup')
  * can be dropped as well.
  */
 class OInstance {
+
+    /*
+     * Returns a new O instance with this OInstance classification instantiated in it.
+     */
+    static new() {
+        return MessageDispatcher.createObject()
+    }
+
+    /// Behaviours
+
     /*
      * Makes this O instance to adquire the behaviour defined in the given classification.
      * If the instance already behaves as the given classification this method does nothing.
      * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
      */
     behaveAs(classification) {
-        if( this.isBehavingAs(classification) ) {
-            return this
-        }
-
-        const classificationCopy = new classification()
-
-        classificationCopy.sourceClassification = classification
-
-        this.classifications.unshift(classificationCopy)
+        MessageDispatcher.behaveAs(this, classification)
 
         return this
     }
@@ -37,25 +39,19 @@ class OInstance {
      * had that classification and there is no way to distinguish bots scenarios.
      */
     dropBehaviour(classification) {
-        const filteredClassifications = this.classifications.filter( (eachClassification) => {
-            return eachClassification.sourceClassification !== classification
-        })
-
-        this.classifications = filteredClassifications
+        MessageDispatcher.objectDropBehaviour(this, classification)
 
         return this
     }
+
+    /// Asking
 
     /*
      * Answers true if this O instance is behaving as the given classification, false otherwise.
      * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
      */
     isBehavingAs(aClassification) {
-        const index = this.classifications.findIndex( (eachClassification) => {
-            return eachClassification.sourceClassification === aClassification
-        })
-
-        return index !== -1
+        return MessageDispatcher.objectIsBehavingAs(this, aClassification)
     }
 
     /*
@@ -63,8 +59,15 @@ class OInstance {
      * An object responds to a message if any of its classifications does.
      */
     respondsTo(message) {
-        return this[message] !== undefined
+        return MessageDispatcher.objectRespondsTo(this, message)
     }
+
+    /// Evaluating
+
+    withClassificationDo(classification, closure) {
+        MessageDispatcher.duringClassificationDo(classification, closure)
+    }
+
 }
 
 module.exports = OInstance

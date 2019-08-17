@@ -1,4 +1,4 @@
-const OInstance = require('./OInstance')
+const OInstance = require('./classifications/OInstance')
 
 /*
  * Creates a new O instance with a OInstance already added.

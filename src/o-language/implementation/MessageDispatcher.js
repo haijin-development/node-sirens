@@ -74,7 +74,7 @@ class MessageDispatcher {
      * given object.
      */
     findClassificationIndexOf(object, classification) {
-        return this.objectGetClassifications(object).findIndex( (eachClassification) => {
+        return this.objectGetInstantiatedClassifications(object).findIndex( (eachClassification) => {
             return eachClassification.sourceClassification === classification
         })
     }
@@ -143,7 +143,7 @@ class MessageDispatcher {
      * If no prop value is found on any classification returns undefined. 
      */
     findMethodAmongAllClassificationsOf(lookupInitialIndex, proxy, receiver, propName) {
-        const classifications = this.objectGetClassifications(receiver)
+        const classifications = this.objectGetInstantiatedClassifications(receiver)
 
         const classificationsCount = classifications.length
 
@@ -325,7 +325,7 @@ class MessageDispatcher {
 
         classificationInstantiation.sourceClassification = classification
 
-        this.objectGetClassifications(object).unshift(classificationInstantiation)
+        this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
     }
 
     /*
@@ -334,7 +334,7 @@ class MessageDispatcher {
      * had that classification and there is no way to distinguish bots scenarios.
      */
     objectDropBehaviour(object, classification) {
-        const filteredClassifications = this.objectGetClassifications(object).filter( (eachClassification) => {
+        const filteredClassifications = this.objectGetInstantiatedClassifications(object).filter( (eachClassification) => {
             return eachClassification.sourceClassification !== classification
         })
 
@@ -346,7 +346,7 @@ class MessageDispatcher {
      * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
      */
     objectIsBehavingAs(object, aClassification) {
-        const index = this.objectGetClassifications(object).findIndex( (eachClassification) => {
+        const index = this.objectGetInstantiatedClassifications(object).findIndex( (eachClassification) => {
             return eachClassification.sourceClassification === aClassification
         })
 
@@ -365,8 +365,17 @@ class MessageDispatcher {
     /*
      * Returns an array with all of the classifications instantiated in the given object.
      */
-    objectGetClassifications(object) {
+    objectGetInstantiatedClassifications(object) {
         return object.impl.classifications
+    }
+
+    /*
+     * Returns an array with all of the classifications instantiated in the given object.
+     */
+    objectGetClassifications(object) {
+        return this.objectGetInstantiatedClassifications(object).map( (eachClassification) => {
+            return eachClassification.sourceClassification
+        })
     }
 
     /*
@@ -392,7 +401,9 @@ class MessageDispatcher {
     objectGetActiveClassification(object) {
         const length = object.impl.activeClassificationStack.length
 
-        return object.impl.activeClassificationStack[ length - 2 ]
+        const classification = object.impl.activeClassificationStack[ length - 2 ]
+
+        return classification.sourceClassification
     }
 
     /*
@@ -403,13 +414,15 @@ class MessageDispatcher {
      * 
      */
     objectGetPreviousClassification(object) {
-        const activeClassification = this.objectGetActiveClassification(object)
+        const length = object.impl.activeClassificationStack.length
+
+        const activeClassification = object.impl.activeClassificationStack[ length - 2 ]
 
         if( activeClassification === undefined ) { return undefined }
 
         const index  = this.findClassificationIndexOf(object, activeClassification.sourceClassification)
 
-        const classifications = this.objectGetClassifications(object)
+        const classifications = this.objectGetInstantiatedClassifications(object)
 
         const previousClassification = classifications[ index + 1 ]
 
@@ -525,7 +538,7 @@ class MessageDispatcher {
      * Instantiates and returns a new OInstance classification to be added to an object.
      */
     newOInstanceClassification() {
-        if(OInstance === null) { OInstance = require('../OInstance') }
+        if(OInstance === null) { OInstance = require('../classifications/OInstance') }
 
         return this.instantiateClassificationFor(OInstance)
     }
@@ -536,14 +549,12 @@ class MessageDispatcher {
     instantiateClassificationFor(classification) {
         let instanceVariables = []
 
-        if( classification.initialized !== true ) {
-            if( classification.definition != undefined ) {
+        if( classification.instanceVariables === undefined ) {
+            if( classification.definition !== undefined ) {
                 classification.definition()
             } else {
                 classification.instanceVariables = []
             }
-
-            classification.initialized = true
         }
 
         const instantiatedClassification = new classification()

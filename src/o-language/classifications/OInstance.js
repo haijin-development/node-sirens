@@ -1,5 +1,4 @@
-const Sirens = require('../Sirens')
-const MessageDispatcher = require('./implementation/MessageDispatcher')
+const MessageDispatcher = require('../implementation/MessageDispatcher')
 
 /*
  * This is the only behaviour that an instance has when its instantiated.
@@ -18,6 +17,24 @@ class OInstance {
      */
     static new() {
         return MessageDispatcher.createObject()
+    }
+
+    /// Asking
+
+    /*
+     * Answers true if this O instance is behaving as the given classification, false otherwise.
+     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     */
+    isBehavingAs(aClassification) {
+        return MessageDispatcher.objectIsBehavingAs(this, aClassification)
+    }
+
+    /*
+     * Answers true if the receiver understands the given message, false otherwise.
+     * An object responds to a message if any of its classifications does.
+     */
+    respondsTo(message) {
+        return MessageDispatcher.objectRespondsTo(this, message)
     }
 
     /// Behaviours
@@ -50,24 +67,6 @@ class OInstance {
      */
     previousClassificationDo(closure) {
         return MessageDispatcher.duringPreviousClassificationDo(this, closure)
-    }
-
-    /// Asking
-
-    /*
-     * Answers true if this O instance is behaving as the given classification, false otherwise.
-     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
-     */
-    isBehavingAs(aClassification) {
-        return MessageDispatcher.objectIsBehavingAs(this, aClassification)
-    }
-
-    /*
-     * Answers true if the receiver understands the given message, false otherwise.
-     * An object responds to a message if any of its classifications does.
-     */
-    respondsTo(message) {
-        return MessageDispatcher.objectRespondsTo(this, message)
     }
 
     /// Querying

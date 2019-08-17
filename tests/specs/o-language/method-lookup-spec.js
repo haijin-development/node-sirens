@@ -3,6 +3,10 @@ const O = require('../../../src/o-language/O')
 const Sirens = require('../../../src/Sirens')
 
 class Shape {
+    static definition() {
+        this.instanceVariables = ['x', 'y', 'shapeWasCalled']
+    }
+
     setPosition({x: x, y: y}) {
         this.x = x
         this.y = y
@@ -17,9 +21,17 @@ class Shape {
     getPosition() {
         return { x: this.x, y: this.y }
     }
+
+    getShapeWasCalled() {
+        return this.shapeWasCalled
+    }
 }
 
 class OptimizedShape {
+    static definition() {
+        this.instanceVariables = ['optimizedShapeWasCalled']
+    }
+
     setPosition({x: x, y: y}) {
         this.previousClassificationDo( () => {
             this.setPosition({x: x, y: y})  
@@ -31,9 +43,17 @@ class OptimizedShape {
 
         this.optimizedShapeWasCalled += 1
     }
+
+    getOptimizedShapeWasCalled() {
+        return this.shapeWasCalled
+    }
 }
 
 class CustomizedShape {
+    static definition() {
+        this.instanceVariables = ['customizedShapeWasCalled']
+    }
+
     setPosition({x: x, y: y}) {
         
         this.previousClassificationDo( () => {
@@ -46,9 +66,33 @@ class CustomizedShape {
 
         this.customizedShapeWasCalled += 1
     }
+
+    getConstant() {
+        return this.getConstant2()
+    }
+
+    getConstant2() {
+        return 123
+    }
+
+    getCustomizedShapeWasCalled() {
+        return this.customizedShapeWasCalled
+    }
 }
 
-xdescribe('When calling a method on an object', () => {
+describe('When calling nested methods on an object', () => {
+    it('calls the nested methods', () => {
+        const object = O.new()
+
+        object.behaveAs(Shape)
+        object.behaveAs(OptimizedShape)
+        object.behaveAs(CustomizedShape)
+
+        expect(object.getConstant()) .to .equal(123)
+    })
+})
+
+describe('When calling a method on an object', () => {
     it('activates the method in a given classification', () => {
         const object = O.new()
 
@@ -57,11 +101,11 @@ xdescribe('When calling a method on an object', () => {
         object.behaveAs(CustomizedShape)
 
         object.withClassificationDo( Shape, () => {
-            this.setPosition({x: 10, y: 20})
+            object.setPosition({x: 10, y: 20})
         })
 
-        expect(object.customizedShapeWasCalled) .to .be .undefined
-        expect(object.optimizedShapeWasCalled) .to .be .undefined
-        expect(object.shapeWasCalled) .to .equal(1)
+        expect( object.getCustomizedShapeWasCalled() ) .to .be .undefined
+        expect( object.getOptimizedShapeWasCalled() ) .to .be .undefined
+        expect( object.getShapeWasCalled() ) .to .equal(1)
     })
 })

@@ -62,10 +62,19 @@ class OInstance {
         return MessageDispatcher.objectRespondsTo(this, message)
     }
 
+    /// Querying
+
+    /*
+     * Returns an array of all of the current classifications instantiated in this object.
+     */
+    classifications() {
+        return MessageDispatcher.objectGetClassifications(this)
+    }
+
     /// Evaluating
 
     withClassificationDo(classification, closure) {
-        MessageDispatcher.duringClassificationDo(classification, closure)
+        MessageDispatcher.duringClassificationDo(this, classification, closure)
     }
 
 }

@@ -3,6 +3,10 @@ const O = require('../../../src/o-language/O')
 const Sirens = require('../../../src/Sirens')
 
 class Shape {
+    static definition() {
+        this.instanceVariables = ['x', 'y']
+    }
+
     setPosition({x: x, y: y}) {
         this.x = x
         this.y = y
@@ -14,6 +18,10 @@ class Shape {
 }
 
 class Circle {
+    static definition() {
+        this.instanceVariables = ['radious']
+    }
+
     setRadious(radious) {
         this.radious = radious
     }
@@ -35,7 +43,7 @@ describe('When dropping behaviour from an instance', () => {
 
         expect(object.respondsTo('getPosition')) .to .be .false
 
-        expect(object.classifications.length) .to .eql(1)
+        expect(object.classifications().length) .to .eql(1)
     })
 
     it('does not drop other classifications', () => {
@@ -49,7 +57,7 @@ describe('When dropping behaviour from an instance', () => {
         expect(object.respondsTo('getPosition')) .to .be .true
         expect(object.respondsTo('getRadious')) .to .be .false
 
-        expect(object.classifications.length) .to .eql(2)
+        expect(object.classifications().length) .to .eql(2)
     })
 
     it('does not fail if the classification was not previously added', () => {
@@ -59,6 +67,6 @@ describe('When dropping behaviour from an instance', () => {
 
         expect(object.respondsTo('getPosition')) .to .be .false
 
-        expect(object.classifications.length) .to .eql(1)
+        expect(object.classifications().length) .to .eql(1)
     })
 })

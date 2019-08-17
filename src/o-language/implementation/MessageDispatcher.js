@@ -2,8 +2,56 @@ let OInstance = null
 
 class MessageDispatcher {
 
-    constructor() {
-        this.activeClassificationsStack = []
+    ////////////////////////////////////////////
+    /// Active classification functions
+    ////////////////////////////////////////////
+
+    pushActiveClassificationInto(object, classification) {
+        object.impl.activeClassificationStack.push(classification)
+    }
+
+    popActiveClassificationFrom(object) {
+        object.impl.activeClassificationStack.pop()
+    }
+
+    getActiveClassificationFrom(object) {
+        const length = object.impl.activeClassificationStack.length
+
+        return object.impl.activeClassificationStack[ length - 1 ]
+    }
+
+    ////////////////////////////////////////////
+    /// Classification lookup functions
+    ////////////////////////////////////////////
+
+    pushInitialClassificationLookup(object, classification) {
+        object.impl.initialClassificationLookup.push(classification)
+    }
+
+    popInitialClassificationLookup(object) {
+        object.impl.initialClassificationLookup.pop()
+    }
+
+    getInitialClassificationLookup(object) {
+        const length = object.impl.initialClassificationLookup.length
+
+        return object.impl.initialClassificationLookup[ length - 1 ]
+    }
+
+    getInitialClassificationLookupIndex(object) {
+        const classification = this.getInitialClassificationLookup(object)
+
+        if( classification === null ) {
+            return -1
+        }
+
+        return this.findClassificationIndexOf(object, classification)
+    }
+
+    findClassificationIndexOf(object, classification) {
+        return this.objectGetClassifications(object).findIndex( (eachClassification) => {
+            return eachClassification.sourceClassification === classification
+        })
     }
 
     /*
@@ -34,12 +82,14 @@ class MessageDispatcher {
      */
     createMethodProxy(classificationFunction, classification) {
         const methodProxyApply = function(targetFunction, thisArg, params) {
-            this.activeClassificationsStack.push(classification)
+            const object = thisArg
+
+            this.pushActiveClassificationInto(object, classification)
 
             try {
                 return targetFunction.call(thisArg, ...params)
             } finally {
-                this.activeClassificationsStack.pop()
+                this.popActiveClassificationFrom(object)
             }
         }
 
@@ -63,10 +113,14 @@ class MessageDispatcher {
      *
      * If none handle is found on any classification returns undefined. 
      */
-    findMethodAmongAllClassificationsOf(proxy, receiver, propName) {
+    findMethodAmongAllClassificationsOf(lookupInitialIndex, proxy, receiver, propName) {
         const classifications = this.objectGetClassifications(receiver)
 
-        for(const eachClassification of classifications) {
+        const classificationsCount = classifications.length
+
+        for(let i = lookupInitialIndex; i < classificationsCount; i++) {
+            const eachClassification = classifications[i]
+
             const prop = this.findPropInClassification(eachClassification, propName)
 
             if( prop !== undefined ) {
@@ -96,15 +150,121 @@ class MessageDispatcher {
      * Otherwise each classification instantiated in the receiver object is queried to find
      * the first one that handles the propName. 
      */
-    lookupPropIn(proxy, receiver, propName) {
-        let propValue = this.findPropInReceiver(proxy, receiver, propName)
+    lookupPropIn(
+        {lookupInitialIndex: lookupInitialIndex, proxy: proxy, receiver: receiver, propName: propName}
+    ) {
+        if( lookupInitialIndex === -1 ) {
+            let propValue = this.findPropInReceiver(proxy, receiver, propName)
 
-        if( propValue != undefined ) {
-            return propValue
+            if( propValue != undefined ) {
+                return propValue
+            }
+
+            lookupInitialIndex = 0
         }
 
-        return this.findMethodAmongAllClassificationsOf(proxy, receiver, propName)
+        return this.findMethodAmongAllClassificationsOf(lookupInitialIndex, proxy, receiver, propName)
     }
+
+
+    ////////////////////////////////////////////
+    /// Classification lookup functions
+    ////////////////////////////////////////////
+
+    /*
+     * Returns true if the given propName is an instance variable of the active classification, false otherwise.
+     */
+    isInstanceVariableInActiveClassification(object, propName) {
+        const activeClassification = this.getActiveClassificationFrom(object)
+
+        if(activeClassification === undefined) {
+            return false
+        }
+
+        return this.isInstanceVariableOfClassificationInstantiation(activeClassification, propName)
+    }
+
+    /*
+     * Returns true if the given propName is an instance variable of the given classification instantiation, false otherwise.
+     */
+    isInstanceVariableOfClassificationInstantiation(classificationInstantiation, propName) {
+        const classification = classificationInstantiation.sourceClassification
+
+        return this.isInstanceVariableOfClassification(classification, propName)
+    }
+
+    /*
+     * Returns true if the given propName is an instance variable of the given classification, false otherwise.
+     */
+    isInstanceVariableOfClassification(classification, propName) {
+        const instanceVariables = classification.instanceVariables
+
+        return instanceVariables.includes(propName)
+    }
+
+    /*
+     * Returns the value of the instance variable in the active classification.
+     * Assumes that the instantace variable exists in that classification.
+     * That assumption might be tested first with isInstanceVariableInActiveClassification(object, instVarName).
+     */
+    getInstanceVariableFromActiveClassification(object, instVarName) {
+        const activeClassification = this.getActiveClassificationFrom(object)
+
+        if(activeClassification === undefined) {
+            return undefined
+        }
+
+        return this.getInstanceVariableFromClassificationInstantiation(activeClassification, instVarName)
+    }
+
+    /*
+     * Returns the value of the instance variable int the given classificationInstantiation.
+     * Assumes that the instantace variable exists in that classificationInstantiation.
+     * That assumption might be tested first with isInstanceVariableOfClassificationInstantiation.
+     */
+    getInstanceVariableFromClassificationInstantiation(classificationInstantiation, instVarName) {
+        return classificationInstantiation[instVarName]
+    }
+
+    /*
+     * Set the prop value in the current classification instantiation.
+     * The instance variables do not belong to an object but to an instantiation of a classification in that
+     * object.
+     */
+    setInstanceVariableInActiveClassification(
+        {proxy: proxy, receiver: receiver, propName: propName, value: value}
+    ) {
+        const activeClassification = this.getActiveClassificationFrom(receiver)
+
+        if( ! activeClassification.sourceClassification.instanceVariables.includes(propName) ) {
+            const classificationsName = activeClassification.sourceClassification.name
+
+            throw new Error(`'${propName}' is not an instance variable of ${classificationsName} Classification.`)
+        }
+
+        if( activeClassification === null ) {
+            receiver[propName] = value
+        } else {
+            activeClassification[propName] = value
+        }
+    }
+
+    /*
+     * Set the given classification as the initial classification in the classifications lookup
+     * and evaluates the given closure.
+     * After the evaluations restores the initial classification in the classifications lookup to
+     * its previous value.
+     */
+    duringClassificationDo(object, classification, closure) {
+        this.pushInitialClassificationLookup(object, classification)
+
+        try {
+            closure.call(object)
+        } finally {
+            this.popInitialClassificationLookup(object)
+        }
+    }
+
 
     ////////////////////////////////////////////
     /// Object methods
@@ -120,11 +280,11 @@ class MessageDispatcher {
             return this
         }
 
-        const classificationCopy = new classification()
+        const classificationInstantiation = this.instantiateClassificationFor(classification)
 
-        classificationCopy.sourceClassification = classification
+        classificationInstantiation.sourceClassification = classification
 
-        this.objectGetClassifications(object).unshift(classificationCopy)
+        this.objectGetClassifications(object).unshift(classificationInstantiation)
     }
 
     /*
@@ -133,7 +293,7 @@ class MessageDispatcher {
      * had that classification and there is no way to distinguish bots scenarios.
      */
     objectDropBehaviour(object, classification) {
-        const filteredClassifications = object.classifications.filter( (eachClassification) => {
+        const filteredClassifications = this.objectGetClassifications(object).filter( (eachClassification) => {
             return eachClassification.sourceClassification !== classification
         })
 
@@ -165,14 +325,14 @@ class MessageDispatcher {
      * Answers an array with all of the classifications instantiated in the given object.
      */
     objectGetClassifications(object) {
-        return object.classifications
+        return object.impl.classifications
     }
 
     /*
      * Sets an array with all of the classifications instantiated on the given object.
      */
     objectSetClassifications(object, classifications) {
-        object.classifications = classifications
+        object.impl.classifications = classifications
     }
 
     ////////////////////////////////////////////
@@ -189,7 +349,24 @@ class MessageDispatcher {
      * to it.
      */
     objectProxyGetProp(receiver, prop) {
-        return MessageDispatcherInstance.lookupPropIn(this, receiver, prop)
+        // These properties are part of the method dispatch implementation and must be handled out of the
+        // regular method dispatch logic
+        if( prop === 'impl' ) {
+            return receiver[prop]
+        }
+
+        if( MessageDispatcherInstance.isInstanceVariableInActiveClassification(receiver, prop) ) {
+            return MessageDispatcherInstance.getInstanceVariableFromActiveClassification(receiver, prop)
+        }
+
+        const lookupInitialIndex = MessageDispatcherInstance.getInitialClassificationLookupIndex(receiver)
+
+        return MessageDispatcherInstance.lookupPropIn({
+            lookupInitialIndex: lookupInitialIndex,
+            proxy: this,
+            receiver: receiver,
+            propName: prop,
+        })
     }
 
     /*
@@ -202,7 +379,12 @@ class MessageDispatcher {
      * to it.
      */
     objectProxySetProp(target, prop, value, receiver) {
-        target[prop] = value
+        MessageDispatcherInstance.setInstanceVariableInActiveClassification({
+            proxy: this,
+            receiver: receiver,
+            propName: prop,
+            value: value,
+        })
 
         return target
     }
@@ -239,7 +421,11 @@ class MessageDispatcher {
 
         const objectInitialClassifications = this.objectInitialClassifications(object)
 
-        this.objectSetClassifications(object, objectInitialClassifications)
+        object.impl = {
+            classifications: objectInitialClassifications,
+            activeClassificationStack: [],
+            initialClassificationLookup: [null],
+        }
 
         return this.createProxyOn(object)
     }
@@ -257,11 +443,30 @@ class MessageDispatcher {
     newOInstanceClassification() {
         if(OInstance === null) { OInstance = require('../OInstance') }
 
-        const oClassification = new OInstance()
+        return this.instantiateClassificationFor(OInstance)
+    }
 
-        oClassification.sourceClassification = OInstance
+    /*
+     * Instantiates a classification for the given object.
+     */
+    instantiateClassificationFor(classification) {
+        let instanceVariables = []
 
-        return oClassification    
+        if( classification.initialized !== true ) {
+            if( classification.definition != undefined ) {
+                classification.definition()
+            } else {
+                classification.instanceVariables = []
+            }
+
+            classification.initialized = true
+        }
+
+        const instantiatedClassification = new classification()
+
+        instantiatedClassification.sourceClassification = classification
+
+        return instantiatedClassification
     }
 }
 

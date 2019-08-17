@@ -3,6 +3,10 @@ const O = require('../../../src/o-language/O')
 const Sirens = require('../../../src/Sirens')
 
 class Shape {
+    static definition() {
+        this.instanceVariables = ['x', 'y']
+    }
+
     setPosition({x: x, y: y}) {
         this.x = x
         this.y = y
@@ -14,6 +18,10 @@ class Shape {
 }
 
 class Circle {
+    static definition() {
+        this.instanceVariables = ['radious']
+    }
+
     setRadious(radious) {
         this.radious = radious
     }
@@ -33,7 +41,7 @@ describe('When adding behaviour to an O instance', () => {
 
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
 
-        expect(object.classifications.length) .to .eql(2)
+        expect(object.classifications().length) .to .eql(2)
     })
 
     it('behaves as more than one classification', () => {
@@ -48,7 +56,7 @@ describe('When adding behaviour to an O instance', () => {
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
         expect(object.getRadious()) .to .eql(3)
 
-        expect(object.classifications.length) .to .eql(3)
+        expect(object.classifications().length) .to .eql(3)
     })
 
     it('does nothing if the object already is behaving as the given classification', () => {
@@ -65,6 +73,6 @@ describe('When adding behaviour to an O instance', () => {
 
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
 
-        expect(object.classifications.length) .to .eql(3)
+        expect(object.classifications().length) .to .eql(3)
     })
 })

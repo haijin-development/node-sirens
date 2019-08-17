@@ -1,6 +1,5 @@
 const expect = require('chai').expect
-const O = require('../../../src/o-language/O')
-const Sirens = require('../../../src/Sirens')
+const O = require('../../../../src/o-language/O')
 
 class Shape {
     static definition() {

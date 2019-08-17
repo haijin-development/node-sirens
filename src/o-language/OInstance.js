@@ -44,6 +44,14 @@ class OInstance {
         return this
     }
 
+    /*
+     * Evaluates the given closure but starting the method lookup in the previous classification to the one
+     * active in the method that called previousClassificationDo().
+     */
+    previousClassificationDo(closure) {
+        return MessageDispatcher.duringPreviousClassificationDo(this, closure)
+    }
+
     /// Asking
 
     /*
@@ -65,16 +73,34 @@ class OInstance {
     /// Querying
 
     /*
-     * Returns an array of all of the current classifications instantiated in this object.
+     * Returns an array of all of the instantiated classifications bound this object.
      */
     classifications() {
         return MessageDispatcher.objectGetClassifications(this)
     }
 
+    /*
+     * Returns the classification active in the method that called thisClassification().
+     */
+    thisClassification() {
+        return MessageDispatcher.objectGetActiveClassification(this)
+    }
+
+    /*
+     * Returns the previous classification to the active classification in the method that 
+     * called previousClassification().
+     */
+    previousClassification() {
+        return MessageDispatcher.objectGetPreviousClassification(this)
+    }
+
     /// Evaluating
 
+    /*
+     * Evaluates the given closure starting the method lookup on the given classification.
+     */
     withClassificationDo(classification, closure) {
-        MessageDispatcher.duringClassificationDo(this, classification, closure)
+        return MessageDispatcher.duringClassificationDo(this, classification, closure)
     }
 
 }

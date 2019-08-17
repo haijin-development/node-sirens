@@ -45,7 +45,7 @@ class OptimizedShape {
     }
 
     getOptimizedShapeWasCalled() {
-        return this.shapeWasCalled
+        return this.optimizedShapeWasCalled
     }
 }
 
@@ -55,7 +55,7 @@ class CustomizedShape {
     }
 
     setPosition({x: x, y: y}) {
-        
+
         this.previousClassificationDo( () => {
             this.setPosition({x: x, y: y})  
         })
@@ -68,11 +68,11 @@ class CustomizedShape {
     }
 
     getConstant() {
-        return this.getConstant2()
+        return this.getConstantFromNestedMethod()
     }
 
-    getConstant2() {
-        return 123
+    getConstantFromNestedMethod() {
+        return 'a constant'
     }
 
     getCustomizedShapeWasCalled() {
@@ -88,7 +88,7 @@ describe('When calling nested methods on an object', () => {
         object.behaveAs(OptimizedShape)
         object.behaveAs(CustomizedShape)
 
-        expect(object.getConstant()) .to .equal(123)
+        expect(object.getConstant()) .to .equal('a constant')
     })
 })
 
@@ -106,6 +106,20 @@ describe('When calling a method on an object', () => {
 
         expect( object.getCustomizedShapeWasCalled() ) .to .be .undefined
         expect( object.getOptimizedShapeWasCalled() ) .to .be .undefined
+        expect( object.getShapeWasCalled() ) .to .equal(1)
+    })
+
+    it('activates the method from the previous classification', () => {
+        const object = O.new()
+
+        object.behaveAs(Shape)
+        object.behaveAs(OptimizedShape)
+        object.behaveAs(CustomizedShape)
+
+        object.setPosition({x: 10, y: 20})
+
+        expect( object.getCustomizedShapeWasCalled() ) .to .be .equal(1)
+        expect( object.getOptimizedShapeWasCalled() ) .to .equal(1)
         expect( object.getShapeWasCalled() ) .to .equal(1)
     })
 })

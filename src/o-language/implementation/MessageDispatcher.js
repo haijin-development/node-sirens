@@ -6,14 +6,23 @@ class MessageDispatcher {
     /// Active classification functions
     ////////////////////////////////////////////
 
+    /*
+     * Pushes the given classification in the call stack of the given object.
+     */
     pushActiveClassificationInto(object, classification) {
         object.impl.activeClassificationStack.push(classification)
     }
 
+    /*
+     * Pops the classification from the call stack of the given object.
+     */
     popActiveClassificationFrom(object) {
         object.impl.activeClassificationStack.pop()
     }
 
+    /*
+     * Returns the active classification from the call stack of the given object.
+     */
     getActiveClassificationFrom(object) {
         const length = object.impl.activeClassificationStack.length
 
@@ -24,20 +33,32 @@ class MessageDispatcher {
     /// Classification lookup functions
     ////////////////////////////////////////////
 
+    /*
+     * Pushes the given classification in the method lookup of the given object.
+     */
     pushInitialClassificationLookup(object, classification) {
         object.impl.initialClassificationLookup.push(classification)
     }
 
+    /*
+     * Pops the classification from the method lookup of the given object.
+     */
     popInitialClassificationLookup(object) {
         object.impl.initialClassificationLookup.pop()
     }
 
+    /*
+     * Returns the starting classification in the method lookup for the given object.
+     */
     getInitialClassificationLookup(object) {
         const length = object.impl.initialClassificationLookup.length
 
         return object.impl.initialClassificationLookup[ length - 1 ]
     }
 
+    /*
+     * Returns the index of the starting classification in the method lookup for the given object.
+     */
     getInitialClassificationLookupIndex(object) {
         const classification = this.getInitialClassificationLookup(object)
 
@@ -48,6 +69,10 @@ class MessageDispatcher {
         return this.findClassificationIndexOf(object, classification)
     }
 
+    /*
+     * Returns the index of the given classification in the array of the instantiated classifications of the
+     * given object.
+     */
     findClassificationIndexOf(object, classification) {
         return this.objectGetClassifications(object).findIndex( (eachClassification) => {
             return eachClassification.sourceClassification === classification
@@ -66,19 +91,21 @@ class MessageDispatcher {
     }
 
     /*
-     * Creates a return a proxy on the given classification function that handles a message
+     * Creates and returns a proxy on the given classification function that handles a message
      * send.
      *
-     * This proxy hooks the function call to correctly active the method, updating which
+     * This proxy hooks the function call to correctly activate the method and update which
      * classification is handling the function call.
      *
      * To know which classification is handling the method call is necessary to correctly
-     * handle the statement
+     * handle the statements
      *
+     *              this.thisClassification()
      *              this.previousClassification()
+     *              this.previousClassificationDo()
      *
-     * that dispatches the messages throught the classifications chain from the current classification
-     * up to the last one.
+     * that dispatch the messages throught the classifications chain from the current classification
+     * up to the first one.
      */
     createMethodProxy(classificationFunction, classification) {
         const methodProxyApply = function(targetFunction, thisArg, params) {
@@ -108,10 +135,12 @@ class MessageDispatcher {
      * Queries each classification instantiated in the receiver object to find
      * the first one that handles the propName.
      *
-     * If the prop value found is a classification method returns a function wrapper on it that
+     * If the found prop value is not a function returns that value.
+
+     * If the found prop value is a classification method returns a function wrapper on it that
      * correctly handles the classification method activation.
      *
-     * If none handle is found on any classification returns undefined. 
+     * If no prop value is found on any classification returns undefined. 
      */
     findMethodAmongAllClassificationsOf(lookupInitialIndex, proxy, receiver, propName) {
         const classifications = this.objectGetClassifications(receiver)
@@ -251,21 +280,32 @@ class MessageDispatcher {
     }
 
     /*
-     * Set the given classification as the initial classification in the classifications lookup
+     * Sets the given classification as the initial classification in the classifications lookup
      * and evaluates the given closure.
-     * After the evaluations restores the initial classification in the classifications lookup to
+     * After the closure evaluation restores the initial classification in the classifications lookup to
      * its previous value.
      */
     duringClassificationDo(object, classification, closure) {
         this.pushInitialClassificationLookup(object, classification)
 
         try {
-            closure.call(object)
+            return closure.call(object)
         } finally {
             this.popInitialClassificationLookup(object)
         }
     }
 
+    /*
+     * Sets the top most - 3 classification as the initial classification in the classifications lookup
+     * and evaluates the given closure.
+     * After the clsoure evaluation restores the initial classification in the classifications lookup to
+     * its previous value.
+     */
+    duringPreviousClassificationDo(object, closure) {
+        const classification = this.objectGetPreviousClassification(object)
+
+        return this.duringClassificationDo(object, classification, closure)
+    }
 
     ////////////////////////////////////////////
     /// Object methods
@@ -323,7 +363,7 @@ class MessageDispatcher {
 
 
     /*
-     * Answers an array with all of the classifications instantiated in the given object.
+     * Returns an array with all of the classifications instantiated in the given object.
      */
     objectGetClassifications(object) {
         return object.impl.classifications
@@ -335,6 +375,49 @@ class MessageDispatcher {
     objectSetClassifications(object, classifications) {
         object.impl.classifications = classifications
     }
+
+    /*
+     * Returns the classification active at the method where this.thisClassification() is called.
+     *
+     * Do not confuse with getActiveClassificationFrom(object).
+     *
+     * getActiveClassificationFrom(object) returns the top most classification in the call stack and is
+     * an implementation method of the MessageDispatcher object.
+     *
+     * objectGetActiveClassification(object) returns the active classification at the method where
+     *              this.thisClassification()
+     * is called. That will be the second top most active frame in the call stack since the top most will
+     * be the call to thisClassification() itself.
+     */
+    objectGetActiveClassification(object) {
+        const length = object.impl.activeClassificationStack.length
+
+        return object.impl.activeClassificationStack[ length - 2 ]
+    }
+
+    /*
+     * Returns the previous classification to the active at the method where this.previousClassification() is called.
+     *
+     * Another way to say it is that it returns the classification instantiated on the given object previous to the 
+     * classification returned by objectGetActiveClassification(object).
+     * 
+     */
+    objectGetPreviousClassification(object) {
+        const activeClassification = this.objectGetActiveClassification(object)
+
+        if( activeClassification === undefined ) { return undefined }
+
+        const index  = this.findClassificationIndexOf(object, activeClassification.sourceClassification)
+
+        const classifications = this.objectGetClassifications(object)
+
+        const previousClassification = classifications[ index + 1 ]
+
+        if( previousClassification === undefined ) { return undefined }
+
+        return previousClassification.sourceClassification
+    }
+
 
     ////////////////////////////////////////////
     //////// Objects instantiation

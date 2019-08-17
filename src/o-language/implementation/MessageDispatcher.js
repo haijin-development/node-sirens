@@ -236,17 +236,18 @@ class MessageDispatcher {
     ) {
         const activeClassification = this.getActiveClassificationFrom(receiver)
 
+        if( activeClassification === undefined ) {
+            receiver[propName] = value
+            return
+        }
+
         if( ! activeClassification.sourceClassification.instanceVariables.includes(propName) ) {
             const classificationsName = activeClassification.sourceClassification.name
 
             throw new Error(`'${propName}' is not an instance variable of ${classificationsName} Classification.`)
         }
 
-        if( activeClassification === null ) {
-            receiver[propName] = value
-        } else {
-            activeClassification[propName] = value
-        }
+        activeClassification[propName] = value
     }
 
     /*
@@ -381,7 +382,7 @@ class MessageDispatcher {
     objectProxySetProp(target, prop, value, receiver) {
         MessageDispatcherInstance.setInstanceVariableInActiveClassification({
             proxy: this,
-            receiver: receiver,
+            receiver: target,
             propName: prop,
             value: value,
         })

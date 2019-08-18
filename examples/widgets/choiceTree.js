@@ -20,21 +20,21 @@ class CustomComponent extends Component{
         const choices = this.getModel()
 
         builder.render(function (component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.treeChoice( (tree) => {
-                    tree.model(choices)
+                this.treeChoice( function() {
+                    this.model(choices)
 
-                    tree.column({
+                    this.column({
                         label: 'Column 1',
                         getTextBlock: (n) => { return n.toString() },
                     })
 
-                    tree.column({
+                    this.column({
                         label: 'Column 2',
                     })
                 })

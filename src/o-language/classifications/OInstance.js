@@ -72,6 +72,15 @@ class OInstance {
     /// Querying
 
     /*
+     * Evaluates the given closure with this object as its parameters and returns this object.
+     */
+    yourself(closure) {
+        closure(this)
+
+        return this
+    }
+
+    /*
      * Returns an array of all of the instantiated classifications bound this object.
      */
     classifications() {

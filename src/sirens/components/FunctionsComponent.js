@@ -16,8 +16,9 @@ class FunctionsComponent extends Component {
         const prototypesModel = this.getModel()
 
         builder.render(function (component) {
-            this.verticalStack( () => {
-                this.horizontalStack( () => {
+            this.verticalStack( function() {
+
+                this.horizontalStack( function() {
                     this.styles({
                         packExpand: false,
                     })
@@ -41,21 +42,19 @@ class FunctionsComponent extends Component {
                     })
                 })
 
-                this.listChoice((list) => {
-                    list.model(prototypesModel.getSelectedPrototypePropsModel())
+                this.listChoice( function() {
+                    this.model( prototypesModel.getSelectedPrototypePropsModel() )
 
-                    list.handlers({
+                    this.handlers({
                         onAction: component.browseSelectedProperty.bind(component),
                     })
 
-                    list.column({
+                    this.column({
                         label: 'Properties',
-                        getTextBlock: (objectProperty) => {
-                            return objectProperty.getKey()
-                        },
+                        getTextBlock: function(objectProperty) { return objectProperty.getKey() },
                     })
 
-                    list.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                    this.popupMenu( function({ menu: menu, ownerView: ownerView }) {
                         const selectedObject =
                             component.getModel().getSelectedPropValue()
 
@@ -66,6 +65,7 @@ class FunctionsComponent extends Component {
                         })
                     })
                 })
+
             })
         })
     }

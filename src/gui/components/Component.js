@@ -1,12 +1,12 @@
 const AbstractComponent = require('./AbstractComponent')
 const ComponentView = require('../views/ComponentView')
-const ComponentBuilder = require('../componentBuilder/ComponentBuilder')
+const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
 class Component extends AbstractComponent {
     build(props) {
         super.build(props)
 
-        const builder = new ComponentBuilder(this)
+        const builder = ComponentRenderer.onRootComponent(this)
 
         this.renderWith(builder)
     }

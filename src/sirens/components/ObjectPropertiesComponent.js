@@ -29,27 +29,27 @@ class ObjectPropertiesComponent extends Component {
     /// Building
 
     renderWith(builder) {
-        builder.render(function (component) {
+        builder.render( function(component) {
 
-            this.treeChoice( (tree) => {
-                tree.model(component.getModel().getObjectPropertiesTree())
+            this.treeChoice( function(tree) {
+                this.model( component.getModel().getObjectPropertiesTree() )
 
-                tree.styles({
+                this.styles({
                     splitProportion: 2.0/3.0,
                     showHeaders: false,
                     clickableHeaders: false,
                 })
 
-                tree.handlers({
+                this.handlers({
                     onAction: component.inspectSelectedObject.bind(component),
                 })
 
-                tree.column({
+                this.column({
                     label: '',
-                    getTextBlock: (instVar) => { return instVar.displayString() },
+                    getTextBlock: function(instVar) { return instVar.displayString() },
                 })
 
-                tree.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                this.popupMenu( function({menu: menu, ownerView: ownerView}) {
                     const selectedObject =
                         component.getModel().getSelectedPropertyValue()
 

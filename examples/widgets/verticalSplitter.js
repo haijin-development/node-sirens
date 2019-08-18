@@ -6,13 +6,13 @@ class CustomComponent extends Component{
 
     renderWith(builder) {
         builder.render(function (component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.verticalSplitter( () => {
+                this.verticalSplitter( function() {
 
                     this.label({
                         splitProportion: 3.0/6,

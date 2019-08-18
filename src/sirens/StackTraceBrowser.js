@@ -21,43 +21,43 @@ class StackTraceBrowser extends Component {
         const browserModel = this.getModel()
 
         builder.render( function(component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     title: 'Stack trace browser',
                     width: 900,
                     height: 400,
                 })
 
-                this.verticalSplitter( () => {
+                this.verticalSplitter( function() {
 
-                    this.horizontalSplitter( () => {
+                    this.horizontalSplitter( function() {
 
                         this.styles({
                             splitProportion: 1.0/2.0,
                         })
 
-                        this.listChoice( (list) => {
-                            list.model( browserModel.getFramesStackModel() )
+                        this.listChoice( function() {
+                            this.model( browserModel.getFramesStackModel() )
 
-                            list.styles({
+                            this.styles({
                                 splitProportion: 2.0/3.0,
                                 showHeaders: true,
                                 clickableHeaders: false,
                             })
 
-                            list.column({
+                            this.column({
                                 label: 'Functions calls',
-                                getTextBlock: (stackFrame) => { return stackFrame.getFunctionName() }
+                                getTextBlock: function(stackFrame) { return stackFrame.getFunctionName() }
                             })
 
-                            list.column({
+                            this.column({
                                 label: 'File',
-                                getTextBlock: (stackFrame) => { return stackFrame.getFileName() }
+                                getTextBlock: function(stackFrame) { return stackFrame.getFileName() }
                             })
 
-                            list.column({
+                            this.column({
                                 label: 'Line',
-                                getTextBlock: (stackFrame) => { return stackFrame.getLineNumber() }
+                                getTextBlock: function(stackFrame) { return stackFrame.getLineNumber() }
                             })
                         })
 

@@ -16,22 +16,22 @@ class CustomComponent extends Component{
     renderWith(builder) {
         const choices = this.getModel()
 
-        builder.render(function (component) {
-            this.window( () => {
+        builder.render( function (component) {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.listChoice( (list) => {
-                    list.model(choices)
+                this.listChoice( function(list) {
+                    this.model(choices)
 
-                    list.column({
+                    this.column({
                         label: 'Column 1',
                         getTextBlock: (n) => { return n.toString() },
                     })
 
-                    list.column({
+                    this.column({
                         label: 'Column 2',
                     })
                 })

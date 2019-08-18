@@ -55,15 +55,15 @@ class ObjectBrowser extends Component {
         const browserModel = this.getModel()
 
         builder.render( function(component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     title: 'Object Browser',
                     width: 400,
                     height: 400,
                 })
 
-                this.verticalStack( () => {
-                    this.verticalSplitter( () => {
+                this.verticalStack( function() {
+                    this.verticalSplitter( function() {
                         this.component(
                             new ObjectPropertiesComponent({
                                 model: browserModel,
@@ -71,7 +71,7 @@ class ObjectBrowser extends Component {
                             })
                         )
 
-                        this.text( () => {
+                        this.text( function() {
                             this.model(browserModel.getSelectedPropertyText())
 
                             this.styles({
@@ -80,7 +80,7 @@ class ObjectBrowser extends Component {
                                 wrapMode: 'wordChar'
                             })
 
-                            this.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                            this.popupMenu( function({menu: menu, ownerView: ownerView}) {
                                 const selectedObject =
                                     component.getModel().getSelectedPropertyValue()
 

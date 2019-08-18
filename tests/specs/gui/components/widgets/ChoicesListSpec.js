@@ -5,7 +5,7 @@ const Column = require('../../../../../src/gui/componentBuilder/Column')
 describe('When using a ChoicesList', () => {
     beforeEach( () => {
         this.list = new ChoicesList({
-            columns: [new Column({label: 'col 1'})],
+            columns: [ Column.newWithProps({label: 'col 1'}) ],
         })
     })
 
@@ -62,7 +62,7 @@ describe('When using a ChoicesList', () => {
 
         it('sets the choices on its constructor', () => {
             this.list = new ChoicesList({
-                columns: [ new Column({label: 'col 1'}) ],
+                columns: [ Column.newWithProps({label: 'col 1'}) ],
                 choices: ['a','b','c'],
                 selection: 'c'
             })

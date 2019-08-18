@@ -1,3 +1,20 @@
+/*
+ * In the O language any classification can be added to any object, making the object to adquire the
+ * classification behaviour:
+ *
+ *      const object = O.new()
+ *
+ *      object.behaveAs(Point)
+ *
+ * If the object already behaves as the added classification nothing happens, making the behaveAs an idemponent
+ * operation:
+ *
+ *      const object = O.new()
+ *
+ *      object.behaveAs(Point)
+ *
+ */
+
 const expect = require('chai').expect
 const O = require('../../../../src/o-language/O')
 

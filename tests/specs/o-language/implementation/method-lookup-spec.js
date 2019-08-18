@@ -1,4 +1,44 @@
-const expect = require('chai').expect
+/*
+ * A classification may call a method on a previously instantiated classification by using the method
+ *
+ *                      this.previousClassificationDo( () => {
+ *                          // ...
+ *                      }).
+ *
+ * This allows to not only override or replace the behaviour of another classification but to extend it
+ * without modifying any of the original behaviour in a similar fashion as 'super' does in object orianted classes:
+ *
+ *   class Point {
+ *       setX(value) {
+ *           this.x = value
+ *       }
+ *   }
+ *
+ *   class PointModel {
+ *      setX(value) {
+ *          const oldValue = this.getX()
+ *
+ *          this.previousClassificationDo( () => {
+ *              this.setX(value)
+ *          })
+ *
+ *          this.trigger({
+ *              event: 'x-coordinate-changed',
+ *              oldValue: oldValue,
+ *              newValue: newValue,
+ *          })
+ *      }
+ *  }
+ *
+ *  const point = O.new()
+ *                  .behaveAs(Point)
+ *                  .behaveAs(PointModel)
+ *
+ * Note that the order in which the classifications are added to an object matters for the method
+ *      previousClassificationDo( () => {} )
+ */
+
+ const expect = require('chai').expect
 const O = require('../../../../src/o-language/O')
 
 class Shape {

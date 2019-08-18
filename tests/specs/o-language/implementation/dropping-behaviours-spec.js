@@ -1,3 +1,23 @@
+/*
+ * In the O language any classification previously added to an instance can be dropped by that instance:
+ *
+ *      const object = O.new()
+ *
+ *      object.behaveAs(Point)
+ *      object.setX(0)
+ *      object.setY(0)
+ *
+ *      object.dropBehaviour(Point)
+ *
+ * If the object did not behaved as the dropped classification nothing happens, making the dropBehaviour an
+ * idemponent operation:
+ *
+ *      const object = O.new()
+ *
+ *      object.dropBehaviour(Point)
+ *
+ */
+
 const expect = require('chai').expect
 const O = require('../../../../src/o-language/O')
 

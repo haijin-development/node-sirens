@@ -9,12 +9,20 @@
  * without modifying any of the original behaviour in a similar fashion as 'super' does in object orianted classes:
  *
  *   class Point {
- *       setX(value) {
- *           this.x = value
- *       }
- *   }
+ *      static definition() {
+ *          this.instanceVariables = ['x', 'y']
+ *      }
  *
- *   class PointModel {
+ *      setX(value) {
+ *          this.x = value
+ *      }
+ *
+ *      getX() {
+ *          return this.x
+ *      }
+ *  }
+ *
+ *  class PointModel {
  *      setX(value) {
  *          const oldValue = this.getX()
  *
@@ -38,7 +46,7 @@
  *      previousClassificationDo( () => {} )
  */
 
- const expect = require('chai').expect
+const expect = require('chai').expect
 const O = require('../../../../src/o-language/O')
 
 class Shape {

@@ -326,6 +326,10 @@ class MessageDispatcher {
         classificationInstantiation.sourceClassification = classification
 
         this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
+
+        if( classificationInstantiation.afterInstantiation !== undefined ) {
+            object.afterInstantiation()
+        }
     }
 
     /*

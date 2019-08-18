@@ -7,6 +7,10 @@
  * Nevertheless classifications may define they own static methods to create and initialize instances:
  *
  *     class Point {
+ *          static definition() {
+ *              this.instanceVariables = ['x', 'y']
+ *          }
+ *
  *          // Instances creation
  *
  *          static new() {

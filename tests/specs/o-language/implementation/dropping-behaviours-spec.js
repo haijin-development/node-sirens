@@ -10,7 +10,7 @@
  *      object.dropBehaviour(Point)
  *
  * If the object did not behaved as the dropped classification nothing happens, making the dropBehaviour an
- * idemponent operation:
+ * idempotent operation:
  *
  *      const object = O.new()
  *

@@ -6,7 +6,7 @@
  *
  *      object.behaveAs(Point)
  *
- * If the object already behaves as the added classification nothing happens, making the behaveAs an idemponent
+ * If the object already behaves as the added classification nothing happens, making the behaveAs an idempotent
  * operation:
  *
  *      const object = O.new()

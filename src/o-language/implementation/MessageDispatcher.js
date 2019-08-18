@@ -327,6 +327,12 @@ class MessageDispatcher {
 
         this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
 
+        const allAssumptions = classification.assumptions
+
+        allAssumptions.forEach( (assumedClassification) => {
+            object.behaveAs(assumedClassification)
+        })
+
         if( classificationInstantiation.afterInstantiation !== undefined ) {
             object.afterInstantiation()
         }
@@ -556,8 +562,14 @@ class MessageDispatcher {
         if( classification.instanceVariables === undefined ) {
             if( classification.definition !== undefined ) {
                 classification.definition()
-            } else {
+            }
+
+            if( classification.instanceVariables === undefined ) {
                 classification.instanceVariables = []
+            }
+
+            if( classification.assumptions === undefined ) {
+                classification.assumptions = []
             }
         }
 

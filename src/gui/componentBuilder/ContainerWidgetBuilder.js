@@ -1,4 +1,4 @@
-const O = require('../../o-language/O')
+const OInstance = require('../../o-language/classifications/OInstance')
 const ColumnsBuilder = require('./ColumnsBuilder')
 const Window = require('../components/containers/Window')
 const Stack = require('../components/containers/Stack')
@@ -11,29 +11,26 @@ const CheckBox = require('../components/widgets/CheckBox')
 const TextButton = require('../components/widgets/TextButton')
 const RadioButton = require('../components/widgets/RadioButton')
 
-class GenericComponentBuilder {
+const WidgetBuilder = require('./WidgetBuilder')
+
+class ContainerWidgetBuilder {
     /// Instantiating
 
     static new() {
-        return this.newWithProps({})
-    }
-
-    static newWithProps(props) {
-        return O.new()
+        return OInstance.new()
             .behaveAs(this)
-            .mergeProps(props)
     }
 
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['props', 'childComponents']
+        this.instanceVariables = ['childComponents']
+        this.assumptions = [WidgetBuilder]
     }
 
     /// Initializing
 
     afterInstantiation() {
-        this.props = {}
         this.childComponents = []
     }
 
@@ -43,41 +40,7 @@ class GenericComponentBuilder {
         return this.childComponents
     }
 
-    getProps() {
-        return this.props
-    }
-
-    mergeProps(additionalProps) {
-        this.props = Object.assign(this.props, additionalProps)
-
-        return this
-    }
-
-    /// Setting props
-
-    model(model) {
-        this.mergeProps({ model: model })
-    }
-
-    styles(props) {
-        this.mergeProps(props)
-    }
-
-    handlers(props) {
-        this.mergeProps(props)
-    }
-
-    popupMenu(populatePopupMenuBlock) {
-        this.mergeProps({ populatePopupMenuBlock: populatePopupMenuBlock })
-    }
-
     /// Building
-
-    build(closure, ...params) {
-        if( closure === undefined ) { return }
-
-        closure.call(this, ...params)
-    }
 
     component(component) {
         this.childComponents.push(component)
@@ -89,7 +52,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -108,7 +71,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -127,7 +90,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -146,7 +109,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -165,7 +128,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -184,7 +147,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
             builder
                 .behaveAs(ColumnsBuilder)
                 .build(closure)
@@ -203,7 +166,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
             builder
                 .behaveAs(ColumnsBuilder)
                 .build(closure)
@@ -222,7 +185,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -239,7 +202,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -256,7 +219,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -273,7 +236,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -290,7 +253,7 @@ class GenericComponentBuilder {
             props = {}
         }
 
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.new().yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -302,4 +265,4 @@ class GenericComponentBuilder {
     }
 }
 
-module.exports = GenericComponentBuilder
+module.exports = ContainerWidgetBuilder

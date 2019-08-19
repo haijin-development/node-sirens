@@ -5,7 +5,7 @@ class Splitter extends PrimitiveComponent {
     /// Initializing
 
     createView() {
-        return new SplitterView(this.props.orientation)
+        return SplitterView.new(this.props.orientation)
     }
 
     synchronizeViewFromModel() {

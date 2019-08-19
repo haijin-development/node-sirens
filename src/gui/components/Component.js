@@ -12,7 +12,7 @@ class Component extends AbstractComponent {
     }
 
     createView() {
-        return new ComponentView()
+        return ComponentView.new()
     }
 
     synchronizeViewFromModel() {

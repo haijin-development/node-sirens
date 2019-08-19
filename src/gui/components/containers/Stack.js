@@ -5,7 +5,7 @@ class Stack extends PrimitiveComponent {
     /// Initializing
 
     createView() {
-        return new StackView(this.props.orientation)
+        return StackView.new(this.props.orientation)
     }
 
     synchronizeViewFromModel() {

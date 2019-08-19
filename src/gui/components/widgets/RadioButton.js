@@ -6,7 +6,7 @@ class RadioButton extends PrimitiveComponent {
     /// Initializing
 
     createView() {
-        return new RadioButtonView()
+        return RadioButtonView.new()
     }
 
     defaultModel() {

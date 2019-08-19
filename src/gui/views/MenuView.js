@@ -1,4 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const OInstance = require('../../o-language/classifications/OInstance')
 
 const gtkMenuMethodsToCopy = ['add', 'showAll', 'popupAtPointer']
 
@@ -12,28 +13,45 @@ class MenuView {
      * gtkWidget. Don't know if there is a cleaner way to do it.
      */
     static castGtkWidgetToGtkMenu(gtkWidget) {
-        gtkWidget.__proto__ = Gtk.Menu.prototype
+        Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
 
         return gtkWidget
+    }
+
+    /// Instantiating
+
+    static new({ gtkWidget: gtkWidget } = { gtkWidget: undefined })
+    {
+        return OInstance.new().yourself( (menu) => {
+            menu
+                .behaveAs(this)
+                .initialize({ gtkWidget: gtkWidget })
+        })
     }
 
     /*
      * Returns a new MenuView wrapping the given GtkWidget.
      */
     static newFromGtkWidget(gtkWidget) {
-        const menuHandle = this.castGtkWidgetToGtkMenu(gtkWidget)
+        const gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
 
-        return new this(menuHandle)
+        return this.new({ gtkWidget: gtkWidget })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [ 'menuHandle' ]
     }
 
     /// Initializing
 
-    constructor(menuHandle) {
-        if(menuHandle === undefined) {
-            menuHandle = new Gtk.Menu()
+    initialize({ gtkWidget: gtkWidget }) {
+        if(gtkWidget === undefined) {
+            gtkWidget = new Gtk.Menu()
         }
 
-        this.menuHandle = menuHandle
+        this.menuHandle = gtkWidget
     }
 
     /// Querying

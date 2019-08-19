@@ -13,7 +13,7 @@ class Text extends PrimitiveComponent {
     }
 
     createView() {
-        return new TextView({onTextChanged: this.onTextChanged.bind(this)})
+        return TextView.new({ onTextChanged: this.onTextChanged.bind(this) })
     }
 
     /// Querying

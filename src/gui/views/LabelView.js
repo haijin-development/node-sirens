@@ -1,7 +1,25 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 
-class LabelView extends View {
+class LabelView {
+
+    /// Instantiating
+
+    static new() {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initializeHandles()
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
 
     /// Initializing
 
@@ -11,17 +29,16 @@ class LabelView extends View {
 
     /// Accessing
 
+    getMainHandle() {
+        return this.mainHandle
+    }
+
     setText(text) {
-        this.mainHandle.label = text
+        this.getMainHandle().label = text
     }
 
     getText() {
-        return this.mainHandle.label
-    }
-
-    /// Events
-
-    subscribeToGUISignals(props) {
+        return this.getMainHandle().label
     }
 }
 

@@ -1,25 +1,16 @@
-const AbstractView = require('./AbstractView')
+const GtkView = require('./GtkView')
+const GtkWidgetWithContextMenu = require('./GtkWidgetWithContextMenu')
 
-class View extends AbstractView {
+class GtkWidget {
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [GtkView, GtkWidgetWithContextMenu]
+    }
+
     /// Initializing
-
-    constructor(...params) {
-        super()
-
-        this.mainHandle = null
-
-        this.build(...params)
-    }
-
-    build(...params) {
-        this.initializeHandles(...params)
-
-        this.subscribeToGUISignals()
-    }
-
-    initializeHandles() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::initializeHandles()`)
-    }
 
     onViewAdded(childView) {
         const childHandles = childView.getChildHandles()
@@ -39,7 +30,7 @@ class View extends AbstractView {
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        throw Error(`The class ${this.constructor.name} must implement the method ::getMainHandle()`)
     }
 
     subscribeToGUISignals() {
@@ -57,4 +48,4 @@ class View extends AbstractView {
     }
 }
 
-module.exports = View
+module.exports = GtkWidget

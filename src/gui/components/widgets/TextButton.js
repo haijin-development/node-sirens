@@ -13,7 +13,7 @@ class TextButton extends PrimitiveComponent {
     }
 
     createView() {
-        return new TextButtonView({
+        return TextButtonView.new({
             onClicked: this.props.onClicked
         })
     }

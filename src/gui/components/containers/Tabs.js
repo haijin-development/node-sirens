@@ -5,7 +5,7 @@ class Tabs extends PrimitiveComponent {
     /// Initializing
 
     createView() {
-        return new TabsView()
+        return TabsView.new()
     }
 
     synchronizeViewFromModel() {

@@ -10,7 +10,7 @@ class ColumnsBuilder {
     /// Columns
 
     column(columnProps) {
-        const column = Column.newWithProps(columnProps)
+        const column = Column.withProps(columnProps)
 
         this.getProps().columns.push(column)
     }

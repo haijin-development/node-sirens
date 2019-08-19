@@ -1,5 +1,5 @@
 const OInstance = require('../../o-language/classifications/OInstance')
-const GenericComponentBuilder = require('./GenericComponentBuilder')
+const ContainerWidgetBuilder = require('./ContainerWidgetBuilder')
 
 class ComponentRenderer {
     /// Instantiating
@@ -8,7 +8,7 @@ class ComponentRenderer {
         return OInstance.new().yourself( (object) => {
                     object
                         .behaveAs(this)
-                        .setRootComponent(rootComponent)
+                        .initialize(rootComponent)
                 })
     }
 
@@ -16,11 +16,12 @@ class ComponentRenderer {
 
     static definition() {
         this.instanceVariables = ['rootComponent']
+        this.assumptions = [ContainerWidgetBuilder]
     }
 
     /// Accessing
 
-    setRootComponent(rootComponent) {
+    initialize(rootComponent) {
         this.rootComponent = rootComponent
     }
 
@@ -28,12 +29,9 @@ class ComponentRenderer {
     /// Building
 
     render(closure) {
-        const builder = GenericComponentBuilder.new().yourself( (builder) => {
-            builder.build(closure, this.rootComponent)
-        })
+        this.build(closure, this.rootComponent)
 
-        const props = builder.getProps()
-        const childComponents = builder.getChildComponents()
+        const childComponents = this.getChildComponents()
 
         this.rootComponent.addAllComponents( childComponents )
 

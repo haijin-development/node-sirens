@@ -1,7 +1,25 @@
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
 
-class TabsView extends View {
+class TabsView {
+    /// Instantiating
+
+    static new() {
+        return OInstance.new().yourself( (tabs) => {
+            tabs
+                .behaveAs(this)
+                .initializeHandles()
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
     initializeHandles() {

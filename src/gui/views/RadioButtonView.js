@@ -1,11 +1,31 @@
-const View = require('./View')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 
-class RadioButtonView extends View {
+class RadioButtonView {
+    /// Instantiating
+
+    static new() {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initializeHandles()
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['text'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat([ 'text' ])
+        })
     }
 
     /// Initializing
@@ -15,6 +35,10 @@ class RadioButtonView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     setText(text) {
         this.mainHandle.label = text
@@ -36,16 +60,13 @@ class RadioButtonView extends View {
     /// Events
 
     onAddedToParentView(parentView) {
-        const length = parentView.childViews.length
+        const length = parentView.getChildViews().length
 
-        const previousRadioButtonView = parentView.childViews[length - 2]
+        const previousRadioButtonView = parentView.getChildViews()[length - 2]
 
         if(previousRadioButtonView !== undefined) {
             this.mainHandle.group = previousRadioButtonView.getMainHandle()
         }
-    }
-
-    subscribeToGUISignals(props) {
     }
 }
 

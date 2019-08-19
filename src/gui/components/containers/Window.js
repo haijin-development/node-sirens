@@ -13,7 +13,7 @@ class Window extends PrimitiveComponent {
     /// Initializing
 
     createView() {
-        return new WindowView()
+        return WindowView.new()
     }
 
     synchronizeViewFromModel() {

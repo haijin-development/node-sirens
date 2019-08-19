@@ -13,7 +13,7 @@ class Label extends PrimitiveComponent {
     }
 
     createView() {
-        return new LabelView()
+        return LabelView.new()
     }
 
     /// Synchronizing

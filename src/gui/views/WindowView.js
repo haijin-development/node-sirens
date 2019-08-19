@@ -1,12 +1,35 @@
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../../Sirens')
-const View = require('./View')
 
-class WindowView extends View {
+class WindowView {
+    /// Instantiating
+
+    static new(orientation) {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initializeHandles(orientation)
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle',
+        ]
+
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['title'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['title'])
+        })
     }
 
     /// Initializing
@@ -45,8 +68,6 @@ class WindowView extends View {
         return this.mainHandle.getTitle()
     }
 
-    /// Styles
-
     setWidth(value) {
         let [width, height] = this.getMainHandle().getDefaultSize()
 
@@ -71,9 +92,8 @@ class WindowView extends View {
         return this.getMainHandle().getDefaultSize()[1]
     }
 
-    /// Events
-
-    subscribeToGUISignals(props) {
+    getMainHandle() {
+        return this.mainHandle
     }
 }
 

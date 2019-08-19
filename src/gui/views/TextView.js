@@ -1,23 +1,45 @@
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
-const WrapModes = require('./WrapModes')
+const GtkWrapModes = require('./GtkWrapModes')
 const MenuView = require('./MenuView')
 
 
-class TextView extends View {
+class TextView {
+    /// Instantiating
+
+    static new({ onTextChanged: onTextChanged })
+    {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initialize({ onTextChanged: onTextChanged })
+        })
+    }
+
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onTextChanged', 'textView']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['wrapMode'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['wrapMode'])
+        })
     }
 
     /// Initializing
 
-    constructor({onTextChanged: onTextChangedBlock})
+    initialize({onTextChanged: onTextChangedBlock})
     {
-        super()
-
         this.onTextChanged = onTextChangedBlock
+
+        this.initializeHandles()
     }
 
     initializeHandles() {
@@ -31,6 +53,10 @@ class TextView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     clearText() {
         this.setText('')
@@ -75,14 +101,14 @@ class TextView extends View {
     /// Styles
 
     setWrapMode(mode) {
-        this.textView.setWrapMode(WrapModes[mode])
+        this.textView.setWrapMode(GtkWrapModes[mode])
     }
 
     getWrapMode() {
         const gtkConstant = this.textView.getWrapMode()
 
-        const mode = Object.keys(WrapModes).find( (key) => {
-            return gtkConstant === WrapModes[key]
+        const mode = Object.keys(GtkWrapModes).find( (key) => {
+            return gtkConstant === GtkWrapModes[key]
         })
 
         return mode

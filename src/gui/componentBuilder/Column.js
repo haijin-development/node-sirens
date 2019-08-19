@@ -3,7 +3,7 @@ const OInstance = require('../../o-language/classifications/OInstance')
 class Column {
     /// Instantiating
 
-    static newWithProps(props) {
+    static withProps(props) {
         props = Object.assign( props, {type: 'string', label: ''} )
 
         return OInstance.new().yourself( (column) => {

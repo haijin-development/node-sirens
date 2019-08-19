@@ -325,13 +325,13 @@ class MessageDispatcher {
 
         classificationInstantiation.sourceClassification = classification
 
-        this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
-
         const allAssumptions = classification.assumptions
 
         allAssumptions.forEach( (assumedClassification) => {
             object.behaveAs(assumedClassification)
         })
+
+        this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
 
         if( classificationInstantiation.afterInstantiation !== undefined ) {
             object.afterInstantiation()

@@ -1,13 +1,31 @@
-const View = require('./View')
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class TextButtonView extends View {
+class TextButtonView {
+    /// Instantiating
+
+    static new({ onClicked: onClickedBlock }) {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initialize({ onClicked: onClickedBlock })
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onClickedBlock']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
-    constructor({onClicked: onClickedBlock}) {
-        super()
-
+    initialize({onClicked: onClickedBlock}) {
         this.onClickedBlock = onClickedBlock
+
+        this.initializeHandles()
     }
 
     initializeHandles() {
@@ -15,6 +33,10 @@ class TextButtonView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     setText(text) {
         this.mainHandle.label = text

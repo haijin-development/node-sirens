@@ -14,7 +14,7 @@ class CheckBox extends PrimitiveComponent {
     }
 
     createView() {
-        return new CheckBoxView({
+        return CheckBoxView.new({
             onClicked: this.onClicked.bind(this)
         })
     }

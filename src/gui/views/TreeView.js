@@ -1,55 +1,88 @@
-const View = require('./View')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const Types = require('./Types')
+const GtkTypes = require('./GtkTypes')
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 
-class TreeView extends View {
-    /// Styles
+class TreeView {
+    /// Instantiating
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(
-            [
-                'columns', 'showHeaders', 'clickableHeaders',
-                'onSelectedValueChanged', 'onSelectionAction',
-            ]
-        )
+    static new({
+        getChildrenBlock: getChildrenBlock,
+        onSelectionChanged: onSelectionChanged,
+        onSelectionAction: onSelectionAction
+    })
+    {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initialize({
+                    getChildrenBlock: getChildrenBlock,
+                    onSelectionChanged: onSelectionChanged,
+                    onSelectionAction: onSelectionAction
+                })
+        })
     }
 
-    static placeholder() {
-        if(this._placeholder === undefined) {
-            this._placeholder = '__placeholder__'
-        }
+    /// Definition
 
-        return this._placeholder
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle', 'treeStore', 'treeView', 'columns',
+            'getChildrenBlock', 'onSelectionChanged', 'onSelectionAction',
+        ]
+
+        this.assumptions = [GtkWidget]
     }
 
     /// Initializing
 
-    constructor({
+    initialize({
             getChildrenBlock: getChildrenBlock,
             onSelectionChanged: onSelectionChanged,
             onSelectionAction: onSelectionAction
      })
     {
-        super()
-
         this.getChildrenBlock = getChildrenBlock
 
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
+
+        this.columns = []
+
+        this.initializeHandles()
     }
 
     initializeHandles() {
-        this.treeStore = new Gtk.TreeStore()
-
-        this.treeView = null
-
         this.mainHandle = new Gtk.ScrolledWindow()
         this.mainHandle.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        this.columns = []
+        this.treeStore = new Gtk.TreeStore()
+
+        this.treeView = null
+    }
+
+    placeholder() {
+        return '__placeholder__'
+    }
+
+    /// Styles
+
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(
+                [
+                    'columns', 'showHeaders', 'clickableHeaders',
+                    'onSelectedValueChanged', 'onSelectionAction',
+                ]
+            )
+        })
+    }
+
+    getMainHandle() {
+        return this.mainHandle
     }
 
     setColumns(columns) {
@@ -95,7 +128,7 @@ class TreeView extends View {
             type = 'string'
         }
 
-        return Types[type]
+        return GtkTypes[type]
     }
 
     /// Accessing
@@ -214,7 +247,7 @@ class TreeView extends View {
         const childrenCount = this.getChildrenAt({path: indicesPath}).length
 
         if( childrenCount > 0 ) {
-            const placeholderText = this.constructor.placeholder()
+            const placeholderText = this.placeholder()
 
             const placeholder = this.treeStore.insert(iter, 0)
 
@@ -235,7 +268,7 @@ class TreeView extends View {
     }
 
     setIterText(text, iter, columnIndex = 0) {
-        const gtkType = Types['string']
+        const gtkType = GtkTypes['string']
 
         const value = new GObject.Value()
 
@@ -294,7 +327,7 @@ class TreeView extends View {
 
         const childValue = this.treeStore.getValue(childIter, 0).getString()
 
-        if( childValue != this.constructor.placeholder() ) {
+        if( childValue != this.placeholder() ) {
             return
         }
 

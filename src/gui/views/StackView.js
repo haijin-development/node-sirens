@@ -1,23 +1,40 @@
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
 
-class StackView extends View {
+class StackView {
+    /// Instantiating
+
+    static new(orientation) {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initializeHandles(orientation)
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
     initializeHandles(orientation) {
-        this.orientation = orientation
-
-        if(this.orientation == 'horizontal') {
+        if(orientation == 'horizontal') {
             this.mainHandle = new Gtk.HBox()
         } else {
             this.mainHandle = new Gtk.VBox()
         }
     }
 
-    /// Events
-
-    subscribeToGUISignals(props) {
+    getMainHandle() {
+        return this.mainHandle
     }
+
+    /// Events
 
     onViewAdded(childView) {
         const childHandles = childView.getChildHandles()

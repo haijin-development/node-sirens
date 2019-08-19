@@ -33,7 +33,7 @@ class ChoicesTree extends PrimitiveComponent {
     }
 
     createView() {
-        return new TreeView({
+        return TreeView.new({
             getChildrenBlock: this.getChildrenAt.bind(this),
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this)

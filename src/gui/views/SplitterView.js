@@ -1,19 +1,39 @@
+const OInstance = require('../../o-language/classifications/OInstance')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
 
-class SplitterView extends View {
-    /// Initializing
+class SplitterView {
+    /// Instantiating
 
-    constructor(...params) {
-        super(...params)
-
-        this.isFirstSizeAllocation = true
+    static new(orientation) {
+        return OInstance.new().yourself( (checkbox) => {
+            checkbox
+                .behaveAs(this)
+                .initialize(orientation)
+        })
     }
 
-    initializeHandles(orientation) {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['orientation', 'mainHandle', 'isFirstSizeAllocation']
+        this.assumptions = [GtkWidget]
+    }
+
+    /// Initializing
+
+    initialize(orientation) {
         this.orientation = orientation
 
-        this.mainHandle = this.newPaned(orientation)
+        this.isFirstSizeAllocation = true
+
+        this.initializeHandles()
+
+        this.subscribeToGUISignals()
+    }
+
+    initializeHandles() {
+        this.mainHandle = this.newPaned(this.orientation)
     }
 
     subscribeToGUISignals() {
@@ -21,6 +41,10 @@ class SplitterView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     orientation() {
         return this.orientation
@@ -39,14 +63,16 @@ class SplitterView extends View {
     addView(childView) {
         const childViewHandle = childView.getMainHandle()
 
-        if(this.childViews.length < 2) {
+        const childViews = this.getChildViews()
+
+        if(childViews.length < 2) {
             this.mainHandle.add(childViewHandle)
 
             childViewHandle.show()
         } else {
             const newPaned = this.newPaned(this.orientation)
 
-            const lastView = this.childViews[this.childViews.length - 1]
+            const lastView = childViews[ childViews.length - 1 ]
             const lastChildHandle = lastView.getMainHandle()
 
             const parentHandle = lastChildHandle.getParent()
@@ -60,7 +86,7 @@ class SplitterView extends View {
             parentHandle.showAll()
         }
 
-        this.childViews.push(childView)
+        childViews.push(childView)
     }
 
     newPaned(orientation) {
@@ -89,9 +115,11 @@ class SplitterView extends View {
 
         let currentHandle = this.mainHandle
 
-        this.childViews.forEach( (childView, index) => {
+        const childViewsCount = this.getChildViews().length
 
-            if(index === this.childViews.length) {
+        this.getChildViews().forEach( (childView, index) => {
+
+            if(index === childViewsCount) {
                 return
             }
 

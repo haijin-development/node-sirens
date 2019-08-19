@@ -72,7 +72,7 @@ class AbstractComponent {
     }
 
     applyViewProps(props) {
-        const acceptedStyles = this.view.constructor.acceptedStyles()
+        const acceptedStyles = this.view.acceptedStyles()
 
         acceptedStyles.forEach( (style) => {
             if(props[style] === undefined) {

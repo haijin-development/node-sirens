@@ -29,7 +29,7 @@ class ChoicesList extends PrimitiveComponent {
     }
 
     createView() {
-        return new ListView({
+        return ListView.new({
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this)
         })

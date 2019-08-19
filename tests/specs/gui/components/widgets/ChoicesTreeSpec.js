@@ -12,7 +12,7 @@ describe('When using a ChoicesTree', () => {
 
         this.tree = new ChoicesTree({
             model: treeModel,
-            columns: [ Column.newWithProps({label: 'col 1'}) ],
+            columns: [ Column.withProps({label: 'col 1'}) ],
         })
     })
 
@@ -44,7 +44,7 @@ describe('When using a ChoicesTree', () => {
 
         it('sets the choices on its constructor', () => {
             this.tree = new ChoicesTree({
-                columns: [ Column.newWithProps({label: 'col 1'}) ],
+                columns: [ Column.withProps({label: 'col 1'}) ],
                 roots: ['a','b','c'],
                 setSelectionPath: ['c']
             })

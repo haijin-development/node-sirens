@@ -8,9 +8,11 @@ class WidgetBuilder {
     }
 
     static withProps(props) {
+        const propsCopy = Object.assign( {}, props )
+
         return OInstance.new()
             .behaveAs(this)
-            .mergeProps(props)
+            .mergeProps(propsCopy)
     }
 
     /// Definition

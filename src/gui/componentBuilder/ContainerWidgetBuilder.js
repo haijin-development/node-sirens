@@ -17,8 +17,15 @@ class ContainerWidgetBuilder {
     /// Instantiating
 
     static new() {
+        return this.withProps({})
+    }
+
+    static withProps(props) {
+        const propsCopy = Object.assign( {}, props )
+
         return OInstance.new()
             .behaveAs(this)
+            .mergeProps(propsCopy)
     }
 
     /// Definition
@@ -52,13 +59,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const window = new Window( props )
+        const window = new Window( builder.getProps() )
 
         window.addAllComponents( builder.getChildComponents() )
 
@@ -71,11 +76,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps(), { orientation: 'vertical' })
+        props = Object.assign( builder.getProps(), { orientation: 'vertical' })
 
         const stack = new Stack( props )
 
@@ -90,11 +95,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps(), { orientation: 'horizontal' })
+        props = Object.assign( builder.getProps(), { orientation: 'horizontal' })
 
         const stack = new Stack( props )
 
@@ -109,11 +114,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps(), { orientation: 'vertical' })
+        props = Object.assign( builder.getProps(), { orientation: 'vertical' })
 
         const splitter = new Splitter( props )
 
@@ -128,11 +133,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new().yourself( (builder) => {
+        const builder = ContainerWidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps(), { orientation: 'horizontal' })
+        props = Object.assign( builder.getProps(), { orientation: 'horizontal' })
 
         const splitter = new Splitter( props )
 
@@ -147,15 +152,13 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
             builder
                 .behaveAs(ColumnsBuilder)
                 .build(closure)
         })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const tree = new ChoicesList( props )
+        const tree = new ChoicesList( builder.getProps() )
 
         this.childComponents.push(tree)
     }
@@ -166,15 +169,13 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
             builder
                 .behaveAs(ColumnsBuilder)
                 .build(closure)
         })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const tree = new ChoicesTree( props )
+        const tree = new ChoicesTree( builder.getProps() )
 
         this.childComponents.push(tree)
     }
@@ -185,13 +186,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const text = new Label( props )
+        const text = new Label( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -202,13 +201,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const text = new Text( props )
+        const text = new Text( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -219,13 +216,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const text = new CheckBox( props )
+        const text = new CheckBox( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -236,13 +231,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const text = new TextButton( props )
+        const text = new TextButton( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -253,13 +246,11 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = WidgetBuilder.new().yourself( (builder) => {
+        const builder = WidgetBuilder.withProps(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        props = Object.assign( props, builder.getProps() )
-
-        const text = new RadioButton( props )
+        const text = new RadioButton( builder.getProps() )
 
         this.childComponents.push(text)
     }

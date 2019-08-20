@@ -6,7 +6,7 @@ class CustomComponent extends Component{
     /// Building
 
     defaultModel() {
-        const treeModel = new TreeChoiceModel({
+        const treeModel = TreeChoiceModel.with({
             roots: ['root1', 'root2'],
             getChildrenBlock: function (item) {
                 return ['child 1', 'child 2', 'child 3']

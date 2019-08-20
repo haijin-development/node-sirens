@@ -10,7 +10,7 @@ class RadioButton extends PrimitiveComponent {
     }
 
     defaultModel() {
-        return new ChoiceModel()
+        return ChoiceModel.new()
     }
 
     /// Synchronizing

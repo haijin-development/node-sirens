@@ -20,7 +20,7 @@ class CheckBox extends PrimitiveComponent {
     }
 
     defaultModel() {
-        return new ValueModel({value: false})
+        return ValueModel.with({value: false})
     }
 
     /// Synchronizing

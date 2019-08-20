@@ -6,7 +6,7 @@ class CustomComponent extends Component{
     /// Building
 
     defaultModel() {
-        const choiceModel = new ChoiceModel()
+        const choiceModel = ChoiceModel.new()
 
         choiceModel.setChoices([1, 2.0, 'a string'])
 

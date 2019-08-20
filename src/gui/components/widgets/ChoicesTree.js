@@ -26,7 +26,7 @@ class ChoicesTree extends PrimitiveComponent {
     }
 
     defaultModel() {
-        return new TreeChoiceModel({
+        return TreeChoiceModel.with({
             roots: [],
             getChildrenBlock: () => { return [] }
         })

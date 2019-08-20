@@ -255,7 +255,7 @@ class TreeView {
         }
     }
 
-    setItemColumnValues({item: item, iter: iter}) {
+    setItemColumnValues({ item: item, iter: iter }) {
         this.columns.forEach( (column, columnIndex) => {
             const text = column.getDisplayTextOf(item)
 

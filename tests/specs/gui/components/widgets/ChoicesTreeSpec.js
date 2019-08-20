@@ -5,7 +5,7 @@ const TreeChoiceModel = require('../../../../../src/gui/models/TreeChoiceModel')
 
 describe('When using a ChoicesTree', () => {
     beforeEach( () => {
-        const treeModel = new TreeChoiceModel({
+        const treeModel = TreeChoiceModel.with({
             roots: [],
             getChildrenBlock: () => { return ['1', '2', '3'] }
         })

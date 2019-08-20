@@ -10,21 +10,21 @@ class PrototypesBrowserModel {
 
         const prototypes = this._getPrototypesChainOf(this.inspectedObject)
 
-        this.objectPrototypesList = new ChoiceModel({
+        this.objectPrototypesList = ChoiceModel.with({
             choices: prototypes,
             selection: this.inspectedObject,
         })
 
-        this.selectedPrototypeProps = new ChoiceModel({
+        this.selectedPrototypeProps = ChoiceModel.with({
             choices: [],
             selection: null,
         })
 
-        this.selectedPropDescription = new ValueModel()
+        this.selectedPropDescription = ValueModel.new()
 
-        this.showInherited = new ValueModel({value: false})
-        this.showFunctions = new ValueModel({value: true})
-        this.showProps = new ValueModel({value: false})
+        this.showInherited = ValueModel.with({ value: false })
+        this.showFunctions = ValueModel.with({ value: true })
+        this.showProps = ValueModel.with({ value: false })
 
         this.connectModels()
     }
@@ -70,7 +70,7 @@ class PrototypesBrowserModel {
         return this.selectedPropDescription
     }
 
-    getshowInheritedModel() {
+    getShowInheritedModel() {
         return this.showInherited
     }
 

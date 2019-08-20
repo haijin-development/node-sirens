@@ -1,11 +1,31 @@
-const EventEmitter = require('events')
+const OInstance = require('../../o-language/classifications/OInstance')
+const Model = require('./Model')
 
-class ListModel extends EventEmitter {
+class ListModel {
+    /// Instantiating
+
+    static new() {
+        return this.with({ list: [] })
+    }
+
+    static with({ list: list }) {
+        return OInstance.new().yourself( (object) => {
+            object
+                .behaveAs(this)
+                .initialize({ list: list })
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['list']
+        this.assumptions = [Model]
+    }
+
     /// Initializing
 
-    constructor({list: list} = {list: []}) {
-        super()
-
+    initialize({ list: list }) {
         this.list = list
     }
 

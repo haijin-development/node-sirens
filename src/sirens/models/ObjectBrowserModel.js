@@ -8,12 +8,12 @@ class ObjectBrowserModel {
     constructor(inspectedObject) {
         this.inspectedObject = inspectedObject
 
-        this.objectPropertiesTree = new TreeChoiceModel({
+        this.objectPropertiesTree = TreeChoiceModel.with({
             roots: this.getRootPropertiesFrom(inspectedObject),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.selectedObjectText = new ValueModel()
+        this.selectedObjectText = ValueModel.new()
 
         this.connectModels()
     }

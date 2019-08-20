@@ -178,7 +178,7 @@ class ListView {
             iter = this.listStore.insert(index)
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     updateItems({items: items, indices: indices}) {
@@ -194,7 +194,7 @@ class ListView {
             throw new Error `The index ${index} is out of range.`
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     removeItems({items: items, indices: indices}) {

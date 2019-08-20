@@ -1,20 +1,38 @@
-const EventEmitter = require('events')
+const OInstance = require('../../o-language/classifications/OInstance')
 const VirtualTreeModel = require('./VirtualTreeModel')
 const ValueModel = require('./ValueModel')
 
-class TreeChoiceModel extends EventEmitter {
+class TreeChoiceModel {
+
+    /// Instantiating
+
+    static new() {
+        return this.with({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock })
+    }
+
+    static with({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
+        return OInstance.new().yourself( (object) => {
+            object
+                .behaveAs(this)
+                .initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock })
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['selection', 'treeModel']
+    }
 
     /// Initializing
 
-    constructor({selection: selection, roots: roots, getChildrenBlock: getChildrenBlock}) {
-        super()
-
+    initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
         if(selection === undefined) selection = null
         if(roots === undefined) roots = []
 
-        this.selection = new ValueModel({value: selection})
+        this.selection = ValueModel.with({ value: selection })
 
-        this.treeModel = new VirtualTreeModel({
+        this.treeModel = VirtualTreeModel.with({
             roots: roots,
             getChildrenBlock: getChildrenBlock
         })

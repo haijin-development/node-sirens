@@ -9,16 +9,16 @@ class StackTraceBrowserModel {
     /// Initializing
 
     constructor({framesStack: framesStack, object: object}) {
-        this.framesStackModel = new ChoiceModel({
+        this.framesStackModel = ChoiceModel.with({
             choices: framesStack
         })
 
-        this.objectPropertiesTree = new TreeChoiceModel({
+        this.objectPropertiesTree = TreeChoiceModel.with({
             roots: this.getRootPropertiesFrom(object),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.functionSourceCode = new ValueModel()
+        this.functionSourceCode = ValueModel.new()
 
         this.connectModels()
     }

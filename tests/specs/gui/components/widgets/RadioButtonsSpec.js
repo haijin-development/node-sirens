@@ -5,7 +5,7 @@ const RadioButton = require('../../../../../src/gui/components/widgets/RadioButt
 
 describe('When using a RadioButton group', () => {
     beforeEach( () => {
-        this.model = new ChoiceModel({choices: ['a', 'b', 'c']})
+        this.model = ChoiceModel.with({ choices: ['a', 'b', 'c'] })
 
         this.button1 = new RadioButton({
             model: this.model,

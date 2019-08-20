@@ -25,7 +25,7 @@ class ChoicesList extends PrimitiveComponent {
     }
 
     defaultModel() {
-        return new ChoiceModel()
+        return ChoiceModel.new()
     }
 
     createView() {

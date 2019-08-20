@@ -1,15 +1,34 @@
-const EventEmitter = require('events')
+const OInstance = require('../../o-language/classifications/OInstance')
 const ListModel = require('./ListModel')
 const ValueModel = require('./ValueModel')
 
-class ChoiceModel extends EventEmitter {
+class ChoiceModel {
+
+    /// Instantiating
+
+    static new() {
+        return this.with({ choices: [], selection: null })
+    }
+
+    static with({ choices: choices, selection: selection }) {
+        return OInstance.new().yourself( (object) => {
+            object
+                .behaveAs(this)
+                .initialize({ choices: choices, selection: selection })
+        })
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['listModel', 'selectionModel']
+    }
+
     /// Initializing
 
-    constructor({choices: choices, selection: selection} = {choices: [], selection: null}) {
-        super()
-
-        this.listModel = new ListModel()
-        this.selectionModel = new ValueModel()
+    initialize({ choices: choices, selection: selection }) {
+        this.listModel = ListModel.new()
+        this.selectionModel = ValueModel.new()
 
         this.listModel.setList(choices)
         this.selectionModel.setValue(selection)

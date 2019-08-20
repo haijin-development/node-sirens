@@ -98,7 +98,7 @@ class AbstractComponent {
     /// Accessing
 
     defaultModel() {
-        return new ValueModel({value: ''})
+        return ValueModel.with({value: ''})
     }
 
     getModel() {

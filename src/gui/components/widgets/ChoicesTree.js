@@ -1,8 +1,8 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
 const TreeView = require('../../views/TreeView')
 
-class ChoicesTree extends PrimitiveComponent {
+class ChoicesTree extends Widget {
     /// Initializing
 
     initializeProps(props) {

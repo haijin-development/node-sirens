@@ -1,8 +1,8 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const RadioButtonView = require('../../views/RadioButtonView')
 const ChoiceModel = require('../../models/ChoiceModel')
 
-class RadioButton extends PrimitiveComponent {
+class RadioButton extends Widget {
     /// Initializing
 
     createView() {

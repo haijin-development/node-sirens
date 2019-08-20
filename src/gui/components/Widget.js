@@ -1,6 +1,6 @@
-const AbstractComponent = require('./AbstractComponent')
+const ComponentBehaviour = require('./ComponentBehaviour')
 
-class PrimitiveComponent extends AbstractComponent {
+class Widget extends ComponentBehaviour {
     /// Initializing
 
     constructor(...params) {
@@ -30,4 +30,4 @@ class PrimitiveComponent extends AbstractComponent {
     }
 }
 
-module.exports = PrimitiveComponent
+module.exports = Widget

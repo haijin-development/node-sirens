@@ -1,7 +1,7 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const SplitterView = require('../../views/SplitterView')
 
-class Splitter extends PrimitiveComponent {
+class Splitter extends Widget {
     /// Initializing
 
     createView() {

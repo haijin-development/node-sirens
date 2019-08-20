@@ -1,7 +1,7 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const TextButtonView = require('../../views/TextButtonView')
 
-class TextButton extends PrimitiveComponent {
+class TextButton extends Widget {
     /// Initializing
 
     initializeModel(props) {

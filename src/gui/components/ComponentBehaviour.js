@@ -1,6 +1,6 @@
 const ValueModel = require('../models/ValueModel')
 
-class AbstractComponent {
+class ComponentBehaviour {
     static open(props = {}) {
         return this.openOn(props)
     }
@@ -184,4 +184,4 @@ class AbstractComponent {
 
 }
 
-module.exports = AbstractComponent
+module.exports = ComponentBehaviour

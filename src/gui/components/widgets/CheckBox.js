@@ -1,8 +1,8 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const ValueModel = require('../../models/ValueModel')
 const CheckBoxView = require('../../views/CheckBoxView')
 
-class CheckBox extends PrimitiveComponent {
+class CheckBox extends Widget {
     /// Initializing
 
     initializeModel(props) {

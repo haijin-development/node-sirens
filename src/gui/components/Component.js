@@ -1,8 +1,8 @@
-const AbstractComponent = require('./AbstractComponent')
+const ComponentBehaviour = require('./ComponentBehaviour')
 const ComponentView = require('../views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
-class Component extends AbstractComponent {
+class Component extends ComponentBehaviour {
     build(props) {
         super.build(props)
 

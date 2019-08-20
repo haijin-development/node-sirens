@@ -1,7 +1,7 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const StackView = require('../../views/StackView')
 
-class Stack extends PrimitiveComponent {
+class Stack extends Widget {
     /// Initializing
 
     createView() {

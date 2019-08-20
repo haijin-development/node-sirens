@@ -1,7 +1,7 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Widget = require('../Widget')
 const WindowView = require('../../views/WindowView')
 
-class Window extends PrimitiveComponent {
+class Window extends Widget {
     static openOn(props) {
         const window = new this(props)
 

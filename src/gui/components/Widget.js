@@ -1,32 +1,18 @@
+const Classification = require('../../o-language/classifications/Classification')
 const ComponentBehaviour = require('./ComponentBehaviour')
 
-class Widget extends ComponentBehaviour {
-    /// Initializing
+class Widget extends Classification {
+    /// Definition
 
-    constructor(...params) {
-        super(...params)
-
-        this.updatingModel = false
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [ComponentBehaviour]
     }
 
     /// Accessing
 
     getMainComponent() {
         return this
-    }
-
-    /// Updating
-
-    duringModelUpdate(block) {
-        const wasUpdatingModel = this.updatingModel
-
-        this.updatingModel = true
-
-        try {
-            block()
-        } finally {
-            this.updatingModel = wasUpdatingModel
-        }
     }
 }
 

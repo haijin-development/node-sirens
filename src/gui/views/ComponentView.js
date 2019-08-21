@@ -1,14 +1,7 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkView = require('./GtkView')
 
-class ComponentView {
-    /// Instantiating
-
-    static new() {
-        return OInstance.new()
-                .behaveAs(this)
-    }
-
+class ComponentView extends Classification {
     /// Definition
 
     static definition() {

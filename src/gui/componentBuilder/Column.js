@@ -1,29 +1,25 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 
-class Column {
-    /// Instantiating
-
-    static withProps(props) {
-        props = Object.assign( props, {type: 'string', label: ''} )
-
-        return OInstance.new().yourself( (column) => {
-            column
-                .behaveAs(this)
-                .setProps(props)
-        })
-    }
-
+class Column extends Classification {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['props']
     }
 
-    /// Accessing
+    /// Initializing
 
-    setProps(props) {
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
+        props = Object.assign( props, {type: 'string', label: ''} )
+
         this.props = props
     }
+
+    /// Accessing
 
     getLabel() {
         return this.props.label

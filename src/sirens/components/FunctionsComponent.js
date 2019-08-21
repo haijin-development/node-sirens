@@ -1,7 +1,15 @@
+const ComponentClassification = require('../../gui/components/ComponentClassification')
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 
-class FunctionsComponent extends Component {
+class FunctionsComponent extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Actions
 
     browseSelectedProperty() {

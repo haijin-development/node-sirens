@@ -1,9 +1,9 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 
 const gtkMenuMethodsToCopy = ['add', 'showAll', 'popupAtPointer']
 
-class MenuView {
+class MenuView extends Classification {
     /// Instantiating
 
     /*
@@ -18,22 +18,11 @@ class MenuView {
         return gtkWidget
     }
 
-    /// Instantiating
-
-    static new({ gtkWidget: gtkWidget } = { gtkWidget: undefined })
-    {
-        return OInstance.new().yourself( (menu) => {
-            menu
-                .behaveAs(this)
-                .initialize({ gtkWidget: gtkWidget })
-        })
-    }
-
     /*
      * Returns a new MenuView wrapping the given GtkWidget.
      */
     static newFromGtkWidget(gtkWidget) {
-        const gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
+        gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
 
         return this.new({ gtkWidget: gtkWidget })
     }
@@ -46,7 +35,11 @@ class MenuView {
 
     /// Initializing
 
-    initialize({ gtkWidget: gtkWidget }) {
+    initialize({ gtkWidget: gtkWidget } = { gtkWidget: undefined }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         if(gtkWidget === undefined) {
             gtkWidget = new Gtk.Menu()
         }

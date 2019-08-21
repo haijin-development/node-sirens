@@ -1,3 +1,4 @@
+const Classification = require('./Classification')
 const MessageDispatcher = require('../implementation/MessageDispatcher')
 
 /*
@@ -10,13 +11,15 @@ const MessageDispatcher = require('../implementation/MessageDispatcher')
  * dynamically added after its instantiation though classifications, and those classifications
  * can be dropped as well.
  */
-class OInstance {
+class OInstance extends Classification {
+
+    /// Initializing
 
     /*
-     * Returns a new O instance with this OInstance classification instantiated in it.
+     * Does nothing but serves as a null implementation for constructors that assumes a polymorphic
+     * initialization of objects.
      */
-    static new() {
-        return MessageDispatcher.createObject()
+    initialize() {
     }
 
     /// Asking
@@ -69,6 +72,20 @@ class OInstance {
         return MessageDispatcher.duringPreviousClassificationDo(this, closure)
     }
 
+    /*
+     * Instantiates the given classification to this object, evaluates the closure and drops the instantiated
+     * classification.
+     */
+    duringClassificationDo(classification, closure) {
+        this.behaveAs(classification)
+
+        try {
+            closure()
+        } finally {
+            this.dropBehaviour(classification)
+        }
+    }
+
     /// Querying
 
     /*
@@ -102,13 +119,19 @@ class OInstance {
         return MessageDispatcher.objectGetPreviousClassification(this)
     }
 
+    classificationInstanceVariablesDo(classification, closure) {
+        MessageDispatcher.classificationInstanceVariablesDo(this, classification, closure)
+   
+        return this
+    }
+
     /// Evaluating
 
     /*
      * Evaluates the given closure starting the method lookup on the given classification.
      */
     withClassificationDo(classification, closure) {
-        return MessageDispatcher.duringClassificationDo(this, classification, closure)
+        return MessageDispatcher.withClassificationDo(this, classification, closure)
     }
 
 }

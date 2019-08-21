@@ -1,23 +1,8 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const VirtualTreeModel = require('./VirtualTreeModel')
 const ValueModel = require('./ValueModel')
 
-class TreeChoiceModel {
-
-    /// Instantiating
-
-    static new() {
-        return this.with({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock })
-    }
-
-    static with({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
-        return OInstance.new().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock })
-        })
-    }
-
+class TreeChoiceModel extends Classification {
     /// Definition
 
     static definition() {
@@ -27,12 +12,16 @@ class TreeChoiceModel {
     /// Initializing
 
     initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         if(selection === undefined) selection = null
         if(roots === undefined) roots = []
 
-        this.selection = ValueModel.with({ value: selection })
+        this.selection = ValueModel.new({ value: selection })
 
-        this.treeModel = VirtualTreeModel.with({
+        this.treeModel = VirtualTreeModel.new({
             roots: roots,
             getChildrenBlock: getChildrenBlock
         })

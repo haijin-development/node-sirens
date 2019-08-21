@@ -1,18 +1,8 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 
-class RadioButtonView {
-    /// Instantiating
-
-    static new() {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initializeHandles()
-        })
-    }
-
+class RadioButtonView extends Classification {
     /// Definition
 
     static definition() {
@@ -58,6 +48,9 @@ class RadioButtonView {
 
 
     /// Events
+
+    subscribeToGUISignals() {
+    }
 
     onAddedToParentView(parentView) {
         const length = parentView.getChildViews().length

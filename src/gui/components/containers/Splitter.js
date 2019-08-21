@@ -1,20 +1,30 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const SplitterView = require('../../views/SplitterView')
 
-class Splitter extends Widget {
+class Splitter extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
     createView() {
-        return SplitterView.new(this.props.orientation)
+        return SplitterView.new({ orientation: this.getProps().orientation })
     }
 
     synchronizeViewFromModel() {
     }
 
     addComponent(component) {
-        component.view.splitProportion = component.props.splitProportion
+        component.getView().splitProportion = component.getProps().splitProportion
 
-        super.addComponent(component)
+        this.previousClassificationDo( () => {
+            this.addComponent(component)
+        })
     }
 }
 

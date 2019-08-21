@@ -1,18 +1,8 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class SplitterView {
-    /// Instantiating
-
-    static new(orientation) {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize(orientation)
-        })
-    }
-
+class SplitterView extends Classification {
     /// Definition
 
     static definition() {
@@ -22,14 +12,14 @@ class SplitterView {
 
     /// Initializing
 
-    initialize(orientation) {
+    initialize({ orientation: orientation }) {
         this.orientation = orientation
 
         this.isFirstSizeAllocation = true
 
-        this.initializeHandles()
-
-        this.subscribeToGUISignals()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {

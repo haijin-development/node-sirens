@@ -1,21 +1,7 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-class ValueModel {
-    /// Instantiating
-
-    static new() {
-        return this.with({ value: null })
-    }
-
-    static with({ value: value }) {
-        return OInstance.new().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize({ value: value })
-        })
-    }
-
+class ValueModel extends Classification {
     /// Definition
 
     static definition() {
@@ -25,7 +11,11 @@ class ValueModel {
 
     /// Initializing
 
-    initialize({ value: value }) {
+    initialize({ value: value } = { value: null }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.value = value
     }
 

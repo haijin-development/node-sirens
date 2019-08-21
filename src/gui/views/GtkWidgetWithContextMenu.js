@@ -1,6 +1,7 @@
+const Classification = require('../../o-language/classifications/Classification')
 const MenuView = require('./MenuView')
 
-class GtkWidgetWithContextMenu {
+class GtkWidgetWithContextMenu extends Classification {
     /// Definition
 
     static definition() {

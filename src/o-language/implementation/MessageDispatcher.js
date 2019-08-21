@@ -111,12 +111,22 @@ class MessageDispatcher {
         const methodProxyApply = function(targetFunction, thisArg, params) {
             const object = thisArg
 
+            const initialLookup = this.getInitialClassificationLookup(object)
+
+            if( initialLookup !== null ) {
+                this.pushInitialClassificationLookup(object, null)
+            }
+
             this.pushActiveClassificationInto(object, classification)
 
             try {
                 return targetFunction.call(thisArg, ...params)
             } finally {
                 this.popActiveClassificationFrom(object)
+
+                if( initialLookup !== null ) {
+                    this.popInitialClassificationLookup(object)
+                }
             }
         }
 
@@ -285,7 +295,7 @@ class MessageDispatcher {
      * After the closure evaluation restores the initial classification in the classifications lookup to
      * its previous value.
      */
-    duringClassificationDo(object, classification, closure) {
+    withClassificationDo(object, classification, closure) {
         this.pushInitialClassificationLookup(object, classification)
 
         try {
@@ -304,7 +314,7 @@ class MessageDispatcher {
     duringPreviousClassificationDo(object, closure) {
         const classification = this.objectGetPreviousClassification(object)
 
-        return this.duringClassificationDo(object, classification, closure)
+        return this.withClassificationDo(object, classification, closure)
     }
 
     ////////////////////////////////////////////
@@ -356,11 +366,21 @@ class MessageDispatcher {
      * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
      */
     objectIsBehavingAs(object, aClassification) {
-        const index = this.objectGetInstantiatedClassifications(object).findIndex( (eachClassification) => {
+        const classificationInstantiation = this.objectGetClassificationInstantiationOn(object, aClassification)
+
+        return classificationInstantiation !== undefined
+    }
+
+    /*
+     * Answers true if the given object is behaving as the given classification, false otherwise.
+     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     */
+    objectGetClassificationInstantiationOn(object, aClassification) {
+        const classificationInstantiation = this.objectGetInstantiatedClassifications(object).find( (eachClassification) => {
             return eachClassification.sourceClassification === aClassification
         })
 
-        return index !== -1
+        return classificationInstantiation
     }
 
     /*
@@ -415,6 +435,20 @@ class MessageDispatcher {
 
         return classification.sourceClassification
     }
+
+    classificationInstanceVariablesDo(object, classification, closure) {
+        const classificationInstantiation = this.objectGetClassificationInstantiationOn(object, classification)
+
+        classification.instanceVariables.forEach( (instVarName) => {
+            const value = this.getInstanceVariableFromClassificationInstantiation(
+                classificationInstantiation,
+                instVarName
+            )
+
+            closure(instVarName, value)
+        })
+    }
+
 
     /*
      * Returns the previous classification to the active at the method where this.previousClassification() is called.

@@ -1,23 +1,11 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkWrapModes = require('./GtkWrapModes')
 const MenuView = require('./MenuView')
 
 
-class TextView {
-    /// Instantiating
-
-    static new({ onTextChanged: onTextChanged })
-    {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize({ onTextChanged: onTextChanged })
-        })
-    }
-
-
+class TextView extends Classification {
     /// Definition
 
     static definition() {
@@ -35,11 +23,12 @@ class TextView {
 
     /// Initializing
 
-    initialize({onTextChanged: onTextChangedBlock})
-    {
+    initialize({ onTextChanged: onTextChangedBlock }) {
         this.onTextChanged = onTextChangedBlock
 
-        this.initializeHandles()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {
@@ -90,11 +79,13 @@ class TextView {
         this.textView.on('populate-popup', (menuHandle) => {
             const menu = MenuView.newFromGtkWidget(menuHandle)
 
-            this.populatePopupMenu({menu: menu})
+            this.populatePopupMenu({ menu: menu })
         })
 
+        const onTextChanged = this.onTextChanged
+
         this.textView.getBuffer().on('changed', () => {
-            this.onTextChanged(this.getText())
+            onTextChanged( this.getText() )
         })
     }
 

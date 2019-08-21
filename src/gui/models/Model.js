@@ -1,4 +1,4 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const EventEmitter = require('events')
 
 class Model extends EventEmitter {

@@ -1,21 +1,7 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-class VirtualTreeModel {
-    /// Instantiating
-
-    static new() {
-        return this.with({ roots: [], getChildrenBlock: undefined })
-    }
-
-    static with({ roots: roots, getChildrenBlock: getChildrenBlock }) {
-        return OInstance.new().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize({ roots: roots, getChildrenBlock: getChildrenBlock })
-        })
-    }
-
+class VirtualTreeModel extends Classification {
     /// Definition
 
     static definition() {
@@ -26,6 +12,10 @@ class VirtualTreeModel {
     /// Initializing
 
     initialize({ roots: roots, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         if(getChildrenBlock === undefined) {
             throw new Error(
                 `A getChildrenBlock must be defined.`
@@ -40,7 +30,7 @@ class VirtualTreeModel {
     }
 
     newTreeNodeOn(item) {
-        return TreeNode.with({value: item, getChildrenBlock: this.getChildrenBlock})
+        return TreeNode.new({ value: item, getChildrenBlock: this.getChildrenBlock })
     }
 
     /// Accessing
@@ -97,7 +87,7 @@ class VirtualTreeModel {
 
             path.push(index)
 
-            objects = objects[index].children
+            objects = objects[index].getChildren()
         })
 
         return path
@@ -121,7 +111,7 @@ class VirtualTreeModel {
 
             hierarchy.push(node.getValue())
 
-            nodes = node.children
+            nodes = node.getChildren()
         })
 
         return hierarchy
@@ -130,17 +120,7 @@ class VirtualTreeModel {
 
 // Tree node class
 
-class TreeNode {
-    /// Instantiating
-
-    static with({ value: value, getChildrenBlock: getChildrenBlock }) {
-        return OInstance.new().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize({ value: value, getChildrenBlock: getChildrenBlock })
-        })
-    }
-
+class TreeNode extends Classification {
     /// Definition
 
     static definition() {
@@ -148,6 +128,10 @@ class TreeNode {
     }
 
     initialize({ value: value, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.value = value
         this.children = undefined
         this.getChildrenBlock = getChildrenBlock
@@ -175,7 +159,7 @@ class TreeNode {
 
     _getChildNodes() {
         return this._getChildItems().map( (item) => {
-            return TreeNode.with({ value: item, getChildrenBlock: this.getChildrenBlock })
+            return TreeNode.new({ value: item, getChildrenBlock: this.getChildrenBlock })
         })
     }
 }

@@ -5,7 +5,7 @@ describe('When using a ValueModel', () => {
     describe('when setting and getting its value', () => {
 
         it('sets its value in its constructor', () => {
-            const model = ValueModel.with({
+            const model = ValueModel.new({
                     value: 2
                 })
 

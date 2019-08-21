@@ -1,17 +1,26 @@
-const Sirens = require('../Sirens')
+const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
+const Sirens = require('../Sirens')
 const StackTraceBrowserModel = require('./models/StackTraceBrowserModel')
 const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
-class StackTraceBrowser extends Component {
+class StackTraceBrowser extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
+    /// Initializing
 
     /**
-     * Returns a new StackTraceBrowserModel.
+     * Returns a Stack.newTraceBrowserModel.
      */
     defaultModel() {
-        return new StackTraceBrowserModel({
-            framesStack: this.props.framesStack,
-            object: this.props.object
+        return StackTraceBrowserModel.new({
+            framesStack: this.getProps().framesStack,
+            object: this.getProps().object,
         })
     }
 
@@ -62,7 +71,7 @@ class StackTraceBrowser extends Component {
                         })
 
                         this.component(
-                            new ObjectPropertiesComponent({
+                            ObjectPropertiesComponent.new({
                                 model: browserModel,
                                 splitProportion: 1.0/3.0,
                             })

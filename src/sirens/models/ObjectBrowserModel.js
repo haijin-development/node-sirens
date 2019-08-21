@@ -1,14 +1,25 @@
+const Classification = require('../../o-language/classifications/Classification')
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
-class ObjectBrowserModel {
+class ObjectBrowserModel extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['inspectedObject', 'objectPropertiesTree', 'selectedObjectText']
+    }
+
     /// Initializing
 
-    constructor(inspectedObject) {
+    initialize({ object: inspectedObject }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.inspectedObject = inspectedObject
 
-        this.objectPropertiesTree = TreeChoiceModel.with({
+        this.objectPropertiesTree = TreeChoiceModel.new({
             roots: this.getRootPropertiesFrom(inspectedObject),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
@@ -19,7 +30,7 @@ class ObjectBrowserModel {
     }
 
     getRootPropertiesFrom(inspectedObject) {
-        const root = new ObjectProperty({key: null, value: inspectedObject})
+        const root = ObjectProperty.new({ key: null, value: inspectedObject })
 
         return [root]
     }

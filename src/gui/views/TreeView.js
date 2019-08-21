@@ -2,29 +2,10 @@ const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
 const GtkTypes = require('./GtkTypes')
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 
-class TreeView {
-    /// Instantiating
-
-    static new({
-        getChildrenBlock: getChildrenBlock,
-        onSelectionChanged: onSelectionChanged,
-        onSelectionAction: onSelectionAction
-    })
-    {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize({
-                    getChildrenBlock: getChildrenBlock,
-                    onSelectionChanged: onSelectionChanged,
-                    onSelectionAction: onSelectionAction
-                })
-        })
-    }
-
+class TreeView extends Classification {
     /// Definition
 
     static definition() {
@@ -52,7 +33,9 @@ class TreeView {
 
         this.columns = []
 
-        this.initializeHandles()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {

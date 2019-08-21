@@ -38,7 +38,7 @@
  *      }
  *  }
  *
- *  const point = O.new()
+ *  const point = OInstance.new()
  *                  .behaveAs(Point)
  *                  .behaveAs(PointModel)
  *
@@ -47,14 +47,14 @@
  */
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Shape {
     static definition() {
         this.instanceVariables = ['x', 'y', 'shapeWasCalled']
     }
 
-    setPosition({x: x, y: y}) {
+    setPosition({ x: x, y: y }) {
         this.x = x
         this.y = y
 
@@ -79,9 +79,9 @@ class OptimizedShape {
         this.instanceVariables = ['optimizedShapeWasCalled']
     }
 
-    setPosition({x: x, y: y}) {
+    setPosition({ x: x, y: y }) {
         this.previousClassificationDo( () => {
-            this.setPosition({x: x, y: y})  
+            this.setPosition({ x: x, y: y })
         })
 
         if( this.optimizedShapeWasCalled === undefined ) {
@@ -94,6 +94,10 @@ class OptimizedShape {
     getOptimizedShapeWasCalled() {
         return this.optimizedShapeWasCalled
     }
+
+    firstLevelMethod() {
+        return this.getConstantFromNestedMethod()
+    }
 }
 
 class CustomizedShape {
@@ -101,10 +105,10 @@ class CustomizedShape {
         this.instanceVariables = ['customizedShapeWasCalled']
     }
 
-    setPosition({x: x, y: y}) {
+    setPosition({ x: x, y: y }) {
 
         this.previousClassificationDo( () => {
-            this.setPosition({x: x, y: y})  
+            this.setPosition({ x: x, y: y })  
         })
 
         if( this.customizedShapeWasCalled === undefined ) {
@@ -125,11 +129,17 @@ class CustomizedShape {
     getCustomizedShapeWasCalled() {
         return this.customizedShapeWasCalled
     }
+
+    firstLevelMethod() {
+        return this.previousClassificationDo( () => {
+            return this.firstLevelMethod()  
+        })        
+    }
 }
 
 describe('When calling nested methods on an object', () => {
     it('calls the nested methods', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(OptimizedShape)
@@ -141,14 +151,14 @@ describe('When calling nested methods on an object', () => {
 
 describe('When calling a method on an object', () => {
     it('activates the method in a given classification', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(OptimizedShape)
         object.behaveAs(CustomizedShape)
 
         object.withClassificationDo( Shape, () => {
-            object.setPosition({x: 10, y: 20})
+            object.setPosition({ x: 10, y: 20 })
         })
 
         expect( object.getCustomizedShapeWasCalled() ) .to .be .undefined
@@ -157,16 +167,28 @@ describe('When calling a method on an object', () => {
     })
 
     it('activates the method from the previous classification', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(OptimizedShape)
         object.behaveAs(CustomizedShape)
 
-        object.setPosition({x: 10, y: 20})
+        object.setPosition({ x: 10, y: 20 })
 
         expect( object.getCustomizedShapeWasCalled() ) .to .be .equal(1)
         expect( object.getOptimizedShapeWasCalled() ) .to .equal(1)
         expect( object.getShapeWasCalled() ) .to .equal(1)
+    })
+
+    it('activates the method from the previous classification only on the first level of messages', () => {
+        const object = OInstance.new()
+
+        object.behaveAs(Shape)
+        object.behaveAs(OptimizedShape)
+        object.behaveAs(CustomizedShape)
+
+        const result = object.firstLevelMethod()
+
+        expect(result) .to .equal('a constant')
     })
 })

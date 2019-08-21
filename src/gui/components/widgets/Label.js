@@ -1,15 +1,23 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const LabelView = require('../../views/LabelView')
+const ValueModel = require('../../models/ValueModel')
 
-class Label extends Widget {
+class Label extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeModel(props) {
-        super.initializeModel(props)
+    defaultModel() {
+        const value = this.getProps().text !== undefined ? 
+                        this.getProps().text : ''
 
-        if(this.props.text !== undefined) {
-            this.getModel().setValue(props.text)
-        }
+        return ValueModel.new({ value: value })
     }
 
     createView() {
@@ -21,7 +29,7 @@ class Label extends Widget {
     synchronizeViewFromModel() {
         const text = this.getModel().getValue()
 
-        this.view.setText(text)
+        this.getView().setText(text)
     }
 
     /// Events

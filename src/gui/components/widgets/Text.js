@@ -1,15 +1,24 @@
+const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const TextView = require('../../views/TextView')
+const ValueModel = require('../../models/ValueModel')
 
-class Text extends Widget {
+class Text extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeModel(props) {
-        super.initializeModel(props)
+    defaultModel() {
+        const value = this.getProps().text !== undefined ? 
+                        this.getProps().text : ''
 
-        if(props.text !== undefined) {
-            this.getModel().setValue(props.text)
-        }
+        return ValueModel.new({ value: value })
     }
 
     createView() {
@@ -19,7 +28,7 @@ class Text extends Widget {
     /// Querying
 
     getSelectedText() {
-        return this.view.getSelectedText()
+        return this.getView().getSelectedText()
     }
 
     /// Synchronizing
@@ -27,21 +36,23 @@ class Text extends Widget {
     synchronizeViewFromModel() {
         const text = this.getModel().getValue()
 
-        this.view.setText(text)
+        this.getView().setText(text)
     }
 
     /// Events
 
+    /*
+     * The model value changed. Updates this widget model.
+     */
     onValueChanged({newValue: newValue, oldValue: oldValue}) {
-        if(this.updatingModel === true) {
-            return
-        }
-
         this.synchronizeViewFromModel()
     }
 
+    /*
+     * The widget value changed. Updates this object model.
+     */
     onTextChanged(text) {
-        this.duringModelUpdate( () => {
+        this.duringClassificationDo( UpdatingModel, () => {
             this.getModel().setValue(text)
         })
     }

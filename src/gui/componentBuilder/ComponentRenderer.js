@@ -1,17 +1,7 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const ContainerWidgetBuilder = require('./ContainerWidgetBuilder')
 
-class ComponentRenderer {
-    /// Instantiating
-
-    static onRootComponent(rootComponent) {
-        return OInstance.new().yourself( (object) => {
-                    object
-                        .behaveAs(this)
-                        .initialize(rootComponent)
-                })
-    }
-
+class ComponentRenderer extends Classification {
     /// Definition
 
     static definition() {
@@ -21,10 +11,13 @@ class ComponentRenderer {
 
     /// Accessing
 
-    initialize(rootComponent) {
+    initialize({ rootComponent: rootComponent }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.rootComponent = rootComponent
     }
-
 
     /// Building
 

@@ -1,22 +1,32 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const StackView = require('../../views/StackView')
 
-class Stack extends Widget {
+class Stack extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
     createView() {
-        return StackView.new(this.props.orientation)
+        return StackView.new({ orientation: this.getProps().orientation })
     }
 
     synchronizeViewFromModel() {
     }
 
     addComponent(component) {
-        component.view.packExpand = component.props.packExpand
-        component.view.packFill = component.props.packFill
-        component.view.packPadding = component.props.packPadding
+        component.getView().packExpand = component.getProps().packExpand
+        component.getView().packFill = component.getProps().packFill
+        component.getView().packPadding = component.getProps().packPadding
 
-        super.addComponent(component)
+        this.previousClassificationDo( () => {
+            this.addComponent( component )
+        })
     }
 }
 

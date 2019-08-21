@@ -47,7 +47,7 @@
  */
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Shape {
     static definition() {
@@ -86,7 +86,7 @@ class Point {
 
 describe('When adding behaviour to an O instance', () => {
     it('if the classification instantiated has a method afterInstantiation that method is invoked', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -94,7 +94,7 @@ describe('When adding behaviour to an O instance', () => {
     })
 
     it('if the classification instantiated does not have a method afterInstantiation defined nothing happens', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Point)
 

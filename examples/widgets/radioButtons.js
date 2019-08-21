@@ -1,8 +1,16 @@
 const Sirens = require('../../src/Sirens')
+const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
-class CustomComponent extends Component{
+class CustomComponent extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Building
 
     defaultModel() {

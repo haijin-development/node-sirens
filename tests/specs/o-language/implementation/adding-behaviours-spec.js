@@ -2,21 +2,21 @@
  * In the O language any classification can be added to any object, making the object to adquire the
  * classification behaviour:
  *
- *      const object = O.new()
+ *      const object = OInstance.new()
  *
  *      object.behaveAs(Point)
  *
  * If the object already behaves as the added classification nothing happens, making the behaveAs an idempotent
  * operation:
  *
- *      const object = O.new()
+ *      const object = OInstance.new()
  *
  *      object.behaveAs(Point)
  *
  */
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Shape {
     static definition() {
@@ -49,7 +49,7 @@ class Circle {
 
 describe('When adding behaviour to an O instance', () => {
     it('behaves as a given classification', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -61,7 +61,7 @@ describe('When adding behaviour to an O instance', () => {
     })
 
     it('behaves as more than one classification', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(Circle)
@@ -76,7 +76,7 @@ describe('When adding behaviour to an O instance', () => {
     })
 
     it('does nothing if the object already is behaving as the given classification', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(Circle)

@@ -42,7 +42,7 @@
 
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Shape {
     static definition() {
@@ -112,7 +112,7 @@ class Point {
 
 describe('When setting instance variables values to an O instance', () => {
     it('sets the given value on an object', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -122,7 +122,7 @@ describe('When setting instance variables values to an O instance', () => {
     })
 
     it('sets the given value on a single classification instantiation', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -132,7 +132,7 @@ describe('When setting instance variables values to an O instance', () => {
     })
 
     it('sets the given value on a classification among many classification instantiations', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(Circle)
@@ -144,7 +144,7 @@ describe('When setting instance variables values to an O instance', () => {
     })
 
     it('sets the given value on a classification that uses the same inst var names as another one', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -164,7 +164,7 @@ describe('When setting instance variables values to an O instance', () => {
     })
 
     it('raises an error if a classification tries to set the value to an inexistent instance variable of its own', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 

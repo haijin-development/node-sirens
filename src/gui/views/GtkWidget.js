@@ -1,7 +1,8 @@
+const Classification = require('../../o-language/classifications/Classification')
 const GtkView = require('./GtkView')
 const GtkWidgetWithContextMenu = require('./GtkWidgetWithContextMenu')
 
-class GtkWidget {
+class GtkWidget extends Classification {
 
     /// Definition
 
@@ -11,6 +12,19 @@ class GtkWidget {
     }
 
     /// Initializing
+
+    initialize() {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.initializeHandles()
+
+        this.subscribeToGUISignals()
+    }
+
+    initializeHandles() {
+    }
 
     onViewAdded(childView) {
         const childHandles = childView.getChildHandles()

@@ -1,23 +1,8 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const ListModel = require('./ListModel')
 const ValueModel = require('./ValueModel')
 
-class ChoiceModel {
-
-    /// Instantiating
-
-    static new() {
-        return this.with({ choices: [], selection: null })
-    }
-
-    static with({ choices: choices, selection: selection }) {
-        return OInstance.new().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize({ choices: choices, selection: selection })
-        })
-    }
-
+class ChoiceModel extends Classification {
     /// Definition
 
     static definition() {
@@ -26,7 +11,11 @@ class ChoiceModel {
 
     /// Initializing
 
-    initialize({ choices: choices, selection: selection }) {
+    initialize({ choices: choices, selection: selection } = { choices: [], selection: null }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.listModel = ListModel.new()
         this.selectionModel = ValueModel.new()
 

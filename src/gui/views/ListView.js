@@ -2,21 +2,10 @@ const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
 const GtkTypes = require('./GtkTypes')
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 
-class ListView {
-    /// Instantiating
-
-    static new({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
-    {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
-        })
-    }
-
+class ListView extends Classification {
     /// Definition
 
     static definition() {
@@ -40,13 +29,15 @@ class ListView {
 
     initialize({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
     {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
 
         this.columns = []
-
-        this.initializeHandles()
     }
 
     initializeHandles() {

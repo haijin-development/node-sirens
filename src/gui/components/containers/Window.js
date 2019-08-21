@@ -1,13 +1,21 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const WindowView = require('../../views/WindowView')
 
-class Window extends Widget {
+class Window extends Classification {
     static openOn(props) {
         const window = new this(props)
 
         window.open()
 
         return window
+    }
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
     }
 
     /// Initializing
@@ -20,7 +28,7 @@ class Window extends Widget {
     }
 
     open() {
-        this.view.open()
+        this.getView().open()
     }
 
     /// Asking

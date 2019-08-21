@@ -1,7 +1,7 @@
 /*
  * In the O language any classification previously added to an instance can be dropped by that instance:
  *
- *      const object = O.new()
+ *      const object = OInstance.new()
  *
  *      object.behaveAs(Point)
  *      object.setX(0)
@@ -12,14 +12,14 @@
  * If the object did not behaved as the dropped classification nothing happens, making the dropBehaviour an
  * idempotent operation:
  *
- *      const object = O.new()
+ *      const object = OInstance.new()
  *
  *      object.dropBehaviour(Point)
  *
  */
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Shape {
     static definition() {
@@ -52,7 +52,7 @@ class Circle {
 
 describe('When dropping behaviour from an instance', () => {
     it('drops a classification previously added', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -66,7 +66,7 @@ describe('When dropping behaviour from an instance', () => {
     })
 
     it('does not drop other classifications', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
         object.behaveAs(Circle)
@@ -80,7 +80,7 @@ describe('When dropping behaviour from an instance', () => {
     })
 
     it('does not fail if the classification was not previously added', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.dropBehaviour(Shape)
 

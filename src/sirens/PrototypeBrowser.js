@@ -1,11 +1,23 @@
-const Sirens = require('../Sirens')
+const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
+const Sirens = require('../Sirens')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
 
-class PrototypeBrowser extends Component {
+class PrototypeBrowser extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
+    /// Initializing
+
     defaultModel() {
-        return new PrototypesBrowserModel(this.props.prototype)
+        const object = this.getProps().prototype
+
+        return PrototypesBrowserModel.new({ object: object })
     }
 
     /// Actions
@@ -72,7 +84,7 @@ class PrototypeBrowser extends Component {
                         })
 
                         this.component(
-                            new FunctionsComponent({
+                            FunctionsComponent.new({
                                 model: prototypesModel,
                                 splitProportion: 3.0/4.0,
                             })

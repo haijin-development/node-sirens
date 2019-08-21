@@ -1,31 +1,36 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const ChoiceModel = require('../../models/ChoiceModel')
 const ListView = require('../../views/ListView')
 
-class ChoicesList extends Widget {
+class ChoicesList extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeProps(props) {
-        super.initializeProps(props)
-
-        if(this.props.columns === undefined) {
+    initializeProps() {
+        if(this.getProps().columns === undefined) {
             throw Error(`The class ${this.constructor.name} props must defined a .columns property.`)
         }
     }
 
-    initializeModel(props) {
-        super.initializeModel(props)
-
-        if(props.choices !== undefined) {
-            this.getModel().setChoices(props.choices)
-        }
-        if(props.selection !== undefined) {
-            this.getModel().setSelection(props.selection)
-        }
-    }
-
     defaultModel() {
-        return ChoiceModel.new()
+        const model = ChoiceModel.new()
+
+        if(this.getProps().choices !== undefined) {
+            model.setChoices( this.getProps().choices )
+        }
+
+        if(this.getProps().selection !== undefined) {
+            model.setSelection( this.getProps().selection )
+        }
+
+        return model
     }
 
     createView() {
@@ -100,7 +105,7 @@ class ChoicesList extends Widget {
     }
 
     onUserSelectionAction() {
-        if(this.props.onAction === undefined) {
+        if(this.getProps().onAction === undefined) {
             return
         }
 

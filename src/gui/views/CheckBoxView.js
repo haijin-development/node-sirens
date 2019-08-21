@@ -1,18 +1,8 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class CheckBoxView {
-    /// Instantiating
-
-    static new({ onClicked: onClickedBlock }) {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize({ onClicked: onClickedBlock })
-        })
-    }
-
+class CheckBoxView extends Classification {
     /// Definition
 
     static definition() {
@@ -25,9 +15,9 @@ class CheckBoxView {
     initialize({ onClicked: onClickedBlock }) {
         this.onClickedBlock = onClickedBlock
 
-        this.initializeHandles()
-
-        this.subscribeToGUISignals()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {

@@ -1,18 +1,8 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class TextButtonView {
-    /// Instantiating
-
-    static new({ onClicked: onClickedBlock }) {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initialize({ onClicked: onClickedBlock })
-        })
-    }
-
+class TextButtonView extends Classification {
     /// Definition
 
     static definition() {
@@ -23,6 +13,10 @@ class TextButtonView {
     /// Initializing
 
     initialize({onClicked: onClickedBlock}) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.onClickedBlock = onClickedBlock
 
         this.initializeHandles()

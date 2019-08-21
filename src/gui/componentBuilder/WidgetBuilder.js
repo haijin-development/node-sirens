@@ -1,20 +1,6 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 
-class WidgetBuilder {
-    /// Instantiating
-
-    static new() {
-        return this.withProps({})
-    }
-
-    static withProps(props) {
-        const propsCopy = Object.assign( {}, props )
-
-        return OInstance.new()
-            .behaveAs(this)
-            .mergeProps(propsCopy)
-    }
-
+class WidgetBuilder extends Classification {
     /// Definition
 
     static definition() {
@@ -25,6 +11,14 @@ class WidgetBuilder {
 
     afterInstantiation() {
         this.props = {}
+    }
+
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.props = props
     }
 
     /// Accessing

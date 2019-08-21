@@ -4,13 +4,13 @@ const Label = require('../../../../../src/gui/components/widgets/Label')
 describe('When using a Label', () => {
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const label = new Label()
+            const label = Label.new()
 
             expect(label.getModel().getValue()) .to .eql('')
         })
 
         it('updates the view value when the model text changes', () => {
-            const label = new Label()
+            const label = Label.new()
 
             label.getModel().setValue('123')
 
@@ -21,13 +21,13 @@ describe('When using a Label', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const label = new Label()
+            const label = Label.new()
 
             expect(label.getView().getText()) .to .eql('')
         })
 
         it('sets a text on its constructor', () => {
-            const label = new Label({text: 'label'})
+            const label = Label.new({text: 'label'})
 
             expect(label.getModel().getValue()) .to .eql('label')
             expect(label.getView().getText()) .to .eql('label')
@@ -36,7 +36,7 @@ describe('When using a Label', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const label = new Label()
+            const label = Label.new()
 
             label.setProps({
                 width: 10
@@ -46,7 +46,7 @@ describe('When using a Label', () => {
         })
 
         it('sets and gets the height', () => {
-            const label = new Label()
+            const label = Label.new()
 
             label.setProps({
                 height: 10

@@ -1,19 +1,9 @@
-const OInstance = require('../../o-language/classifications/OInstance')
+const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../../Sirens')
 
-class WindowView {
-    /// Instantiating
-
-    static new(orientation) {
-        return OInstance.new().yourself( (checkbox) => {
-            checkbox
-                .behaveAs(this)
-                .initializeHandles(orientation)
-        })
-    }
-
+class WindowView extends Classification {
     /// Definition
 
     static definition() {
@@ -34,7 +24,11 @@ class WindowView {
 
     /// Initializing
 
-    initializeHandles() {
+    initialize() {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.mainHandle = new Gtk.Window()
 
         Sirens.registerWindow()
@@ -50,6 +44,9 @@ class WindowView {
 
     open() {
         this.mainHandle.showAll()
+    }
+
+    subscribeToGUISignals() {
     }
 
     /// Asking

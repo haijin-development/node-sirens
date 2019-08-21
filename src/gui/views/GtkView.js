@@ -1,10 +1,11 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
 
 Sirens.initialize()
 
-class GtkView {
+class GtkView extends Classification {
     /// Definition
 
     static definition() {

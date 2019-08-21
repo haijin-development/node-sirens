@@ -38,7 +38,7 @@
  *          }
  *       }
  *
- *      const patient = O.new()
+ *      const patient = OInstance.new()
  *
  *      patient.behaveAs(SymptonPresence)
  *
@@ -61,7 +61,7 @@
  */
 
 const expect = require('chai').expect
-const O = require('../../../../src/o-language/O')
+const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
 class Positionable {
     static definition() {
@@ -115,7 +115,7 @@ class Circle {
 
 describe('When adding classifications that assumes previous classifications', () => {
     it('adds the assumed direct classifications if they are not present already', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Shape)
 
@@ -127,7 +127,7 @@ describe('When adding classifications that assumes previous classifications', ()
     })
 
     it('adds the indirect assumed classifications if they are not present already', () => {
-        const object = O.new()
+        const object = OInstance.new()
 
         object.behaveAs(Circle)
 

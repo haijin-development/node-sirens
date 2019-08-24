@@ -1,20 +1,27 @@
-const EventEmitter = require('events')
+const Classification = require('../../o-language/classifications/Classification')
 const VirtualTreeModel = require('./VirtualTreeModel')
 const ValueModel = require('./ValueModel')
 
-class TreeChoiceModel extends EventEmitter {
+class TreeChoiceModel extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['selection', 'treeModel']
+    }
 
     /// Initializing
 
-    constructor({selection: selection, roots: roots, getChildrenBlock: getChildrenBlock}) {
-        super()
+    initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         if(selection === undefined) selection = null
         if(roots === undefined) roots = []
 
-        this.selection = new ValueModel({value: selection})
+        this.selection = ValueModel.new({ value: selection })
 
-        this.treeModel = new VirtualTreeModel({
+        this.treeModel = VirtualTreeModel.new({
             roots: roots,
             getChildrenBlock: getChildrenBlock
         })

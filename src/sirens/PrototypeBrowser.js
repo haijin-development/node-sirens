@@ -1,11 +1,23 @@
-const Sirens = require('../Sirens')
+const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
+const Sirens = require('../Sirens')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
 
-class PrototypeBrowser extends Component {
+class PrototypeBrowser extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
+    /// Initializing
+
     defaultModel() {
-        return new PrototypesBrowserModel(this.props.prototype)
+        const object = this.getProps().prototype
+
+        return PrototypesBrowserModel.new({ object: object })
     }
 
     /// Actions
@@ -27,39 +39,38 @@ class PrototypeBrowser extends Component {
     renderWith(builder) {
         const prototypesModel = this.getModel()
 
-        builder.render(function (component) {
-            this.window(() => {
+        builder.render( function(component) {
+            this.window( function() {
                 this.styles({
                     title: 'Prototypes Browser',
                     width: 500,
                     height: 400,
                 })
 
-                this.verticalSplitter( () => {
-                    this.horizontalSplitter(() => {
+                this.verticalSplitter( function() {
+
+                    this.horizontalSplitter( function() {
                         this.styles({
                             splitProportion: 2.0/3.0,
                         })
 
-                        this.listChoice((list) => {
-                            list.model(prototypesModel.getPrototypesModel())
+                        this.listChoice( function() {
+                            this.model( prototypesModel.getPrototypesModel() )
 
-                            list.styles({
+                            this.styles({
                                 splitProportion: 1.0/4.0,
                             })
 
-                            list.handlers({
+                            this.handlers({
                                 onAction: component.browseSelectedPrototype.bind(component),
                             })
 
-                            list.column({
+                            this.column({
                                 label: 'Prototypes',
-                                getTextBlock: (object) => {
-                                    return object.constructor.name
-                                },
+                                getTextBlock: function(object) { return object.constructor.name },
                             })
 
-                            list.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                            this.popupMenu( function({ menu: menu, ownerView: ownerView }) {
                                 const selectedObject =
                                     component.getModel().getSelectedPrototype()
 
@@ -73,7 +84,7 @@ class PrototypeBrowser extends Component {
                         })
 
                         this.component(
-                            new FunctionsComponent({
+                            FunctionsComponent.new({
                                 model: prototypesModel,
                                 splitProportion: 3.0/4.0,
                             })

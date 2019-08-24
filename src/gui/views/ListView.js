@@ -1,28 +1,43 @@
-const View = require('./View')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const Types = require('./Types')
+const GtkTypes = require('./GtkTypes')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 
-class ListView extends View {
+class ListView extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle', 'listStore', 'treeView', 'columns',
+            'onSelectionChanged', 'onSelectionAction',
+        ]
+
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['columns'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['columns'])
+        })
     }
 
     /// Initializing
 
-    constructor({
-                    onSelectionChanged: onSelectionChanged,
-                    onSelectionAction: onSelectionAction
-                })
+    initialize({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
     {
-        super()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
+
+        this.columns = []
     }
 
     initializeHandles() {
@@ -31,8 +46,6 @@ class ListView extends View {
 
         this.listStore = new Gtk.ListStore()
         this.treeView = null
-
-        this.columns = []
     }
 
     setColumns(columns) {
@@ -73,10 +86,14 @@ class ListView extends View {
     }
 
     getColumnType(type) {
-        return Types[type]
+        return GtkTypes[type]
     }
 
     /// Querying
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     /*
      * Returns an array with the text of each row in the list.
@@ -152,7 +169,7 @@ class ListView extends View {
             iter = this.listStore.insert(index)
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     updateItems({items: items, indices: indices}) {
@@ -168,7 +185,7 @@ class ListView extends View {
             throw new Error `The index ${index} is out of range.`
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     removeItems({items: items, indices: indices}) {
@@ -195,7 +212,7 @@ class ListView extends View {
                 throw new Error `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
             }
 
-            const gtkType = Types['string']
+            const gtkType = GtkTypes['string']
 
             const value = new GObject.Value()
 

@@ -1,22 +1,36 @@
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
 
-class StackView extends View {
+class StackView extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
-    initializeHandles(orientation) {
-        this.orientation = orientation
+    initialize({ orientation: orientation }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
-        if(this.orientation == 'horizontal') {
+        if(orientation == 'horizontal') {
             this.mainHandle = new Gtk.HBox()
         } else {
             this.mainHandle = new Gtk.VBox()
         }
     }
 
+    getMainHandle() {
+        return this.mainHandle
+    }
+
     /// Events
 
-    subscribeToGUISignals(props) {
+    subscribeToGUISignals() {
     }
 
     onViewAdded(childView) {

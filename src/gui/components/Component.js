@@ -1,18 +1,34 @@
-const AbstractComponent = require('./AbstractComponent')
+const Classification = require('../../o-language/classifications/Classification')
+const ComponentBehaviour = require('./ComponentBehaviour')
 const ComponentView = require('../views/ComponentView')
-const ComponentBuilder = require('../componentBuilder/ComponentBuilder')
+const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
-class Component extends AbstractComponent {
+class Component extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [ComponentBehaviour]
+    }
+
+    /// Initializing
+
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
+        this.build()
+    }
+
     build(props) {
-        super.build(props)
-
-        const builder = new ComponentBuilder(this)
+        const builder = ComponentRenderer.new({ rootComponent: this })
 
         this.renderWith(builder)
     }
 
     createView() {
-        return new ComponentView()
+        return ComponentView.new()
     }
 
     synchronizeViewFromModel() {
@@ -25,11 +41,11 @@ class Component extends AbstractComponent {
     /// Accessing
 
     getMainComponent() {
-        if( this.components.length === 0 ) {
+        if( this.getComponents().length === 0 ) {
             throw Error(`The ${this.constructor.name} has no main child component.`)
         }
 
-        return this.components[0].getMainComponent()
+        return this.getComponents()[0].getMainComponent()
     }
 
     /// Asking

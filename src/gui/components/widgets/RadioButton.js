@@ -1,16 +1,24 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const Widget = require('../Widget')
 const RadioButtonView = require('../../views/RadioButtonView')
 const ChoiceModel = require('../../models/ChoiceModel')
 
-class RadioButton extends PrimitiveComponent {
+class RadioButton extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
     createView() {
-        return new RadioButtonView()
+        return RadioButtonView.new()
     }
 
     defaultModel() {
-        return new ChoiceModel()
+        return ChoiceModel.new()
     }
 
     /// Synchronizing
@@ -20,7 +28,7 @@ class RadioButton extends PrimitiveComponent {
 
         const value = this.getId() === selectedChoice
 
-        this.view.setValue(value)
+        this.getView().setValue(value)
     }
 
     /// Events

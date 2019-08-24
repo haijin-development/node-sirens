@@ -1,30 +1,45 @@
+const Classification = require('../../o-language/classifications/Classification')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
-class PrototypesBrowserModel {
+class PrototypesBrowserModel extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'inspectedObject',
+            'objectPrototypesList', 'selectedPrototypeProps', 'selectedPropDescription',
+            'showInherited', 'showFunctions', 'showProps',
+        ]
+    }
+
     /// Initializing
 
-    constructor(inspectedObject) {
+    initialize({ object: inspectedObject }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.inspectedObject = inspectedObject
 
-        const prototypes = this._getPrototypesChainOf(this.inspectedObject)
+        const prototypes = this._getPrototypesChainOf( this.inspectedObject )
 
-        this.objectPrototypesList = new ChoiceModel({
+        this.objectPrototypesList = ChoiceModel.new({
             choices: prototypes,
             selection: this.inspectedObject,
         })
 
-        this.selectedPrototypeProps = new ChoiceModel({
+        this.selectedPrototypeProps = ChoiceModel.new({
             choices: [],
             selection: null,
         })
 
-        this.selectedPropDescription = new ValueModel()
+        this.selectedPropDescription = ValueModel.new()
 
-        this.showInherited = new ValueModel({value: false})
-        this.showFunctions = new ValueModel({value: true})
-        this.showProps = new ValueModel({value: false})
+        this.showInherited = ValueModel.new({ value: false })
+        this.showFunctions = ValueModel.new({ value: true })
+        this.showProps = ValueModel.new({ value: false })
 
         this.connectModels()
     }
@@ -70,7 +85,7 @@ class PrototypesBrowserModel {
         return this.selectedPropDescription
     }
 
-    getshowInheritedModel() {
+    getShowInheritedModel() {
         return this.showInherited
     }
 
@@ -118,7 +133,7 @@ class PrototypesBrowserModel {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            return new ObjectProperty({
+            return ObjectProperty.new({
                 key: key,
                 value: object[key]
             })
@@ -181,12 +196,12 @@ class PrototypesBrowserModel {
 
     displayStringOf(objectProperty) {
         if(objectProperty.isFunction()) {
-            return objectProperty.value.toString()
+            return objectProperty.getValue().toString()
         } else {
             try {
-                return JSON.stringify(objectProperty.value)
+                return JSON.stringify(objectProperty.getValue())
             } catch(error) {
-                return objectProperty.value.toString()
+                return objectProperty.getValue().toString()
             }
         }
     }

@@ -1,7 +1,8 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const Widget = require('../Widget')
 const WindowView = require('../../views/WindowView')
 
-class Window extends PrimitiveComponent {
+class Window extends Classification {
     static openOn(props) {
         const window = new this(props)
 
@@ -10,17 +11,24 @@ class Window extends PrimitiveComponent {
         return window
     }
 
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
     createView() {
-        return new WindowView()
+        return WindowView.new()
     }
 
     synchronizeViewFromModel() {
     }
 
     open() {
-        this.view.open()
+        this.getView().open()
     }
 
     /// Asking

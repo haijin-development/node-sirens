@@ -1,13 +1,25 @@
-const View = require('./View')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class TextButtonView extends View {
+class TextButtonView extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onClickedBlock']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
-    constructor({onClicked: onClickedBlock}) {
-        super()
+    initialize({onClicked: onClickedBlock}) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         this.onClickedBlock = onClickedBlock
+
+        this.initializeHandles()
     }
 
     initializeHandles() {
@@ -15,6 +27,10 @@ class TextButtonView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     setText(text) {
         this.mainHandle.label = text

@@ -5,14 +5,14 @@ const TreeChoiceModel = require('../../../../../src/gui/models/TreeChoiceModel')
 
 describe('When using a ChoicesTree', () => {
     beforeEach( () => {
-        const treeModel = new TreeChoiceModel({
+        const treeModel = TreeChoiceModel.new({
             roots: [],
             getChildrenBlock: () => { return ['1', '2', '3'] }
         })
 
-        this.tree = new ChoicesTree({
+        this.tree = ChoicesTree.new({
             model: treeModel,
-            columns: [new Column({label: 'col 1'})],
+            columns: [ Column.new({ label: 'col 1' }) ],
         })
     })
 
@@ -43,8 +43,8 @@ describe('When using a ChoicesTree', () => {
         })
 
         it('sets the choices on its constructor', () => {
-            this.tree = new ChoicesTree({
-                columns: [ new Column({label: 'col 1'}) ],
+            this.tree = ChoicesTree.new({
+                columns: [ Column.new({ label: 'col 1' }) ],
                 roots: ['a','b','c'],
                 setSelectionPath: ['c']
             })

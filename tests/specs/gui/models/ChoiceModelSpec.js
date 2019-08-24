@@ -9,7 +9,7 @@ describe('When using a ChoiceModel', () => {
 
     describe('when creating one', () => {
         it('has a default ListModel choices and a default ValueModel selection', () => {
-            const choice_model = new ChoiceModel()
+            const choice_model = ChoiceModel.new()
 
             expect(choice_model.getList().constructor.name) .to .eql('ListModel')
             expect(choice_model.getValue().constructor.name) .to .eql('ValueModel')
@@ -19,7 +19,7 @@ describe('When using a ChoiceModel', () => {
         })
 
         it('its has the given choices and selection', () => {
-            const choice_model = new ChoiceModel({choices: ['a', 'b', 'c'], selection: 'c'})
+            const choice_model = ChoiceModel.new({ choices: ['a', 'b', 'c'], selection: 'c' })
 
             expect(choice_model.getList().constructor.name) .to .eql('ListModel')
             expect(choice_model.getValue().constructor.name) .to .eql('ValueModel')
@@ -31,7 +31,7 @@ describe('When using a ChoiceModel', () => {
 
     describe('when setting its choices', () => {
         it('sets the given choices', () => {
-            const choice_model = new ChoiceModel()
+            const choice_model = ChoiceModel.new()
 
             expect(choice_model.setChoices(['a', 'b', 'c']))
 
@@ -41,7 +41,7 @@ describe('When using a ChoiceModel', () => {
 
     describe('when setting its selection', () => {
         it('sets the given selection', () => {
-            const choice_model = new ChoiceModel()
+            const choice_model = ChoiceModel.new()
 
             choice_model.setChoices(['a', 'b', 'c'])
 

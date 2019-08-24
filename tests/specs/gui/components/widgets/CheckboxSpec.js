@@ -4,63 +4,63 @@ const CheckBox = require('../../../../../src/gui/components/widgets/CheckBox')
 describe('When using a CheckBox', () => {
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            expect(label.getModel().getValue()) .to .eql(false)
+            expect(widget.getModel().getValue()) .to .eql(false)
         })
 
         it('updates the view value when the model value changes', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            label.getModel().setValue(true)
+            widget.getModel().setValue(true)
 
-            expect(label.getView().getValue()) .to .eql(true)
+            expect(widget.getView().getValue()) .to .eql(true)
         })
 
         it('updates the model value when the view changes', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            label.getView().setValue(true)
-            label.onClicked()
+            widget.getView().setValue(true)
+            widget.onClicked()
 
-            expect(label.getModel().getValue()) .to .eql(true)
+            expect(widget.getModel().getValue()) .to .eql(true)
         })
     })
 
     describe( 'constructor', () =>{
         it('has a false value by default', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            expect(label.getView().getValue()) .to .eql(false)
+            expect(widget.getView().getValue()) .to .eql(false)
         })
 
         it('sets a value on its constructor', () => {
-            const label = new CheckBox({value: true})
+            const widget = CheckBox.new({ value: true })
 
-            expect(label.getModel().getValue()) .to .eql(true)
-            expect(label.getView().getValue()) .to .eql(true)
+            expect(widget.getModel().getValue()) .to .eql(true)
+            expect(widget.getView().getValue()) .to .eql(true)
         })
     })
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            label.setProps({
+            widget.setProps({
                 width: 10
             })
 
-            expect(label.getView().getWidth()) .to .eql(10)
+            expect(widget.getView().getWidth()) .to .eql(10)
         })
 
         it('sets and gets the height', () => {
-            const label = new CheckBox()
+            const widget = CheckBox.new()
 
-            label.setProps({
+            widget.setProps({
                 height: 10
             })
 
-            expect(label.getView().getHeight()) .to .eql(10)
+            expect(widget.getView().getHeight()) .to .eql(10)
         })
     })
 })

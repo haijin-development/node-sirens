@@ -1,7 +1,19 @@
-class ObjectProperty {
+const Classification = require('../../o-language/classifications/Classification')
+
+class ObjectProperty extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['key', 'value']
+    }
+
     /// Initializing
 
-    constructor({key: key, value: value}) {
+    initialize({ key: key, value: value }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.key = key
         this.value = value
     }
@@ -32,7 +44,7 @@ class ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return new ObjectProperty({
+            return ObjectProperty.new({
                 key: index,
                 value: item
             })
@@ -51,7 +63,7 @@ class ObjectProperty {
                 continue
             }
 
-            const instVar = new ObjectProperty({
+            const instVar = ObjectProperty.new({
                 key: key,
                 value: instVarValue
             })

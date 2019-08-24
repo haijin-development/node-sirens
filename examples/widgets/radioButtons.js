@@ -1,12 +1,20 @@
 const Sirens = require('../../src/Sirens')
+const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
-class CustomComponent extends Component{
+class CustomComponent extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Building
 
     defaultModel() {
-        const choiceModel = new ChoiceModel()
+        const choiceModel = ChoiceModel.new()
 
         choiceModel.setChoices([1, 2, 3])
 
@@ -15,13 +23,13 @@ class CustomComponent extends Component{
 
     renderWith(builder) {
         builder.render(function (component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.verticalStack( () => {
+                this.verticalStack( function() {
                     this.radioButton({
                         model: component.getModel(),
                         id: 1,

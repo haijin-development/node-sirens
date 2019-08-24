@@ -1,12 +1,20 @@
 const Sirens = require('../../src/Sirens')
+const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const TreeChoiceModel = require('../../src/gui/models/TreeChoiceModel')
 
-class CustomComponent extends Component{
+class CustomComponent extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Building
 
     defaultModel() {
-        const treeModel = new TreeChoiceModel({
+        const treeModel = TreeChoiceModel.new({
             roots: ['root1', 'root2'],
             getChildrenBlock: function (item) {
                 return ['child 1', 'child 2', 'child 3']
@@ -20,21 +28,21 @@ class CustomComponent extends Component{
         const choices = this.getModel()
 
         builder.render(function (component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.treeChoice( (tree) => {
-                    tree.model(choices)
+                this.treeChoice( function() {
+                    this.model(choices)
 
-                    tree.column({
+                    this.column({
                         label: 'Column 1',
                         getTextBlock: (n) => { return n.toString() },
                     })
 
-                    tree.column({
+                    this.column({
                         label: 'Column 2',
                     })
                 })

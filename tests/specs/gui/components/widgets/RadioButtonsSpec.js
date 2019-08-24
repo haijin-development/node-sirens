@@ -5,27 +5,27 @@ const RadioButton = require('../../../../../src/gui/components/widgets/RadioButt
 
 describe('When using a RadioButton group', () => {
     beforeEach( () => {
-        this.model = new ChoiceModel({choices: ['a', 'b', 'c']})
+        this.model = ChoiceModel.new({ choices: ['a', 'b', 'c'] })
 
-        this.button1 = new RadioButton({
+        this.button1 = RadioButton.new({
             model: this.model,
             id: 'a',
             label: 'Option 1'
         })
 
-        this.button2 = new RadioButton({
+        this.button2 = RadioButton.new({
             model: this.model,
             id: 'b',
             label: 'Option 2'
         })
 
-        this.button3 = new RadioButton({
+        this.button3 = RadioButton.new({
             model: this.model,
             id: 'c',
             label: 'Option 3'
         })
 
-        this.container = new Stack({orientation: 'horizontal'})
+        this.container = Stack.new({orientation: 'horizontal'})
 
         this.container.addAllComponents(
             [this.button1, this.button2, this.button3]
@@ -34,13 +34,13 @@ describe('When using a RadioButton group', () => {
 
     describe( 'constructor', () =>{
         it('has a empty label', () => {
-            const radioButton = new RadioButton()
+            const radioButton = RadioButton.new()
 
             expect(radioButton.getView().getText()) .to .eql('')
         })
 
         it('sets a text on its constructor', () => {
-            const label = new RadioButton({text: 'label'})
+            const label = RadioButton.new({text: 'label'})
 
             expect(label.getView().getText()) .to .eql('label')
         })

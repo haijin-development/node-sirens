@@ -1,19 +1,19 @@
 const expect = require('chai').expect
-const Model = require('../../../../src/gui/models/ValueModel')
+const ValueModel = require('../../../../src/gui/models/ValueModel')
 
-describe('When using a Model', () => {
+describe('When using a ValueModel', () => {
     describe('when setting and getting its value', () => {
 
         it('sets its value in its constructor', () => {
-            const model = new Model({
+            const model = ValueModel.new({
                     value: 2
                 })
 
-            expect(model.value) .to .equal(2)
+            expect(model.getValue()) .to .equal(2)
         })
 
         it('sets and gets its value', () => {
-            const model = new Model()
+            const model = ValueModel.new()
 
             model.setValue(1)
 
@@ -21,7 +21,7 @@ describe('When using a Model', () => {
         })
 
         it('sets and gets an existent value', () => {
-            const model = new Model()
+            const model = ValueModel.new()
 
             model.setValue(1)
 
@@ -33,12 +33,12 @@ describe('When using a Model', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            const model = new Model()
+            const model = ValueModel.new()
 
             model.on('value-changed', (event) => {
                 this.triggeredEvent = true
 
-                expect(event.oldValue) .to .be .undefined
+                expect(event.oldValue) .to .be .null
                 expect(event.newValue) .to .equal(1)
             })
 

@@ -1,7 +1,15 @@
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
 
-class TabsView extends View {
+class TabsView extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
     initializeHandles() {

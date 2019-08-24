@@ -1,9 +1,17 @@
-const Sirens = require('../Sirens')
+const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
+const Sirens = require('../Sirens')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
-class ObjectBrowser extends Component {
+class ObjectBrowser extends ComponentClassification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Initializing
 
     /**
@@ -12,7 +20,7 @@ class ObjectBrowser extends Component {
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        return new ObjectBrowserModel(this.props.object)
+        return ObjectBrowserModel.new({ object: this.getProps().object })
     }
 
     /// Actions
@@ -43,7 +51,7 @@ class ObjectBrowser extends Component {
         let selectedText = playgroundComponent.getSelectedText()
 
         if(selectedText == '') {
-            selectedText = this.getModel().getSelectedPropertyText().getValue()
+            selectedText = playgroundComponent.getModel().getValue()
         }
 
         return selectedText
@@ -55,24 +63,24 @@ class ObjectBrowser extends Component {
         const browserModel = this.getModel()
 
         builder.render( function(component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     title: 'Object Browser',
                     width: 400,
                     height: 400,
                 })
 
-                this.verticalStack( () => {
-                    this.verticalSplitter( () => {
+                this.verticalStack( function() {
+                    this.verticalSplitter( function() {
                         this.component(
-                            new ObjectPropertiesComponent({
+                            ObjectPropertiesComponent.new({
                                 model: browserModel,
                                 splitProportion: 2.0/4.0,
                             })
                         )
 
-                        this.text( () => {
-                            this.model(browserModel.getSelectedPropertyText())
+                        this.text( function() {
+                            this.model( browserModel.getSelectedPropertyText() )
 
                             this.styles({
                                 id: 'playground',
@@ -80,7 +88,7 @@ class ObjectBrowser extends Component {
                                 wrapMode: 'wordChar'
                             })
 
-                            this.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                            this.popupMenu( function({menu: menu, ownerView: ownerView}) {
                                 const selectedObject =
                                     component.getModel().getSelectedPropertyValue()
 

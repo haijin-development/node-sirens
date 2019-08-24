@@ -1,8 +1,20 @@
-const EventEmitter = require('events')
+const Classification = require('../../o-language/classifications/Classification')
+const Model = require('./Model')
 
-class ValueModel extends EventEmitter {
-    constructor({value: value} = {value: undefined}) {
-        super()
+class ValueModel extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['value']
+        this.assumptions = [Model]
+    }
+
+    /// Initializing
+
+    initialize({ value: value } = { value: null }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         this.value = value
     }

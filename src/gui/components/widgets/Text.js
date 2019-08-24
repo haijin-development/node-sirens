@@ -1,25 +1,34 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
+const Widget = require('../Widget')
 const TextView = require('../../views/TextView')
+const ValueModel = require('../../models/ValueModel')
 
-class Text extends PrimitiveComponent {
+class Text extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeModel(props) {
-        super.initializeModel(props)
+    defaultModel() {
+        const value = this.getProps().text !== undefined ? 
+                        this.getProps().text : ''
 
-        if(props.text !== undefined) {
-            this.getModel().setValue(props.text)
-        }
+        return ValueModel.new({ value: value })
     }
 
     createView() {
-        return new TextView({onTextChanged: this.onTextChanged.bind(this)})
+        return TextView.new({ onTextChanged: this.onTextChanged.bind(this) })
     }
 
     /// Querying
 
     getSelectedText() {
-        return this.view.getSelectedText()
+        return this.getView().getSelectedText()
     }
 
     /// Synchronizing
@@ -27,21 +36,23 @@ class Text extends PrimitiveComponent {
     synchronizeViewFromModel() {
         const text = this.getModel().getValue()
 
-        this.view.setText(text)
+        this.getView().setText(text)
     }
 
     /// Events
 
+    /*
+     * The model value changed. Updates this widget model.
+     */
     onValueChanged({newValue: newValue, oldValue: oldValue}) {
-        if(this.updatingModel === true) {
-            return
-        }
-
         this.synchronizeViewFromModel()
     }
 
+    /*
+     * The widget value changed. Updates this object model.
+     */
     onTextChanged(text) {
-        this.duringModelUpdate( () => {
+        this.duringClassificationDo( UpdatingModel, () => {
             this.getModel().setValue(text)
         })
     }

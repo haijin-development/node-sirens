@@ -1,12 +1,24 @@
+const Classification = require('../../o-language/classifications/Classification')
+
 /*
  * The definition of a javascript function.
  *
  * It is implemented as a wrapper on a parse tree node.
  */
-class AbsentFunctionDefinition {
+class AbsentFunctionDefinition extends Classification {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['sourceFile', 'line', 'column']
+    }
+
     /// Initializing
 
-    constructor({sourceFile: sourceFile, line: line, column: column}) {
+    initialize({ sourceFile: sourceFile, line: line, column: column }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.sourceFile = sourceFile
         this.line = line
         this.column = column

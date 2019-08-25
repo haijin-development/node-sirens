@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-class ValueModel extends Classification {
+const ValueModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -34,6 +34,6 @@ class ValueModel extends Classification {
 
         this.emit('value-changed', {oldValue: oldValue, newValue: newValue})
     }
-}
+})
 
 module.exports = ValueModel

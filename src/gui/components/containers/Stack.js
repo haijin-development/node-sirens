@@ -2,7 +2,7 @@ const Classification = require('../../../o-language/classifications/Classificati
 const Widget = require('../Widget')
 const StackView = require('../../views/StackView')
 
-class Stack extends Classification {
+const Stack = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -28,6 +28,6 @@ class Stack extends Classification {
             this.addComponent( component )
         })
     }
-}
+})
 
 module.exports = Stack

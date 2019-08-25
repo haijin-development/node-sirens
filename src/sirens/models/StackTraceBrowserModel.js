@@ -6,7 +6,7 @@ const callsites = require('callsites')
 const FunctionDefinition = require('../objects/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
 
-class StackTraceBrowserModel extends Classification {
+const StackTraceBrowserModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -91,6 +91,6 @@ class StackTraceBrowserModel extends Classification {
 
     /// Displaying
     
-}
+})
 
 module.exports = StackTraceBrowserModel

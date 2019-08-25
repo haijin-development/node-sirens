@@ -3,7 +3,7 @@ const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../../Sirens')
 
-class WindowView extends Classification {
+const WindowView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -92,6 +92,6 @@ class WindowView extends Classification {
     getMainHandle() {
         return this.mainHandle
     }
-}
+})
 
 module.exports = WindowView

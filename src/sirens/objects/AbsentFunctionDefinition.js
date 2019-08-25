@@ -5,7 +5,7 @@ const Classification = require('../../o-language/classifications/Classification'
  *
  * It is implemented as a wrapper on a parse tree node.
  */
-class AbsentFunctionDefinition extends Classification {
+const AbsentFunctionDefinition = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -63,6 +63,6 @@ class AbsentFunctionDefinition extends Classification {
     getOriginalSourceCode({cr: cr}) {
         return 'Source code not found'
     }
-}
+})
 
 module.exports = AbsentFunctionDefinition

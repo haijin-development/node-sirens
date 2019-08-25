@@ -3,30 +3,7 @@ const Classification = require('../../o-language/classifications/Classification'
 
 const gtkMenuMethodsToCopy = ['add', 'showAll', 'popupAtPointer']
 
-class MenuView extends Classification {
-    /// Instantiating
-
-    /*
-     * Downcast a GtkWidget handle to a Gtk.Menu handle.
-     *
-     * Actually we just copy and bind the functions that the MenuView uses from a Gtk.Menu to the given
-     * gtkWidget. Don't know if there is a cleaner way to do it.
-     */
-    static castGtkWidgetToGtkMenu(gtkWidget) {
-        Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
-
-        return gtkWidget
-    }
-
-    /*
-     * Returns a new MenuView wrapping the given GtkWidget.
-     */
-    static newFromGtkWidget(gtkWidget) {
-        gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
-
-        return this.new({ gtkWidget: gtkWidget })
-    }
-
+const MenuView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -87,6 +64,33 @@ class MenuView extends Classification {
         this.menuHandle.showAll()
         this.menuHandle.popupAtPointer()
     }
-}
+})
+
+const MenuViewClassification = Classification.define( class {
+    /// Instantiating
+
+    /*
+     * Downcast a GtkWidget handle to a Gtk.Menu handle.
+     *
+     * Actually we just copy and bind the functions that the MenuView uses from a Gtk.Menu to the given
+     * gtkWidget. Don't know if there is a cleaner way to do it.
+     */
+    castGtkWidgetToGtkMenu(gtkWidget) {
+        Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
+
+        return gtkWidget
+    }
+
+    /*
+     * Returns a new MenuView wrapping the given GtkWidget.
+     */
+    newFromGtkWidget(gtkWidget) {
+        gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
+
+        return this.new({ gtkWidget: gtkWidget })
+    }
+})
+
+MenuView.behaveAs( MenuViewClassification )
 
 module.exports = MenuView

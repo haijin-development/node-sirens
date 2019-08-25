@@ -13,7 +13,7 @@ const RadioButton = require('../components/widgets/RadioButton')
 
 const WidgetBuilder = require('./WidgetBuilder')
 
-class ContainerWidgetBuilder extends Classification {
+const ContainerWidgetBuilder = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -240,6 +240,6 @@ class ContainerWidgetBuilder extends Classification {
 
         this.childComponents.push(text)
     }
-}
+})
 
 module.exports = ContainerWidgetBuilder

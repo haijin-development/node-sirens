@@ -2,7 +2,7 @@ const Classification = require('../../../o-language/classifications/Classificati
 const Widget = require('../Widget')
 const TabsView = require('../../views/TabsView')
 
-class Tabs extends Classification {
+const Tabs = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -18,6 +18,6 @@ class Tabs extends Classification {
 
     synchronizeViewFromModel() {
     }
-}
+})
 
 module.exports = TabsView

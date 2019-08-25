@@ -6,14 +6,7 @@ const Sirens = require('../../Sirens')
  *
  * It is implemented as a wrapper on a parse tree node.
  */
-class FunctionDefinition extends Classification {
-    static from({ file: file, line: line, column: column }) {
-        const SourceFile = require('./SourceFile')
-
-        const sourceFile = SourceFile.new({ filepath: file })
-
-        return sourceFile.getFunctionAt({ line: line, column: column })
-    }
+const FunctionDefinition = Classification.define( class {
 
     /// Definition
 
@@ -75,6 +68,14 @@ class FunctionDefinition extends Classification {
             cr: cr
         })
     }
+})
+
+FunctionDefinition.from = function({ file: file, line: line, column: column }) {
+    const SourceFile = require('./SourceFile')
+
+    const sourceFile = SourceFile.new({ filepath: file })
+
+    return sourceFile.getFunctionAt({ line: line, column: column })
 }
 
 module.exports = FunctionDefinition

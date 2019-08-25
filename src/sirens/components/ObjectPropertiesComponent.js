@@ -1,8 +1,9 @@
+const Classification = require('../../../src/o-language/classifications/Classification')
 const ComponentClassification = require('../../gui/components/ComponentClassification')
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 
-class ObjectPropertiesComponent extends ComponentClassification {
+const ObjectPropertiesComponent = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -78,5 +79,6 @@ class ObjectPropertiesComponent extends ComponentClassification {
             })
         })
     }
-}
+})
+
 module.exports = ObjectPropertiesComponent

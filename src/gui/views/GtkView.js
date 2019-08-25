@@ -5,7 +5,7 @@ const MenuView = require('./MenuView')
 
 Sirens.initialize()
 
-class GtkView extends Classification {
+const GtkView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -87,6 +87,6 @@ class GtkView extends Classification {
     getHeight(value) {
         return this.getMainHandle().getSizeRequest().height
     }
-}
+})
 
 module.exports = GtkView

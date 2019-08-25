@@ -3,7 +3,7 @@ const ComponentBehaviour = require('./ComponentBehaviour')
 const ComponentView = require('../views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
-class Component extends Classification {
+const Component = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -53,6 +53,6 @@ class Component extends Classification {
     isTopMostComponent() {
         return this.getMainComponent().isTopMostComponent()
     }
-}
+})
 
 module.exports = Component

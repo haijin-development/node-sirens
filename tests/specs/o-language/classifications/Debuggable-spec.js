@@ -1,9 +1,12 @@
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 const Debuggable = require('../../../../src/o-language/classifications/Debuggable')
 
-class Shape {
+const Shape = Classification.define( class {
+
     static definition() {
+        this.cName = 'Shape'
         this.instanceVariables = ['x', 'y', 'overriden']
         this.assumptions = [Debuggable]
     }
@@ -24,10 +27,11 @@ class Shape {
     getOverriden(value) {
         return this.overriden
     }
-}
+})
 
-class Circle {
+const Circle = Classification.define( class {
     static definition() {
+        this.cName = 'Circle'
         this.instanceVariables = ['radious', 'overriden']
         this.assumptions = [Debuggable]
     }
@@ -47,7 +51,7 @@ class Circle {
             this.setOverriden( value + 10 )
         })
     }
-}
+})
 
 describe('The Debuggable classification', () => {
     it('prints an new object', () => {

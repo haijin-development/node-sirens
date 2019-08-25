@@ -3,7 +3,7 @@ const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
-class ObjectBrowserModel extends Classification {
+const ObjectBrowserModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -83,6 +83,6 @@ class ObjectBrowserModel extends Classification {
             return selectedInstVarValue.toString()
         }
     }
-}
+})
 
 module.exports = ObjectBrowserModel

@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class SplitterView extends Classification {
+const SplitterView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -146,6 +146,6 @@ class SplitterView extends Classification {
             childHandle.setSizeRequest(width, height * proportion)
         }
     }
-}
+})
 
 module.exports = SplitterView

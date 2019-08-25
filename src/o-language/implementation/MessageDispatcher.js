@@ -1,6 +1,60 @@
-let OInstance = null
-
 class MessageDispatcher {
+
+    constructor() {
+        this.classificationClassification = Classification
+        this.oInstanceClassification = OInstance
+    }
+
+    ////////////////////////////////////////////
+    /// Boot
+    ////////////////////////////////////////////
+
+
+    /*
+     * The classifications OInstance and Classification must be wired by hand at booting time since
+     * the two of them are need to build an object.
+     */
+    initialize() {
+
+        this.classificationClassification = this.createObjectProxy()
+        this.oInstanceClassification = this.createObjectProxy()
+
+
+        let classificationInstantiation = this.instantiateClassificationFromDefinition( Classification )
+        classificationInstantiation.sourceClassification = this.classificationClassification
+
+        let oInstanceInstantiation = this.instantiateClassificationFromDefinition( OInstance )
+        oInstanceInstantiation.sourceClassification = this.oInstanceClassification
+
+        this.classificationClassification.impl.classifications = [
+            classificationInstantiation,
+            oInstanceInstantiation,
+        ]
+
+        this.classificationClassification.setClassificationDefinition(Classification)
+
+
+        classificationInstantiation = this.instantiateClassificationFromDefinition( Classification )
+        classificationInstantiation.sourceClassification = this.classificationClassification
+
+        oInstanceInstantiation = this.instantiateClassificationFromDefinition( OInstance )
+        oInstanceInstantiation.sourceClassification = this.oInstanceClassification
+
+        this.oInstanceClassification.impl.classifications = [
+            classificationInstantiation,
+            oInstanceInstantiation,
+        ]
+
+        this.oInstanceClassification.setClassificationDefinition(OInstance)
+    }
+
+    getClassificationClassification() {
+        return this.classificationClassification
+    }
+
+    getOInstanceClassification() {
+        return this.oInstanceClassification
+    }
 
     ////////////////////////////////////////////
     /// Active classification functions
@@ -211,6 +265,24 @@ class MessageDispatcher {
     ////////////////////////////////////////////
 
     /*
+     * Returns the classification definition of a classificationInstantiation.
+     * The classification definition is the class where the instance methods are defined.
+     */
+    getClassificationDefinitionFrom(classificationInstantiation) {
+        return classificationInstantiation.constructor
+    }
+
+    /*
+     * Returns the classification definition of a classificationInstantiation.
+     * The classification definition is the class where the instance methods are defined.
+     */
+    getInstanceVariablesFrom(classificationInstantiation) {
+        const classificationDefinition = this.getClassificationDefinitionFrom(classificationInstantiation)
+
+        return classificationDefinition.instanceVariables
+    }
+
+    /*
      * Returns true if the given propName is an instance variable of the active classification, false otherwise.
      */
     isInstanceVariableInActiveClassification(object, propName) {
@@ -227,16 +299,7 @@ class MessageDispatcher {
      * Returns true if the given propName is an instance variable of the given classification instantiation, false otherwise.
      */
     isInstanceVariableOfClassificationInstantiation(classificationInstantiation, propName) {
-        const classification = classificationInstantiation.sourceClassification
-
-        return this.isInstanceVariableOfClassification(classification, propName)
-    }
-
-    /*
-     * Returns true if the given propName is an instance variable of the given classification, false otherwise.
-     */
-    isInstanceVariableOfClassification(classification, propName) {
-        const instanceVariables = classification.instanceVariables
+        const instanceVariables = this.getInstanceVariablesFrom(classificationInstantiation)
 
         return instanceVariables.includes(propName)
     }
@@ -280,8 +343,9 @@ class MessageDispatcher {
             return
         }
 
-        if( ! activeClassification.sourceClassification.instanceVariables.includes(propName) ) {
-            const classificationsName = activeClassification.sourceClassification.name
+        if( ! activeClassification.constructor.instanceVariables.includes(propName) ) {
+            const classificationsName = 
+                activeClassification.sourceClassification.getClassificationDefinition().cName
 
             throw new Error(`'${propName}' is not an instance variable of ${classificationsName} Classification.`)
         }
@@ -331,14 +395,16 @@ class MessageDispatcher {
             return this
         }
 
-        const classificationInstantiation = this.instantiateClassificationFor(classification)
+        const classificationInstantiation = this.instantiateClassification(classification)
 
         classificationInstantiation.sourceClassification = classification
 
-        const allAssumptions = classification.assumptions
+        const classificationDefinition = classification.getClassificationDefinition()
+
+        const allAssumptions = classificationDefinition.assumptions
 
         allAssumptions.forEach( (assumedClassification) => {
-            object.behaveAs(assumedClassification)
+            object.behaveAs( assumedClassification )
         })
 
         this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
@@ -439,7 +505,7 @@ class MessageDispatcher {
     classificationInstanceVariablesDo(object, classification, closure) {
         const classificationInstantiation = this.objectGetClassificationInstantiationOn(object, classification)
 
-        classification.instanceVariables.forEach( (instVarName) => {
+        this.getInstanceVariablesFrom(classificationInstantiation).forEach( (instVarName) => {
             const value = this.getInstanceVariableFromClassificationInstantiation(
                 classificationInstantiation,
                 instVarName
@@ -485,7 +551,7 @@ class MessageDispatcher {
      * the given prop among all of the classifications that the given object has instantiated on
      * itself.
      *
-     * Note that in this method "this" is bound to the proxy object and not to the MessageDispatcher.
+     * Note that in this method "this" is bound to the proxy object and not to the MessageDispatcherInstance.
      * This is because the proxy must be known to correctly bind the evaluation of the handler function
      * to it.
      */
@@ -515,7 +581,7 @@ class MessageDispatcher {
      * the given prop among all of the classifications that the given object has instantiated on
      * itself.
      *
-     * Note that in this method "this" is bound to the proxy object and not to the MessageDispatcher.
+     * Note that in this method "this" is bound to the proxy object and not to the MessageDispatcherInstance.
      * This is because the proxy must be known to correctly bind the evaluation of the handler function
      * to it.
      */
@@ -552,18 +618,18 @@ class MessageDispatcher {
     }
 
     /*
-     * Creates and returns a new O instance.
+     * Creates and returns a new object with no classification.
      *
-     * The O instances behaves as the only classification OInstance, that allows to add
-     * and drop other classifications.
+     * Since it does not even have OInstance classification this object can not dynamically add any behaviour,
+     * that can be accomplished wiring it up by hand, but except for not having the initial classifications
+     * it is fully structured object.
+     *
      */
-    createObject() {
+    createObjectProxy() {
         const object = Object.create(null)
 
-        const objectInitialClassifications = this.objectInitialClassifications(object)
-
         object.impl = {
-            classifications: objectInitialClassifications,
+            classifications: [],
             activeClassificationStack: [],
             initialClassificationLookup: [null],
         }
@@ -572,49 +638,271 @@ class MessageDispatcher {
     }
 
     /*
-     * Returns an array with the initial classifications of an object instantiated.
+     * Creates and returns a new O instance.
+     *
+     * The O instances behaves as the only classification OInstance, that allows to add
+     * and drop other classifications.
      */
-    objectInitialClassifications(object) {
-        return [ this.newOInstanceClassification() ]   
+    createObject() {
+        const object = this.createObjectProxy()
+
+        const objectInitialClassifications = this.objectInitialClassifications(object)
+
+        object.impl.classifications = objectInitialClassifications
+
+        return object
+    }
+
+    createClassification(classificationDefinition) {
+        const object = this.createObject()
+
+        object.behaveAs( this.getClassificationClassification() )
+
+        object.setClassificationDefinition(classificationDefinition)
+
+        return object
     }
 
     /*
-     * Instantiates and returns a new OInstance classification to be added to an object.
+     * Returns an array with the initial classifications of an object instantiated.
      */
-    newOInstanceClassification() {
-        if(OInstance === null) { OInstance = require('../classifications/OInstance') }
+    objectInitialClassifications(object) {
+        const oInstanceInstantiation = this.instantiateClassification( this.oInstanceClassification )
 
-        return this.instantiateClassificationFor(OInstance)
+        return [ oInstanceInstantiation ]   
     }
 
     /*
      * Instantiates a classification for the given object.
      */
-    instantiateClassificationFor(classification) {
-        let instanceVariables = []
+    instantiateClassification(classification) {
+        const classificationDefinition = classification.getClassificationDefinition()
 
-        if( classification.instanceVariables === undefined ) {
-            if( classification.definition !== undefined ) {
-                classification.definition()
-            }
-
-            if( classification.instanceVariables === undefined ) {
-                classification.instanceVariables = []
-            }
-
-            if( classification.assumptions === undefined ) {
-                classification.assumptions = []
-            }
-        }
-
-        const instantiatedClassification = new classification()
+        const instantiatedClassification = this.instantiateClassificationFromDefinition(classificationDefinition)
 
         instantiatedClassification.sourceClassification = classification
 
         return instantiatedClassification
     }
+
+    /*
+     * Instantiates a classification for the given object.
+     */
+    instantiateClassificationFromDefinition(classificationDefinition) {
+        let instanceVariables = []
+
+        if( classificationDefinition.instanceVariables === undefined ) {
+            if( classificationDefinition.definition !== undefined ) {
+                classificationDefinition.definition()
+            }
+
+            if( classificationDefinition.instanceVariables === undefined ) {
+                classificationDefinition.instanceVariables = []
+            }
+
+            if( classificationDefinition.assumptions === undefined ) {
+                classificationDefinition.assumptions = []
+            }
+
+            if( classificationDefinition.cName === undefined ) {
+                classificationDefinition.cName = 'Unnamed'
+            }
+        }
+
+        return new classificationDefinition()
+    }
+}
+
+class Classification {
+
+    /// Creating classifications
+
+    define(classificationDefinition) {
+        return MessageDispatcherInstance.createClassification(classificationDefinition)
+    }
+
+    /// Definition
+
+    static definition() {
+        this.cName = 'Classification'
+        this.instanceVariables = ['classificationDefinition']
+    }
+
+    /*
+     * Returns a new O instance with this OInstance classification instantiated in it.
+     */
+    createObject() {
+        return MessageDispatcherInstance.createObject()
+    }
+
+    /*
+     * Returns a new O instance with this OInstance classification instantiated in it.
+     */
+    new(...props) {
+        return this.createObject().yourself( (object) => {
+            object
+                .behaveAs(this)
+                .initialize(...props)
+        })
+    }
+
+    /// Accessing
+
+    getName() {
+        return this.classificationDefinition.cName
+    }
+
+    getClassificationDefinition() {
+        return this.classificationDefinition
+    }
+
+    setClassificationDefinition(classificationDefinition) {
+        this.classificationDefinition = classificationDefinition
+    }
+}
+
+/*
+ * This is the only behaviour that an instance has when its instantiated.
+ * 
+ * An O instance by itself contains only the methods to be able to dynamically add and drop behaviours
+ * through classifications.
+ *
+ * In the O language an O instance has nothing else but its identity, all of its behaviour is
+ * dynamically added after its instantiation though classifications, and those classifications
+ * can be dropped as well.
+ */
+class OInstance {
+
+    static definition() {
+        this.cName = 'OInstance'
+    }
+
+
+    /// Initializing
+
+    /*
+     * Does nothing but serves as a null implementation for constructors that assumes a polymorphic
+     * initialization of objects.
+     */
+    initialize() {
+    }
+
+    /// Asking
+
+    /*
+     * Answers true if this O instance is behaving as the given classification, false otherwise.
+     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     */
+    isBehavingAs(aClassification) {
+        return MessageDispatcherInstance.objectIsBehavingAs(this, aClassification)
+    }
+
+    /*
+     * Answers true if the receiver understands the given message, false otherwise.
+     * An object responds to a message if any of its classifications does.
+     */
+    respondsTo(message) {
+        return MessageDispatcherInstance.objectRespondsTo(this, message)
+    }
+
+    /// Behaviours
+
+    /*
+     * Makes this O instance to adquire the behaviour defined in the given classification.
+     * If the instance already behaves as the given classification this method does nothing.
+     * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
+     */
+    behaveAs(classification) {
+        MessageDispatcherInstance.behaveAs(this, classification)
+
+        return this
+    }
+
+    /*
+     * Makes this O instance to stop behaving with the behaviour defined in the given classification.
+     * An O instance that drops a classification is exactly the same as if it had not previously
+     * had that classification and there is no way to distinguish bots scenarios.
+     */
+    dropBehaviour(classification) {
+        MessageDispatcherInstance.objectDropBehaviour(this, classification)
+
+        return this
+    }
+
+    /*
+     * Evaluates the given closure but starting the method lookup in the previous classification to the one
+     * active in the method that called previousClassificationDo().
+     */
+    previousClassificationDo(closure) {
+        return MessageDispatcherInstance.duringPreviousClassificationDo(this, closure)
+    }
+
+    /*
+     * Instantiates the given classification to this object, evaluates the closure and drops the instantiated
+     * classification.
+     */
+    duringClassificationDo(classification, closure) {
+        this.behaveAs(classification)
+
+        try {
+            closure()
+        } finally {
+            this.dropBehaviour(classification)
+        }
+    }
+
+    /// Querying
+
+    /*
+     * Evaluates the given closure with this object as its parameters and returns this object.
+     */
+    yourself(closure) {
+        closure(this)
+
+        return this
+    }
+
+    /*
+     * Returns an array of all of the instantiated classifications bound this object.
+     */
+    classifications() {
+        return MessageDispatcherInstance.objectGetClassifications(this)
+    }
+
+    /*
+     * Returns the classification active in the method that called thisClassification().
+     */
+    thisClassification() {
+        return MessageDispatcherInstance.objectGetActiveClassification(this)
+    }
+
+    /*
+     * Returns the previous classification to the active classification in the method that 
+     * called previousClassification().
+     */
+    previousClassification() {
+        return MessageDispatcherInstance.objectGetPreviousClassification(this)
+    }
+
+    classificationInstanceVariablesDo(classification, closure) {
+        MessageDispatcherInstance.classificationInstanceVariablesDo(this, classification, closure)
+   
+        return this
+    }
+
+    /// Evaluating
+
+    /*
+     * Evaluates the given closure starting the method lookup on the given classification.
+     */
+    withClassificationDo(classification, closure) {
+        return MessageDispatcherInstance.withClassificationDo(this, classification, closure)
+    }
+
 }
 
 const MessageDispatcherInstance = new MessageDispatcher()
+
+MessageDispatcherInstance.initialize()
 
 module.exports = MessageDispatcherInstance

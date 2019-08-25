@@ -15,11 +15,11 @@
  * classifications are instantiated on the object before the classification if they had not been instantiated 
  * already:
  *
- *      class Shape {
+ *      const Shape = Classification.define( class {
  *          static definition() {
  *              this.assumptions = [Positionable, Coloured]
  *          }
- *      }
+ *      })
  *
  * This definition clearly expresses the assumptions of a classification and simplifies the creation of an object.
  * In that sense it resembles the inheritance relation of the classes in the object oriented classes.
@@ -32,11 +32,11 @@
  * When a professional diagnoses some condition to a patient based on symptoms he is making the following
  * reasoning:
  *
- *      class SymptonPresence {
+ *      const SymptonPresence = Classification.define( class {
  *          static definition() {
  *              this.assumptions = [PatientCondition]
  *          }
- *       }
+ *      })
  *
  *      const patient = OInstance.new()
  *
@@ -61,9 +61,11 @@
  */
 
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-class Positionable {
+const Positionable = Classification.define( class {
+
     static definition() {
         this.instanceVariables = ['x', 'y']
     }
@@ -76,9 +78,9 @@ class Positionable {
     getPosition() {
         return { x: this.x, y: this.y }
     }
-}
+})
 
-class Coloured {
+const Coloured = Classification.define( class {
     static definition() {
         this.instanceVariables = ['color']
     }
@@ -90,15 +92,15 @@ class Coloured {
     getColor() {
         return this.color
     }
-}
+})
 
-class Shape {
+const Shape = Classification.define( class {
     static definition() {
         this.assumptions = [Positionable, Coloured]
     }
-}
+})
 
-class Circle {
+const Circle = Classification.define( class {
     static definition() {
         this.instanceVariables = ['radious']
         this.assumptions = [Shape]
@@ -111,7 +113,7 @@ class Circle {
     getRadious() {
         return this.radious
     }
-}
+})
 
 describe('When adding classifications that assumes previous classifications', () => {
     it('adds the assumed direct classifications if they are not present already', () => {

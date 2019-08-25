@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-class VirtualTreeModel extends Classification {
+const VirtualTreeModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -116,11 +116,11 @@ class VirtualTreeModel extends Classification {
 
         return hierarchy
     }
-}
+})
 
 // Tree node class
 
-class TreeNode extends Classification {
+const TreeNode = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -162,6 +162,6 @@ class TreeNode extends Classification {
             return TreeNode.new({ value: item, getChildrenBlock: this.getChildrenBlock })
         })
     }
-}
+})
 
 module.exports = VirtualTreeModel

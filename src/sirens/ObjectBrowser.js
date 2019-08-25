@@ -1,10 +1,11 @@
+const Classification = require('../../src/o-language/classifications/Classification')
 const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
 const Sirens = require('../Sirens')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
-class ObjectBrowser extends ComponentClassification {
+const ObjectBrowser = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -106,6 +107,8 @@ class ObjectBrowser extends ComponentClassification {
             })
         })
     }
-}
+})
+
+ObjectBrowser.behaveAs(ComponentClassification)
 
 module.exports = ObjectBrowser

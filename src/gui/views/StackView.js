@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class StackView extends Classification {
+const StackView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -53,6 +53,6 @@ class StackView extends Classification {
             childView.getMainHandle().show()
         })
     }
-}
+})
 
 module.exports = StackView

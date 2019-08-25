@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const VirtualTreeModel = require('./VirtualTreeModel')
 const ValueModel = require('./ValueModel')
 
-class TreeChoiceModel extends Classification {
+const TreeChoiceModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -144,6 +144,6 @@ class TreeChoiceModel extends Classification {
     hasSelection() {
         return this.selection.value != undefined && this.selection.value.length > 0
     }
-}
+})
 
 module.exports = TreeChoiceModel

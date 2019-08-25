@@ -1,7 +1,8 @@
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-class Shape {
+const Shape = Classification.define( class {
     static definition() {
         this.instanceVariables = ['x', 'y', 'overriden']
     }
@@ -30,9 +31,9 @@ class Shape {
     getPreviousClassification() {
         return this.previousClassification()
     }
-}
+})
 
-class Circle {
+const Circle = Classification.define( class {
     static definition() {
         this.instanceVariables = ['radious']
     }
@@ -50,7 +51,7 @@ class Circle {
             this.setOverriden( value + 10 )
         })
     }
-}
+})
 
 describe('The OInstance classification', () => {
     it('creates a new O instance object', () => {

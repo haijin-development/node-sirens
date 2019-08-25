@@ -5,7 +5,7 @@ const ClassDefinition = require('../ClassDefinition')
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
-class ClassDefinitionsCollector extends Classification {
+const ClassDefinitionsCollector = Classification.define( class {
 
     static definition() {
         this.instanceVariables = []
@@ -45,6 +45,6 @@ class ClassDefinitionsCollector extends Classification {
     visitExpressionStatement(treeNode) {
         return []
     }
-}
+})
 
 module.exports = ClassDefinitionsCollector

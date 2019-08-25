@@ -1,13 +1,13 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-class ComponentClassification extends Classification {
+const ComponentClassification = Classification.define( class {
     /// Instantiating
 
-    static open(props = {}) {
+    open(props = {}) {
         return this.openOn(props)
     }
 
-    static openOn(props) {
+    openOn(props) {
         return this.new(props).yourself( (component) => {
 
             if( component.isTopMostComponent() ) {
@@ -26,6 +26,6 @@ class ComponentClassification extends Classification {
 
         })
     }
-}
+})
 
 module.exports = ComponentClassification

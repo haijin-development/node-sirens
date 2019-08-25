@@ -4,7 +4,7 @@ const Widget = require('../Widget')
 const ValueModel = require('../../models/ValueModel')
 const CheckBoxView = require('../../views/CheckBoxView')
 
-class CheckBox extends Classification {
+const CheckBox = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -48,6 +48,6 @@ class CheckBox extends Classification {
             this.getModel().setValue( this.getView().getValue() )
         })
     }
-}
+})
 
 module.exports = CheckBox

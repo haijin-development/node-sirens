@@ -5,7 +5,7 @@ const GtkTypes = require('./GtkTypes')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 
-class TreeView extends Classification {
+const TreeView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -347,6 +347,6 @@ class TreeView extends Classification {
     getClickableHeaders() {
         return this.treeView.getHeadersClickable()
     }
-}
+})
 
 module.exports = TreeView

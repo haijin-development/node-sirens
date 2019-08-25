@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-class Column extends Classification {
+const Column = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -36,6 +36,6 @@ class Column extends Classification {
 
         return this.props.getTextBlock(item)
     }
-}
+})
 
 module.exports = Column

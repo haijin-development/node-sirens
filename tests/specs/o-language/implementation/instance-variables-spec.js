@@ -23,11 +23,11 @@
  *
  * The instance variables of a classification must be declared in the classification definition:
  *
- *      class Point {
+ *      const Point = Classification.define( class {
  *          static definition() {
  *              this.instanceVariables = ['x', 'y']
  *          }
- *      }
+ *      })
  *
  * One of the reasons is that it makes the classification to clearly express the instance variables its uses.
  *
@@ -40,12 +40,13 @@
  *
  */
 
-
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-class Shape {
+const Shape = Classification.define( class {
     static definition() {
+        this.cName = 'Shape'
         this.instanceVariables = ['x', 'y']
     }
 
@@ -72,9 +73,9 @@ class Shape {
     setMissingInstanceVariable() {
         this.missingInstanceVariable = 1;
     }
-}
+})
 
-class Circle {
+const Circle = Classification.define( class {
     static definition() {
         this.instanceVariables = ['radious']
     }
@@ -86,9 +87,9 @@ class Circle {
     getRadious() {
         return this.radious
     }
-}
+})
 
-class Point {
+const Point = Classification.define( class {
     static definition() {
         this.instanceVariables = ['x', 'y']
     }
@@ -108,7 +109,7 @@ class Point {
     getY() {
         return this.y
     }
-}
+})
 
 describe('When setting instance variables values to an O instance', () => {
     it('sets the given value on an object', () => {

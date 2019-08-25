@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-class ObjectProperty extends Classification {
+const ObjectProperty = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -183,6 +183,6 @@ class ObjectProperty extends Classification {
 
         return description
     }
-}
+})
 
 module.exports = ObjectProperty

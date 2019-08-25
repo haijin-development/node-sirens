@@ -3,7 +3,7 @@ const Widget = require('../Widget')
 const RadioButtonView = require('../../views/RadioButtonView')
 const ChoiceModel = require('../../models/ChoiceModel')
 
-class RadioButton extends Classification {
+const RadioButton = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -43,6 +43,6 @@ class RadioButton extends Classification {
     onSelectedValueChanged() {
         this.synchronizeViewFromModel()
     }
-}
+})
 
 module.exports = RadioButton

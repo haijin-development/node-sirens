@@ -8,7 +8,7 @@
  * This allows to not only override or replace the behaviour of another classification but to extend it
  * without modifying any of the original behaviour in a similar fashion as 'super' does in object orianted classes:
  *
- *   class Point {
+ *   const Point = Classification.define( class {
  *      static definition() {
  *          this.instanceVariables = ['x', 'y']
  *      }
@@ -20,9 +20,9 @@
  *      getX() {
  *          return this.x
  *      }
- *  }
+ *  })
  *
- *  class PointModel {
+ *  const PointModel = Classification.define( class {
  *      setX(value) {
  *          const oldValue = this.getX()
  *
@@ -36,7 +36,7 @@
  *              newValue: newValue,
  *          })
  *      }
- *  }
+ *  })
  *
  *  const point = OInstance.new()
  *                  .behaveAs(Point)
@@ -47,9 +47,10 @@
  */
 
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-class Shape {
+const Shape = Classification.define( class {
     static definition() {
         this.instanceVariables = ['x', 'y', 'shapeWasCalled']
     }
@@ -72,9 +73,9 @@ class Shape {
     getShapeWasCalled() {
         return this.shapeWasCalled
     }
-}
+})
 
-class OptimizedShape {
+const OptimizedShape = Classification.define( class {
     static definition() {
         this.instanceVariables = ['optimizedShapeWasCalled']
     }
@@ -98,9 +99,9 @@ class OptimizedShape {
     firstLevelMethod() {
         return this.getConstantFromNestedMethod()
     }
-}
+})
 
-class CustomizedShape {
+const CustomizedShape = Classification.define( class {
     static definition() {
         this.instanceVariables = ['customizedShapeWasCalled']
     }
@@ -135,7 +136,7 @@ class CustomizedShape {
             return this.firstLevelMethod()  
         })        
     }
-}
+})
 
 describe('When calling nested methods on an object', () => {
     it('calls the nested methods', () => {

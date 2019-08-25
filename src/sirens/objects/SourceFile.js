@@ -11,7 +11,7 @@ const Sirens = require('../../Sirens')
 /*
  * A source file to query javascript definitions.
  */
-class SourceFile extends Classification {
+const SourceFile = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -188,6 +188,6 @@ class SourceFile extends Classification {
 
         return esprima.parseModule(string, parsingOptions)
     }
-}
+})
 
 module.exports = SourceFile

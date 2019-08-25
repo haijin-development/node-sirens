@@ -6,7 +6,7 @@ const Sirens = require('../../../Sirens')
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
-class FunctionDefinitionsCollector extends Classification {
+const FunctionDefinitionsCollector = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -94,6 +94,6 @@ class FunctionDefinitionsCollector extends Classification {
             []
         )
     }
-}
+})
 
 module.exports = FunctionDefinitionsCollector

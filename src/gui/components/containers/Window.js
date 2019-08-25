@@ -2,14 +2,7 @@ const Classification = require('../../../o-language/classifications/Classificati
 const Widget = require('../Widget')
 const WindowView = require('../../views/WindowView')
 
-class Window extends Classification {
-    static openOn(props) {
-        const window = new this(props)
-
-        window.open()
-
-        return window
-    }
+const Window = Classification.define( class {
 
     /// Definition
 
@@ -36,6 +29,6 @@ class Window extends Classification {
     isTopMostComponent() {
         return true
     }
-}
+})
 
 module.exports = Window

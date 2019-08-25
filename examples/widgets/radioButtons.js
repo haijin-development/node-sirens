@@ -1,9 +1,10 @@
 const Sirens = require('../../src/Sirens')
+const Classification = require('../../src/o-language/classifications/Classification')
 const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
-class CustomComponent extends ComponentClassification {
+const CustomComponent = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -51,7 +52,9 @@ class CustomComponent extends ComponentClassification {
             })
         })
     }
-}
+})
+
+CustomComponent.behaveAs( ComponentClassification )
 
 Sirens.do( () => {
     CustomComponent.open()

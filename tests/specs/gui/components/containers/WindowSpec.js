@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const Window = require('../../../../../src/gui/components/containers/Window')
 const Label = require('../../../../../src/gui/components/widgets/Label')
+const LabelView = require('../../../../../src/gui/views/LabelView')
 
 describe('When using a Window', () => {
     it('instantiates an empty one', () => {
@@ -15,7 +16,7 @@ describe('When using a Window', () => {
         window.addComponent( Label.new() )
 
         expect( window.getComponents().length ) .to .eql(1)
-        expect( window.getComponents()[0].constructor.name ) .to .eql('Label')
-        expect( window.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
+        expect( window.getComponents()[0].isBehavingAs(Label) ) .to .be .true
+        expect( window.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
     })
 })

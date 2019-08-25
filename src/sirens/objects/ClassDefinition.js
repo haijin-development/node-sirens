@@ -5,7 +5,7 @@ const Classification = require('../../o-language/classifications/Classification'
  *
  * It is implemented as a wrapper on a parse tree node.
  */
-class ClassDefinition extends Classification {
+const ClassDefinition = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -27,6 +27,6 @@ class ClassDefinition extends Classification {
     getClassName() {
         return this.parseNode.id.name
     }
-}
+})
 
 module.exports = ClassDefinition

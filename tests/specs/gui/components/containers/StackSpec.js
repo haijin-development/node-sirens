@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const Stack = require('../../../../../src/gui/components/containers/Stack')
 const Label = require('../../../../../src/gui/components/widgets/Label')
+const LabelView = require('../../../../../src/gui/views/LabelView')
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {
@@ -16,9 +17,9 @@ describe('When using a Stack', () => {
             stack.addComponent(Label.new())
             stack.addComponent(Label.new())
 
-            expect(stack.getComponents().length) .to .eql(2)
-            expect(stack.getComponents()[0].getView().constructor.name) .to .eql('LabelView')
-            expect(stack.getComponents()[1].getView().constructor.name) .to .eql('LabelView')
+            expect( stack.getComponents().length ) .to .eql(2)
+            expect( stack.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( stack.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 
@@ -35,9 +36,9 @@ describe('When using a Stack', () => {
             stack.addComponent(Label.new())
             stack.addComponent(Label.new())
 
-            expect(stack.getComponents().length) .to .eql(2)
-            expect(stack.getComponents()[0].getView().constructor.name) .to .eql('LabelView')
-            expect(stack.getComponents()[1].getView().constructor.name) .to .eql('LabelView')
+            expect( stack.getComponents().length ) .to .eql(2)
+            expect( stack.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( stack.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 })

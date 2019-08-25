@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const MenuView = require('./MenuView')
 
-class GtkWidgetWithContextMenu extends Classification {
+const GtkWidgetWithContextMenu = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -33,6 +33,6 @@ class GtkWidgetWithContextMenu extends Classification {
 
         this.populatePopupMenuBlock({ menu: menuView, ownerView: this })
     }
-}
+})
 
 module.exports = GtkWidgetWithContextMenu

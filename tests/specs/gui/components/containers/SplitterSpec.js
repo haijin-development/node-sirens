@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const Splitter = require('../../../../../src/gui/components/containers/Splitter')
 const Label = require('../../../../../src/gui/components/widgets/Label')
+const LabelView = require('../../../../../src/gui/views/LabelView')
 
 describe('When using a Splitter', () => {
     describe('horizontal', () => {
@@ -24,7 +25,7 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label)
 
             expect( splitter.getComponents().length) .to .eql(1)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 2 sub-components', () => {
@@ -46,8 +47,8 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label2)
 
             expect( splitter.getComponents().length ) .to .eql(2)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 3 sub-components', () => {
@@ -74,9 +75,9 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label3)
 
             expect( splitter.getComponents().length) .to .eql(3)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[2].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 4 sub-components', () => {
@@ -108,10 +109,10 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label4)
 
             expect( splitter.getComponents().length) .to .eql(4)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[2].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[3].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[3].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 
@@ -136,7 +137,7 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label1)
 
             expect( splitter.getComponents().length ) .to .eql(1)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 2 sub-components', () => {
@@ -158,8 +159,8 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label2)
 
             expect( splitter.getComponents().length ) .to .eql(2)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 3 sub-components', () => {
@@ -186,9 +187,9 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label3)
 
             expect( splitter.getComponents().length) .to .eql(3)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[2].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
         it('adds 4 sub-components', () => {
@@ -220,10 +221,10 @@ describe('When using a Splitter', () => {
             splitter.addComponent(label4)
 
             expect( splitter.getComponents().length ) .to .eql(4)
-            expect( splitter.getComponents()[0].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[1].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[2].getView().constructor.name ) .to .eql('LabelView')
-            expect( splitter.getComponents()[3].getView().constructor.name ) .to .eql('LabelView')
+            expect( splitter.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getComponents()[3].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 })

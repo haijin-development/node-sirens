@@ -4,7 +4,7 @@
  *                          afterInstantiation()
  * that method is invoked:
  *
- *      class Shape {
+ *      const Shape = Classification.define( class {
  *          static definition() {
  *              this.instanceVariables = ['x', 'y']
  *          }
@@ -13,7 +13,7 @@
  *              this.x = 0
  *              this.y = 0
  *          }
- *      }
+ *      })
  *
  * The optional method afterInstantiation can be used to, for instance, initialize instance variables, dynamically 
  * add further classifications to itself dependening on the current state of the object or check the integrity of 
@@ -24,7 +24,7 @@
  * For instance, the following example uses a design pattern that allows a classification to act as a temporary 
  * snapshot or version of an existing object:
  *
- *      class PositionSnapshot {
+ *      const PositionSnapshot = Classification.define( class {
  *          static definition() {
  *              this.instanceVariables = ['x', 'y']
  *          }
@@ -41,15 +41,16 @@
  *              this.x = x
  *              this.y = y
  *          }
- *      }
+ *      })
  *
  * If the classification does not defined a method afterInstantiation() then nothing happens.
  */
 
 const expect = require('chai').expect
+const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-class Shape {
+const Shape = Classification.define( class {
     static definition() {
         this.instanceVariables = ['x', 'y']
     }
@@ -67,9 +68,9 @@ class Shape {
     getPosition() {
         return { x: this.x, y: this.y }
     }
-}
+})
 
-class Point {
+const Point = Classification.define( class {
     static definition() {
         this.instanceVariables = ['x', 'y']
     }
@@ -82,7 +83,7 @@ class Point {
     getPosition() {
         return { x: this.x, y: this.y }
     }
-}
+})
 
 describe('When adding behaviour to an O instance', () => {
     it('if the classification instantiated has a method afterInstantiation that method is invoked', () => {

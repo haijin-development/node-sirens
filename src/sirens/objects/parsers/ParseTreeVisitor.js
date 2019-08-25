@@ -4,7 +4,7 @@ const Sirens = require('../../../Sirens')
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
-class ParseTreeVisitor extends Classification {
+const ParseTreeVisitor = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -74,6 +74,6 @@ class ParseTreeVisitor extends Classification {
     visitCallExpression(treeNode) {
         return undefined 
     }
-}
+})
 
 module.exports = ParseTreeVisitor

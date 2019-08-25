@@ -1,15 +1,25 @@
-const MessageDispatcher = require('../implementation/MessageDispatcher')
+const Classification = require('./Classification')
 
 /*
- * This classification add debugging methods to an object.
+ * This classification adds debugging methods to an object.
  */
-class Debuggable {
+ const Debuggable = Classification.define( class {
+
+    /// Definition
+
+    static definition() {
+        this.cName = 'Debuggable'
+        this.instanceVariables = []
+        this.assumptions = []
+    }
+
+    /// Debugging
 
     debugString({ cr: cr, tab: tab } = { cr: undefined, tab: undefined }) {
         return debugString({ object: this, cr: cr, tab: tab, indentation: 0 })
     }
 
-}
+})
 
 function debugString({ object: object, cr: cr, tab: tab, indentation: i }) {
     if( cr === undefined ) { cr = "\n" }
@@ -20,7 +30,7 @@ function debugString({ object: object, cr: cr, tab: tab, indentation: i }) {
     object.classifications().forEach( (eachClassification) => {
 
         string += nestedIndentation({ tab: tab, i: i })
-        string += eachClassification.name + " {"
+        string += eachClassification.getName() + " {"
         string += cr
 
         object.classificationInstanceVariablesDo( eachClassification, (name, value) => {

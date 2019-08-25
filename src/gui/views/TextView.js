@@ -4,8 +4,7 @@ const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkWrapModes = require('./GtkWrapModes')
 const MenuView = require('./MenuView')
 
-
-class TextView extends Classification {
+const TextView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -104,6 +103,6 @@ class TextView extends Classification {
 
         return mode
     }
-}
+})
 
 module.exports = TextView

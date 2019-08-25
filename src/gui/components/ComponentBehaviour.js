@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ValueModel = require('../models/ValueModel')
 
-class ComponentBehaviour extends Classification {
+const ComponentBehaviour = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -166,7 +166,7 @@ class ComponentBehaviour extends Classification {
     subscribeToModelEvents() {
         const model = this.getModel()
 
-        if( model && model.constructor.name == 'ValueModel' ) {
+        if( model && model.isBehavingAs(ValueModel) ) {
             model.on('value-changed', this.onValueChanged.bind(this))
         }
     }
@@ -180,6 +180,6 @@ class ComponentBehaviour extends Classification {
         throw Error(`The class ${this.constructor.name} must implement the method ::synchronizeViewFromModel()`)
     }
 
-}
+})
 
 module.exports = ComponentBehaviour

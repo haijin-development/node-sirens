@@ -3,7 +3,7 @@ const Widget = require('../Widget')
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
 const TreeView = require('../../views/TreeView')
 
-class ChoicesTree extends Classification {
+const ChoicesTree = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -103,6 +103,6 @@ class ChoicesTree extends Classification {
 
         this.getProps().onAction()
     }
-}
+})
 
 module.exports = ChoicesTree

@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-class WidgetBuilder extends Classification {
+const WidgetBuilder = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -58,6 +58,6 @@ class WidgetBuilder extends Classification {
 
         closure.call(this, ...params)
     }
-}
+})
 
 module.exports = WidgetBuilder

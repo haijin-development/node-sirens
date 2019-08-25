@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-class ListModel extends Classification {
+const ListModel = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -136,6 +136,6 @@ class ListModel extends Classification {
 
         return indices
     }
-}
+})
 
 module.exports = ListModel

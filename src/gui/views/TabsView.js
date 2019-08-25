@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class TabsView extends Classification {
+const TabsView = Classification.define( class {
     /// Definition
 
     static definition() {
@@ -34,6 +34,6 @@ class TabsView extends Classification {
 
     subscribeToGUISignals(props) {
     }
-}
+})
 
 module.exports = TabsView

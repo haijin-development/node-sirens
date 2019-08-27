@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const ListModel = require('./ListModel')
 const ValueModel = require('./ValueModel')
 
-const ChoiceModel = Classification.define( class {
+class ChoiceModel {
     /// Definition
 
     static definition() {
@@ -54,6 +54,6 @@ const ChoiceModel = Classification.define( class {
     setSelection(newSelection) {
         return this.selectionModel.setValue(newSelection)
     }
-})
+}
 
-module.exports = ChoiceModel
+module.exports = Classification.define(ChoiceModel)

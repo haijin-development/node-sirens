@@ -5,7 +5,7 @@ const Sirens = require('../Sirens')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
 
-const PrototypeBrowser = Classification.define( class {
+class PrototypeBrowser {
     /// Definition
 
     static definition() {
@@ -100,8 +100,8 @@ const PrototypeBrowser = Classification.define( class {
             })
         })
     }
-})
+}
 
-PrototypeBrowser.behaveAs(ComponentClassification)
 
-module.exports = PrototypeBrowser
+module.exports = Classification.define(PrototypeBrowser)
+                    .behaveAs(ComponentClassification)

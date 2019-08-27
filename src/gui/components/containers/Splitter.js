@@ -2,7 +2,7 @@ const Classification = require('../../../o-language/classifications/Classificati
 const Widget = require('../Widget')
 const SplitterView = require('../../views/SplitterView')
 
-const Splitter = Classification.define( class {
+class Splitter {
     /// Definition
 
     static definition() {
@@ -26,6 +26,6 @@ const Splitter = Classification.define( class {
             this.addComponent(component)
         })
     }
-})
+}
 
-module.exports = Splitter
+module.exports = Classification.define(Splitter)

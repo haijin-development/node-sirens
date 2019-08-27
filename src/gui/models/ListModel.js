@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-const ListModel = Classification.define( class {
+class ListModel {
     /// Definition
 
     static definition() {
@@ -136,6 +136,6 @@ const ListModel = Classification.define( class {
 
         return indices
     }
-})
+}
 
-module.exports = ListModel
+module.exports = Classification.define(ListModel)

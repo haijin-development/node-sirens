@@ -3,7 +3,7 @@ const ChoiceModel = require('../../gui/models/ChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
 
-const PrototypesBrowserModel = Classification.define( class {
+class PrototypesBrowserModel {
     /// Definition
 
     static definition() {
@@ -205,6 +205,6 @@ const PrototypesBrowserModel = Classification.define( class {
             }
         }
     }
-})
+}
 
-module.exports = PrototypesBrowserModel
+module.exports = Classification.define(PrototypesBrowserModel)

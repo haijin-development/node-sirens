@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Column = require('./Column')
 
-const ColumnsBuilder = Classification.define( class {
+class ColumnsBuilder {
     /// Initializing
 
     afterInstantiation() {
@@ -15,6 +15,6 @@ const ColumnsBuilder = Classification.define( class {
 
         this.getProps().columns.push(column)
     }
-})
+}
 
-module.exports = ColumnsBuilder
+module.exports = Classification.define(ColumnsBuilder)

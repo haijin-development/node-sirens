@@ -4,7 +4,7 @@ const Widget = require('../Widget')
 const TextView = require('../../views/TextView')
 const ValueModel = require('../../models/ValueModel')
 
-const Text = Classification.define( class {
+class Text {
     /// Definition
 
     static definition() {
@@ -56,6 +56,6 @@ const Text = Classification.define( class {
             this.getModel().setValue(text)
         })
     }
-})
+}
 
-module.exports = Text
+module.exports = Classification.define(Text)

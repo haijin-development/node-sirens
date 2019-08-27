@@ -4,7 +4,7 @@ const ComponentClassification = require('../../src/gui/components/ComponentClass
 const Component = require('../../src/gui/components/Component')
 const TreeChoiceModel = require('../../src/gui/models/TreeChoiceModel')
 
-const CustomComponent = Classification.define( class {
+class CustomComponent {
     /// Definition
 
     static definition() {
@@ -50,10 +50,12 @@ const CustomComponent = Classification.define( class {
             })
         })
     }
-})
+}
 
-CustomComponent.behaveAs( ComponentClassification )
+const customComponent = Classification.define(CustomComponent)
+
+customComponent.behaveAs( ComponentClassification )
 
 Sirens.do( () => {
-    CustomComponent.open()
+    customComponent.open()
 })

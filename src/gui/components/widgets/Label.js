@@ -3,7 +3,7 @@ const Widget = require('../Widget')
 const LabelView = require('../../views/LabelView')
 const ValueModel = require('../../models/ValueModel')
 
-const Label = Classification.define( class {
+class Label {
     /// Definition
 
     static definition() {
@@ -37,6 +37,6 @@ const Label = Classification.define( class {
     onValueChanged({newValue: newValue, oldValue: oldValue}) {
         this.synchronizeViewFromModel()
     }
-})
+}
 
-module.exports = Label
+module.exports = Classification.define(Label)

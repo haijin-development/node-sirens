@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-const ObjectProperty = Classification.define( class {
+class ObjectProperty {
     /// Definition
 
     static definition() {
@@ -44,7 +44,7 @@ const ObjectProperty = Classification.define( class {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return ObjectProperty.new({
+            return ObjectPropertyClassification.new({
                 key: index,
                 value: item
             })
@@ -63,7 +63,7 @@ const ObjectProperty = Classification.define( class {
                 continue
             }
 
-            const instVar = ObjectProperty.new({
+            const instVar = ObjectPropertyClassification.new({
                 key: key,
                 value: instVarValue
             })
@@ -183,6 +183,8 @@ const ObjectProperty = Classification.define( class {
 
         return description
     }
-})
+}
 
-module.exports = ObjectProperty
+const ObjectPropertyClassification = Classification.define(ObjectProperty)
+
+module.exports = ObjectPropertyClassification

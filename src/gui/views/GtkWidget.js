@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkView = require('./GtkView')
 const GtkWidgetWithContextMenu = require('./GtkWidgetWithContextMenu')
 
-const GtkWidget = Classification.define( class {
+class GtkWidget {
     /// Definition
 
     static definition() {
@@ -59,6 +59,6 @@ const GtkWidget = Classification.define( class {
     isTopMostView() {
         return false
     }
-})
+}
 
-module.exports = GtkWidget
+module.exports = Classification.define(GtkWidget)

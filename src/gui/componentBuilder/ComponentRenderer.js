@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ContainerWidgetBuilder = require('./ContainerWidgetBuilder')
 
-const ComponentRenderer = Classification.define( class {
+class ComponentRenderer {
     /// Definition
 
     static definition() {
@@ -30,6 +30,6 @@ const ComponentRenderer = Classification.define( class {
 
         return this.rootComponent
     }
-})
+}
 
-module.exports = ComponentRenderer
+module.exports = Classification.define(ComponentRenderer)

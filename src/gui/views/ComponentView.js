@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkView = require('./GtkView')
 
-const ComponentView = Classification.define( class {
+class ComponentView {
     /// Definition
 
     static definition() {
@@ -54,6 +54,6 @@ const ComponentView = Classification.define( class {
 
     onAddedToParentView(parentView) {
     }
-})
+}
 
-module.exports = ComponentView
+module.exports = Classification.define(ComponentView)

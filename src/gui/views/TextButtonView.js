@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-const TextButtonView = Classification.define( class {
+class TextButtonView {
     /// Definition
 
     static definition() {
@@ -49,6 +49,6 @@ const TextButtonView = Classification.define( class {
     onClick() {
         this.onClickedBlock()
     }
-})
+}
 
-module.exports = TextButtonView
+module.exports = Classification.define(TextButtonView)

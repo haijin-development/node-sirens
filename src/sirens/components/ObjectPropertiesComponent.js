@@ -3,7 +3,7 @@ const ComponentClassification = require('../../gui/components/ComponentClassific
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 
-const ObjectPropertiesComponent = Classification.define( class {
+class ObjectPropertiesComponent {
     /// Definition
 
     static definition() {
@@ -79,6 +79,6 @@ const ObjectPropertiesComponent = Classification.define( class {
             })
         })
     }
-})
+}
 
-module.exports = ObjectPropertiesComponent
+module.exports = Classification.define(ObjectPropertiesComponent)

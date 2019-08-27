@@ -2,7 +2,7 @@ const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 
-const RadioButtonView = Classification.define( class {
+class RadioButtonView {
     /// Definition
 
     static definition() {
@@ -61,6 +61,6 @@ const RadioButtonView = Classification.define( class {
             this.mainHandle.group = previousRadioButtonView.getMainHandle()
         }
     }
-})
+}
 
-module.exports = RadioButtonView
+module.exports = Classification.define(RadioButtonView)

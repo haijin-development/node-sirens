@@ -13,7 +13,7 @@ const RadioButton = require('../components/widgets/RadioButton')
 
 const WidgetBuilder = require('./WidgetBuilder')
 
-const ContainerWidgetBuilder = Classification.define( class {
+class ContainerWidgetBuilder {
     /// Definition
 
     static definition() {
@@ -45,7 +45,7 @@ const ContainerWidgetBuilder = Classification.define( class {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new(props).yourself( (builder) => {
+        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -62,7 +62,7 @@ const ContainerWidgetBuilder = Classification.define( class {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new(props).yourself( (builder) => {
+        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -81,7 +81,7 @@ const ContainerWidgetBuilder = Classification.define( class {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new(props).yourself( (builder) => {
+        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -100,7 +100,7 @@ const ContainerWidgetBuilder = Classification.define( class {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new(props).yourself( (builder) => {
+        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -119,7 +119,7 @@ const ContainerWidgetBuilder = Classification.define( class {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilder.new(props).yourself( (builder) => {
+        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -240,6 +240,8 @@ const ContainerWidgetBuilder = Classification.define( class {
 
         this.childComponents.push(text)
     }
-})
+}
 
-module.exports = ContainerWidgetBuilder
+const ContainerWidgetBuilderClassification = Classification.define(ContainerWidgetBuilder)
+
+module.exports = ContainerWidgetBuilderClassification

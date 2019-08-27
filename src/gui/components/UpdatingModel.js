@@ -30,7 +30,7 @@ const Classification = require('../../o-language/classifications/Classification'
  *      }
  *
  */
-const UpdatingModel = Classification.define( class {
+class UpdatingModel {
 
     /*
      * The model has been syncronized with the value from the widget.
@@ -39,6 +39,6 @@ const UpdatingModel = Classification.define( class {
     synchronizeViewFromModel() {
     }
 
-})
+}
 
-module.exports = UpdatingModel
+module.exports = Classification.define(UpdatingModel)

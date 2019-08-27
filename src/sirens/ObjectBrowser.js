@@ -5,7 +5,7 @@ const Sirens = require('../Sirens')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
-const ObjectBrowser = Classification.define( class {
+class ObjectBrowser {
     /// Definition
 
     static definition() {
@@ -107,8 +107,7 @@ const ObjectBrowser = Classification.define( class {
             })
         })
     }
-})
+}
 
-ObjectBrowser.behaveAs(ComponentClassification)
-
-module.exports = ObjectBrowser
+module.exports = Classification.define(ObjectBrowser)
+                    .behaveAs(ComponentClassification)

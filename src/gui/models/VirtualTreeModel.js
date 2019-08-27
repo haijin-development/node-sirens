@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
 
-const VirtualTreeModel = Classification.define( class {
+class VirtualTreeModel {
     /// Definition
 
     static definition() {
@@ -30,7 +30,7 @@ const VirtualTreeModel = Classification.define( class {
     }
 
     newTreeNodeOn(item) {
-        return TreeNode.new({ value: item, getChildrenBlock: this.getChildrenBlock })
+        return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
     }
 
     /// Accessing
@@ -116,11 +116,11 @@ const VirtualTreeModel = Classification.define( class {
 
         return hierarchy
     }
-})
+}
 
 // Tree node class
 
-const TreeNode = Classification.define( class {
+const TreeNodeClassification = Classification.define( class TreeNode {
     /// Definition
 
     static definition() {
@@ -159,9 +159,9 @@ const TreeNode = Classification.define( class {
 
     _getChildNodes() {
         return this._getChildItems().map( (item) => {
-            return TreeNode.new({ value: item, getChildrenBlock: this.getChildrenBlock })
+            return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
         })
     }
 })
 
-module.exports = VirtualTreeModel
+module.exports = Classification.define(VirtualTreeModel)

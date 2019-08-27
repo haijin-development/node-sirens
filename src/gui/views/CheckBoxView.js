@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-const CheckBoxView = Classification.define( class {
+class CheckBoxView {
     /// Definition
 
     static definition() {
@@ -55,6 +55,6 @@ const CheckBoxView = Classification.define( class {
     onClick() {
         this.onClickedBlock()
     }
-})
+}
 
-module.exports = CheckBoxView
+module.exports = Classification.define(CheckBoxView)

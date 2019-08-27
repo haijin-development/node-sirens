@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ValueModel = require('../models/ValueModel')
 
-const ComponentBehaviour = Classification.define( class {
+class ComponentBehaviour {
     /// Definition
 
     static definition() {
@@ -180,6 +180,6 @@ const ComponentBehaviour = Classification.define( class {
         throw Error(`The class ${this.constructor.name} must implement the method ::synchronizeViewFromModel()`)
     }
 
-})
+}
 
-module.exports = ComponentBehaviour
+module.exports = Classification.define(ComponentBehaviour)

@@ -3,7 +3,7 @@ const Classification = require('../../o-language/classifications/Classification'
 
 const gtkMenuMethodsToCopy = ['add', 'showAll', 'popupAtPointer']
 
-const MenuView = Classification.define( class {
+class MenuView {
     /// Definition
 
     static definition() {
@@ -64,9 +64,9 @@ const MenuView = Classification.define( class {
         this.menuHandle.showAll()
         this.menuHandle.popupAtPointer()
     }
-})
+}
 
-const MenuViewClassification = Classification.define( class {
+class MenuViewBuilder {
     /// Instantiating
 
     /*
@@ -89,8 +89,12 @@ const MenuViewClassification = Classification.define( class {
 
         return this.new({ gtkWidget: gtkWidget })
     }
-})
+}
 
-MenuView.behaveAs( MenuViewClassification )
+const menuViewBuilder = Classification.define(MenuViewBuilder)
 
-module.exports = MenuView
+
+const menuView = Classification.define(MenuView)
+                    .behaveAs( menuViewBuilder )
+
+module.exports = menuView

@@ -3,7 +3,7 @@ const ComponentClassification = require('../../gui/components/ComponentClassific
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 
-const FunctionsComponent = Classification.define( class {
+class FunctionsComponent {
     /// Definition
 
     static definition() {
@@ -78,6 +78,6 @@ const FunctionsComponent = Classification.define( class {
             })
         })
     }
-})
+}
 
-module.exports = FunctionsComponent
+module.exports = Classification.define(FunctionsComponent)

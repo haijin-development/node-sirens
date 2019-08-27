@@ -3,7 +3,7 @@ const Classification = require('./Classification')
 /*
  * This classification adds debugging methods to an object.
  */
- const Debuggable = Classification.define( class {
+class Debuggable {
 
     /// Definition
 
@@ -19,7 +19,7 @@ const Classification = require('./Classification')
         return debugString({ object: this, cr: cr, tab: tab, indentation: 0 })
     }
 
-})
+}
 
 function debugString({ object: object, cr: cr, tab: tab, indentation: i }) {
     if( cr === undefined ) { cr = "\n" }
@@ -76,4 +76,5 @@ function nestedIndentation({ tab: tab, i: i }) {
     return tab.repeat(i)
 }
 
-module.exports = Debuggable
+
+module.exports = Classification.define(Debuggable)

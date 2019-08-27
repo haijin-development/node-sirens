@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ComponentBehaviour = require('./ComponentBehaviour')
 
-const Widget = Classification.define( class {
+class Widget {
     /// Definition
 
     static definition() {
@@ -14,6 +14,6 @@ const Widget = Classification.define( class {
     getMainComponent() {
         return this
     }
-})
+}
 
-module.exports = Widget
+module.exports = Classification.define(Widget)

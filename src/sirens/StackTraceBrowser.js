@@ -5,7 +5,7 @@ const Sirens = require('../Sirens')
 const StackTraceBrowserModel = require('./models/StackTraceBrowserModel')
 const ObjectPropertiesComponent = require('./components/ObjectPropertiesComponent')
 
-const StackTraceBrowser = Classification.define( class {
+class StackTraceBrowser {
     /// Definition
 
     static definition() {
@@ -90,8 +90,7 @@ const StackTraceBrowser = Classification.define( class {
             })
         })
     }
-})
+}
 
-StackTraceBrowser.behaveAs(ComponentClassification)
-
-module.exports = StackTraceBrowser
+module.exports = Classification.define(StackTraceBrowser)
+                    .behaveAs(ComponentClassification)

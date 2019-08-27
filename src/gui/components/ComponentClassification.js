@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-const ComponentClassification = Classification.define( class {
+class ComponentClassification {
     /// Instantiating
 
     open(props = {}) {
@@ -26,6 +26,6 @@ const ComponentClassification = Classification.define( class {
 
         })
     }
-})
+}
 
-module.exports = ComponentClassification
+module.exports = Classification.define(ComponentClassification)

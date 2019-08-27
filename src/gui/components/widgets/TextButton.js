@@ -3,7 +3,7 @@ const Widget = require('../Widget')
 const TextButtonView = require('../../views/TextButtonView')
 const ValueModel = require('../../models/ValueModel')
 
-const TextButton = Classification.define( class {
+class TextButton {
     /// Definition
 
     static definition() {
@@ -43,6 +43,6 @@ const TextButton = Classification.define( class {
     onValueChanged({newValue: newValue, oldValue: oldValue}) {
         this.synchronizeViewFromModel()
     }
-})
+}
 
-module.exports = TextButton
+module.exports = Classification.define(TextButton)

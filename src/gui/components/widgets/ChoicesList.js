@@ -3,7 +3,7 @@ const Widget = require('../Widget')
 const ChoiceModel = require('../../models/ChoiceModel')
 const ListView = require('../../views/ListView')
 
-const ChoicesList = Classification.define( class {
+class ChoicesList {
     /// Definition
 
     static definition() {
@@ -111,6 +111,6 @@ const ChoicesList = Classification.define( class {
 
         this.getProps().onAction()
     }
-})
+}
 
-module.exports = ChoicesList
+module.exports = Classification.define(ChoicesList)

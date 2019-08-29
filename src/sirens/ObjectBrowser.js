@@ -89,13 +89,13 @@ class ObjectBrowser {
                                 wrapMode: 'wordChar'
                             })
 
-                            this.popupMenu( function({menu: menu, ownerView: ownerView}) {
+                            this.popupMenu( function() {
                                 const selectedObject =
                                     component.getModel().getSelectedPropertyValue()
 
-                                menu.addSeparator()
+                                this.addSeparator()
 
-                                menu.addItem({
+                                this.addItem({
                                     label: 'Inspect selected code',
                                     enabled: selectedObject !== undefined,
                                     action: component.evaluateSelectedCode.bind(component),

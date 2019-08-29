@@ -58,19 +58,19 @@ class ObjectPropertiesComponent {
                     getTextBlock: function(instVar) { return instVar.displayString() },
                 })
 
-                this.popupMenu( function({menu: menu, ownerView: ownerView}) {
+                this.popupMenu( function() {
                     const selectedObject =
                         component.getModel().getSelectedPropertyValue()
 
-                    menu.addItem({
+                    this.addItem({
                         label: 'Browse it',
                         enabled: selectedObject !== undefined,
                         action: component.inspectSelectedObject.bind(component),
                     })
 
-                    menu.addSeparator()
+                    this.addSeparator()
 
-                    menu.addItem({
+                    this.addItem({
                         label: 'Browse its prototype',
                         enabled: selectedObject !== undefined,
                         action: component.browseSelectedObjectPrototypes.bind(component),

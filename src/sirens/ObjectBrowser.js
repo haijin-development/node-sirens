@@ -93,9 +93,9 @@ class ObjectBrowser {
                                 const selectedObject =
                                     component.getModel().getSelectedPropertyValue()
 
-                                this.addSeparator()
+                                this.separator()
 
-                                this.addItem({
+                                this.item({
                                     label: 'Inspect selected code',
                                     enabled: selectedObject !== undefined,
                                     action: component.evaluateSelectedCode.bind(component),

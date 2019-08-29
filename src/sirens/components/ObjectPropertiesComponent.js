@@ -62,15 +62,15 @@ class ObjectPropertiesComponent {
                     const selectedObject =
                         component.getModel().getSelectedPropertyValue()
 
-                    this.addItem({
+                    this.item({
                         label: 'Browse it',
                         enabled: selectedObject !== undefined,
                         action: component.inspectSelectedObject.bind(component),
                     })
 
-                    this.addSeparator()
+                    this.separator()
 
-                    this.addItem({
+                    this.item({
                         label: 'Browse its prototype',
                         enabled: selectedObject !== undefined,
                         action: component.browseSelectedObjectPrototypes.bind(component),

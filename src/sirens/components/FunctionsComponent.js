@@ -67,7 +67,7 @@ class FunctionsComponent {
                         const selectedObject =
                             component.getModel().getSelectedPropValue()
 
-                        this.addItem({
+                        this.item({
                             label: 'Browse it',
                             enabled: selectedObject !== undefined,
                             action: component.browseSelectedProperty.bind(component),

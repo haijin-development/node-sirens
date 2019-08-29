@@ -75,7 +75,7 @@ class PrototypeBrowser {
                                 const selectedObject =
                                     component.getModel().getSelectedPrototype()
 
-                                this.addItem({
+                                this.item({
                                     label: 'Browse it',
                                     enabled: selectedObject !== undefined,
                                     action: component.browseSelectedPrototype.bind(component),

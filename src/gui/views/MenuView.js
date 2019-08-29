@@ -32,7 +32,7 @@ class MenuView {
 
     /// Adding
 
-    addItem({label: label, enabled: enabled, action: action}) {
+    item({label: label, enabled: enabled, action: action}) {
         if(enabled === undefined) {
             enabled = true
         }
@@ -50,7 +50,7 @@ class MenuView {
         menuItemHandle.show()
     }
 
-    addSeparator() {
+    separator() {
         const menuSeparatorHandle = new Gtk.SeparatorMenuItem()
 
         this.menuHandle.add(menuSeparatorHandle)

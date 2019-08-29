@@ -71,11 +71,11 @@ class PrototypeBrowser {
                                 getTextBlock: function(object) { return object.constructor.name },
                             })
 
-                            this.popupMenu( function({ menu: menu, ownerView: ownerView }) {
+                            this.popupMenu( function() {
                                 const selectedObject =
                                     component.getModel().getSelectedPrototype()
 
-                                menu.addItem({
+                                this.addItem({
                                     label: 'Browse it',
                                     enabled: selectedObject !== undefined,
                                     action: component.browseSelectedPrototype.bind(component),

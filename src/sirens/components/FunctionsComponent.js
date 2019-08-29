@@ -63,11 +63,11 @@ class FunctionsComponent {
                         getTextBlock: function(objectProperty) { return objectProperty.getKey() },
                     })
 
-                    this.popupMenu( function({ menu: menu, ownerView: ownerView }) {
+                    this.popupMenu( function() {
                         const selectedObject =
                             component.getModel().getSelectedPropValue()
 
-                        menu.addItem({
+                        this.addItem({
                             label: 'Browse it',
                             enabled: selectedObject !== undefined,
                             action: component.browseSelectedProperty.bind(component),

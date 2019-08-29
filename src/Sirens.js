@@ -30,6 +30,14 @@ class Sirens {
         })
     }
 
+    static openClassEditor() {
+        this.do( () => {
+            const ClassEditor = require('./sirens/ClassEditor')
+
+            ClassEditor.open()
+        })
+    }
+
     static do(closure) {
         if(this.gtkIsRunningTheMainLoop === true) {
             closure.call(this)

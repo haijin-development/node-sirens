@@ -1,3 +1,4 @@
+const path = require('path')
 const Classification = require('../../src/o-language/classifications/Classification')
 const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
@@ -31,8 +32,8 @@ class PrototypeBrowser {
 
     /// Icons
 
-    getImageFor(object) {
-        return 'resources/icons/array.png'
+    getPrototypeIcon() {
+        return path.resolve( __dirname + '/../../resources/icons/prototype.png' )
     }
 
     /// Building
@@ -64,6 +65,13 @@ class PrototypeBrowser {
 
                             this.handlers({
                                 onAction: component.browseSelectedPrototype.bind(component),
+                            })
+
+                            this.column({
+                                label: '',
+                                getImageBlock: function(object) { return component.getPrototypeIcon() },
+                                imageWidth: 16,
+                                imageHeight: 16,
                             })
 
                             this.column({

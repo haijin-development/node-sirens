@@ -1,6 +1,7 @@
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
+const GdkPixbuf = nodeGtk.require('GdkPixbuf')
 const GtkTypes = require('./GtkTypes')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
@@ -56,7 +57,7 @@ class ListView {
 
     addColumns(columns) {
         const listStoreTypes = columns.map( (column) => {
-            return this.getColumnType(column.getType())
+            return GtkTypes[ column.getType() ]
         })
 
         this.listStore.setColumnTypes(listStoreTypes)
@@ -75,18 +76,29 @@ class ListView {
 
         const columnIndex = this.treeView.getColumns().length
 
-        const col = new Gtk.TreeViewColumn({title: column.getLabel()})
+        let col = new Gtk.TreeViewColumn({ title: column.getLabel() })
 
-        const renderer = new Gtk.CellRendererText()
+        if( column.isImage() ) {
 
-        col.packStart(renderer, true)
-        col.addAttribute(renderer, 'text', columnIndex)
+            const renderer = new Gtk.CellRendererPixbuf()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'pixbuf', columnIndex)
+
+        } else {
+
+            const renderer = new Gtk.CellRendererText()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'text', columnIndex)
+
+            this.treeView.appendColumn(col)
+
+        }
 
         this.treeView.appendColumn(col)
-    }
-
-    getColumnType(type) {
-        return GtkTypes[type]
     }
 
     /// Querying
@@ -204,24 +216,54 @@ class ListView {
         this.listStore.remove(iter)
     }
 
-    setItemColumnValues({item: item, iter: iter}) {
+    setItemColumnValues({ item: item, iter: iter }) {
         this.columns.forEach( (column, columnIndex) => {
-            const text = column.getDisplayTextOf(item)
 
-            if(text === undefined) {
-                throw new Error `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+            if( column.isImage() ) {
+                const imageFile = column.getImageFileOf(item, () => {
+                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`
+                })
+
+                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
+                    imageFile,
+                    column.getImageWidth(),
+                    column.getImageHeight()
+                )
+
+                this.setIterImage(pixbuf, iter, columnIndex)
+
+            } else {
+                const text = column.getDisplayTextOf(item, () => {
+                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+                })
+
+                this.setIterText(text, iter, columnIndex)
             }
-
-            const gtkType = GtkTypes['string']
-
-            const value = new GObject.Value()
-
-            value.init(gtkType)
-
-            value.setString(text)
-
-            this.listStore.setValue(iter, columnIndex, value)
         })
+    }
+
+    setIterText(text, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['string']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setString(text)
+
+        this.listStore.setValue(iter, columnIndex, value)
+    }
+
+    setIterImage(pixbuf, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['image']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setObject(pixbuf)
+
+        this.listStore.setValue(iter, columnIndex, value)
     }
 
     /// Events

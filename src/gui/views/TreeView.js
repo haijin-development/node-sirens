@@ -1,6 +1,7 @@
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
+const GdkPixbuf = nodeGtk.require('GdkPixbuf')
 const GtkTypes = require('./GtkTypes')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
@@ -12,6 +13,7 @@ class TreeView {
         this.instanceVariables = [
             'mainHandle', 'treeStore', 'treeView', 'columns',
             'getChildrenBlock', 'onSelectionChanged', 'onSelectionAction',
+            'placeholder'
         ]
 
         this.assumptions = [GtkWidget]
@@ -36,6 +38,8 @@ class TreeView {
         this.previousClassificationDo( () => {
             this.initialize()
         })
+
+        this.placeholder = '__placeholder__'
     }
 
     initializeHandles() {
@@ -45,10 +49,6 @@ class TreeView {
         this.treeStore = new Gtk.TreeStore()
 
         this.treeView = null
-    }
-
-    placeholder() {
-        return '__placeholder__'
     }
 
     /// Styles
@@ -74,7 +74,7 @@ class TreeView {
 
     addColumns(columns) {
         const listStoreTypes = columns.map( (column) => {
-            return this.getColumnType(column.type)
+            return GtkTypes[ column.getType() ]
         })
 
         this.treeStore.setColumnTypes(listStoreTypes)
@@ -95,23 +95,29 @@ class TreeView {
 
         const columnIndex = this.treeView.getColumns().length
 
-        const col = new Gtk.TreeViewColumn({title: column.getLabel()})
+        let col = new Gtk.TreeViewColumn({ title: column.getLabel() })
 
-        const renderer = new Gtk.CellRendererText()
+        if( column.isImage() ) {
 
-        col.packStart(renderer, true)
+            const renderer = new Gtk.CellRendererPixbuf()
 
-        col.addAttribute(renderer, 'text', columnIndex)
+            col.packStart(renderer, true)
 
-        this.treeView.appendColumn(col)
-    }
+            col.addAttribute(renderer, 'pixbuf', columnIndex)
 
-    getColumnType(type) {
-        if(type === undefined) {
-            type = 'string'
+        } else {
+
+            const renderer = new Gtk.CellRendererText()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'text', columnIndex)
+
+            this.treeView.appendColumn(col)
+
         }
 
-        return GtkTypes[type]
+        this.treeView.appendColumn(col)
     }
 
     /// Accessing
@@ -215,7 +221,7 @@ class TreeView {
     addItem({item: item, parentIter: parentIter, index: index}) {
         const iter = this.treeStore.insert(parentIter, index)
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
 
         let indicesPath = []
 
@@ -227,26 +233,42 @@ class TreeView {
 
         indicesPath.push(index)
 
-        const childrenCount = this.getChildrenAt({path: indicesPath}).length
+        const childrenCount = this.getChildrenAt({ path: indicesPath }).length
 
         if( childrenCount > 0 ) {
-            const placeholderText = this.placeholder()
+            const placeholderIter = this.treeStore.insert(iter, 0)
 
-            const placeholder = this.treeStore.insert(iter, 0)
-
-            this.setIterText(placeholderText, placeholder)
+            if(this.columns.length == 1) {
+                this.setIterText(this.placeholder, placeholderIter, 0)
+            } else {
+                this.setIterText(this.placeholder, placeholderIter, 1)
+            }
         }
     }
 
     setItemColumnValues({ item: item, iter: iter }) {
         this.columns.forEach( (column, columnIndex) => {
-            const text = column.getDisplayTextOf(item)
 
-            if(text === undefined) {
-                throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+            if( column.isImage() ) {
+                const imageFile = column.getImageFileOf(item, () => {
+                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`                
+                })
+
+                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
+                    imageFile,
+                    column.getImageWidth(),
+                    column.getImageHeight()
+                )
+
+                this.setIterImage(pixbuf, iter, columnIndex)
+
+            } else {
+                const text = column.getDisplayTextOf(item, () => {
+                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`                
+                })
+
+                this.setIterText(text, iter, columnIndex)
             }
-
-            this.setIterText(text, iter, columnIndex)
         })
     }
 
@@ -258,6 +280,18 @@ class TreeView {
         value.init(gtkType)
 
         value.setString(text)
+
+        this.treeStore.setValue(iter, columnIndex, value)
+    }
+
+    setIterImage(pixbuf, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['image']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setObject(pixbuf)
 
         this.treeStore.setValue(iter, columnIndex, value)
     }
@@ -308,9 +342,15 @@ class TreeView {
     onRowExpanded(iter, treePath) {
         const [bool, childIter] = this.treeStore.iterNthChild(iter, 0)
 
-        const childValue = this.treeStore.getValue(childIter, 0).getString()
+        let childValue
 
-        if( childValue != this.placeholder() ) {
+        if( this.columns.length === 1 ) {
+            childValue = this.treeStore.getValue(childIter, 0).getString()
+        } else {
+            childValue = this.treeStore.getValue(childIter, 1).getString()
+        }
+
+        if( childValue !== this.placeholder ) {
             return
         }
 

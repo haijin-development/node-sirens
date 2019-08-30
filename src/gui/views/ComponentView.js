@@ -1,17 +1,25 @@
-const AbstractView = require('./AbstractView')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkView = require('./GtkView')
 
-class ComponentView extends AbstractView {
+class ComponentView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onClickedBlock']
+        this.assumptions = [GtkView]
+    }
+
     onViewAdded(childView) {
     }
 
     /// Accessing
 
     getMainView() {
-        if( this.childViews.length === 0 ) {
+        if( this.getChildViews().length === 0 ) {
             throw Error(`The ${this.constructor.name} has no main child view.`)
         }
 
-        return this.childViews[0].getMainView()
+        return this.getChildViews()[0].getMainView()
     }
 
     getMainHandle() {
@@ -21,7 +29,7 @@ class ComponentView extends AbstractView {
     getChildHandles() {
         let handles = []
 
-        this.childViews.forEach( (view) => {
+        this.getChildViews().forEach( (view) => {
             handles = handles.concat( view.getChildHandles() )
         })
 
@@ -35,7 +43,7 @@ class ComponentView extends AbstractView {
     }
 
     addView(childView) {
-        this.childViews.push(childView)
+        this.getChildViews().push(childView)
 
         if(!childView.isTopMostView()) {
             this.onViewAdded(childView)
@@ -48,4 +56,4 @@ class ComponentView extends AbstractView {
     }
 }
 
-module.exports = ComponentView
+module.exports = Classification.define(ComponentView)

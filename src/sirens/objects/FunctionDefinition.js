@@ -1,3 +1,4 @@
+const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 
 /*
@@ -6,17 +7,20 @@ const Sirens = require('../../Sirens')
  * It is implemented as a wrapper on a parse tree node.
  */
 class FunctionDefinition {
-    static from({ file: file, line: line, column: column }) {
-        const SourceFile = require('./SourceFile')
 
-        const sourceFile = new SourceFile({ filepath: file })
+    /// Definition
 
-        return sourceFile.getFunctionAt({ line: line, column: column })
+    static definition() {
+        this.instanceVariables = ['parseNode', 'sourceFile']
     }
 
     /// Initializing
 
-    constructor({parseNode: parseNode, sourceFile: sourceFile}) {
+    initialize({ parseNode: parseNode, sourceFile: sourceFile }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.parseNode = parseNode
         this.sourceFile = sourceFile
     }
@@ -66,4 +70,15 @@ class FunctionDefinition {
     }
 }
 
-module.exports = FunctionDefinition
+class FunctionDefinitionBuilder {
+    from({ file: file, line: line, column: column }) {
+        const SourceFile = require('./SourceFile')
+
+        const sourceFile = SourceFile.new({ filepath: file })
+
+        return sourceFile.getFunctionAt({ line: line, column: column })
+    }
+}
+
+module.exports = Classification.define(FunctionDefinition)
+                    .behaveAs( Classification.define(FunctionDefinitionBuilder) )

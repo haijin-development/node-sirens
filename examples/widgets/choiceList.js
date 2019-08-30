@@ -1,14 +1,23 @@
 const Sirens = require('../../src/Sirens')
+const Classification = require('../../src/o-language/classifications/Classification')
+const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
-class CustomComponent extends Component{
+class CustomComponent {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Building
 
     defaultModel() {
-        const choiceModel = new ChoiceModel()
+        const choiceModel = ChoiceModel.new()
 
-        choiceModel.setChoices([1, 2.0, 'a string'])
+        choiceModel.setChoices( [1, 2.0, 'a string'] )
 
         return choiceModel
     }
@@ -16,22 +25,22 @@ class CustomComponent extends Component{
     renderWith(builder) {
         const choices = this.getModel()
 
-        builder.render(function (component) {
-            this.window( () => {
+        builder.render( function (component) {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.listChoice( (list) => {
-                    list.model(choices)
+                this.listChoice( function(list) {
+                    this.model(choices)
 
-                    list.column({
+                    this.column({
                         label: 'Column 1',
                         getTextBlock: (n) => { return n.toString() },
                     })
 
-                    list.column({
+                    this.column({
                         label: 'Column 2',
                     })
                 })
@@ -40,6 +49,10 @@ class CustomComponent extends Component{
     }
 }
 
+const customComponent = Classification.define(CustomComponent)
+
+customComponent.behaveAs( ComponentClassification )
+
 Sirens.do( () => {
-    CustomComponent.open()
+    customComponent.open()
 })

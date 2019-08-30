@@ -1,7 +1,16 @@
+const Classification = require('../../../src/o-language/classifications/Classification')
+const ComponentClassification = require('../../gui/components/ComponentClassification')
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 
-class ObjectPropertiesComponent extends Component {
+class ObjectPropertiesComponent {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Actions
 
     getSelectedObject() {
@@ -29,39 +38,46 @@ class ObjectPropertiesComponent extends Component {
     /// Building
 
     renderWith(builder) {
-        builder.render(function (component) {
+        builder.render( function(component) {
 
-            this.treeChoice( (tree) => {
-                tree.model(component.getModel().getObjectPropertiesTree())
+            this.treeChoice( function(tree) {
+                this.model( component.getModel().getObjectPropertiesTree() )
 
-                tree.styles({
+                this.styles({
                     splitProportion: 2.0/3.0,
                     showHeaders: false,
                     clickableHeaders: false,
                 })
 
-                tree.handlers({
+                this.handlers({
                     onAction: component.inspectSelectedObject.bind(component),
                 })
 
-                tree.column({
+                this.column({
                     label: '',
-                    getTextBlock: (instVar) => { return instVar.displayString() },
+                    getImageBlock: function(instVar) { return instVar.icon() },
+                    imageWidth: 16,
+                    imageHeight: 16,
                 })
 
-                tree.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                this.column({
+                    label: '',
+                    getTextBlock: function(instVar) { return instVar.displayString() },
+                })
+
+                this.popupMenu( function() {
                     const selectedObject =
                         component.getModel().getSelectedPropertyValue()
 
-                    menu.addItem({
+                    this.item({
                         label: 'Browse it',
                         enabled: selectedObject !== undefined,
                         action: component.inspectSelectedObject.bind(component),
                     })
 
-                    menu.addSeparator()
+                    this.separator()
 
-                    menu.addItem({
+                    this.item({
                         label: 'Browse its prototype',
                         enabled: selectedObject !== undefined,
                         action: component.browseSelectedObjectPrototypes.bind(component),
@@ -71,4 +87,5 @@ class ObjectPropertiesComponent extends Component {
         })
     }
 }
-module.exports = ObjectPropertiesComponent
+
+module.exports = Classification.define(ObjectPropertiesComponent)

@@ -1,6 +1,6 @@
 {
   "name": "sirens",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
   "dependencies": {

@@ -1,15 +1,23 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const Widget = require('../Widget')
 const TabsView = require('../../views/TabsView')
 
-class Tabs extends PrimitiveComponent {
+class TabsView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
     createView() {
-        return new TabsView()
+        return TabsView.new()
     }
 
     synchronizeViewFromModel() {
     }
 }
 
-module.exports = TabsView
+module.exports = Classification.define(TabsView)

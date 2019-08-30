@@ -1,17 +1,34 @@
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../../Sirens')
-const View = require('./View')
 
-class WindowView extends View {
+class WindowView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle',
+        ]
+
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['title'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['title'])
+        })
     }
 
     /// Initializing
 
-    initializeHandles() {
+    initialize() {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.mainHandle = new Gtk.Window()
 
         Sirens.registerWindow()
@@ -29,6 +46,9 @@ class WindowView extends View {
         this.mainHandle.showAll()
     }
 
+    subscribeToGUISignals() {
+    }
+
     /// Asking
 
     isTopMostView() {
@@ -44,8 +64,6 @@ class WindowView extends View {
     getTitle(value) {
         return this.mainHandle.getTitle()
     }
-
-    /// Styles
 
     setWidth(value) {
         let [width, height] = this.getMainHandle().getDefaultSize()
@@ -71,10 +89,9 @@ class WindowView extends View {
         return this.getMainHandle().getDefaultSize()[1]
     }
 
-    /// Events
-
-    subscribeToGUISignals(props) {
+    getMainHandle() {
+        return this.mainHandle
     }
 }
 
-module.exports = WindowView
+module.exports = Classification.define(WindowView)

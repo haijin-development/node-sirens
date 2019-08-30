@@ -1,28 +1,44 @@
-const View = require('./View')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const Types = require('./Types')
+const GdkPixbuf = nodeGtk.require('GdkPixbuf')
+const GtkTypes = require('./GtkTypes')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 
-class ListView extends View {
+class ListView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle', 'listStore', 'treeView', 'columns',
+            'onSelectionChanged', 'onSelectionAction',
+        ]
+
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['columns'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['columns'])
+        })
     }
 
     /// Initializing
 
-    constructor({
-                    onSelectionChanged: onSelectionChanged,
-                    onSelectionAction: onSelectionAction
-                })
+    initialize({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
     {
-        super()
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
+
+        this.columns = []
     }
 
     initializeHandles() {
@@ -31,8 +47,6 @@ class ListView extends View {
 
         this.listStore = new Gtk.ListStore()
         this.treeView = null
-
-        this.columns = []
     }
 
     setColumns(columns) {
@@ -43,7 +57,7 @@ class ListView extends View {
 
     addColumns(columns) {
         const listStoreTypes = columns.map( (column) => {
-            return this.getColumnType(column.getType())
+            return GtkTypes[ column.getType() ]
         })
 
         this.listStore.setColumnTypes(listStoreTypes)
@@ -62,21 +76,36 @@ class ListView extends View {
 
         const columnIndex = this.treeView.getColumns().length
 
-        const col = new Gtk.TreeViewColumn({title: column.getLabel()})
+        let col = new Gtk.TreeViewColumn({ title: column.getLabel() })
 
-        const renderer = new Gtk.CellRendererText()
+        if( column.isImage() ) {
 
-        col.packStart(renderer, true)
-        col.addAttribute(renderer, 'text', columnIndex)
+            const renderer = new Gtk.CellRendererPixbuf()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'pixbuf', columnIndex)
+
+        } else {
+
+            const renderer = new Gtk.CellRendererText()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'text', columnIndex)
+
+            this.treeView.appendColumn(col)
+
+        }
 
         this.treeView.appendColumn(col)
     }
 
-    getColumnType(type) {
-        return Types[type]
-    }
-
     /// Querying
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     /*
      * Returns an array with the text of each row in the list.
@@ -152,7 +181,7 @@ class ListView extends View {
             iter = this.listStore.insert(index)
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     updateItems({items: items, indices: indices}) {
@@ -168,7 +197,7 @@ class ListView extends View {
             throw new Error `The index ${index} is out of range.`
         }
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
     }
 
     removeItems({items: items, indices: indices}) {
@@ -187,24 +216,54 @@ class ListView extends View {
         this.listStore.remove(iter)
     }
 
-    setItemColumnValues({item: item, iter: iter}) {
+    setItemColumnValues({ item: item, iter: iter }) {
         this.columns.forEach( (column, columnIndex) => {
-            const text = column.getDisplayTextOf(item)
 
-            if(text === undefined) {
-                throw new Error `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+            if( column.isImage() ) {
+                const imageFile = column.getImageFileOf(item, () => {
+                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`
+                })
+
+                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
+                    imageFile,
+                    column.getImageWidth(),
+                    column.getImageHeight()
+                )
+
+                this.setIterImage(pixbuf, iter, columnIndex)
+
+            } else {
+                const text = column.getDisplayTextOf(item, () => {
+                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+                })
+
+                this.setIterText(text, iter, columnIndex)
             }
-
-            const gtkType = Types['string']
-
-            const value = new GObject.Value()
-
-            value.init(gtkType)
-
-            value.setString(text)
-
-            this.listStore.setValue(iter, columnIndex, value)
         })
+    }
+
+    setIterText(text, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['string']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setString(text)
+
+        this.listStore.setValue(iter, columnIndex, value)
+    }
+
+    setIterImage(pixbuf, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['image']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setObject(pixbuf)
+
+        this.listStore.setValue(iter, columnIndex, value)
     }
 
     /// Events
@@ -264,4 +323,4 @@ class ListView extends View {
     }
 }
 
-module.exports = ListView
+module.exports = Classification.define(ListView)

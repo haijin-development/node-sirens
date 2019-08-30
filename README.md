@@ -6,7 +6,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-![Object browser](./docs/browsing-object.gif)
+![Object browser](./docs/browsing-stack.gif)
 
 ### Installation
 
@@ -41,9 +41,6 @@ Open a browser on the stack call with
 ```javascript
 Sirens.browseStack(arguments)
 ```
-
-![Stack browser](./docs/browsing-stack.gif)
-
 
 ### Pre-requisites
 

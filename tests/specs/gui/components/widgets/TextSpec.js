@@ -4,13 +4,13 @@ const Text = require('../../../../../src/gui/components/widgets/Text')
 describe('When using a Text', () => {
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const label = new Text()
+            const label = Text.new()
 
             expect(label.getModel().getValue()) .to .eql('')
         })
 
         it('updates the view value when the model text changes', () => {
-            const label = new Text()
+            const label = Text.new()
 
             label.getModel().setValue('123')
 
@@ -21,13 +21,13 @@ describe('When using a Text', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const label = new Text()
+            const label = Text.new()
 
             expect(label.getView().getText()) .to .eql('')
         })
 
         it('sets a text on its constructor', () => {
-            const label = new Text({text: '123'})
+            const label = Text.new({text: '123'})
 
             expect(label.getModel().getValue()) .to .eql('123')
             expect(label.getView().getText()) .to .eql('123')
@@ -36,7 +36,7 @@ describe('When using a Text', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const label = new Text()
+            const label = Text.new()
 
             label.setProps({
                 width: 10
@@ -46,7 +46,7 @@ describe('When using a Text', () => {
         })
 
         it('sets and gets the height', () => {
-            const label = new Text()
+            const label = Text.new()
 
             label.setProps({
                 height: 10
@@ -56,7 +56,7 @@ describe('When using a Text', () => {
         })
 
         it('sets and gets the wrapMode', () => {
-            const label = new Text()
+            const label = Text.new()
 
             label.setProps({
                 wrapMode: 'char'

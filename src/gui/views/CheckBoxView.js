@@ -1,13 +1,23 @@
-const View = require('./View')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
-class CheckBoxView extends View {
+class CheckBoxView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onClickedBlock']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Initializing
 
-    constructor({onClicked: onClickedBlock}) {
-        super()
-
+    initialize({ onClicked: onClickedBlock }) {
         this.onClickedBlock = onClickedBlock
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {
@@ -15,6 +25,10 @@ class CheckBoxView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     setText(text) {
         this.mainHandle.label = text
@@ -43,4 +57,4 @@ class CheckBoxView extends View {
     }
 }
 
-module.exports = CheckBoxView
+module.exports = Classification.define(CheckBoxView)

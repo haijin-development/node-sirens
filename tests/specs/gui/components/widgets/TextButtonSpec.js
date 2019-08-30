@@ -4,13 +4,13 @@ const TextButton = require('../../../../../src/gui/components/widgets/TextButton
 describe('When using a TextButton', () => {
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const label = new TextButton()
+            const label = TextButton.new()
 
             expect(label.getModel().getValue()) .to .eql('')
         })
 
         it('updates the view value when the model text changes', () => {
-            const label = new TextButton()
+            const label = TextButton.new()
 
             label.getModel().setValue('123')
 
@@ -21,13 +21,13 @@ describe('When using a TextButton', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const label = new TextButton()
+            const label = TextButton.new()
 
             expect(label.getView().getText()) .to .eql('')
         })
 
         it('sets a text on its constructor', () => {
-            const label = new TextButton({text: 'label'})
+            const label = TextButton.new({text: 'label'})
 
             expect(label.getModel().getValue()) .to .eql('label')
             expect(label.getView().getText()) .to .eql('label')
@@ -40,7 +40,7 @@ describe('When using a TextButton', () => {
         })
 
         it('calls the onClicked callback', () => {
-            const label = new TextButton({
+            const label = TextButton.new({
                 onClicked: () => {this.clicked = true}
             })
 
@@ -52,7 +52,7 @@ describe('When using a TextButton', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const label = new TextButton()
+            const label = TextButton.new()
 
             label.setProps({
                 width: 10
@@ -62,7 +62,7 @@ describe('When using a TextButton', () => {
         })
 
         it('sets and gets the height', () => {
-            const label = new TextButton()
+            const label = TextButton.new()
 
             label.setProps({
                 height: 10

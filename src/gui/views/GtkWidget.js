@@ -1,24 +1,28 @@
-const AbstractView = require('./AbstractView')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkView = require('./GtkView')
+const GtkWidgetWithContextMenu = require('./GtkWidgetWithContextMenu')
 
-class View extends AbstractView {
-    /// Initializing
+class GtkWidget {
+    /// Definition
 
-    constructor(...params) {
-        super()
-
-        this.mainHandle = null
-
-        this.build(...params)
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [GtkView, GtkWidgetWithContextMenu]
     }
 
-    build(...params) {
-        this.initializeHandles(...params)
+    /// Initializing
+
+    initialize() {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.initializeHandles()
 
         this.subscribeToGUISignals()
     }
 
     initializeHandles() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::initializeHandles()`)
     }
 
     onViewAdded(childView) {
@@ -39,7 +43,7 @@ class View extends AbstractView {
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        throw Error(`The class ${this.constructor.name} must implement the method ::getMainHandle()`)
     }
 
     subscribeToGUISignals() {
@@ -57,4 +61,4 @@ class View extends AbstractView {
     }
 }
 
-module.exports = View
+module.exports = Classification.define(GtkWidget)

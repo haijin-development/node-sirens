@@ -1,19 +1,27 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const Widget = require('../Widget')
 const LabelView = require('../../views/LabelView')
+const ValueModel = require('../../models/ValueModel')
 
-class Label extends PrimitiveComponent {
+class Label {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeModel(props) {
-        super.initializeModel(props)
+    defaultModel() {
+        const value = this.getProps().text !== undefined ? 
+                        this.getProps().text : ''
 
-        if(this.props.text !== undefined) {
-            this.getModel().setValue(props.text)
-        }
+        return ValueModel.new({ value: value })
     }
 
     createView() {
-        return new LabelView()
+        return LabelView.new()
     }
 
     /// Synchronizing
@@ -21,7 +29,7 @@ class Label extends PrimitiveComponent {
     synchronizeViewFromModel() {
         const text = this.getModel().getValue()
 
-        this.view.setText(text)
+        this.getView().setText(text)
     }
 
     /// Events
@@ -31,4 +39,4 @@ class Label extends PrimitiveComponent {
     }
 }
 
-module.exports = Label
+module.exports = Classification.define(Label)

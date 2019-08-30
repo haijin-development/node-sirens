@@ -1,55 +1,71 @@
-const View = require('./View')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const Types = require('./Types')
+const GdkPixbuf = nodeGtk.require('GdkPixbuf')
+const GtkTypes = require('./GtkTypes')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 
-class TreeView extends View {
-    /// Styles
+class TreeView {
+    /// Definition
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(
-            [
-                'columns', 'showHeaders', 'clickableHeaders',
-                'onSelectedValueChanged', 'onSelectionAction',
-            ]
-        )
-    }
+    static definition() {
+        this.instanceVariables = [
+            'mainHandle', 'treeStore', 'treeView', 'columns',
+            'getChildrenBlock', 'onSelectionChanged', 'onSelectionAction',
+            'placeholder'
+        ]
 
-    static placeholder() {
-        if(this._placeholder === undefined) {
-            this._placeholder = '__placeholder__'
-        }
-
-        return this._placeholder
+        this.assumptions = [GtkWidget]
     }
 
     /// Initializing
 
-    constructor({
+    initialize({
             getChildrenBlock: getChildrenBlock,
             onSelectionChanged: onSelectionChanged,
             onSelectionAction: onSelectionAction
      })
     {
-        super()
-
         this.getChildrenBlock = getChildrenBlock
 
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
+
+        this.columns = []
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.placeholder = '__placeholder__'
     }
 
     initializeHandles() {
-        this.treeStore = new Gtk.TreeStore()
-
-        this.treeView = null
-
         this.mainHandle = new Gtk.ScrolledWindow()
         this.mainHandle.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        this.columns = []
+        this.treeStore = new Gtk.TreeStore()
+
+        this.treeView = null
+    }
+
+    /// Styles
+
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(
+                [
+                    'columns', 'showHeaders', 'clickableHeaders',
+                    'onSelectedValueChanged', 'onSelectionAction',
+                ]
+            )
+        })
+    }
+
+    getMainHandle() {
+        return this.mainHandle
     }
 
     setColumns(columns) {
@@ -58,7 +74,7 @@ class TreeView extends View {
 
     addColumns(columns) {
         const listStoreTypes = columns.map( (column) => {
-            return this.getColumnType(column.type)
+            return GtkTypes[ column.getType() ]
         })
 
         this.treeStore.setColumnTypes(listStoreTypes)
@@ -79,23 +95,29 @@ class TreeView extends View {
 
         const columnIndex = this.treeView.getColumns().length
 
-        const col = new Gtk.TreeViewColumn({title: column.getLabel()})
+        let col = new Gtk.TreeViewColumn({ title: column.getLabel() })
 
-        const renderer = new Gtk.CellRendererText()
+        if( column.isImage() ) {
 
-        col.packStart(renderer, true)
+            const renderer = new Gtk.CellRendererPixbuf()
 
-        col.addAttribute(renderer, 'text', columnIndex)
+            col.packStart(renderer, true)
 
-        this.treeView.appendColumn(col)
-    }
+            col.addAttribute(renderer, 'pixbuf', columnIndex)
 
-    getColumnType(type) {
-        if(type === undefined) {
-            type = 'string'
+        } else {
+
+            const renderer = new Gtk.CellRendererText()
+
+            col.packStart(renderer, true)
+
+            col.addAttribute(renderer, 'text', columnIndex)
+
+            this.treeView.appendColumn(col)
+
         }
 
-        return Types[type]
+        this.treeView.appendColumn(col)
     }
 
     /// Accessing
@@ -199,7 +221,7 @@ class TreeView extends View {
     addItem({item: item, parentIter: parentIter, index: index}) {
         const iter = this.treeStore.insert(parentIter, index)
 
-        this.setItemColumnValues({item: item, iter: iter})
+        this.setItemColumnValues({ item: item, iter: iter })
 
         let indicesPath = []
 
@@ -211,37 +233,65 @@ class TreeView extends View {
 
         indicesPath.push(index)
 
-        const childrenCount = this.getChildrenAt({path: indicesPath}).length
+        const childrenCount = this.getChildrenAt({ path: indicesPath }).length
 
         if( childrenCount > 0 ) {
-            const placeholderText = this.constructor.placeholder()
+            const placeholderIter = this.treeStore.insert(iter, 0)
 
-            const placeholder = this.treeStore.insert(iter, 0)
-
-            this.setIterText(placeholderText, placeholder)
+            if(this.columns.length == 1) {
+                this.setIterText(this.placeholder, placeholderIter, 0)
+            } else {
+                this.setIterText(this.placeholder, placeholderIter, 1)
+            }
         }
     }
 
-    setItemColumnValues({item: item, iter: iter}) {
+    setItemColumnValues({ item: item, iter: iter }) {
         this.columns.forEach( (column, columnIndex) => {
-            const text = column.getDisplayTextOf(item)
 
-            if(text === undefined) {
-                throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+            if( column.isImage() ) {
+                const imageFile = column.getImageFileOf(item, () => {
+                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`                
+                })
+
+                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
+                    imageFile,
+                    column.getImageWidth(),
+                    column.getImageHeight()
+                )
+
+                this.setIterImage(pixbuf, iter, columnIndex)
+
+            } else {
+                const text = column.getDisplayTextOf(item, () => {
+                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`                
+                })
+
+                this.setIterText(text, iter, columnIndex)
             }
-
-            this.setIterText(text, iter, columnIndex)
         })
     }
 
     setIterText(text, iter, columnIndex = 0) {
-        const gtkType = Types['string']
+        const gtkType = GtkTypes['string']
 
         const value = new GObject.Value()
 
         value.init(gtkType)
 
         value.setString(text)
+
+        this.treeStore.setValue(iter, columnIndex, value)
+    }
+
+    setIterImage(pixbuf, iter, columnIndex = 0) {
+        const gtkType = GtkTypes['image']
+
+        const value = new GObject.Value()
+
+        value.init(gtkType)
+
+        value.setObject(pixbuf)
 
         this.treeStore.setValue(iter, columnIndex, value)
     }
@@ -292,9 +342,15 @@ class TreeView extends View {
     onRowExpanded(iter, treePath) {
         const [bool, childIter] = this.treeStore.iterNthChild(iter, 0)
 
-        const childValue = this.treeStore.getValue(childIter, 0).getString()
+        let childValue
 
-        if( childValue != this.constructor.placeholder() ) {
+        if( this.columns.length === 1 ) {
+            childValue = this.treeStore.getValue(childIter, 0).getString()
+        } else {
+            childValue = this.treeStore.getValue(childIter, 1).getString()
+        }
+
+        if( childValue !== this.placeholder ) {
             return
         }
 
@@ -333,4 +389,4 @@ class TreeView extends View {
     }
 }
 
-module.exports = TreeView
+module.exports = Classification.define(TreeView)

@@ -1,12 +1,21 @@
 const Sirens = require('../../src/Sirens')
+const Classification = require('../../src/o-language/classifications/Classification')
+const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
-class CustomComponent extends Component{
+class CustomComponent {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
     /// Building
 
     defaultModel() {
-        const choiceModel = new ChoiceModel()
+        const choiceModel = ChoiceModel.new()
 
         choiceModel.setChoices([1, 2, 3])
 
@@ -15,13 +24,13 @@ class CustomComponent extends Component{
 
     renderWith(builder) {
         builder.render(function (component) {
-            this.window( () => {
+            this.window( function() {
                 this.styles({
                     width: 100,
                     height: 100,
                 })
 
-                this.verticalStack( () => {
+                this.verticalStack( function() {
                     this.radioButton({
                         model: component.getModel(),
                         id: 1,
@@ -45,6 +54,10 @@ class CustomComponent extends Component{
     }
 }
 
+const customComponent = Classification.define(CustomComponent)
+
+customComponent.behaveAs( ComponentClassification )
+
 Sirens.do( () => {
-    CustomComponent.open()
+    customComponent.open()
 })

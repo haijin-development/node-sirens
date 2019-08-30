@@ -1,13 +1,20 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
 
 Sirens.initialize()
 
-class AbstractView {
+class GtkView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['childViews']
+    }
+
     /// Styles
 
-    static acceptedStyles() {
+    acceptedStyles() {
         return [
             'width', 'height',
             'backgroundColor', 'foregroundColor',
@@ -17,7 +24,7 @@ class AbstractView {
 
     /// Initializing
 
-    constructor() {
+    afterInstantiation() {
         this.childViews = []
     }
 
@@ -38,6 +45,10 @@ class AbstractView {
     }
 
     /// Accessing
+
+    getChildViews() {
+        return this.childViews
+    }
 
     getMainView() {
         throw Error(`The class ${this.constructor.name} must implement the method ::getMainView()`)
@@ -76,32 +87,6 @@ class AbstractView {
     getHeight(value) {
         return this.getMainHandle().getSizeRequest().height
     }
-
-    /// Menu
-
-    showPopupMenu() {
-        const menu = new MenuView()
-
-        this.populatePopupMenu({menu: menu})
-
-        if(menu.getItemsCount() > 0) {
-            menu.open()
-        }
-    }
-
-    setPopulatePopupMenuBlock(block) {
-        this.populatePopupMenuBlock = block
-    }
-
-    getPopulatePopupMenuBlock(block) {
-        return this.populatePopupMenuBlock
-    }
-
-    populatePopupMenu({menu: menuView}) {
-        if(this.populatePopupMenuBlock === undefined) return
-
-        this.populatePopupMenuBlock({menu: menuView, ownerView: this})
-    }
 }
 
-module.exports = AbstractView
+module.exports = Classification.define(GtkView)

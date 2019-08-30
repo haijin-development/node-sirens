@@ -1,39 +1,43 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const Widget = require('../Widget')
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
 const TreeView = require('../../views/TreeView')
 
-class ChoicesTree extends PrimitiveComponent {
+class ChoicesTree {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
+    }
+
     /// Initializing
 
-    initializeProps(props) {
-        super.initializeProps(props)
-
-        if(props.columns === undefined) {
+    initializeProps() {
+        if(this.getProps().columns === undefined) {
             throw Error(`The class ${this.constructor.name} props must defined a .columns property.`)
         }
     }
 
-    initializeModel(props) {
-        super.initializeModel(props)
-
-        if(props.roots !== undefined) {
-            this.getModel().setRoots(props.roots)
-        }
-
-        if(props.setSelectionPath !== undefined) {
-            this.getModel().setSelectionPath(props.setSelectionPath)
-        }
-    }
-
     defaultModel() {
-        return new TreeChoiceModel({
+        const model = TreeChoiceModel.new({
             roots: [],
             getChildrenBlock: () => { return [] }
         })
+
+        if(this.getProps().roots !== undefined) {
+            model.setRoots( this.getProps().roots )
+        }
+
+        if(this.getProps().setSelectionPath !== undefined) {
+            model.setSelectionPath( this.getProps().setSelectionPath )
+        }
+
+        return model
     }
 
     createView() {
-        return new TreeView({
+        return TreeView.new({
             getChildrenBlock: this.getChildrenAt.bind(this),
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this)
@@ -50,9 +54,9 @@ class ChoicesTree extends PrimitiveComponent {
         const selectionIndices = this.getModel().getSelectionIndices()
         const indices = selectionIndices.length == 0 ? [] : [selectionIndices]
 
-        this.view.clearItems()
+        this.getView().clearItems()
 
-        this.view.addItems({
+        this.getView().addItems({
             parentIter: null,
             items: this.getModel().getRoots(),
             index: 0
@@ -74,7 +78,7 @@ class ChoicesTree extends PrimitiveComponent {
     onChoicesChanged() {
         const roots = this.getModel().getRoots()
 
-        this.view.setRoots(roots)
+        this.getView().setRoots(roots)
     }
 
     onSelectedValueChanged() {
@@ -93,12 +97,12 @@ class ChoicesTree extends PrimitiveComponent {
     }
 
     onUserSelectionAction() {
-        if(this.props.onAction === undefined) {
+        if(this.getProps().onAction === undefined) {
             return
         }
 
-        this.props.onAction()
+        this.getProps().onAction()
     }
 }
 
-module.exports = ChoicesTree
+module.exports = Classification.define(ChoicesTree)

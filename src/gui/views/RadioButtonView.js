@@ -1,11 +1,21 @@
-const View = require('./View')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 
-class RadioButtonView extends View {
+class RadioButtonView {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['mainHandle']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['text'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat([ 'text' ])
+        })
     }
 
     /// Initializing
@@ -15,6 +25,10 @@ class RadioButtonView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     setText(text) {
         this.mainHandle.label = text
@@ -35,18 +49,18 @@ class RadioButtonView extends View {
 
     /// Events
 
-    onAddedToParentView(parentView) {
-        const length = parentView.childViews.length
+    subscribeToGUISignals() {
+    }
 
-        const previousRadioButtonView = parentView.childViews[length - 2]
+    onAddedToParentView(parentView) {
+        const length = parentView.getChildViews().length
+
+        const previousRadioButtonView = parentView.getChildViews()[length - 2]
 
         if(previousRadioButtonView !== undefined) {
             this.mainHandle.group = previousRadioButtonView.getMainHandle()
         }
     }
-
-    subscribeToGUISignals(props) {
-    }
 }
 
-module.exports = RadioButtonView
+module.exports = Classification.define(RadioButtonView)

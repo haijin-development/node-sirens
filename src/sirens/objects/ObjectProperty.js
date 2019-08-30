@@ -1,3 +1,4 @@
+const path = require('path')
 const Classification = require('../../o-language/classifications/Classification')
 
 class ObjectProperty {
@@ -182,6 +183,50 @@ class ObjectProperty {
         }
 
         return description
+    }
+
+    icon() {
+        const icon = function() {
+
+            if(this.value === true) {
+                return "true.png"
+            }
+
+            if(this.value === false) {
+                return "false.png"
+            }
+
+            if(this.isUndefined()) {
+                return "undefined.png"
+            }
+
+            if(this.isNull()) {
+                return "null.png"
+            }
+
+            if(this.isNumber()) {
+                return "number.png"
+            }
+
+            if(this.isString()) {
+                return "string.png"
+            }
+
+            if(this.isArray()) {
+                return "array.png"
+            }
+
+            if(this.isFunction()) {
+                return "function.png"
+            }
+
+            if(this.isObject()) {
+                return "object.png"
+            }
+
+        }.call(this)
+
+        return path.resolve( __dirname + '/../../../resources/icons/' + icon)
     }
 }
 

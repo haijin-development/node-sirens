@@ -55,6 +55,13 @@ class ObjectPropertiesComponent {
 
                 this.column({
                     label: '',
+                    getImageBlock: function(instVar) { return instVar.icon() },
+                    imageWidth: 16,
+                    imageHeight: 16,
+                })
+
+                this.column({
+                    label: '',
                     getTextBlock: function(instVar) { return instVar.displayString() },
                 })
 

@@ -14,9 +14,15 @@ class Column {
             this.initialize(props)
         })
 
-        props = Object.assign( props, {type: 'string', label: ''} )
+        props = Object.assign( props, {label: ''} )
 
         this.props = props
+    }
+
+    /// Asking
+
+    isImage() {
+        return this.props.getImageBlock !== undefined
     }
 
     /// Accessing
@@ -26,15 +32,43 @@ class Column {
     }
 
     getType() {
-        return this.props.type
+        if( this.isImage() ) {
+            return 'image'
+        }
+
+        return 'string'
     }
 
-    getDisplayTextOf(item) {
+    getDisplayTextOf(item, errorHandler) {
         if(this.props.getTextBlock === undefined) {
             return item.toString()
         }
 
-        return this.props.getTextBlock(item)
+        const text = this.props.getTextBlock(item)
+
+        if(text === undefined) {
+            errorHandler()
+        }
+
+        return text
+    }
+
+    getImageFileOf(item, errorHandler) {
+        const filename = this.props.getImageBlock(item)
+
+        if(filename === undefined) {
+            errorHandler()
+        }
+
+        return filename
+    }
+
+    getImageWidth() {
+        return this.props.imageWidth
+    }
+
+    getImageHeight() {
+        return this.props.imageHeight
     }
 }
 

@@ -1,3 +1,4 @@
+const path = require('path')
 const Classification = require('../../../src/o-language/classifications/Classification')
 const ComponentClassification = require('../../gui/components/ComponentClassification')
 const Sirens = require('../../Sirens')
@@ -17,6 +18,12 @@ class FunctionsComponent {
         const selectedPropertyValue = this.getModel().getSelectedPropValue()
 
         Sirens.browseObject(selectedPropertyValue)
+    }
+
+    /// Icons
+
+    getPrototypeIcon() {
+        return path.resolve( __dirname + '/../../resources/icons/prototype.png' )
     }
 
     /// Building
@@ -56,6 +63,13 @@ class FunctionsComponent {
 
                     this.handlers({
                         onAction: component.browseSelectedProperty.bind(component),
+                    })
+
+                    this.column({
+                        label: '',
+                        getImageBlock: function(objectProperty) { return objectProperty.icon() },
+                        imageWidth: 16,
+                        imageHeight: 16,
                     })
 
                     this.column({

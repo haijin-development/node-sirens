@@ -1,23 +1,33 @@
+const Classification = require('../../o-language/classifications/Classification')
+const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const View = require('./View')
-const WrapModes = require('./WrapModes')
+const GtkWrapModes = require('./GtkWrapModes')
 const MenuView = require('./MenuView')
 
+class TextView {
+    /// Definition
 
-class TextView extends View {
+    static definition() {
+        this.instanceVariables = ['mainHandle', 'onTextChanged', 'textView']
+        this.assumptions = [GtkWidget]
+    }
+
     /// Styles
 
-    static acceptedStyles() {
-        return super.acceptedStyles().concat(['wrapMode'])
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat(['wrapMode'])
+        })
     }
 
     /// Initializing
 
-    constructor({onTextChanged: onTextChangedBlock})
-    {
-        super()
-
+    initialize({ onTextChanged: onTextChangedBlock }) {
         this.onTextChanged = onTextChangedBlock
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     initializeHandles() {
@@ -31,6 +41,10 @@ class TextView extends View {
     }
 
     /// Accessing
+
+    getMainHandle() {
+        return this.mainHandle
+    }
 
     clearText() {
         this.setText('')
@@ -64,29 +78,31 @@ class TextView extends View {
         this.textView.on('populate-popup', (menuHandle) => {
             const menu = MenuView.newFromGtkWidget(menuHandle)
 
-            this.populatePopupMenu({menu: menu})
+            this.populatePopupMenu({ menu: menu })
         })
 
+        const onTextChanged = this.onTextChanged
+
         this.textView.getBuffer().on('changed', () => {
-            this.onTextChanged(this.getText())
+            onTextChanged( this.getText() )
         })
     }
 
     /// Styles
 
     setWrapMode(mode) {
-        this.textView.setWrapMode(WrapModes[mode])
+        this.textView.setWrapMode(GtkWrapModes[mode])
     }
 
     getWrapMode() {
         const gtkConstant = this.textView.getWrapMode()
 
-        const mode = Object.keys(WrapModes).find( (key) => {
-            return gtkConstant === WrapModes[key]
+        const mode = Object.keys(GtkWrapModes).find( (key) => {
+            return gtkConstant === GtkWrapModes[key]
         })
 
         return mode
     }
 }
 
-module.exports = TextView
+module.exports = Classification.define(TextView)

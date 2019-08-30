@@ -1,7 +1,20 @@
+const path = require('path')
+const Classification = require('../../o-language/classifications/Classification')
+
 class ObjectProperty {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['key', 'value']
+    }
+
     /// Initializing
 
-    constructor({key: key, value: value}) {
+    initialize({ key: key, value: value }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.key = key
         this.value = value
     }
@@ -32,7 +45,7 @@ class ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return new ObjectProperty({
+            return ObjectPropertyClassification.new({
                 key: index,
                 value: item
             })
@@ -51,7 +64,7 @@ class ObjectProperty {
                 continue
             }
 
-            const instVar = new ObjectProperty({
+            const instVar = ObjectPropertyClassification.new({
                 key: key,
                 value: instVarValue
             })
@@ -171,6 +184,52 @@ class ObjectProperty {
 
         return description
     }
+
+    icon() {
+        const icon = function() {
+
+            if(this.value === true) {
+                return "true.png"
+            }
+
+            if(this.value === false) {
+                return "false.png"
+            }
+
+            if(this.isUndefined()) {
+                return "undefined.png"
+            }
+
+            if(this.isNull()) {
+                return "null.png"
+            }
+
+            if(this.isNumber()) {
+                return "number.png"
+            }
+
+            if(this.isString()) {
+                return "string.png"
+            }
+
+            if(this.isArray()) {
+                return "array.png"
+            }
+
+            if(this.isFunction()) {
+                return "function.png"
+            }
+
+            if(this.isObject()) {
+                return "object.png"
+            }
+
+        }.call(this)
+
+        return path.resolve( __dirname + '/../../../resources/icons/' + icon)
+    }
 }
 
-module.exports = ObjectProperty
+const ObjectPropertyClassification = Classification.define(ObjectProperty)
+
+module.exports = ObjectPropertyClassification

@@ -1,3 +1,4 @@
+const Classification = require('../../o-language/classifications/Classification')
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
@@ -6,25 +7,35 @@ const FunctionDefinition = require('../objects/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class StackTraceBrowserModel {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['framesStackModel', 'objectPropertiesTree', 'functionSourceCode']
+    }
+
     /// Initializing
 
-    constructor({framesStack: framesStack, object: object}) {
-        this.framesStackModel = new ChoiceModel({
+    initialize({ framesStack: framesStack, object: object }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.framesStackModel = ChoiceModel.new({
             choices: framesStack
         })
 
-        this.objectPropertiesTree = new TreeChoiceModel({
+        this.objectPropertiesTree = TreeChoiceModel.new({
             roots: this.getRootPropertiesFrom(object),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.functionSourceCode = new ValueModel()
+        this.functionSourceCode = ValueModel.new()
 
         this.connectModels()
     }
 
     getRootPropertiesFrom(object) {
-        const objectProperty = new ObjectProperty({key: null, value: object})
+        const objectProperty = ObjectProperty.new({ key: null, value: object })
 
         return [objectProperty]
     }
@@ -82,4 +93,4 @@ class StackTraceBrowserModel {
     
 }
 
-module.exports = StackTraceBrowserModel
+module.exports = Classification.define(StackTraceBrowserModel)

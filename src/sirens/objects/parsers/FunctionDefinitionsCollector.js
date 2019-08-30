@@ -1,3 +1,4 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('./ParseTreeVisitor')
 const FunctionDefinition = require('../FunctionDefinition')
 const Sirens = require('../../../Sirens')
@@ -5,13 +6,19 @@ const Sirens = require('../../../Sirens')
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
-class FunctionDefinitionsCollector extends ParseTreeVisitor {
+class FunctionDefinitionsCollector {
+    /// Definition
 
-    collectFunctionDefinitionsIn({treeNode: treeNode, sourceFile: sourceFile}) {
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [ParseTreeVisitor]
+    }
+
+    collectFunctionDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
         const functionDeclarations = this.visit(treeNode)
 
         return functionDeclarations.map( (parseNode) => {
-                return new FunctionDefinition({parseNode: parseNode, sourceFile: sourceFile})
+                return FunctionDefinition.new({ parseNode: parseNode, sourceFile: sourceFile })
             })
     }
 
@@ -22,7 +29,9 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
     }
 
     visit(treeNode) {
-        const result = super.visit(treeNode)
+        const result = this.previousClassificationDo( () => {
+            return this.visit(treeNode)
+        })
 
         if( result !== undefined ) {
             return result
@@ -87,4 +96,4 @@ class FunctionDefinitionsCollector extends ParseTreeVisitor {
     }
 }
 
-module.exports = FunctionDefinitionsCollector
+module.exports = Classification.define(FunctionDefinitionsCollector)

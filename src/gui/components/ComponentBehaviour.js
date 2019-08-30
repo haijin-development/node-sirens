@@ -1,85 +1,71 @@
+const Classification = require('../../o-language/classifications/Classification')
 const ValueModel = require('../models/ValueModel')
 
-class AbstractComponent {
-    static open(props = {}) {
-        return this.openOn(props)
-    }
+class ComponentBehaviour {
+    /// Definition
 
-    static openOn(props) {
-        const component = new this(props)
-
-        if( component.isTopMostComponent() ) {
-            component.getMainComponent().open()
-
-            return component
-        }
-
-        const Window = require('./containers/Window')
-
-        const window = new Window()
-
-        window.addComponent(component)
-
-        window.open()
-
-        return component
+    static definition() {
+        this.instanceVariables = ['props', 'components', 'view']
     }
 
     /// Initializing
 
-    constructor(props = {}) {
+    afterInstantiation() {
         this.props = {}
         this.components = []
         this.view = null
-
-        this.build(props)
     }
 
-    initializeProps(props) {
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
         this.props = props
+
+        this.initializeProps()
+
+        this.initializeModel()
+
+        this.initializeView()
+
+        this.initializeEvents()
     }
 
-    initializeModel(props) {
-        if( this.props.model === undefined ) {
-            this.props.model = this.defaultModel()
-        }
+    initializeProps() {
     }
 
-    initializeView(props) {
+    initializeModel() {
+        if( this.getModel() !== undefined ) { return }
+
+        this.setModel( this.defaultModel() )
+    }
+
+    initializeView() {
         this.view = this.createView()
 
-        this.applyViewProps(props)
+        this.applyViewProps()
 
         this.synchronizeViewFromModel()
     }
 
-    initializeEvents(props) {
+    initializeEvents() {
         this.subscribeToModelEvents()
-    }
-
-    build(props) {
-        this.initializeProps(props)
-
-        this.initializeModel(props)
-
-        this.initializeView(props)
-
-        this.initializeEvents(props)
     }
 
     createView() {
         throw Error(`The class ${this.constructor.name} must implement the method ::createView()`)
     }
 
-    applyViewProps(props) {
-        const acceptedStyles = this.view.constructor.acceptedStyles()
+    applyViewProps() {
+        const acceptedStyles = this.view.acceptedStyles()
 
         acceptedStyles.forEach( (style) => {
-            if(props[style] === undefined) {
+            if( this.props[style] === undefined ) {
                 return
             }
 
-            this.applyViewProp(style, props[style])
+            this.applyViewProp( style, this.props[style] )
         })
     }
 
@@ -98,11 +84,19 @@ class AbstractComponent {
     /// Accessing
 
     defaultModel() {
-        return new ValueModel({value: ''})
+        return ValueModel.new({ new: '' })
+    }
+
+    getComponents() {
+        return this.components
     }
 
     getModel() {
         return this.props.model
+    }
+
+    setModel(model) {
+        this.props.model = model
     }
 
     getMainComponent() {
@@ -117,6 +111,10 @@ class AbstractComponent {
         return this.props.id
     }
 
+    getProps() {
+        return this.props
+    }
+
     setProps(props) {
         this.props = Object.assign(this.props, props)
 
@@ -129,7 +127,7 @@ class AbstractComponent {
         for (let i = 0; i < length; i++) {
             const childComponent = this.components[i]
 
-            if(childComponentId == childComponent.props.id) {
+            if(childComponentId == childComponent.getProps().id) {
                 return childComponent
             }
 
@@ -154,7 +152,7 @@ class AbstractComponent {
     addComponent(component) {
         this.components.push(component)
 
-        this.view.addView(component.view)
+        this.view.addView( component.getView() )
     }
 
     addAllComponents(components) {
@@ -168,7 +166,7 @@ class AbstractComponent {
     subscribeToModelEvents() {
         const model = this.getModel()
 
-        if(model && model.constructor.name == 'ValueModel') {
+        if( model && model.isBehavingAs(ValueModel) ) {
             model.on('value-changed', this.onValueChanged.bind(this))
         }
     }
@@ -184,4 +182,4 @@ class AbstractComponent {
 
 }
 
-module.exports = AbstractComponent
+module.exports = Classification.define(ComponentBehaviour)

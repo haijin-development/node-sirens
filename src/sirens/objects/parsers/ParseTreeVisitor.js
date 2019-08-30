@@ -1,9 +1,15 @@
+const Classification = require('../../../o-language/classifications/Classification')
 const Sirens = require('../../../Sirens')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
 class ParseTreeVisitor {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+    }
 
     /// Visiting
 
@@ -70,4 +76,4 @@ class ParseTreeVisitor {
     }
 }
 
-module.exports = ParseTreeVisitor
+module.exports = Classification.define(ParseTreeVisitor)

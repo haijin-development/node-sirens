@@ -1,11 +1,25 @@
-const Sirens = require('../Sirens')
+const path = require('path')
+const Classification = require('../../src/o-language/classifications/Classification')
+const ComponentClassification = require('../gui/components/ComponentClassification')
 const Component = require('../gui/components/Component')
+const Sirens = require('../Sirens')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
 const FunctionsComponent = require('./components/FunctionsComponent')
 
-class PrototypeBrowser extends Component {
+class PrototypeBrowser {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Component]
+    }
+
+    /// Initializing
+
     defaultModel() {
-        return new PrototypesBrowserModel(this.props.prototype)
+        const object = this.getProps().prototype
+
+        return PrototypesBrowserModel.new({ object: object })
     }
 
     /// Actions
@@ -18,8 +32,8 @@ class PrototypeBrowser extends Component {
 
     /// Icons
 
-    getImageFor(object) {
-        return 'resources/icons/array.png'
+    getPrototypeIcon() {
+        return path.resolve( __dirname + '/../../resources/icons/prototype.png' )
     }
 
     /// Building
@@ -27,43 +41,49 @@ class PrototypeBrowser extends Component {
     renderWith(builder) {
         const prototypesModel = this.getModel()
 
-        builder.render(function (component) {
-            this.window(() => {
+        builder.render( function(component) {
+            this.window( function() {
                 this.styles({
                     title: 'Prototypes Browser',
                     width: 500,
                     height: 400,
                 })
 
-                this.verticalSplitter( () => {
-                    this.horizontalSplitter(() => {
+                this.verticalSplitter( function() {
+
+                    this.horizontalSplitter( function() {
                         this.styles({
                             splitProportion: 2.0/3.0,
                         })
 
-                        this.listChoice((list) => {
-                            list.model(prototypesModel.getPrototypesModel())
+                        this.listChoice( function() {
+                            this.model( prototypesModel.getPrototypesModel() )
 
-                            list.styles({
+                            this.styles({
                                 splitProportion: 1.0/4.0,
                             })
 
-                            list.handlers({
+                            this.handlers({
                                 onAction: component.browseSelectedPrototype.bind(component),
                             })
 
-                            list.column({
-                                label: 'Prototypes',
-                                getTextBlock: (object) => {
-                                    return object.constructor.name
-                                },
+                            this.column({
+                                label: '',
+                                getImageBlock: function(object) { return component.getPrototypeIcon() },
+                                imageWidth: 16,
+                                imageHeight: 16,
                             })
 
-                            list.popupMenu(({menu: menu, ownerView: ownerView}) => {
+                            this.column({
+                                label: 'Prototypes',
+                                getTextBlock: function(object) { return object.constructor.name },
+                            })
+
+                            this.popupMenu( function() {
                                 const selectedObject =
                                     component.getModel().getSelectedPrototype()
 
-                                menu.addItem({
+                                this.item({
                                     label: 'Browse it',
                                     enabled: selectedObject !== undefined,
                                     action: component.browseSelectedPrototype.bind(component),
@@ -73,7 +93,7 @@ class PrototypeBrowser extends Component {
                         })
 
                         this.component(
-                            new FunctionsComponent({
+                            FunctionsComponent.new({
                                 model: prototypesModel,
                                 splitProportion: 3.0/4.0,
                             })
@@ -89,4 +109,7 @@ class PrototypeBrowser extends Component {
         })
     }
 }
-module.exports = PrototypeBrowser
+
+
+module.exports = Classification.define(PrototypeBrowser)
+                    .behaveAs(ComponentClassification)

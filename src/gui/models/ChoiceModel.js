@@ -1,15 +1,23 @@
-const EventEmitter = require('events')
+const Classification = require('../../o-language/classifications/Classification')
 const ListModel = require('./ListModel')
 const ValueModel = require('./ValueModel')
 
-class ChoiceModel extends EventEmitter {
+class ChoiceModel {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['listModel', 'selectionModel']
+    }
+
     /// Initializing
 
-    constructor({choices: choices, selection: selection} = {choices: [], selection: null}) {
-        super()
+    initialize({ choices: choices, selection: selection } = { choices: [], selection: null }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
-        this.listModel = new ListModel()
-        this.selectionModel = new ValueModel()
+        this.listModel = ListModel.new()
+        this.selectionModel = ValueModel.new()
 
         this.listModel.setList(choices)
         this.selectionModel.setValue(selection)
@@ -48,4 +56,4 @@ class ChoiceModel extends EventEmitter {
     }
 }
 
-module.exports = ChoiceModel
+module.exports = Classification.define(ChoiceModel)

@@ -1,10 +1,20 @@
-const EventEmitter = require('events')
+const Classification = require('../../o-language/classifications/Classification')
+const Model = require('./Model')
 
-class ListModel extends EventEmitter {
+class ListModel {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['list']
+        this.assumptions = [Model]
+    }
+
     /// Initializing
 
-    constructor({list: list} = {list: []}) {
-        super()
+    initialize({ list: list } = { list: [] }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         this.list = list
     }
@@ -128,4 +138,4 @@ class ListModel extends EventEmitter {
     }
 }
 
-module.exports = ListModel
+module.exports = Classification.define(ListModel)

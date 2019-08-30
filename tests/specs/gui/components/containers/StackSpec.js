@@ -1,43 +1,44 @@
 const expect = require('chai').expect
 const Stack = require('../../../../../src/gui/components/containers/Stack')
 const Label = require('../../../../../src/gui/components/widgets/Label')
+const LabelView = require('../../../../../src/gui/views/LabelView')
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {
         it('instantiates an empty one', () => {
-            const stack = new Stack()
+            const stack = Stack.new()
 
-            expect(stack.components) .to .eql([])
+            expect(stack.getComponents()) .to .eql([])
         })
 
         it('adds sub-components', () => {
-            const stack = new Stack({orientation: 'horizontal'})
+            const stack = Stack.new({ orientation: 'horizontal' })
 
-            stack.addComponent(new Label())
-            stack.addComponent(new Label())
+            stack.addComponent(Label.new())
+            stack.addComponent(Label.new())
 
-            expect(stack.components.length) .to .eql(2)
-            expect(stack.components[0].getView().constructor.name) .to .eql('LabelView')
-            expect(stack.components[1].getView().constructor.name) .to .eql('LabelView')
+            expect( stack.getComponents().length ) .to .eql(2)
+            expect( stack.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( stack.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 
     describe('vertical', () => {
         it('instantiates an empty one', () => {
-            const stack = new Stack()
+            const stack = Stack.new()
 
-            expect(stack.components) .to .eql([])
+            expect(stack.getComponents()) .to .eql([])
         })
 
         it('adds sub-components', () => {
-            const stack = new Stack({orientation: 'vertical'})
+            const stack = Stack.new({orientation: 'vertical'})
 
-            stack.addComponent(new Label())
-            stack.addComponent(new Label())
+            stack.addComponent(Label.new())
+            stack.addComponent(Label.new())
 
-            expect(stack.components.length) .to .eql(2)
-            expect(stack.components[0].getView().constructor.name) .to .eql('LabelView')
-            expect(stack.components[1].getView().constructor.name) .to .eql('LabelView')
+            expect( stack.getComponents().length ) .to .eql(2)
+            expect( stack.getComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( stack.getComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
     })
 })

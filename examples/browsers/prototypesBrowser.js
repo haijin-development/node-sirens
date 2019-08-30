@@ -1,20 +1,5 @@
 const Sirens = require('../../src/Sirens')
 
-object = {
-    names: ['Lisa'],
-    lastNames: ['Simpson'],
-    addresses: [
-        {
-            streetName: 'Evergreen',
-            number: 742
-        }
-    ],
-
-    getStreetName: () => {
-        return this.streetName
-    },
-}
-
 class Object {
 }
 

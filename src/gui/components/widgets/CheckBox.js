@@ -1,36 +1,40 @@
-const PrimitiveComponent = require('../PrimitiveComponent')
+const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
+const Widget = require('../Widget')
 const ValueModel = require('../../models/ValueModel')
 const CheckBoxView = require('../../views/CheckBoxView')
 
-class CheckBox extends PrimitiveComponent {
-    /// Initializing
+class CheckBox {
+    /// Definition
 
-    initializeModel(props) {
-        super.initializeModel(props)
-
-        if(props.value !== undefined) {
-            this.getModel().setValue(props.value)
-        }
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [Widget]
     }
 
+    /// Initializing
+
     createView() {
-        return new CheckBoxView({
+        return CheckBoxView.new({
             onClicked: this.onClicked.bind(this)
         })
     }
 
     defaultModel() {
-        return new ValueModel({value: false})
+        const value = this.getProps().value !== undefined ? 
+                        this.getProps().value : false
+
+        return ValueModel.new({ value: value })
     }
 
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const text = this.props.label
+        const text = this.getProps().label
         const value = this.getModel().getValue()
 
-        this.view.setText(text)
-        this.view.setValue(value)
+        this.getView().setText(text)
+        this.getView().setValue(value)
     }
 
     /// Events
@@ -40,8 +44,10 @@ class CheckBox extends PrimitiveComponent {
     }
 
     onClicked() {
-        this.getModel().setValue( this.getView().getValue() )
+        this.duringClassificationDo( UpdatingModel, () => {
+            this.getModel().setValue( this.getView().getValue() )
+        })
     }
 }
 
-module.exports = CheckBox
+module.exports = Classification.define(CheckBox)

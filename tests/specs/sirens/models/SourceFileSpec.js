@@ -27,9 +27,9 @@ const filename = 'tests/samples/index.js'
 
 const absentFilename = 'tests/samples/absentFile.js'
 
-const sourceFile = new SourceFile({ filepath: filename })
+const sourceFile = SourceFile.new({ filepath: filename })
 
-const absentSourceFile = new SourceFile({ filepath: absentFilename })
+const absentSourceFile = SourceFile.new({ filepath: absentFilename })
 
 describe('When using a SourceFile', () => {
     it('gets the file path', () => {

@@ -1,3 +1,4 @@
+const Classification = require('../../o-language/classifications/Classification')
 const path = require('path')
 const fs = require('fs')
 const esprima = require('esprima')
@@ -11,9 +12,19 @@ const Sirens = require('../../Sirens')
  * A source file to query javascript definitions.
  */
 class SourceFile {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['filepath', 'parseTree']
+    }
+
     /// Initializing
 
-    constructor({filepath: filepath}) {
+    initialize({ filepath: filepath }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.filepath = path.resolve(filepath)
         this.parseTree = undefined
     }
@@ -44,7 +55,7 @@ class SourceFile {
      * Returns all the class definitions in the file.
      */
     getClassDefinitions() {
-        const collector = new ClassDefinitionsCollector()
+        const collector = ClassDefinitionsCollector.new()
 
         return collector.collectClassDefinitionsIn( this.getParsedContents() )
     }
@@ -55,7 +66,7 @@ class SourceFile {
      * The functions may be defined in any scope, not just the top most module scope.
      */
     getFunctionDefinitions() {
-        const collector = new FunctionDefinitionsCollector()
+        const collector = FunctionDefinitionsCollector.new()
 
         return collector.collectFunctionDefinitionsIn({
             treeNode: this.getParsedContents(),
@@ -70,7 +81,7 @@ class SourceFile {
     }
 
     newAbsentFunctionDefinitionAt(line, column) {
-        return new AbsentFunctionDefinition({
+        return AbsentFunctionDefinition.new({
                 sourceFile: this,
                 line: line,
                 column: column
@@ -179,4 +190,4 @@ class SourceFile {
     }
 }
 
-module.exports = SourceFile
+module.exports = Classification.define(SourceFile)

@@ -1,26 +1,76 @@
+const Classification = require('../../o-language/classifications/Classification')
+
 class Column {
-    constructor(props) {
-        this.props = Object.assign(
-            {type: 'string', label: '',},
-            props
-        )
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['props']
     }
+
+    /// Initializing
+
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
+        props = Object.assign( props, {label: ''} )
+
+        this.props = props
+    }
+
+    /// Asking
+
+    isImage() {
+        return this.props.getImageBlock !== undefined
+    }
+
+    /// Accessing
 
     getLabel() {
         return this.props.label
     }
 
     getType() {
-        return this.props.type
+        if( this.isImage() ) {
+            return 'image'
+        }
+
+        return 'string'
     }
 
-    getDisplayTextOf(item) {
+    getDisplayTextOf(item, errorHandler) {
         if(this.props.getTextBlock === undefined) {
             return item.toString()
         }
 
-        return this.props.getTextBlock(item)
+        const text = this.props.getTextBlock(item)
+
+        if(text === undefined) {
+            errorHandler()
+        }
+
+        return text
+    }
+
+    getImageFileOf(item, errorHandler) {
+        const filename = this.props.getImageBlock(item)
+
+        if(filename === undefined) {
+            errorHandler()
+        }
+
+        return filename
+    }
+
+    getImageWidth() {
+        return this.props.imageWidth
+    }
+
+    getImageHeight() {
+        return this.props.imageHeight
     }
 }
 
-module.exports = Column
+
+module.exports = Classification.define(Column)

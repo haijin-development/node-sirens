@@ -1,10 +1,20 @@
-const EventEmitter = require('events')
+const Classification = require('../../o-language/classifications/Classification')
+const Model = require('./Model')
 
-class VirtualTreeModel extends EventEmitter {
+class VirtualTreeModel {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['getChildrenBlock', 'roots']
+        this.assumptions = [Model]
+    }
+
     /// Initializing
 
-    constructor({roots: roots, getChildrenBlock: getChildrenBlock}) {
-        super()
+    initialize({ roots: roots, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
 
         if(getChildrenBlock === undefined) {
             throw new Error(
@@ -20,14 +30,14 @@ class VirtualTreeModel extends EventEmitter {
     }
 
     newTreeNodeOn(item) {
-        return new TreeNode({value: item, getChildrenBlock: this.getChildrenBlock})
+        return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
     }
 
     /// Accessing
 
     getRoots() {
         return this.roots.map((node) => {
-            return node.value
+            return node.getValue()
         })
     }
 
@@ -54,7 +64,7 @@ class VirtualTreeModel extends EventEmitter {
     }
 
     getItemAt(path) {
-        return this.getNodeAt(path).value
+        return this.getNodeAt(path).getValue()
     }
 
     getChildrenAt(path) {
@@ -72,12 +82,12 @@ class VirtualTreeModel extends EventEmitter {
 
         objectsHierarchy.forEach((each_object) => {
             const index = objects.findIndex((node) => {
-                return node.value == each_object
+                return node.getValue() == each_object
             })
 
             path.push(index)
 
-            objects = objects[index].children
+            objects = objects[index].getChildren()
         })
 
         return path
@@ -99,36 +109,32 @@ class VirtualTreeModel extends EventEmitter {
         path.forEach((index) => {
             const node = nodes[index]
 
-            hierarchy.push(node.value)
+            hierarchy.push(node.getValue())
 
-            nodes = node.children
+            nodes = node.getChildren()
         })
 
         return hierarchy
     }
 }
 
-/// Announcements
-
-class TreeChanged {
-    constructor({newRoots: newRoots, oldRoots: oldRoots}) {
-        this.newRoots = newRoots
-        this.oldRoots = oldRoots
-    }
-}
-
 // Tree node class
 
-let index = 0;
+const TreeNodeClassification = Classification.define( class TreeNode {
+    /// Definition
 
-class TreeNode {
-    constructor({value: value, getChildrenBlock: getChildrenBlock}) {
+    static definition() {
+        this.instanceVariables = ['value', 'children', 'getChildrenBlock']
+    }
+
+    initialize({ value: value, getChildrenBlock: getChildrenBlock }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
         this.value = value
         this.children = undefined
         this.getChildrenBlock = getChildrenBlock
-        this.index = index
-
-        index += 1
     }
 
     getValue() {
@@ -153,9 +159,9 @@ class TreeNode {
 
     _getChildNodes() {
         return this._getChildItems().map( (item) => {
-            return new TreeNode({value: item, getChildrenBlock: this.getChildrenBlock})
+            return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
         })
     }
-}
+})
 
-module.exports = VirtualTreeModel
+module.exports = Classification.define(VirtualTreeModel)

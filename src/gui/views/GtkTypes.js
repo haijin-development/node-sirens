@@ -1,10 +1,9 @@
 const GObject = require('node-gtk').require('GObject')
 const Gtk = require('node-gtk').require('Gtk')
 
-const Types = {
-    number: GObject.typeFromName('gfloat'),
+const GtkTypes = {
     string: GObject.typeFromName('gchararray'),
-    image: Gtk.ImageType.PIXBUF,
+    image: GObject.typeFromName('GdkPixbuf'),
 }
 
-module.exports = Types
+module.exports = GtkTypes

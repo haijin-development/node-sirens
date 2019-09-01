@@ -73,7 +73,7 @@ class MenuViewBuilder {
      * Downcast a GtkWidget handle to a Gtk.Menu handle.
      *
      * Actually we just copy and bind the functions that the MenuView uses from a Gtk.Menu to the given
-     * gtkWidget. Don't know if there is a cleaner way to do it.
+     * gtkWidget.
      */
     castGtkWidgetToGtkMenu(gtkWidget) {
         Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
@@ -91,10 +91,7 @@ class MenuViewBuilder {
     }
 }
 
-const menuViewBuilder = Classification.define(MenuViewBuilder)
+MenuView = Classification.define(MenuView)
+            .behaveAs( Classification.define(MenuViewBuilder) )
 
-
-const menuView = Classification.define(MenuView)
-                    .behaveAs( menuViewBuilder )
-
-module.exports = menuView
+module.exports = MenuView

@@ -45,7 +45,7 @@ class ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return ObjectPropertyClassification.new({
+            return this.thisClassification().new({
                 key: index,
                 value: item
             })
@@ -64,7 +64,7 @@ class ObjectProperty {
                 continue
             }
 
-            const instVar = ObjectPropertyClassification.new({
+            const instVar = this.thisClassification().new({
                 key: key,
                 value: instVarValue
             })
@@ -230,6 +230,4 @@ class ObjectProperty {
     }
 }
 
-const ObjectPropertyClassification = Classification.define(ObjectProperty)
-
-module.exports = ObjectPropertyClassification
+module.exports = Classification.define(ObjectProperty)

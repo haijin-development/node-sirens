@@ -23,7 +23,7 @@ class CustomComponent {
 
                 this.textButton({
                     text: 'A text button',
-                    onClicked: () => { console.log('clicked') },
+                    onClicked: () => { console.info('clicked') },
                 })
             })
         })

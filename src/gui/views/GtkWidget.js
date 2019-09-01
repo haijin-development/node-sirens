@@ -55,10 +55,6 @@ class GtkWidget {
     getMainView() {
         return this
     }
-
-    isTopMostView() {
-        return false
-    }
 }
 
 module.exports = Classification.define(GtkWidget)

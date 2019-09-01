@@ -45,9 +45,7 @@ class ComponentView {
     addView(childView) {
         this.getChildViews().push(childView)
 
-        if(!childView.isTopMostView()) {
-            this.onViewAdded(childView)
-        }
+        this.onViewAdded(childView)
     }
 
     /// Events

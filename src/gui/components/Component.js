@@ -47,12 +47,6 @@ class Component {
 
         return this.getComponents()[0].getMainComponent()
     }
-
-    /// Asking
-
-    isTopMostComponent() {
-        return this.getMainComponent().isTopMostComponent()
-    }
 }
 
 module.exports = Classification.define(Component)

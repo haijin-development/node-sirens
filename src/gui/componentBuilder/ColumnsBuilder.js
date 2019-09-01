@@ -1,7 +1,15 @@
 const Classification = require('../../o-language/classifications/Classification')
+const WidgetBuilder = require('./WidgetBuilder')
 const Column = require('./Column')
 
 class ColumnsBuilder {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = [WidgetBuilder]
+    }
+
     /// Initializing
 
     afterInstantiation() {

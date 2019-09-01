@@ -141,12 +141,6 @@ class ComponentBehaviour {
         return null
     }
 
-    /// Asking
-
-    isTopMostComponent() {
-        return false
-    }
-
     /// Sub-components
 
     addComponent(component) {

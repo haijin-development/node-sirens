@@ -18,16 +18,6 @@ class Stack {
 
     synchronizeViewFromModel() {
     }
-
-    addComponent(component) {
-        component.getView().packExpand = component.getProps().packExpand
-        component.getView().packFill = component.getProps().packFill
-        component.getView().packPadding = component.getProps().packPadding
-
-        this.previousClassificationDo( () => {
-            this.addComponent( component )
-        })
-    }
 }
 
 module.exports = Classification.define(Stack)

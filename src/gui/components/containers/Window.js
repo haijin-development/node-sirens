@@ -23,12 +23,6 @@ class Window {
     open() {
         this.getView().open()
     }
-
-    /// Asking
-
-    isTopMostComponent() {
-        return true
-    }
 }
 
 module.exports = Classification.define(Window)

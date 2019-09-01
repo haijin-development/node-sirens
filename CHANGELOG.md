@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.6.0 (unreleased)
+
+### Sirens
+
+- Updated README.md
+- Rewrote StackView packExpand and packFill using viewCustomAttributes
+
+### gui
+
+- Implemented MenuBar
+- Added viewCustomAttributes to GtkView classification
+- Implemented FileChooser dialog
+
+### O language
+
+
 ## v0.5.0
 
 ### Sirens

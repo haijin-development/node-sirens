@@ -39,6 +39,8 @@ Sirens.browsePrototypes(object)
 Open a browser on the stack call with
 
 ```javascript
+const Sirens = require('sirens')
+
 Sirens.browseStack(arguments)
 ```
 

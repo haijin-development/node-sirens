@@ -9,7 +9,7 @@ class GtkView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childViews']
+        this.instanceVariables = ['childViews', 'viewCustomAttributes']
     }
 
     /// Styles
@@ -18,7 +18,8 @@ class GtkView {
         return [
             'width', 'height',
             'backgroundColor', 'foregroundColor',
-            'populatePopupMenuBlock'
+            'populatePopupMenuBlock',
+            'viewCustomAttributes'
         ]
     }
 
@@ -26,6 +27,7 @@ class GtkView {
 
     afterInstantiation() {
         this.childViews = []
+        this.viewCustomAttributes = []
     }
 
     addView(childView) {
@@ -86,6 +88,22 @@ class GtkView {
 
     getHeight(value) {
         return this.getMainHandle().getSizeRequest().height
+    }
+
+    /// View custom attributes
+
+    setViewCustomAttributes(value) {
+        this.viewCustomAttributes = value
+    }
+
+    getViewCustomAttributes() {
+        return this.viewCustomAttributes
+    }
+
+    getViewCustomAttribute({ at: attributeName, ifAbsent: absentValue }) {
+        const value = this.viewCustomAttributes[attributeName]
+
+        return value !== undefined ? value : absentValue
     }
 }
 

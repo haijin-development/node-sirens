@@ -1,5 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ColumnsBuilder = require('./ColumnsBuilder')
+const MenuBuilder = require('./MenuBuilder')
 const Window = require('../components/containers/Window')
 const Stack = require('../components/containers/Stack')
 const Splitter = require('../components/containers/Splitter')
@@ -45,7 +46,7 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -62,7 +63,7 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -81,7 +82,7 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -100,7 +101,7 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -119,7 +120,7 @@ class ContainerWidgetBuilder {
             props = {}
         }
 
-        const builder = ContainerWidgetBuilderClassification.new(props).yourself( (builder) => {
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
@@ -240,8 +241,17 @@ class ContainerWidgetBuilder {
 
         this.childComponents.push(text)
     }
+
+    menuBar(props, closure) {
+        if (typeof (props) == 'function') {
+            closure = props
+            props = {}
+        }
+
+        const menuBar = MenuBuilder.new(props).createFromClosure(closure)
+
+        this.childComponents.push(menuBar)
+    }
 }
 
-const ContainerWidgetBuilderClassification = Classification.define(ContainerWidgetBuilder)
-
-module.exports = ContainerWidgetBuilderClassification
+module.exports = Classification.define(ContainerWidgetBuilder)

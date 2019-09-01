@@ -36,25 +36,33 @@ class FunctionsComponent {
 
                 this.horizontalStack( function() {
                     this.styles({
-                        packExpand: false,
+                        viewCustomAttributes: {
+                            packExpand: false,
+                        },
                     })
 
                     this.checkBox({
-                        label: 'Show inherited',
-                        packExpand: false,
                         model: prototypesModel.getShowInheritedModel(),
+                        label: 'Show inherited',
+                        viewCustomAttributes: {
+                            packExpand: false,
+                        },
                     })
 
                     this.checkBox({
-                        label: 'Show functions',
-                        packExpand: false,
                         model: prototypesModel.getShowFunctionsModel(),
+                        label: 'Show functions',
+                        viewCustomAttributes: {
+                            packExpand: false,
+                        },
                     })
 
                     this.checkBox({
-                        label: 'Show props',
-                        packExpand: false,
                         model: prototypesModel.getShowPropsModel(),
+                        label: 'Show props',
+                        viewCustomAttributes: {
+                            packExpand: false,
+                        },
                     })
                 })
 

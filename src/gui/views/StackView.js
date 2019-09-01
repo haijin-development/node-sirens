@@ -34,11 +34,11 @@ class StackView {
     }
 
     onViewAdded(childView) {
-        const childHandles = childView.getChildHandles()
+        const packExpand = childView.getViewCustomAttribute({ at: 'packExpand', ifAbsent: true })
+        const packFill = childView.getViewCustomAttribute({ at: 'packFill', ifAbsent: true })
+        const packPadding = childView.getViewCustomAttribute({ at: 'packPadding', ifAbsent: 0 })
 
-        const packExpand = childView.packExpand !== undefined ? childView.packExpand : true
-        const packFill = childView.packFill !== undefined ? childView.packFill : true
-        const packPadding = childView.packPadding !== undefined ? childView.packPadding : 0
+        const childHandles = childView.getChildHandles()
 
         childHandles.forEach( (childHandle) => {
             this.mainHandle.packStart(

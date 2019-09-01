@@ -49,12 +49,6 @@ class WindowView {
     subscribeToGUISignals() {
     }
 
-    /// Asking
-
-    isTopMostView() {
-        return true
-    }
-
     /// Styles
 
     setTitle(value) {

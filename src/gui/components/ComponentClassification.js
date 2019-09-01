@@ -9,21 +9,9 @@ class ComponentClassification {
 
     openOn(props) {
         return this.new(props).yourself( (component) => {
+            component.getMainComponent().open()
 
-            if( component.isTopMostComponent() ) {
-                component.getMainComponent().open()
-
-                return component
-            }
-
-            const Window = require('./containers/Window')
-
-            const window = Window.new()
-
-            window.addComponent( component )
-
-            window.open()
-
+            return component
         })
     }
 }

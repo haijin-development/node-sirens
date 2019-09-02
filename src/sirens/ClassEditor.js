@@ -1,8 +1,7 @@
-const Classification = require('../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../gui/components/ComponentClassification')
+const ComponentInstantiator = require('../gui/components/ComponentInstantiator')
 const Component = require('../gui/components/Component')
-const Sirens = require('../Sirens')
 const ClassEditorModel = require('./models/ClassEditorModel')
+const ClassEditorMenuBar = require('./components/ClassEditorMenuBar')
 
 class ClassEditor {
     /// Definition
@@ -26,7 +25,7 @@ class ClassEditor {
     /// Building
 
     renderWith(builder) {
-        const browserModel = this.getModel()
+        const model = this.getModel()
 
         builder.render( function(component) {
             this.window( function() {
@@ -35,10 +34,15 @@ class ClassEditor {
                     width: 400,
                     height: 400,
                 })
+
+                this.verticalStack( function() {
+                    this.component(
+                        ClassEditorMenuBar.new({ model: model, parentComponent: component })
+                    )
+                })
             })
         })
     }
 }
 
-module.exports = Classification.define(ClassEditor)
-                    .behaveAs(ComponentClassification)
+module.exports = ComponentInstantiator.define(ClassEditor)

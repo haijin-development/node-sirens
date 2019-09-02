@@ -1,5 +1,4 @@
-const Classification = require('../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../gui/components/ComponentClassification')
+const ComponentInstantiator = require('../gui/components/ComponentInstantiator')
 const Component = require('../gui/components/Component')
 const Sirens = require('../Sirens')
 const ObjectBrowserModel = require('./models/ObjectBrowserModel')
@@ -109,5 +108,4 @@ class ObjectBrowser {
     }
 }
 
-module.exports = Classification.define(ObjectBrowser)
-                    .behaveAs(ComponentClassification)
+module.exports = ComponentInstantiator.define(ObjectBrowser)

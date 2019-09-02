@@ -15,6 +15,7 @@
 
 ### O language
 
+- The method #define works with any classification object, not just Classification.
 
 ## v0.5.0
 

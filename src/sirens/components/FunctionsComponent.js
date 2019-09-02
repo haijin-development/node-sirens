@@ -1,6 +1,5 @@
 const path = require('path')
 const Classification = require('../../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../../gui/components/ComponentClassification')
 const Sirens = require('../../Sirens')
 const Component = require('../../gui/components/Component')
 

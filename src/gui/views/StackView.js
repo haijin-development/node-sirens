@@ -34,6 +34,8 @@ class StackView {
     }
 
     onViewAdded(childView) {
+        childView = childView.getMainView()
+
         const packExpand = childView.getViewCustomAttribute({ at: 'packExpand', ifAbsent: true })
         const packFill = childView.getViewCustomAttribute({ at: 'packFill', ifAbsent: true })
         const packPadding = childView.getViewCustomAttribute({ at: 'packPadding', ifAbsent: 0 })

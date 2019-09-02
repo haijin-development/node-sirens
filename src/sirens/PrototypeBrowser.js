@@ -1,6 +1,5 @@
 const path = require('path')
-const Classification = require('../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../gui/components/ComponentClassification')
+const ComponentInstantiator = require('../gui/components/ComponentInstantiator')
 const Component = require('../gui/components/Component')
 const Sirens = require('../Sirens')
 const PrototypesBrowserModel = require('./models/PrototypesBrowserModel')
@@ -111,5 +110,4 @@ class PrototypeBrowser {
 }
 
 
-module.exports = Classification.define(PrototypeBrowser)
-                    .behaveAs(ComponentClassification)
+module.exports = ComponentInstantiator.define(PrototypeBrowser)

@@ -1,6 +1,13 @@
 const Classification = require('../../o-language/classifications/Classification')
 
-class ComponentClassification {
+class ComponentInstantiator {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumptions = []
+    }
+
     /// Instantiating
 
     open(props = {}) {
@@ -16,4 +23,4 @@ class ComponentClassification {
     }
 }
 
-module.exports = Classification.define(ComponentClassification)
+module.exports = Classification.define(ComponentInstantiator)

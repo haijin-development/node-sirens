@@ -47,6 +47,12 @@ class Component {
 
         return this.getComponents()[0].getMainComponent()
     }
+
+    /// Opening
+
+    open() {
+        return this.getMainComponent().open()
+    }
 }
 
 module.exports = Classification.define(Component)

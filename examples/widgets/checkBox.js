@@ -1,7 +1,6 @@
 const Sirens = require('../../src/Sirens')
-const Classification = require('../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../../src/gui/components/ComponentClassification')
 const Component = require('../../src/gui/components/Component')
+const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
 
 class CustomComponent {
     /// Definition
@@ -25,12 +24,11 @@ class CustomComponent {
             })
         })
     }
+
 }
 
-const customComponent = Classification.define(CustomComponent)
-
-customComponent.behaveAs( ComponentClassification )
+CustomComponent = ComponentInstantiator.define(CustomComponent)
 
 Sirens.do( () => {
-    customComponent.open()
+    CustomComponent.open()
 })

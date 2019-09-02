@@ -718,7 +718,13 @@ class Classification {
     /// Creating classifications
 
     define(classificationDefinition) {
-        return MessageDispatcherInstance.createClassification(classificationDefinition)
+        const classificationInstance = MessageDispatcherInstance.createClassification(classificationDefinition)
+
+        // If this object is different than the Classification object make the object created
+        // to adquire the behaviour of this object
+        classificationInstance.behaveAs(this)
+
+        return classificationInstance
     }
 
     /// Definition

@@ -13,6 +13,7 @@ class ListView {
         this.instanceVariables = [
             'mainHandle', 'listStore', 'treeView', 'columns',
             'onSelectionChanged', 'onSelectionAction',
+            'allowSelectionChange',
         ]
 
         this.assumptions = [GtkWidget]
@@ -28,7 +29,11 @@ class ListView {
 
     /// Initializing
 
-    initialize({ onSelectionChanged: onSelectionChanged, onSelectionAction: onSelectionAction })
+    initialize({
+            onSelectionChanged: onSelectionChanged,
+            onSelectionAction: onSelectionAction,
+            allowSelectionChange: allowSelectionChange,
+        })
     {
         this.previousClassificationDo( () => {
             this.initialize()
@@ -37,6 +42,8 @@ class ListView {
         this.onSelectionChanged = onSelectionChanged
 
         this.onSelectionAction = onSelectionAction
+
+        this.allowSelectionChange = allowSelectionChange
 
         this.columns = []
     }
@@ -63,6 +70,8 @@ class ListView {
         this.listStore.setColumnTypes(listStoreTypes)
 
         this.treeView = new Gtk.TreeView({model: this.listStore})
+
+        this.treeView.getSelection().setSelectFunction( this.onSelectFunction.bind(this) )
 
         columns.forEach( (eachColumn) => {
             this.addColumn(eachColumn)
@@ -302,6 +311,22 @@ class ListView {
         const selectedIndices = this.getSelectionIndices()
 
         this.onSelectionAction(selectedIndices)
+    }
+
+    /*
+     * Note: returning false does not disallow changing the selection.
+     * Leave it as an error for now.
+     */
+    onSelectFunction(treeSelection, treeModel, treePath, pathCurrentlySelected) {
+        if( this.allowSelectionChange === undefined ) {
+            return true
+        }
+
+        const selectedIndices = this.getSelectionIndices()
+
+        const allowed = this.allowSelectionChange({ selectedIndices: selectedIndices })
+
+        return allowed
     }
 
     /// Styles

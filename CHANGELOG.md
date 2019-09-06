@@ -6,16 +6,19 @@
 
 - Updated README.md
 - Rewrote StackView packExpand and packFill using viewCustomAttributes
+- Implemented ClassEditor
 
 ### gui
 
 - Implemented MenuBar
 - Added viewCustomAttributes to GtkView classification
 - Implemented FileChooser dialog
+- Implemented Tab pages
+- Implemented ToolBar
 
 ### O language
 
-- The method #define works with any classification object, not just Classification.
+- The method #define works with any classification object not just with Classification.
 
 ## v0.5.0
 

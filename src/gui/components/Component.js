@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ComponentBehaviour = require('./ComponentBehaviour')
-const ComponentView = require('../views/ComponentView')
+const ComponentView = require('../gtk-views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
 class Component {

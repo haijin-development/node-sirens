@@ -5,8 +5,7 @@ const esprima = require('esprima')
 const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
-const AbsentFunctionDefinition = require('./AbsentFunctionDefinition')
-const Sirens = require('../../Sirens')
+const AbsentFunctionDefinition = require('./js-statements/AbsentFunctionDefinition')
 
 /*
  * A source file to query javascript definitions.
@@ -57,7 +56,10 @@ class SourceFile {
     getClassDefinitions() {
         const collector = ClassDefinitionsCollector.new()
 
-        return collector.collectClassDefinitionsIn( this.getParsedContents() )
+        return collector.collectClassDefinitionsIn({
+            treeNode: this.getParsedContents(),
+            sourceFile: this,
+        })
     }
 
 
@@ -72,6 +74,22 @@ class SourceFile {
             treeNode: this.getParsedContents(),
             sourceFile: this,
         })
+    }
+
+    getAllStatementsBefore({parseNode: parseNode}) {
+        const topMostStatements = this.getParsedContents().body
+
+        const index = topMostStatements.indexOf( parseNode )
+
+        return topMostStatements.slice(0, index)
+    }
+
+    getAllStatementsAfter({parseNode: parseNode}) {
+        const topMostStatements = this.getParsedContents().body
+
+        const index = topMostStatements.indexOf( parseNode )
+
+        return topMostStatements.slice(index + 1)
     }
 
     /// Querying
@@ -137,9 +155,6 @@ class SourceFile {
     getOriginalSourceCode({
         fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn, cr = cr
     }) {
-        /// fromLine and toLine are 1 based whilst slice is 0 based.
-        fromLine = fromLine - 1
-        toLine = toLine - 1
         if( cr === undefined ) {
             cr = "\n"
         }
@@ -147,6 +162,15 @@ class SourceFile {
         const fileContents = this.getFileContents()
 
         const allLines = splitLines(fileContents)
+
+        if( toLine === undefined && toColumn === undefined ) {
+            toLine = allLines.length
+            toColumn = allLines[toLine - 1].length
+        }
+
+        /// fromLine and toLine are 1 based whilst slice is 0 based.
+        fromLine = fromLine - 1
+        toLine = toLine - 1
 
         const firstLine = allLines[fromLine]
 
@@ -161,8 +185,12 @@ class SourceFile {
         let sourceCode = ''
 
         sourceCode += firstLine.slice(fromColumn)
-        sourceCode += cr
-        sourceCode += middleLines.join(cr)
+
+        if( middleLines.length > 0 ) {
+            sourceCode += cr
+            sourceCode += middleLines.join(cr)
+        }
+
         sourceCode += cr
         sourceCode += lastLine.slice(0, toColumn)
 
@@ -186,7 +214,19 @@ class SourceFile {
             jsx: true,
         }
 
-        return esprima.parseModule(string, parsingOptions)
+        try {
+            return esprima.parseModule(string, parsingOptions)
+        } catch(error) {
+            return null
+        }
+    }
+
+    /// Writing
+
+    saveFileContents(newFileContents) {
+        newFileContents = newFileContents.split("\r").join( "\n" )
+
+        fs.writeFileSync( this.filepath, newFileContents )
     }
 }
 

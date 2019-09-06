@@ -1,4 +1,3 @@
-const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const WidgetBuilder = require('./WidgetBuilder')
 const MenuItem = require('../components/menus/MenuItem')
@@ -14,7 +13,11 @@ class MenuGroupBuilder {
 
     /// Initializing
 
-    afterInstantiation() {
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
         this.menuItems = []
     }
 

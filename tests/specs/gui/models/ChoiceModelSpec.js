@@ -13,21 +13,21 @@ describe('When using a ChoiceModel', () => {
         it('has a default ListModel choices and a default ValueModel selection', () => {
             const choice_model = ChoiceModel.new()
 
-            expect( choice_model.getList().isBehavingAs(ListModel) ) .to .be .true
-            expect( choice_model.getValue().isBehavingAs(ValueModel) ) .to .be .true
+            expect( choice_model.getListModel().isBehavingAs(ListModel) ) .to .be .true
+            expect( choice_model.getSelectionModel().isBehavingAs(ValueModel) ) .to .be .true
 
             expect(choice_model.getChoices()) .to .eql([])
-            expect(choice_model.getSelection()) .to .be .null
+            expect(choice_model.getSelectionValue()) .to .be .null
         })
 
         it('its has the given choices and selection', () => {
             const choice_model = ChoiceModel.new({ choices: ['a', 'b', 'c'], selection: 'c' })
 
-            expect( choice_model.getList().isBehavingAs(ListModel) ) .to .be .true
-            expect( choice_model.getValue().isBehavingAs(ValueModel) ) .to .be .true
+            expect( choice_model.getListModel().isBehavingAs(ListModel) ) .to .be .true
+            expect( choice_model.getSelectionModel().isBehavingAs(ValueModel) ) .to .be .true
 
             expect(choice_model.getChoices()) .to .eql(['a', 'b', 'c'])
-            expect(choice_model.getSelection()) .to .eql('c')
+            expect(choice_model.getSelectionValue()) .to .eql('c')
         })
     })
 
@@ -47,9 +47,9 @@ describe('When using a ChoiceModel', () => {
 
             choice_model.setChoices(['a', 'b', 'c'])
 
-            choice_model.setSelection('c')
+            choice_model.setSelectionValue('c')
 
-            expect(choice_model.getSelection()) .to .eql('c')
+            expect(choice_model.getSelectionValue()) .to .eql('c')
         })
     })
 })

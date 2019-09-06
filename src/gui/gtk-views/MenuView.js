@@ -39,7 +39,7 @@ class MenuView {
 
         const menuItemHandle = new Gtk.MenuItem({label: label})
 
-        menuItemHandle.sensitive = enabled
+        menuItemHandle.setSensitive( enabled )
 
         menuItemHandle.on('activate', (props) => {
             action()

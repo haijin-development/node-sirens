@@ -30,11 +30,15 @@ class ListModel {
 
         this.list = newList
 
-        this.emit('list-changed', {oldList: oldList, newList: newList})
+        this.emit('list-changed', { oldList: oldList, newList: newList })
     }
 
-    getIndexOf(item) {
+    getIndexOf({ item: item }) {
         return this.list.indexOf(item)
+    }
+
+    getItemAt({ index: index }) {
+        return this.list[index]
     }
 
     /// Adding
@@ -45,32 +49,32 @@ class ListModel {
         // optimized
         this.list.push(...items)
 
-        this.emit('items-added', {list: this.list, items: items, index: index})
+        this.emit('items-added', { list: this.list, items: items, index: index })
     }
 
     insert(index, ...items) {
         this.list.splice(index, 0, ...items)
 
-        this.emit('items-added', {list: this.list, items: items, index: index})
+        this.emit('items-added', { list: this.list, items: items, index: index })
     }
 
     /// Updating
 
-    update({index: index, item: item, indices: indices, items: items} =
-               {index: undefined, item: undefined, indices: undefined, items: undefined})
+    update({ index: index, item: item, indices: indices, items: items } =
+               { index: undefined, item: undefined, indices: undefined, items: undefined })
     {
-        if(indices === undefined) {
+        if( indices === undefined ) {
             indices = [index]
         }
 
-        if(items === undefined) {
+        if( items === undefined ) {
             items = [item]
         }
 
-        this.updateAll({indices: indices, items: items})
+        this.updateAll({ indices: indices, items: items })
     }
 
-    updateAll({indices: indices, items: items})
+    updateAll({ indices: indices, items: items })
     {
         for (let i = 0; i < items.length; i++) {
             const index = indices[i]
@@ -79,7 +83,7 @@ class ListModel {
             this.list[index] = item
         }
 
-        this.emit('items-updated', {list: this.list, items: items, indices: indices})
+        this.emit('items-updated', { list: this.list, items: items, indices: indices })
     }
 
     /// Removing
@@ -90,7 +94,7 @@ class ListModel {
 
         this.list.splice(index, 1)
 
-        this.emit('items-removed', {list: this.list, items: [item], indices: [index]})
+        this.emit('items-removed', { list: this.list, items: [item], indices: [index] })
     }
 
     removeAll(items) {
@@ -104,11 +108,11 @@ class ListModel {
             this.list.splice(index, 1)
         })
 
-        this.emit('items-removed', {list: this.list, items: removedItems, indices: removedIndices})
+        this.emit('items-removed', { list: this.list, items: removedItems, indices: removedIndices })
     }
 
     removeAt(index) {
-        this.removeAllAt([index])
+        this.removeAllAt( [index] )
     }
 
     removeAllAt(indices) {
@@ -117,12 +121,12 @@ class ListModel {
         const removedIndices = indices.slice().sort().reverse()
 
         removedIndices.forEach( (index) => {
-            removedItems.push(this.list[index])
+            removedItems.push( this.list[index] )
 
-            this.list.splice(index, 1)
+            this.list.splice( index, 1 )
         })
 
-        this.emit('items-removed', {list: this.list, items: removedItems, indices: removedIndices})
+        this.emit('items-removed', { list: this.list, items: removedItems, indices: removedIndices })
     }
 
     indicesOf(items) {

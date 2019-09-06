@@ -1,7 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const WidgetBuilder = require('./WidgetBuilder')
 const MenuGroupBuilder = require('./MenuGroupBuilder')
-const MenuGroup = require('../components/menus/MenuGroup')
 const MenuBar = require('../components/menus/MenuBar')
 
 class MenuBuilder {
@@ -14,7 +13,11 @@ class MenuBuilder {
 
     /// Initializing
 
-    afterInstantiation() {
+    initialize(props = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
         this.menuGroups = []
     }
 
@@ -38,10 +41,7 @@ class MenuBuilder {
 
 
     menuGroup(props, closure) {
-        if (typeof (props) == 'function') {
-            closure = props
-            props = {}
-        }
+        [props, closure] = this.normalizeArguments(props, closure)
 
         const menuGroup = MenuGroupBuilder.new( props ).createFromClosure(closure)
 

@@ -64,6 +64,10 @@ class GtkView {
         return [this.getMainHandle()]
     }
 
+    getChildrenCount() {
+        return this.childViews.length
+    }
+
     /// Styles
 
     setWidth(value) {

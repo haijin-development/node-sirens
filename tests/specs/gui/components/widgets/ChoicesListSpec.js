@@ -11,13 +11,13 @@ describe('When using a ChoicesList', () => {
 
     describe('model', () => {
         it('has a ChoiceModel', () => {
-            expect(this.list.getModel().getSelection()) .to .eql(null)
+            expect(this.list.getModel().getSelectionValue()) .to .eql(null)
             expect(this.list.getModel().getChoices()) .to .eql([])
         })
 
         it('updates the selection when the model selection changes', () => {
             this.list.getModel().setChoices(['a', 'b', 'c'])
-            this.list.getModel().setSelection('c')
+            this.list.getModel().setSelectionValue('c')
 
             expect(this.list.getView().getSelectionIndices()) .to .eql([2])
         })
@@ -31,7 +31,7 @@ describe('When using a ChoicesList', () => {
         it('updates the items when the model adds a choice', () => {
             this.list.getModel().setChoices(['a', 'b', 'c'])
 
-            this.list.getModel().getList().insert(1, 'd', 'e')
+            this.list.getModel().getListModel().insert(1, 'd', 'e')
 
             expect(this.list.getView().getRows()) .to .eql(['a','d', 'e','b','c'])
         })
@@ -39,7 +39,7 @@ describe('When using a ChoicesList', () => {
         it('updates the items when the model updates a choice', () => {
             this.list.getModel().setChoices(['a', 'b', 'c'])
 
-            this.list.getModel().getList().update({indices: [0, 2], items: ['d', 'e']})
+            this.list.getModel().getListModel().update({indices: [0, 2], items: ['d', 'e']})
 
             expect(this.list.getView().getRows()) .to .eql(['d', 'b', 'e'])
         })
@@ -47,7 +47,7 @@ describe('When using a ChoicesList', () => {
         it('updates the items when the model deletes a choice', () => {
             this.list.getModel().setChoices(['a', 'b', 'c'])
 
-            this.list.getModel().getList().removeAll(['a', 'b'])
+            this.list.getModel().getListModel().removeAll(['a', 'b'])
 
             expect(this.list.getView().getRows()) .to .eql(['c'])
         })
@@ -67,7 +67,7 @@ describe('When using a ChoicesList', () => {
                 selection: 'c'
             })
 
-            expect(this.list.getModel().getSelection()) .to .eql('c')
+            expect(this.list.getModel().getSelectionValue()) .to .eql('c')
             expect(this.list.getModel().getChoices()) .to .eql(['a','b','c'])
 
             expect(this.list.getView().getSelectionIndices()) .to .eql([2])

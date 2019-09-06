@@ -25,11 +25,11 @@ class ChoiceModel {
 
     /// Accessing
 
-    getList() {
+    getListModel() {
         return this.listModel
     }
 
-    getValue() {
+    getSelectionModel() {
         return this.selectionModel
     }
 
@@ -37,22 +37,28 @@ class ChoiceModel {
         return this.listModel.getList()
     }
 
-    getSelection() {
-        return this.selectionModel.getValue()
-    }
-
-    getSelectionIndex() {
-        const item = this.getSelection()
-
-        return this.listModel.getIndexOf(item)
-    }
-
     setChoices(newArray) {
         return this.listModel.setList(newArray)
     }
 
-    setSelection(newSelection) {
+    getSelectionValue() {
+        return this.selectionModel.getValue()
+    }
+
+    setSelectionValue(newSelection) {
         return this.selectionModel.setValue(newSelection)
+    }
+
+    getSelectionIndex() {
+        const item = this.getSelectionValue()
+
+        return this.listModel.getIndexOf({ item: item })
+    }
+
+    setSelectionIndex({ index: index }) {
+        const item = this.listModel.getItemAt({ index: index })
+
+        return this.selectionModel.setValue(item)
     }
 }
 

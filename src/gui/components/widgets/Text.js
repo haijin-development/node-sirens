@@ -1,7 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const TextView = require('../../views/TextView')
+const TextView = require('../../gtk-views/TextView')
 const ValueModel = require('../../models/ValueModel')
 
 class Text {

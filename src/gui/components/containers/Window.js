@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const WindowView = require('../../views/WindowView')
+const WindowView = require('../../gtk-views/WindowView')
 
 class Window {
 

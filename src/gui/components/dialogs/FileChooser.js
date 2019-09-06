@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const FileChooserView = require('../../views/FileChooserView')
+const FileChooserView = require('../../gtk-views/FileChooserView')
 
 class FileChooser {
 

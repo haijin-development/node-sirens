@@ -30,11 +30,11 @@ class Sirens {
         })
     }
 
-    static openClassEditor() {
+    static openClassEditor({ filename: __filename } = { filename: undefined }) {
         this.do( () => {
             const ClassEditor = require('./sirens/ClassEditor')
 
-            ClassEditor.open()
+            ClassEditor.openOn({ filename: __filename })
         })
     }
 

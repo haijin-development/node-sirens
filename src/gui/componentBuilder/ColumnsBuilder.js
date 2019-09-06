@@ -12,7 +12,11 @@ class ColumnsBuilder {
 
     /// Initializing
 
-    afterInstantiation() {
+    initialize(props) {
+        this.previousClassificationDo( () => {
+            this.initialize(props)
+        })
+
         this.mergeProps({ columns: [] })
     }
 

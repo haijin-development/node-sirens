@@ -1,10 +1,9 @@
-const fs = require('fs')
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const esprima = require('esprima')
-const Sirens = require('../../../../src/Sirens')
 
-const fileContents = `
+const fileContents = '' +
+`const path = require('path')
+
 class Sample {
     getName() {
         return this.name
@@ -70,49 +69,49 @@ describe('When using a SourceFile', () => {
 
     describe('when searching for a function definition at a file position', () => {
         it('finds the function definition starting at a line and column number', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 4})
+            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 4})
 
             expect(functionDefinition.getFunctionName()) .to .equal('constructor')
         })
 
         it('finds the function definition starting at a line and beyond the column number', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 5})
+            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 5})
 
             expect(functionDefinition.getFunctionName()) .to .equal('constructor')
         })
 
         it('finds the function definition starting before the line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 3})
+            const functionDefinition = sourceFile.getFunctionAt({line: 15, column: 3})
 
             expect(functionDefinition.getFunctionName()) .to .equal('constructor')
         })
 
         it('finds the function definition ending in the line and before the ending column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 15, column: 4})
+            const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 4})
 
             expect(functionDefinition.getFunctionName()) .to .equal('constructor')
         })
 
         it('does not find the function definition in a line before the starting line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 12, column: 1})
+            const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 1})
 
             expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition in the staring line but before the starting column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 3})
+            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 3})
 
             expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition ending in the line but after the ending column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 15, column: 5})
+            const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 5})
 
             expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
 
         it('does not find the function definition ending after the line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 1})
+            const functionDefinition = sourceFile.getFunctionAt({line: 17, column: 1})
 
             expect(functionDefinition.getFunctionName()) .to .equal('Function not found')
         })
@@ -124,9 +123,9 @@ describe('When using a FunctionDefinition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getStartingPosition().line) .to .equal(3)
-        expect(functions[1].getStartingPosition().line) .to .equal(8)
-        expect(functions[2].getStartingPosition().line) .to .equal(13)
+        expect(functions[0].getStartingPosition().line) .to .equal(4)
+        expect(functions[1].getStartingPosition().line) .to .equal(9)
+        expect(functions[2].getStartingPosition().line) .to .equal(14)
     })
 
     it('gets the starting column number of the function definition', () => {
@@ -142,9 +141,9 @@ describe('When using a FunctionDefinition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getEndingPosition().line) .to .equal(5)
-        expect(functions[1].getEndingPosition().line) .to .equal(10)
-        expect(functions[2].getEndingPosition().line) .to .equal(15)
+        expect(functions[0].getEndingPosition().line) .to .equal(6)
+        expect(functions[1].getEndingPosition().line) .to .equal(11)
+        expect(functions[2].getEndingPosition().line) .to .equal(16)
     })
 
     it('gets the ending column number of the function definition', () => {
@@ -160,7 +159,7 @@ describe('When using a FunctionDefinition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        let sourceCode = functions[0].getOriginalSourceCode({cr: "\n"})
+        let sourceCode = functions[0].getSourceCode({cr: "\n"})
 
         const exepctedSourceCode = `getName() {
         return this.name

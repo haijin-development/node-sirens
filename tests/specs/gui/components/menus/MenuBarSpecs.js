@@ -2,8 +2,8 @@ const expect = require('chai').expect
 const MenuBar = require('../../../../../src/gui/components/menus/MenuBar')
 const MenuGroup = require('../../../../../src/gui/components/menus/MenuGroup')
 const MenuItem = require('../../../../../src/gui/components/menus/MenuItem')
-const MenuGroupView = require('../../../../../src/gui/views/MenuGroupView')
-const MenuItemView = require('../../../../../src/gui/views/MenuItemView')
+const MenuGroupView = require('../../../../../src/gui/gtk-views/MenuGroupView')
+const MenuItemView = require('../../../../../src/gui/gtk-views/MenuItemView')
 
 describe('When using a MenuBar', () => {
     it('instantiates an empty one', () => {

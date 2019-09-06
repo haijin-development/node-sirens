@@ -9,13 +9,9 @@ class WidgetBuilder {
 
     /// Initializing
 
-    afterInstantiation() {
-        this.props = {}
-    }
-
     initialize(props = {}) {
         this.previousClassificationDo( () => {
-            this.initialize()
+            this.initialize(props)
         })
 
         this.props = props
@@ -57,6 +53,15 @@ class WidgetBuilder {
         if( closure === undefined ) { return }
 
         closure.call(this, ...params)
+    }
+
+    normalizeArguments(props, closure) {
+        if (typeof (props) == 'function') {
+            closure = props
+            props = {}
+        }
+
+        return [props, closure]
     }
 }
 

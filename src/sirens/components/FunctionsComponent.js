@@ -19,12 +19,6 @@ class FunctionsComponent {
         Sirens.browseObject(selectedPropertyValue)
     }
 
-    /// Icons
-
-    getPrototypeIcon() {
-        return path.resolve( __dirname + '/../../resources/icons/prototype.png' )
-    }
-
     /// Building
 
     renderWith(builder) {

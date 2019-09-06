@@ -1,7 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('./ParseTreeVisitor')
-const FunctionDefinition = require('../FunctionDefinition')
-const Sirens = require('../../../Sirens')
+const FunctionDefinition = require('../js-statements/FunctionDefinition')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.

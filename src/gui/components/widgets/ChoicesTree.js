@@ -1,7 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
-const TreeView = require('../../views/TreeView')
+const TreeView = require('../../gtk-views/TreeView')
 
 class ChoicesTree {
     /// Definition
@@ -71,8 +71,8 @@ class ChoicesTree {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getTree().on('roots-changed', this.onChoicesChanged.bind(this))
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getTreeModel().on('roots-changed', this.onChoicesChanged.bind(this))
+        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
     }
 
     onChoicesChanged() {

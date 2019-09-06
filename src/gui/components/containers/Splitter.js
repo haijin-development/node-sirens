@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const SplitterView = require('../../views/SplitterView')
+const SplitterView = require('../../gtk-views/SplitterView')
 
 class Splitter {
     /// Definition

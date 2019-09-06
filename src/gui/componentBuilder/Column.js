@@ -14,7 +14,7 @@ class Column {
             this.initialize(props)
         })
 
-        props = Object.assign( props, {label: ''} )
+        props = Object.assign( {label: ''}, props )
 
         this.props = props
     }

@@ -851,7 +851,7 @@ class OInstance {
         this.behaveAs(classification)
 
         try {
-            closure()
+            return closure.call(this)
         } finally {
             this.dropBehaviour(classification)
         }

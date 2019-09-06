@@ -46,7 +46,7 @@ class ObjectBrowser {
     /// Querying
 
     getSelectedText() {
-        const playgroundComponent = this.getChildComponent({id: 'playground'})
+        const playgroundComponent = this.getChildComponent({ id: 'playground' })
 
         let selectedText = playgroundComponent.getSelectedText()
 
@@ -60,7 +60,7 @@ class ObjectBrowser {
     /// Building
 
     renderWith(builder) {
-        const browserModel = this.getModel()
+        const model = this.getModel()
 
         builder.render( function(component) {
             this.window( function() {
@@ -74,13 +74,13 @@ class ObjectBrowser {
                     this.verticalSplitter( function() {
                         this.component(
                             ObjectPropertiesComponent.new({
-                                model: browserModel,
+                                model: model,
                                 splitProportion: 2.0/4.0,
                             })
                         )
 
                         this.text( function() {
-                            this.model( browserModel.getSelectedPropertyText() )
+                            this.model( model.getSelectedPropertyTextModel() )
 
                             this.styles({
                                 id: 'playground',

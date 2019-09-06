@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const StackView = require('../../views/StackView')
+const StackView = require('../../gtk-views/StackView')
 
 class Stack {
     /// Definition

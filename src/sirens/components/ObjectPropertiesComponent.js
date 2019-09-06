@@ -40,7 +40,7 @@ class ObjectPropertiesComponent {
         builder.render( function(component) {
 
             this.treeChoice( function(tree) {
-                this.model( component.getModel().getObjectPropertiesTree() )
+                this.model( component.getModel().getObjectPropertiesTreeModel() )
 
                 this.styles({
                     splitProportion: 2.0/3.0,

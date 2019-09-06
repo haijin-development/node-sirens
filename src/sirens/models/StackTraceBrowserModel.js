@@ -3,14 +3,16 @@ const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
-const FunctionDefinition = require('../objects/FunctionDefinition')
+const FunctionDefinition = require('../objects/js-statements/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class StackTraceBrowserModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['framesStackModel', 'objectPropertiesTree', 'functionSourceCode']
+        this.instanceVariables = [
+            'framesStackModel', 'objectPropertiesTreeModel', 'functionSourceCodeModel'
+        ]
     }
 
     /// Initializing
@@ -24,12 +26,12 @@ class StackTraceBrowserModel {
             choices: framesStack
         })
 
-        this.objectPropertiesTree = TreeChoiceModel.new({
+        this.objectPropertiesTreeModel = TreeChoiceModel.new({
             roots: this.getRootPropertiesFrom(object),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.functionSourceCode = ValueModel.new()
+        this.functionSourceCodeModel = ValueModel.new()
 
         this.connectModels()
     }
@@ -41,7 +43,7 @@ class StackTraceBrowserModel {
     }
 
     connectModels() {
-        this.framesStackModel.getValue().on(
+        this.framesStackModel.getSelectionModel().on(
             'value-changed',
             this.onStackFrameSelectionChanged.bind(this)
         )        
@@ -54,19 +56,19 @@ class StackTraceBrowserModel {
     }
 
     getFunctionSourceCodeModel() {
-        return this.functionSourceCode
+        return this.functionSourceCodeModel
     }
 
     getSelectedStackFrame() {
-        return this.framesStackModel.getSelection()
+        return this.framesStackModel.getSelectionValue()
     }
 
-    getObjectPropertiesTree() {
-        return this.objectPropertiesTree
+    getObjectPropertiesTreeModel() {
+        return this.objectPropertiesTreeModel
     }
 
     getSelectedPropertyValue() {
-        return this.objectPropertiesTree.getSelectionValue()
+        return this.objectPropertiesTreeModel.getSelectionValue()
     }
 
     /// Events
@@ -76,9 +78,9 @@ class StackTraceBrowserModel {
 
         const functionDefinition = this.getFunctionDefinitionFrom(selectedStackFrame)
 
-        const functionSourceCode = functionDefinition.getOriginalSourceCode({cr: "\r"})
+        const functionSourceCodeModel = functionDefinition.getSourceCode({cr: "\r"})
 
-        this.functionSourceCode.setValue(functionSourceCode)
+        this.functionSourceCodeModel.setValue(functionSourceCodeModel)
     }
 
     getFunctionDefinitionFrom(stackFrame) {

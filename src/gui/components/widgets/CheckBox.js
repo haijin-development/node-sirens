@@ -2,7 +2,7 @@ const Classification = require('../../../o-language/classifications/Classificati
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const ValueModel = require('../../models/ValueModel')
-const CheckBoxView = require('../../views/CheckBoxView')
+const CheckBoxView = require('../../gtk-views/CheckBoxView')
 
 class CheckBox {
     /// Definition

@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const RadioButtonView = require('../../views/RadioButtonView')
+const RadioButtonView = require('../../gtk-views/RadioButtonView')
 const ChoiceModel = require('../../models/ChoiceModel')
 
 class RadioButton {
@@ -24,7 +24,7 @@ class RadioButton {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const selectedChoice = this.getModel().getSelection()
+        const selectedChoice = this.getModel().getSelectionValue()
 
         const value = this.getId() === selectedChoice
 
@@ -37,7 +37,10 @@ class RadioButton {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getSelectionModel().on(
+            'value-changed',
+            this.onSelectedValueChanged.bind(this)
+        )
     }
 
     onSelectedValueChanged() {

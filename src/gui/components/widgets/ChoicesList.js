@@ -1,7 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const ChoiceModel = require('../../models/ChoiceModel')
-const ListView = require('../../views/ListView')
+const ListView = require('../../gtk-views/ListView')
 
 class ChoicesList {
     /// Definition
@@ -27,7 +27,7 @@ class ChoicesList {
         }
 
         if(this.getProps().selection !== undefined) {
-            model.setSelection( this.getProps().selection )
+            model.setSelectionValue( this.getProps().selection )
         }
 
         return model
@@ -36,7 +36,8 @@ class ChoicesList {
     createView() {
         return ListView.new({
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
-            onSelectionAction: this.onUserSelectionAction.bind(this)
+            onSelectionAction: this.onUserSelectionAction.bind(this),
+            allowSelectionChange: this.allowSelectionChange.bind(this),
         })
     }
 
@@ -58,13 +59,13 @@ class ChoicesList {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getList().on('list-changed', this.onChoicesChanged.bind(this))
+        this.getModel().getListModel().on('list-changed', this.onChoicesChanged.bind(this))
 
-        this.getModel().getList().on('items-added', this.onItemsAdded.bind(this))
-        this.getModel().getList().on('items-updated', this.onItemsUpdated.bind(this))
-        this.getModel().getList().on('items-removed', this.onItemsRemoved.bind(this))
+        this.getModel().getListModel().on('items-added', this.onItemsAdded.bind(this))
+        this.getModel().getListModel().on('items-updated', this.onItemsUpdated.bind(this))
+        this.getModel().getListModel().on('items-removed', this.onItemsRemoved.bind(this))
 
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
     }
 
     onChoicesChanged() {
@@ -101,7 +102,7 @@ class ChoicesList {
 
         const selectedItem = choices[selectedIndex]
 
-        this.getModel().setSelection(selectedItem)
+        this.getModel().setSelectionValue(selectedItem)
     }
 
     onUserSelectionAction() {
@@ -110,6 +111,18 @@ class ChoicesList {
         }
 
         this.getProps().onAction()
+    }
+
+    allowSelectionChange({ selectedIndices: selectedIndices }) {
+        const allowSelectionChangeClosure = this.getProps().allowSelectionChange
+
+        if( allowSelectionChangeClosure === undefined ) {
+            return true
+        }
+
+        const allowed = allowSelectionChangeClosure()
+
+        return allowed
     }
 }
 

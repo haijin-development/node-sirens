@@ -1,4 +1,5 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../../o-language/classifications/Classification')
+const JsStatement = require('./JsStatement')
 
 /*
  * The definition of a javascript function.
@@ -9,17 +10,17 @@ class AbsentFunctionDefinition {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['sourceFile', 'line', 'column']
+        this.instanceVariables = ['line', 'column']
+        this.assumptions = [JsStatement]
     }
 
     /// Initializing
 
     initialize({ sourceFile: sourceFile, line: line, column: column }) {
         this.previousClassificationDo( () => {
-            this.initialize()
+            this.initialize({ sourceFile: sourceFile })
         })
 
-        this.sourceFile = sourceFile
         this.line = line
         this.column = column
     }
@@ -60,7 +61,7 @@ class AbsentFunctionDefinition {
         return this.getEndingPosition().column
     }
 
-    getOriginalSourceCode({cr: cr}) {
+    getSourceCode({cr: cr}) {
         return 'Source code not found'
     }
 }

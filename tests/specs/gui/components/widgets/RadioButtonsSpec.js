@@ -48,7 +48,7 @@ describe('When using a RadioButton group', () => {
 
     describe('model', () => {
         it('updates the selection when the model selection changes', () => {
-            this.model.setSelection('c')
+            this.model.setSelectionValue('c')
 
             expect(this.button1.getView().getValue()) .to .eql(false)
             expect(this.button2.getView().getValue()) .to .eql(false)

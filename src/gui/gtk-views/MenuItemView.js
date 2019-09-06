@@ -25,7 +25,7 @@ class MenuItemView {
     initializeHandles() {
         this.menuItem = new Gtk.MenuItem({ label: this.label })
 
-        this.menuItem.sensitive = this.enabled
+        this.menuItem.setSensitive( this.enabled )
 
         this.menuItem.on('activate', this.onAction.bind(this) )
 

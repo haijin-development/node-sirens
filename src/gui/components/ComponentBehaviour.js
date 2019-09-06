@@ -107,10 +107,6 @@ class ComponentBehaviour {
         return this.view
     }
 
-    getId() {
-        return this.props.id
-    }
-
     getProps() {
         return this.props
     }
@@ -119,6 +115,14 @@ class ComponentBehaviour {
         this.props = Object.assign(this.props, props)
 
         this.applyViewProps(props)
+    }
+
+    getId() {
+        return this.props.id
+    }
+
+    getParentComponent() {
+        return this.props.parentComponent
     }
 
     getChildComponent({id: childComponentId}) {

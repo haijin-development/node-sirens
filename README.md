@@ -44,6 +44,21 @@ const Sirens = require('sirens')
 Sirens.browseStack(arguments)
 ```
 
+Open a class editor with
+
+```javascript
+const Sirens = require('sirens')
+
+Sirens.openClassEditor()
+```
+
+### Screenshots
+
+![Gtk browser](./docs/browsing-object.gif)
+
+![Class editor](./docs/editing-class.gif)
+
+
 ### Pre-requisites
 
 The current version does not work with node > v10.

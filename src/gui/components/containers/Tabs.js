@@ -1,13 +1,21 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const TabsView = require('../../views/TabsView')
+const TabsView = require('../../gtk-views/TabsView')
 
-class TabsView {
+class Tabs {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
         this.assumptions = [Widget]
+    }
+
+    /// Queyring
+
+    getSelectedPageComponent() {
+        const selectedPageIndex = this.getView().getSelectedPageIndex()
+
+        return this.getComponents()[selectedPageIndex]
     }
 
     /// Initializing
@@ -20,4 +28,4 @@ class TabsView {
     }
 }
 
-module.exports = Classification.define(TabsView)
+module.exports = Classification.define(Tabs)

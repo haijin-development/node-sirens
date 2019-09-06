@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const MenuGroupView = require('../../views/MenuGroupView')
+const MenuGroupView = require('../../gtk-views/MenuGroupView')
 
 class MenuGroup {
     /// Definition

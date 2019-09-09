@@ -27,18 +27,6 @@ class ClassSourceFile {
     getClassDefinition() {
         return this.getClassDefinitions()[0]
     }
-
-    setHeaderSourceCode(headerSourceCode) {
-        const classDefinition = this.getClassDefinition()
-
-        classDefinition.setHeaderSourceCode(headerSourceCode)
-    }
-
-    setFooterSourceCode(footerSourceCode) {
-        const classDefinition = this.getClassDefinition()
-
-        classDefinition.setFooterSourceCode(footerSourceCode)
-    }
 }
 
 module.exports = Classification.define(ClassSourceFile)

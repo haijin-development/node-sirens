@@ -6,6 +6,7 @@ const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
 const AbsentFunctionDefinition = require('./js-statements/AbsentFunctionDefinition')
+const StringStream = require('../../o-language/classifications/StringStream')
 
 /*
  * A source file to query javascript definitions.
@@ -182,19 +183,19 @@ class SourceFile {
             return firstLine.slice(fromColumn, toColumn)
         }
 
-        let sourceCode = ''
+        let sourceCode = StringStream.new({ cr: cr })
 
-        sourceCode += firstLine.slice(fromColumn)
+        sourceCode.append({ string: firstLine.slice(fromColumn) })
 
         if( middleLines.length > 0 ) {
-            sourceCode += cr
-            sourceCode += middleLines.join(cr)
+            sourceCode.cr()
+            sourceCode.append({ string: middleLines.join(cr) })
         }
 
-        sourceCode += cr
-        sourceCode += lastLine.slice(0, toColumn)
+        sourceCode.cr()
+        sourceCode.append({ string: lastLine.slice(0, toColumn) })
 
-        return sourceCode
+        return sourceCode.getString()
     }
 
     /// Parsing

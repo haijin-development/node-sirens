@@ -59,39 +59,31 @@ class FunctionDefinition {
         return this.getEndingPosition().column
     }
 
-    /// Formatting
-
-    getFormattedSourceCode() {
-        let sourceCode = this.getSourceCode({ cr: "\r" })
-
-        return sourceCode
-    }
-
     /// Writing
 
-    setSourceCode(methodSourceCode) {
-        const methodStartLine = this.parseNode.loc.start.line
-        const methodStartColumn = this.parseNode.loc.start.column
-        const methodEndLine = this.parseNode.loc.end.line
-        const methodEndColumn = this.parseNode.loc.end.column
+    setSourceCode(functionSourceCode) {
+        const functionStartLine = this.parseNode.loc.start.line
+        const functionStartColumn = this.parseNode.loc.start.column
+        const functionEndLine = this.parseNode.loc.end.line
+        const functionEndColumn = this.parseNode.loc.end.column
 
         const fileContentsBeforeMethod = this.getSourceFile().getOriginalSourceCode({
             fromLine: 1,
             fromColumn: 0,
-            toLine: methodStartLine,
-            toColumn: methodStartColumn,
+            toLine: functionStartLine,
+            toColumn: functionStartColumn,
             cr: "\n"
         })
 
         const fileContentsAfterMethod = this.getSourceFile().getOriginalSourceCode({
-            fromLine: methodEndLine,
-            fromColumn: methodEndColumn,
+            fromLine: functionEndLine,
+            fromColumn: functionEndColumn,
             cr: "\n"
         })
 
         const newFileContents = fileContentsBeforeMethod +
 
-            methodSourceCode +
+            functionSourceCode +
 
             fileContentsAfterMethod
 

@@ -127,7 +127,9 @@ class ClassEditorModel {
     saveHeaderToFile() {
         const headerSourceCode = this.headerSourceCodeModel.getValue()
 
-        this.sourceFile.setHeaderSourceCode(headerSourceCode)
+        const classDefinition = this.sourceFile.getClassDefinition()
+
+        classDefinition.setHeaderSourceCode(headerSourceCode)
     }
 
     saveSelectedMethodToFile() {
@@ -141,7 +143,9 @@ class ClassEditorModel {
     saveFooterToFile() {
         const footerSourceCode = this.footerSourceCodeModel.getValue()
 
-        this.sourceFile.setFooterSourceCode(footerSourceCode)
+        const classDefinition = this.sourceFile.getClassDefinition()
+
+        classDefinition.setFooterSourceCode(footerSourceCode)
     }
 
     /// Events
@@ -155,7 +159,7 @@ class ClassEditorModel {
 
     onSelectedMethodChanged({ oldValue: oldMethod, newValue: selectedMethod }) {
         const sourceCode = selectedMethod !== undefined ?
-            selectedMethod.getFormattedSourceCode() : undefined
+            selectedMethod.getFormattedSourceCode({ cr: "\r" }) : undefined
 
         this.selectedMethodSourceCodeModel.setValue(sourceCode)
     }

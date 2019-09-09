@@ -44,9 +44,8 @@ const expect = require('chai').expect
 const Classification = require('../../../../src/o-language/classifications/Classification')
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 
-const Shape = Classification.define( class {
+const Shape = Classification.define( class Shape {
     static definition() {
-        this.cName = 'Shape'
         this.instanceVariables = ['x', 'y']
     }
 
@@ -75,7 +74,7 @@ const Shape = Classification.define( class {
     }
 })
 
-const Circle = Classification.define( class {
+const Circle = Classification.define( class Circle {
     static definition() {
         this.instanceVariables = ['radious']
     }
@@ -89,7 +88,7 @@ const Circle = Classification.define( class {
     }
 })
 
-const Point = Classification.define( class {
+const Point = Classification.define( class Point {
     static definition() {
         this.instanceVariables = ['x', 'y']
     }

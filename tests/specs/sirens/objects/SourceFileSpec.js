@@ -168,15 +168,3 @@ describe('When using a FunctionDefinition', () => {
         expect(sourceCode) .to .equal(exepctedSourceCode)
     })
 })
-
-describe('When using an AbsentFunctionDefinition', () => {
-    it('the starting and ending positions in the file are undefined', () => {
-
-        const functionDefinition = sourceFile.getFunctionAt({line: 100, column: 0})
-
-        expect(functionDefinition.getStartingPosition().line) .to .be .undefined
-        expect(functionDefinition.getEndingPosition().line) .to .be .undefined
-        expect(functionDefinition.getStartingPosition().column) .to .be .undefined
-        expect(functionDefinition.getEndingPosition().column) .to .be .undefined
-    })
-})

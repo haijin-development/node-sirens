@@ -40,6 +40,14 @@ class JsStatement {
             cr: cr,
         })
     }
+
+    /// Formatting
+
+    getFormattedSourceCode({ cr: cr }) {
+        let sourceCode = this.getSourceCode({ cr: cr })
+
+        return sourceCode
+    }
 }
 
 module.exports = Classification.define(JsStatement)

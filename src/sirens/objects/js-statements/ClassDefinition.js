@@ -3,6 +3,7 @@ const JsStatement = require('./JsStatement')
 const FunctionDefinitionsCollector = require('../parsers/FunctionDefinitionsCollector')
 const ClassDefinitionHeader = require('./ClassDefinitionHeader')
 const ClassDefinitionFooter = require('./ClassDefinitionFooter')
+const StringStream = require('../../../o-language/classifications/StringStream')
 
 /*
  * The definition of a javascript class.
@@ -87,16 +88,19 @@ class ClassDefinition {
             cr: "\n"
         })
 
-        let newFileContents = ""
+        const hasNotEmptyHeader = headerSourceCode !== ''
 
-        if( headerSourceCode !== "" ) {
-            newFileContents += headerSourceCode + "\n"
-        }
+        const newFileContents = StringStream.new()
 
-        newFileContents += "\n" +
-            fileContentsExceptHeader
+        newFileContents.append({ string: headerSourceCode, if: hasNotEmptyHeader })
 
-        this.getSourceFile().saveFileContents( newFileContents )
+        newFileContents.cr({ if: hasNotEmptyHeader })
+
+        newFileContents.cr()
+
+        newFileContents.append({ string: fileContentsExceptHeader })
+
+        this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
 
     setFooterSourceCode(footerSourceCode) {
@@ -111,15 +115,19 @@ class ClassDefinition {
             cr: "\n"
         })
 
-        let newFileContents = ""
+        const hasNotEmptyFooter = footerSourceCode !== ''
 
-        newFileContents += fileContentsExceptFooter + "\n"
+        const newFileContents = StringStream.new()
 
-        if( footerSourceCode !== "" ) {
-            newFileContents += "\n" + footerSourceCode
-        }
+        newFileContents.append({ string: fileContentsExceptFooter })
 
-        this.getSourceFile().saveFileContents( newFileContents )
+        newFileContents.cr()
+
+        newFileContents.append({ string: footerSourceCode, if: hasNotEmptyFooter })
+
+        newFileContents.cr({ if: hasNotEmptyFooter })
+
+        this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
 }
 

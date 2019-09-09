@@ -2,8 +2,19 @@ const Sirens = require('../../src/Sirens')
 
 /*
     class(`
-        This class is a regular javascript class to use in a ClassEditor example.
+        This is a regular javascript class to use in the ClassEditor example.
     `)
+
+    example({
+        description: `
+            Open a ClassEditor on the current file.
+        `,
+        code: `
+            const Sirens = require('sirens')
+
+            Sirens.openClassEditor({ filename: __filename })
+        `,
+    })
 */
 class Address {
     /*
@@ -18,6 +29,10 @@ class Address {
             protocols: [ int ]
             description: `The number of the address in the street.`,
         })
+
+        tags([
+            `constructor`
+        ])
     */
     constructor({ streetName: streetName, number: number }) {
         this.streetName = streetName
@@ -38,13 +53,21 @@ class Address {
             Returns this.streetName.
         `)
 
-        example(`
-            const address = new Address({ streetName: streetName, number: number })
+        example({
+            description: `
+                Create an Address and get its street name.
+            `,
+            code: `
+                const address = new Address({ streetName: streetName, number: number })
 
-            address.getStreetName()
-        `)
+                address.getStreetName()
+            `,
+        })
 
-        tags = [ 'accessors', 'getters' ]
+        tags([
+            'accessors'
+            'getters',
+        ])
     */
     getStreetName() {
         return this.streetName
@@ -64,13 +87,21 @@ class Address {
             Returns this.number.
         `)
 
-        example(`
-            const address = new Address({ streetName: streetName, number: number })
+        example({
+            description: `
+                Create an Address and get its number.
+            `,
+            code: `
+                const address = new Address({ streetName: streetName, number: number })
 
-            address.getNumber()
-        `)
+                address.getNumber()
+            `,
+        })
 
-        tags = [ 'accessors', 'setters' ]
+        tags([
+            'accessors',
+            'setters',
+        ])
     */
     getNumber() {
         return this.getNumber()

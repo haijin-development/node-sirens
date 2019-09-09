@@ -19,6 +19,7 @@
 ### O language
 
 - The method #define works with any classification object not just with Classification.
+- Added Protocol class and Classification.implements(procotol) method
 
 ## v0.5.0
 

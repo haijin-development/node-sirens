@@ -19,6 +19,8 @@ class MessageDispatcher {
         this.classificationClassification = this.createObjectProxy()
         this.oInstanceClassification = this.createObjectProxy()
 
+        this.initializeClassificationDefinition(OInstance)
+        this.initializeClassificationDefinition(Classification)
 
         let classificationInstantiation = this.instantiateClassificationFromDefinition( Classification )
         classificationInstantiation.sourceClassification = this.classificationClassification
@@ -345,7 +347,7 @@ class MessageDispatcher {
 
         if( ! activeClassification.constructor.instanceVariables.includes(propName) ) {
             const classificationsName = 
-                activeClassification.sourceClassification.getClassificationDefinition().cName
+                activeClassification.sourceClassification.getClassificationDefinition().name
 
             throw new Error(`'${propName}' is not an instance variable of ${classificationsName} Classification.`)
         }
@@ -395,23 +397,51 @@ class MessageDispatcher {
             return this
         }
 
+        const allAssumptions = this.classificationRecursiveAssumptions(classification)
+
+        allAssumptions.push(classification)
+
+        allAssumptions.forEach( (eachClassification) => {
+            if( ! this.objectIsBehavingAs(object, eachClassification) ) {
+                this.attachBehaviourTo(object, eachClassification)
+            }
+        })
+    }
+
+    attachBehaviourTo(object, classification) {
         const classificationInstantiation = this.instantiateClassification(classification)
 
         classificationInstantiation.sourceClassification = classification
 
         const classificationDefinition = classification.getClassificationDefinition()
 
-        const allAssumptions = classificationDefinition.assumptions
-
-        allAssumptions.forEach( (assumedClassification) => {
-            object.behaveAs( assumedClassification )
-        })
-
         this.objectGetInstantiatedClassifications(object).unshift(classificationInstantiation)
 
         if( classificationInstantiation.afterInstantiation !== undefined ) {
             object.afterInstantiation()
-        }
+        }        
+    }
+
+    classificationRecursiveAssumptions(classification) {
+        let allAssumptions = []
+
+        const directAssumptions = classification.getClassificationDefinition().assumptions
+
+        directAssumptions.forEach( (classification) => {
+            const assumptions = this.classificationRecursiveAssumptions(classification)
+
+            assumptions.forEach( (eachClassification) => {
+                if( ! allAssumptions.includes( eachClassification ) ) {
+                    allAssumptions.push( eachClassification )
+                }
+            })
+
+            if( ! allAssumptions.includes( classification ) ) {
+                allAssumptions.push( classification )
+            }
+        })
+
+        return allAssumptions
     }
 
     /*
@@ -541,6 +571,17 @@ class MessageDispatcher {
         return previousClassification.sourceClassification
     }
 
+    ////////////////////////////////////////////
+    //////// Classification methods
+    ////////////////////////////////////////////
+
+    classificationgetDefinedMethodNames(classificationObject) {
+        return Object.getOwnPropertyNames( classificationObject.classificationDefinition.prototype )
+    }
+
+    classificationDefinesMethod(classificationObject, methodName) {
+        return typeof( classificationObject.classificationDefinition.prototype[methodName] ) === 'function'
+    }
 
     ////////////////////////////////////////////
     //////// Objects instantiation
@@ -653,7 +694,23 @@ class MessageDispatcher {
         return object
     }
 
+    initializeClassificationDefinition(classificationDefinition) {
+        if( classificationDefinition.definition !== undefined ) {
+            classificationDefinition.definition()
+        }
+
+        if( classificationDefinition.instanceVariables === undefined ) {
+            classificationDefinition.instanceVariables = []
+        }
+
+        if( classificationDefinition.assumptions === undefined ) {
+            classificationDefinition.assumptions = []
+        }
+    }
+
     createClassification(classificationDefinition) {
+        this.initializeClassificationDefinition(classificationDefinition)
+
         const object = this.createObject()
 
         object.behaveAs( this.getClassificationClassification() )
@@ -689,26 +746,6 @@ class MessageDispatcher {
      * Instantiates a classification for the given object.
      */
     instantiateClassificationFromDefinition(classificationDefinition) {
-        let instanceVariables = []
-
-        if( classificationDefinition.instanceVariables === undefined ) {
-            if( classificationDefinition.definition !== undefined ) {
-                classificationDefinition.definition()
-            }
-
-            if( classificationDefinition.instanceVariables === undefined ) {
-                classificationDefinition.instanceVariables = []
-            }
-
-            if( classificationDefinition.assumptions === undefined ) {
-                classificationDefinition.assumptions = []
-            }
-
-            if( classificationDefinition.cName === undefined ) {
-                classificationDefinition.cName = 'Unnamed'
-            }
-        }
-
         return new classificationDefinition()
     }
 }
@@ -730,7 +767,6 @@ class Classification {
     /// Definition
 
     static definition() {
-        this.cName = 'Classification'
         this.instanceVariables = ['classificationDefinition']
     }
 
@@ -755,7 +791,7 @@ class Classification {
     /// Accessing
 
     getName() {
-        return this.classificationDefinition.cName
+        return this.classificationDefinition.name
     }
 
     getClassificationDefinition() {
@@ -764,6 +800,52 @@ class Classification {
 
     setClassificationDefinition(classificationDefinition) {
         this.classificationDefinition = classificationDefinition
+    }
+
+    getDefinedMethodNames() {
+        return MessageDispatcherInstance.classificationgetDefinedMethodNames(this)
+    }
+
+    definesMethod(methodName) {
+        return MessageDispatcherInstance.classificationDefinesMethod(this, methodName)
+    }
+
+    getDefinedInstanceVariables() {
+        return this.getClassificationDefinition().instanceVariables.slice() 
+    }
+
+    setDefinedInstanceVariables(instanceVariables) {
+        this.getClassificationDefinition().instanceVariables = instanceVariables 
+
+        return this
+    }
+
+    definesInstanceVariable(name) {
+        return this.getDefinedInstanceVariables().includes( name ) 
+    }
+
+    getAssumptions() {
+        return this.getClassificationDefinition().assumptions.slice() 
+    }
+
+    setAssumptions(assumptions) {
+        this.getClassificationDefinition().assumptions = assumptions
+    
+        return this
+    }
+
+    getRecursiveAssumptions() {
+        return MessageDispatcherInstance.classificationRecursiveAssumptions(this)
+    }
+
+    getAssumptionsChain() {
+        return this.getRecursiveAssumptions().concat( [this] )
+    }
+
+    implements(protocol) {
+        protocol.isImplementedBy({ classification: this })
+
+        return this
     }
 }
 
@@ -780,7 +862,6 @@ class Classification {
 class OInstance {
 
     static definition() {
-        this.cName = 'OInstance'
     }
 
 

@@ -16,7 +16,7 @@ const classDefinitionAttributes = [
 
 class ClassificationDefinition {
 
-    static initialize(classificationDefinition) {
+    static initialize({ classificationDefinition: classificationDefinition }) {
         if( classificationDefinition.definition !== undefined ) {
             classificationDefinition.definition()
         }
@@ -50,7 +50,7 @@ class ClassificationDefinition {
         })
     }
 
-    static getInstanceVariablesOf(classificationDefinition) {
+    static getInstanceVariablesOf({ classificationDefinition: classificationDefinition }) {
         return classificationDefinition.instanceVariables
     }
 
@@ -58,8 +58,20 @@ class ClassificationDefinition {
     /*
      * Instantiates a classification for the given object.
      */
-    static instantiateClassificationFrom(classificationDefinition) {
-        return new classificationDefinition()
+    static instantiateClassificationFrom({ classificationDefinition: classificationDefinition }) {
+        const instantiation = new classificationDefinition()
+
+        return instantiation
+    }
+
+    static setAssumptions({
+        classificationDefinition: classificationDefinition, assumptions: assumptions }
+    ) {
+        classificationDefinition.assumes = assumptions.slice()
+    }
+
+    static getName({ classificationDefinition: classificationDefinition }) {
+        return classificationDefinition.name
     }
 }
 

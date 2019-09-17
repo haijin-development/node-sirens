@@ -44,6 +44,7 @@
 - Added the assertion that a Classification implements the protocols it declares in its ClassificationDefinition.implementations
 - Added ClassificationDefinition.classificationBehaviours
 - Implemented ObjectWithProps classification
+- Rewrote the MessageDispatcher implementation
 
 ## v0.5.0
 

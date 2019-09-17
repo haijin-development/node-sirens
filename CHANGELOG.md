@@ -16,7 +16,7 @@
 - Implemented Tab pages
 - Implemented ToolBar
 - Added ComponentInstantiator.render(closure) method
-- Improved the naming of the paremter methods of ListModel
+- Improved the naming of the paremeter methods of ListModel
 - Rewrote classifications with 'props' instance variables to use ObjectWithProps classification
 - Reimplemented ValueModel
 - Implemented ObjectPropModel and ObjectAttributeModel
@@ -41,7 +41,7 @@
 - Renamed ClassificationDefinition.implementations to ClassificationDefinition.implements
 - Added ClassificationDefinition.expects
 - Implemented several protocols
-- Added the assertion that a Classifications implements the protocols it declares in its ClassificationDefinition.implementations
+- Added the assertion that a Classification implements the protocols it declares in its ClassificationDefinition.implementations
 - Added ClassificationDefinition.classificationBehaviours
 - Implemented ObjectWithProps classification
 

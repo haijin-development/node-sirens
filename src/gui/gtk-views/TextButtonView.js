@@ -1,53 +1,55 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class TextButtonView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle', 'onClickedBlock']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['button', 'onClickedClosure']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({onClicked: onClickedBlock}) {
+    initialize({ onClicked: onClickedClosure }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
-        this.onClickedBlock = onClickedBlock
+        this.onClickedClosure = onClickedClosure
 
         this.initializeHandles()
     }
 
     initializeHandles() {
-        this.mainHandle = new Gtk.Button({label: ''})
+        this.button = new Gtk.Button({label: ''})
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.button
     }
 
     setText(text) {
-        this.mainHandle.label = text
+        this.button.label = text
     }
 
     getText() {
-        return this.mainHandle.label
+        return this.button.label
     }
 
     /// Events
 
     subscribeToGUISignals(props) {
-        this.mainHandle.on('clicked', this.onClick.bind(this))
+        this.button.on('clicked', this.handleClick.bind(this))
     }
 
-    onClick() {
-        this.onClickedBlock()
+    handleClick() {
+        this.onClickedClosure()
     }
 }
 

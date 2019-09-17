@@ -1,33 +1,35 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class LabelView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['labelView']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
     initializeHandles() {
-        this.mainHandle = new Gtk.Label()
+        this.labelView = new Gtk.Label()
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.labelView
     }
 
     setText(text) {
-        this.getMainHandle().label = text
+        this.labelView.label = text
     }
 
     getText() {
-        return this.getMainHandle().label
+        return this.labelView.label
     }
 
     /// Events

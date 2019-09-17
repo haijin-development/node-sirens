@@ -9,7 +9,7 @@ class ToolBarBuilder {
 
     static definition() {
         this.instanceVariables = ['toolBarItems']
-        this.assumptions = [WidgetBuilder]
+        this.assumes = [WidgetBuilder]
     }
 
     /// Initializing
@@ -29,7 +29,7 @@ class ToolBarBuilder {
 
         const toolBar = ToolBar.new( this.getProps() )
 
-        toolBar.addAllComponents( this.toolBarItems )
+        toolBar.addAllChildrenComponents( this.toolBarItems )
 
         return toolBar
     }

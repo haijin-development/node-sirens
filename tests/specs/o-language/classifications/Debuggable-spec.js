@@ -7,7 +7,7 @@ const Shape = Classification.define( class Shape {
 
     static definition() {
         this.instanceVariables = ['x', 'y', 'overriden']
-        this.assumptions = [Debuggable]
+        this.assumes = [Debuggable]
     }
 
     setPosition({x: x, y: y}) {
@@ -31,7 +31,7 @@ const Shape = Classification.define( class Shape {
 const Circle = Classification.define( class Circle {
     static definition() {
         this.instanceVariables = ['radious', 'overriden']
-        this.assumptions = [Debuggable]
+        this.assumes = [Debuggable]
     }
 
     setRadious(radious) {

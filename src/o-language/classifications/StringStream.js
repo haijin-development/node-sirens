@@ -1,12 +1,13 @@
 const Classification = require('./Classification')
-const StringStreamProcotol = require('./StringStreamProcotol')
+const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
 class StringStream {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['buffer', 'crChar']
-        this.assumptions = []
+        this.assumes = []
+        this.implements = [StringStreamProcotol]
     }
 
     /// Initializing
@@ -86,4 +87,3 @@ class StringStream {
 }
 
 module.exports = Classification.define(StringStream)
-                    .implements( StringStreamProcotol )

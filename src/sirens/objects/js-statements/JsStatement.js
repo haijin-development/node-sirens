@@ -1,4 +1,5 @@
 const Classification = require('../../../o-language/classifications/Classification')
+const StringStream = require('../../../o-language/classifications/StringStream')
 
 /*
  * The statements previous to a ClassDefinition.
@@ -31,22 +32,53 @@ class JsStatement {
     /*
      * Returns the source code of the class header.
      */
-    getSourceCode({ cr: cr }) {
+    getSourceCode() {
         return this.getSourceFile().getOriginalSourceCode({
             fromLine: this.getStartingLine(),
             fromColumn: this.getStartingColumn(),
             toLine: this.getEndingLine(),
             toColumn: this.getEndingColumn(),
-            cr: cr,
         })
     }
 
     /// Formatting
 
-    getFormattedSourceCode({ cr: cr }) {
-        let sourceCode = this.getSourceCode({ cr: cr })
+    getFormattedSourceCode() {
+        let sourceCode = this.getSourceCode()
 
         return sourceCode
+    }
+
+    /// Writing
+
+    writeSourceCode(sourceCode) {
+        const firstStatementStartLine = this.getStartingLine()
+        const firstStatementStartColumn = this.getStartingColumn()
+
+        const lastStatementEndLine = this.getEndingLine()
+        const lastStatementEndColumn = this.getEndingColumn()
+
+        const fileContentsBefore = this.getSourceFile().getOriginalSourceCode({
+            fromLine: 1,
+            fromColumn: 0,
+            toLine: firstStatementStartLine,
+            toColumn: firstStatementStartColumn,
+        })
+
+        const fileContentsAfter = this.getSourceFile().getOriginalSourceCode({
+            fromLine: lastStatementEndLine,
+            fromColumn: lastStatementEndColumn,
+        })
+
+        const newFileContents = StringStream.new()
+
+        newFileContents.append({ string: fileContentsBefore, if: fileContentsBefore !== '' })
+
+        newFileContents.append({ string: sourceCode, if: sourceCode !== '' })
+
+        newFileContents.append({ string: fileContentsAfter, if: fileContentsAfter !== '' })
+
+        this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
 }
 

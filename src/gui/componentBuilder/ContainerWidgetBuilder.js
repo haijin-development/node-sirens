@@ -23,7 +23,7 @@ class ContainerWidgetBuilder {
 
     static definition() {
         this.instanceVariables = ['childComponents']
-        this.assumptions = [WidgetBuilder]
+        this.assumes = [WidgetBuilder]
     }
 
     /// Initializing
@@ -49,6 +49,10 @@ class ContainerWidgetBuilder {
     /// Building
 
     component(component) {
+        if( component === undefined ) {
+            throw new Error(`The component can not be undefined.`)
+        }
+
         this.childComponents.push(component)
     }
 
@@ -61,7 +65,7 @@ class ContainerWidgetBuilder {
 
         const window = Window.new( builder.getProps() )
 
-        window.addAllComponents( builder.getChildComponents() )
+        window.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(window)
     }
@@ -77,7 +81,7 @@ class ContainerWidgetBuilder {
 
         const stack = Stack.new( props )
 
-        stack.addAllComponents( builder.getChildComponents() )
+        stack.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(stack)
     }
@@ -93,7 +97,7 @@ class ContainerWidgetBuilder {
 
         const stack = Stack.new( props )
 
-        stack.addAllComponents( builder.getChildComponents() )
+        stack.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(stack)
     }
@@ -109,7 +113,7 @@ class ContainerWidgetBuilder {
 
         const splitter = Splitter.new( props )
 
-        splitter.addAllComponents( builder.getChildComponents() )
+        splitter.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(splitter)
     }
@@ -125,7 +129,7 @@ class ContainerWidgetBuilder {
 
         const splitter = Splitter.new( props )
 
-        splitter.addAllComponents( builder.getChildComponents() )
+        splitter.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(splitter)
     }
@@ -141,10 +145,17 @@ class ContainerWidgetBuilder {
 
         const tabs = Tabs.new( props )
 
-        tabs.addAllComponents( builder.getChildComponents() )
+        tabs.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(tabs)
     }
+
+    behaveAsTabsPageBuilder() {
+        this.behaveAs(TabPagesBuilder)
+
+        return this
+    }
+
 
     listChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -177,9 +188,9 @@ class ContainerWidgetBuilder {
                 builder.build(closure)
             })
 
-        const text = Label.new( builder.getProps() )
+        const label = Label.new( builder.getProps() )
 
-        this.childComponents.push(text)
+        this.childComponents.push(label)
     }
 
     text(props, closure) {

@@ -9,7 +9,7 @@ class ClassDefinitionsCollector {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [ParseTreeVisitor]
+        this.assumes = [ParseTreeVisitor]
     }
 
     collectClassDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {

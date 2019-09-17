@@ -5,16 +5,17 @@ class TabPagesBuilder {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = []
+        this.assumes = []
     }
 
-    tabPage({label: tabLabel}, closure) {
-        closure.call(this)
+    tabPage({ label: tabLabel, fixedPosition: tabFixedPosition }, closure) {
+        this.bindYourself(closure)
 
         this.getLastChildComponent()
-            .setProps({
+            .mergeProps({
                 viewCustomAttributes: {
-                    tabLabel: tabLabel
+                    tabLabel: tabLabel,
+                    tabFixedPosition: tabFixedPosition,
                 }
             })
     }

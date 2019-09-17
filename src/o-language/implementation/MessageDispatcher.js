@@ -1,3 +1,6 @@
+const ClassificationDefinition = require('./classification-definition')
+
+
 class MessageDispatcher {
 
     constructor() {
@@ -19,13 +22,14 @@ class MessageDispatcher {
         this.classificationClassification = this.createObjectProxy()
         this.oInstanceClassification = this.createObjectProxy()
 
-        this.initializeClassificationDefinition(OInstance)
-        this.initializeClassificationDefinition(Classification)
+        ClassificationDefinition.initialize(OInstance)
+        ClassificationDefinition.initialize(Classification)
 
-        let classificationInstantiation = this.instantiateClassificationFromDefinition( Classification )
+        let classificationInstantiation = ClassificationDefinition.instantiateClassificationFrom( Classification )
         classificationInstantiation.sourceClassification = this.classificationClassification
+        classificationInstantiation.classificationDefinition = Classification
 
-        let oInstanceInstantiation = this.instantiateClassificationFromDefinition( OInstance )
+        let oInstanceInstantiation = ClassificationDefinition.instantiateClassificationFrom( OInstance )
         oInstanceInstantiation.sourceClassification = this.oInstanceClassification
 
         this.classificationClassification.impl.classifications = [
@@ -33,21 +37,17 @@ class MessageDispatcher {
             oInstanceInstantiation,
         ]
 
-        this.classificationClassification.setClassificationDefinition(Classification)
-
-
-        classificationInstantiation = this.instantiateClassificationFromDefinition( Classification )
+        classificationInstantiation = ClassificationDefinition.instantiateClassificationFrom( Classification )
         classificationInstantiation.sourceClassification = this.classificationClassification
+        classificationInstantiation.classificationDefinition = OInstance
 
-        oInstanceInstantiation = this.instantiateClassificationFromDefinition( OInstance )
+        oInstanceInstantiation = ClassificationDefinition.instantiateClassificationFrom( OInstance )
         oInstanceInstantiation.sourceClassification = this.oInstanceClassification
 
         this.oInstanceClassification.impl.classifications = [
             classificationInstantiation,
             oInstanceInstantiation,
         ]
-
-        this.oInstanceClassification.setClassificationDefinition(OInstance)
     }
 
     getClassificationClassification() {
@@ -176,7 +176,7 @@ class MessageDispatcher {
             this.pushActiveClassificationInto(object, classification)
 
             try {
-                return targetFunction.call(thisArg, ...params)
+                return targetFunction.call(object, ...params)
             } finally {
                 this.popActiveClassificationFrom(object)
 
@@ -281,7 +281,7 @@ class MessageDispatcher {
     getInstanceVariablesFrom(classificationInstantiation) {
         const classificationDefinition = this.getClassificationDefinitionFrom(classificationInstantiation)
 
-        return classificationDefinition.instanceVariables
+        return ClassificationDefinition.getInstanceVariablesOf(classificationDefinition)
     }
 
     /*
@@ -425,7 +425,7 @@ class MessageDispatcher {
     classificationRecursiveAssumptions(classification) {
         let allAssumptions = []
 
-        const directAssumptions = classification.getClassificationDefinition().assumptions
+        const directAssumptions = classification.getClassificationDefinition().assumes
 
         directAssumptions.forEach( (classification) => {
             const assumptions = this.classificationRecursiveAssumptions(classification)
@@ -694,22 +694,8 @@ class MessageDispatcher {
         return object
     }
 
-    initializeClassificationDefinition(classificationDefinition) {
-        if( classificationDefinition.definition !== undefined ) {
-            classificationDefinition.definition()
-        }
-
-        if( classificationDefinition.instanceVariables === undefined ) {
-            classificationDefinition.instanceVariables = []
-        }
-
-        if( classificationDefinition.assumptions === undefined ) {
-            classificationDefinition.assumptions = []
-        }
-    }
-
     createClassification(classificationDefinition) {
-        this.initializeClassificationDefinition(classificationDefinition)
+        ClassificationDefinition.initialize(classificationDefinition)
 
         const object = this.createObject()
 
@@ -735,22 +721,22 @@ class MessageDispatcher {
     instantiateClassification(classification) {
         const classificationDefinition = classification.getClassificationDefinition()
 
-        const instantiatedClassification = this.instantiateClassificationFromDefinition(classificationDefinition)
+        const instantiatedClassification = ClassificationDefinition.instantiateClassificationFrom(classificationDefinition)
 
         instantiatedClassification.sourceClassification = classification
 
         return instantiatedClassification
     }
 
-    /*
-     * Instantiates a classification for the given object.
-     */
-    instantiateClassificationFromDefinition(classificationDefinition) {
-        return new classificationDefinition()
-    }
 }
 
 class Classification {
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = ['classificationDefinition']
+    }
 
     /// Creating classifications
 
@@ -761,13 +747,19 @@ class Classification {
         // to adquire the behaviour of this object
         classificationInstance.behaveAs(this)
 
+        // If the classificationDefinition declares additional classificationBehaviours make the 
+        // created classification to adquire them
+        classificationDefinition.classificationBehaviours.forEach( (classification) => {
+            classificationInstance.behaveAs(classification)
+        })
+
+        // If the classificationDefinition declares implementations to comply with 
+        // validate that the created classification complies with them
+        classificationDefinition.implements.forEach( (implementation) => {
+            classificationInstance.implements({ protocol: implementation })
+        })
+
         return classificationInstance
-    }
-
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = ['classificationDefinition']
     }
 
     /*
@@ -825,11 +817,11 @@ class Classification {
     }
 
     getAssumptions() {
-        return this.getClassificationDefinition().assumptions.slice() 
+        return this.getClassificationDefinition().assumes.slice() 
     }
 
     setAssumptions(assumptions) {
-        this.getClassificationDefinition().assumptions = assumptions
+        this.getClassificationDefinition().assumes = assumptions
     
         return this
     }
@@ -842,7 +834,7 @@ class Classification {
         return this.getRecursiveAssumptions().concat( [this] )
     }
 
-    implements(protocol) {
+    implements({ protocol: protocol }) {
         protocol.isImplementedBy({ classification: this })
 
         return this
@@ -986,6 +978,11 @@ class OInstance {
         return MessageDispatcherInstance.withClassificationDo(this, classification, closure)
     }
 
+    bindYourself(closure, ...params) {
+        closure.call(this, ...params)
+
+        return this
+    }
 }
 
 const MessageDispatcherInstance = new MessageDispatcher()

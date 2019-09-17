@@ -12,7 +12,8 @@ class FunctionDefinition {
 
     static definition() {
         this.instanceVariables = ['parseNode']
-        this.assumptions = [JsStatement]
+        this.assumes = [JsStatement]
+        this.classificationBehaviours = [FunctionDefinitionBuilder]
     }
 
     /// Initializing
@@ -72,13 +73,11 @@ class FunctionDefinition {
             fromColumn: 0,
             toLine: functionStartLine,
             toColumn: functionStartColumn,
-            cr: "\n"
         })
 
         const fileContentsAfterMethod = this.getSourceFile().getOriginalSourceCode({
             fromLine: functionEndLine,
             fromColumn: functionEndColumn,
-            cr: "\n"
         })
 
         const newFileContents = fileContentsBeforeMethod +
@@ -101,5 +100,6 @@ class FunctionDefinitionBuilder {
     }
 }
 
+FunctionDefinitionBuilder = Classification.define(FunctionDefinitionBuilder)
+
 module.exports = Classification.define(FunctionDefinition)
-                    .behaveAs( Classification.define(FunctionDefinitionBuilder) )

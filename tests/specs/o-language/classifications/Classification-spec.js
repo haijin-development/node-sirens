@@ -84,7 +84,7 @@ describe('The Classification classification', () => {
             }
         )
 
-        expect( Point.implements( PointProtocol ) ) .to .equal(Point)
+        expect( Point.implements({ protocol: PointProtocol }) ) .to .equal(Point)
     })
 
     it('returns false if it does not implement a protocol', () => {
@@ -96,7 +96,7 @@ describe('The Classification classification', () => {
 
         expect( () => {
 
-            Point.implements( PointProtocol )
+            Point.implements({ protocol: PointProtocol })
 
         }).to .throw(
             Error,
@@ -144,7 +144,7 @@ describe('The Classification classification', () => {
         const Classification_1_1_1 = Classification.define(
             class Classification_1_1_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -152,7 +152,7 @@ describe('The Classification classification', () => {
         const Classification_1_2_1 = Classification.define(
             class Classification_1_2_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -160,7 +160,7 @@ describe('The Classification classification', () => {
         const Classification_1_1 = Classification.define(
             class Classification_1_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1_1]
+                    this.assumes = [Classification_1_1_1]
                 }
             }
         )
@@ -168,7 +168,7 @@ describe('The Classification classification', () => {
         const Classification_1_2 = Classification.define(
             class Classification_1_2 {
                 static definition() {
-                    this.assumptions = [Classification_1_2_1]
+                    this.assumes = [Classification_1_2_1]
                 }
             }
         )
@@ -176,7 +176,7 @@ describe('The Classification classification', () => {
         const Classification_1 = Classification.define(
             class Classification_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1, Classification_1_2]
+                    this.assumes = [Classification_1_1, Classification_1_2]
                 }
             }
         )
@@ -193,7 +193,7 @@ describe('The Classification classification', () => {
         const Classification_1_1_1 = Classification.define(
             class Classification_1_1_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -201,7 +201,7 @@ describe('The Classification classification', () => {
         const Classification_1_1 = Classification.define(
             class Classification_1_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -209,7 +209,7 @@ describe('The Classification classification', () => {
         const Classification_1_2 = Classification.define(
             class Classification_1_2 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -217,7 +217,7 @@ describe('The Classification classification', () => {
         const Classification_1 = Classification.define(
             class Classification_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1, Classification_1_2]
+                    this.assumes = [Classification_1_1, Classification_1_2]
                 }
             }
         )
@@ -235,7 +235,7 @@ describe('The Classification classification', () => {
         const Classification_1_1_1 = Classification.define(
             class Classification_1_1_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -243,7 +243,7 @@ describe('The Classification classification', () => {
         const Classification_1_2_1 = Classification.define(
             class Classification_1_2_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -251,7 +251,7 @@ describe('The Classification classification', () => {
         const Classification_1_1 = Classification.define(
             class Classification_1_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1_1]
+                    this.assumes = [Classification_1_1_1]
                 }
             }
         )
@@ -259,7 +259,7 @@ describe('The Classification classification', () => {
         const Classification_1_2 = Classification.define(
             class Classification_1_2 {
                 static definition() {
-                    this.assumptions = [Classification_1_1_1, Classification_1_2_1]
+                    this.assumes = [Classification_1_1_1, Classification_1_2_1]
                 }
             }
         )
@@ -267,7 +267,7 @@ describe('The Classification classification', () => {
         const Classification_1 = Classification.define(
             class Classification_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1, Classification_1_2]
+                    this.assumes = [Classification_1_1, Classification_1_2]
                 }
             }
         )
@@ -284,7 +284,7 @@ describe('The Classification classification', () => {
         const Classification_1_1_1 = Classification.define(
             class Classification_1_1_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -292,7 +292,7 @@ describe('The Classification classification', () => {
         const Classification_1_2_1 = Classification.define(
             class Classification_1_2_1 {
                 static definition() {
-                    this.assumptions = []
+                    this.assumes = []
                 }
             }
         )
@@ -300,7 +300,7 @@ describe('The Classification classification', () => {
         const Classification_1_1 = Classification.define(
             class Classification_1_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1_1]
+                    this.assumes = [Classification_1_1_1]
                 }
             }
         )
@@ -308,7 +308,7 @@ describe('The Classification classification', () => {
         const Classification_1_2 = Classification.define(
             class Classification_1_2 {
                 static definition() {
-                    this.assumptions = [Classification_1_1_1, Classification_1_2_1]
+                    this.assumes = [Classification_1_1_1, Classification_1_2_1]
                 }
             }
         )
@@ -316,7 +316,7 @@ describe('The Classification classification', () => {
         const Classification_1 = Classification.define(
             class Classification_1 {
                 static definition() {
-                    this.assumptions = [Classification_1_1, Classification_1_2]
+                    this.assumes = [Classification_1_1, Classification_1_2]
                 }
             }
         )

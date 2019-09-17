@@ -2,16 +2,15 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Sirens = require('../../Sirens')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class WindowView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [
-            'mainHandle',
-        ]
-
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['window']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Styles
@@ -29,21 +28,17 @@ class WindowView {
             this.initialize()
         })
 
-        this.mainHandle = new Gtk.Window()
+        this.window = new Gtk.Window()
 
         Sirens.registerWindow()
 
-        this.mainHandle.on('delete-event', () => {
-            return false
-        })
+        this.window.on( 'delete-event', this.handleDeleteEvent.bind(this) )
 
-        this.mainHandle.on('destroy', () => {
-            Sirens.unregisterWindow()
-        })
+        this.window.on( 'destroy', this.handleDestroy.bind(this) )
     }
 
     open() {
-        this.mainHandle.showAll()
+        this.window.showAll()
     }
 
     subscribeToGUISignals() {
@@ -52,11 +47,11 @@ class WindowView {
     /// Styles
 
     setTitle(value) {
-        this.mainHandle.setTitle(value)
+        this.window.setTitle(value)
     }
 
     getTitle(value) {
-        return this.mainHandle.getTitle()
+        return this.window.getTitle()
     }
 
     setWidth(value) {
@@ -84,7 +79,17 @@ class WindowView {
     }
 
     getMainHandle() {
-        return this.mainHandle
+        return this.window
+    }
+
+    /// Events
+
+    handleDeleteEvent() {
+        return false
+    }
+
+    handleDestroy() {
+        Sirens.unregisterWindow()
     }
 }
 

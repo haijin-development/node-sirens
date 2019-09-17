@@ -1,13 +1,15 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class MenuGroupView {
     /// Definition
 
     static definition() {
         this.instanceVariables = [ 'menu', 'label']
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -28,10 +30,12 @@ class MenuGroupView {
 
     /// Adding
 
-    onViewAdded(childView) {
+    directChildViewAdd(childView) {
         const childHandle = childView.getMainHandle()
 
         this.menu.submenu.add( childHandle )
+
+        this.menu.submenu.showAll()
     }
 
     /// Querying

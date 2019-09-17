@@ -1,6 +1,34 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 
+class MenuViewBuilder {
+    /// Instantiating
+
+    /*
+     * Downcast a GtkWidget handle to a Gtk.Menu handle.
+     *
+     * Actually we just copy and bind the functions that the MenuView uses from a Gtk.Menu to the given
+     * gtkWidget.
+     */
+    castGtkWidgetToGtkMenu(gtkWidget) {
+        Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
+
+        return gtkWidget
+    }
+
+    /*
+     * Returns a new MenuView wrapping the given GtkWidget.
+     */
+    newFromGtkWidget(gtkWidget) {
+        gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
+
+        return this.new({ gtkWidget: gtkWidget })
+    }
+}
+
+MenuViewBuilder = Classification.define(MenuViewBuilder)
+
+
 const gtkMenuMethodsToCopy = ['add', 'showAll', 'popupAtPointer']
 
 class MenuView {
@@ -8,6 +36,7 @@ class MenuView {
 
     static definition() {
         this.instanceVariables = [ 'menuHandle' ]
+        this.classificationBehaviours = [MenuViewBuilder]
     }
 
     /// Initializing
@@ -47,7 +76,7 @@ class MenuView {
 
         this.menuHandle.add(menuItemHandle)
 
-        menuItemHandle.show()
+        this.menuHandle.showAll()
     }
 
     separator() {
@@ -55,7 +84,7 @@ class MenuView {
 
         this.menuHandle.add(menuSeparatorHandle)
 
-        menuSeparatorHandle.show()
+        this.menuHandle.showAll()
     }
 
     /// Operations
@@ -66,32 +95,6 @@ class MenuView {
     }
 }
 
-class MenuViewBuilder {
-    /// Instantiating
-
-    /*
-     * Downcast a GtkWidget handle to a Gtk.Menu handle.
-     *
-     * Actually we just copy and bind the functions that the MenuView uses from a Gtk.Menu to the given
-     * gtkWidget.
-     */
-    castGtkWidgetToGtkMenu(gtkWidget) {
-        Object.setPrototypeOf(gtkWidget, Gtk.Menu.prototype)
-
-        return gtkWidget
-    }
-
-    /*
-     * Returns a new MenuView wrapping the given GtkWidget.
-     */
-    newFromGtkWidget(gtkWidget) {
-        gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
-
-        return this.new({ gtkWidget: gtkWidget })
-    }
-}
-
 MenuView = Classification.define(MenuView)
-            .behaveAs( Classification.define(MenuViewBuilder) )
 
 module.exports = MenuView

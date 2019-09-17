@@ -3,13 +3,15 @@ const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkWrapModes = require('./GtkWrapModes')
 const MenuView = require('./MenuView')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class TextView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle', 'onTextChanged', 'textView']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['scrolledWindow', 'onTextChanged', 'textView']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Styles
@@ -33,17 +35,17 @@ class TextView {
     initializeHandles() {
         this.textView = new Gtk.TextView()
 
-        this.mainHandle = new Gtk.ScrolledWindow()
+        this.scrolledWindow = new Gtk.ScrolledWindow()
 
-        this.mainHandle.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+        this.scrolledWindow.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
 
-        this.mainHandle.add(this.textView)
+        this.scrolledWindow.add(this.textView)
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.scrolledWindow
     }
 
     clearText() {
@@ -51,41 +53,51 @@ class TextView {
     }
 
     setText(text) {
-        if(text === undefined) {
+        if( text === undefined || text === null ) {
             text = ''
         }
+
+        text = this.textToWindowText(text)
 
         this.textView.getBuffer().text = text
     }
 
     getText() {
-        return this.textView.getBuffer().text
+        const windowText = this.textView.getBuffer().text
+
+        return this.windowTextToText(windowText)
     }
 
     getSelectedText() {
-        const [hasSelection, iterFrom, iterTo] = this.textView.buffer.getSelectionBounds()
+        const [hasSelection, iterFrom, iterTo] = this.textView.getBuffer().getSelectionBounds()
 
         if(hasSelection === false) {
             return ''
         }
 
-        return this.textView.buffer.getText(iterFrom, iterTo, false)
+        const windowText = this.textView.getBuffer().getText(iterFrom, iterTo, false)
+
+        return this.windowTextToText(windowText)
     }
 
     /// Events
 
     subscribeToGUISignals() {
-        this.textView.on('populate-popup', (menuHandle) => {
-            const menu = MenuView.newFromGtkWidget(menuHandle)
+        this.textView.on( 'populate-popup', this.handlePopulateMenuPopup.bind(this) )
 
-            this.populatePopupMenu({ menu: menu })
-        })
+        this.textView.getBuffer().on( 'changed', this.handleTextChanged.bind(this) )
+    }
 
+    handleTextChanged() {
         const onTextChanged = this.onTextChanged
 
-        this.textView.getBuffer().on('changed', () => {
-            onTextChanged( this.getText() )
-        })
+        this.onTextChanged( this.getText() )
+    }
+
+    handlePopulateMenuPopup(menuHandle) {
+        const menu = MenuView.newFromGtkWidget(menuHandle)
+
+        this.populatePopupMenu({ menu: menu })        
     }
 
     /// Styles
@@ -102,6 +114,16 @@ class TextView {
         })
 
         return mode
+    }
+
+    /// Converting
+
+    textToWindowText(text) {
+        return text.split("\n").join( "\r" )
+    }
+
+    windowTextToText(windowText) {
+        return windowText.split("\r").join( "\n" )
     }
 }
 

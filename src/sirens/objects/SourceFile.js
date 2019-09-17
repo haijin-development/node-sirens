@@ -77,8 +77,18 @@ class SourceFile {
         })
     }
 
+    getAllTopMostStatements() {
+        const parsedContents = this.getParsedContents()
+
+        if( parsedContents === null ) {
+            return []
+        }
+
+        return parsedContents.body
+    }
+
     getAllStatementsBefore({parseNode: parseNode}) {
-        const topMostStatements = this.getParsedContents().body
+        const topMostStatements = this.getAllTopMostStatements()
 
         const index = topMostStatements.indexOf( parseNode )
 
@@ -86,7 +96,7 @@ class SourceFile {
     }
 
     getAllStatementsAfter({parseNode: parseNode}) {
-        const topMostStatements = this.getParsedContents().body
+        const topMostStatements = this.getAllTopMostStatements()
 
         const index = topMostStatements.indexOf( parseNode )
 
@@ -154,12 +164,8 @@ class SourceFile {
     }
 
     getOriginalSourceCode({
-        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn, cr = cr
+        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
     }) {
-        if( cr === undefined ) {
-            cr = "\n"
-        }
-
         const fileContents = this.getFileContents()
 
         const allLines = splitLines(fileContents)
@@ -183,13 +189,13 @@ class SourceFile {
             return firstLine.slice(fromColumn, toColumn)
         }
 
-        let sourceCode = StringStream.new({ cr: cr })
+        let sourceCode = StringStream.new()
 
         sourceCode.append({ string: firstLine.slice(fromColumn) })
 
         if( middleLines.length > 0 ) {
             sourceCode.cr()
-            sourceCode.append({ string: middleLines.join(cr) })
+            sourceCode.append({ string: middleLines.join( "\n" ) })
         }
 
         sourceCode.cr()
@@ -225,8 +231,6 @@ class SourceFile {
     /// Writing
 
     saveFileContents(newFileContents) {
-        newFileContents = newFileContents.split("\r").join( "\n" )
-
         fs.writeFileSync( this.filepath, newFileContents )
     }
 }

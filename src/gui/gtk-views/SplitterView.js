@@ -1,13 +1,15 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class SplitterView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['orientation', 'mainHandle', 'isFirstSizeAllocation']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['orientation', 'paned', 'isFirstSizeAllocation']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -23,17 +25,17 @@ class SplitterView {
     }
 
     initializeHandles() {
-        this.mainHandle = this.newPaned(this.orientation)
+        this.paned = this.newPaned()
     }
 
     subscribeToGUISignals() {
-        this.mainHandle.on('size-allocate', this.onSizeAllocation.bind(this))
+        this.paned.on('size-allocate', this.handleSizeAllocate.bind(this))
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.paned
     }
 
     orientation() {
@@ -50,37 +52,51 @@ class SplitterView {
 
     /// Adding child views
 
-    addView(childView) {
-        const childViewHandle = childView.getMainHandle()
+    directChildViewAdd(childView) {
+        const childHandle = childView.getMainHandle()
 
-        const childViews = this.getChildViews()
+        let lastParent = this.paned
 
-        if(childViews.length < 2) {
-            this.mainHandle.add(childViewHandle)
+        while( true ) {
+            const children = lastParent.getChildren()
 
-            childViewHandle.show()
-        } else {
-            const newPaned = this.newPaned(this.orientation)
+            if( children.length < 2 ) { break }
 
-            const lastView = childViews[ childViews.length - 1 ]
-            const lastChildHandle = lastView.getMainHandle()
+            const typeOfLastChildren = children[1].constructor
 
-            const parentHandle = lastChildHandle.getParent()
-            parentHandle.remove(lastChildHandle)
+            if( typeOfLastChildren !== Gtk.HPaned && typeOfLastChildren !== Gtk.VPaned ) {
+                break
+            }
 
-            parentHandle.add(newPaned)
-
-            newPaned.add(lastChildHandle)
-            newPaned.add(childViewHandle)
-
-            parentHandle.showAll()
+            lastParent = children[1]
         }
 
-        childViews.push(childView)
+        const children = lastParent.getChildren()
+
+        if( children.length < 2 ) {
+            lastParent.add( childHandle )
+
+            return
+        }
+
+        const lastChildren = lastParent.getChildren()[1]
+
+        lastParent.remove(lastChildren)
+
+        const paned = this.newPaned()
+
+        paned.add( lastChildren )
+        paned.add( childHandle )
+
+        lastParent.add( paned )
+
+        this.isFirstSizeAllocation = true
+
+        this.paned.showAll()
     }
 
-    newPaned(orientation) {
-        if(orientation == 'horizontal') {
+    newPaned() {
+        if( this.isHorizontal() ) {
             return new Gtk.HPaned()
         } else {
             return new Gtk.VPaned()
@@ -90,12 +106,11 @@ class SplitterView {
 
     /// Events
 
-    onSizeAllocation(rectangle) {
+    handleSizeAllocate(rectangle) {
         if(this.isFirstSizeAllocation != true) {
             return
         }
 
-        this.mainHandle.off('size-allocate')
         this.isFirstSizeAllocation = false
 
         const width = rectangle.width
@@ -103,9 +118,20 @@ class SplitterView {
 
         let remainingProportion = 1.0
 
-        let currentHandle = this.mainHandle
+        let currentHandle = this.paned
 
         const childViewsCount = this.getChildViews().length
+
+        let totalSize
+        let remainingSize
+
+        if( this.isHorizontal() ) {
+            totalSize = width
+            remainingSize = width
+        } else {
+            totalSize = height
+            remainingSize = height
+        }
 
         this.getChildViews().forEach( (childView, index) => {
 
@@ -113,37 +139,38 @@ class SplitterView {
                 return
             }
 
-            if( currentHandle.getChildren === undefined || currentHandle.getChildren().length == 0 ) {
+            const typeOfLastChildren = currentHandle.constructor
+            if( typeOfLastChildren !== Gtk.HPaned && typeOfLastChildren !== Gtk.VPaned ) {
                 return
             }
-
-            const proportion = childView.splitProportion
-
-            remainingProportion = remainingProportion - proportion
 
             const children = currentHandle.getChildren()
 
             const firstChild = children[0]
 
-            this.setProportionalSize(firstChild, width, height, proportion)
-
             const secondChild = children[1]
+
+            const firstChildSize = totalSize * childView.splitProportion
+
+            remainingSize = remainingSize - firstChildSize
+
+            this.setProportionalSize(firstChild, width, height, firstChildSize)
 
             if( secondChild === undefined ) {
                 return
             }
 
-            this.setProportionalSize(secondChild, width, height, remainingProportion)
+            this.setProportionalSize(secondChild, width, height, remainingSize)
 
             currentHandle = secondChild
         })
     }
 
-    setProportionalSize(childHandle, width, height, proportion) {
+    setProportionalSize(childHandle, width, height, size) {
         if(this.isHorizontal()) {
-            childHandle.setSizeRequest(width * proportion, height)
+            childHandle.setSizeRequest(size, height)
         } else {
-            childHandle.setSizeRequest(width, height * proportion)
+            childHandle.setSizeRequest(width, size)
         }
     }
 }

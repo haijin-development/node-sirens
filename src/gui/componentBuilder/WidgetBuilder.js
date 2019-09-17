@@ -1,32 +1,22 @@
 const Classification = require('../../o-language/classifications/Classification')
+const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
 
 class WidgetBuilder {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['props']
+        this.instanceVariables = []
+        this.assumes = [ObjectWithProps]
     }
 
     /// Initializing
 
     initialize(props = {}) {
         this.previousClassificationDo( () => {
-            this.initialize(props)
+            this.initialize()
         })
 
-        this.props = props
-    }
-
-    /// Accessing
-
-    getProps() {
-        return this.props
-    }
-
-    mergeProps(additionalProps) {
-        this.props = Object.assign(this.props, additionalProps)
-
-        return this
+        this.setProps( props )
     }
 
     /// Setting props
@@ -52,7 +42,7 @@ class WidgetBuilder {
     build(closure, ...params) {
         if( closure === undefined ) { return }
 
-        closure.call(this, ...params)
+        this.bindYourself(closure, ...params)
     }
 
     normalizeArguments(props, closure) {

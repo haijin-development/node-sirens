@@ -1,13 +1,15 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class RadioButtonView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['radioButton']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Styles
@@ -21,29 +23,29 @@ class RadioButtonView {
     /// Initializing
 
     initializeHandles() {
-        this.mainHandle = new Gtk.RadioButton()
+        this.radioButton = new Gtk.RadioButton()
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.radioButton
     }
 
     setText(text) {
-        this.mainHandle.label = text
+        this.radioButton.label = text
     }
 
     getText() {
-        return this.mainHandle.label
+        return this.radioButton.label
     }
 
     setValue(boolean) {
-        this.mainHandle.setActive(boolean)
+        this.radioButton.setActive(boolean)
     }
 
     getValue() {
-        return this.mainHandle.active
+        return this.radioButton.active
     }
 
 
@@ -52,13 +54,19 @@ class RadioButtonView {
     subscribeToGUISignals() {
     }
 
-    onAddedToParentView(parentView) {
-        const length = parentView.getChildViews().length
+    connectToParentHandleOwnerView() {
+        this.previousClassificationDo( () => {
+            this.connectToParentHandleOwnerView()
+        })
 
-        const previousRadioButtonView = parentView.getChildViews()[length - 2]
+        const radioButtonSiblings = this.radioButton.getParent().getChildren()
 
-        if(previousRadioButtonView !== undefined) {
-            this.mainHandle.group = previousRadioButtonView.getMainHandle()
+        const siblingsCount = radioButtonSiblings.length
+
+        if(siblingsCount > 1) {
+            const previousRadioButtonHandle = radioButtonSiblings[siblingsCount - 2]
+
+            this.radioButton.group = previousRadioButtonHandle
         }
     }
 }

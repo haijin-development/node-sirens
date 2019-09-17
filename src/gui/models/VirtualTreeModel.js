@@ -6,7 +6,7 @@ class VirtualTreeModel {
 
     static definition() {
         this.instanceVariables = ['getChildrenBlock', 'roots']
-        this.assumptions = [Model]
+        this.assumes = [Model]
     }
 
     /// Initializing

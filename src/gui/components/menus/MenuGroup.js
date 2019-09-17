@@ -1,16 +1,22 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const MenuGroupView = require('../../gtk-views/MenuGroupView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class MenuGroup {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
+
+    defaultModel() {
+        return undefined
+    }
 
     createView() {
         const label = this.getProps().label

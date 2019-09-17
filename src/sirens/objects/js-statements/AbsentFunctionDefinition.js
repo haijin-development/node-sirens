@@ -11,7 +11,7 @@ class AbsentFunctionDefinition {
 
     static definition() {
         this.instanceVariables = ['line', 'column']
-        this.assumptions = [JsStatement]
+        this.assumes = [JsStatement]
     }
 
     /// Initializing
@@ -61,7 +61,7 @@ class AbsentFunctionDefinition {
         return this.getEndingPosition().column
     }
 
-    getSourceCode({cr: cr}) {
+    getSourceCode() {
         return 'Source code not found'
     }
 }

@@ -1,13 +1,15 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkView = require('./GtkView')
 const GtkWidgetWithContextMenu = require('./GtkWidgetWithContextMenu')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class GtkWidget {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [GtkView, GtkWidgetWithContextMenu]
+        this.assumes = [GtkView, GtkWidgetWithContextMenu]
+        this.expects = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -25,35 +27,38 @@ class GtkWidget {
     initializeHandles() {
     }
 
-    onViewAdded(childView) {
-        const childHandles = childView.getChildHandles()
+    connectToParentHandleOwnerView() {
+        const parentView = this.getParentHandleOwnerView()
 
-        childHandles.forEach( (childHandle) => {
-            this.getMainHandle().add(childHandle)
-
-            childView.onAddedToParentView(this)
-
-            childView.getMainHandle().show()
-        })
+        if( parentView !== undefined ) {
+            parentView.directChildViewAdd(this)
+        }
     }
 
-    onAddedToParentView(parentView) {
+    disconnectFromParentHandleOwnerView() {
+        const parentView = this.getParentHandleOwnerView()
+
+        if( parentView !== undefined ) {
+            parentView.directChildViewRemove(this)
+        }
+    }
+    
+    directChildViewAdd(childView) {
+        const childHandle = childView.getMainHandle()
+
+        this.getMainHandle().add( childHandle )
+
+        this.getMainHandle().showAll()
     }
 
-    /// Accessing
+    directChildViewRemove(childView) {
+        const childHandle = childView.getMainHandle()
 
-    getMainHandle() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::getMainHandle()`)
+        this.getMainHandle().remove( childHandle )
     }
 
-    subscribeToGUISignals() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::subscribeToGUISignals()`)
-    }
-
-    /// Asking
-
-    getMainView() {
-        return this
+    concreteViewsDo(closure) {
+        closure(this)
     }
 }
 

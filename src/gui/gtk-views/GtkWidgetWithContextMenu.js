@@ -31,7 +31,7 @@ class GtkWidgetWithContextMenu {
     populatePopupMenu({menu: menuView}) {
         if(this.populatePopupMenuBlock === undefined) { return }
 
-        this.populatePopupMenuBlock.call(menuView, { ownerView: this })
+        menuView.bindYourself(this.populatePopupMenuBlock, { ownerView: this })
     }
 }
 

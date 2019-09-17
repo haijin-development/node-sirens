@@ -1,13 +1,15 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class MenuItemView {
     /// Definition
 
     static definition() {
         this.instanceVariables = [ 'menuItem', 'label', 'enabled', 'action']
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -27,7 +29,7 @@ class MenuItemView {
 
         this.menuItem.setSensitive( this.enabled )
 
-        this.menuItem.on('activate', this.onAction.bind(this) )
+        this.menuItem.on('activate', this.handleActivate.bind(this) )
 
         this.menuItem.show()
     }
@@ -43,7 +45,7 @@ class MenuItemView {
     subscribeToGUISignals() {
     }
 
-    onAction() {
+    handleActivate() {
         this.action()
     }
 }

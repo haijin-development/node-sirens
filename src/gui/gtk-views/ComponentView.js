@@ -1,39 +1,58 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkView = require('./GtkView')
+const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
 
 class ComponentView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle', 'onClickedBlock']
-        this.assumptions = [GtkView]
-    }
-
-    onViewAdded(childView) {
+        this.instanceVariables = ['onClickedBlock']
+        this.assumes = [GtkView]
+        this.implements = [GtkViewProtocol_Implementation]
     }
 
     /// Accessing
 
-    getMainView() {
-        if( this.getChildViews().length === 0 ) {
-            throw Error(`The ${this.constructor.name} has no main child view.`)
+    getMainHandle() {
+        throw Error(`ComponentView has no main handle.`)
+    }
+
+    getOnlyChildViewMainHandle() {
+        const childViews = this.getChildViews()
+
+        if( childViews.length != 1 ) {
+            throw new Error(
+                `This ComponentView must have exactly 1 childView to respond ComponentView.getOnlyChildViewMainHandle.`
+            )
         }
 
-        return this.getChildViews()[0].getMainView()
+        return childViews[0].getOnlyChildViewMainHandle()
     }
 
-    getMainHandle() {
-        return this.getMainView().getMainHandle()
-    }
+    connectToParentHandleOwnerView() {
+        this.getChildViews().forEach( (childView) => {
+            const parentHandleOwnerView = this.getParentHandleOwnerView()
 
-    getChildHandles() {
-        let handles = []
+            childView.setParentHandleOwnerView( parentHandleOwnerView )
 
-        this.getChildViews().forEach( (view) => {
-            handles = handles.concat( view.getChildHandles() )
+            childView.connectToParentHandleOwnerView()
         })
+    }
 
-        return handles
+    disconnectFromParentHandleOwnerView() {
+        this.getChildViews().forEach( (childView) => {
+            childView.disconnectFromParentHandleOwnerView()
+        })
+    }
+
+    concreteViewsDo(closure) {
+        this.getChildViews().forEach( (childView) => {
+            childView.concreteViewsDo(closure)
+        })
+    }
+
+    isComponentView() {
+        return true
     }
 
     /// Actions
@@ -42,15 +61,18 @@ class ComponentView {
         return this.getMainHandle().open()
     }
 
-    addView(childView) {
-        this.getChildViews().push(childView)
+    /// Child views
 
-        this.onViewAdded(childView)
+    directChildViewAdd(childView) {
+        throw new Error(
+            `ComponentView.directChildViewAdd() should not be called since it is not a handle owner.`
+        )
     }
 
-    /// Events
-
-    onAddedToParentView(parentView) {
+    directChildViewRemove(childView) {
+        throw new Error(
+            `ComponentView.directChildViewRemove() should not be called since it is not a handle owner.`
+        )
     }
 }
 

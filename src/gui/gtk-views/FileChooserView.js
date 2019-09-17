@@ -1,6 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 const modes = {
     chooseFile: Gtk.FileChooserAction.OPEN,
@@ -21,13 +22,14 @@ class FileChooserView {
 
     static definition() {
         this.instanceVariables = ['dialog']
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({ title: title, mode: mode, parentView: parentView, openButtonLabel: openButtonLabel }) {
-        const parent = parentView !== undefined ? parentView.getMainHandle() : undefined
+    initialize({ title: title, mode: mode, windowView: windowView, openButtonLabel: openButtonLabel }) {
+        const windowHandle = windowView !== undefined ? windowView.getOnlyChildViewMainHandle() : undefined
         const label = openButtonLabel !== undefined ? openButtonLabel : this.defaultLabelFor(mode)
 
         this.previousClassificationDo( () => {
@@ -38,7 +40,7 @@ class FileChooserView {
 
         this.dialog.setAction( modes[mode] )
         this.dialog.setTitle(title)
-        this.dialog.setTransientFor(parent)
+        this.dialog.setTransientFor(windowHandle)
         this.dialog.setModal(true)
         this.dialog.addButton('Cancel', Gtk.ResponseType.CANCEL)
         this.dialog.addButton(label, Gtk.ResponseType.ACCEPT)

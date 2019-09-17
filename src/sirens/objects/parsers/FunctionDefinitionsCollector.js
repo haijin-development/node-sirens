@@ -10,7 +10,7 @@ class FunctionDefinitionsCollector {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [ParseTreeVisitor]
+        this.assumes = [ParseTreeVisitor]
     }
 
     collectFunctionDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {

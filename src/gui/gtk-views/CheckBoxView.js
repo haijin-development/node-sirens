@@ -1,13 +1,15 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 
 class CheckBoxView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle', 'onClickedBlock']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['checkButton', 'onClickedBlock']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -21,38 +23,38 @@ class CheckBoxView {
     }
 
     initializeHandles() {
-        this.mainHandle = new Gtk.CheckButton({label: ''})
+        this.checkButton = new Gtk.CheckButton({label: ''})
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.mainHandle
+        return this.checkButton
     }
 
     setText(text) {
-        this.mainHandle.label = text
+        this.checkButton.label = text
     }
 
     getText() {
-        return this.mainHandle.label
+        return this.checkButton.label
     }
 
     setValue(boolean) {
-        this.mainHandle.setActive(boolean)
+        this.checkButton.setActive(boolean)
     }
 
     getValue() {
-        return this.mainHandle.getActive()
+        return this.checkButton.getActive()
     }
 
     /// Events
 
     subscribeToGUISignals() {
-        this.mainHandle.on('clicked', this.onClick.bind(this))
+        this.checkButton.on( 'clicked', this.handleClick.bind(this) )
     }
 
-    onClick() {
+    handleClick() {
         this.onClickedBlock()
     }
 }

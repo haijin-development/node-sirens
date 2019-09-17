@@ -2,6 +2,7 @@ const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
+const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
 
 Sirens.initialize()
 
@@ -9,7 +10,8 @@ class GtkView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childViews', 'viewCustomAttributes']
+        this.instanceVariables = ['childViews', 'viewCustomAttributes', 'parentHandleOwnerView']
+        this.expects = [GtkViewProtocol_Implementation]
     }
 
     /// Styles
@@ -30,20 +32,38 @@ class GtkView {
         this.viewCustomAttributes = []
     }
 
-    addView(childView) {
+    addChildView(childView) {
         this.childViews.push(childView)
 
-        this.onViewAdded(childView)
+        if( this.isComponentView() ) {
+            const parentHandleOwnerView = this.getParentHandleOwnerView()
+
+            childView.setParentHandleOwnerView( parentHandleOwnerView )
+        } else {
+            childView.setParentHandleOwnerView( this )
+        }
+
+        childView.connectToParentHandleOwnerView()
     }
 
-    /// Events
+    removeChildView(childView) {
+        const viewsCount = this.childViews.length
 
-    onViewAdded(childView) {
-        throw Error(`The class ${this.constructor.name} must implement the method ::onViewAdded()`)
+        this.childViews = this.childViews.filter( (eachView) => {
+            return eachView !== childView
+        })
+
+        if( viewsCount !== this.childViews.length + 1 ) {
+            throw new Error(`Trying to remove a view that is not a child view.`)
+        }
+
+        childView.disconnectFromParentHandleOwnerView()
     }
 
-    onAddedToParentView(parentView) {
-        throw Error(`The class ${this.constructor.name} must implement the method ::onAddedToParentView()`)
+    /// Asking
+
+    isComponentView() {
+        return false
     }
 
     /// Accessing
@@ -52,20 +72,16 @@ class GtkView {
         return this.childViews
     }
 
-    getMainView() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::getMainView()`)
-    }
-
-    getMainHandle() {
-        throw Error(`The class ${this.constructor.name} must implement the method ::getMainHandle()`)
-    }
-
-    getChildHandles() {
-        return [this.getMainHandle()]
-    }
-
     getChildrenCount() {
         return this.childViews.length
+    }
+
+    setParentHandleOwnerView(view) {
+        this.parentHandleOwnerView = view
+    }
+
+    getParentHandleOwnerView() {
+        return this.parentHandleOwnerView
     }
 
     /// Styles
@@ -108,6 +124,17 @@ class GtkView {
         const value = this.viewCustomAttributes[attributeName]
 
         return value !== undefined ? value : absentValue
+    }
+
+    /// Handles
+
+    /*
+        Returns the only Gtk.Widget handle of this Gtk.View.
+        If this views has more than one child returns an error.
+        If this Gtk.View is a ComponentView returns the Gtk handle of its child component.
+    */
+    getOnlyChildViewMainHandle() {
+        return this.getMainHandle()
     }
 }
 

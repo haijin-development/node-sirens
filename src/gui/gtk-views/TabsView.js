@@ -1,6 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 const tabPositions = {
     left: Gtk.PositionType.LEFT,
@@ -14,7 +15,8 @@ class TabsView {
 
     static definition() {
         this.instanceVariables = ['notebook']
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Styles
@@ -63,22 +65,61 @@ class TabsView {
         return this.notebook.getCurrentPage()
     }
 
+    getSelectedPageView() {
+        const selectedPageIndex = this.getSelectedPageIndex()
+
+        let selectedPage
+        let index = 0
+
+        this.getChildViews().forEach( (childView) => {
+            childView.concreteViewsDo( (childView) => {
+                if( index === selectedPageIndex ) {
+                    selectedPage = childView
+                }
+
+                index += 1
+            })
+        })
+
+        return selectedPage
+    }
+
     /// Events
 
-    onViewAdded(childView) {
+    directChildViewAdd(childView) {
         this.previousClassificationDo( () => {
-            this.onViewAdded(childView)
+            this.directChildViewAdd(childView)
         })
+
+        let tabPageIndex = this.notebook.getChildren().length - 1
 
         const tabLabel = childView.getViewCustomAttribute({ at: 'tabLabel' })
 
         this.setTabLabelAt({
-            index: this.getChildrenCount() - 1,
+            index: tabPageIndex,
             text: tabLabel
+        })
+
+        this.getChildViews().forEach( (childView) => {
+            childView.concreteViewsDo( (childView) => {
+                this.ensureFixedPosition(childView)
+            })
         })
     }
 
     subscribeToGUISignals(props) {
+    }
+
+    ensureFixedPosition(childView) {
+        let tabFixedPosition = childView.getViewCustomAttribute({ at: 'tabFixedPosition' })
+
+        if( tabFixedPosition === undefined ) { return }
+
+        if( tabFixedPosition < 0 ) {
+            tabFixedPosition = this.notebook.getChildren().length + tabFixedPosition
+        }
+
+        this.notebook.reorderChild( childView.getMainHandle(), tabFixedPosition )
     }
 }
 

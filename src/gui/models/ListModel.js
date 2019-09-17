@@ -6,7 +6,7 @@ class ListModel {
 
     static definition() {
         this.instanceVariables = ['list']
-        this.assumptions = [Model]
+        this.assumes = [Model]
     }
 
     /// Initializing
@@ -52,7 +52,15 @@ class ListModel {
         this.emit('items-added', { list: this.list, items: items, index: index })
     }
 
-    insert(index, ...items) {
+    insert({ index: index, item: item }) {
+        if( item === undefined ) { throw new Error(`{ item: } is undefined. Are you trying to use ListModel.insertAll instead?`) }
+
+        this.insertAll({ index: index, items: [item] })
+    }
+
+    insertAll({ index: index, items: items }) {
+        if( items === undefined ) { throw new Error(`{ items: } is undefined. Are you trying to use ListModel.insert instead?`) }
+
         this.list.splice(index, 0, ...items)
 
         this.emit('items-added', { list: this.list, items: items, index: index })
@@ -60,22 +68,17 @@ class ListModel {
 
     /// Updating
 
-    update({ index: index, item: item, indices: indices, items: items } =
-               { index: undefined, item: undefined, indices: undefined, items: undefined })
+    update({ index: index, item: item })
     {
-        if( indices === undefined ) {
-            indices = [index]
-        }
+        if( item === undefined ) { throw new Error(`{ item: } is undefined. Are you trying to use ListModel.updateAll instead?`) }
 
-        if( items === undefined ) {
-            items = [item]
-        }
-
-        this.updateAll({ indices: indices, items: items })
+        this.updateAll({ indices: [index], items: [item] })
     }
 
     updateAll({ indices: indices, items: items })
     {
+        if( items === undefined ) { throw new Error(`{ items: } is undefined. Are you trying to use ListModel.update instead?`) }
+
         for (let i = 0; i < items.length; i++) {
             const index = indices[i]
             const item = items[i]
@@ -89,7 +92,9 @@ class ListModel {
     /// Removing
 
     // Removes the first ocurrence of the item from the list.
-    remove(item) {
+    remove({ item: item }) {
+        if( item === undefined ) { throw new Error(`{ item: } is undefined. Are you trying to use ListModel.removeAll instead?`) }
+
         const index = this.list.indexOf(item)
 
         this.list.splice(index, 1)
@@ -97,7 +102,9 @@ class ListModel {
         this.emit('items-removed', { list: this.list, items: [item], indices: [index] })
     }
 
-    removeAll(items) {
+    removeAll({ items: items }) {
+        if( items === undefined ) { throw new Error(`{ items: } is undefined. Are you trying to use ListModel.remove instead?`) }
+
         const removedItems = []
 
         const removedIndices = this.indicesOf(items).sort().reverse()
@@ -111,11 +118,11 @@ class ListModel {
         this.emit('items-removed', { list: this.list, items: removedItems, indices: removedIndices })
     }
 
-    removeAt(index) {
-        this.removeAllAt( [index] )
+    removeAt({ index: index }) {
+        this.removeAllAt({ indices: [index] })
     }
 
-    removeAllAt(indices) {
+    removeAllAt({ indices: indices }) {
         const removedItems = []
 
         const removedIndices = indices.slice().sort().reverse()

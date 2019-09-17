@@ -7,7 +7,7 @@ class ColumnsBuilder {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [WidgetBuilder]
+        this.assumes = [WidgetBuilder]
     }
 
     /// Initializing

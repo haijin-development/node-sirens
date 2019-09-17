@@ -1,12 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
-const path = require('path')
-const fs = require('fs')
-const esprima = require('esprima')
-const splitLines = require('split-lines')
-const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
-const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
-const AbsentFunctionDefinition = require('./js-statements/AbsentFunctionDefinition')
 const SourceFile = require('./SourceFile')
+const ClassSourceFileFooter = require('./js-statements/ClassSourceFileFooter')
 
 /*
  * A source file with a class definition.
@@ -16,16 +10,35 @@ class ClassSourceFile {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [SourceFile]
+        this.assumes = [SourceFile]
     }
 
     /// Accessing
 
     /*
-     * Returns all the class definitions in the file.
+     * Returns the statements below the class declaration.
+     * This section tipically includes the exports, additional functions, etc, etc.
      */
-    getClassDefinition() {
-        return this.getClassDefinitions()[0]
+    getFooterDefinition() {
+        const classDefinitions = this.getClassDefinitions()
+
+        if( classDefinitions.length === 0 ) {
+            return ClassSourceFileFooter.new({
+                statements: this.getAllTopMostStatements(),
+                sourceFile: this,
+            })
+        }
+
+        const lastClassDefinition = classDefinitions[ classDefinitions.length - 1 ]
+
+        const lastClassParseNode = lastClassDefinition.getParseNode()
+
+        const footerStatements = this.getAllStatementsAfter({ parseNode: lastClassParseNode })
+
+        return ClassSourceFileFooter.new({
+            statements: footerStatements,
+            sourceFile: this,
+        })
     }
 }
 

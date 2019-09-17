@@ -11,7 +11,7 @@ class ClassDefinitionHeader {
 
     static definition() {
         this.instanceVariables = ['statements']
-        this.assumptions = [JsStatement]
+        this.assumes = [JsStatement]
     }
 
     /// Initializing

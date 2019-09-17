@@ -1,13 +1,15 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class StackView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainHandle']
-        this.assumptions = [GtkWidget]
+        this.instanceVariables = ['box']
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -18,14 +20,14 @@ class StackView {
         })
 
         if(orientation == 'horizontal') {
-            this.mainHandle = new Gtk.HBox()
+            this.box = new Gtk.HBox()
         } else {
-            this.mainHandle = new Gtk.VBox()
+            this.box = new Gtk.VBox()
         }
     }
 
     getMainHandle() {
-        return this.mainHandle
+        return this.box
     }
 
     /// Events
@@ -33,27 +35,21 @@ class StackView {
     subscribeToGUISignals() {
     }
 
-    onViewAdded(childView) {
-        childView = childView.getMainView()
-
+    directChildViewAdd(childView) {
         const packExpand = childView.getViewCustomAttribute({ at: 'packExpand', ifAbsent: true })
         const packFill = childView.getViewCustomAttribute({ at: 'packFill', ifAbsent: true })
         const packPadding = childView.getViewCustomAttribute({ at: 'packPadding', ifAbsent: 0 })
 
-        const childHandles = childView.getChildHandles()
+        const childHandle = childView.getMainHandle()
 
-        childHandles.forEach( (childHandle) => {
-            this.mainHandle.packStart(
-                childHandle,
-                packExpand,
-                packFill,
-                packPadding
-            )
+        this.box.packStart(
+            childHandle,
+            packExpand,
+            packFill,
+            packPadding
+        )
 
-            childView.onAddedToParentView(this)
-
-            childView.getMainHandle().show()
-        })
+        this.box.showAll()
     }
 }
 

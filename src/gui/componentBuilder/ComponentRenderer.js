@@ -1,12 +1,14 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ContainerWidgetBuilder = require('./ContainerWidgetBuilder')
+const ComponentRendererProtocol = require('../protocols/ComponentRendererProtocol')
 
 class ComponentRenderer {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['rootComponent']
-        this.assumptions = [ContainerWidgetBuilder]
+        this.assumes = [ContainerWidgetBuilder]
+        this.implements = [ComponentRendererProtocol]
     }
 
     /// Accessing
@@ -26,7 +28,7 @@ class ComponentRenderer {
 
         const childComponents = this.getChildComponents()
 
-        this.rootComponent.addAllComponents( childComponents )
+        this.rootComponent.addAllChildrenComponents( childComponents )
 
         return this.rootComponent
     }

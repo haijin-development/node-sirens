@@ -1,5 +1,6 @@
 const Classification = require('./Classification')
 const StringStream = require('./StringStream')
+const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
 /*
     class(`
@@ -87,7 +88,8 @@ class IndentedStringStream {
 
     static definition() {
         this.instanceVariables = ['indentationCount', 'indentationChar', 'indentation']
-        this.assumptions = []
+        this.assumes = []
+        this.expects = [StringStreamProcotol]
     }
 
     /// Initializing

@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
-const ValueModel = require('../../gui/models/ValueModel')
+const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
 const FunctionDefinition = require('../objects/js-statements/FunctionDefinition')
@@ -31,7 +31,9 @@ class StackTraceBrowserModel {
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.functionSourceCodeModel = ValueModel.new()
+        this.functionSourceCodeModel = BufferedAttributeModel.new({
+            attributeReader: this.getFunctionSourceCode.bind(this)
+        })
 
         this.connectModels()
     }
@@ -71,6 +73,14 @@ class StackTraceBrowserModel {
         return this.objectPropertiesTreeModel.getSelectionValue()
     }
 
+    /// Formatting
+
+    getFunctionSourceCode(functionDefinition) {
+        if( functionDefinition === undefined ) { return '' }
+
+        return functionDefinition.getSourceCode()
+    }
+
     /// Events
 
     onStackFrameSelectionChanged() {
@@ -78,9 +88,7 @@ class StackTraceBrowserModel {
 
         const functionDefinition = this.getFunctionDefinitionFrom(selectedStackFrame)
 
-        const functionSourceCodeModel = functionDefinition.getSourceCode({cr: "\r"})
-
-        this.functionSourceCodeModel.setValue(functionSourceCodeModel)
+        this.functionSourceCodeModel.setObject(functionDefinition)
     }
 
     getFunctionDefinitionFrom(stackFrame) {

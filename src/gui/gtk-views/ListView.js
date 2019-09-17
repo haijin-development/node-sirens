@@ -5,18 +5,19 @@ const GdkPixbuf = nodeGtk.require('GdkPixbuf')
 const GtkTypes = require('./GtkTypes')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class ListView {
     /// Definition
 
     static definition() {
         this.instanceVariables = [
-            'mainHandle', 'listStore', 'treeView', 'columns',
+            'scrolledView', 'listStore', 'treeView', 'columns',
             'onSelectionChanged', 'onSelectionAction',
             'allowSelectionChange',
         ]
-
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Styles
@@ -49,8 +50,8 @@ class ListView {
     }
 
     initializeHandles() {
-        this.mainHandle = new Gtk.ScrolledWindow()
-        this.mainHandle.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        this.scrolledView = new Gtk.ScrolledWindow()
+        this.scrolledView.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         this.listStore = new Gtk.ListStore()
         this.treeView = null
@@ -77,7 +78,7 @@ class ListView {
             this.addColumn(eachColumn)
         })
 
-        this.mainHandle.add(this.treeView)
+        this.scrolledView.add(this.treeView)
     }
 
     addColumn(column) {
@@ -113,7 +114,7 @@ class ListView {
     /// Querying
 
     getMainHandle() {
-        return this.mainHandle
+        return this.scrolledView
     }
 
     /*
@@ -229,8 +230,11 @@ class ListView {
         this.columns.forEach( (column, columnIndex) => {
 
             if( column.isImage() ) {
-                const imageFile = column.getImageFileOf(item, () => {
-                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`
+                const imageFile = column.getImageFileOf({
+                    item: item,
+                    onUndefined: () => {
+                        throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`
+                    }
                 })
 
                 const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
@@ -242,8 +246,11 @@ class ListView {
                 this.setIterImage(pixbuf, iter, columnIndex)
 
             } else {
-                const text = column.getDisplayTextOf(item, () => {
-                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+                const text = column.getDisplayTextOf({
+                    item: item,
+                    onUndefined: () => {
+                        throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+                    }
                 })
 
                 this.setIterText(text, iter, columnIndex)
@@ -282,20 +289,14 @@ class ListView {
             return
         }
 
-        this.treeView.getSelection().on('changed', this.onSelectedRowChanged.bind(this))
+        this.treeView.getSelection().on('changed', this.handleSelectedRowChanged.bind(this))
 
-        this.treeView.on('row-activated', this.onSelectionActioned.bind(this))
+        this.treeView.on('row-activated', this.handleSelectionActioned.bind(this))
 
-        this.treeView.on('button-press-event', this.onButtonPressed.bind(this))
+        this.treeView.on('button-press-event', this.handleButtonPressed.bind(this))
     }
 
-    onButtonPressed(event) {
-        if (event.button !== 3) return
-
-        this.showPopupMenu()
-    }
-
-    onSelectedRowChanged() {
+    handleSelectedRowChanged() {
         if(this.onSelectionChanged === undefined) {
             return
         }
@@ -303,7 +304,7 @@ class ListView {
         this.onSelectionChanged()
     }
 
-    onSelectionActioned(treePath, treeViewColumn) {
+    handleSelectionActioned(treePath, treeViewColumn) {
         if(this.onSelectionAction === undefined) {
             return
         }
@@ -311,6 +312,12 @@ class ListView {
         const selectedIndices = this.getSelectionIndices()
 
         this.onSelectionAction(selectedIndices)
+    }
+
+    handleButtonPressed(event) {
+        if (event.button !== 3) return
+
+        this.showPopupMenu()
     }
 
     /*

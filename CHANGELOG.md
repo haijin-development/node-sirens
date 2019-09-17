@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0 (unreleased)
+## v0.6.0 (next release)
 
 ### Sirens
 
@@ -15,11 +15,35 @@
 - Implemented FileChooser dialog
 - Implemented Tab pages
 - Implemented ToolBar
+- Added ComponentInstantiator.render(closure) method
+- Improved the naming of the paremter methods of ListModel
+- Rewrote classifications with 'props' instance variables to use ObjectWithProps classification
+- Reimplemented ValueModel
+- Implemented ObjectPropModel and ObjectAttributeModel
+- Standarized all Views events subscriptions naming convention to handleEvent()
+- Standarized all Views events subscriptions to always use an owned class method to allow overriding.
+- Standarized all Component callbacks to always use an owned class method to allow overriding.
+- TextView converts between "\n" and "\cr"
+- Removed passing unnecessary cr parameters
+- Implemented BufferedAttributeModel
 
 ### O language
 
-- The method #define works with any classification object not just with Classification.
-- Added Protocol class and Classification.implements(procotol) method
+- The method Classification.define works with any classification object and not just with Classification.
+- Implemented StringStream
+- Implemented IndentedStringStream
+- Implemented Protocol classification and Classification.implements(procotol) method
+- Implemented StringStreamProtocol
+- Rewrote Debuggable
+- Improved Classification protocol and tests.
+- Started to document classifications and methods with the **native dsl within comments** style
+- Renamed ClassificationDefinition.assumptions to ClassificationDefinition.assumes
+- Renamed ClassificationDefinition.implementations to ClassificationDefinition.implements
+- Added ClassificationDefinition.expects
+- Implemented several protocols
+- Added the assertion that a Classifications implements the protocols it declares in its ClassificationDefinition.implementations
+- Added ClassificationDefinition.classificationBehaviours
+- Implemented ObjectWithProps classification
 
 ## v0.5.0
 

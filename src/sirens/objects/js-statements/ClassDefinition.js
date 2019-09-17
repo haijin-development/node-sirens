@@ -2,8 +2,6 @@ const Classification = require('../../../o-language/classifications/Classificati
 const JsStatement = require('./JsStatement')
 const FunctionDefinitionsCollector = require('../parsers/FunctionDefinitionsCollector')
 const ClassDefinitionHeader = require('./ClassDefinitionHeader')
-const ClassDefinitionFooter = require('./ClassDefinitionFooter')
-const StringStream = require('../../../o-language/classifications/StringStream')
 
 /*
  * The definition of a javascript class.
@@ -15,7 +13,7 @@ class ClassDefinition {
 
     static definition() {
         this.instanceVariables = ['parseNode']
-        this.assumptions = [JsStatement]
+        this.assumes = [JsStatement]
     }
 
     /// Initializing
@@ -30,6 +28,10 @@ class ClassDefinition {
 
     /// Accessing
 
+    getParseNode() {
+        return this.parseNode
+    }
+
     /*
      * Returns the name of the class.
      */
@@ -43,22 +45,22 @@ class ClassDefinition {
      */
     getHeaderDefinition() {
         const statements = this.getSourceFile().getAllStatementsBefore({ parseNode: this.parseNode })
+            
+        let statementsBeforePreviousClass = 0
+
+        for( const eachStatement of statements.slice().reverse() ) {
+
+            if( eachStatement.type === 'ClassDeclaration' ) {
+                break
+            }
+
+            statementsBeforePreviousClass += 1
+        }
+
+        const statementsFromPreviousClassDefinition = statements.slice( -statementsBeforePreviousClass )
 
         return ClassDefinitionHeader.new({
-            statements: statements,
-            sourceFile: this.getSourceFile()
-        })
-    }
-
-    /*
-     * Returns the statements below the class declaration.
-     * This section tipically includes the exports, additional functions, etc, etc.
-     */
-    getFooterDefinition() {
-        const statements = this.getSourceFile().getAllStatementsAfter({ parseNode: this.parseNode })
-
-        return ClassDefinitionFooter.new({
-            statements: statements,
+            statements: statementsFromPreviousClassDefinition,
             sourceFile: this.getSourceFile()
         })
     }
@@ -74,60 +76,6 @@ class ClassDefinition {
             treeNode: this.parseNode,
             sourceFile: this.getSourceFile(),
         })
-    }
-
-    /// Writing
-
-    setHeaderSourceCode(headerSourceCode) {
-        const classStartLine = this.parseNode.loc.start.line
-        const classStartColumn = this.parseNode.loc.start.column
-
-        const fileContentsExceptHeader = this.getSourceFile().getOriginalSourceCode({
-            fromLine: classStartLine,
-            fromColumn: classStartColumn,
-            cr: "\n"
-        })
-
-        const hasNotEmptyHeader = headerSourceCode !== ''
-
-        const newFileContents = StringStream.new()
-
-        newFileContents.append({ string: headerSourceCode, if: hasNotEmptyHeader })
-
-        newFileContents.cr({ if: hasNotEmptyHeader })
-
-        newFileContents.cr()
-
-        newFileContents.append({ string: fileContentsExceptHeader })
-
-        this.getSourceFile().saveFileContents( newFileContents.getString() )
-    }
-
-    setFooterSourceCode(footerSourceCode) {
-        const classEndLine = this.parseNode.loc.end.line
-        const classEndColumn = this.parseNode.loc.end.column
-
-        const fileContentsExceptFooter = this.getSourceFile().getOriginalSourceCode({
-            fromLine: 1,
-            fromColumn: 0,
-            toLine: classEndLine,
-            toColumn: classEndColumn,
-            cr: "\n"
-        })
-
-        const hasNotEmptyFooter = footerSourceCode !== ''
-
-        const newFileContents = StringStream.new()
-
-        newFileContents.append({ string: fileContentsExceptFooter })
-
-        newFileContents.cr()
-
-        newFileContents.append({ string: footerSourceCode, if: hasNotEmptyFooter })
-
-        newFileContents.cr({ if: hasNotEmptyFooter })
-
-        this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
 }
 

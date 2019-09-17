@@ -8,7 +8,7 @@ class MenuBuilder {
 
     static definition() {
         this.instanceVariables = ['menuGroups']
-        this.assumptions = [WidgetBuilder]
+        this.assumes = [WidgetBuilder]
     }
 
     /// Initializing
@@ -34,7 +34,7 @@ class MenuBuilder {
 
         const menuBar = MenuBar.new( this.getProps() )
 
-        menuBar.addAllComponents( this.menuGroups )
+        menuBar.addAllChildrenComponents( this.menuGroups )
 
         return menuBar
     }

@@ -5,18 +5,19 @@ const GdkPixbuf = nodeGtk.require('GdkPixbuf')
 const GtkTypes = require('./GtkTypes')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
+const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class TreeView {
     /// Definition
 
     static definition() {
         this.instanceVariables = [
-            'mainHandle', 'treeStore', 'treeView', 'columns',
+            'scrolledWindow', 'treeStore', 'treeView', 'columns',
             'getChildrenBlock', 'onSelectionChanged', 'onSelectionAction',
             'placeholder'
         ]
-
-        this.assumptions = [GtkWidget]
+        this.assumes = [GtkWidget]
+        this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
@@ -43,8 +44,8 @@ class TreeView {
     }
 
     initializeHandles() {
-        this.mainHandle = new Gtk.ScrolledWindow()
-        this.mainHandle.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        this.scrolledWindow = new Gtk.ScrolledWindow()
+        this.scrolledWindow.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         this.treeStore = new Gtk.TreeStore()
 
@@ -65,7 +66,7 @@ class TreeView {
     }
 
     getMainHandle() {
-        return this.mainHandle
+        return this.scrolledWindow
     }
 
     setColumns(columns) {
@@ -85,7 +86,7 @@ class TreeView {
             this.addColumn(eachColumn)
         })
 
-        this.mainHandle.add(this.treeView)
+        this.scrolledWindow.add(this.treeView)
 
         this.subscribeToGUISignals()
     }
@@ -250,8 +251,11 @@ class TreeView {
         this.columns.forEach( (column, columnIndex) => {
 
             if( column.isImage() ) {
-                const imageFile = column.getImageFileOf(item, () => {
-                    throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`                
+                const imageFile = column.getImageFileOf({
+                    item: item,
+                    onUndefined: () => {
+                        throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`                
+                    }
                 })
 
                 const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
@@ -263,8 +267,11 @@ class TreeView {
                 this.setIterImage(pixbuf, iter, columnIndex)
 
             } else {
-                const text = column.getDisplayTextOf(item, () => {
-                    throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`                
+                const text = column.getDisplayTextOf({
+                    item: item,
+                    onUndefined: () => {
+                        throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`                
+                    }
                 })
 
                 this.setIterText(text, iter, columnIndex)
@@ -303,22 +310,22 @@ class TreeView {
             return
         }
 
-        this.treeView.getSelection().on('changed', this.onSelectedRowChanged.bind(this))
+        this.treeView.getSelection().on('changed', this.handleSelectedRowChanged.bind(this))
 
-        this.treeView.on('row-activated', this.onSelectionActioned.bind(this))
+        this.treeView.on('row-activated', this.handleSelectionActioned.bind(this))
 
-        this.treeView.on('row-expanded', this.onRowExpanded.bind(this))
+        this.treeView.on('row-expanded', this.handleRowExpanded.bind(this))
 
-        this.treeView.on('button-press-event', this.onButtonPressed.bind(this))
+        this.treeView.on('button-press-event', this.handleButtonPressed.bind(this))
     }
 
-    onButtonPressed(event) {
+    handleButtonPressed(event) {
         if (event.button !== 3) return
 
         this.showPopupMenu()
     }
 
-    onSelectedRowChanged() {
+    handleSelectedRowChanged() {
         if(this.onSelectionChanged === undefined) {
             return
         }
@@ -326,7 +333,7 @@ class TreeView {
         this.onSelectionChanged()
     }
 
-    onSelectionActioned(treePath, treeViewColumn) {
+    handleSelectionActioned(treePath, treeViewColumn) {
         const selectedIndices = this.pathStringToPathIndices(treePath)
 
         this.onSelectionAction(selectedIndices)
@@ -339,7 +346,7 @@ class TreeView {
      * replaced with the actual node children.
      * The actual children are get using the getChildrenBlock.
      */
-    onRowExpanded(iter, treePath) {
+    handleRowExpanded(iter, treePath) {
         const [bool, childIter] = this.treeStore.iterNthChild(iter, 0)
 
         let childValue

@@ -66,4 +66,58 @@ describe('A Protocol classification', () => {
             classification: Circle, ifNot: () => { return 'not' }
         }) ) .to .equal( 'not' )
     })
+
+
+    describe('when declared in the implementations array of a Classification', () => {
+
+        class Point {
+            /// Definition
+
+            static definition() {
+                this.instanceVariables = ['x', 'y']
+                this.implements = [PointProcotol]
+            }
+
+            // Accessing
+
+            getX() {
+                return this.x
+            }
+
+            setX(value) {
+                this.x = value
+            }
+
+            getY() {
+                return this.y
+            }
+
+            setY(value) {
+                this.y = value
+            }
+        }
+
+        class Circle {
+            /// Definition
+
+            static definition() {
+                this.instanceVariables = []
+                this.implements = [PointProcotol]
+            }
+        }
+
+        it('does not raise an error if the classification implements the protocol', () => {
+            expect( () => {
+                Classification.define(Point)
+            }) .not .to .throw( Error )
+        })
+
+        it('raises an error if the classification does not implement the protocol', () => {
+            expect( () => {
+                Classification.define(Circle)
+            }) .to .throw(Error, 'Circle classification must implement the method PointProcotol.getX to comply with the protocol implementation.')
+        })
+
+    })
+
 })

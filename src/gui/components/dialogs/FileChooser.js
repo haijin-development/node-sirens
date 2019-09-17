@@ -1,6 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
 const FileChooserView = require('../../gtk-views/FileChooserView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class FileChooser {
 
@@ -8,20 +9,25 @@ class FileChooser {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
 
-    createView() {
-        const parentComponent = this.getProps().parentComponent
+    defaultModel() {
+        return undefined
+    }
 
-        const parentView = parentComponent !== undefined ? parentComponent.getView() : undefined
+    createView() {
+        const window = this.getProps().window
+
+        const windowView = window !== undefined ? window.getView() : undefined
 
         return FileChooserView.new({
             title: this.getProps().title,
             mode: this.getProps().mode,
-            parentView: parentView,
+            windowView: windowView,
         })
     }
 
@@ -37,11 +43,11 @@ FileChooser = Classification.define(FileChooser)
 
 /// Constructors
 
-FileChooser.openFile = function({ title: title,  parent: parentComponent }) {
+FileChooser.openFile = function({ title: title,  window: windowComponent }) {
     const dialog = this.new({
         title: title,
         mode: 'chooseFile',
-        parentComponent: parentComponent
+        window: windowComponent
     })
 
     return dialog.open()

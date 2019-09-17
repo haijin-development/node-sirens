@@ -23,7 +23,11 @@ class Protocol {
             }
         }
 
-        const protocolMethods = this.getDefinedMethodNames()
+        let protocolMethods = []
+
+        this.getAssumptionsChain().forEach( (protocol) => {
+            protocolMethods = protocolMethods.concat( protocol.getDefinedMethodNames() )
+        })
 
         for(const eachMethod of protocolMethods) {
             const implementsMethod = classifications.some( (classification) => {

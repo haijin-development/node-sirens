@@ -1,5 +1,6 @@
 const Classification = require('./Classification')
 const OInstance = require('./OInstance')
+const DebuggableProtocol = require('../protocols/DebuggableProtocol')
 const IndentedStringStream = require('./IndentedStringStream')
 
 /*
@@ -11,7 +12,8 @@ class Debuggable {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = []
+        this.assumes = []
+        this.implements = [DebuggableProtocol]
     }
 
     /// Debugging

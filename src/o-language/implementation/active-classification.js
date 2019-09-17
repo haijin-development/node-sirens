@@ -4,8 +4,8 @@ class ActiveClassification {
     /*
      * Pushes the given classification in the call stack of the given object.
      */
-    static pushInto({ object: object, classification: classification }) {
-        object.impl.activeClassificationStack.push(classification)
+    static pushInto({ object: object, instantiatedClassification: instantiatedClassification }) {
+        object.impl.activeClassificationStack.push( instantiatedClassification )
     }
 
     /*
@@ -18,24 +18,26 @@ class ActiveClassification {
     /*
      * Returns the active classification from the call stack of the given object.
      */
-    static in({ object }) {
+    static in({ object: object, offset: offset }) {
+        if( offset === undefined ) { offset = 0 }
+
         const length = object.impl.activeClassificationStack.length
 
-        return object.impl.activeClassificationStack[ length - 1 ]
+        return object.impl.activeClassificationStack[ length - 1 + offset ]
     }
 
     /*
      * Returns true if the given propName is an instance variable of the active classification, false otherwise.
      */
     static hasInstanceVariable({ object: object, instanceVariableName: instanceVariableName }) {
-        const activeClassification = ActiveClassification.in({ object : object })
+        const activeInstantiatedClassification = ActiveClassification.in({ object : object })
 
-        if(activeClassification === undefined) {
+        if( activeInstantiatedClassification === undefined ) {
             return false
         }
 
         return ClassificationInstantiation.hasInstanceVariable({
-            classificationInstantiation: activeClassification,
+            classificationInstantiation: activeInstantiatedClassification,
             instanceVariableName: instanceVariableName,
         })
     }
@@ -46,16 +48,16 @@ class ActiveClassification {
      * That assumption might be tested first with isInstanceVariableInActiveClassification(object, instVarName).
      */
     static getInstanceVariableValue({ object: object, instanceVariableName: instanceVariableName }) {
-        const activeClassification = ActiveClassification.in({
+        const activeInstantiatedClassification = ActiveClassification.in({
             object: object
         })
 
-        if( activeClassification === undefined ) {
+        if( activeInstantiatedClassification === undefined ) {
             return undefined
         }
 
         return ClassificationInstantiation.getInstanceVariableValue({
-            classificationInstantiation: activeClassification,
+            classificationInstantiation: activeInstantiatedClassification,
             instanceVariableName: instanceVariableName,
         })
     }
@@ -68,24 +70,24 @@ class ActiveClassification {
     static setInstanceVariableValue({
         object: object, instanceVariableName: instanceVariableName, value: value}
     ) {
-        const activeClassification = ActiveClassification.in({
+        const activeInstantiatedClassification = ActiveClassification.in({
             object: object
         })
 
-        if( activeClassification === undefined ) {
+        if( activeInstantiatedClassification === undefined ) {
             object[instanceVariableName] = value
 
             return
         }
 
-        if( ! activeClassification.constructor.instanceVariables.includes(instanceVariableName) ) {
+        if( ! activeInstantiatedClassification.constructor.instanceVariables.includes(instanceVariableName) ) {
             const classificationsName = 
-                activeClassification.sourceClassification.getClassificationDefinition().name
+                activeInstantiatedClassification.sourceClassification.getClassificationDefinition().name
 
             throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
         }
 
-        activeClassification[instanceVariableName] = value
+        activeInstantiatedClassification[instanceVariableName] = value
     }
 }
 

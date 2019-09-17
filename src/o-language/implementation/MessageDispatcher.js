@@ -32,7 +32,7 @@ class MessageDispatcher {
         ClassificationDefinition.initialize({ classificationDefinition: OInstance })
         ClassificationDefinition.initialize({ classificationDefinition: Classification })
 
-        const classificationInstantiation_1 = ClassificationDefinition.instantiateClassificationFrom({
+        const classificationInstantiation_1 = ClassificationDefinition.instantiateClassification({
             classificationDefinition: Classification
         })
         classificationInstantiation_1.sourceClassification = this.classificationClassification
@@ -40,7 +40,7 @@ class MessageDispatcher {
         // for the Classifification instantiation of the Classification object
         classificationInstantiation_1.classificationDefinition = Classification
 
-        const oInstanceInstantiation_1 = ClassificationDefinition.instantiateClassificationFrom({ 
+        const oInstanceInstantiation_1 = ClassificationDefinition.instantiateClassification({ 
             classificationDefinition: OInstance
         })
         oInstanceInstantiation_1.sourceClassification = this.oInstanceClassification
@@ -50,7 +50,7 @@ class MessageDispatcher {
             oInstanceInstantiation_1,
         ]
 
-        const classificationInstantiation_2 = ClassificationDefinition.instantiateClassificationFrom({
+        const classificationInstantiation_2 = ClassificationDefinition.instantiateClassification({
             classificationDefinition: Classification
         })
         classificationInstantiation_2.sourceClassification = this.classificationClassification
@@ -58,7 +58,7 @@ class MessageDispatcher {
         // for the Classifification instantiation of the OInstance object
         classificationInstantiation_2.classificationDefinition = OInstance
 
-        const oInstanceInstantiation_2 = ClassificationDefinition.instantiateClassificationFrom({
+        const oInstanceInstantiation_2 = ClassificationDefinition.instantiateClassification({
             classificationDefinition: OInstance
         })
         oInstanceInstantiation_2.sourceClassification = this.oInstanceClassification
@@ -82,15 +82,15 @@ class MessageDispatcher {
     ////////////////////////////////////////////
 
     /*
-     * Sets the given classification as the initial classification in the classifications lookup
+     * Sets the given classificationObject as the initial classification in the classifications lookup
      * and evaluates the given closure.
      * After the closure evaluation restores the initial classification in the classifications lookup to
      * its previous value.
      */
-    withClassificationDo({ object: object, classification: classification, closure: closure }) {
+    withClassificationDo({ object: object, classificationObject: classificationObject, closure: closure }) {
         ClassificationLookup.pushInitialClassification({
             object: object,
-            classification: classification,
+            classificationObject: classificationObject,
         })
 
         try {
@@ -109,13 +109,13 @@ class MessageDispatcher {
      * its previous value.
      */
     duringPreviousClassificationDo({ object: object, closure: closure }) {
-        const classification = this.getPreviousClassificationOfObject({
+        const classificationObject = this.getPreviousClassificationOfObject({
             object: object
         })
 
         return this.withClassificationDo({
             object: object,
-            classification: classification,
+            classificationObject: classificationObject,
             closure: closure,
         })
     }
@@ -129,20 +129,20 @@ class MessageDispatcher {
      * If the instance already behaves as the given classification this method does nothing.
      * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
      */
-    behaveAs({ object: object, classification: classification }) {
-        if( this.objectIsBehavingAs({ object: object, classification: classification }) ) {
+    behaveAs({ object: object, classificationObject: classificationObject }) {
+        if( this.objectIsBehavingAs({ object: object, classificationObject: classificationObject }) ) {
             return this
         }
 
         const allAssumptions = this.classificationRecursiveAssumptions({
-            classification: classification
+            classificationObject: classificationObject
         })
 
-        allAssumptions.push(classification)
+        allAssumptions.push( classificationObject )
 
         allAssumptions.forEach( (eachClassification) => {
-            if( ! this.objectIsBehavingAs({ object: object, classification: eachClassification }) ) {
-                ClassificationObject.attachBehaviourTo({
+            if( ! this.objectIsBehavingAs({ object: object, classificationObject: eachClassification }) ) {
+                ClassificationObject.attachBehaviour({
                     classificationObject: eachClassification,
                     object: object,
                 })
@@ -150,14 +150,14 @@ class MessageDispatcher {
         })
     }
 
-    classificationRecursiveAssumptions({ classification: classification }) {
+    classificationRecursiveAssumptions({ classificationObject: classificationObject }) {
         let allAssumptions = []
 
-        const directAssumptions = classification.getClassificationDefinition().assumes
+        const directAssumptions = classificationObject.getClassificationDefinition().assumes
 
-        directAssumptions.forEach( (classification) => {
+        directAssumptions.forEach( (classificationObject) => {
             const assumptions = this.classificationRecursiveAssumptions({
-                classification: classification
+                classificationObject: classificationObject
             })
 
             assumptions.forEach( (eachClassification) => {
@@ -166,8 +166,8 @@ class MessageDispatcher {
                 }
             })
 
-            if( ! allAssumptions.includes( classification ) ) {
-                allAssumptions.push( classification )
+            if( ! allAssumptions.includes( classificationObject ) ) {
+                allAssumptions.push( classificationObject )
             }
         })
 
@@ -179,11 +179,11 @@ class MessageDispatcher {
      * An O instance that drops a classification is exactly the same as if it had not previously
      * had that classification and there is no way to distinguish bots scenarios.
      */
-    objectDropBehaviour({ object: object, classification: classification }) {
+    objectDropBehaviour({ object: object, classificationObject: classificationObject }) {
         const filteredInstantiatedClassifications =
-            ClassificationInstantiation.getInstantiatedClassificationsOf({ object: object })
+            ClassificationInstantiation.getInstantiatedClassifications({ object: object })
                 .filter( (eachClassification) => {
-                    return eachClassification.sourceClassification !== classification
+                    return eachClassification.sourceClassification !== classificationObject
                 })
 
         this.objectSetClassifications({
@@ -196,10 +196,10 @@ class MessageDispatcher {
      * Answers true if the given object is behaving as the given classification, false otherwise.
      * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
      */
-    objectIsBehavingAs({ object: object, classification: classification }) {
+    objectIsBehavingAs({ object: object, classificationObject: classificationObject }) {
         const classificationInstantiation = this.objectGetClassificationInstantiationOn({
             object: object,
-            classification: classification,
+            classificationObject: classificationObject,
         })
 
         return classificationInstantiation !== undefined
@@ -209,14 +209,14 @@ class MessageDispatcher {
      * Answers true if the given object is behaving as the given classification, false otherwise.
      * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
      */
-    objectGetClassificationInstantiationOn({ object: object, classification: classification }) {
+    objectGetClassificationInstantiationOn({ object: object, classificationObject: classificationObject }) {
         const classificationInstantiations =
-            ClassificationInstantiation.getInstantiatedClassificationsOf({
+            ClassificationInstantiation.getInstantiatedClassifications({
                 object: object
             })
 
         const classificationInstantiation = classificationInstantiations.find( (eachClassification) => {
-            return eachClassification.sourceClassification === classification
+            return eachClassification.sourceClassification === classificationObject
         })
 
         return classificationInstantiation
@@ -234,7 +234,7 @@ class MessageDispatcher {
      * Returns an array with all of the classifications instantiated in the given object.
      */
     objectGetClassifications({ object: object }) {
-        return ClassificationInstantiation.getInstantiatedClassificationsOf({ object: object })
+        return ClassificationInstantiation.getInstantiatedClassifications({ object: object })
             .map( (eachClassification) => {
                 return eachClassification.sourceClassification
             })
@@ -263,20 +263,22 @@ class MessageDispatcher {
     objectGetActiveClassification({ object: object }) {
         const length = object.impl.activeClassificationStack.length
 
-        const classification = object.impl.activeClassificationStack[ length - 2 ]
+        const instantiatedClassification = ActiveClassification.in({ object: object, offset: -1 })
 
-        return classification.sourceClassification
+        return ClassificationInstantiation.getSourceClassification({
+            instantiatedClassification: instantiatedClassification
+        })
     }
 
     classificationInstanceVariablesDo({
-        object: object, classification: classification, closure: closure
+        object: object, classificationObject: classificationObject, closure: closure
     }) {
         const classificationInstantiation = this.objectGetClassificationInstantiationOn({
             object: object,
-            classification: classification,
+            classificationObject: classificationObject,
         })
 
-        ClassificationInstantiation.getInstanceVariablesFrom({ classificationInstantiation: classificationInstantiation })
+        ClassificationInstantiation.getInstanceVariables({ classificationInstantiation: classificationInstantiation })
             .forEach( (instanceVariableName) => {
                 const value = ClassificationInstantiation.getInstanceVariableValue({
                     classificationInstantiation: classificationInstantiation,
@@ -302,12 +304,12 @@ class MessageDispatcher {
 
         if( activeClassification === undefined ) { return undefined }
 
-        const index  = ClassificationInstantiation.findClassificationIndexOf({
+        const index  = ClassificationInstantiation.findClassificationIndex({
             object: object,
             classificationObject: activeClassification.sourceClassification,
         })
 
-        const classifications = ClassificationInstantiation.getInstantiatedClassificationsOf({ object: object })
+        const classifications = ClassificationInstantiation.getInstantiatedClassifications({ object: object })
 
         const previousClassification = classifications[ index + 1 ]
 
@@ -333,7 +335,7 @@ class MessageDispatcher {
         })
     }
 
-    classificationSetAssumptions({ classification: classificationObject, assumptions: assumptions }) {
+    classificationSetAssumptions({ classificationObject: classificationObject, assumptions: assumptions }) {
         const classificationDefinition = ClassificationObject.getClassificationDefinition({
             classificationObject: classificationObject,
         })
@@ -344,7 +346,7 @@ class MessageDispatcher {
         })
     }
 
-    classificationGetName({ classification: classificationObject }) {
+    classificationGetName({ classificationObject: classificationObject }) {
         const classificationDefinition = ClassificationObject.getClassificationDefinition({
             classificationObject: classificationObject,
         })
@@ -381,7 +383,7 @@ class MessageDispatcher {
 
         const lookupInitialIndex = ClassificationLookup.getInitialLookupIndex({ object: object })
 
-        return ClassificationLookup.lookupPropIn({
+        return ClassificationLookup.lookupProp({
             lookupInitialIndex: lookupInitialIndex,
             object: object,
             propName: prop,

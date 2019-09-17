@@ -50,15 +50,14 @@ class ClassificationDefinition {
         })
     }
 
-    static getInstanceVariablesOf({ classificationDefinition: classificationDefinition }) {
+    static getInstanceVariables({ classificationDefinition: classificationDefinition }) {
         return classificationDefinition.instanceVariables
     }
-
 
     /*
      * Instantiates a classification for the given object.
      */
-    static instantiateClassificationFrom({ classificationDefinition: classificationDefinition }) {
+    static instantiateClassification({ classificationDefinition: classificationDefinition }) {
         const instantiation = new classificationDefinition()
 
         return instantiation

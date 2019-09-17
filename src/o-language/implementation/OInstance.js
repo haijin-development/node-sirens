@@ -27,7 +27,7 @@ class OInstance {
     isBehavingAs(classification) {
         return MessageDispatcherInstance.objectIsBehavingAs({
             object: this, 
-            classification: classification,
+            classificationObject: classification,
         })
     }
 
@@ -52,7 +52,7 @@ class OInstance {
     behaveAs(classification) {
         MessageDispatcherInstance.behaveAs({
             object: this,
-            classification: classification,
+            classificationObject: classification,
         })
 
         return this
@@ -66,7 +66,7 @@ class OInstance {
     dropBehaviour(classification) {
         MessageDispatcherInstance.objectDropBehaviour({
             object: this,
-            classification: classification,
+            classificationObject: classification,
         })
 
         return this
@@ -102,7 +102,7 @@ class OInstance {
     classificationInstanceVariablesDo(classification, closure) {
         MessageDispatcherInstance.classificationInstanceVariablesDo({
             object: this,
-            classification: classification,
+            classificationObject: classification,
             closure: closure,
         })
 
@@ -115,7 +115,7 @@ class OInstance {
     withClassificationDo(classification, closure) {
         return MessageDispatcherInstance.withClassificationDo({
             object: this,
-            classification: classification,
+            classificationObject: classification,
             closure: closure,
         })
     }

@@ -62,7 +62,7 @@ class Classification {
 
     getName() {
         return MessageDispatcherInstance.classificationGetName({
-            classification: this
+            classificationObject: this
         })
     }
 
@@ -109,7 +109,7 @@ class Classification {
 
     setAssumptions(assumptions) {
         MessageDispatcherInstance.classificationSetAssumptions({
-            classification: this,
+            classificationObject: this,
             assumptions: assumptions,
         })
     
@@ -118,7 +118,7 @@ class Classification {
 
     getRecursiveAssumptions() {
         return MessageDispatcherInstance.classificationRecursiveAssumptions({
-            classification: this
+            classificationObject: this
         })
     }
 

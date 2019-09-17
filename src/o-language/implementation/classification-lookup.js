@@ -5,8 +5,8 @@ class ClassificationLookup {
     /*
      * Pushes the given classification in the method lookup of the given object.
      */
-    static pushInitialClassification({ object: object, classification: classification }) {
-        object.impl.initialClassificationLookup.push(classification)
+    static pushInitialClassification({ object: object, classificationObject: classificationObject }) {
+        object.impl.initialClassificationLookup.push( classificationObject )
     }
 
     /*
@@ -29,29 +29,18 @@ class ClassificationLookup {
      * Returns the index of the starting classification in the method lookup for the given object.
      */
     static getInitialLookupIndex({ object: object }) {
-        const classification = ClassificationLookup.getInitialClassification({
+        const classificationObject = ClassificationLookup.getInitialClassification({
             object: object
         })
 
-        if( classification === null ) {
+        if( classificationObject === null ) {
             return -1
         }
 
-        return ClassificationInstantiation.findClassificationIndexOf({
+        return ClassificationInstantiation.findClassificationIndex({
             object: object,
-            classificationObject: classification,
+            classificationObject: classificationObject,
         })
-    }
-
-    /*
-     * Finds the property value assigned to the given classification.
-     *
-     * If none is defined in the given classification returns undefined.
-     */
-    static findPropInClassificationObject({ classification: classification, propName: propName }) {
-        const prototype = Object.getPrototypeOf(classification)
-
-        return prototype[propName]
     }
 
     /*
@@ -65,8 +54,8 @@ class ClassificationLookup {
      *
      * If no prop value is found on any classification returns undefined. 
      */
-    static findMethodAmongAllClassificationsOf({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
-        const { prop, classification } = ClassificationLookup.findPropAmongAllClassificationsOf({
+    static findPropOrMethodAmongAllClassifications({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
+        const { prop, instantiatedClassification } = ClassificationLookup.findPropAmongAllClassifications({
                 lookupInitialIndex: lookupInitialIndex,
                 object: receiver,
                 propName: propName
@@ -78,7 +67,7 @@ class ClassificationLookup {
 
         return ClassificationLookup.createMethodProxy({
             method: prop,
-            classification: classification
+            instantiatedClassification: instantiatedClassification
         })
     }
 
@@ -88,22 +77,22 @@ class ClassificationLookup {
      *
      * If no prop value is found on any classification returns undefined. 
      */
-    static findPropAmongAllClassificationsOf({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
-        const classifications =
-            ClassificationInstantiation.getInstantiatedClassificationsOf({ object: receiver })
+    static findPropAmongAllClassifications({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
+        const instantiatedClassifications =
+            ClassificationInstantiation.getInstantiatedClassifications({ object: receiver })
 
-        const classificationsCount = classifications.length
+        const classificationsCount = instantiatedClassifications.length
 
         for(let i = lookupInitialIndex; i < classificationsCount; i++) {
-            const eachClassification = classifications[i]
+            const eachInstantiatedClassification = instantiatedClassifications[i]
 
-            const prop = ClassificationLookup.findPropInClassificationObject({
-                classification: eachClassification,
-                propName: propName
+            const prop = ClassificationInstantiation.getProp({
+                classificationInstantiation: eachInstantiatedClassification,
+                propName: propName,
             })
 
             if( prop !== undefined ) {
-                return { prop: prop, classification: eachClassification }
+                return { prop: prop, instantiatedClassification: eachInstantiatedClassification }
             }
         }
 
@@ -127,35 +116,34 @@ class ClassificationLookup {
      * that dispatch the messages throught the classifications chain from the current classification
      * up to the first one.
      */
-    static createMethodProxy({ method: method, classification: classification }) {
+    static createMethodProxy({ method: method, instantiatedClassification: instantiatedClassification }) {
         const methodProxyApply = function(targetFunction, thisArg, params) {
             const object = thisArg
 
-            const initialLookup = ClassificationLookup.getInitialClassification({
+            const initialClassificationObject = ClassificationLookup.getInitialClassification({
                 object: object
             })
 
-            if( initialLookup !== null ) {
+            if( initialClassificationObject !== null ) {
                 ClassificationLookup.pushInitialClassification({
                     object: object,
-                    classification: null
+                    instantiatedClassification: null
                 })
             }
 
             ActiveClassification.pushInto({
                 object: object,
-                classification: classification
+                instantiatedClassification: instantiatedClassification
             })
 
             try {
                 return targetFunction.call(object, ...params)
             } finally {
                 ActiveClassification.popFrom({
-                    object:
-                    object
+                    object: object
                 })
 
-                if( initialLookup !== null ) {
+                if( initialClassificationObject !== null ) {
                     ClassificationLookup.popInitialClassification({
                         object: object
                     })
@@ -180,11 +168,11 @@ class ClassificationLookup {
      * Otherwise each classification instantiated in the receiver object is queried to find
      * the first one that handles the propName. 
      */
-    static lookupPropIn(
+    static lookupProp(
         { lookupInitialIndex: lookupInitialIndex, object: object, propName: propName }
     ) {
         if( lookupInitialIndex === -1 ) {
-            let propValue = ClassificationLookup.findPropInReceiver({
+            let propValue = ClassificationLookup.getUnclassifiedProp({
                 object: object,
                 propName: propName
             })
@@ -196,7 +184,7 @@ class ClassificationLookup {
             lookupInitialIndex = 0
         }
 
-        return ClassificationLookup.findMethodAmongAllClassificationsOf({
+        return ClassificationLookup.findPropOrMethodAmongAllClassifications({
             lookupInitialIndex: lookupInitialIndex,
             object: object,
             propName: propName
@@ -208,7 +196,7 @@ class ClassificationLookup {
      * value.
      * Otherwise returns undefined.
      */
-    static findPropInReceiver({ object: object, propName: propName }) {
+    static getUnclassifiedProp({ object: object, propName: propName }) {
         return object[propName]
     }
 }

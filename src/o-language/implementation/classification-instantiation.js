@@ -5,8 +5,8 @@ class ClassificationInstantiation {
      * Returns the index of the given classification in the array of the instantiated classifications of the
      * given object.
      */
-    static findClassificationIndexOf({ object: object, classificationObject: classificationObject }) {
-        const classificationInstantiations = ClassificationInstantiation.getInstantiatedClassificationsOf({
+    static findClassificationIndex({ object: object, classificationObject: classificationObject }) {
+        const classificationInstantiations = ClassificationInstantiation.getInstantiatedClassifications({
             object: object
         })
 
@@ -18,12 +18,12 @@ class ClassificationInstantiation {
     /*
      * Returns an array with all of the classifications instantiated in the given object.
      */
-    static getInstantiatedClassificationsOf({ object: object }) {
+    static getInstantiatedClassifications({ object: object }) {
         return object.impl.instantiatedClassifications
     }
 
-    static attachInstantiatedClassificationTo({ object: object, classificationInstantiation: classificationInstantiation }) {
-        const classificationInstantiations = ClassificationInstantiation.getInstantiatedClassificationsOf({
+    static attachInstantiatedClassification({ object: object, classificationInstantiation: classificationInstantiation }) {
+        const classificationInstantiations = ClassificationInstantiation.getInstantiatedClassifications({
             object: object
         })
 
@@ -34,20 +34,36 @@ class ClassificationInstantiation {
      * Returns the classification definition of a classificationInstantiation.
      * The classification definition is the class where the instance methods are defined.
      */
-    static getClassificationDefinitionFrom({ classificationInstantiation: classificationInstantiation }) {
+    static getClassificationDefinition({ classificationInstantiation: classificationInstantiation }) {
         return classificationInstantiation.constructor
+    }
+
+    static getSourceClassification({ instantiatedClassification: instantiateClassification }) {
+        return instantiateClassification.sourceClassification
+    }
+
+    static getProp({ classificationInstantiation: classificationInstantiation, propName: propName }) {
+        const classificationObject = ClassificationInstantiation.getClassificationObject({
+            classificationInstantiation: classificationInstantiation
+        })
+
+        return classificationObject[propName]
+    }
+
+    static getClassificationObject({ classificationInstantiation: classificationInstantiation }) {
+        return Object.getPrototypeOf( classificationInstantiation )
     }
 
     /*
      * Returns the classification definition of a classificationInstantiation.
      * The classification definition is the class where the instance methods are defined.
      */
-    static getInstanceVariablesFrom({ classificationInstantiation: classificationInstantiation }) {
-        const classificationDefinition = ClassificationInstantiation.getClassificationDefinitionFrom({
+    static getInstanceVariables({ classificationInstantiation: classificationInstantiation }) {
+        const classificationDefinition = ClassificationInstantiation.getClassificationDefinition({
                 classificationInstantiation: classificationInstantiation
             })
 
-        return ClassificationDefinition.getInstanceVariablesOf({
+        return ClassificationDefinition.getInstanceVariables({
             classificationDefinition: classificationDefinition
         })
     }
@@ -58,7 +74,7 @@ class ClassificationInstantiation {
     static hasInstanceVariable({
         classificationInstantiation:classificationInstantiation, instanceVariableName: instanceVariableName
     }) {
-        const instanceVariables = ClassificationInstantiation.getInstanceVariablesFrom({
+        const instanceVariables = ClassificationInstantiation.getInstanceVariables({
             classificationInstantiation: classificationInstantiation
         })
 

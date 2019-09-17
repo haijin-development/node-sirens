@@ -2,14 +2,14 @@ const ClassificationInstantiation = require('./classification-instantiation')
 const ClassificationDefinition = require('./classification-definition')
 
 class ClassificationObject {
-    static attachBehaviourTo({ classificationObject: classificationObject, object: object }) {
+    static attachBehaviour({ classificationObject: classificationObject, object: object }) {
         const classificationInstantiation = ClassificationObject.instantiateClassification({
             classificationObject: classificationObject
         })
 
         const classificationDefinition = classificationObject.getClassificationDefinition()
 
-        ClassificationInstantiation.attachInstantiatedClassificationTo({
+        ClassificationInstantiation.attachInstantiatedClassification({
             object: object,
             classificationInstantiation: classificationInstantiation,
         })
@@ -27,7 +27,7 @@ class ClassificationObject {
             classificationObject: classificationObject,
         })
 
-        const instantiatedClassification = ClassificationDefinition.instantiateClassificationFrom({
+        const instantiatedClassification = ClassificationDefinition.instantiateClassification({
             classificationDefinition: classificationDefinition
         })
 

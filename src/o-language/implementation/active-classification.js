@@ -1,4 +1,5 @@
 const ClassificationInstantiation = require('./classification-instantiation')
+const ClassificationDefinition = require('./classification-definition')
 
 class ActiveClassification {
     /*
@@ -44,7 +45,7 @@ class ActiveClassification {
 
     /*
      * Returns the value of the instance variable in the active classification.
-     * Assumes that the instantace variable exists in that classification.
+     * Assumes that the instance variable exists in that classification.
      * That assumption might be tested first with isInstanceVariableInActiveClassification(object, instVarName).
      */
     static getInstanceVariableValue({ object: object, instanceVariableName: instanceVariableName }) {
@@ -74,20 +75,18 @@ class ActiveClassification {
             object: object
         })
 
+        // If there is not active classification then set the value to an object property
         if( activeInstantiatedClassification === undefined ) {
             object[instanceVariableName] = value
 
             return
         }
 
-        if( ! activeInstantiatedClassification.constructor.instanceVariables.includes(instanceVariableName) ) {
-            const classificationsName = 
-                activeInstantiatedClassification.sourceClassification.getClassificationDefinition().name
-
-            throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
-        }
-
-        activeInstantiatedClassification[instanceVariableName] = value
+        ClassificationInstantiation.setInstanceVariableValue({
+            classificationInstantiation: activeInstantiatedClassification,
+            instanceVariableName: instanceVariableName,
+            value: value,
+        })
     }
 }
 

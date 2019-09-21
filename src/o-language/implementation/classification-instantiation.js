@@ -10,9 +10,9 @@ class ClassificationInstantiation {
             object: object
         })
 
-        return classificationInstantiations.findIndex( (eachClassification) => {
-                    return eachClassification.sourceClassification === classificationObject
-                })
+        return classificationInstantiations.findIndex( (classificationInstantiation) => {
+                return classificationInstantiation.sourceClassification === classificationObject
+            })
     }
 
     /*
@@ -38,20 +38,19 @@ class ClassificationInstantiation {
         return classificationInstantiation.constructor
     }
 
-    static getSourceClassification({ instantiatedClassification: instantiateClassification }) {
-        return instantiateClassification.sourceClassification
+    static getSourceClassification({ instantiatedClassification: instantiatedClassification }) {
+        return instantiatedClassification.sourceClassification
     }
 
-    static getProp({ classificationInstantiation: classificationInstantiation, propName: propName }) {
-        const classificationObject = ClassificationInstantiation.getClassificationObject({
+    static getMethod({ classificationInstantiation: classificationInstantiation, methodName: methodName }) {
+        const classificationDefinition = ClassificationDefinition.getClassificationDefinition({
             classificationInstantiation: classificationInstantiation
         })
 
-        return classificationObject[propName]
-    }
-
-    static getClassificationObject({ classificationInstantiation: classificationInstantiation }) {
-        return Object.getPrototypeOf( classificationInstantiation )
+        return ClassificationDefinition.getMethod({
+            classificationDefinition: classificationDefinition,
+            methodName: methodName
+        })
     }
 
     /*
@@ -63,7 +62,7 @@ class ClassificationInstantiation {
                 classificationInstantiation: classificationInstantiation
             })
 
-        return ClassificationDefinition.getInstanceVariables({
+        return ClassificationDefinition.getDefinedInstanceVariables({
             classificationDefinition: classificationDefinition
         })
     }
@@ -89,7 +88,49 @@ class ClassificationInstantiation {
     static getInstanceVariableValue({
         classificationInstantiation: classificationInstantiation, instanceVariableName: instanceVariableName
     }) {
+        const classificationDefinition = ClassificationInstantiation.getClassificationDefinition({
+            classificationInstantiation: classificationInstantiation
+        })
+
+        const instanceVariableIsDefined = ClassificationDefinition.hasInstanceVariableDefined({
+            classificationDefinition: classificationDefinition,
+            instanceVariableName: instanceVariableName,
+        })
+
+        if( ! instanceVariableIsDefined ) {
+            const classificationsName = ClassificationDefinition.getName({
+                classificationDefinition: classificationDefinition
+            })
+
+            throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
+        }
+
         return classificationInstantiation[instanceVariableName]
+    }
+
+    static setInstanceVariableValue({
+        classificationInstantiation: classificationInstantiation,
+        instanceVariableName: instanceVariableName,
+        value: value
+    }) {
+        const classificationDefinition = ClassificationInstantiation.getClassificationDefinition({
+            classificationInstantiation: classificationInstantiation
+        })
+
+        const instanceVariableIsDefined = ClassificationDefinition.hasInstanceVariableDefined({
+            classificationDefinition: classificationDefinition,
+            instanceVariableName: instanceVariableName,
+        })
+
+        if( ! instanceVariableIsDefined ) {
+            const classificationsName = ClassificationDefinition.getName({
+                classificationDefinition: classificationDefinition
+            })
+
+            throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
+        }
+
+        classificationInstantiation[instanceVariableName] = value
     }
 }
 

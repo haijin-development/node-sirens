@@ -47,56 +47,34 @@ class ClassificationLookup {
      * Queries each classification instantiated in the receiver object to find
      * the first one that handles the propName.
      *
-     * If the found prop value is not a function returns that value.
-
-     * If the found prop value is a classification method returns a function wrapper on it that
-     * correctly handles the classification method activation.
-     *
      * If no prop value is found on any classification returns undefined. 
      */
-    static findPropOrMethodAmongAllClassifications({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
-        const { prop, instantiatedClassification } = ClassificationLookup.findPropAmongAllClassifications({
-                lookupInitialIndex: lookupInitialIndex,
-                object: receiver,
-                propName: propName
-            })
-
-        if( typeof prop !== 'function' ) {
-            return prop
-        }
-
-        return ClassificationLookup.createMethodProxy({
-            method: prop,
-            instantiatedClassification: instantiatedClassification
-        })
-    }
-
-    /*
-     * Queries each classification instantiated in the receiver object to find
-     * the first one that handles the propName.
-     *
-     * If no prop value is found on any classification returns undefined. 
-     */
-    static findPropAmongAllClassifications({ lookupInitialIndex: lookupInitialIndex, object: receiver, propName: propName }) {
+    static findMethodAmongAllClassifications({
+        lookupInitialIndex: lookupInitialIndex, object: receiver, methodName: methodName
+    }) {
         const instantiatedClassifications =
             ClassificationInstantiation.getInstantiatedClassifications({ object: receiver })
 
         const classificationsCount = instantiatedClassifications.length
 
         for(let i = lookupInitialIndex; i < classificationsCount; i++) {
+
             const eachInstantiatedClassification = instantiatedClassifications[i]
 
-            const prop = ClassificationInstantiation.getProp({
+            const prop = ClassificationInstantiation.getMethod({
                 classificationInstantiation: eachInstantiatedClassification,
-                propName: propName,
+                methodName: methodName,
             })
 
             if( prop !== undefined ) {
-                return { prop: prop, instantiatedClassification: eachInstantiatedClassification }
+                return ClassificationLookup.createMethodProxy({
+                    method: prop,
+                    instantiatedClassification: eachInstantiatedClassification
+                })
             }
         }
 
-        return { prop: undefined, classification: undefined }
+        return undefined
     }
 
     /*
@@ -168,13 +146,13 @@ class ClassificationLookup {
      * Otherwise each classification instantiated in the receiver object is queried to find
      * the first one that handles the propName. 
      */
-    static lookupProp(
-        { lookupInitialIndex: lookupInitialIndex, object: object, propName: propName }
+    static lookupMethod(
+        { lookupInitialIndex: lookupInitialIndex, object: object, methodName: methodName }
     ) {
         if( lookupInitialIndex === -1 ) {
-            let propValue = ClassificationLookup.getUnclassifiedProp({
+            let propValue = ClassificationLookup.getUnclassifiedMethod({
                 object: object,
-                propName: propName
+                methodName: methodName
             })
 
             if( propValue != undefined ) {
@@ -184,10 +162,10 @@ class ClassificationLookup {
             lookupInitialIndex = 0
         }
 
-        return ClassificationLookup.findPropOrMethodAmongAllClassifications({
+        return ClassificationLookup.findMethodAmongAllClassifications({
             lookupInitialIndex: lookupInitialIndex,
             object: object,
-            propName: propName
+            methodName: methodName
         })
     }
 
@@ -196,8 +174,8 @@ class ClassificationLookup {
      * value.
      * Otherwise returns undefined.
      */
-    static getUnclassifiedProp({ object: object, propName: propName }) {
-        return object[propName]
+    static getUnclassifiedMethod({ object: object, methodName: methodName }) {
+        return object[methodName]
     }
 }
 

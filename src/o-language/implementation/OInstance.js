@@ -12,7 +12,7 @@ class OInstance {
     /// Initializing
 
     /*
-     * Does nothing but serves as a null implementation for constructors that assumes a polymorphic
+     * Does nothing but serves as a null implementation for constructors that assume a polymorphic
      * initialization of objects.
      */
     initialize() {
@@ -50,7 +50,31 @@ class OInstance {
      * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
      */
     behaveAs(classification) {
-        MessageDispatcherInstance.behaveAs({
+        if( this.isBehavingAs(classification) ) {
+            return this
+        }
+
+        const getRecursiveAssumptions = classification.getRecursiveAssumptions()
+
+        getRecursiveAssumptions.forEach( (eachClassification) => {
+            this.behaveAs( eachClassification )
+        })
+
+        this.pushBehaviour( classification )
+
+        if( classification.definesMethod( 'afterInstantiation' ) ) {
+            this.afterInstantiation()
+        }        
+
+        return this
+    }
+
+    /*
+        Makes this O instance to instantiate and push the given classification on top of its instantiated 
+        classifications even if it already behaves as that classification.
+     */
+    pushBehaviour(classification) {
+        MessageDispatcherInstance.objectPushBehaviour({
             object: this,
             classificationObject: classification,
         })

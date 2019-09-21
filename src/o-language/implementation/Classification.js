@@ -17,23 +17,21 @@ class Classification {
     /// Creating classifications
 
     define(classificationDefinition) {
-        const classificationInstance = MessageDispatcherInstance.createClassification({
-            classificationDefinition: classificationDefinition
-        })
+        const Classification = MessageDispatcherInstance.getClassificationClassification()
 
-        // If this object is different than the Classification object make the object created
-        // to adquire the behaviour of this object
-        classificationInstance.behaveAs(this)
+        const classificationInstance = this.createObject()
 
-        // If the classificationDefinition declares additional classificationBehaviours make the 
-        // created classification to adquire them
-        classificationDefinition.classificationBehaviours.forEach( (classification) => {
+        classificationInstance.behaveAs( Classification )
+
+        classificationInstance.setClassificationDefinition(classificationDefinition)
+
+        classificationInstance.behaveAs( this )
+
+        classificationInstance.getClassificationBehaviours().forEach( (classification) => {
             classificationInstance.behaveAs(classification)
         })
 
-        // If the classificationDefinition declares implementations to comply with 
-        // validate that the created classification complies with them
-        classificationDefinition.implements.forEach( (implementation) => {
+        classificationInstance.getImplementedProtocols().forEach( (implementation) => {
             classificationInstance.implements({ protocol: implementation })
         })
 
@@ -62,7 +60,7 @@ class Classification {
 
     getName() {
         return MessageDispatcherInstance.classificationGetName({
-            classificationObject: this
+            classificationObject: this,
         })
     }
 
@@ -70,33 +68,50 @@ class Classification {
         return this.classificationDefinition
     }
 
+    initializeClassificationDefinition(classificationDefinition) {
+        MessageDispatcherInstance.classificationDefinitionInitialize({
+            classificationDefinition: classificationDefinition,
+        })
+    }
+
     setClassificationDefinition(classificationDefinition) {
-        ClassificationDefinition.initialize({ classificationDefinition: classificationDefinition })
+        this.initializeClassificationDefinition( classificationDefinition )
 
         this.classificationDefinition = classificationDefinition
     }
 
     getDefinedMethodNames() {
+        const classificationDefinition = this.classificationDefinition
+
         return MessageDispatcherInstance.classificationGetDefinedMethodNames({
-            classificationObject: this
+            classificationDefinition: classificationDefinition,
         })
     }
 
     definesMethod(methodName) {
+        const classificationDefinition = this.classificationDefinition
+
         return MessageDispatcherInstance.classificationDefinesMethod({
-            classificationObject: this,
-            methodName: methodName
+            classificationDefinition: classificationDefinition,
+            methodName: methodName,
         })
     }
 
     getDefinedInstanceVariables() {
-        return this.getClassificationDefinition().instanceVariables.slice() 
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationGetDefinedInstanceVariables({
+            classificationDefinition: classificationDefinition,
+        })
     }
 
     setDefinedInstanceVariables(instanceVariables) {
-        this.getClassificationDefinition().instanceVariables = instanceVariables 
+        const classificationDefinition = this.classificationDefinition
 
-        return this
+        return MessageDispatcherInstance.classificationSetDefinedInstanceVariables({
+            classificationDefinition: classificationDefinition,
+            instanceVariables: instanceVariables,
+        })
     }
 
     definesInstanceVariable(name) {
@@ -104,22 +119,44 @@ class Classification {
     }
 
     getAssumptions() {
-        return this.getClassificationDefinition().assumes.slice() 
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationGetAssumptions({
+            classificationDefinition: classificationDefinition,
+        })
     }
 
-    setAssumptions(assumptions) {
-        MessageDispatcherInstance.classificationSetAssumptions({
-            classificationObject: this,
-            assumptions: assumptions,
+    setAssumptions(otherClassifications) {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationSetAssumptions({
+            classificationDefinition: classificationDefinition,
+            assumptions: otherClassifications,
         })
-    
+
         return this
     }
 
     getRecursiveAssumptions() {
-        return MessageDispatcherInstance.classificationRecursiveAssumptions({
-            classificationObject: this
+        let allAssumptions = []
+
+        const directAssumptions = this.getAssumptions()
+
+        directAssumptions.forEach( (directAssumption) => {
+            const assumptions = directAssumption.getRecursiveAssumptions()
+
+            assumptions.forEach( (eachClassification) => {
+                if( ! allAssumptions.includes( eachClassification ) ) {
+                    allAssumptions.push( eachClassification )
+                }
+            })
+
+            if( ! allAssumptions.includes( directAssumption ) ) {
+                allAssumptions.push( directAssumption )
+            }
         })
+
+        return allAssumptions
     }
 
     getAssumptionsChain() {
@@ -127,8 +164,44 @@ class Classification {
                     .concat( [this] )
     }
 
+    getClassificationBehaviours() {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationGetClassificationBehaviours({
+            classificationDefinition: classificationDefinition,
+        })
+    }
+
+    setClassificationBehaviours(otherClassifications) {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationSetClassificationBehaviours({
+            classificationDefinition: classificationDefinition,
+            classificationBehaviours: otherClassifications,
+        })
+    }
+
+    getImplementedProtocols() {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationGetImplementedClassifications({
+            classificationDefinition: classificationDefinition,
+        })
+    }
+
+    setImplementedProtocols(protocols) {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationSetImplementedClassifications({
+            classificationDefinition: classificationDefinition,
+            protocols: protocols,
+        })
+    }
+
     implements({ protocol: protocol }) {
-        protocol.isImplementedBy({ classification: this })
+        protocol.isImplementedBy({
+            classification: this
+        })
 
         return this
     }

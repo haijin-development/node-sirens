@@ -189,6 +189,7 @@ describe('The Classification classification', () => {
             'new',
             'getName',
             'getClassificationDefinition',
+            'initializeClassificationDefinition',
             'setClassificationDefinition',
             'getDefinedMethodNames',
             'definesMethod',
@@ -199,6 +200,10 @@ describe('The Classification classification', () => {
             'setAssumptions',
             'getRecursiveAssumptions',
             'getAssumptionsChain',
+            'getClassificationBehaviours',
+            'setClassificationBehaviours',
+            'getImplementedProtocols',
+            'setImplementedProtocols',
             'implements',
         ])
     })
@@ -250,6 +255,7 @@ describe('The OInstance classification', () => {
             'isBehavingAs',
             'respondsTo',
             'behaveAs',
+            'pushBehaviour',
             'dropBehaviour',
             'previousClassificationDo',
             'duringClassificationDo',

@@ -7,16 +7,10 @@ class ClassificationObject {
             classificationObject: classificationObject
         })
 
-        const classificationDefinition = classificationObject.getClassificationDefinition()
-
         ClassificationInstantiation.attachInstantiatedClassification({
             object: object,
             classificationInstantiation: classificationInstantiation,
         })
-
-        if( classificationInstantiation.afterInstantiation !== undefined ) {
-            object.afterInstantiation()
-        }        
     }
 
     /*
@@ -36,31 +30,22 @@ class ClassificationObject {
         return instantiatedClassification
     }
 
-    static definedMethodNames({ classificationObject: classificationObject }) {
-        return Object.getOwnPropertyNames(
-            classificationObject.classificationDefinition.prototype
-        )
-    }
-
-    static hasMethodDefined({ classificationObject: classificationObject, methodName: methodName }) {
-        return typeof( classificationObject.classificationDefinition.prototype[methodName] ) === 'function'
-    }
-
     static getClassificationDefinition({ classificationObject: classificationObject }) {
         const objectInstantiatedClassifications = classificationObject.impl.instantiatedClassifications
 
-        // Find the classification instantiation of the given classificationObject
-        for( const instantiatedClassification of objectInstantiatedClassifications ) {
-            if( instantiatedClassification.sourceClassification === classificationObject ) {
-                // The found classification instantiation is the one that has the instance variable
-                // classificationDefinition.
-                // Return that.
+        // The first classification instantiated by a classification object is OInstance,
+        // the second one is Classification
+        const classificationInstantiationIndex = objectInstantiatedClassifications.length - 2
 
-                //return instantiatedClassification.sourceClassification.classificationDefinition
-            }
-        }
+        const classificationClassificationInstantiation = 
+            objectInstantiatedClassifications[classificationInstantiationIndex]
 
-        return classificationObject.getClassificationDefinition()
+        const classificationDefinition = ClassificationInstantiation.getInstanceVariableValue({
+            classificationInstantiation: classificationClassificationInstantiation,
+            instanceVariableName: 'classificationDefinition'
+        })
+
+        return classificationDefinition
     }
 }
 

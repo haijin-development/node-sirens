@@ -26,47 +26,59 @@ class MessageDispatcher {
         require('./Classification').setMessageDispatcher(this)
         require('./OInstance').setMessageDispatcher(this)
 
-        this.classificationClassification = this.createObjectProxy()
-        this.oInstanceClassification = this.createObjectProxy()
-
         ClassificationDefinition.initialize({ classificationDefinition: OInstance })
         ClassificationDefinition.initialize({ classificationDefinition: Classification })
+
+        this.classificationClassification = this.createObjectProxy()
+        this.oInstanceClassification = this.createObjectProxy()
 
         const classificationInstantiation_1 = ClassificationDefinition.instantiateClassification({
             classificationDefinition: Classification
         })
-        classificationInstantiation_1.sourceClassification = this.classificationClassification
-        // This is the equivalent of setting the instance variable "classificationDefinition"
-        // for the Classifification instantiation of the Classification object
-        classificationInstantiation_1.classificationDefinition = Classification
 
         const oInstanceInstantiation_1 = ClassificationDefinition.instantiateClassification({ 
             classificationDefinition: OInstance
         })
-        oInstanceInstantiation_1.sourceClassification = this.oInstanceClassification
+
+        const classificationInstantiation_2 = ClassificationDefinition.instantiateClassification({
+            classificationDefinition: Classification
+        })
+
+        const oInstanceInstantiation_2 = ClassificationDefinition.instantiateClassification({
+            classificationDefinition: OInstance
+        })
 
         this.classificationClassification.impl.instantiatedClassifications = [
             classificationInstantiation_1,
             oInstanceInstantiation_1,
         ]
 
-        const classificationInstantiation_2 = ClassificationDefinition.instantiateClassification({
-            classificationDefinition: Classification
-        })
-        classificationInstantiation_2.sourceClassification = this.classificationClassification
-        // This is the equivalent of setting the instance variable "classificationDefinition"
-        // for the Classifification instantiation of the OInstance object
-        classificationInstantiation_2.classificationDefinition = OInstance
-
-        const oInstanceInstantiation_2 = ClassificationDefinition.instantiateClassification({
-            classificationDefinition: OInstance
-        })
-        oInstanceInstantiation_2.sourceClassification = this.oInstanceClassification
-
         this.oInstanceClassification.impl.instantiatedClassifications = [
             classificationInstantiation_2,
             oInstanceInstantiation_2,
         ]
+
+        classificationInstantiation_1.sourceClassification = this.classificationClassification
+        oInstanceInstantiation_1.sourceClassification = this.oInstanceClassification
+        classificationInstantiation_2.sourceClassification = this.classificationClassification
+        oInstanceInstantiation_2.sourceClassification = this.oInstanceClassification
+
+        // This is the equivalent of setting the instance variable "classificationDefinition"
+        // for the Classifification instantiation of the Classification object
+        classificationInstantiation_1.classificationDefinition = Classification
+
+        // This is the equivalent of setting the instance variable "classificationDefinition"
+        // for the Classifification instantiation of the OInstance object
+        classificationInstantiation_2.classificationDefinition = OInstance
+
+
+        // This is the internal handling of the classification definition within a classification
+        // instantiation. For the time being it is handled separately than the previous instance
+        // variable
+        classificationInstantiation_1.definition = Classification
+        oInstanceInstantiation_1.definition = OInstance
+        classificationInstantiation_2.definition = Classification
+        oInstanceInstantiation_2.definition = OInstance
     }
 
     getClassificationClassification() {
@@ -125,53 +137,14 @@ class MessageDispatcher {
     ////////////////////////////////////////////
 
     /*
-     * Makes the given object to adquire the behaviour defined in the given classification.
-     * If the instance already behaves as the given classification this method does nothing.
-     * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
+        Makes the given classificationObject to instantiate and push the given classification on top of
+        its instantiated classifications even if it already behaves as that classification.
      */
-    behaveAs({ object: object, classificationObject: classificationObject }) {
-        if( this.objectIsBehavingAs({ object: object, classificationObject: classificationObject }) ) {
-            return this
-        }
-
-        const allAssumptions = this.classificationRecursiveAssumptions({
-            classificationObject: classificationObject
+    objectPushBehaviour({ object: object, classificationObject: classificationObject }) {
+        ClassificationObject.attachBehaviour({
+            classificationObject: classificationObject,
+            object: object,
         })
-
-        allAssumptions.push( classificationObject )
-
-        allAssumptions.forEach( (eachClassification) => {
-            if( ! this.objectIsBehavingAs({ object: object, classificationObject: eachClassification }) ) {
-                ClassificationObject.attachBehaviour({
-                    classificationObject: eachClassification,
-                    object: object,
-                })
-            }
-        })
-    }
-
-    classificationRecursiveAssumptions({ classificationObject: classificationObject }) {
-        let allAssumptions = []
-
-        const directAssumptions = classificationObject.getClassificationDefinition().assumes
-
-        directAssumptions.forEach( (classificationObject) => {
-            const assumptions = this.classificationRecursiveAssumptions({
-                classificationObject: classificationObject
-            })
-
-            assumptions.forEach( (eachClassification) => {
-                if( ! allAssumptions.includes( eachClassification ) ) {
-                    allAssumptions.push( eachClassification )
-                }
-            })
-
-            if( ! allAssumptions.includes( classificationObject ) ) {
-                allAssumptions.push( classificationObject )
-            }
-        })
-
-        return allAssumptions
     }
 
     /*
@@ -322,27 +295,68 @@ class MessageDispatcher {
     //////// Classification methods
     ////////////////////////////////////////////
 
-    classificationGetDefinedMethodNames({ classificationObject: classificationObject }) {
-        return ClassificationObject.definedMethodNames({
-            classificationObject: classificationObject
+    classificationGetDefinedMethodNames({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getDefinedMethodNames({
+            classificationDefinition: classificationDefinition
         })
     }
 
-    classificationDefinesMethod({ classificationObject: classificationObject, methodName: methodName }) {
-        return ClassificationObject.hasMethodDefined({
-            classificationObject: classificationObject,
+    classificationDefinesMethod({ classificationDefinition: classificationDefinition, methodName: methodName }) {
+        return ClassificationDefinition.hasMethodDefined({
+            classificationDefinition: classificationDefinition,
             methodName: methodName,
         })
     }
 
-    classificationSetAssumptions({ classificationObject: classificationObject, assumptions: assumptions }) {
-        const classificationDefinition = ClassificationObject.getClassificationDefinition({
-            classificationObject: classificationObject,
+    classificationGetDefinedInstanceVariables({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getDefinedInstanceVariables({
+            classificationDefinition: classificationDefinition
         })
+    }
 
+    classificationSetDefinedInstanceVariables({
+        classificationDefinition: classificationDefinition,
+        instanceVariables: instanceVariables,
+    }) {
+        return ClassificationDefinition.setDefinedInstanceVariables({
+            classificationDefinition: classificationDefinition,
+            instanceVariables: instanceVariables,
+        })
+    }
+
+    classificationGetAssumptions({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getAssumptions({
+            classificationDefinition: classificationDefinition
+        })
+    }
+
+    classificationSetAssumptions({
+        classificationDefinition: classificationDefinition, assumptions: classificationsObjects
+    }) {
         ClassificationDefinition.setAssumptions({
             classificationDefinition: classificationDefinition,
-            assumptions: assumptions,
+            assumptions: classificationsObjects,
+        })
+    }
+
+    classificationGetClassificationBehaviours({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getClassificationBehaviours({
+            classificationDefinition: classificationDefinition
+        })
+    }
+
+    classificationGetImplementedClassifications({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getImplementedProtocols({
+            classificationDefinition: classificationDefinition
+        })
+    }
+
+    classificationSetClassificationBehaviours({
+        classificationDefinition: classificationDefinition, classificationsObjects: classificationsObjects
+    }) {
+        ClassificationDefinition.setClassificationBehaviours({
+            classificationDefinition: classificationDefinition,
+            classificationsObjects: classificationsObjects,
         })
     }
 
@@ -352,6 +366,10 @@ class MessageDispatcher {
         })
 
         return ClassificationDefinition.getName({ classificationDefinition: classificationDefinition })
+    }
+
+    classificationDefinitionInitialize({ classificationDefinition: classificationDefinition }) {
+        ClassificationDefinition.initialize({ classificationDefinition: classificationDefinition })
     }
 
     ////////////////////////////////////////////
@@ -383,10 +401,10 @@ class MessageDispatcher {
 
         const lookupInitialIndex = ClassificationLookup.getInitialLookupIndex({ object: object })
 
-        return ClassificationLookup.lookupProp({
+        return ClassificationLookup.lookupMethod({
             lookupInitialIndex: lookupInitialIndex,
             object: object,
-            propName: prop,
+            methodName: prop,
         })
     }
 
@@ -464,18 +482,6 @@ class MessageDispatcher {
         })
 
         object.impl.instantiatedClassifications = objectInitialClassifications
-
-        return object
-    }
-
-    createClassification({ classificationDefinition: classificationDefinition }) {
-        ClassificationDefinition.initialize({ classificationDefinition: classificationDefinition })
-
-        const object = this.createObject()
-
-        object.behaveAs( this.getClassificationClassification() )
-
-        object.setClassificationDefinition(classificationDefinition)
 
         return object
     }

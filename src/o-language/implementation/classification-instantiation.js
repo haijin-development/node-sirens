@@ -35,7 +35,7 @@ class ClassificationInstantiation {
      * The classification definition is the class where the instance methods are defined.
      */
     static getClassificationDefinition({ classificationInstantiation: classificationInstantiation }) {
-        return classificationInstantiation.constructor
+        return classificationInstantiation.definition
     }
 
     static getSourceClassification({ instantiatedClassification: instantiatedClassification }) {

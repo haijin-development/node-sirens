@@ -54,7 +54,7 @@ class ClassificationDefinition {
      * Instantiates a classification for the given object.
      */
     static instantiateClassification({ classificationDefinition: classificationDefinition }) {
-        const instantiation = new classificationDefinition()
+        const instantiation = Object.create(null)
 
         instantiation.definition = classificationDefinition
 

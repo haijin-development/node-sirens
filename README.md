@@ -1,5 +1,7 @@
 # Sirens
 
+[![Build Status](https://travis-ci.org/haijin-development/node-sirens.svg?branch=master)](https://travis-ci.org/haijin-development/node-sirens)
+
 Sirens gives Node.js developers some simple and interactive utilities to ease development, testing, debugging and learning Node.
 
 These utilities are written in Node and use GTK3 through [node-gtk](https://www.npmjs.com/package/node-gtk) as its GUI support.
@@ -7,6 +9,10 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 **Note: this project is usable but it is still at an early stage of development.**
 
 ![Object browser](./docs/browsing-stack.gif)
+
+Next release:
+
+[![Next Release Build Status](https://travis-ci.org/haijin-development/node-sirens.svg?branch=development)](https://travis-ci.org/haijin-development/node-sirens)
 
 ### Installation
 

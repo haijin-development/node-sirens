@@ -262,6 +262,8 @@ describe('The OInstance classification', () => {
             'classificationInstanceVariablesDo',
             'withClassificationDo',
             'bindYourself',
+            'beforeMethod',
+            'afterMethod',
             'yourself',
             'classifications',
             'thisClassification',

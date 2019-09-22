@@ -28,6 +28,21 @@ class ActiveClassification {
     }
 
     /*
+     * Returns the active classification from the call stack of the given object.
+     */
+    static getActiveClassificationObjectIn({ object: object }) {
+        const activeInstantiatedClassification = ActiveClassification.in({ object : object })
+
+        if( activeInstantiatedClassification === undefined ) {
+            return undefined
+        }
+
+        return ClassificationInstantiation.getSourceClassification({
+            instantiatedClassification: activeInstantiatedClassification
+        })
+    }
+
+    /*
      * Returns true if the given propName is an instance variable of the active classification, false otherwise.
      */
     static hasInstanceVariable({ object: object, instanceVariableName: instanceVariableName }) {

@@ -9,6 +9,7 @@ const {Classification} = require('./Classification')
 class MessageDispatcher {
 
     constructor() {
+        this.objectId = 0
         this.classificationClassification = Classification
         this.oInstanceClassification = OInstance
     }
@@ -448,6 +449,12 @@ class MessageDispatcher {
         return proxy
     }
 
+    getNextObjectId() {
+        this.objectId += 1
+
+        return this.objectId
+    }
+
     /*
      * Creates and returns a new object with no classification.
      *
@@ -457,12 +464,15 @@ class MessageDispatcher {
      *
      */
     createObjectProxy() {
+        const objectId = this.getNextObjectId()
+
         const object = Object.create(null)
 
         object.impl = {
             instantiatedClassifications: [],
             activeClassificationStack: [],
             initialClassificationLookup: [null],
+            objectId: objectId,
         }
 
         return this.createProxyOn(object)

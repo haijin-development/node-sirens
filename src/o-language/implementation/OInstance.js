@@ -150,6 +150,12 @@ class OInstance {
         return this
     }
 
+    beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+    }
+
+    afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
+    }
+
     /// Querying
 
     /*

@@ -1,5 +1,6 @@
 const ClassificationInstantiation = require('./classification-instantiation')
 const ActiveClassification = require('./active-classification')
+const O_Object = require('./o-object')
 
 class ClassificationLookup {
     /*
@@ -77,6 +78,143 @@ class ClassificationLookup {
         return undefined
     }
 
+    static mustCallBeforeAndAfterMethod({
+        object: object, method: method, instantiatedClassification: instantiatedClassification
+    }) {
+        // The following methods are a special case because they would generate an infinite recursion
+        // since the proxy classification implements them
+        if( ['beforeMethod', 'afterMethod', 'previousClassificationDo'].includes(method.name) ) {
+            return false
+        }
+
+        const classificationObjectOwningMethod = ClassificationInstantiation.getSourceClassification({
+            instantiatedClassification: instantiatedClassification
+        })
+
+        // The .afterInstantiation is a special case because it always gets called from from the
+        // OInstance classification. If its the call to the proxy classification do not call beforeMethod
+        if( method.name === 'afterInstantiation' ) {
+            const mostRecentClassification = O_Object.getMostRecentClassificationObject({
+                object: object
+            })
+
+            if( classificationObjectOwningMethod === mostRecentClassification ) {
+                return false
+            }
+        }
+
+        // If the call comes from the proxy classification do not call .beforeMethod since it would
+        // generate an infinite recursion
+        {
+            let activeClassificationObject = ActiveClassification.getActiveClassificationObjectIn({
+                object: object
+            })
+
+            if( activeClassificationObject === undefined ) {
+                activeClassificationObject = O_Object.getMostRecentClassificationObject({
+                    object: object
+                })
+            }
+            if( classificationObjectOwningMethod === activeClassificationObject ) {
+                return false
+            }            
+        }
+
+        // Otherwise call .beforeMethod for the proxy classification to hook it.
+        return true
+    }
+
+    static activateMethod({
+        object: object, method: method, params: params, instantiatedClassification: instantiatedClassification
+    }) {
+        const methodName = method.name
+
+        const mustCallBeforeAndAfterMethod = ClassificationLookup.mustCallBeforeAndAfterMethod({
+            object: object,
+            method: method,
+            instantiatedClassification: instantiatedClassification,
+        })
+
+        if( mustCallBeforeAndAfterMethod ) {
+            const classificationObjectOwningMethod =
+                ClassificationInstantiation.getSourceClassification({
+                    instantiatedClassification: instantiatedClassification
+                })
+
+            const beforeMethodResult = object.beforeMethod({
+                methodName: methodName,
+                params: params,
+                classification: classificationObjectOwningMethod,
+            })
+
+            if( beforeMethodResult !== undefined && beforeMethodResult.skipMethodCall === true ) {
+                return beforeMethodResult
+            }
+
+            if( beforeMethodResult !== undefined && beforeMethodResult.params !== undefined ) {
+                if( ! Array.isArray( beforeMethodResult.params ) ) {
+                    throw new Error(`Expecting an array in .params property.`)
+                }
+
+                params = beforeMethodResult.params
+            }
+        }
+
+        const initialClassificationObject = ClassificationLookup.getInitialClassification({
+            object: object
+        })
+
+        if( initialClassificationObject !== null ) {
+            ClassificationLookup.pushInitialClassification({
+                object: object,
+                instantiatedClassification: null
+            })
+        }
+
+        ActiveClassification.pushInto({
+            object: object,
+            instantiatedClassification: instantiatedClassification
+        })
+
+        let methodResult
+
+        try {
+
+            methodResult = method.call(object, ...params)
+
+        } finally {
+            ActiveClassification.popFrom({
+                object: object
+            })
+
+            if( initialClassificationObject !== null ) {
+                ClassificationLookup.popInitialClassification({
+                    object: object
+                })
+            }
+        }
+
+        if( mustCallBeforeAndAfterMethod ) {
+            const classificationObjectOwningMethod =
+                ClassificationInstantiation.getSourceClassification({
+                    instantiatedClassification: instantiatedClassification
+                })
+
+            const afterMethodResult = object.afterMethod({
+                methodName: methodName,
+                params: params,
+                result: methodResult,
+                classification: classificationObjectOwningMethod,
+            })
+
+            if( afterMethodResult !== undefined && afterMethodResult.result !== undefined ) {
+                methodResult = afterMethodResult.result
+            }
+        }
+
+        return methodResult
+    }
+
     /*
      * Creates and returns a proxy on the given classification function that handles a message
      * send.
@@ -97,36 +235,14 @@ class ClassificationLookup {
     static createMethodProxy({ method: method, instantiatedClassification: instantiatedClassification }) {
         const methodProxyApply = function(targetFunction, thisArg, params) {
             const object = thisArg
+            const method = targetFunction
 
-            const initialClassificationObject = ClassificationLookup.getInitialClassification({
-                object: object
-            })
-
-            if( initialClassificationObject !== null ) {
-                ClassificationLookup.pushInitialClassification({
-                    object: object,
-                    instantiatedClassification: null
-                })
-            }
-
-            ActiveClassification.pushInto({
+            return ClassificationLookup.activateMethod({
                 object: object,
-                instantiatedClassification: instantiatedClassification
+                method: method,
+                params: params,
+                instantiatedClassification: instantiatedClassification,
             })
-
-            try {
-                return targetFunction.call(object, ...params)
-            } finally {
-                ActiveClassification.popFrom({
-                    object: object
-                })
-
-                if( initialClassificationObject !== null ) {
-                    ClassificationLookup.popInitialClassification({
-                        object: object
-                    })
-                }
-            }
         }
 
 

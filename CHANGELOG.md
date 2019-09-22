@@ -47,6 +47,8 @@
 - Cleaned up and rewrote the MessageDispatcher implementation
 - Moved logic from MessageDispatcher to OInstance and Classification classifications.
 - Removed all access to the implementation from OInstance and Classification
+- Added an objectId to each O instance for debugging. It could be improved or removed in the future
+- Implemented the beforeMethod and afterMethod hooks. It will be optimized in the future.
 
 ## v0.5.0
 

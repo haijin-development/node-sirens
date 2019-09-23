@@ -153,7 +153,7 @@ class ClassificationLookup {
                 classification: classificationObjectOwningMethod,
             })
 
-            if( beforeMethodResult !== undefined && beforeMethodResult.skipMethodCall === true ) {
+            if( beforeMethodResult !== undefined && beforeMethodResult.methodName === null ) {
                 return beforeMethodResult
             }
 

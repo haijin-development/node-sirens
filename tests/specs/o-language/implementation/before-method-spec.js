@@ -270,7 +270,7 @@ const ShapeProxySkippingMethodCall = Classification.define( class ShapeProxy {
 
         if( methodName === 'setPosition' ) {
             return {
-                skipMethodCall: true
+                methodName: null
             }
         }
 

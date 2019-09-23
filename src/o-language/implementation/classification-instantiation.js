@@ -1,4 +1,5 @@
 const ClassificationDefinition = require('./classification-definition')
+const O_Object = require('./o-object')
 
 class ClassificationInstantiation {
     /*
@@ -19,7 +20,7 @@ class ClassificationInstantiation {
      * Returns an array with all of the classifications instantiated in the given object.
      */
     static getInstantiatedClassifications({ object: object }) {
-        return object.impl.instantiatedClassifications
+        return O_Object.getAllInstantiatedClassifications({ object: object })
     }
 
     static attachInstantiatedClassification({ object: object, classificationInstantiation: classificationInstantiation }) {

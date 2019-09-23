@@ -3,6 +3,7 @@ const ActiveClassification = require('./active-classification')
 const ClassificationLookup = require('./classification-lookup')
 const ClassificationInstantiation = require('./classification-instantiation')
 const ClassificationObject = require('./classification-object')
+const O_Object = require('./o-object')
 const {OInstance} = require('./OInstance')
 const {Classification} = require('./Classification')
 
@@ -49,15 +50,15 @@ class MessageDispatcher {
             classificationDefinition: OInstance
         })
 
-        this.classificationClassification.impl.instantiatedClassifications = [
-            classificationInstantiation_1,
-            oInstanceInstantiation_1,
-        ]
+        O_Object.setAllInstantiatedClassifications({
+            object: this.classificationClassification,
+            instantiatedClassifications: [ classificationInstantiation_1, oInstanceInstantiation_1 ]
+        })
 
-        this.oInstanceClassification.impl.instantiatedClassifications = [
-            classificationInstantiation_2,
-            oInstanceInstantiation_2,
-        ]
+        O_Object.setAllInstantiatedClassifications({
+            object: this.oInstanceClassification,
+            instantiatedClassifications: [ classificationInstantiation_2, oInstanceInstantiation_2 ]
+        })
 
         classificationInstantiation_1.sourceClassification = this.classificationClassification
         oInstanceInstantiation_1.sourceClassification = this.oInstanceClassification
@@ -218,7 +219,10 @@ class MessageDispatcher {
      * Sets an array with all of the classifications instantiated on the given object.
      */
     objectSetClassifications({ object: object, instantiatedClassifications: instantiatedClassifications }) {
-        object.impl.instantiatedClassifications = instantiatedClassifications
+        O_Object.setAllInstantiatedClassifications({
+            object: object,
+            instantiatedClassifications: instantiatedClassifications,
+        })
     }
 
     /*
@@ -234,13 +238,10 @@ class MessageDispatcher {
      * is called. That will be the second top most active frame in the call stack since the top most will
      * be the call to thisClassification() itself.
      */
-    objectGetActiveClassification({ object: object }) {
-        const length = object.impl.activeClassificationStack.length
-
-        const instantiatedClassification = ActiveClassification.in({ object: object, offset: -1 })
-
-        return ClassificationInstantiation.getSourceClassification({
-            instantiatedClassification: instantiatedClassification
+    objectGetThisClassification({ object: object }) {
+        return ActiveClassification.getActiveClassificationObjectIn({
+            object: object,
+            offset: -1,
         })
     }
 
@@ -272,15 +273,16 @@ class MessageDispatcher {
      * 
      */
     getPreviousClassificationOfObject({ object: object }) {
-        const length = object.impl.activeClassificationStack.length
+        const activeInstantiatedClassification = ActiveClassification.in({
+            object: object,
+            offset: -1,
+        })
 
-        const activeClassification = object.impl.activeClassificationStack[ length - 2 ]
-
-        if( activeClassification === undefined ) { return undefined }
+        if( activeInstantiatedClassification === undefined ) { return undefined }
 
         const index  = ClassificationInstantiation.findClassificationIndex({
             object: object,
-            classificationObject: activeClassification.sourceClassification,
+            classificationObject: activeInstantiatedClassification.sourceClassification,
         })
 
         const classifications = ClassificationInstantiation.getInstantiatedClassifications({ object: object })
@@ -491,7 +493,10 @@ class MessageDispatcher {
             object: object
         })
 
-        object.impl.instantiatedClassifications = objectInitialClassifications
+        O_Object.setAllInstantiatedClassifications({
+            object: object,
+            instantiatedClassifications: objectInitialClassifications,
+        })
 
         return object
     }

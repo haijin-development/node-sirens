@@ -1,5 +1,6 @@
 const ClassificationInstantiation = require('./classification-instantiation')
 const ClassificationDefinition = require('./classification-definition')
+const O_Object = require('./o-object')
 
 class ClassificationObject {
     static attachBehaviour({ classificationObject: classificationObject, object: object }) {
@@ -31,14 +32,11 @@ class ClassificationObject {
     }
 
     static getClassificationDefinition({ classificationObject: classificationObject }) {
-        const objectInstantiatedClassifications = classificationObject.impl.instantiatedClassifications
-
-        // The first classification instantiated by a classification object is OInstance,
-        // the second one is Classification
-        const classificationInstantiationIndex = objectInstantiatedClassifications.length - 2
-
         const classificationClassificationInstantiation = 
-            objectInstantiatedClassifications[classificationInstantiationIndex]
+            O_Object.getLessRecentInstantiatedClassification({
+                object: classificationObject,
+                offset: -1,
+            })
 
         const classificationDefinition = ClassificationInstantiation.getInstanceVariableValue({
             classificationInstantiation: classificationClassificationInstantiation,
@@ -47,6 +45,16 @@ class ClassificationObject {
 
         return classificationDefinition
     }
+
+    static getMostRecentClassificationObject({ object: object }) {
+        const firstInstantiatedClassification = O_Object.getMostRecentInstantiatedClassification({
+                object: object
+            })
+
+        return ClassificationInstantiation.getSourceClassification({
+            instantiatedClassification: firstInstantiatedClassification
+        })
+    }    
 }
 
 

@@ -1,5 +1,6 @@
 const ClassificationInstantiation = require('./classification-instantiation')
 const ActiveClassification = require('./active-classification')
+const ClassificationObject = require('./classification-object')
 const O_Object = require('./o-object')
 
 class ClassificationLookup {
@@ -7,23 +8,28 @@ class ClassificationLookup {
      * Pushes the given classification in the method lookup of the given object.
      */
     static pushInitialClassification({ object: object, classificationObject: classificationObject }) {
-        object.impl.initialClassificationLookup.push( classificationObject )
+        return O_Object.pushLookupInitialClassification({
+            object: object,
+            classificationObject: classificationObject,
+        })
     }
 
     /*
      * Pops the classification from the method lookup of the given object.
      */
     static popInitialClassification({ object: object }) {
-        object.impl.initialClassificationLookup.pop()
+        return O_Object.popLookupInitialClassification({
+            object: object
+        })
     }
 
     /*
      * Returns the starting classification in the method lookup for the given object.
      */
     static getInitialClassification({ object: object }) {
-        const length = object.impl.initialClassificationLookup.length
-
-        return object.impl.initialClassificationLookup[ length - 1 ]
+        return O_Object.getLookupInitialClassification({
+            object: object
+        })
     }
 
     /*
@@ -94,7 +100,7 @@ class ClassificationLookup {
         // The .afterInstantiation is a special case because it always gets called from from the
         // OInstance classification. If its the call to the proxy classification do not call beforeMethod
         if( method.name === 'afterInstantiation' ) {
-            const mostRecentClassification = O_Object.getMostRecentClassificationObject({
+            const mostRecentClassification = ClassificationObject.getMostRecentClassificationObject({
                 object: object
             })
 
@@ -111,7 +117,7 @@ class ClassificationLookup {
             })
 
             if( activeClassificationObject === undefined ) {
-                activeClassificationObject = O_Object.getMostRecentClassificationObject({
+                activeClassificationObject = ClassificationObject.getMostRecentClassificationObject({
                     object: object
                 })
             }

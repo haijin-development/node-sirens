@@ -180,7 +180,7 @@ class OInstance {
      * Returns the classification active in the method that called thisClassification().
      */
     thisClassification() {
-        return MessageDispatcherInstance.objectGetActiveClassification({
+        return MessageDispatcherInstance.objectGetThisClassification({
             object: this
         })
     }

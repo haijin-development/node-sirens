@@ -1,37 +1,44 @@
 const ClassificationInstantiation = require('./classification-instantiation')
-const ClassificationDefinition = require('./classification-definition')
+const O_Object = require('./o-object')
 
 class ActiveClassification {
     /*
      * Pushes the given classification in the call stack of the given object.
      */
     static pushInto({ object: object, instantiatedClassification: instantiatedClassification }) {
-        object.impl.activeClassificationStack.push( instantiatedClassification )
+        O_Object.pushActiveInstantiatedClassification({
+            object: object,
+            instantiatedClassification: instantiatedClassification,
+        })
     }
 
     /*
      * Pops the classification from the call stack of the given object.
      */
     static popFrom({ object: object }) {
-        object.impl.activeClassificationStack.pop()
+        O_Object.popActiveInstantiatedClassification({
+            object: object,
+        })
     }
 
     /*
      * Returns the active classification from the call stack of the given object.
      */
     static in({ object: object, offset: offset }) {
-        if( offset === undefined ) { offset = 0 }
-
-        const length = object.impl.activeClassificationStack.length
-
-        return object.impl.activeClassificationStack[ length - 1 + offset ]
+        return O_Object.getMostRecentActiveInstantiatedClassification({
+            object: object,
+            offset: offset,
+        })
     }
 
     /*
      * Returns the active classification from the call stack of the given object.
      */
-    static getActiveClassificationObjectIn({ object: object }) {
-        const activeInstantiatedClassification = ActiveClassification.in({ object : object })
+    static getActiveClassificationObjectIn({ object: object, offset: offset }) {
+        const activeInstantiatedClassification = ActiveClassification.in({
+            object : object,
+            offset: offset,
+        })
 
         if( activeInstantiatedClassification === undefined ) {
             return undefined

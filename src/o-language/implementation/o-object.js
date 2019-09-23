@@ -1,27 +1,84 @@
-const ClassificationInstantiation = require('./classification-instantiation')
-const ClassificationDefinition = require('./classification-definition')
-
 class O_Object {
-    static getInstantiatedClassificationAtOffset({ object: object, index: index }) {
+    /// Instantiated classifications
+
+    static getAllInstantiatedClassifications({ object: object }) {
+        return object.impl.instantiatedClassifications
+    }
+
+    /*
+     * Sets an array with all of the classifications instantiated on the given object.
+     */
+    static setAllInstantiatedClassifications({
+        object: object, instantiatedClassifications: instantiatedClassifications
+    }) {
+        object.impl.instantiatedClassifications = instantiatedClassifications.slice()
+    }
+
+    static getMostRecentInstantiatedClassification({ object: object, offset: offset }) {
+        if( offset === undefined ) {
+            offset = 0
+        }
+
+        const index = - offset
+
+        return object.impl.instantiatedClassifications[offset]
+    }
+
+    static getLessRecentInstantiatedClassification({ object: object, offset: offset }) {
+        if( offset === undefined ) {
+            offset = 0
+        }
+
+        const index = object.impl.instantiatedClassifications.length - 1 + offset
+
         return object.impl.instantiatedClassifications[index]
-    }    
+    }
 
-    static getMostRecentInstantiatedClassification({ object: object }) {
-        return O_Object.getInstantiatedClassificationAtOffset({
-            object: object,
-            index: 0,
-        })
-    }    
+    /// Active instantiated classification stack
 
-    static getMostRecentClassificationObject({ object: object }) {
-        const firstInstantiatedClassification = O_Object.getMostRecentInstantiatedClassification({
-                object: object
-            })
+    static pushActiveInstantiatedClassification({
+        object: object,
+        instantiatedClassification: instantiatedClassification
+    }) {
+        object.impl.activeClassificationStack.push( instantiatedClassification )
+    }
 
-        return ClassificationInstantiation.getSourceClassification({
-            instantiatedClassification: firstInstantiatedClassification
-        })
-    }    
+    static popActiveInstantiatedClassification({ object: object }) {
+        object.impl.activeClassificationStack.pop()
+    }
+
+    static getMostRecentActiveInstantiatedClassification({ object: object, offset: offset }) {
+        if( offset === undefined ) { offset = 0 }
+
+        const length = object.impl.activeClassificationStack.length
+
+        return object.impl.activeClassificationStack[ length - 1 + offset ]
+    }
+
+    /// Classification lookup
+
+    /*
+     * Pushes the given classification in the classifications lookup stack of the given object.
+     */
+    static pushLookupInitialClassification({ object: object, classificationObject: classificationObject }) {
+        object.impl.initialClassificationLookup.push( classificationObject )
+    }
+
+    /*
+     * Pops the classification from the method lookup of the given object.
+     */
+    static popLookupInitialClassification({ object: object }) {
+        object.impl.initialClassificationLookup.pop()
+    }
+
+    /*
+     * Returns the starting classification in the method lookup for the given object.
+     */
+    static getLookupInitialClassification({ object: object }) {
+        const length = object.impl.initialClassificationLookup.length
+
+        return object.impl.initialClassificationLookup[ length - 1 ]
+    }
 }
 
 

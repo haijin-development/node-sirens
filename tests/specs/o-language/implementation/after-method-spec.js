@@ -94,7 +94,7 @@ const ShapeProxyOverridingResult = Classification.define( class ShapeProxy {
 
     afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
         return {
-            result: false
+            callResult: false
         }
     }
 })

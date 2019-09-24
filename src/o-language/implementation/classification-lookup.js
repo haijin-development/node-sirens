@@ -131,9 +131,10 @@ class ClassificationLookup {
         instantiatedClassification: instantiatedClassification,
     }) {
         let classificationObjectOwningMethod
+
         const result = {
-            mustCallMethod: true,
-            params: params,
+            callMethod: methodName,
+            callParams: params,
         }
 
         if( instantiatedClassification !== null ) {
@@ -155,16 +156,25 @@ class ClassificationLookup {
             ]
         })
 
-        if( beforeMethodResult !== undefined && beforeMethodResult.methodName === null ) {
-            result.mustCallMethod = false
+        if( beforeMethodResult === undefined ) {
+            return result
         }
 
-        if( beforeMethodResult !== undefined && beforeMethodResult.params !== undefined ) {
-            if( result.mustCallMethod === true && ! Array.isArray( beforeMethodResult.params ) ) {
-                throw new Error(`Expecting an array in .params property.`)
-            }
+        if( beforeMethodResult.callMethod !== null
+            &&
+            beforeMethodResult.callParams !== undefined
+            &&
+            ! Array.isArray( beforeMethodResult.callParams )
+          ) {
+            throw new Error(`Expecting an array in .params property.`)
+        }
 
-            result.params = beforeMethodResult.params
+        if( beforeMethodResult.callMethod !== undefined ) {
+            result.callMethod = beforeMethodResult.callMethod
+        }
+
+        if( beforeMethodResult.callParams !== undefined ) {
+            result.callParams = beforeMethodResult.callParams
         }
 
         return result
@@ -219,7 +229,7 @@ class ClassificationLookup {
         let classificationObjectOwningMethod
 
         const result = {
-            overridenResult: undefined,
+            callResult: undefined,
         }
 
         if( instantiatedClassification !== null ) {
@@ -242,8 +252,8 @@ class ClassificationLookup {
             ]
         })
 
-        if( afterMethodResult !== undefined && afterMethodResult.result !== undefined ) {
-            result.overridenResult = afterMethodResult.result
+        if( afterMethodResult !== undefined && afterMethodResult.callResult !== undefined ) {
+            result.callResult = afterMethodResult.callResult
         }
 
         return result
@@ -264,18 +274,20 @@ class ClassificationLookup {
         })
 
         let mustCallMethod = true 
+        let beforeMethodResult
         let methodResult
 
         if( mustCallBeforeAndAfterMethod ) {
-            const result = ClassificationLookup.callBeforeMethod({
+            beforeMethodResult = ClassificationLookup.callBeforeMethod({
                 methodName: methodName,
                 params: params,
                 instantiatedClassification: instantiatedClassification,
                 proxyObject: proxyObject,
             })
 
-            mustCallMethod = result.mustCallMethod
-            params = result.params
+            params = beforeMethodResult.callParams
+
+            mustCallMethod = beforeMethodResult.callMethod !== null
         }
 
         if( mustCallMethod ) {
@@ -283,12 +295,25 @@ class ClassificationLookup {
                 throw new Error(`Method not found .${methodName}()`)
             }
 
-            methodResult = ClassificationLookup.callMethod({
-                object: object,
-                method: method,
-                params: params,
-                instantiatedClassification: instantiatedClassification
-            })
+            if( beforeMethodResult !== undefined && beforeMethodResult.callMethod !== methodName ) {
+
+                methodResult = O_Object.objectCallMethod({
+                    proxyObject: proxyObject,
+                    methodName: beforeMethodResult.callMethod,
+                    params: params
+                })
+
+            } else {
+
+                methodResult = ClassificationLookup.callMethod({
+                    object: object,
+                    method: method,
+                    params: params,
+                    instantiatedClassification: instantiatedClassification
+                })
+
+            }
+
         }
 
         if( mustCallBeforeAndAfterMethod ) {
@@ -300,8 +325,8 @@ class ClassificationLookup {
                 instantiatedClassification: instantiatedClassification
             })
 
-            if( afterMethodResult.overridenResult !== undefined  ) {
-                return afterMethodResult.overridenResult
+            if( afterMethodResult.callResult !== undefined  ) {
+                methodResult = afterMethodResult.callResult
             }
         }
 

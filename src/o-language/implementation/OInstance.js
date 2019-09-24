@@ -50,9 +50,12 @@ class OInstance {
      * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
      */
     behaveAs(classification) {
-        if( this.isBehavingAs(classification) ) {
-            return this
-        }
+        const isBehavingAs = MessageDispatcherInstance.objectIsBehavingAs({
+            object: this, 
+            classificationObject: classification,
+        })
+
+        if( isBehavingAs ) { return this }
 
         const getRecursiveAssumptions = classification.getRecursiveAssumptions()
 

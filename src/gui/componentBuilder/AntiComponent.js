@@ -11,13 +11,13 @@ class AntiComponent {
 
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
         return {
-            methodName: null,
+            callMethod: null,
         }
     }
 
     afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
         return {
-            result: this,
+            callResult: this,
         }
     }
 }

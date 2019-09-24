@@ -8,7 +8,7 @@ class ClassificationObject {
             classificationObject: classificationObject
         })
 
-        ClassificationInstantiation.attachInstantiatedClassification({
+        O_Object.attachInstantiatedClassification({
             object: object,
             classificationInstantiation: classificationInstantiation,
         })

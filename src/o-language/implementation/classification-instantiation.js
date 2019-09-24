@@ -23,14 +23,6 @@ class ClassificationInstantiation {
         return O_Object.getAllInstantiatedClassifications({ object: object })
     }
 
-    static attachInstantiatedClassification({ object: object, classificationInstantiation: classificationInstantiation }) {
-        const classificationInstantiations = ClassificationInstantiation.getInstantiatedClassifications({
-            object: object
-        })
-
-        classificationInstantiations.unshift(classificationInstantiation)
-    }
-
     /*
      * Returns the classification definition of a classificationInstantiation.
      * The classification definition is the class where the instance methods are defined.

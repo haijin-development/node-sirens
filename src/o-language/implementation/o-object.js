@@ -1,8 +1,23 @@
 class O_Object {
     /// Instantiated classifications
 
+    static attachInstantiatedClassification({
+        object: object, classificationInstantiation: classificationInstantiation
+    }) {
+        object.impl.instantiatedClassifications.unshift(classificationInstantiation)
+    }
+
+    static dettachClassificationObject({
+        object: object, classificationObject: classificationObject
+    }) {
+        object.impl.instantiatedClassifications =
+            object.impl.instantiatedClassifications.filter( (instantiatedClassification) => {
+                return instantiatedClassification.sourceClassification !== classificationObject
+            })
+    }
+
     static getAllInstantiatedClassifications({ object: object }) {
-        return object.impl.instantiatedClassifications
+        return object.impl.instantiatedClassifications.slice()
     }
 
     /*

@@ -155,15 +155,9 @@ class MessageDispatcher {
      * had that classification and there is no way to distinguish bots scenarios.
      */
     objectDropBehaviour({ object: object, classificationObject: classificationObject }) {
-        const filteredInstantiatedClassifications =
-            ClassificationInstantiation.getInstantiatedClassifications({ object: object })
-                .filter( (eachClassification) => {
-                    return eachClassification.sourceClassification !== classificationObject
-                })
-
-        this.objectSetClassifications({
+        O_Object.dettachClassificationObject({
             object: object,
-            instantiatedClassifications: filteredInstantiatedClassifications
+            classificationObject: classificationObject
         })
     }
 
@@ -213,16 +207,6 @@ class MessageDispatcher {
             .map( (eachClassification) => {
                 return eachClassification.sourceClassification
             })
-    }
-
-    /*
-     * Sets an array with all of the classifications instantiated on the given object.
-     */
-    objectSetClassifications({ object: object, instantiatedClassifications: instantiatedClassifications }) {
-        O_Object.setAllInstantiatedClassifications({
-            object: object,
-            instantiatedClassifications: instantiatedClassifications,
-        })
     }
 
     /*

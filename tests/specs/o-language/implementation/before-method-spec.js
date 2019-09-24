@@ -10,12 +10,20 @@ describe('When calling the beforeMethod hook', () => {
 
         object.setPosition({ x: 10, y: 20 })
 
-        expect( object.getFirstProxyBeforeMethodCalls() ) .to .eql([{
-            proxy: 'ShapeProxy',
-            methodName: 'setPosition',
-            params: [{ x: 10, y: 20 }],
-            classification: Shape,
-        }])
+        const beforeMethodsCalled = object.getFirstProxyBeforeMethodCalls()
+
+        expect( beforeMethodsCalled.length ) .to .equal( 2 )
+
+        expect( beforeMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[0].methodName ) .to .eql( 'setPosition' )
+        expect( beforeMethodsCalled[0].params ) .to .eql( [{ x: 10, y: 20 }] )
+        expect( beforeMethodsCalled[0].classification === Shape ) .to .be .true
+
+        expect( beforeMethodsCalled[1].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[1].methodName ) .to .eql( 'getFirstProxyBeforeMethodCalls' )
+        expect( beforeMethodsCalled[1].params ) .to .eql( [] )
+        expect( beforeMethodsCalled[1].classification === ShapeProxy ) .to .be .true
+
     })
 })
 
@@ -28,37 +36,52 @@ describe('When calling the beforeMethod hook on a method that calls previousClas
 
         object.setPosition({ x: 10, y: 20 })
 
-        const firstProxyBeforeMethodCalls = object.getFirstProxyBeforeMethodCalls()
+        const allBeforeMethodCalls = [].concat(
+            object.getFirstProxyBeforeMethodCalls(),
+            object.getSecondProxyBeforeMethodCalls(),
+        )
 
-        expect( firstProxyBeforeMethodCalls[0] ) .to .eql({
-                proxy: 'ShapeProxy',
-                methodName: 'behaveAs',
-                params: [ShapeProxyCallingPreviousClassification],
-                classification: OInstance,
-            })
+        expect( allBeforeMethodCalls.length ) .to .equal( 8 )
 
-        expect( firstProxyBeforeMethodCalls[1] ) .to .eql({
-            proxy: 'ShapeProxy',
-            methodName: 'setPosition',
-            params: [{ x: 10, y: 20 }],
-            classification: Shape,
-        })
+        expect( allBeforeMethodCalls[0].proxy ) .to .eql( 'ShapeProxy' )
+        expect( allBeforeMethodCalls[0].methodName ) .to .eql( 'behaveAs' )
+        expect( allBeforeMethodCalls[0].params ) .to .eql( [ ShapeProxyCallingPreviousClassification ] )
+        expect( allBeforeMethodCalls[0].classification === OInstance ) .to .be .true
 
-        expect( firstProxyBeforeMethodCalls[2] ) .to .eql({
-            proxy: 'ShapeProxy',
-            methodName: 'getFirstProxyBeforeMethodCalls',
-            params: [],
-            classification: ShapeProxy,
-        })
+        expect( allBeforeMethodCalls[1].proxy ) .to .eql( 'ShapeProxy' )
+        expect( allBeforeMethodCalls[1].methodName ) .to .eql( 'isBehavingAs' )
+        expect( allBeforeMethodCalls[1].params ) .to .eql( [ ShapeProxyCallingPreviousClassification ] )
+        expect( allBeforeMethodCalls[1].classification === OInstance ) .to .be .true
 
-        const secondProxyBeforeMethodCalls = object.getSecondProxyBeforeMethodCalls()
+        expect( allBeforeMethodCalls[2].proxy ) .to .eql( 'ShapeProxy' )
+        expect( allBeforeMethodCalls[2].methodName ) .to .eql( 'setPosition' )
+        expect( allBeforeMethodCalls[2].params ) .to .eql( [{ x: 10, y: 20 }] )
+        expect( allBeforeMethodCalls[2].classification === Shape ) .to .be .true
 
-        expect( secondProxyBeforeMethodCalls[0] ) .to .eql({
-                proxy: 'ShapeProxyCallingPreviousClassification',
-                methodName: 'setPosition',
-                params: [{ x: 10, y: 20 }],
-                classification: Shape,
-            })
+        expect( allBeforeMethodCalls[3].proxy ) .to .eql( 'ShapeProxy' )
+        expect( allBeforeMethodCalls[3].methodName ) .to .eql( 'getFirstProxyBeforeMethodCalls' )
+        expect( allBeforeMethodCalls[3].params ) .to .eql( [] )
+        expect( allBeforeMethodCalls[3].classification === ShapeProxy ) .to .be .true
+
+        expect( allBeforeMethodCalls[4].proxy ) .to .eql( 'ShapeProxy' )
+        expect( allBeforeMethodCalls[4].methodName ) .to .eql( 'getSecondProxyBeforeMethodCalls' )
+        expect( allBeforeMethodCalls[4].params ) .to .eql( [] )
+        expect( allBeforeMethodCalls[4].classification === ShapeProxyCallingPreviousClassification ) .to .be .true
+
+        expect( allBeforeMethodCalls[5].proxy ) .to .eql( 'ShapeProxyCallingPreviousClassification' )
+        expect( allBeforeMethodCalls[5].methodName ) .to .eql( 'setPosition' )
+        expect( allBeforeMethodCalls[5].params ) .to .eql( [{ x: 10, y: 20 }] )
+        expect( allBeforeMethodCalls[5].classification === Shape ) .to .be .true
+
+        expect( allBeforeMethodCalls[6].proxy ) .to .eql( 'ShapeProxyCallingPreviousClassification' )
+        expect( allBeforeMethodCalls[6].methodName ) .to .eql( 'getFirstProxyBeforeMethodCalls' )
+        expect( allBeforeMethodCalls[6].params ) .to .eql( [] )
+        expect( allBeforeMethodCalls[6].classification === ShapeProxy ) .to .be .true
+
+        expect( allBeforeMethodCalls[7].proxy ) .to .eql( 'ShapeProxyCallingPreviousClassification' )
+        expect( allBeforeMethodCalls[7].methodName ) .to .eql( 'getSecondProxyBeforeMethodCalls' )
+        expect( allBeforeMethodCalls[7].params ) .to .eql( [] )
+        expect( allBeforeMethodCalls[7].classification === ShapeProxyCallingPreviousClassification ) .to .be .true
     })
 })
 
@@ -93,7 +116,7 @@ describe('When skipping a method call from the beforeMethod hook', () => {
         expect( object.getPosition() ) .to .eql({ x: undefined, y: undefined })
     })
 
-    it('does not call the method but does call other beforeMethod hooks', () => {
+    it('does call other beforeMethod hooks', () => {
         const object = Shape.new()
 
         object.behaveAs(ShapeProxy)
@@ -101,13 +124,29 @@ describe('When skipping a method call from the beforeMethod hook', () => {
 
         object.setPosition({ x: 10, y: 20 })
 
-        const allProxiesBeforeMethodCalls = [].concat(
-            object.getFirstProxyBeforeMethodCalls(),
-        )
+        const beforeMethodsCalled = object.getFirstProxyBeforeMethodCalls()
 
-        expect( allProxiesBeforeMethodCalls.length ) .to .equal(3)
+        expect( beforeMethodsCalled.length ) .to .equal( 4 )
 
-        expect( object.getPosition() ) .to .eql({ x: undefined, y: undefined })
+        expect( beforeMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[0].methodName ) .to .eql( 'behaveAs' )
+        expect( beforeMethodsCalled[0].params ) .to .eql( [ ShapeProxySkippingMethodCall ] )
+        expect( beforeMethodsCalled[0].classification === OInstance ) .to .be .true
+
+        expect( beforeMethodsCalled[1].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[1].methodName ) .to .eql( 'isBehavingAs' )
+        expect( beforeMethodsCalled[1].params ) .to .eql( [ ShapeProxySkippingMethodCall ] )
+        expect( beforeMethodsCalled[1].classification === OInstance ) .to .be .true
+
+        expect( beforeMethodsCalled[2].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[2].methodName ) .to .eql( 'setPosition' )
+        expect( beforeMethodsCalled[2].params ) .to .eql( [{ x: 10, y: 20 }] )
+        expect( beforeMethodsCalled[2].classification === Shape ) .to .be .true
+
+        expect( beforeMethodsCalled[3].proxy ) .to .eql( 'ShapeProxy' )
+        expect( beforeMethodsCalled[3].methodName ) .to .eql( 'getFirstProxyBeforeMethodCalls' )
+        expect( beforeMethodsCalled[3].params ) .to .eql( [] )
+        expect( beforeMethodsCalled[3].classification === ShapeProxy ) .to .be .true
     })
 })
 
@@ -215,6 +254,8 @@ const ShapeProxyCallingItsOwnMethod = Classification.define( class ShapeProxy {
     }
 
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+        if( this.thisClassification() === classification ) { return }
+
         this.thirdProxyBeforeMethodCalls.push({
             proxy: 'ShapeProxyCallingItsOwnMethod',
             methodName: methodName,
@@ -284,10 +325,13 @@ const StandAloneProxy = Classification.define( class StandAloneProxy {
     }
 
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+        if( methodName === 'getBeforeMethodWasCalled' ) { return }
+
         this.beforeMethodWasCalled = true
 
         return {
             methodName: null,
+            params: null,
         }
     }
 

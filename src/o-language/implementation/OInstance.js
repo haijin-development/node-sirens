@@ -60,7 +60,11 @@ class OInstance {
             this.behaveAs( eachClassification )
         })
 
-        this.pushBehaviour( classification )
+        // This is to avoid the method lookup during this.pushBehaviour
+        MessageDispatcherInstance.objectPushBehaviour({
+            object: this,
+            classificationObject: classification,
+        })
 
         if( classification.definesMethod( 'afterInstantiation' ) ) {
             this.afterInstantiation()

@@ -10,23 +10,24 @@ describe('When calling the afterMethod hook', () => {
 
         object.setPosition({ x: 10, y: 20 })
 
-        const afterMethodCalls = object.getFirstProxyAfterMethodCalls()
+        const afterMethodsCalled = object.getFirstProxyAfterMethodCalls()
 
-        expect( afterMethodCalls[0] ) .to .eql({
-            proxy: 'ShapeProxy',
-            methodName: 'behaveAs',
-            params: [ShapeProxy],
-            result: object,
-            classification: OInstance,
-        })
+        expect( afterMethodsCalled.length ) .to .equal( 3 )
 
-        expect( afterMethodCalls[1] ) .to .eql({
-            proxy: 'ShapeProxy',
-            methodName: 'setPosition',
-            params: [{ x: 10, y: 20 }],
-            result: true,
-            classification: Shape,
-        })
+        expect( afterMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
+        expect( afterMethodsCalled[0].methodName ) .to .eql( 'behaveAs' )
+        expect( afterMethodsCalled[0].params ) .to .eql( [ ShapeProxy ] )
+        expect( afterMethodsCalled[0].classification === OInstance ) .to .be .true
+
+        expect( afterMethodsCalled[1].proxy ) .to .eql( 'ShapeProxy' )
+        expect( afterMethodsCalled[1].methodName ) .to .eql( 'setPosition' )
+        expect( afterMethodsCalled[1].params ) .to .eql( [{ x: 10, y: 20 }] )
+        expect( afterMethodsCalled[1].classification === Shape ) .to .be .true
+
+        expect( afterMethodsCalled[2].proxy ) .to .eql( 'ShapeProxy' )
+        expect( afterMethodsCalled[2].methodName ) .to .eql( 'getFirstProxyAfterMethodCalls' )
+        expect( afterMethodsCalled[2].params ) .to .eql( [] )
+        expect( afterMethodsCalled[2].classification === ShapeProxy ) .to .be .true
     })
 })
 

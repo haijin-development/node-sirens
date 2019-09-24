@@ -93,49 +93,30 @@ class ClassificationLookup {
     }) {
         // The following methods are a special case because they would generate an infinite recursion
         // since the proxy classification implements them
-        if( ['beforeMethod', 'afterMethod', 'previousClassificationDo'].includes(methodName) ) {
+        if( ['beforeMethod', 'afterMethod', 'previousClassificationDo', 'thisClassification'].includes(methodName) ) {
             return false
         }
 
+        // If instantiatedClassification === null we are executing a methodNotFound.
+        // In this case always call beforeMethod and afterMethod to allow the proxies to handle
+        // the methodNotFound.
         if( instantiatedClassification === null ) {
             return true
         }
 
-        const classificationObjectOwningMethod = ClassificationInstantiation.getSourceClassification({
-            instantiatedClassification: instantiatedClassification
-        })
-
         // The .afterInstantiation is a special case because it always gets called from from the
         // OInstance classification. If its the call to the proxy classification do not call beforeMethod
         if( methodName === 'afterInstantiation' ) {
+            const classificationObjectOwningMethod = ClassificationInstantiation.getSourceClassification({
+                instantiatedClassification: instantiatedClassification
+            })
+
             const mostRecentClassification = ClassificationObject.getMostRecentClassificationObject({
                 object: object
             })
 
             if( classificationObjectOwningMethod === mostRecentClassification ) {
                 return false
-            }
-        }
-
-        // If the call comes from the proxy classification do not call .beforeMethod since it would
-        // generate an infinite recursion
-        {
-            const activeClassificationObject = ActiveClassification.getActiveClassificationObjectIn({
-                object: object
-            })
-
-            if( classificationObjectOwningMethod === activeClassificationObject ) {
-                return false
-            }            
-
-            if( activeClassificationObject === undefined ) {
-                const activeClassificationObject = ClassificationObject.getMostRecentClassificationObject({
-                    object: object
-                })
-
-                if( classificationObjectOwningMethod === activeClassificationObject ) {
-                    return false
-                }            
             }
         }
 
@@ -179,7 +160,7 @@ class ClassificationLookup {
         }
 
         if( beforeMethodResult !== undefined && beforeMethodResult.params !== undefined ) {
-            if( ! Array.isArray( beforeMethodResult.params ) ) {
+            if( result.mustCallMethod === true && ! Array.isArray( beforeMethodResult.params ) ) {
                 throw new Error(`Expecting an array in .params property.`)
             }
 
@@ -193,12 +174,8 @@ class ClassificationLookup {
         object: object,
         method: method,
         params: params,
-        instantiatedClassification: instantiatedClassification
+        instantiatedClassification: instantiatedClassification,
     }) {
-        if( method === null ) {
-            throw new Error(`Method not found .${methodName}()`)
-        }
-
         const initialClassificationObject = ClassificationLookup.getInitialClassification({
             object: object
         })
@@ -302,6 +279,10 @@ class ClassificationLookup {
         }
 
         if( mustCallMethod ) {
+            if( method === null ) {
+                throw new Error(`Method not found .${methodName}()`)
+            }
+
             methodResult = ClassificationLookup.callMethod({
                 object: object,
                 method: method,

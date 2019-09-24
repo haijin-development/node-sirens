@@ -79,6 +79,12 @@ class O_Object {
 
         return object.impl.initialClassificationLookup[ length - 1 ]
     }
+
+    /// Calling methods
+
+    static objectCallMethod({ proxyObject: proxyObject, methodName: methodName, params: params }) {
+        return proxyObject[methodName](...params)
+    }
 }
 
 

@@ -147,10 +147,16 @@ class ClassificationLookup {
                     instantiatedClassification: instantiatedClassification
                 })
 
-            const beforeMethodResult = object.beforeMethod({
-                methodName: methodName,
-                params: params,
-                classification: classificationObjectOwningMethod,
+            const beforeMethodResult = O_Object.objectCallMethod({
+                proxyObject: object,
+                methodName: 'beforeMethod',
+                params: [
+                    {
+                        methodName: methodName,
+                        params: params,
+                        classification: classificationObjectOwningMethod,
+                    }
+                ]
             })
 
             if( beforeMethodResult !== undefined && beforeMethodResult.methodName === null ) {

@@ -1,19 +1,58 @@
+const ClassificationDefinition = require('./classification-definition')
+
 class O_Object {
     /// Instantiated classifications
 
     static attachInstantiatedClassification({
-        object: object, classificationInstantiation: classificationInstantiation
+        object: object,
+        instantiatedClassification: instantiatedClassification,
+        classificationDefinition: classificationDefinition,
     }) {
-        object.impl.instantiatedClassifications.unshift(classificationInstantiation)
+        object.impl.instantiatedClassifications.unshift(instantiatedClassification)
+
+        const implementsBeforeAfterMethods = ClassificationDefinition.implementsBeforeAfterMethods({
+            classificationDefinition: classificationDefinition
+        })
+
+        // if classificationDefinition.implementsBeforeAfterMethods === false keep the previous value
+        if( implementsBeforeAfterMethods ) {
+            object.impl.implementsBeforeAfterMethods = true
+        }
     }
 
-    static dettachClassificationObject({
+    static detachClassificationObject({
         object: object, classificationObject: classificationObject
     }) {
-        object.impl.instantiatedClassifications =
-            object.impl.instantiatedClassifications.filter( (instantiatedClassification) => {
-                return instantiatedClassification.sourceClassification !== classificationObject
+        let objectImplementsBeforeAfterMethods = false
+
+        const remainingInstantiatedClassifications = object.impl.instantiatedClassifications
+            .filter( (instantiatedClassification) => {
+
+                const keepThisClassificationInstantiation =
+                    instantiatedClassification.sourceClassification !== classificationObject
+
+                if( keepThisClassificationInstantiation ) {
+                    const thisClassificationImplementsBeforeAfterMethods =
+                        ClassificationDefinition.implementsBeforeAfterMethods({
+                            classificationDefinition: instantiatedClassification.definition
+                        })
+
+                    objectImplementsBeforeAfterMethods = 
+                        objectImplementsBeforeAfterMethods || thisClassificationImplementsBeforeAfterMethods
+
+                }
+
+                return keepThisClassificationInstantiation
             })
+
+        object.impl.instantiatedClassifications = remainingInstantiatedClassifications
+
+        delete object.impl.implementsBeforeAfterMethods
+
+        // if classificationDefinition.implementsBeforeAfterMethods === false keep the previous value
+        if( objectImplementsBeforeAfterMethods ) {
+            object.impl.implementsBeforeAfterMethods = objectImplementsBeforeAfterMethods
+        }
     }
 
     static getAllInstantiatedClassifications({ object: object }) {
@@ -99,6 +138,12 @@ class O_Object {
 
     static objectCallMethod({ proxyObject: proxyObject, methodName: methodName, params: params }) {
         return proxyObject[methodName](...params)
+    }
+
+    /// beforeMethod/afterMethod optimization
+
+    static implementsBeforeAfterMethods({ object: object }) {
+        return object.impl.implementsBeforeAfterMethods === true
     }
 }
 

@@ -31,6 +31,9 @@ class MessageDispatcher {
         ClassificationDefinition.initialize({ classificationDefinition: OInstance })
         ClassificationDefinition.initialize({ classificationDefinition: Classification })
 
+        // Set this by hand to opmitize the method lookup and dispatch.
+        OInstance.implementsBeforeAfterMethods = false
+
         this.classificationClassification = this.createObjectProxy()
         this.oInstanceClassification = this.createObjectProxy()
 
@@ -155,7 +158,7 @@ class MessageDispatcher {
      * had that classification and there is no way to distinguish bots scenarios.
      */
     objectDropBehaviour({ object: object, classificationObject: classificationObject }) {
-        O_Object.dettachClassificationObject({
+        O_Object.detachClassificationObject({
             object: object,
             classificationObject: classificationObject
         })

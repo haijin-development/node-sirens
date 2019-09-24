@@ -45,7 +45,7 @@ class ActiveClassification {
         }
 
         return ClassificationInstantiation.getSourceClassification({
-            instantiatedClassification: activeInstantiatedClassification
+            classificationInstantiation: activeInstantiatedClassification
         })
     }
 

@@ -4,13 +4,18 @@ const O_Object = require('./o-object')
 
 class ClassificationObject {
     static attachBehaviour({ classificationObject: classificationObject, object: object }) {
-        const classificationInstantiation = ClassificationObject.instantiateClassification({
+        const instantiatedClassification = ClassificationObject.instantiateClassification({
             classificationObject: classificationObject
+        })
+
+        const classificationDefinition = ClassificationInstantiation.getClassificationDefinition({
+            classificationInstantiation: instantiatedClassification,
         })
 
         O_Object.attachInstantiatedClassification({
             object: object,
-            classificationInstantiation: classificationInstantiation,
+            instantiatedClassification: instantiatedClassification,
+            classificationDefinition: classificationDefinition,
         })
     }
 
@@ -52,7 +57,7 @@ class ClassificationObject {
             })
 
         return ClassificationInstantiation.getSourceClassification({
-            instantiatedClassification: firstInstantiatedClassification
+            classificationInstantiation: firstInstantiatedClassification
         })
     }    
 }

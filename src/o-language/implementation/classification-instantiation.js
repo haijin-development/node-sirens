@@ -31,8 +31,8 @@ class ClassificationInstantiation {
         return classificationInstantiation.definition
     }
 
-    static getSourceClassification({ instantiatedClassification: instantiatedClassification }) {
-        return instantiatedClassification.sourceClassification
+    static getSourceClassification({ classificationInstantiation: classificationInstantiation }) {
+        return classificationInstantiation.sourceClassification
     }
 
     static getMethod({ classificationInstantiation: classificationInstantiation, methodName: methodName }) {

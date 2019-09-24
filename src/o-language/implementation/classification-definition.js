@@ -12,6 +12,8 @@ const classDefinitionAttributes = [
     'implements',
     'classificationBehaviours',
     'expects',
+
+    'implementsBeforeAfterMethods',
 ]
 
 class ClassificationDefinition {
@@ -48,6 +50,11 @@ class ClassificationDefinition {
                 throw new Error(`Uknown classification definition '${attribute}'.`)
             }  
         })
+
+        classificationDefinition.implementsBeforeAfterMethods =
+            ClassificationDefinition.checkIfImplementsBeforeAfterMethods({
+                classificationDefinition: classificationDefinition
+            })
     }
 
     /*
@@ -129,6 +136,24 @@ class ClassificationDefinition {
         classificationDefinition: classificationDefinition, implementedProtocols: implementedProtocols }
     ) {
         classificationDefinition.implements = implementedProtocols.slice()
+    }
+
+    /// beforeMethod/afterMethod optimization
+
+    static implementsBeforeAfterMethods({ classificationDefinition: classificationDefinition }) {
+        return classificationDefinition.implementsBeforeAfterMethods
+    }
+
+    static checkIfImplementsBeforeAfterMethods({ classificationDefinition: classificationDefinition }) {
+        return  ClassificationDefinition.hasMethodDefined({
+                    classificationDefinition: classificationDefinition,
+                    methodName: 'beforeMethod',
+                })
+                ||
+                ClassificationDefinition.hasMethodDefined({
+                    classificationDefinition: classificationDefinition,
+                    methodName: 'afterMethod',
+                })
     }
 }
 

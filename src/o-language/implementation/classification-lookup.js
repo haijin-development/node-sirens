@@ -91,6 +91,11 @@ class ClassificationLookup {
     static mustCallBeforeAndAfterMethod({
         object: object, methodName: methodName, instantiatedClassification: instantiatedClassification
     }) {
+        // If the given object does not implement beforeMethod or afterMethod just skip them
+        if( ! O_Object.implementsBeforeAfterMethods({ object: object }) ) {
+            return false
+        }
+
         // The following methods are a special case because they would generate an infinite recursion
         // since the proxy classification implements them
         if( ['beforeMethod', 'afterMethod', 'previousClassificationDo', 'thisClassification'].includes(methodName) ) {
@@ -108,7 +113,7 @@ class ClassificationLookup {
         // OInstance classification. If its the call to the proxy classification do not call beforeMethod
         if( methodName === 'afterInstantiation' ) {
             const classificationObjectOwningMethod = ClassificationInstantiation.getSourceClassification({
-                instantiatedClassification: instantiatedClassification
+                classificationInstantiation: instantiatedClassification
             })
 
             const mostRecentClassification = ClassificationObject.getMostRecentClassificationObject({
@@ -140,7 +145,7 @@ class ClassificationLookup {
         if( instantiatedClassification !== null ) {
             classificationObjectOwningMethod =
                 ClassificationInstantiation.getSourceClassification({
-                    instantiatedClassification: instantiatedClassification
+                    classificationInstantiation: instantiatedClassification
                 })
         }
 
@@ -235,7 +240,7 @@ class ClassificationLookup {
         if( instantiatedClassification !== null ) {
             classificationObjectOwningMethod =
                 ClassificationInstantiation.getSourceClassification({
-                    instantiatedClassification: instantiatedClassification
+                    classificationInstantiation: instantiatedClassification
                 })
         }
 

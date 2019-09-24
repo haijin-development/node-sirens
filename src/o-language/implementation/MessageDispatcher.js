@@ -408,6 +408,7 @@ class MessageDispatcher {
             lookupInitialIndex: lookupInitialIndex,
             object: object,
             methodName: prop,
+            proxyObject: this,
         })
     }
 

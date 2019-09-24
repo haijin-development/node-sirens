@@ -57,7 +57,10 @@ class ClassificationLookup {
      * If no prop value is found on any classification returns undefined. 
      */
     static findMethodAmongAllClassifications({
-        lookupInitialIndex: lookupInitialIndex, object: receiver, methodName: methodName
+        lookupInitialIndex: lookupInitialIndex,
+        object: receiver,
+        methodName: methodName,
+        proxyObject: proxyObject
     }) {
         const instantiatedClassifications =
             ClassificationInstantiation.getInstantiatedClassifications({ object: receiver })
@@ -76,7 +79,8 @@ class ClassificationLookup {
             if( prop !== undefined ) {
                 return ClassificationLookup.createMethodProxy({
                     method: prop,
-                    instantiatedClassification: eachInstantiatedClassification
+                    instantiatedClassification: eachInstantiatedClassification,
+                    proxyObject: proxyObject,
                 })
             }
         }
@@ -131,7 +135,11 @@ class ClassificationLookup {
     }
 
     static activateMethod({
-        object: object, method: method, params: params, instantiatedClassification: instantiatedClassification
+        object: object,
+        method: method,
+        params: params,
+        instantiatedClassification: instantiatedClassification,
+        proxyObject: proxyObject,
     }) {
         const methodName = method.name
 
@@ -148,7 +156,7 @@ class ClassificationLookup {
                 })
 
             const beforeMethodResult = O_Object.objectCallMethod({
-                proxyObject: object,
+                proxyObject: proxyObject,
                 methodName: 'beforeMethod',
                 params: [
                     {
@@ -244,7 +252,11 @@ class ClassificationLookup {
      * that dispatch the messages throught the classifications chain from the current classification
      * up to the first one.
      */
-    static createMethodProxy({ method: method, instantiatedClassification: instantiatedClassification }) {
+    static createMethodProxy({
+        method: method,
+        instantiatedClassification: instantiatedClassification,
+        proxyObject: proxyObject
+    }) {
         const methodProxyApply = function(targetFunction, thisArg, params) {
             const object = thisArg
             const method = targetFunction
@@ -254,6 +266,7 @@ class ClassificationLookup {
                 method: method,
                 params: params,
                 instantiatedClassification: instantiatedClassification,
+                proxyObject: proxyObject,
             })
         }
 
@@ -274,9 +287,12 @@ class ClassificationLookup {
      * Otherwise each classification instantiated in the receiver object is queried to find
      * the first one that handles the propName. 
      */
-    static lookupMethod(
-        { lookupInitialIndex: lookupInitialIndex, object: object, methodName: methodName }
-    ) {
+    static lookupMethod({
+        lookupInitialIndex: lookupInitialIndex,
+        object: object,
+        methodName: methodName,
+        proxyObject: proxyObject
+    }) {
         if( lookupInitialIndex === -1 ) {
             let propValue = ClassificationLookup.getUnclassifiedMethod({
                 object: object,
@@ -293,7 +309,8 @@ class ClassificationLookup {
         return ClassificationLookup.findMethodAmongAllClassifications({
             lookupInitialIndex: lookupInitialIndex,
             object: object,
-            methodName: methodName
+            methodName: methodName,
+            proxyObject: proxyObject,
         })
     }
 

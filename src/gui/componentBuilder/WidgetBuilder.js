@@ -1,5 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
+const AntiComponent = require('./AntiComponent')
 
 class WidgetBuilder {
     /// Definition
@@ -43,6 +44,10 @@ class WidgetBuilder {
         if( closure === undefined ) { return }
 
         this.bindYourself(closure, ...params)
+    }
+
+    skip() {
+        return AntiComponent.new()
     }
 
     normalizeArguments(props, closure) {

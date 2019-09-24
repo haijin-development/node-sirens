@@ -66,39 +66,11 @@ describe('When calling other methods from within the beforeMethod', () => {
     it('calls the other method but not a new beforeMethod', () => {
         const object = Shape.new()
 
-        object.behaveAs(ShapeProxy)
         object.behaveAs(ShapeProxyCallingItsOwnMethod)
-        object.behaveAs(ShapeProxyCallingPreviousClassification)
 
         object.setPosition({ x: 10, y: 20 })
 
         const allProxiesBeforeMethodCalls = [].concat(
-            object.getFirstProxyBeforeMethodCalls(),
-            object.getSecondProxyBeforeMethodCalls(),
-            object.getThirdProxyBeforeMethodCalls(),
-        )
-
-        allProxiesBeforeMethodCalls.forEach( (methodCalls) => {
-            expect( methodCalls.methodName ) .not .to .equal('ownProxyMethod')
-        })
-
-        expect( object.ownMethodWasCalled() ) .to .be .true
-    })
-})
-
-describe('When an beforeMethod returns "skipMethodCall"', () => {
-    it('the original call does not get called', () => {
-        const object = Shape.new()
-
-        object.behaveAs(ShapeProxy)
-        object.behaveAs(ShapeProxyCallingItsOwnMethod)
-        object.behaveAs(ShapeProxyCallingPreviousClassification)
-
-        object.setPosition({ x: 10, y: 20 })
-
-        const allProxiesBeforeMethodCalls = [].concat(
-            object.getFirstProxyBeforeMethodCalls(),
-            object.getSecondProxyBeforeMethodCalls(),
             object.getThirdProxyBeforeMethodCalls(),
         )
 
@@ -126,16 +98,14 @@ describe('When skipping a method call from the beforeMethod hook', () => {
 
         object.behaveAs(ShapeProxy)
         object.behaveAs(ShapeProxySkippingMethodCall)
-        object.behaveAs(ShapeProxyCallingPreviousClassification)
 
         object.setPosition({ x: 10, y: 20 })
 
         const allProxiesBeforeMethodCalls = [].concat(
             object.getFirstProxyBeforeMethodCalls(),
-            object.getSecondProxyBeforeMethodCalls(),
         )
 
-        expect( allProxiesBeforeMethodCalls.length ) .to .equal(6)
+        expect( allProxiesBeforeMethodCalls.length ) .to .equal(3)
 
         expect( object.getPosition() ) .to .eql({ x: undefined, y: undefined })
     })
@@ -150,6 +120,16 @@ describe('When overriding the original method call parameters from the beforeMet
         object.setPosition({ x: 10, y: 20 })
 
         expect( object.getPosition() ) .to .eql({ x: 100, y: 200 })
+    })
+})
+
+describe('When calling the beforeMethod hook in a stand alone proxy', () => {
+    it('passes along the overriden parameters', () => {
+        const object = StandAloneProxy.new()
+
+        object.anyMethod()
+
+        expect( object.getBeforeMethodWasCalled() ) .to .be .true
     })
 })
 
@@ -295,5 +275,23 @@ const ShapeProxyOverridingMethodCallParams = Classification.define( class ShapeP
         }
 
         return result
+    }
+})
+
+const StandAloneProxy = Classification.define( class StandAloneProxy {
+    static definition() {
+        this.instanceVariables = ['beforeMethodWasCalled']
+    }
+
+    beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+        this.beforeMethodWasCalled = true
+
+        return {
+            methodName: null,
+        }
+    }
+
+    getBeforeMethodWasCalled() {
+        return this.beforeMethodWasCalled
     }
 })

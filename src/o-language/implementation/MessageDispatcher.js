@@ -202,7 +202,7 @@ class MessageDispatcher {
      * An object responds to a message if any of its classifications does.
      */
     objectRespondsTo({ object: object, message: message }) {
-        return object[message] !== undefined
+        return object[message].isMethodNotFound !== true
     }
 
     /*

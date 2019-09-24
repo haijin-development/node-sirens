@@ -26,6 +26,7 @@
 - TextView converts between "\n" and "\cr"
 - Removed passing unnecessary cr parameters
 - Implemented BufferedAttributeModel
+- Implemented component.skip()
 
 ### O language
 

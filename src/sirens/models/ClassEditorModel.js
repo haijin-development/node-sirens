@@ -114,9 +114,7 @@ class ClassEditorModel {
         this.footerSourceCodeModel.setObject( undefined )
     }
 
-    saveFile({ selectedPageComponent: selectedPageComponent }) {
-        const selectedPageModel = selectedPageComponent.getModel()
-
+    saveFile({ selectedPageModel: selectedPageModel }) {
         const selectedPageSourceCode = selectedPageComponent.getModel().getValue()
 
         const pageObject = selectedPageModel.getObject()

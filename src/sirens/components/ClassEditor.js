@@ -45,6 +45,8 @@ class ClassEditor {
 
         if( filename !== null ) {
             this.getModel().openFile({ filename: filename })
+
+            this.showFirstTabPage()
         }
     }
 
@@ -53,7 +55,15 @@ class ClassEditor {
 
         const selectedPageComponent = tabsComponent.getSelectedPageComponent()
 
-        this.getModel().saveFile({ selectedPageComponent: selectedPageComponent })
+        const selectedPageModel = selectedPageComponent.getModel()
+
+        this.getModel().saveFile({ selectedPageModel: selectedPageModel })
+    }
+
+    showFirstTabPage() {
+        const tabsComponent = this.getChildComponent({ id: 'tabs' })
+
+        tabsComponent.showTabPageAt({ index: 0 })
     }
 
     /// Building

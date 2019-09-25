@@ -49,6 +49,12 @@ class Tabs {
 
         return pages[selectedPageIndex]
     }
+
+    /// Actions
+
+    showTabPageAt({ index: index }) {
+        this.getView().showTabPageAt({ index: 0 })
+    }
 }
 
 module.exports = Classification.define(Tabs)

@@ -84,6 +84,12 @@ class TabsView {
         return selectedPage
     }
 
+    /// Actions
+
+    showTabPageAt({ index: index }) {
+        this.notebook.setCurrentPage( index )
+    }
+
     /// Events
 
     directChildViewAdd(childView) {

@@ -46,7 +46,11 @@ class SourceFile {
     }
 
     getFileContents() {
-        return fs.readFileSync(this.filepath).toString()
+        try {
+            return fs.readFileSync(this.filepath).toString()
+        } catch(e) {
+            return null
+        }
     }
 
     getParsedContents() {

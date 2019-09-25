@@ -23,8 +23,8 @@ describe('When using a FunctionDefinition', () => {
     it('gets the formatted source code', () => {
         const expectedSourceCode = 
 `getName() {
-        return this.name
-    }`
+    return this.name
+}`
         expect( functionDefinition.getFormattedSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
     })
 })

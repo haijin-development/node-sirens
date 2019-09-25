@@ -43,7 +43,7 @@ class ClassEditorMenuBar {
                             action: component.getProps().openFile,
                         })
 
-                        this.item({
+                        this.skip().item({
                             label: 'Save file',
                             enabled: true,
                             action: component.getProps().saveFile,
@@ -67,9 +67,9 @@ class ClassEditorMenuBar {
                         action: component.getProps().openFile,
                     })
 
-                    this.separator()
+                    this.skip().separator()
 
-                    this.item({
+                    this.skip().item({
                         label: 'Save file',
                         icon: GtkIcons.saveFile,
                         tooltip: 'Saves the edited file.',

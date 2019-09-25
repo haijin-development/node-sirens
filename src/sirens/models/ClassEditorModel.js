@@ -52,16 +52,24 @@ class ClassEditorModel {
     }
 
     getFilePath(classSourceFile) {
-        if( classSourceFile === undefined ) {
+        if( classSourceFile === undefined && this.sourceFile === null ) {
             return 'No source file selected.'
+        }
+
+        if( classSourceFile === undefined && this.sourceFile !== null ) {
+            return 'Not a valid javascript file.'
         }
 
         return classSourceFile.getFilePath()
     }
 
     getFooterDefinitionSourceCode(footerDefinition) {
-        if( footerDefinition === undefined ) {
+        if( footerDefinition === undefined && this.sourceFile === null ) {
             return 'No source file selected.'
+        }
+
+        if( footerDefinition === undefined && this.sourceFile !== null ) {
+            return 'Not a valid javascript file.'
         }
 
         return footerDefinition.getSourceCode()
@@ -78,6 +86,12 @@ class ClassEditorModel {
     openFile({ filename: filename }) {
         this.sourceFile = ClassSourceFile.new({ filepath: filename })
 
+        if( ! this.sourceFile.isJavascriptFile() ) {
+            this.clearModels()
+
+            return
+        }
+
         this.sourceFilenameModel.setObject( this.sourceFile )
 
         const classesDefinitionsInFile =
@@ -90,6 +104,14 @@ class ClassEditorModel {
         this.footerSourceCodeModel.setObject(
             this.sourceFile.getFooterDefinition()
         )
+    }
+
+    clearModels() {
+        this.sourceFilenameModel.setObject( undefined )
+
+        this.classesDefinitionsModel.setList( [] )
+
+        this.footerSourceCodeModel.setObject( undefined )
     }
 
     saveFile({ selectedPageComponent: selectedPageComponent }) {

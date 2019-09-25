@@ -27,6 +27,12 @@ class SourceFile {
 
         this.filepath = path.resolve(filepath)
         this.parseTree = undefined
+
+        this.doParseContents()
+    }
+
+    doParseContents() {
+        this.getParsedContents()
     }
 
     /// Accessing
@@ -106,7 +112,11 @@ class SourceFile {
     /// Querying
 
     existsFile() {
-        return fs.existsSync(this.filepath)
+        return fs.existsSync( this.filepath )
+    }
+
+    isJavascriptFile() {
+        return this.parseTree !== null
     }
 
     newAbsentFunctionDefinitionAt(line, column) {

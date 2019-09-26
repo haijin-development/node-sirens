@@ -1,34 +1,52 @@
 const Classification = require('../../o-language/classifications/Classification')
+const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
 
 class Column {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['props']
+        this.instanceVariables = []
+        this.assumes = [ObjectWithProps]
     }
 
     /// Initializing
 
     initialize(props = {}) {
         this.previousClassificationDo( () => {
-            this.initialize(props)
+            this.initialize()
         })
 
-        props = Object.assign( props, {label: ''} )
+        props = Object.assign( {label: ''}, props )
 
-        this.props = props
+        this.setProps( props )
     }
 
     /// Asking
 
     isImage() {
-        return this.props.getImageBlock !== undefined
+        return this.hasImageBlock()
+    }
+
+    hasTextBlock() {
+        return this.hasProp({ key: 'getTextBlock' })
+    }
+
+    hasImageBlock() {
+        return this.hasProp({ key: 'getImageBlock' })
     }
 
     /// Accessing
 
     getLabel() {
-        return this.props.label
+        return this.getProp({ key: 'label' })
+    }
+
+    getTextBlock() {
+        return this.getProp({ key: 'getTextBlock' })
+    }
+
+    getImageBlock() {
+        return this.getProp({ key: 'getImageBlock' })
     }
 
     getType() {
@@ -39,36 +57,40 @@ class Column {
         return 'string'
     }
 
-    getDisplayTextOf(item, errorHandler) {
-        if(this.props.getTextBlock === undefined) {
+    getDisplayTextOf({ item: item, onUndefined: undefinedHandler }) {
+        if( ! this.hasTextBlock() ) {
             return item.toString()
         }
 
-        const text = this.props.getTextBlock(item)
+        const textBlock = this.getTextBlock()
+
+        const text = textBlock(item)
 
         if(text === undefined) {
-            errorHandler()
+            undefinedHandler()
         }
 
         return text
     }
 
-    getImageFileOf(item, errorHandler) {
-        const filename = this.props.getImageBlock(item)
+    getImageFileOf({ item: item, onUndefined: undefinedHandler }) {
+        const imageBlock = this.getImageBlock()
+
+        const filename = imageBlock(item)
 
         if(filename === undefined) {
-            errorHandler()
+            undefinedHandler()
         }
 
         return filename
     }
 
     getImageWidth() {
-        return this.props.imageWidth
+        return this.getProp({ key: 'imageWidth' })
     }
 
     getImageHeight() {
-        return this.props.imageHeight
+        return this.getProp({ key: 'imageHeight' })
     }
 }
 

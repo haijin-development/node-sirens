@@ -1,6 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const WindowView = require('../../views/WindowView')
+const WindowView = require('../../gtk-views/WindowView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Window {
 
@@ -8,10 +9,15 @@ class Window {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
+
+    defaultModel() {
+        return undefined
+    }
 
     createView() {
         return WindowView.new()
@@ -22,12 +28,6 @@ class Window {
 
     open() {
         this.getView().open()
-    }
-
-    /// Asking
-
-    isTopMostComponent() {
-        return true
     }
 }
 

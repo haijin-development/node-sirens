@@ -6,13 +6,19 @@ class Widget {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [ComponentBehaviour]
+        this.assumes = [ComponentBehaviour]
     }
 
     /// Accessing
 
     getMainComponent() {
         return this
+    }
+
+    /// Child components
+
+    concreteComponentsDo(closure) {
+        closure(this)
     }
 }
 

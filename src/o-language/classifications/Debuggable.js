@@ -1,4 +1,7 @@
 const Classification = require('./Classification')
+const OInstance = require('./OInstance')
+const DebuggableProtocol = require('../protocols/DebuggableProtocol')
+const IndentedStringStream = require('./IndentedStringStream')
 
 /*
  * This classification adds debugging methods to an object.
@@ -8,73 +11,102 @@ class Debuggable {
     /// Definition
 
     static definition() {
-        this.cName = 'Debuggable'
         this.instanceVariables = []
-        this.assumptions = []
+        this.assumes = []
+        this.implements = [DebuggableProtocol]
     }
 
     /// Debugging
 
     debugString({ cr: cr, tab: tab } = { cr: undefined, tab: undefined }) {
-        return debugString({ object: this, cr: cr, tab: tab, indentation: 0 })
+        if( cr === undefined ) { cr = "\n" }
+        if( tab === undefined ) { tab = "    " }
+
+        let stream = IndentedStringStream.new()
+
+        stream.setCrChar( cr )
+        stream.setIndentationChar( tab )
+
+        printValueString({ value: this, stream: stream })
+
+        return stream.getString()
     }
 
 }
 
-function debugString({ object: object, cr: cr, tab: tab, indentation: i }) {
-    if( cr === undefined ) { cr = "\n" }
-    if( tab === undefined ) { tab = "    " }
+function printValueString({ value: value, stream: stream }) {
+    if(value === undefined) {
+        stream.append({ string: 'undefined' })
 
-    let string = ''
+        return
+    }
 
-    object.classifications().forEach( (eachClassification) => {
+    if(value === null) {
+        stream.append({ string: 'null' })
 
-        string += nestedIndentation({ tab: tab, i: i })
-        string += eachClassification.getName() + " {"
-        string += cr
+        return
+    }
 
-        object.classificationInstanceVariablesDo( eachClassification, (name, value) => {
-            string += nestedIndentation({ tab: tab, i: i + 1 })
+    if( OInstance.isOInstance( value ) ) {
+        printOInstanceString({ oInstance: value, stream: stream })
 
-            string += name + ": " +
-                valueDebugString({ object: value, cr: cr, tab: tab, indentation: i + 1 })
+        return
+    }
 
-            string += cr
+    stream.append({ string: value.toString() })
+}
+
+function printOInstanceString({ oInstance: oInstance, stream: stream }) {
+    let isFirstClassification = true
+
+    oInstance.classifications().forEach( (classification) => {
+        if( ! isFirstClassification ) {
+            stream.cr({ indent: true })
+        }
+
+        printClassificationInstantiationString({
+            oInstance: oInstance,
+            classification: classification,
+            stream: stream,
+            isFirstClassification: isFirstClassification
         })
 
-        string += nestedIndentation({ tab: tab, i: i })
-        string += "}"
-        string += cr
-
-    })
-
-    return string
-}
-
-function valueDebugString({ object: object, cr: cr, tab: tab, indentation: i }) {
-    if(object === undefined) {
-        return 'undefined'
-    }
-
-    if(object === null) {
-        return 'null'
-    }
-
-    if( object.impl === undefined ) {
-        return object.toString()
-    }
-
-    return cr + debugString({
-        object: object,
-        cr: cr,
-        tab: tab,
-        indentation: i + 1
+        isFirstClassification = false
     })
 }
 
-function nestedIndentation({ tab: tab, i: i }) {
-    return tab.repeat(i)
-}
+function printClassificationInstantiationString({
+    oInstance: oInstance,
+    classification: classification,
+    stream: stream,
+    isFirstClassification: isFirstClassification
+}) {
+    const line = classification.getName() + " {"
 
+    stream.append({ string: line })
+
+    stream.whileIncrementingIndentationDo({ by: 1 }, () => {
+
+        oInstance.classificationInstanceVariablesDo(classification, (name, value) => {
+            const newLine = name + ': '
+
+            stream.appendLine({ string: newLine })
+
+            if( ! OInstance.isOInstance(value) ) {
+                printValueString({ value: value, stream: stream })
+
+                return
+            }
+
+            stream.whileIncrementingIndentationDo({ by: 1 }, () => {
+                stream.cr({ indent: true })
+
+                printValueString({ value: value, stream: stream })
+            })
+        })
+    })
+
+    stream.appendLine({ string: '}' })
+}
 
 module.exports = Classification.define(Debuggable)

@@ -1,5 +1,60 @@
 # Changelog
 
+## v0.7.0 (next release)
+
+## v0.6.0
+
+### Sirens
+
+- Updated README.md.
+- Rewrote StackView packExpand and packFill using viewCustomAttributes.
+- Implemented ClassEditor.
+- Added ClassEditor bin file to package.json.
+- Added https://travis-ci.org/ CI.
+
+### gui
+
+- Implemented MenuBar.
+- Added viewCustomAttributes to GtkView classification.
+- Implemented FileChooser dialog.
+- Implemented Tab pages.
+- Implemented ToolBar.
+- Added ComponentInstantiator.render(closure) method.
+- Improved the naming of the paremeter methods of ListModel.
+- Rewrote classifications with 'props' instance variables to use ObjectWithProps classification.
+- Reimplemented ValueModel.
+- Implemented ObjectPropModel and ObjectAttributeModel.
+- Standarized all Views events subscriptions naming convention to handleEvent().
+- Standarized all Views events subscriptions to always use an owned class method to allow overriding.
+- Standarized all Component callbacks to always use an owned class method to allow overriding.
+- TextView converts between "\n" and "\cr".
+- Removed passing unnecessary cr parameters.
+- Implemented BufferedAttributeModel.
+- Implemented component.skip().
+
+### O language
+
+- The method Classification.define works with any classification object and not just with Classification.
+- Implemented StringStream.
+- Implemented IndentedStringStream.
+- Implemented Protocol classification and Classification.implements(procotol) method.
+- Implemented StringStreamProtocol.
+- Rewrote Debuggable.
+- Improved Classification protocol and tests.
+- Started to document classifications and methods with the **native dsl within comments** style.
+- Renamed ClassificationDefinition.assumptions to ClassificationDefinition.assumes.
+- Renamed ClassificationDefinition.implementations to ClassificationDefinition.implements.
+- Added ClassificationDefinition.expects.
+- Implemented several protocols.
+- Added the assertion that a Classification implements the protocols it declares in its ClassificationDefinition.implementations.
+- Added ClassificationDefinition.classificationBehaviours.
+- Implemented ObjectWithProps classification.
+- Cleaned up and rewrote the MessageDispatcher implementation.
+- Moved logic from MessageDispatcher to OInstance and Classification classifications.
+- Removed all access to the implementation from OInstance and Classification.
+- Added an objectId to each O instance for debugging. It could be improved or removed in the future.
+- Implemented the optimized beforeMethod and afterMethod hooks.
+
 ## v0.5.0
 
 ### Sirens
@@ -7,8 +62,8 @@
 - Rewrote Sirens in the O language.
 - ObjectBrowser.popupMenu bounds this to the MenuView.
 - Added images to Sirens lists and trees.
-- Added CHANGELOG.md file
-- Updated README.md
+- Added CHANGELOG.md file.
+- Updated README.md.
 
 ### gui
 

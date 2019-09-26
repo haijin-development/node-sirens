@@ -17,7 +17,7 @@
  *
  *      const Shape = Classification.define( class {
  *          static definition() {
- *              this.assumptions = [Positionable, Coloured]
+ *              this.assumes = [Positionable, Coloured]
  *          }
  *      })
  *
@@ -34,7 +34,7 @@
  *
  *      const SymptonPresence = Classification.define( class {
  *          static definition() {
- *              this.assumptions = [PatientCondition]
+ *              this.assumes = [PatientCondition]
  *          }
  *      })
  *
@@ -96,14 +96,14 @@ const Coloured = Classification.define( class {
 
 const Shape = Classification.define( class {
     static definition() {
-        this.assumptions = [Positionable, Coloured]
+        this.assumes = [Positionable, Coloured]
     }
 })
 
 const Circle = Classification.define( class {
     static definition() {
         this.instanceVariables = ['radious']
-        this.assumptions = [Shape]
+        this.assumes = [Shape]
     }
 
     setRadious(radious) {

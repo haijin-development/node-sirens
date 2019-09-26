@@ -1,14 +1,21 @@
 const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const ChoiceModel = require('../../models/ChoiceModel')
-const ListView = require('../../views/ListView')
+const ListView = require('../../gtk-views/ListView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
+const ListModelComponentProtocol_Implementation = require('../../protocols/ListModelComponentProtocol_Implementation')
 
 class ChoicesList {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [
+            ComponentBehaviourProtocol_Implementation,
+            ListModelComponentProtocol_Implementation
+        ]
     }
 
     /// Initializing
@@ -27,7 +34,7 @@ class ChoicesList {
         }
 
         if(this.getProps().selection !== undefined) {
-            model.setSelection( this.getProps().selection )
+            model.setSelectionValue( this.getProps().selection )
         }
 
         return model
@@ -36,20 +43,22 @@ class ChoicesList {
     createView() {
         return ListView.new({
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
-            onSelectionAction: this.onUserSelectionAction.bind(this)
+            onSelectionAction: this.onUserSelectionAction.bind(this),
+            allowSelectionChange: this.allowSelectionChange.bind(this),
         })
     }
 
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const items = this.getModel().getChoices()
-        const selectionIndex = this.getModel().getSelectionIndex()
-        const indices = selectionIndex == -1 ? [] : [selectionIndex]
+        this.duringClassificationDo( UpdatingView, () => {
+            const currentSelectionIndex = this.getModel().getSelectionIndex()
+            const currentIndices = currentSelectionIndex == -1 ? [] : [currentSelectionIndex]
 
-        this.getView().addItems(items)
+            this.onItemsListChanged()
 
-        this.getView().setSelectionIndices(indices)
+            this.getView().setSelectionIndices(currentIndices)
+        })
     }
 
     /// Events
@@ -58,50 +67,66 @@ class ChoicesList {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getList().on('list-changed', this.onChoicesChanged.bind(this))
+        this.previousClassificationDo( () => {
+            this.subscribeToModelEvents()
+        })
 
-        this.getModel().getList().on('items-added', this.onItemsAdded.bind(this))
-        this.getModel().getList().on('items-updated', this.onItemsUpdated.bind(this))
-        this.getModel().getList().on('items-removed', this.onItemsRemoved.bind(this))
+        this.getModel().getListModel().on('list-changed', this.onItemsListChanged.bind(this))
 
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getListModel().on('items-added', this.onItemsAdded.bind(this))
+        this.getModel().getListModel().on('items-updated', this.onItemsUpdated.bind(this))
+        this.getModel().getListModel().on('items-removed', this.onItemsRemoved.bind(this))
+
+        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
     }
 
-    onChoicesChanged() {
-        const choices = this.getModel().getChoices()
+    onItemsListChanged() {
+        this.duringClassificationDo( UpdatingView, () => {
+            const items = this.getModel().getChoices()
 
-        this.getView().clearItems()
-        this.getView().addItems(choices)
+            this.getView().clearItems()
+            this.getView().addItems(items)
+        })
     }
 
     onItemsAdded({list: list, items: items, index: index}) {
-        this.getView().addItems(items, index)
+        this.duringClassificationDo( UpdatingView, () => {
+            this.getView().addItems(items, index)
+        })
     }
 
     onItemsUpdated({list: list, items: items, indices: indices}) {
-        this.getView().updateItems({items: items, indices: indices})
+        this.duringClassificationDo( UpdatingView, () => {
+            this.getView().updateItems({items: items, indices: indices})
+        })
     }
 
     onItemsRemoved({list: list, items: items, indices: indices}) {
-        this.getView().removeItems({items: items, indices: indices})
+        this.duringClassificationDo( UpdatingView, () => {
+            this.getView().removeItems({items: items, indices: indices})
+        })
     }
 
     onSelectedValueChanged() {
-        const selectionIndex = this.getModel().getSelectionIndex()
+        this.duringClassificationDo( UpdatingView, () => {
+            const selectionIndex = this.getModel().getSelectionIndex()
 
-        this.getView().setSelectionIndices([selectionIndex])
+            this.getView().setSelectionIndices([selectionIndex])
+        })
     }
 
     onUserSelectionChanged() {
-        const indices = this.getView().getSelectionIndices()
+        this.duringClassificationDo( UpdatingModel, () => {
+            const indices = this.getView().getSelectionIndices()
 
-        const selectedIndex = indices[0]
+            const selectedIndex = indices[0]
 
-        const choices = this.getModel().getChoices()
+            const choices = this.getModel().getChoices()
 
-        const selectedItem = choices[selectedIndex]
+            const selectedItem = choices[selectedIndex]
 
-        this.getModel().setSelection(selectedItem)
+            this.getModel().setSelectionValue(selectedItem)
+        })
     }
 
     onUserSelectionAction() {
@@ -111,6 +136,24 @@ class ChoicesList {
 
         this.getProps().onAction()
     }
+
+    allowSelectionChange({ selectedIndices: selectedIndices }) {
+        const allowSelectionChangeClosure = this.getProps().allowSelectionChange
+
+        if( allowSelectionChangeClosure === undefined ) {
+            return true
+        }
+
+        const allowed = allowSelectionChangeClosure()
+
+        return allowed
+    }
 }
+
+class UpdatingView {
+    onUserSelectionChanged() {}
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(ChoicesList)

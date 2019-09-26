@@ -4,7 +4,7 @@ const callsites = require('callsites')
 class Sirens {
     static browseObject(object) {
         this.do( () => {
-            const ObjectBrowser = require('./sirens/ObjectBrowser')
+            const ObjectBrowser = require('./sirens/components/ObjectBrowser')
 
             ObjectBrowser.openOn({object: object})
         })
@@ -12,7 +12,7 @@ class Sirens {
 
     static browsePrototypes(object) {
         this.do( () => {
-            const PrototypeBrowser = require('./sirens/PrototypeBrowser')
+            const PrototypeBrowser = require('./sirens/components/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
         })
@@ -24,17 +24,17 @@ class Sirens {
         const allStackedFramesButThisOne = framesStack.slice(1)
 
         this.do( () => {
-            const StackTraceBrowser = require('./sirens/StackTraceBrowser')
+            const StackTraceBrowser = require('./sirens/components/StackTraceBrowser')
 
             StackTraceBrowser.openOn({framesStack: allStackedFramesButThisOne, object: object})
         })
     }
 
-    static openClassEditor() {
+    static openClassEditor({ filename: __filename } = { filename: undefined }) {
         this.do( () => {
-            const ClassEditor = require('./sirens/ClassEditor')
+            const ClassEditor = require('./sirens/components/ClassEditor')
 
-            ClassEditor.open()
+            ClassEditor.openOn({ filename: __filename })
         })
     }
 

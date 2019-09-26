@@ -2,14 +2,16 @@ const Classification = require('../../../o-language/classifications/Classificati
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const ValueModel = require('../../models/ValueModel')
-const CheckBoxView = require('../../views/CheckBoxView')
+const CheckBoxView = require('../../gtk-views/CheckBoxView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class CheckBox {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
@@ -30,14 +32,24 @@ class CheckBox {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const text = this.getProps().label
-        const value = this.getModel().getValue()
+        this.duringClassificationDo( UpdatingView, () => {
+            const text = this.getProps().label
+            const value = this.getModel().getValue()
 
-        this.getView().setText(text)
-        this.getView().setValue(value)
+            this.getView().setText(text)
+            this.getView().setValue(value)
+        })
     }
 
     /// Events
+
+    subscribeToModelEvents() {
+        this.previousClassificationDo( () => {
+            this.subscribeToModelEvents()
+        })
+
+        this.getModel().on('value-changed', this.onValueChanged.bind(this))
+    }
 
     onValueChanged({newValue: newValue, oldValue: oldValue}) {
         this.synchronizeViewFromModel()
@@ -49,5 +61,11 @@ class CheckBox {
         })
     }
 }
+
+class UpdatingView {
+    onClicked() {}
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(CheckBox)

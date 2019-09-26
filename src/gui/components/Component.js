@@ -1,14 +1,25 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ComponentBehaviour = require('./ComponentBehaviour')
-const ComponentView = require('../views/ComponentView')
+const ComponentView = require('../gtk-views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
+
+const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
+const ComponentProtocol = require('../protocols/ComponentProtocol')
+const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
+const ComponentInstantiator = require('./ComponentInstantiator')
 
 class Component {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [ComponentBehaviour]
+        this.assumes = [ComponentBehaviour]
+        this.implements = [
+            ComponentBehaviourProtocol_Implementation,
+            ComponentProtocol,
+        ]
+        this.expects = [ComponentProtocol_Implementation]
+        this.classificationBehaviours = [ComponentInstantiator]
     }
 
     /// Initializing
@@ -21,10 +32,14 @@ class Component {
         this.build()
     }
 
-    build(props) {
-        const builder = ComponentRenderer.new({ rootComponent: this })
+    defaultModel() {
+        return undefined
+    }
 
-        this.renderWith(builder)
+    build(props) {
+        const componentsRenderer = ComponentRenderer.new({ rootComponent: this })
+
+        this.renderWith(componentsRenderer)
     }
 
     createView() {
@@ -34,24 +49,24 @@ class Component {
     synchronizeViewFromModel() {
     }
 
-    renderWith(builder) {
+    renderWith(componentsRenderer) {
         throw Error(`The class ${this.constructor.name} must implement the method ::renderWith()`)
     }
 
     /// Accessing
 
     getMainComponent() {
-        if( this.getComponents().length === 0 ) {
+        if( this.getChildComponents().length === 0 ) {
             throw Error(`The ${this.constructor.name} has no main child component.`)
         }
 
-        return this.getComponents()[0].getMainComponent()
+        return this.getChildComponents()[0].getMainComponent()
     }
 
-    /// Asking
+    /// Opening
 
-    isTopMostComponent() {
-        return this.getMainComponent().isTopMostComponent()
+    open() {
+        return this.getMainComponent().open()
     }
 }
 

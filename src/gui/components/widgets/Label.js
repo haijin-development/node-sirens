@@ -1,14 +1,16 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const LabelView = require('../../views/LabelView')
+const LabelView = require('../../gtk-views/LabelView')
 const ValueModel = require('../../models/ValueModel')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Label {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
@@ -27,16 +29,31 @@ class Label {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const text = this.getModel().getValue()
+        this.duringClassificationDo( UpdatingView, () => {
+            const text = this.getModel().getValue()
 
-        this.getView().setText(text)
+            this.getView().setText(text)
+        })
     }
 
     /// Events
 
-    onValueChanged({newValue: newValue, oldValue: oldValue}) {
+    subscribeToModelEvents() {
+        this.previousClassificationDo( () => {
+            this.subscribeToModelEvents()
+        })
+
+        this.getModel().on('value-changed', this.onValueChanged.bind(this))
+    }
+
+    onValueChanged({ newValue: newValue, oldValue: oldValue }) {
         this.synchronizeViewFromModel()
     }
 }
+
+class UpdatingView {
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(Label)

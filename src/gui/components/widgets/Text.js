@@ -1,15 +1,17 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const TextView = require('../../views/TextView')
+const TextView = require('../../gtk-views/TextView')
 const ValueModel = require('../../models/ValueModel')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Text {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
@@ -22,7 +24,9 @@ class Text {
     }
 
     createView() {
-        return TextView.new({ onTextChanged: this.onTextChanged.bind(this) })
+        return TextView.new({
+            onTextChanged: (text) => this.onTextChanged(text)
+        })
     }
 
     /// Querying
@@ -34,12 +38,22 @@ class Text {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const text = this.getModel().getValue()
+        this.duringClassificationDo( UpdatingView, () => {
+            const text = this.getModel().getValue()
 
-        this.getView().setText(text)
+            this.getView().setText( text )
+        })
     }
 
     /// Events
+
+    subscribeToModelEvents() {
+        this.previousClassificationDo( () => {
+            this.subscribeToModelEvents()
+        })
+
+        this.getModel().on('value-changed', this.onValueChanged.bind(this))
+    }
 
     /*
      * The model value changed. Updates this widget model.
@@ -57,5 +71,11 @@ class Text {
         })
     }
 }
+
+class UpdatingView {
+    onTextChanged(text) {}
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(Text)

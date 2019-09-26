@@ -5,8 +5,8 @@ const esprima = require('esprima')
 const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
-const AbsentFunctionDefinition = require('./AbsentFunctionDefinition')
-const Sirens = require('../../Sirens')
+const AbsentFunctionDefinition = require('./js-statements/AbsentFunctionDefinition')
+const StringStream = require('../../o-language/classifications/StringStream')
 
 /*
  * A source file to query javascript definitions.
@@ -27,6 +27,12 @@ class SourceFile {
 
         this.filepath = path.resolve(filepath)
         this.parseTree = undefined
+
+        this.doParseContents()
+    }
+
+    doParseContents() {
+        this.getParsedContents()
     }
 
     /// Accessing
@@ -40,7 +46,11 @@ class SourceFile {
     }
 
     getFileContents() {
-        return fs.readFileSync(this.filepath).toString()
+        try {
+            return fs.readFileSync(this.filepath).toString()
+        } catch(e) {
+            return null
+        }
     }
 
     getParsedContents() {
@@ -57,7 +67,10 @@ class SourceFile {
     getClassDefinitions() {
         const collector = ClassDefinitionsCollector.new()
 
-        return collector.collectClassDefinitionsIn( this.getParsedContents() )
+        return collector.collectClassDefinitionsIn({
+            treeNode: this.getParsedContents(),
+            sourceFile: this,
+        })
     }
 
 
@@ -74,10 +87,40 @@ class SourceFile {
         })
     }
 
+    getAllTopMostStatements() {
+        const parsedContents = this.getParsedContents()
+
+        if( parsedContents === null ) {
+            return []
+        }
+
+        return parsedContents.body
+    }
+
+    getAllStatementsBefore({parseNode: parseNode}) {
+        const topMostStatements = this.getAllTopMostStatements()
+
+        const index = topMostStatements.indexOf( parseNode )
+
+        return topMostStatements.slice(0, index)
+    }
+
+    getAllStatementsAfter({parseNode: parseNode}) {
+        const topMostStatements = this.getAllTopMostStatements()
+
+        const index = topMostStatements.indexOf( parseNode )
+
+        return topMostStatements.slice(index + 1)
+    }
+
     /// Querying
 
     existsFile() {
-        return fs.existsSync(this.filepath)
+        return fs.existsSync( this.filepath )
+    }
+
+    isJavascriptFile() {
+        return this.parseTree !== null
     }
 
     newAbsentFunctionDefinitionAt(line, column) {
@@ -135,18 +178,20 @@ class SourceFile {
     }
 
     getOriginalSourceCode({
-        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn, cr = cr
+        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
     }) {
-        /// fromLine and toLine are 1 based whilst slice is 0 based.
-        fromLine = fromLine - 1
-        toLine = toLine - 1
-        if( cr === undefined ) {
-            cr = "\n"
-        }
-
         const fileContents = this.getFileContents()
 
         const allLines = splitLines(fileContents)
+
+        if( toLine === undefined && toColumn === undefined ) {
+            toLine = allLines.length
+            toColumn = allLines[toLine - 1].length
+        }
+
+        /// fromLine and toLine are 1 based whilst slice is 0 based.
+        fromLine = fromLine - 1
+        toLine = toLine - 1
 
         const firstLine = allLines[fromLine]
 
@@ -158,15 +203,19 @@ class SourceFile {
             return firstLine.slice(fromColumn, toColumn)
         }
 
-        let sourceCode = ''
+        let sourceCode = StringStream.new()
 
-        sourceCode += firstLine.slice(fromColumn)
-        sourceCode += cr
-        sourceCode += middleLines.join(cr)
-        sourceCode += cr
-        sourceCode += lastLine.slice(0, toColumn)
+        sourceCode.append({ string: firstLine.slice(fromColumn) })
 
-        return sourceCode
+        if( middleLines.length > 0 ) {
+            sourceCode.cr()
+            sourceCode.append({ string: middleLines.join( "\n" ) })
+        }
+
+        sourceCode.cr()
+        sourceCode.append({ string: lastLine.slice(0, toColumn) })
+
+        return sourceCode.getString()
     }
 
     /// Parsing
@@ -186,7 +235,17 @@ class SourceFile {
             jsx: true,
         }
 
-        return esprima.parseModule(string, parsingOptions)
+        try {
+            return esprima.parseModule(string, parsingOptions)
+        } catch(error) {
+            return null
+        }
+    }
+
+    /// Writing
+
+    saveFileContents(newFileContents) {
+        fs.writeFileSync( this.filepath, newFileContents )
     }
 }
 

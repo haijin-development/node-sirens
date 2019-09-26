@@ -1,37 +1,16 @@
 const Sirens = require('../../src/Sirens')
+const {Address, User} = require('../samples/AddressAndUser')
 
-class Object {
-}
+const address = new Address({
+    streetName: 'Evergreen', number: 742
+})
 
-class Address extends Object {
-    constructor() {
-        super()
-
-        this.streetName = 'Evergreen'
-        this.number = 742
-    }
-
-    getStreetName() {
-        return this.streetName
-    }
-
-    getNumber() {
-        return this.getNumber()
-    }
-}
-
-class User extends Object {
-    constructor() {
-        super()
-
-        this.names = ['Lisa']
-        this.lastNames = ['Simpson']
-        this.addresses = [
-            new Address()
-        ]
-    }
-}
+const user = new User({
+    names: ['Lisa'],
+    lastNames: ['Simpson'],
+    addresses: [address]
+})
 
 Sirens.do( () => {
-    Sirens.browsePrototypes(new User())
+    Sirens.browsePrototypes( user )
 })

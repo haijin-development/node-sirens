@@ -1,0 +1,118 @@
+const path = require('path')
+const Classification = require('../../o-language/classifications/Classification')
+const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
+const Component = require('../../gui/components/Component')
+const Sirens = require('../../Sirens')
+const PrototypesBrowserModel = require('../models/PrototypesBrowserModel')
+const FunctionsComponent = require('./prototype-browser/FunctionsComponent')
+const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
+const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
+class PrototypeBrowser {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumes = [Component]
+        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.classificationBehaviours = [ComponentInstantiator]
+    }
+
+    /// Initializing
+
+    defaultModel() {
+        const object = this.getProps().prototype
+
+        return PrototypesBrowserModel.new({ object: object })
+    }
+
+    /// Actions
+
+    browseSelectedPrototype() {
+        const selectedPrototype = this.getModel().getSelectedPrototype()
+
+        Sirens.browsePrototypes(selectedPrototype)
+    }
+
+    /// Icons
+
+    getPrototypeIcon() {
+        return path.resolve( __dirname + '/../../../resources/icons/prototype.png' )
+    }
+
+    /// Building
+
+    renderWith(componentsRenderer) {
+        const prototypesModel = this.getModel()
+
+        componentsRenderer.render( function(component) {
+            this.window( function() {
+                this.styles({
+                    title: 'Prototypes Browser',
+                    width: 500,
+                    height: 400,
+                })
+
+                this.verticalSplitter( function() {
+
+                    this.horizontalSplitter( function() {
+                        this.styles({
+                            splitProportion: 2.0/3.0,
+                        })
+
+                        this.listChoice( function() {
+                            this.model( prototypesModel.getPrototypesModel() )
+
+                            this.styles({
+                                splitProportion: 1.0/4.0,
+                            })
+
+                            this.handlers({
+                                onAction: component.browseSelectedPrototype.bind(component),
+                            })
+
+                            this.column({
+                                label: '',
+                                getImageBlock: function(object) { return component.getPrototypeIcon() },
+                                imageWidth: 16,
+                                imageHeight: 16,
+                            })
+
+                            this.column({
+                                label: 'Prototypes',
+                                getTextBlock: function(object) { return object.constructor.name },
+                            })
+
+                            this.popupMenu( function() {
+                                const selectedObject =
+                                    component.getModel().getSelectedPrototype()
+
+                                this.item({
+                                    label: 'Browse it',
+                                    enabled: selectedObject !== undefined,
+                                    action: component.browseSelectedPrototype.bind(component),
+                                })
+                            })
+
+                        })
+
+                        this.component(
+                            FunctionsComponent.new({
+                                model: prototypesModel,
+                                splitProportion: 3.0/4.0,
+                            })
+                        )
+                    })
+
+                    this.text({
+                        splitProportion: 1.0/3.0,
+                        model: prototypesModel.getSelectedPropDescriptionModel(),
+                    })
+                })
+            })
+        })
+    }
+}
+
+
+module.exports = Classification.define(PrototypeBrowser)

@@ -1,16 +1,18 @@
 const Classification = require('../../o-language/classifications/Classification')
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
-const ValueModel = require('../../gui/models/ValueModel')
+const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
-const FunctionDefinition = require('../objects/FunctionDefinition')
+const FunctionDefinition = require('../objects/js-statements/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class StackTraceBrowserModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['framesStackModel', 'objectPropertiesTree', 'functionSourceCode']
+        this.instanceVariables = [
+            'framesStackModel', 'objectPropertiesTreeModel', 'functionSourceCodeModel'
+        ]
     }
 
     /// Initializing
@@ -24,12 +26,14 @@ class StackTraceBrowserModel {
             choices: framesStack
         })
 
-        this.objectPropertiesTree = TreeChoiceModel.new({
+        this.objectPropertiesTreeModel = TreeChoiceModel.new({
             roots: this.getRootPropertiesFrom(object),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.functionSourceCode = ValueModel.new()
+        this.functionSourceCodeModel = BufferedAttributeModel.new({
+            attributeReader: this.getFunctionSourceCode.bind(this)
+        })
 
         this.connectModels()
     }
@@ -41,7 +45,7 @@ class StackTraceBrowserModel {
     }
 
     connectModels() {
-        this.framesStackModel.getValue().on(
+        this.framesStackModel.getSelectionModel().on(
             'value-changed',
             this.onStackFrameSelectionChanged.bind(this)
         )        
@@ -54,19 +58,27 @@ class StackTraceBrowserModel {
     }
 
     getFunctionSourceCodeModel() {
-        return this.functionSourceCode
+        return this.functionSourceCodeModel
     }
 
     getSelectedStackFrame() {
-        return this.framesStackModel.getSelection()
+        return this.framesStackModel.getSelectionValue()
     }
 
-    getObjectPropertiesTree() {
-        return this.objectPropertiesTree
+    getObjectPropertiesTreeModel() {
+        return this.objectPropertiesTreeModel
     }
 
     getSelectedPropertyValue() {
-        return this.objectPropertiesTree.getSelectionValue()
+        return this.objectPropertiesTreeModel.getSelectionValue()
+    }
+
+    /// Formatting
+
+    getFunctionSourceCode(functionDefinition) {
+        if( functionDefinition === undefined ) { return '' }
+
+        return functionDefinition.getSourceCode()
     }
 
     /// Events
@@ -76,9 +88,7 @@ class StackTraceBrowserModel {
 
         const functionDefinition = this.getFunctionDefinitionFrom(selectedStackFrame)
 
-        const functionSourceCode = functionDefinition.getOriginalSourceCode({cr: "\r"})
-
-        this.functionSourceCode.setValue(functionSourceCode)
+        this.functionSourceCodeModel.setObject(functionDefinition)
     }
 
     getFunctionDefinitionFrom(stackFrame) {

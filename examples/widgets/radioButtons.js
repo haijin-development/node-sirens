@@ -1,7 +1,9 @@
-const Sirens = require('../../src/Sirens')
 const Classification = require('../../src/o-language/classifications/Classification')
-const ComponentClassification = require('../../src/gui/components/ComponentClassification')
+const Sirens = require('../../src/Sirens')
 const Component = require('../../src/gui/components/Component')
+const ComponentProtocol_Implementation = require('../../src/gui/protocols/ComponentProtocol_Implementation')
+const ComponentProtocol = require('../../src/gui/protocols/ComponentProtocol')
+const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
 class CustomComponent {
@@ -9,7 +11,9 @@ class CustomComponent {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Component]
+        this.assumes = [Component]
+        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.classificationBehaviours = [ComponentInstantiator]
     }
 
     /// Building
@@ -22,8 +26,8 @@ class CustomComponent {
         return choiceModel
     }
 
-    renderWith(builder) {
-        builder.render(function (component) {
+    renderWith(componentsRenderer) {
+        componentsRenderer.render(function (component) {
             this.window( function() {
                 this.styles({
                     width: 100,
@@ -54,10 +58,8 @@ class CustomComponent {
     }
 }
 
-const customComponent = Classification.define(CustomComponent)
-
-customComponent.behaveAs( ComponentClassification )
+CustomComponent = Classification.define(CustomComponent)
 
 Sirens.do( () => {
-    customComponent.open()
+    CustomComponent.new().open()
 })

@@ -7,6 +7,7 @@
 - Updated README.md
 - Rewrote StackView packExpand and packFill using viewCustomAttributes
 - Implemented ClassEditor
+- Added ClassEditor bin file to package.json
 
 ### gui
 

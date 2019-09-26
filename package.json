@@ -16,6 +16,9 @@
   "scripts": {
     "test": "node ./node_modules/.bin/mocha --recursive ./tests/specs/"
   },
+  "bin": {
+    "classEditor": "./bin/classEditor.js"
+  },
   "keywords": [
     "development tools",
     "debugging tools",

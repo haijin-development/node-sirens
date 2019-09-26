@@ -58,6 +58,14 @@ const Sirens = require('sirens')
 Sirens.openClassEditor()
 ```
 
+### ClassEditor command line
+
+To open a ClassEditor from the command line in the project requiring `Sirens` do
+
+```
+node_modules/.bin/classEditor [javascript-filename.js]
+```
+
 ### Screenshots
 
 ![Gtk browser](./docs/browsing-object.gif)

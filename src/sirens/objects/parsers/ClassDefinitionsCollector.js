@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('./ParseTreeVisitor')
-const ClassDefinition = require('../ClassDefinition')
+const ClassDefinition = require('../js-statements/ClassDefinition')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
@@ -9,41 +9,41 @@ class ClassDefinitionsCollector {
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [ParseTreeVisitor]
+        this.assumes = [ParseTreeVisitor]
     }
 
-    collectClassDefinitionsIn(treeNode) {
+    collectClassDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
+        if( treeNode === null ) {
+            return []
+        }
+
         const classDeclarations = this.visit(treeNode)
 
         return classDeclarations.map( (parseNode) => {
-                return ClassDefinition.new(parseNode)
+                return ClassDefinition.new({ parseNode: parseNode, sourceFile: sourceFile })
             })
     }
 
     /// Visiting
 
     visitProgram(treeNode) {
-        let classDefinitions = []
+        let collectedClassDefinitions = []
 
         const childNodes = treeNode.body
 
         childNodes.forEach( (node) => {
-            classDefinitions = classDefinitions.concat( this.visit(node) )
+            const classDefinition = this.visit(node)
+
+            if( classDefinition !== undefined ) {
+                collectedClassDefinitions.push( classDefinition )
+            }
         })
 
-        return classDefinitions
+        return collectedClassDefinitions
     }
 
     visitClassDeclaration(treeNode) {
-        return [treeNode]
-    }
-
-    visitFunctionDeclaration(treeNode) {
-        return []
-    }
-
-    visitExpressionStatement(treeNode) {
-        return []
+        return treeNode
     }
 }
 

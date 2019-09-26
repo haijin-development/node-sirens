@@ -72,16 +72,6 @@ describe('The OInstance classification', () => {
         expect( object.isBehavingAs(Circle) ) .to .be .false
     })
 
-    it('answers if it behaves as a classification', () => {
-        const object = OInstance.new()
-
-        object.behaveAs(Shape)
-
-        expect( object.isBehavingAs(OInstance) ) .to .be .true
-        expect( object.isBehavingAs(Shape) ) .to .be .true
-        expect( object.isBehavingAs(Circle) ) .to .be .false
-    })
-
     it('answers if it responds to a message', () => {
         const object = OInstance.new()
 

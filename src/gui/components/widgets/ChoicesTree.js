@@ -1,14 +1,17 @@
 const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const TreeChoiceModel = require('../../models/TreeChoiceModel')
-const TreeView = require('../../views/TreeView')
+const TreeView = require('../../gtk-views/TreeView')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class ChoicesTree {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
@@ -51,18 +54,20 @@ class ChoicesTree {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const selectionIndices = this.getModel().getSelectionIndices()
-        const indices = selectionIndices.length == 0 ? [] : [selectionIndices]
+        this.duringClassificationDo( UpdatingView, () => {
+            const selectionIndices = this.getModel().getSelectionIndices()
+            const indices = selectionIndices.length == 0 ? [] : [selectionIndices]
 
-        this.getView().clearItems()
+            this.getView().clearItems()
 
-        this.getView().addItems({
-            parentIter: null,
-            items: this.getModel().getRoots(),
-            index: 0
+            this.getView().addItems({
+                parentIter: null,
+                items: this.getModel().getRoots(),
+                index: 0
+            })
+
+            this.getView().setSelectionIndices(indices)
         })
-
-        this.getView().setSelectionIndices(indices)
     }
 
     /// Events
@@ -71,29 +76,35 @@ class ChoicesTree {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getTree().on('roots-changed', this.onChoicesChanged.bind(this))
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getTreeModel().on('roots-changed', this.onChoicesChanged.bind(this))
+        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
     }
 
     onChoicesChanged() {
-        const roots = this.getModel().getRoots()
+        this.duringClassificationDo( UpdatingView, () => {
+            const roots = this.getModel().getRoots()
 
-        this.getView().setRoots(roots)
+            this.getView().setRoots(roots)
+        })
     }
 
     onSelectedValueChanged() {
-        let selectionIndices = this.getModel().getSelectionIndices()
+        this.duringClassificationDo( UpdatingView, () => {
+            let selectionIndices = this.getModel().getSelectionIndices()
 
-        selectionIndices = selectionIndices === null ?
-            [] : [selectionIndices]
+            selectionIndices = selectionIndices === null ?
+                [] : [selectionIndices]
 
-        this.getView().setSelectionIndices(selectionIndices)
+            this.getView().setSelectionIndices(selectionIndices)
+        })
     }
 
     onUserSelectionChanged() {
-        const selectedPath = this.getView().getSelectionIndices()
+        this.duringClassificationDo( UpdatingModel, () => {
+            const selectedPath = this.getView().getSelectionIndices()
 
-        this.getModel().setSelectionFromPath(selectedPath[0])
+            this.getModel().setSelectionFromPath(selectedPath[0])
+        })
     }
 
     onUserSelectionAction() {
@@ -104,5 +115,11 @@ class ChoicesTree {
         this.getProps().onAction()
     }
 }
+
+class UpdatingView {
+    onUserSelectionChanged() {}
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(ChoicesTree)

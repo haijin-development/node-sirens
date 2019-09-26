@@ -9,8 +9,8 @@ class PrototypesBrowserModel {
     static definition() {
         this.instanceVariables = [
             'inspectedObject',
-            'objectPrototypesList', 'selectedPrototypeProps', 'selectedPropDescription',
-            'showInherited', 'showFunctions', 'showProps',
+            'objectPrototypesListModel', 'selectedPrototypePropsModel', 'selectedPropDescriptionModel',
+            'showInheritedModel', 'showFunctionsModel', 'showPropsModel',
         ]
     }
 
@@ -25,47 +25,47 @@ class PrototypesBrowserModel {
 
         const prototypes = this._getPrototypesChainOf( this.inspectedObject )
 
-        this.objectPrototypesList = ChoiceModel.new({
+        this.objectPrototypesListModel = ChoiceModel.new({
             choices: prototypes,
             selection: this.inspectedObject,
         })
 
-        this.selectedPrototypeProps = ChoiceModel.new({
+        this.selectedPrototypePropsModel = ChoiceModel.new({
             choices: [],
             selection: null,
         })
 
-        this.selectedPropDescription = ValueModel.new()
+        this.selectedPropDescriptionModel = ValueModel.new()
 
-        this.showInherited = ValueModel.new({ value: false })
-        this.showFunctions = ValueModel.new({ value: true })
-        this.showProps = ValueModel.new({ value: false })
+        this.showInheritedModel = ValueModel.new({ value: false })
+        this.showFunctionsModel = ValueModel.new({ value: true })
+        this.showPropsModel = ValueModel.new({ value: false })
 
         this.connectModels()
     }
 
     connectModels() {
-        this.objectPrototypesList.getValue().on(
+        this.objectPrototypesListModel.getSelectionModel().on(
             'value-changed',
             this.updatePrototypeProps.bind(this)
         )
 
-        this.selectedPrototypeProps.getValue().on(
+        this.selectedPrototypePropsModel.getSelectionModel().on(
             'value-changed',
             this.onPropSelectionChanged.bind(this)
         )
 
-        this.showInherited.on(
+        this.showInheritedModel.on(
             'value-changed',
             this.updatePrototypeProps.bind(this)
         )
 
-        this.showFunctions.on(
+        this.showFunctionsModel.on(
             'value-changed',
             this.updatePrototypeProps.bind(this)
         )
 
-        this.showProps.on(
+        this.showPropsModel.on(
             'value-changed',
             this.updatePrototypeProps.bind(this)
         )
@@ -74,35 +74,35 @@ class PrototypesBrowserModel {
     /// Accessing
 
     getPrototypesModel() {
-        return this.objectPrototypesList
+        return this.objectPrototypesListModel
     }
 
     getSelectedPrototypePropsModel() {
-        return this.selectedPrototypeProps
+        return this.selectedPrototypePropsModel
     }
 
     getSelectedPropDescriptionModel() {
-        return this.selectedPropDescription
+        return this.selectedPropDescriptionModel
     }
 
     getShowInheritedModel() {
-        return this.showInherited
+        return this.showInheritedModel
     }
 
     getShowFunctionsModel() {
-        return this.showFunctions
+        return this.showFunctionsModel
     }
 
     getShowPropsModel() {
-        return this.showProps
+        return this.showPropsModel
     }
 
     getSelectedPrototype() {
-        return this.objectPrototypesList.getSelection()
+        return this.objectPrototypesListModel.getSelectionValue()
     }
 
     getSelectedProp() {
-        return this.selectedPrototypeProps.getSelection()
+        return this.selectedPrototypePropsModel.getSelectionValue()
     }
 
     getSelectedPropValue() {
@@ -141,9 +141,9 @@ class PrototypesBrowserModel {
     }
 
     _getPropsOf(object) {
-        const showInherited = this.showInherited.getValue()
-        const showFunctions = this.showFunctions.getValue()
-        const showProps = this.showProps.getValue()
+        const showInheritedModel = this.showInheritedModel.getValue()
+        const showFunctionsModel = this.showFunctionsModel.getValue()
+        const showPropsModel = this.showPropsModel.getValue()
 
         let props = []
 
@@ -154,18 +154,18 @@ class PrototypesBrowserModel {
 
             props = props.concat(ownedProps)
 
-            if(showInherited === false) {
+            if(showInheritedModel === false) {
                 break
             }
 
             currentPrototype = Object.getPrototypeOf(currentPrototype)
         }
 
-        if(showFunctions === false) {
+        if(showFunctionsModel === false) {
             props = props.filter( (prop) => { return ! prop.isFunction() })
         }
 
-        if(showProps === false) {
+        if(showPropsModel === false) {
             props = props.filter( (prop) => { return prop.isFunction() })
         }
 
@@ -181,7 +181,7 @@ class PrototypesBrowserModel {
 
         const props = this._getPropsOf(selectedObject)
 
-        this.selectedPrototypeProps.setChoices(props)
+        this.selectedPrototypePropsModel.setChoices(props)
     }
 
     onPropSelectionChanged() {
@@ -189,7 +189,7 @@ class PrototypesBrowserModel {
 
         const text = selectedProp === undefined ? '' : this.displayStringOf(selectedProp)
 
-        this.selectedPropDescription.setValue(text)
+        this.selectedPropDescriptionModel.setValue(text)
     }
 
     /// Displaying

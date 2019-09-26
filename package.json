@@ -1,6 +1,6 @@
 {
   "name": "sirens",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Interactive utilities to ease development, testing and debugging in Node.js, implemented in Node.js and GTK3.",
   "main": "index.js",
   "dependencies": {
@@ -14,7 +14,10 @@
     "mocha": "^6.1"
   },
   "scripts": {
-    "test": "mocha --recursive ./tests/specs/"
+    "test": "node ./node_modules/.bin/mocha --recursive ./tests/specs/"
+  },
+  "bin": {
+    "classEditor": "./bin/classEditor.js"
   },
   "keywords": [
     "development tools",

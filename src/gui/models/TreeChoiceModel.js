@@ -6,20 +6,20 @@ class TreeChoiceModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['selection', 'treeModel']
+        this.instanceVariables = ['selectionModel', 'treeModel']
     }
 
     /// Initializing
 
-    initialize({ selection: selection, roots: roots, getChildrenBlock: getChildrenBlock }) {
+    initialize({ selectionModel: selectionModel, roots: roots, getChildrenBlock: getChildrenBlock }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
-        if(selection === undefined) selection = null
+        if(selectionModel === undefined) selectionModel = null
         if(roots === undefined) roots = []
 
-        this.selection = ValueModel.new({ value: selection })
+        this.selectionModel = ValueModel.new({ value: selectionModel })
 
         this.treeModel = VirtualTreeModel.new({
             roots: roots,
@@ -30,12 +30,12 @@ class TreeChoiceModel {
     /// Accessing
 
     /**
-     * Returns the selection model, not the selected item.
+     * Returns the selectionModel model, not the selected item.
      * This model can be observed for changes.
      * This model value is an array with the objects path from the tree root object to the selected item.
      **/
-    getValue() {
-        return this.selection
+    getSelectionModel() {
+        return this.selectionModel
     }
 
     getSelectionValue() {
@@ -52,14 +52,14 @@ class TreeChoiceModel {
     * Sets the item currently selected.
     * The objects_hierarchy is an array with the objects path from the tree root object to the
     * selected item.
-    * The selection model triggers an announcement that its value changed.
+    * The selectionModel model triggers an announcement that its value changed.
     */
     setSelectionPath(objectsHierarchy) {
-        this.selection.setValue(objectsHierarchy)
+        this.selectionModel.setValue(objectsHierarchy)
     }
 
     getSelectionPath() {
-        return this.selection.getValue()
+        return this.selectionModel.getValue()
     }
 
     getSelectionIndices() {
@@ -76,7 +76,7 @@ class TreeChoiceModel {
     * Sets the item currently selected.
     * The objects_hierarchy is an array with the objects path from the tree root object to the
     * selected item.
-    * The selection model triggers an announcement that its value changed.
+    * The selectionModel model triggers an announcement that its value changed.
     */
     setSelectionFromPath(path) {
         const objectsHierarchy = this.getObjectsHierarchyAt(path)
@@ -88,7 +88,7 @@ class TreeChoiceModel {
     * Returns the tree model.
     * The tree model holds the tree items and announces changes on it.
     */
-    getTree() {
+    getTreeModel() {
         return this.treeModel
     }
 
@@ -142,7 +142,7 @@ class TreeChoiceModel {
     /// Asking
 
     hasSelection() {
-        return this.selection.value != undefined && this.selection.value.length > 0
+        return this.selectionModel.value != undefined && this.selectionModel.value.length > 0
     }
 }
 

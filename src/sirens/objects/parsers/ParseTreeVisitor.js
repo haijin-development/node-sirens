@@ -24,11 +24,13 @@ class ParseTreeVisitor {
 
         const treeNodeHandler = 'visit' + treeNodeType
 
-        if( this[treeNodeHandler] === undefined ) {
-            throw new Error(`Uknown treeNode type" '${treeNodeType}'`)
+        const methodHandler = this[treeNodeHandler]
+
+        if( methodHandler === undefined ) {
+            throw new Error(`Uknown treeNode type '${treeNodeType}'`)
         }
 
-        return this[treeNodeHandler].call(this, treeNode)
+        return methodHandler.call(this, treeNode)
     }
 
     visitProgram(treeNode) {

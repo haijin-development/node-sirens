@@ -1,3 +1,5 @@
 const Sirens = require('../../src/Sirens')
 
-Sirens.openClassEditor()
+const sampleFilename = `${__dirname}/../samples/AddressAndUser.js`
+
+Sirens.openClassEditor({ filename: sampleFilename })

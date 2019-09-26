@@ -7,7 +7,9 @@ class ObjectBrowserModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['inspectedObject', 'objectPropertiesTree', 'selectedObjectText']
+        this.instanceVariables = [
+            'inspectedObject', 'objectPropertiesTreeModel', 'selectedObjectTextModel'
+        ]
     }
 
     /// Initializing
@@ -19,12 +21,12 @@ class ObjectBrowserModel {
 
         this.inspectedObject = inspectedObject
 
-        this.objectPropertiesTree = TreeChoiceModel.new({
+        this.objectPropertiesTreeModel = TreeChoiceModel.new({
             roots: this.getRootPropertiesFrom(inspectedObject),
             getChildrenBlock: (objectProperty) => { return objectProperty.getChildProperties() },
         })
 
-        this.selectedObjectText = ValueModel.new()
+        this.selectedObjectTextModel = ValueModel.new()
 
         this.connectModels()
     }
@@ -36,7 +38,7 @@ class ObjectBrowserModel {
     }
 
     connectModels() {
-        this.objectPropertiesTree.getValue().on(
+        this.objectPropertiesTreeModel.getSelectionModel().on(
             'value-changed',
             this.onInstVarSelectionChanged.bind(this)
         )
@@ -45,19 +47,19 @@ class ObjectBrowserModel {
     /// Accessing
 
     getRootObject() {
-        return this.objectPropertiesTree.getRoots()[0].getValue()
+        return this.objectPropertiesTreeModel.getRoots()[0].getValue()
     }
 
-    getObjectPropertiesTree() {
-        return this.objectPropertiesTree
+    getObjectPropertiesTreeModel() {
+        return this.objectPropertiesTreeModel
     }
 
     getSelectedPropertyValue() {
-        return this.objectPropertiesTree.getSelectionValue()
+        return this.objectPropertiesTreeModel.getSelectionValue()
     }
 
-    getSelectedPropertyText() {
-        return this.selectedObjectText
+    getSelectedPropertyTextModel() {
+        return this.selectedObjectTextModel
     }
 
     /// Events
@@ -65,7 +67,7 @@ class ObjectBrowserModel {
     onInstVarSelectionChanged() {
         const selectedValueString = this.selectedValueString()
 
-        this.selectedObjectText.setValue(selectedValueString)
+        this.selectedObjectTextModel.setValue(selectedValueString)
     }
 
     /// Displaying

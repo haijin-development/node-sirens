@@ -1,14 +1,17 @@
 const Classification = require('../../../o-language/classifications/Classification')
+const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const RadioButtonView = require('../../views/RadioButtonView')
+const RadioButtonView = require('../../gtk-views/RadioButtonView')
 const ChoiceModel = require('../../models/ChoiceModel')
+const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class RadioButton {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumptions = [Widget]
+        this.assumes = [Widget]
+        this.implements = [ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing
@@ -24,11 +27,13 @@ class RadioButton {
     /// Synchronizing
 
     synchronizeViewFromModel() {
-        const selectedChoice = this.getModel().getSelection()
+        this.duringClassificationDo( UpdatingView, () => {
+            const selectedChoice = this.getModel().getSelectionValue()
 
-        const value = this.getId() === selectedChoice
+            const value = this.getId() === selectedChoice
 
-        this.getView().setValue(value)
+            this.getView().setValue(value)
+        })
     }
 
     /// Events
@@ -37,12 +42,20 @@ class RadioButton {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getValue().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getSelectionModel().on(
+            'value-changed',
+            this.onSelectedValueChanged.bind(this)
+        )
     }
 
     onSelectedValueChanged() {
         this.synchronizeViewFromModel()
     }
 }
+
+class UpdatingView {
+}
+
+UpdatingView = Classification.define(UpdatingView)
 
 module.exports = Classification.define(RadioButton)

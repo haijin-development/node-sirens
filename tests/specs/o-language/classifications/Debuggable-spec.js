@@ -3,12 +3,11 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 const Debuggable = require('../../../../src/o-language/classifications/Debuggable')
 
-const Shape = Classification.define( class {
+const Shape = Classification.define( class Shape {
 
     static definition() {
-        this.cName = 'Shape'
         this.instanceVariables = ['x', 'y', 'overriden']
-        this.assumptions = [Debuggable]
+        this.assumes = [Debuggable]
     }
 
     setPosition({x: x, y: y}) {
@@ -29,11 +28,10 @@ const Shape = Classification.define( class {
     }
 })
 
-const Circle = Classification.define( class {
+const Circle = Classification.define( class Circle {
     static definition() {
-        this.cName = 'Circle'
         this.instanceVariables = ['radious', 'overriden']
-        this.assumptions = [Debuggable]
+        this.assumes = [Debuggable]
     }
 
     setRadious(radious) {
@@ -64,8 +62,7 @@ describe('The Debuggable classification', () => {
 `Debuggable {
 }
 OInstance {
-}
-`
+}`
         expect(debugString) .to .equal(expectedString)
     })
 
@@ -90,8 +87,7 @@ Shape {
 Debuggable {
 }
 OInstance {
-}
-`
+}`
         expect(debugString) .to .equal(expectedString)
     })
 
@@ -120,13 +116,12 @@ OInstance {
         }
         OInstance {
         }
-
 }
 Debuggable {
 }
 OInstance {
-}
-`
+}`
+
         expect(debugString) .to .equal(expectedString)
     })
 })

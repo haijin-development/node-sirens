@@ -18,10 +18,16 @@ Next release:
 
 **Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**
 
-Add `Sirens` to the project with
+Add `Sirens` to your project with
 
 ```
 npm install sirens --save-dev
+```
+
+or install it globally with
+
+```
+npm install sirens -g
 ```
 
 ### Usage
@@ -60,7 +66,25 @@ Sirens.openClassEditor()
 
 ### ClassEditor command line
 
-To open a ClassEditor from the command line in the project requiring `Sirens` do
+If you install `Sirens` globally
+
+```
+npm install sirens -g
+```
+
+you can open a javascript ClassEditor from the command line with:
+
+```
+classEditor [javascript-filename.js]
+```
+
+If you install `Sirens` in the scope of a project with
+
+```
+npm install sirens --save-dev
+```
+
+you can open a javascript ClassEditor from the project folder with
 
 ```
 node_modules/.bin/classEditor [javascript-filename.js]
@@ -78,13 +102,13 @@ node_modules/.bin/classEditor [javascript-filename.js]
 The current version does not work with node > v10.
 
 ```
-nvm install v10.15.3
+nvm install v10
 ```
 
 Please refer to the installation section of [node-gtk](https://www.npmjs.com/package/node-gtk#installing-and-building).
 
 
-In Ubuntu installing the following libraries
+In Ubuntu installing the [following libraries](./.travis.yml#L10)
 
 ```
 sudo apt install libgtk-3-dev libgirepository1.0-dev gobject-introspection build-essential
@@ -92,6 +116,18 @@ sudo apt install libgtk-3-dev libgirepository1.0-dev gobject-introspection build
 
 should be enough to run [node-gtk](https://www.npmjs.com/package/node-gtk#installing-and-building) and `sirens`.
 
+
+## Semantic versioning
+
+Sirens release model follows the [Semantic Versioning 2.0.0](https://semver.org/) convention.
+
+However please note that:
+
+- Currently Sirens [public API](https://semver.org/#spec-item-1) is the one declared in this document [Usage](./README.md/#usage) section.
+
+- Sirens is still in [verion 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
+
+The [o-language](./src/o-language) and the [gui builder](./src/gui) used by Sirens browsers will be released as standalone libraries once they reach a estable public interface. This will happen once there are several new releases of Sirens with no modifications neither in the o-language nor in its gui builder public interfaces.
 
 ## Development
 

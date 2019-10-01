@@ -118,7 +118,7 @@ describe('When using a SourceFile', () => {
     })
 })
 
-describe('When using a FunctionDefinition', () => {
+describe('When using a Function', () => {
     it('gets the starting line number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()

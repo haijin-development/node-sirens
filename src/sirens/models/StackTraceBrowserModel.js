@@ -3,7 +3,7 @@ const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
-const FunctionDefinition = require('../objects/js-statements/FunctionDefinition')
+const Function = require('../objects/source-code/Function')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class StackTraceBrowserModel {
@@ -92,7 +92,7 @@ class StackTraceBrowserModel {
     }
 
     getFunctionDefinitionFrom(stackFrame) {
-        return FunctionDefinition.from({
+        return Function.from({
             file: stackFrame.getFileName(),
             line: stackFrame.getLineNumber(),
             colum: stackFrame.getColumnNumber(),

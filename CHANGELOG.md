@@ -1,6 +1,23 @@
 # Changelog
 
-## v0.7.0 (next release)
+## v0.8.0 (next release)
+
+## v0.7.0
+
+### Sirens
+
+- Updated README.md.
+- Code cleanup.
+- Implemented the full javascript sintax visitor for esprima
+- Integrated comments to statements and expressions in esprima
+- Added 'Open file in new window ...' menu to ClassBrowser.
+- Implemented the ClassDocumentationBrowser
+
+### gui
+
+- Implemented MenuSeparator
+
+### O language
 
 ## v0.6.0
 

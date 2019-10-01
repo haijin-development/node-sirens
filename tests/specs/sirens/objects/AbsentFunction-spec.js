@@ -7,7 +7,7 @@ const sourceFile = SourceFile.new({ filepath: filename })
 
 const absentFunctionDefinition = sourceFile.getFunctionAt({line: 100, column: 0})
 
-describe('When using an AbsentFunctionDefinition', () => {
+describe('When using an AbsentFunction', () => {
     it('gets a default function name', () => {
         expect( absentFunctionDefinition.getFunctionName() ) .to .equal('Function not found')
     })

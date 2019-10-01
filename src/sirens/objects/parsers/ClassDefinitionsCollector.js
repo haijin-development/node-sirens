@@ -1,6 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('./ParseTreeVisitor')
-const ClassDefinition = require('../js-statements/ClassDefinition')
+const ClassDefinition = require('../source-code/ClassDefinition')
+const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
@@ -8,8 +9,9 @@ const ClassDefinition = require('../js-statements/ClassDefinition')
 class ClassDefinitionsCollector {
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['collectedClassDefinitions']
         this.assumes = [ParseTreeVisitor]
+        this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
 
     collectClassDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
@@ -17,33 +19,26 @@ class ClassDefinitionsCollector {
             return []
         }
 
-        const classDeclarations = this.visit(treeNode)
+        this.collectedClassDefinitions = [] 
 
-        return classDeclarations.map( (parseNode) => {
-                return ClassDefinition.new({ parseNode: parseNode, sourceFile: sourceFile })
+        this.visit(treeNode)
+
+        return this.collectedClassDefinitions.map( (parseNode) => {
+                return ClassDefinition.new({
+                    sourceFile: sourceFile,
+                    parseNode: parseNode,
+                })
             })
     }
 
     /// Visiting
 
-    visitProgram(treeNode) {
-        let collectedClassDefinitions = []
-
-        const childNodes = treeNode.body
-
-        childNodes.forEach( (node) => {
-            const classDefinition = this.visit(node)
-
-            if( classDefinition !== undefined ) {
-                collectedClassDefinitions.push( classDefinition )
-            }
-        })
-
-        return collectedClassDefinitions
+    visitClassDeclaration(classDeclaration) {
+        this.collectedClassDefinitions.push( classDeclaration )
     }
 
-    visitClassDeclaration(treeNode) {
-        return treeNode
+    visitClassExpression(classExpression) {
+        this.collectedClassDefinitions.push( classExpression )
     }
 }
 

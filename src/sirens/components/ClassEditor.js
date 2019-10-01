@@ -2,11 +2,13 @@ const Classification = require('../../o-language/classifications/Classification'
 const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
 const Component = require('../../gui/components/Component')
 const ClassEditorModel = require('../models/ClassEditorModel')
-const ClassEditorMenuBar = require('./class-editor/ClassEditorMenuBar')
+const ClassEditorMenu = require('./class-editor/ClassEditorMenu')
 const ClassesComponent = require('./class-editor/ClassesComponent')
+const FileFooterComponent = require('./class-editor/FileFooterComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
 const FileChooser = require('../../gui/components/dialogs/FileChooser')
+const Sirens = require('../../Sirens')
 
 class ClassEditor {
     /// Definition
@@ -37,17 +39,35 @@ class ClassEditor {
 
     /// Actions
 
-    openFile() {
+    pickFile() {
         const filename = FileChooser.openFile({
             title: 'Choose a file',
             window: this
         })
 
-        if( filename !== null ) {
-            this.getModel().openFile({ filename: filename })
+        return filename        
+    }
 
-            this.showFirstTabPage()
+    openFile() {
+        const filename = this.pickFile()
+
+        if( filename === null ) {
+            return
         }
+
+        this.getModel().openFile({ filename: filename })
+
+        this.showFirstTabPage()
+    }
+
+    openFileInNewWindow() {
+        const filename = this.pickFile()
+
+        if( filename === null ) {
+            return
+        }
+
+        Sirens.openClassEditor({ filename: filename })
     }
 
     saveFile() {
@@ -88,15 +108,15 @@ class ClassEditor {
                     })
 
                     this.component(
-                        ClassEditorMenuBar.new({
+                        ClassEditorMenu.new({
                             model: model,
                             openFile: component.openFile.bind(component),
+                            openFileInNewWindow: component.openFileInNewWindow.bind(component),
                             saveFile: component.saveFile.bind(component),
                         })
                     )
 
                     this.tabs({ aligment: 'left', id: 'tabs' }, function() {
-
 
                         this.component(
                             ClassesComponent.new({
@@ -104,12 +124,12 @@ class ClassEditor {
                             })
                         )
 
-                        this.tabPage({ label: 'Footer', fixedPosition: -1 }, function() {
-                            this.text({
+                        this.component(
+                            FileFooterComponent.new({
                                 model: model.getFooterSourceCodeModel(),
-                                splitProportion: 1.0 / 2,
                             })
-                        })
+                        )
+
                     })
                 })
             })

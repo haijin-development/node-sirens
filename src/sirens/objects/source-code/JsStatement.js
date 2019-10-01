@@ -11,17 +11,18 @@ class JsStatement {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['sourceFile']
+        this.instanceVariables = ['sourceFile', 'parseNodes']
     }
 
     /// Initializing
 
-    initialize({ sourceFile: sourceFile }) {
+    initialize({ sourceFile: sourceFile, parseNodes: parseNodes }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
         this.sourceFile = sourceFile
+        this.parseNodes = parseNodes
     }
 
     /// Accessing
@@ -40,6 +41,40 @@ class JsStatement {
             toLine: this.getEndingLine(),
             toColumn: this.getEndingColumn(),
         })
+    }
+
+    /// Position in file
+
+    getFirstNode() {
+        return this.parseNodes[0]
+    }
+
+    getLastNode() {
+        return this.parseNodes[ this.parseNodes.length - 1 ]
+    }
+
+    getStartingPosition() {
+        return this.getFirstNode().loc.start
+    }
+
+    getStartingLine() {
+        return this.getStartingPosition().line
+    }
+
+    getStartingColumn() {
+        return this.getStartingPosition().column
+    }
+
+    getEndingPosition() {
+        return this.getLastNode().loc.end
+    }
+
+    getEndingLine() {
+        return this.getEndingPosition().line
+    }
+
+    getEndingColumn() {
+        return this.getEndingPosition().column
     }
 
     /// Formatting

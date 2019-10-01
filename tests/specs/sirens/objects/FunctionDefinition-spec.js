@@ -7,7 +7,7 @@ const sourceFile = SourceFile.new({ filepath: filename })
 
 const functionDefinition = sourceFile.getFunctionDefinitions()[0]
 
-describe('When using a FunctionDefinition', () => {
+describe('When using a Function', () => {
     it('gets the function name', () => {
         expect( functionDefinition.getFunctionName() ) .to .equal('getName')
     })

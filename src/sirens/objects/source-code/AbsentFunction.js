@@ -1,12 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
 
-/*
- * The definition of a javascript function.
- *
- * It is implemented as a wrapper on a parse tree node.
- */
-class AbsentFunctionDefinition {
+class AbsentFunction {
     /// Definition
 
     static definition() {
@@ -18,7 +13,9 @@ class AbsentFunctionDefinition {
 
     initialize({ sourceFile: sourceFile, line: line, column: column }) {
         this.previousClassificationDo( () => {
-            this.initialize({ sourceFile: sourceFile })
+            this.initialize({
+                sourceFile: sourceFile,
+            })
         })
 
         this.line = line
@@ -66,4 +63,4 @@ class AbsentFunctionDefinition {
     }
 }
 
-module.exports = Classification.define(AbsentFunctionDefinition)
+module.exports = Classification.define(AbsentFunction)

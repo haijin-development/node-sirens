@@ -11,6 +11,7 @@ class ClassEditionModel {
             'headerSourceCodeModel',
             'classMethodsModel',
             'selectedMethodSourceCodeModel',
+            'classCommentModel',
         ]
     }
 
@@ -24,17 +25,22 @@ class ClassEditionModel {
         this.classDefinition = classDefinition
 
         this.headerSourceCodeModel = BufferedAttributeModel.new({
-            object: classDefinition.getHeaderDefinition(), 
+            object: classDefinition.getHeader(),
             attributeReader: this.getHeaderSourceCode.bind(this),
         })
 
         this.classMethodsModel = ChoiceModel.new({
-            choices: classDefinition.getFunctionDefinitions(),
+            choices: classDefinition.getMethods(),
             selection: undefined,
         })
 
         this.selectedMethodSourceCodeModel = BufferedAttributeModel.new({
             attributeReader: this.getMethodSourceCode.bind(this),
+        })
+
+        this.classCommentModel = BufferedAttributeModel.new({
+            object: classDefinition.getComment(),
+            attributeReader: (comment) => { return comment.getString() },
         })
 
         this.connectModels()
@@ -56,6 +62,10 @@ class ClassEditionModel {
 
     getSelectedMethodSourceCodeModel() {
         return this.selectedMethodSourceCodeModel
+    }
+
+    getClassCommentModel() {
+        return this.classCommentModel
     }
 
     /// Formatting

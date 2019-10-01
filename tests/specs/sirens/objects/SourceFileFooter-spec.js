@@ -5,7 +5,7 @@ const filename = 'tests/samples/index.js'
 
 const sourceFile = ClassSourceFile.new({ filepath: filename })
 
-const footerDefinition = sourceFile.getFooterDefinition()
+const footerDefinition = sourceFile.getFooter()
 
 describe('When using an ClassDefinitionFooter', () => {
     it('gets the source code as it is writen in the source file', () => {

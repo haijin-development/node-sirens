@@ -1,6 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const SourceFile = require('./SourceFile')
-const ClassSourceFileFooter = require('./js-statements/ClassSourceFileFooter')
+const SourceFileFooter = require('./source-code/SourceFileFooter')
 
 /*
  * A source file with a class definition.
@@ -9,23 +9,48 @@ class ClassSourceFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['classes', 'footer']
         this.assumes = [SourceFile]
     }
 
-    /// Accessing
+    /// Initializing
+
+    initialize({ filepath: filepath }) {
+        this.previousClassificationDo( () => {
+            this.initialize({ filepath: filepath })
+
+        })
+
+        this.classes = this.getClassDefinitions()
+        this.footer = this.buildFooter()
+    }
+
+    /// Acccessing
+
+    /*
+     * Returns all the classes definitions in the file.
+     */
+    getClasses() {
+        return this.classes
+    }
 
     /*
      * Returns the statements below the class declaration.
      * This section tipically includes the exports, additional functions, etc, etc.
      */
-    getFooterDefinition() {
+    getFooter() {
+        return this.footer
+    }
+
+    /// Building
+
+    buildFooter() {
         const classDefinitions = this.getClassDefinitions()
 
         if( classDefinitions.length === 0 ) {
-            return ClassSourceFileFooter.new({
-                statements: this.getAllTopMostStatements(),
+            return SourceFileFooter.new({
                 sourceFile: this,
+                parseNodes: this.getAllTopMostStatements(),
             })
         }
 
@@ -35,9 +60,9 @@ class ClassSourceFile {
 
         const footerStatements = this.getAllStatementsAfter({ parseNode: lastClassParseNode })
 
-        return ClassSourceFileFooter.new({
-            statements: footerStatements,
+        return SourceFileFooter.new({
             sourceFile: this,
+            parseNodes: footerStatements,
         })
     }
 }

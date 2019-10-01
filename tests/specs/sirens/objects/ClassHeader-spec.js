@@ -7,10 +7,10 @@ const sourceFile = SourceFile.new({ filepath: filename })
 
 const classDefinitions = sourceFile.getClassDefinitions()
 
-describe('When using an ClassDefinitionHeader', () => {
+describe('When using an ClassHeader', () => {
     it('gets the source code of the first class as it is writen in the source file', () => {
 
-        const headerDefinition = classDefinitions[0].getHeaderDefinition()
+        const headerDefinition = classDefinitions[0].getHeader()
 
         const expectedSourceCode = 
 `const path = require('path')`
@@ -19,7 +19,7 @@ describe('When using an ClassDefinitionHeader', () => {
     })
 
     it('gets the formatted source code of the first class defined in the file', () => {
-        const headerDefinition = classDefinitions[0].getHeaderDefinition()
+        const headerDefinition = classDefinitions[0].getHeader()
 
         const expectedSourceCode = 
 `const path = require('path')`
@@ -29,7 +29,7 @@ describe('When using an ClassDefinitionHeader', () => {
 
     it('gets the source code of the second class as it is writen in the source file', () => {
 
-        const headerDefinition = classDefinitions[1].getHeaderDefinition()
+        const headerDefinition = classDefinitions[1].getHeader()
 
         const expectedSourceCode = 
 `function modFunction() {
@@ -40,7 +40,7 @@ describe('When using an ClassDefinitionHeader', () => {
     })
 
     it('gets the formatted source code of the second class defined in the file', () => {
-        const headerDefinition = classDefinitions[1].getHeaderDefinition()
+        const headerDefinition = classDefinitions[1].getHeader()
 
         const expectedSourceCode = 
 `function modFunction() {

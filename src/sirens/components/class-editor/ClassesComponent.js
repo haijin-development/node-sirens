@@ -3,6 +3,8 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const ComponentsList = require('../../../gui/components/ComponentsList')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ListModelComponentProtocol_Implementation = require('../../../gui/protocols/ListModelComponentProtocol_Implementation')
+const SingleClassMenu = require('./SingleClassMenu')
+const Sirens = require('../../../Sirens')
 
 class ClassesComponent {
     /// Definition
@@ -22,10 +24,16 @@ class ClassesComponent {
         return path.resolve( __dirname + '/../../../../resources/icons/function.png' )
     }
 
+    /// Actions
+
+    openDocumentationBrowser(classEditionModel) {
+        Sirens.browseDocumentation({ model: classEditionModel })
+    }
+
     /// Rendering
 
-    renderItem({ item: item, index: index, renderer: renderer }) {
-        const className = item.getClassName()
+    renderItem({ item: classEditionModel, index: index, renderer: renderer }) {
+        const className = classEditionModel.getClassName()
 
         const component = this
 
@@ -35,43 +43,56 @@ class ClassesComponent {
 
             this.tabPage({ label: 'Header' }, function() {
                 this.text({
-                    model: item.getHeaderSourceCodeModel(),
+                    model: classEditionModel.getHeaderSourceCodeModel(),
                     splitProportion: 1.0 / 2,
                 })
             })
 
             this.tabPage({ label: className }, function() {
 
-                this.verticalSplitter( function() {
+                this.verticalStack( function() {
 
-                    this.model( item.getSelectedMethodSourceCodeModel() )
+                    this.component(
+                        SingleClassMenu.new({
+                            openDocumentationBrowser: () => {
+                                component.openDocumentationBrowser(classEditionModel)
+                            }
+                        })
+                    )
 
-                    this.listChoice( function() {
-                        this.styles({
-                            splitProportion: 1.0 / 2
+                    this.verticalSplitter( function() {
+
+                        this.model( classEditionModel.getSelectedMethodSourceCodeModel() )
+
+                        this.listChoice( function() {
+
+                            this.model( classEditionModel.getClassMethodsModel() )
+
+                            this.styles({
+                                splitProportion: 1.0 / 2
+                            })
+
+                            this.column({
+                                label: '',
+                                getImageBlock: function(functionDefinition) { return component.getMethodIcon() },
+                                imageWidth: 16,
+                                imageHeight: 16,
+                            })
+
+                            this.column({
+                                getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionName() },
+                            })
                         })
 
-                        this.model( item.getClassMethodsModel() )
-
-                        this.column({
-                            label: '',
-                            getImageBlock: function(functionDefinition) { return component.getMethodIcon() },
-                            imageWidth: 16,
-                            imageHeight: 16,
+                        this.text({
+                            model: classEditionModel.getSelectedMethodSourceCodeModel(),
+                            splitProportion: 1.0 / 2,
                         })
 
-                        this.column({
-                            label: 'Methods',
-                            getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionName() },
-                        })
-                    })
-
-                    this.text({
-                        model: item.getSelectedMethodSourceCodeModel(),
-                        splitProportion: 1.0 / 2,
                     })
 
                 })
+
             })
 
         })

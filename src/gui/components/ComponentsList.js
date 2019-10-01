@@ -47,11 +47,10 @@ class ComponentsList {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().on('list-changed', this.onItemsListChanged.bind(this))
-
-        this.getModel().on('items-added', this.onItemsAdded.bind(this))
-        this.getModel().on('items-updated', this.onItemsUpdated.bind(this))
-        this.getModel().on('items-removed', this.onItemsRemoved.bind(this))
+        this.getModel().onListChanged( this.onItemsListChanged.bind(this) )
+        this.getModel().onItemsAdded( this.onItemsAdded.bind(this) )
+        this.getModel().onItemsUpdated( this.onItemsUpdated.bind(this) )
+        this.getModel().onItemsRemoved( this.onItemsRemoved.bind(this) )
     }
 
     onItemsListChanged() {

@@ -45,8 +45,7 @@ class StackTraceBrowserModel {
     }
 
     connectModels() {
-        this.framesStackModel.getSelectionModel().on(
-            'value-changed',
+        this.framesStackModel.onSelectionChanged(
             this.onStackFrameSelectionChanged.bind(this)
         )        
     }

@@ -76,8 +76,8 @@ class ChoicesTree {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getTreeModel().on('roots-changed', this.onChoicesChanged.bind(this))
-        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().getTreeModel().onRootsChanged( this.onChoicesChanged.bind(this) )
+        this.getModel().onSelectionChanged( this.onSelectedValueChanged.bind(this) )
     }
 
     onChoicesChanged() {

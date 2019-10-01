@@ -19,6 +19,8 @@
 
 ### O language
 
+- Implemented ObjectWithProps.propsAndValuesDo
+
 ## v0.6.0
 
 ### Sirens

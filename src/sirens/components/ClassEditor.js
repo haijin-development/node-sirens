@@ -94,18 +94,12 @@ class ClassEditor {
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
-                    title: 'Class editor',
+                    title: model.getSourceFilenameModel(),
                     width: 900,
                     height: 600,
                 })
 
                 this.verticalStack( function() {
-                    this.label({
-                        model: model.getSourceFilenameModel(),
-                        viewCustomAttributes: {
-                            packExpand: false,
-                        }
-                    })
 
                     this.component(
                         ClassEditorMenu.new({

@@ -1,14 +1,16 @@
 const Classification = require('../../o-language/classifications/Classification')
+const OInstance = require('../../o-language/classifications/OInstance')
 const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
 const ValueModelBehaviour = require('../models/ValueModelBehaviour')
 const ValueModel = require('../models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
+const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 
 class ComponentBehaviour {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childComponents', 'view', 'propModels']
+        this.instanceVariables = ['childComponents', 'view']
         this.assumes = [ObjectWithProps]
         this.expects = [ComponentBehaviourProtocol_Implementation]
     }
@@ -18,7 +20,6 @@ class ComponentBehaviour {
     afterInstantiation() {
         this.childComponents = []
         this.view = null
-        this.propModels = []
     }
 
     initialize(props = {}) {
@@ -30,6 +31,8 @@ class ComponentBehaviour {
 
         this.initializeProps()
 
+        this.initializePropModels()
+
         this.initializeModel()
 
         this.initializeView()
@@ -38,6 +41,23 @@ class ComponentBehaviour {
     }
 
     initializeProps() {
+    }
+
+    initializePropModels() {
+        this.propsAndValuesDo( (prop, value) => {
+            const isValueModel =
+                prop !== 'model' &&
+                OInstance.isOInstance( value ) &&
+                value.compliesWith( ValueModelProtocol )
+
+            if( isValueModel ) {
+                const propModel = value
+
+                propModel.onValueChanged( ({ newValue: newValue, oldValue: oldValue }) => {
+                    this.onPropValueChanged({ propName: prop, newValue: newValue, oldValue: oldValue })
+                })
+            }
+        })
     }
 
     initializeModel() {
@@ -65,12 +85,16 @@ class ComponentBehaviour {
             const propValue = propsToApply[style]
 
             if( propValue !== undefined ) {
-                this.applyViewProp( style, propValue )
+                this.applyViewProp({ prop: style, value: propValue })
             }
         })
     }
 
-    applyViewProp(propName, propValue) {
+    applyViewProp({ prop: propName, value: propValue }) {
+        if ( OInstance.isOInstance( propValue ) && propValue.compliesWith( ValueModelProtocol ) ) {
+            propValue = propValue.getValue()
+        }
+
         const setter = 'set' + propName.charAt(0).toUpperCase() + propName.slice(1)
 
         if(this.view[setter] === undefined) {
@@ -80,6 +104,10 @@ class ComponentBehaviour {
         }
 
         this.view[setter](propValue)
+    }
+
+    onPropValueChanged({ propName: propName, newValue: newValue, oldValue: oldValue }) {
+        this.applyViewProp({ prop: propName, value: newValue })
     }
 
     /// Accessing

@@ -205,6 +205,7 @@ describe('The Classification classification', () => {
             'getImplementedProtocols',
             'setImplementedProtocols',
             'implements',
+            'compliesWith',
         ])
     })
 
@@ -254,6 +255,7 @@ describe('The OInstance classification', () => {
             'initialize',
             'isBehavingAs',
             'respondsTo',
+            'compliesWith',
             'behaveAs',
             'pushBehaviour',
             'dropBehaviour',

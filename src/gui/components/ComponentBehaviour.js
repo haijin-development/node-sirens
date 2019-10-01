@@ -8,7 +8,7 @@ class ComponentBehaviour {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childComponents', 'view']
+        this.instanceVariables = ['childComponents', 'view', 'propModels']
         this.assumes = [ObjectWithProps]
         this.expects = [ComponentBehaviourProtocol_Implementation]
     }
@@ -18,6 +18,7 @@ class ComponentBehaviour {
     afterInstantiation() {
         this.childComponents = []
         this.view = null
+        this.propModels = []
     }
 
     initialize(props = {}) {

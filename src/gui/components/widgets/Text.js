@@ -52,7 +52,7 @@ class Text {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().on('value-changed', this.onValueChanged.bind(this))
+        this.getModel().onValueChanged( this.onValueChanged.bind(this) )
     }
 
     /*

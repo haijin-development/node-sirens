@@ -60,6 +60,38 @@ class ChoiceModel {
 
         return this.selectionModel.setValue(item)
     }
+
+    /// Events
+
+    onChoicesChanged(closure) {
+        this.listModel.onListChanged(closure)
+
+        return this
+    }
+
+    onChoicesAdded(closure) {
+        this.listModel.onItemsAdded(closure)
+
+        return this
+    }
+
+    onChoicesUpdated(closure) {
+        this.listModel.onItemsUpdated(closure)
+
+        return this
+    }
+
+    onChoicesRemoved(closure) {
+        this.listModel.onItemsRemoved(closure)
+
+        return this
+    }
+
+    onSelectionChanged(closure) {
+        this.selectionModel.onValueChanged(closure)
+
+        return this
+    }
 }
 
 module.exports = Classification.define(ChoiceModel)

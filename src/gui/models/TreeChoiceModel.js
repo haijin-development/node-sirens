@@ -144,6 +144,14 @@ class TreeChoiceModel {
     hasSelection() {
         return this.selectionModel.value != undefined && this.selectionModel.value.length > 0
     }
+
+    /// Events
+
+    onSelectionChanged(closure) {
+        this.selectionModel.onValueChanged(closure)
+
+        return this
+    }
 }
 
 module.exports = Classification.define(TreeChoiceModel)

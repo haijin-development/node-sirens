@@ -35,7 +35,7 @@ describe('When using a ValueModel', () => {
 
             const model = ValueModel.new()
 
-            model.on('value-changed', (event) => {
+            model.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .be .null

@@ -83,8 +83,7 @@ class ClassEditionModel {
     /// Events
 
     connectModels() {
-        this.classMethodsModel.getSelectionModel().on(
-            'value-changed',
+        this.classMethodsModel.onSelectionChanged(
             this.onSelectedMethodChanged.bind(this)
         )
     }

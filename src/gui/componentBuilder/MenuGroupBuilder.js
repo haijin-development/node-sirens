@@ -1,6 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const WidgetBuilder = require('./WidgetBuilder')
 const MenuItem = require('../components/menus/MenuItem')
+const MenuItemSeparator = require('../components/menus/MenuItemSeparator')
 const MenuGroup = require('../components/menus/MenuGroup')
 
 class MenuGroupBuilder {
@@ -34,7 +35,9 @@ class MenuGroupBuilder {
 
         const label = this.getProps().label
 
-        const menuGroup = MenuGroup.new({ label: label })
+        const menuGroup = MenuGroup.new({
+            label: label
+        })
 
         menuGroup.addAllChildrenComponents( this.menuItems )
 
@@ -42,9 +45,19 @@ class MenuGroupBuilder {
     }
 
     item({label: label, enabled: enabled, action: action}) {
-        const menuItem = MenuItem.new({ label: label, enabled: enabled, action: action })
+        const menuItem = MenuItem.new({
+            label: label,
+            enabled: enabled,
+            action: action
+        })
 
-        this.menuItems.push(menuItem)
+        this.menuItems.push( menuItem )
+    }
+
+    separator() {
+        const menuItemSeparator = MenuItemSeparator.new()
+
+        this.menuItems.push( menuItemSeparator )
     }
 }
 

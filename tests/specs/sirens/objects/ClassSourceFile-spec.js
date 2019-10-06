@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const ClassSourceFile = require('../../../../src/sirens/objects/ClassSourceFile')
-const ClassDefinition = require('../../../../src/sirens/objects/js-statements/ClassDefinition')
+const ClassDefinition = require('../../../../src/sirens/objects/source-code/ClassDefinition')
 
 const fileContents = '' +
 `const path = require('path')
@@ -29,7 +29,7 @@ const sourceFile = ClassSourceFile.new({ filepath: filename })
 
 describe('When using a ClassSourceFile', () => {
     it('gets the class footer', () => {
-        const header = sourceFile.getFooterDefinition()
+        const header = sourceFile.getFooter()
 
         const sourceCode = header.getSourceCode({ cr: "\n" })
 

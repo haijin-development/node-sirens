@@ -10,7 +10,7 @@ class GtkView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childViews', 'viewCustomAttributes', 'parentHandleOwnerView']
+        this.instanceVariables = ['childViews', 'viewAttributes', 'parentHandleOwnerView']
         this.expects = [GtkViewProtocol_Implementation]
     }
 
@@ -20,8 +20,11 @@ class GtkView {
         return [
             'width', 'height',
             'backgroundColor', 'foregroundColor',
+            'alignHorizontal', 'alignVertical',
+            'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
+            'marginHorizontal', 'marginVertical',
             'populatePopupMenuBlock',
-            'viewCustomAttributes'
+            'viewAttributes'
         ]
     }
 
@@ -29,7 +32,7 @@ class GtkView {
 
     afterInstantiation() {
         this.childViews = []
-        this.viewCustomAttributes = []
+        this.viewAttributes = []
     }
 
     addChildView(childView) {
@@ -84,6 +87,10 @@ class GtkView {
         return this.parentHandleOwnerView
     }
 
+    getIndexOfChildView(childView) {
+        return this.childViews.indexOf( childView )
+    }
+
     /// Styles
 
     setWidth(value) {
@@ -110,18 +117,112 @@ class GtkView {
         return this.getMainHandle().getSizeRequest().height
     }
 
+    setAlignHorizontal(alignment) {
+        let align
+
+        switch( alignment ) {
+            case 'begining':
+                align = Gtk.Align.START
+                break
+
+            case 'end':
+                align = Gtk.Align.END
+                break
+
+            case 'center':
+                align = Gtk.Align.CENTER
+                break
+
+            case 'baseline':
+                align = Gtk.Align.BASELINE
+                break
+
+            case 'fill':
+                align = Gtk.Align.FILL
+                break
+
+            default:
+                throw new Error(`Uknown align value: '${alignment}'.`)
+                break
+        }
+
+        this.getMainHandle().setHalign(align)
+
+        return this
+    }
+
+    setAlignVertical(alignment) {
+        let align
+
+        switch( alignment ) {
+            case 'begining':
+                align = Gtk.Align.START
+                break
+
+            case 'end':
+                align = Gtk.Align.END
+                break
+
+            case 'center':
+                align = Gtk.Align.CENTER
+                break
+
+            case 'baseline':
+                align = Gtk.Align.BASELINE
+                break
+
+            case 'fill':
+                align = Gtk.Align.FILL
+                break
+
+            default:
+                throw new Error(`Uknown align value: '${alignment}'.`)
+                break
+        }
+
+        this.getMainHandle().setValign(align)
+
+        return this
+    }
+
+    setMarginLeft(margin) {
+        this.getMainHandle().setMarginLeft(margin)
+    }
+
+    setMarginRight(margin) {
+        this.getMainHandle().setMarginRight(margin)
+    }
+
+    setMarginTop(margin) {
+        this.getMainHandle().setMarginTop(margin)
+    }
+
+    setMarginBottom(margin) {
+        this.getMainHandle().setMarginBottom(margin)
+    }
+
+    setMarginHorizontal(margin) {
+        this.getMainHandle().setMarginLeft(margin)
+        this.getMainHandle().setMarginRight(margin)
+    }
+
+    setMarginVertical(margin) {
+        this.getMainHandle().setMarginTop(margin)
+        this.getMainHandle().setMarginBottom(margin)
+    }
+
     /// View custom attributes
 
-    setViewCustomAttributes(value) {
-        this.viewCustomAttributes = value
+    setViewAttributes(value) {
+        this.viewAttributes = value
     }
 
-    getViewCustomAttributes() {
-        return this.viewCustomAttributes
+    getviewAttributes() {
+        return this.viewAttributes
     }
 
-    getViewCustomAttribute({ at: attributeName, ifAbsent: absentValue }) {
-        const value = this.viewCustomAttributes[attributeName]
+    getViewAttribute({ at: attributeName, ifAbsent: absentValue }) {
+        const value = this.viewAttributes[attributeName]
 
         return value !== undefined ? value : absentValue
     }

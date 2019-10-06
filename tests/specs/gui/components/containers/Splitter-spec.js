@@ -21,7 +21,7 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.5,
+                        viewAttributes: { splitProportion: 0.5 },
                     })
                 })
             })
@@ -39,11 +39,11 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.5,
+                        viewAttributes: { splitProportion: 0.5 },
                     })
 
                     this.label({
-                        splitProportion: 0.5,
+                        viewAttributes: { splitProportion: 0.5 },
                     })
                 })
             })
@@ -62,15 +62,15 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.3,
+                        viewAttributes: { splitProportion: 0.3 },
                     })
 
                     this.label({
-                        splitProportion: 0.3,
+                        viewAttributes: { splitProportion: 0.3 },
                     })
 
                     this.label({
-                        splitProportion: 0.3,
+                        viewAttributes: { splitProportion: 0.3 },
                     })
                 })
             })
@@ -90,19 +90,19 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
                 })
             })
@@ -133,7 +133,7 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
                 })
             })
@@ -151,11 +151,11 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
                 })
             })
@@ -174,15 +174,15 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
                 })
             })
@@ -202,19 +202,19 @@ describe('When using a Splitter', () => {
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
 
                     this.label({
-                        splitProportion: 0.25,
+                        viewAttributes: { splitProportion: 0.25 },
                     })
                 })
             })

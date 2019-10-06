@@ -94,7 +94,7 @@ node_modules/.bin/classEditor [javascript-filename.js]
 
 ![Gtk browser](./docs/browsing-object.gif)
 
-![Class editor](./docs/editing-class.gif)
+![Class documentation browser](./docs/browsing-class-documentation.gif)
 
 
 ### Pre-requisites

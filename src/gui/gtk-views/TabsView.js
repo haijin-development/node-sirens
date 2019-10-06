@@ -1,20 +1,14 @@
+const Gtk = require('node-gtk').require('Gtk', '3.0')
+const GtkPositions = require('./constants/GtkPositions')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
-const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
-
-const tabPositions = {
-    left: Gtk.PositionType.LEFT,
-    right: Gtk.PositionType.RIGHT,
-    top: Gtk.PositionType.TOP,
-    bottom: Gtk.PositionType.BOTTOM,
-}
 
 class TabsView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['notebook']
+        this.instanceVariables = ['notebook', 'tabLabels']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -31,6 +25,8 @@ class TabsView {
 
     initializeHandles() {
         this.notebook = new Gtk.Notebook()
+
+        this.tabLabels = []
     }
 
     /// Accessing
@@ -42,6 +38,8 @@ class TabsView {
     /// Styles
 
     setTabLabelAt({index: index, text: text}) {
+        this.tabLabels[index] = text
+
         const pageHandle = this.notebook.getChildren()[index]
 
         this.notebook.setTabLabelText(pageHandle, text)
@@ -54,7 +52,7 @@ class TabsView {
     }
 
     setAligment(aligment) {
-        const tabPos = tabPositions[ aligment ]
+        const tabPos = GtkPositions[ aligment ]
 
         this.notebook.setTabPos(tabPos)
     }
@@ -99,7 +97,7 @@ class TabsView {
 
         let tabPageIndex = this.notebook.getChildren().length - 1
 
-        const tabLabel = childView.getViewCustomAttribute({ at: 'tabLabel' })
+        const tabLabel = this.tabLabels[ tabPageIndex ]
 
         this.setTabLabelAt({
             index: tabPageIndex,
@@ -117,7 +115,7 @@ class TabsView {
     }
 
     ensureFixedPosition(childView) {
-        let tabFixedPosition = childView.getViewCustomAttribute({ at: 'tabFixedPosition' })
+        let tabFixedPosition = childView.getViewAttribute({ at: 'tabFixedPosition' })
 
         if( tabFixedPosition === undefined ) { return }
 
@@ -126,6 +124,30 @@ class TabsView {
         }
 
         this.notebook.reorderChild( childView.getMainHandle(), tabFixedPosition )
+    }
+
+    /// Child views
+
+    addChildView(childView) {
+        this.tabLabels.push( childView.getLabel() )
+
+        this.previousClassificationDo( () => {
+            this.addChildView( childView )
+        })
+    }
+
+    removeChildView(childView) {
+        const index = this.getIndexOfChildView( childView )
+
+        if( index < 0 ) {
+            throw new Error(`TabsView childView not found.`)
+        }
+
+        this.tabLabels = this.tabLabels.splice( index, 1 )
+
+        this.previousClassificationDo( () => {
+            this.removeChildView( childView )
+        })
     }
 }
 

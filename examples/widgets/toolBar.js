@@ -4,7 +4,7 @@ const Component = require('../../src/gui/components/Component')
 const ComponentProtocol_Implementation = require('../../src/gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../src/gui/protocols/ComponentProtocol')
 const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
-const GtkIcons = require('../../src/gui/gtk-views/GtkIcons')
+const GtkIcons = require('../../src/gui/gtk-views/constants/GtkIcons')
 
 class CustomComponent {
     /// Definition
@@ -41,14 +41,14 @@ class CustomComponent {
                     this.toolBar( function() {
 
                         this.styles({
-                            viewCustomAttributes: {
-                                packExpand: false,
+                            viewAttributes: {
+                                stackSize: 'fixed',
                             }
                         })
 
                         this.item({
                             label: 'Open file...',
-                            icon: GtkIcons.openFile,
+                            icon: GtkIcons.open,
                             tooltip: 'Opens a file',
                             enabled: true,
                             action: component.openFile.bind(component),
@@ -58,7 +58,7 @@ class CustomComponent {
 
                         this.item({
                             label: 'Save file',
-                            icon: GtkIcons.saveFile,
+                            icon: GtkIcons.save,
                             tooltip: 'Saves the file',
                             enabled: true,
                             action: component.createFile.bind(component),

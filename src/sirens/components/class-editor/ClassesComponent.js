@@ -3,6 +3,10 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const ComponentsList = require('../../../gui/components/ComponentsList')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ListModelComponentProtocol_Implementation = require('../../../gui/protocols/ListModelComponentProtocol_Implementation')
+const SingleClassMenu = require('./SingleClassMenu')
+const FileFooterComponent = require('./FileFooterComponent')
+const Sirens = require('../../../Sirens')
+const Resource = require('../../objects/Resource')
 
 class ClassesComponent {
     /// Definition
@@ -16,62 +20,103 @@ class ClassesComponent {
         ]
     }
 
-    /// Icons
+    /// Actions
 
-    getMethodIcon() {
-        return path.resolve( __dirname + '/../../../../resources/icons/function.png' )
+    openDocumentationBrowser(classEditionModel) {
+        const classDefinition = classEditionModel.getClassDefinition()
+
+        Sirens.browseClassDocumentation({ classDefinition: classDefinition })
     }
 
     /// Rendering
 
-    renderItem({ item: item, index: index, renderer: renderer }) {
-        const className = item.getClassName()
+    renderWith(componentsRenderer) {
+        const footerModel = this.getProps().footerModel
+
+        const items = this.getModel().getList()
+
+        componentsRenderer.render( function(component) {
+
+            this.tabs({ aligment: 'left', id: 'tabs' }, function() {
+
+                items.forEach( (item, index) => {
+                    component.renderItem({ item: item, index: index, renderer: this })
+                })
+
+                this.tabPage({ label: 'Footer', fixedPosition: -1 }, function() {
+
+                    this.component(
+                        FileFooterComponent.new({
+                            model: footerModel,
+                        })
+                    )
+                })
+
+            })
+
+        })
+    }
+
+    renderItem({ item: classEditionModel, index: index, renderer: renderer }) {
+        const className = classEditionModel.getClassName()
 
         const component = this
-
-        renderer.behaveAsTabsPageBuilder()
 
         renderer.bindYourself( function() {
 
             this.tabPage({ label: 'Header' }, function() {
                 this.text({
-                    model: item.getHeaderSourceCodeModel(),
-                    splitProportion: 1.0 / 2,
+                    model: classEditionModel.getHeaderSourceCodeModel(),
+                    viewAttributes: { splitProportion: 1.0 / 2 },
                 })
             })
 
             this.tabPage({ label: className }, function() {
 
-                this.verticalSplitter( function() {
+                this.verticalStack( function() {
 
-                    this.model( item.getSelectedMethodSourceCodeModel() )
+                    this.verticalSplitter( function() {
 
-                    this.listChoice( function() {
-                        this.styles({
-                            splitProportion: 1.0 / 2
+                        this.model( classEditionModel.getSelectedMethodSourceCodeModel() )
+
+                        this.listChoice( function() {
+
+                            this.model( classEditionModel.getClassMethodsModel() )
+
+                            this.styles({
+                                viewAttributes: { splitProportion: 1.0 / 2 },
+                                showHeaders: false,
+                            })
+
+                            this.column({
+                                label: '',
+                                getImageBlock: function(functionDefinition) { return Resource.image.method },
+                                imageWidth: 24,
+                                imageHeight: 24,
+                            })
+
+                            this.column({
+                                getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                            })
                         })
 
-                        this.model( item.getClassMethodsModel() )
-
-                        this.column({
-                            label: '',
-                            getImageBlock: function(functionDefinition) { return component.getMethodIcon() },
-                            imageWidth: 16,
-                            imageHeight: 16,
+                        this.text({
+                            model: classEditionModel.getSelectedMethodSourceCodeModel(),
+                            viewAttributes: { splitProportion: 1.0 / 2 },
                         })
 
-                        this.column({
-                            label: 'Methods',
-                            getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionName() },
-                        })
                     })
 
-                    this.text({
-                        model: item.getSelectedMethodSourceCodeModel(),
-                        splitProportion: 1.0 / 2,
-                    })
+                    this.component(
+                        SingleClassMenu.new({
+                            openDocumentationBrowser: () => {
+                                component.openDocumentationBrowser(classEditionModel)
+                            }
+                        })
+                    )
 
                 })
+
             })
 
         })

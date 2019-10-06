@@ -25,7 +25,7 @@ class Text {
 
     createView() {
         return TextView.new({
-            onTextChanged: (text) => this.onTextChanged(text)
+            onTextChanged: (text) => { this.onTextChanged(text) },
         })
     }
 
@@ -52,7 +52,7 @@ class Text {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().on('value-changed', this.onValueChanged.bind(this))
+        this.getModel().onValueChanged( this.onValueChanged.bind(this) )
     }
 
     /*

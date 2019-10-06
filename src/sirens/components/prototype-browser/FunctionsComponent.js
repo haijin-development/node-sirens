@@ -32,32 +32,32 @@ class FunctionsComponent {
 
                 this.horizontalStack( function() {
                     this.styles({
-                        viewCustomAttributes: {
-                            packExpand: false,
+                        viewAttributes: {
+                            stackSize: 'fixed',
                         },
                     })
 
                     this.checkBox({
                         model: prototypesModel.getShowInheritedModel(),
                         label: 'Show inherited',
-                        viewCustomAttributes: {
-                            packExpand: false,
+                        viewAttributes: {
+                            stackSize: 'fixed',
                         },
                     })
 
                     this.checkBox({
                         model: prototypesModel.getShowFunctionsModel(),
                         label: 'Show functions',
-                        viewCustomAttributes: {
-                            packExpand: false,
+                        viewAttributes: {
+                            stackSize: 'fixed',
                         },
                     })
 
                     this.checkBox({
                         model: prototypesModel.getShowPropsModel(),
                         label: 'Show props',
-                        viewCustomAttributes: {
-                            packExpand: false,
+                        viewAttributes: {
+                            stackSize: 'fixed',
                         },
                     })
                 })
@@ -72,8 +72,8 @@ class FunctionsComponent {
                     this.column({
                         label: '',
                         getImageBlock: function(objectProperty) { return objectProperty.icon() },
-                        imageWidth: 16,
-                        imageHeight: 16,
+                        imageWidth: 24,
+                        imageHeight: 24,
                     })
 
                     this.column({

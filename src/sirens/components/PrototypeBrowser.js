@@ -1,4 +1,3 @@
-const path = require('path')
 const Classification = require('../../o-language/classifications/Classification')
 const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
 const Component = require('../../gui/components/Component')
@@ -7,6 +6,7 @@ const PrototypesBrowserModel = require('../models/PrototypesBrowserModel')
 const FunctionsComponent = require('./prototype-browser/FunctionsComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+const Resource = require('../objects/Resource')
 
 class PrototypeBrowser {
     /// Definition
@@ -37,7 +37,7 @@ class PrototypeBrowser {
     /// Icons
 
     getPrototypeIcon() {
-        return path.resolve( __dirname + '/../../../resources/icons/prototype.png' )
+        return Resource.image.prototype
     }
 
     /// Building
@@ -57,14 +57,14 @@ class PrototypeBrowser {
 
                     this.horizontalSplitter( function() {
                         this.styles({
-                            splitProportion: 2.0/3.0,
+                            viewAttributes: { splitProportion: 2.0/3.0 },
                         })
 
                         this.listChoice( function() {
                             this.model( prototypesModel.getPrototypesModel() )
 
                             this.styles({
-                                splitProportion: 1.0/4.0,
+                                viewAttributes: { splitProportion: 1.0/4.0 },
                             })
 
                             this.handlers({
@@ -74,8 +74,8 @@ class PrototypeBrowser {
                             this.column({
                                 label: '',
                                 getImageBlock: function(object) { return component.getPrototypeIcon() },
-                                imageWidth: 16,
-                                imageHeight: 16,
+                                imageWidth: 24,
+                                imageHeight: 24,
                             })
 
                             this.column({
@@ -99,13 +99,13 @@ class PrototypeBrowser {
                         this.component(
                             FunctionsComponent.new({
                                 model: prototypesModel,
-                                splitProportion: 3.0/4.0,
+                                viewAttributes: { splitProportion: 3.0/4.0 },
                             })
                         )
                     })
 
                     this.text({
-                        splitProportion: 1.0/3.0,
+                        viewAttributes: { splitProportion: 1.0/3.0 },
                         model: prototypesModel.getSelectedPropDescriptionModel(),
                     })
                 })

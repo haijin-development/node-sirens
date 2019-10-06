@@ -2,12 +2,14 @@ const Classification = require('../../o-language/classifications/Classification'
 const ColumnsBuilder = require('./ColumnsBuilder')
 const MenuBuilder = require('./MenuBuilder')
 const ToolBarBuilder = require('./ToolBarBuilder')
-const TabPagesBuilder = require('./TabPagesBuilder')
 
 const Window = require('../components/containers/Window')
+const Container = require('../components/containers/Container')
 const Stack = require('../components/containers/Stack')
 const Splitter = require('../components/containers/Splitter')
 const Tabs = require('../components/containers/Tabs')
+const TabPage = require('../components/containers/TabPage')
+const Separator = require('../components/widgets/Separator')
 const ChoicesList = require('../components/widgets/ChoicesList')
 const ChoicesTree = require('../components/widgets/ChoicesTree')
 const Label = require('../components/widgets/Label')
@@ -15,6 +17,8 @@ const Text = require('../components/widgets/Text')
 const CheckBox = require('../components/widgets/CheckBox')
 const TextButton = require('../components/widgets/TextButton')
 const RadioButton = require('../components/widgets/RadioButton')
+const FileImage = require('../components/widgets/FileImage')
+const StockIcon = require('../components/widgets/StockIcon')
 
 const WidgetBuilder = require('./WidgetBuilder')
 
@@ -68,6 +72,20 @@ class ContainerWidgetBuilder {
         window.addAllChildrenComponents( builder.getChildComponents() )
 
         this.childComponents.push(window)
+    }
+
+    container(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const container = Container.new( builder.getProps() )
+
+        container.addAllChildrenComponents( builder.getChildComponents() )
+
+        this.childComponents.push(container)
     }
 
     verticalStack(props, closure) {
@@ -138,9 +156,7 @@ class ContainerWidgetBuilder {
         [props, closure] = this.normalizeArguments(props, closure)
 
         const builder = this.thisClassification().new(props).yourself( (builder) => {
-                builder
-                    .behaveAs(TabPagesBuilder)
-                    .build(closure)
+                builder.build(closure)
             })
 
         const tabs = Tabs.new( props )
@@ -150,12 +166,49 @@ class ContainerWidgetBuilder {
         this.childComponents.push(tabs)
     }
 
-    behaveAsTabsPageBuilder() {
-        this.behaveAs(TabPagesBuilder)
+    tabPage(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
 
-        return this
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const tabPage = TabPage.new( props )
+
+        tabPage.addAllChildrenComponents( builder.getChildComponents() )
+
+        this.childComponents.push(tabPage)
     }
 
+    verticalSeparator(props) {
+        const defaultProps = {
+            viewAttributes: {
+                stackSize: 'fixed',
+            }
+        }
+
+        props = Object.assign(defaultProps, props)
+        props = Object.assign(props, { orientation: 'vertical' })
+
+        const separator = Separator.new(props)
+
+        this.childComponents.push(separator)
+    }
+
+    horizontalSeparator() {
+        const defaultProps = {
+            viewAttributes: {
+                stackSize: 'fixed',
+            }
+        }
+
+        props = Object.assign(defaultProps, props)
+        props = Object.assign(props, { orientation: 'horizontal' })
+
+        const separator = Separator.new(props)
+
+        this.childComponents.push(separator)
+    }
 
     listChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -255,6 +308,30 @@ class ContainerWidgetBuilder {
         const toolBar = ToolBarBuilder.new(props).createFromClosure(closure)
 
         this.childComponents.push(toolBar)
+    }
+
+    fileImage(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const image = FileImage.new( builder.getProps() )
+
+        this.childComponents.push(image)
+    }
+
+    stockIcon(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const image = StockIcon.new( builder.getProps() )
+
+        this.childComponents.push(image)
     }
 }
 

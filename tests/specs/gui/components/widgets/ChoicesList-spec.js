@@ -107,7 +107,7 @@ describe('When using a ChoicesList', () => {
                 showHeaders: false
             })
 
-            expect(this.list.getView().getShowHeaders()) .to .eql(true)
+            expect(this.list.getView().getShowHeaders()) .to .eql(false)
         })
 
         it('sets and gets the clickableHeaders', () => {

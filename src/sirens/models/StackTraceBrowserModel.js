@@ -3,7 +3,7 @@ const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
-const FunctionDefinition = require('../objects/js-statements/FunctionDefinition')
+const FunctionDefinition = require('../objects/source-code/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
 
 class StackTraceBrowserModel {
@@ -45,8 +45,7 @@ class StackTraceBrowserModel {
     }
 
     connectModels() {
-        this.framesStackModel.getSelectionModel().on(
-            'value-changed',
+        this.framesStackModel.onSelectionChanged(
             this.onStackFrameSelectionChanged.bind(this)
         )        
     }
@@ -78,7 +77,7 @@ class StackTraceBrowserModel {
     getFunctionSourceCode(functionDefinition) {
         if( functionDefinition === undefined ) { return '' }
 
-        return functionDefinition.getSourceCode()
+        return functionDefinition.getFunctionSourceCode()
     }
 
     /// Events

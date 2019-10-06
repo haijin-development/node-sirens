@@ -5,7 +5,8 @@ const esprima = require('esprima')
 const splitLines = require('split-lines')
 const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
-const AbsentFunctionDefinition = require('./js-statements/AbsentFunctionDefinition')
+const ParseTreeFlattener = require('./parsers/ParseTreeFlattener')
+const AbsentFunction = require('./source-code/AbsentFunction')
 const StringStream = require('../../o-language/classifications/StringStream')
 
 /*
@@ -56,9 +57,66 @@ class SourceFile {
     getParsedContents() {
         if( this.parseTree === undefined ) {
             this.parseTree = this.parseFileContents()
+        
+            this.integrateCommentsToExpressions()
         }
 
         return this.parseTree
+    }
+
+    integrateCommentsToExpressions() {
+        if( this.parseTree === null ) { return }
+
+        const expressionsFlattener = ParseTreeFlattener.new()
+
+        const expressions = expressionsFlattener.flattenExpressionsIn({
+            treeNode: this.parseTree
+        })
+
+        const expressionsWithComments = expressions.concat( this.parseTree.comments )
+
+        expressionsWithComments.sort( (exp1, exp2) => {
+            if( exp1.loc.start.line < exp2.loc.start.line ) { return -1 }
+
+            if( exp1.loc.start.line > exp2.loc.start.line ) { return 1 }
+
+            if( exp1.loc.start.line === exp2.loc.start.line ) {
+                if( exp1.loc.start.column === exp2.loc.start.column ) { return 0 }
+                if( exp1.loc.start.column < exp2.loc.start.column ) { return -1 }
+                if( exp1.loc.start.column > exp2.loc.start.column ) { return 1 }
+            }
+        });
+
+        for(let i = 1; i < expressionsWithComments.length; i++ ) {
+            const currentExpression = expressionsWithComments[ i ]
+
+            if(
+                currentExpression.type === 'ClassDeclaration'
+                ||
+                currentExpression.type === 'MethodDefinition'
+              )
+              {
+
+                const previousExpression = expressionsWithComments[ i - 1 ]
+                const previousPreviousExpression = expressionsWithComments[ i - 2 ]
+
+                if( previousExpression.type === 'Block' ) {
+                    currentExpression.comment = previousExpression
+                }
+
+                // Sometimes esprima generates an additional Indentifier node before the Declaration:
+                //      Identifier {
+                //          type: 'Identifier',
+                //          name: 'constructor',
+                if(
+                    previousPreviousExpression.type === 'Block'
+                    &&
+                    previousExpression.type === 'Identifier'
+                  ) {
+                    currentExpression.comment = previousPreviousExpression
+                }
+            }
+        }
     }
 
     /*
@@ -124,7 +182,7 @@ class SourceFile {
     }
 
     newAbsentFunctionDefinitionAt(line, column) {
-        return AbsentFunctionDefinition.new({
+        return AbsentFunction.new({
                 sourceFile: this,
                 line: line,
                 column: column
@@ -230,7 +288,7 @@ class SourceFile {
         const parsingOptions = {
             loc: true,
             comment: true,
-            tokens: true,
+            tokens: false,
             tolerant: true,
             jsx: true,
         }

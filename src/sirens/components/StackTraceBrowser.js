@@ -47,14 +47,14 @@ class StackTraceBrowser {
                     this.horizontalSplitter( function() {
 
                         this.styles({
-                            splitProportion: 1.0/2.0,
+                            viewAttributes: { splitProportion: 1.0/2.0 },
                         })
 
                         this.listChoice( function() {
                             this.model( browserModel.getFramesStackModel() )
 
                             this.styles({
-                                splitProportion: 2.0/3.0,
+                                viewAttributes: { splitProportion: 2.0/3.0 },
                                 showHeaders: true,
                                 clickableHeaders: false,
                             })
@@ -78,14 +78,14 @@ class StackTraceBrowser {
                         this.component(
                             ObjectPropertiesComponent.new({
                                 model: browserModel,
-                                splitProportion: 1.0/3.0,
+                                viewAttributes: { splitProportion: 1.0/3.0 },
                             })
                         )
 
                     })
 
                     this.text({
-                        splitProportion: 1.0/2.0,
+                        viewAttributes: { splitProportion: 1.0/2.0 },
                         model: browserModel.getFunctionSourceCodeModel(),
                     })
 

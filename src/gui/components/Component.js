@@ -29,14 +29,25 @@ class Component {
             this.initialize(props)
         })
 
+        this.reRenderWhen()
+
         this.build()
+    }
+
+    reRenderWhen() {
     }
 
     defaultModel() {
         return undefined
     }
 
-    build(props) {
+    reRenderOnValueChangeOf(valueModel) {
+        valueModel.onValueChanged( () => {
+            this.reRender()
+        })
+    }
+
+    build() {
         const componentsRenderer = ComponentRenderer.new({ rootComponent: this })
 
         this.renderWith(componentsRenderer)
@@ -49,9 +60,18 @@ class Component {
     synchronizeViewFromModel() {
     }
 
+    /// Rendering
+
     renderWith(componentsRenderer) {
         throw Error(`The class ${this.constructor.name} must implement the method ::renderWith()`)
     }
+
+    reRender() {
+        this.removeAllChildrenComponents()
+
+        this.build()
+    }
+
 
     /// Accessing
 

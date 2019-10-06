@@ -1,8 +1,10 @@
 const Classification = require('../../o-language/classifications/Classification')
+const OInstance = require('../../o-language/classifications/OInstance')
 const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
 const ValueModelBehaviour = require('../models/ValueModelBehaviour')
 const ValueModel = require('../models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
+const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 
 class ComponentBehaviour {
     /// Definition
@@ -29,6 +31,8 @@ class ComponentBehaviour {
 
         this.initializeProps()
 
+        this.initializePropModels()
+
         this.initializeModel()
 
         this.initializeView()
@@ -37,6 +41,23 @@ class ComponentBehaviour {
     }
 
     initializeProps() {
+    }
+
+    initializePropModels() {
+        this.propsAndValuesDo( (prop, value) => {
+            const isValueModel =
+                prop !== 'model' &&
+                OInstance.isOInstance( value ) &&
+                value.compliesWith( ValueModelProtocol )
+
+            if( isValueModel ) {
+                const propModel = value
+
+                propModel.onValueChanged( ({ newValue: newValue, oldValue: oldValue }) => {
+                    this.onPropValueChanged({ propName: prop, newValue: newValue, oldValue: oldValue })
+                })
+            }
+        })
     }
 
     initializeModel() {
@@ -58,18 +79,22 @@ class ComponentBehaviour {
     }
 
     applyViewProps({ props: propsToApply }) {
-        const acceptedStyles = this.view.acceptedStyles()
+        for( const propName in propsToApply ) {
+            const value = propsToApply[propName]
 
-        acceptedStyles.forEach( (style) => {
-            const propValue = propsToApply[style]
-
-            if( propValue !== undefined ) {
-                this.applyViewProp( style, propValue )
-            }
-        })
+            this.applyViewProp({ prop: propName, value: value })
+        }
     }
 
-    applyViewProp(propName, propValue) {
+    applyViewProp({ prop: propName, value: propValue }) {
+        const acceptedStyles = this.view.acceptedStyles()
+
+        if( ! acceptedStyles.includes( propName ) ) { return }
+
+        if ( OInstance.isOInstance( propValue ) && propValue.compliesWith( ValueModelProtocol ) ) {
+            propValue = propValue.getValue()
+        }
+
         const setter = 'set' + propName.charAt(0).toUpperCase() + propName.slice(1)
 
         if(this.view[setter] === undefined) {
@@ -79,6 +104,10 @@ class ComponentBehaviour {
         }
 
         this.view[setter](propValue)
+    }
+
+    onPropValueChanged({ propName: propName, newValue: newValue, oldValue: oldValue }) {
+        this.applyViewProp({ prop: propName, value: newValue })
     }
 
     /// Accessing

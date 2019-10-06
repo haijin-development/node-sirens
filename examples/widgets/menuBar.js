@@ -52,8 +52,8 @@ class CustomComponent {
                     this.menuBar( function() {
 
                         this.styles({
-                            viewCustomAttributes: {
-                                packExpand: false,
+                            viewAttributes: {
+                                stackSize: 'fixed',
                             }
                         })
 

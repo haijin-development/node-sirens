@@ -38,6 +38,14 @@ class Sirens {
         })
     }
 
+    static browseClassDocumentation({ classDefinition: classDefinition }) {
+        this.do( () => {
+            const ClassDocumentationBrowser = require('./sirens/components/ClassDocumentationBrowser')
+
+            ClassDocumentationBrowser.openOn({ classDefinition: classDefinition })
+        })
+    }
+
     static do(closure) {
         if(this.gtkIsRunningTheMainLoop === true) {
             closure.call(this)

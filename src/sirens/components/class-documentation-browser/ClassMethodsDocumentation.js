@@ -62,7 +62,7 @@ class ClassMethodsDocumentation {
                     })
 
                     this.column({
-                        getTextBlock: function(functionDefinition) { return functionDefinition.getDeclarationString() },
+                        getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
                     })
                 })
 

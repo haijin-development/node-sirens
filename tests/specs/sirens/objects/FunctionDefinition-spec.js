@@ -69,7 +69,7 @@ describe('When using a Function', () => {
 `getName() {
         return this.name
     }`
-        expect( functionDefinitions[0].getSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
+        expect( functionDefinitions[0].getFunctionSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
     })
 
     it('gets the formatted source code', () => {
@@ -77,6 +77,6 @@ describe('When using a Function', () => {
 `getName() {
     return this.name
 }`
-        expect( functionDefinitions[0].getFormattedSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
+        expect( functionDefinitions[0].getFunctionFormattedSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
     })
 })

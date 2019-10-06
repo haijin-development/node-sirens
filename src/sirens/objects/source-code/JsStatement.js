@@ -23,6 +23,10 @@ class JsStatement {
 
         this.sourceFile = sourceFile
         this.parseNodes = parseNodes
+
+        if( this.parseNodes.length === 0 ) {
+            throw new Error(`JsStatement can not be empty. Use EmptyJsStatement instead.`)
+        }
     }
 
     /// Expression parts bulding
@@ -67,8 +71,8 @@ class JsStatement {
 
     /// Asking
 
-    isEmpty() {
-        return this.parseNodes.length === 0
+    isPresent() {
+        return true
     }
 
     /// Accessing

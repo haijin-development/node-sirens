@@ -19,6 +19,22 @@ class MethodDocumentationInstantiator {
 
         return methodDocumentation
     }
+
+    isDocumentationString({
+        string: string, ifTrue: validDocumentationClosure, ifFalse: invalidDocumentationClosure
+    }) {
+        try {
+
+            const documentation = this.fromString( string )
+
+            return validDocumentationClosure( documentation )
+
+        } catch( e ) {
+
+            return invalidDocumentationClosure()
+
+        }
+    }
 }
 
 MethodDocumentationInstantiator = Classification.define(MethodDocumentationInstantiator)

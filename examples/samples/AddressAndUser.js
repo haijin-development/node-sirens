@@ -1,5 +1,3 @@
-const path = require('path')
-
 /*
     This is a regular comment.
 */
@@ -33,5 +31,3 @@ class User {
     }
 }
 
-module.exports.Address = Address
-module.exports.User  = User

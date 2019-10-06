@@ -31,7 +31,7 @@ class MethodUnformattedComment {
         const method = model.getSelectedMethod()
 
         if( method !== null ) {
-            methodDeclaration = method.getDeclarationString()
+            methodDeclaration = method.getFunctionSignatureString()
 
             methodUnformattedComment = method.getComment().getString()
         }

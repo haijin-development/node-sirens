@@ -1,19 +1,15 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
+const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
-/*
- * The definition of a javascript function.
- *
- * It is implemented as a wrapper on a parse tree node.
- */
-class Function {
+class FunctionDeclaration {
 
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['name', 'params', 'comment']
+        this.instanceVariables = ['name', 'params']
         this.assumes = [JsStatement]
-        this.classificationBehaviours = [FunctionDefinitionBuilder]
+        this.implements = [JsStatementProtocol]
     }
 
     /// Initializing
@@ -28,7 +24,6 @@ class Function {
 
         this.name = name
         this.params = params
-        this.comment = this.buildComment()
     }
 
     /// Queyring
@@ -59,7 +54,7 @@ class Function {
         return flattenedParams
     }
 
-    getDeclarationString() {
+    getFunctionSignatureString() {
         const methodName = this.getName()
         const methodParams = this.getParams()
 
@@ -85,24 +80,6 @@ class Function {
 
         return methodText
     }
-
-    getComment() {
-        return this.comment
-    }
 }
 
-class FunctionDefinitionBuilder {
-
-    from({ file: file, line: line, column: column }) {
-        const SourceFile = require('../SourceFile')
-
-        const sourceFile = SourceFile.new({ filepath: file })
-
-        return sourceFile.getFunctionAt({ line: line, column: column })
-    }
-
-}
-
-FunctionDefinitionBuilder = Classification.define(FunctionDefinitionBuilder)
-
-module.exports = Classification.define(Function)
+module.exports = Classification.define(FunctionDeclaration)

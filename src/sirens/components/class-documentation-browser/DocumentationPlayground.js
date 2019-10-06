@@ -33,7 +33,7 @@ class DocumentationPlayground {
     }
 
     renderWith(componentsRenderer) {
-        const text = this.getProps().text
+        const text = "\n" + this.getProps().text + "\n"
 
         componentsRenderer.render( function(component) {
 

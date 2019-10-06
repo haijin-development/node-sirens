@@ -1,5 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
+const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 const SourceCodeText = require('../SourceCodeText')
 
 /*
@@ -13,6 +14,7 @@ class Comment {
     static definition() {
         this.instanceVariables = []
         this.assumes = [JsStatement]
+        this.implements = [JsStatementProtocol]
     }
 
     /// Initializing

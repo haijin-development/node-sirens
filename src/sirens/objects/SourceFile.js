@@ -90,11 +90,12 @@ class SourceFile {
         for(let i = 1; i < expressionsWithComments.length; i++ ) {
             const currentExpression = expressionsWithComments[ i ]
 
-            // Sometimes it generate an additional node before the definition:
-            //      Identifier {
-            //          type: 'Identifier',
-            //          name: 'constructor',
-            if( currentExpression.type === 'ClassDeclaration' || currentExpression.type === 'MethodDefinition') {
+            if(
+                currentExpression.type === 'ClassDeclaration'
+                ||
+                currentExpression.type === 'MethodDefinition'
+              )
+              {
 
                 const previousExpression = expressionsWithComments[ i - 1 ]
                 const previousPreviousExpression = expressionsWithComments[ i - 2 ]
@@ -103,7 +104,15 @@ class SourceFile {
                     currentExpression.comment = previousExpression
                 }
 
-                if( previousPreviousExpression.type === 'Block' && previousExpression.type === 'Identifier' ) {
+                // Sometimes esprima generates an additional Indentifier node before the Declaration:
+                //      Identifier {
+                //          type: 'Identifier',
+                //          name: 'constructor',
+                if(
+                    previousPreviousExpression.type === 'Block'
+                    &&
+                    previousExpression.type === 'Identifier'
+                  ) {
                     currentExpression.comment = previousPreviousExpression
                 }
             }

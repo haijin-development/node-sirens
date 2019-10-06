@@ -44,23 +44,6 @@ class ClassDocumentationBuilder {
         return esprima.parse( string, parsingOptions )
     }
 
-    collectClassDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
-        if( treeNode === null ) {
-            return []
-        }
-
-        this.collectedClassDefinitions = [] 
-
-        this.visit(treeNode)
-
-        return this.collectedClassDefinitions.map( (parseNode) => {
-                return ClassDefinition.new({
-                    sourceFile: sourceFile,
-                    parseNode: parseNode,
-                })
-            })
-    }
-
     visitCallExpression(callExpression) {
         const calledFunction = this.visit( callExpression.callee )
 

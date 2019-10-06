@@ -33,7 +33,7 @@ class MethodFormattedComment {
         let methodDeclaration = 'No method selected.'
 
         if( model.getSelectedMethod() !== null ) {
-            methodDeclaration = model.getSelectedMethod().getDeclarationString()
+            methodDeclaration = model.getSelectedMethod().getFunctionSignatureString()
         }
 
         const documentation = model.getSelectedMethodDocumentation()

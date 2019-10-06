@@ -1,6 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const SourceFile = require('./SourceFile')
 const SourceFileFooter = require('./source-code/SourceFileFooter')
+const EmptyJsStatement = require('./source-code/EmptyJsStatement')
 
 /*
  * A source file with a class definition.
@@ -21,8 +22,13 @@ class ClassSourceFile {
 
         })
 
-        this.classes = this.getClassDefinitions()
-        this.footer = this.buildFooter()
+        this.classes = []
+        this.footer = undefined
+
+        if( this.isJavascriptFile() ) {
+            this.classes = this.getClassDefinitions()
+            this.footer = this.buildFooter()
+        }
     }
 
     /// Acccessing
@@ -56,13 +62,28 @@ class ClassSourceFile {
 
         const lastClassDefinition = classDefinitions[ classDefinitions.length - 1 ]
 
-        const lastClassParseNode = lastClassDefinition.getParseNode()
+        const lastClassParseNode = lastClassDefinition.getLastNode()
 
         const footerStatements = this.getAllStatementsAfter({ parseNode: lastClassParseNode })
 
-        return SourceFileFooter.new({
+        if( footerStatements.length === 0 ) {
+            return this.newEmptyFooter({
+                endingLine: lastClassParseNode.loc.end.line,
+                endingColumn: lastClassParseNode.loc.end.column,
+            })
+        } else {
+            return SourceFileFooter.new({
+                sourceFile: this,
+                parseNodes: footerStatements,
+            })
+        }
+    }
+
+    newEmptyFooter({ endingLine: endingLine, endingColumn: endingColumn }) {
+        return EmptyJsStatement.new({
             sourceFile: this,
-            parseNodes: footerStatements,
+            lineNumber: endingLine,
+            columnNumber: endingColumn,
         })
     }
 }

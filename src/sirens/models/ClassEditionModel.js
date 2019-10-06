@@ -71,7 +71,7 @@ class ClassEditionModel {
     getMethodSourceCode(selectedMethod) {
         if( selectedMethod === undefined ) { return '' }
 
-        return selectedMethod.getFormattedSourceCode()
+        return selectedMethod.getFunctionFormattedSourceCode()
     }
 
     /// Events

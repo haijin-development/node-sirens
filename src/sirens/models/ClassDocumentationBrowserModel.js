@@ -73,16 +73,19 @@ class ClassDocumentationBrowserModel {
 
         const unformattedComment = this.getClassUnformattedComment()
 
-        try {
-            return ClassDocumentation.fromString( unformattedComment ).yourself( (documentation) => {
+        return ClassDocumentation.isDocumentationString({
+            string: unformattedComment,
+            ifTrue: (documentation) => {
                 documentation.setClassName( className )
-            })
-        } catch( e ) {
-            return ClassDocumentation.new().yourself( (documentation) => {
+                return documentation
+            },
+            ifFalse: () => {
+                const documentation = ClassDocumentation.new()
                 documentation.setClassName( className )
                 documentation.setDescription( unformattedComment )
-            })
-        }
+                return documentation
+            },
+        })
     }
 
 
@@ -105,18 +108,21 @@ class ClassDocumentationBrowserModel {
 
         const unformattedComment = method.getComment().getString()
 
-        try {
-            return MethodDocumentation.fromString( unformattedComment ).yourself( (documentation) => {
+        return MethodDocumentation.isDocumentationString({
+            string: unformattedComment,
+            ifTrue: (documentation) => {
                 documentation.setMethodName( method.getName() )
                 documentation.setMethodParams( method.getParams() )
-            })
-        } catch( e ) {
-            return MethodDocumentation.new().yourself( (documentation) => {
+                return documentation
+            },
+            ifFalse: () => {
+                const documentation = MethodDocumentation.new()
                 documentation.setMethodName( method.getName() )
                 documentation.setMethodParams( method.getParams() )
                 documentation.setDescription( unformattedComment )
-            })
-        }    
+                return documentation
+            },
+        })
     }
 
     /// Actions

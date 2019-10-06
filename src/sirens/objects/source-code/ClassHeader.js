@@ -1,5 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
+const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
 /*
  * The statements previous to a ClassDefinition.
@@ -12,17 +13,7 @@ class ClassHeader {
     static definition() {
         this.instanceVariables = []
         this.assumes = [JsStatement]
-    }
-
-    /// Initializing
-
-    initialize({ sourceFile: sourceFile, parseNodes: parseNodes }) {
-        this.previousClassificationDo( () => {
-            this.initialize({
-                sourceFile: sourceFile,
-                parseNodes: parseNodes
-            })
-        })
+        this.implements = [JsStatementProtocol]
     }
 }
 

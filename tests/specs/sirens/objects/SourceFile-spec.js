@@ -123,43 +123,43 @@ describe('When using a Function', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getStartingPosition().line) .to .equal(4)
-        expect(functions[1].getStartingPosition().line) .to .equal(9)
-        expect(functions[2].getStartingPosition().line) .to .equal(14)
+        expect(functions[0].getStartingLine()) .to .equal(4)
+        expect(functions[1].getStartingLine()) .to .equal(9)
+        expect(functions[2].getStartingLine()) .to .equal(14)
     })
 
     it('gets the starting column number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getStartingPosition().column) .to .equal(4)
-        expect(functions[1].getStartingPosition().column) .to .equal(0)
-        expect(functions[2].getStartingPosition().column) .to .equal(4)
+        expect(functions[0].getStartingColumn()) .to .equal(4)
+        expect(functions[1].getStartingColumn()) .to .equal(0)
+        expect(functions[2].getStartingColumn()) .to .equal(4)
     })
 
     it('gets the ending line number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getEndingPosition().line) .to .equal(6)
-        expect(functions[1].getEndingPosition().line) .to .equal(11)
-        expect(functions[2].getEndingPosition().line) .to .equal(16)
+        expect(functions[0].getEndingLine()) .to .equal(6)
+        expect(functions[1].getEndingLine()) .to .equal(11)
+        expect(functions[2].getEndingLine()) .to .equal(16)
     })
 
     it('gets the ending column number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getEndingPosition().column) .to .equal(5)
-        expect(functions[1].getEndingPosition().column) .to .equal(1)
-        expect(functions[2].getEndingPosition().column) .to .equal(5)
+        expect(functions[0].getEndingColumn()) .to .equal(5)
+        expect(functions[1].getEndingColumn()) .to .equal(1)
+        expect(functions[2].getEndingColumn()) .to .equal(5)
     })
 
     it('gets the original source code', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        let sourceCode = functions[0].getSourceCode({cr: "\n"})
+        let sourceCode = functions[0].getFunctionSourceCode({cr: "\n"})
 
         const exepctedSourceCode = `getName() {
         return this.name

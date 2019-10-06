@@ -1,7 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
-const FunctionDefinitionsCollector = require('../parsers/FunctionDefinitionsCollector')
-const ClassHeader = require('./ClassHeader')
+const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
 /*
  * The definition of a javascript class.
@@ -12,44 +11,29 @@ class ClassDefinition {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['header', 'comment', 'methods']
-        this.assumes = [JsStatement]
+        this.instanceVariables = ['header', 'comment', 'declaration']
+        this.assumes = []
+        this.implements = [JsStatementProtocol]
     }
 
     /// Initializing
 
-    initialize({ sourceFile: sourceFile, parseNode: parseNode }) {
+    initialize({ header: header, comment: comment, declaration: declaration }) {
         this.previousClassificationDo( () => {
-            this.initialize({
-                sourceFile: sourceFile,
-                parseNodes: [parseNode],
-            })
+            this.initialize()
         })
 
-        this.header = this.buildHeader()
-        this.comment = this.buildComment()
-        this.methods = this.buildMethods()
+        this.declaration = declaration
+        this.comment = comment
+        this.header = header
     }
 
     /// Accessing
 
-    getParseNode() {
-        return this.getFirstNode()
+    getSourceFile() {
+        return this.declaration.getSourceFile()
     }
 
-    /*
-     * Returns the name of the class.
-     */
-    getClassName() {
-        const classNode = this.getFirstNode()
-
-        return classNode.id.name
-    }
-
-    /*
-     * Returns the statements above the class declaration.
-     * This section tipically includes the global requires, the global constants definintions, etc.
-     */
     getHeader() {
         return this.header
     }
@@ -58,60 +42,38 @@ class ClassDefinition {
         return this.comment
     }
 
-    /*
-     * Returns all the functions defined in the file.
-     * The functions may be defined in any scope, not just the top most module scope.
-     */
+    getLastNode() {
+        return this.declaration.getLastNode()
+    }
+
+    /// Querying
+
+    getClassName() {
+        return this.declaration.getClassName()
+    }
+
     getMethods() {
-        return this.methods
+        return this.declaration.getMethods()
     }
 
-    getFunctionDefinitions() {
-        const classNode = this.getFirstNode()
-
-        const collector = FunctionDefinitionsCollector.new()
-
-        return collector.collectFunctionDefinitionsIn({
-            treeNode: classNode,
-            sourceFile: this.getSourceFile(),
-        })
+    getClassSourceCode() {
+        return this.declaration.getSourceCode()
     }
 
-    buildHeader() {
-        const classNode = this.getFirstNode()
-
-        const statements = this.getSourceFile().getAllStatementsBefore({
-            parseNode: classNode,
-        })
-            
-        let statementsBeforePreviousClass = 0
-
-        for( const eachStatement of statements.slice().reverse() ) {
-
-            if( eachStatement.type === 'ClassDeclaration' ) {
-                break
-            }
-
-            statementsBeforePreviousClass += 1
-        }
-
-        const statementsFromPreviousClassDefinition = statements.slice( -statementsBeforePreviousClass )
-
-        return ClassHeader.new({
-            sourceFile: this.getSourceFile(),
-            parseNodes: statementsFromPreviousClassDefinition,
-        })
+    getStartingLine() {
+        return this.header.getStartingLine()
     }
 
-    buildMethods() {
-        const classNode = this.getFirstNode()
+    getStartingColumn() {
+        return this.header.getStartingColumn()
+    }
 
-        const collector = FunctionDefinitionsCollector.new()
+    getEndingLine() {
+        return this.declaration.getEndingLine()
+    }
 
-        return collector.collectFunctionDefinitionsIn({
-            treeNode: classNode,
-            sourceFile: this.getSourceFile(),
-        })
+    getEndingColumn() {
+        return this.declaration.getStartingColumn()
     }
 }
 

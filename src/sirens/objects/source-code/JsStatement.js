@@ -25,6 +25,52 @@ class JsStatement {
         this.parseNodes = parseNodes
     }
 
+    /// Expression parts bulding
+
+    buildComment() {
+        const Comment = require('./Comment')
+
+        const expressionNode = this.getFirstNode()
+
+        if( expressionNode.comment === undefined ) {
+            return this.buildMissingComment()
+        }
+
+        return Comment.new({
+            sourceFile: this.getSourceFile(),
+            parseNode: expressionNode.comment,
+        })
+    }
+
+    buildMissingComment() {
+        const Comment = require('./Comment')
+
+        const parseNode = {
+            value: '',
+            loc: {
+                start: {
+                    line: this.getStartingLine(),
+                    column: this.getStartingColumn(),
+                },
+                end: {
+                    line: this.getStartingLine(),
+                    column: this.getStartingColumn(),
+                },
+            }
+        }
+
+        return Comment.new({
+            sourceFile: this.getSourceFile(),
+            parseNode: parseNode,
+        })
+    }
+
+    /// Asking
+
+    isEmpty() {
+        return this.parseNodes.length === 0
+    }
+
     /// Accessing
 
     getSourceFile() {

@@ -4,7 +4,7 @@ const Component = require('../../src/gui/components/Component')
 const ComponentProtocol_Implementation = require('../../src/gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../src/gui/protocols/ComponentProtocol')
 const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
-const GtkIcons = require('../../src/gui/gtk-views/GtkIcons')
+const GtkIcons = require('../../src/gui/gtk-views/constants/GtkIcons')
 
 class CustomComponent {
     /// Definition
@@ -41,8 +41,8 @@ class CustomComponent {
                     this.toolBar( function() {
 
                         this.styles({
-                            viewCustomAttributes: {
-                                packExpand: false,
+                            viewAttributes: {
+                                stackSize: 'fixed',
                             }
                         })
 

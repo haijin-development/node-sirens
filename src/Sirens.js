@@ -38,11 +38,11 @@ class Sirens {
         })
     }
 
-    static browseDocumentation({ model: classEditionModel }) {
+    static browseClassDocumentation({ classDefinition: classDefinition }) {
         this.do( () => {
-            const DocumentationBrowser = require('./sirens/components/DocumentationBrowser')
+            const ClassDocumentationBrowser = require('./sirens/components/ClassDocumentationBrowser')
 
-            DocumentationBrowser.openOn({ model: classEditionModel })
+            ClassDocumentationBrowser.openOn({ classDefinition: classDefinition })
         })
     }
 

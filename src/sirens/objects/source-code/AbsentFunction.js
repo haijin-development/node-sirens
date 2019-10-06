@@ -24,7 +24,7 @@ class AbsentFunction {
 
     /// Queyring
 
-    getFunctionName() {
+    getName() {
         return 'Function not found'
     }
 

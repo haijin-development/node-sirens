@@ -27,8 +27,16 @@ class ToolButtonView {
     }
 
     initializeHandles() {
-        this.toolButton = new Gtk.ToolButton()
+        this.setToolButtonHandle( new Gtk.ToolButton() )
 
+        this.initializeMainHandle()
+    }
+
+    setToolButtonHandle(toolButtonHandle) {
+        this.toolButton = toolButtonHandle
+    }
+
+    initializeMainHandle() {
         this.toolButton.setStockId( this.icon )
 
         this.toolButton.setLabel( this.label )

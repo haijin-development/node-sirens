@@ -11,32 +11,83 @@ class Function {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['name', 'params', 'comment']
         this.assumes = [JsStatement]
         this.classificationBehaviours = [FunctionDefinitionBuilder]
     }
 
     /// Initializing
 
-    initialize({ sourceFile: sourceFile, parseNode: parseNode }) {
+    initialize({ name: name, params: params, sourceFile: sourceFile, parseNode: parseNode }) {
         this.previousClassificationDo( () => {
             this.initialize({
                 sourceFile: sourceFile,
                 parseNodes: [parseNode]
             })
         })
+
+        this.name = name
+        this.params = params
+        this.comment = this.buildComment()
     }
 
     /// Queyring
 
-    getFunctionName() {
-        const functionNode = this.getFirstNode()
+    getName() {
+        return this.name
+    }
 
-        if( functionNode.type === 'MethodDefinition' ) {
-            return functionNode.key.name
-        } else {
-            return functionNode.id.name
-        }
+    getParams() {
+        return this.params
+    }
+
+    getFlattenedParams() {
+        const flattenedParams = []
+
+        this.getParams().forEach( (param) => {
+            if( Array.isArray( param) ) {
+
+                param.forEach( (namedParam) => {
+                    flattenedParams.push( namedParam )
+                })
+
+            } else {
+                flattenedParams.push( param )
+            }
+        })
+
+        return flattenedParams
+    }
+
+    getDeclarationString() {
+        const methodName = this.getName()
+        const methodParams = this.getParams()
+
+        let methodText = methodName
+
+        methodText += '('
+
+        const paramsTexts = methodParams.map( (param) => {
+            if( typeof( param ) === 'string' ) {
+                return param
+            } else {
+                const namedParams = param.map( (namedParam) => {
+                    return `${namedParam.key}: ${namedParam.value}`
+                })
+
+                return `{ ${namedParams.join( ', ' )} }`
+            }
+        })
+
+        methodText += paramsTexts.join( ', ' )
+
+        methodText += ')'
+
+        return methodText
+    }
+
+    getComment() {
+        return this.comment
     }
 }
 

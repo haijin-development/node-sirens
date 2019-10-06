@@ -2,7 +2,6 @@ const Classification = require('../../../o-language/classifications/Classificati
 const JsStatement = require('./JsStatement')
 const FunctionDefinitionsCollector = require('../parsers/FunctionDefinitionsCollector')
 const ClassHeader = require('./ClassHeader')
-const Comment = require('./Comment')
 
 /*
  * The definition of a javascript class.
@@ -75,42 +74,6 @@ class ClassDefinition {
         return collector.collectFunctionDefinitionsIn({
             treeNode: classNode,
             sourceFile: this.getSourceFile(),
-        })
-    }
-
-    /// Class parts bulding
-
-    buildComment() {
-        const classNode = this.getFirstNode()
-
-        if( classNode.comment === undefined ) {
-            return this.buildMissingComment()
-        }
-
-        return Comment.new({
-            sourceFile: this.getSourceFile(),
-            parseNode: classNode.comment,
-        })
-    }
-
-    buildMissingComment() {
-        const parseNode = {
-            value: '',
-            loc: {
-                start: {
-                    line: this.getStartingLine(),
-                    column: this.getStartingColumn(),
-                },
-                end: {
-                    line: this.getStartingLine(),
-                    column: this.getStartingColumn(),
-                },
-            }
-        }
-
-        return Comment.new({
-            sourceFile: this.getSourceFile(),
-            parseNode: parseNode,
         })
     }
 

@@ -38,6 +38,6 @@ describe('When using a ClassDefinition', () => {
         const functionDefinitions = classDefinition.getMethods()
 
         expect( functionDefinitions.length ) .to .equal(1)
-        expect( functionDefinitions[0].getFunctionName() ) .to .equal('getName')
+        expect( functionDefinitions[0].getName() ) .to .equal('getName')
     })
 })

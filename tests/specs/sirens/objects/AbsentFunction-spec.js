@@ -9,7 +9,7 @@ const absentFunctionDefinition = sourceFile.getFunctionAt({line: 100, column: 0}
 
 describe('When using an AbsentFunction', () => {
     it('gets a default function name', () => {
-        expect( absentFunctionDefinition.getFunctionName() ) .to .equal('Function not found')
+        expect( absentFunctionDefinition.getName() ) .to .equal('Function not found')
     })
 
     it('gets a default function name', () => {

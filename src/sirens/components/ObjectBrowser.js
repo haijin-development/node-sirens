@@ -6,6 +6,7 @@ const ObjectBrowserModel = require('../models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+const ScriptEvaluator = require('./ScriptEvaluator')
 
 class ObjectBrowser {
     /// Definition
@@ -35,17 +36,12 @@ class ObjectBrowser {
 
         const selectedText = this.getSelectedText()
 
-        const codeEvaluator = function(){ return eval(selectedText) }
+        const evaluationResult = ScriptEvaluator.evaluate({
+            thisObject: selectedValue,
+            script: selectedText,
+        })
 
-        let evaluationResult = null
-
-        try {
-            evaluationResult = codeEvaluator.call(selectedValue)
-        } catch (e) {
-            evaluationResult = e
-        }
-
-        Sirens.browseObject(evaluationResult)
+        Sirens.browseObject( evaluationResult )
     }
 
     /// Querying
@@ -79,7 +75,7 @@ class ObjectBrowser {
                     this.component(
                         ObjectPropertiesComponent.new({
                             model: model,
-                            splitProportion: 1.0/2.0,
+                            viewAttributes: { splitProportion: 1.0/2.0 },
                         })
                     )
 
@@ -88,7 +84,7 @@ class ObjectBrowser {
 
                         this.styles({
                             id: 'playground',
-                            splitProportion: 1.0/2.0,
+                            viewAttributes: { splitProportion: 1.0/2.0 },
                             wrapMode: 'wordChar'
                         })
 

@@ -4,7 +4,6 @@ const Component = require('../../gui/components/Component')
 const ClassEditorModel = require('../models/ClassEditorModel')
 const ClassEditorMenu = require('./class-editor/ClassEditorMenu')
 const ClassesComponent = require('./class-editor/ClassesComponent')
-const FileFooterComponent = require('./class-editor/FileFooterComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
 const FileChooser = require('../../gui/components/dialogs/FileChooser')
@@ -110,24 +109,18 @@ class ClassEditor {
                         })
                     )
 
-                    this.tabs({ aligment: 'left', id: 'tabs' }, function() {
+                    this.component(
+                        ClassesComponent.new({
+                            model: model.getClassesDefinitionsModel(),
+                            footerModel: model.getFooterSourceCodeModel(),
+                        })
+                    )
 
-                        this.component(
-                            ClassesComponent.new({
-                                model: model.getClassesDefinitionsModel(),
-                            })
-                        )
-
-                        this.component(
-                            FileFooterComponent.new({
-                                model: model.getFooterSourceCodeModel(),
-                            })
-                        )
-
-                    })
                 })
             })
         })
+
+        this.showFirstTabPage()
     }
 }
 

@@ -88,12 +88,24 @@ class SourceFile {
         });
 
         for(let i = 1; i < expressionsWithComments.length; i++ ) {
-            const previousExpression = expressionsWithComments[ i - 1 ]
             const currentExpression = expressionsWithComments[ i ]
 
-            // It is a comment
-            if( previousExpression.type === 'Block' ) {
-                currentExpression.comment = previousExpression
+            // Sometimes it generate an additional node before the definition:
+            //      Identifier {
+            //          type: 'Identifier',
+            //          name: 'constructor',
+            if( currentExpression.type === 'ClassDeclaration' || currentExpression.type === 'MethodDefinition') {
+
+                const previousExpression = expressionsWithComments[ i - 1 ]
+                const previousPreviousExpression = expressionsWithComments[ i - 2 ]
+
+                if( previousExpression.type === 'Block' ) {
+                    currentExpression.comment = previousExpression
+                }
+
+                if( previousPreviousExpression.type === 'Block' && previousExpression.type === 'Identifier' ) {
+                    currentExpression.comment = previousPreviousExpression
+                }
             }
         }
     }

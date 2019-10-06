@@ -18,15 +18,11 @@ class FileFooterComponent {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        componentsRenderer.behaveAsTabsPageBuilder()
-
         componentsRenderer.render( function(component) {
 
-            this.tabPage({ label: 'Footer', fixedPosition: -1 }, function() {
-                this.text({
-                    model: model,
-                    splitProportion: 1.0 / 2,
-                })
+            this.text({
+                model: model,
+                viewAttributes: { splitProportion: 1.0 / 2 },
             })
 
         })

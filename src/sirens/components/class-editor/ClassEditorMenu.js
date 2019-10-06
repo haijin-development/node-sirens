@@ -24,8 +24,8 @@ class ClassEditorMenu {
             this.verticalStack( function() {
 
                 this.styles({
-                    viewCustomAttributes: {
-                        packExpand: false,
+                    viewAttributes: {
+                        stackSize: 'fixed',
                     }
                 })
 

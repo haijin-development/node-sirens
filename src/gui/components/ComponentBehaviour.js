@@ -79,18 +79,18 @@ class ComponentBehaviour {
     }
 
     applyViewProps({ props: propsToApply }) {
-        const acceptedStyles = this.view.acceptedStyles()
+        for( const propName in propsToApply ) {
+            const value = propsToApply[propName]
 
-        acceptedStyles.forEach( (style) => {
-            const propValue = propsToApply[style]
-
-            if( propValue !== undefined ) {
-                this.applyViewProp({ prop: style, value: propValue })
-            }
-        })
+            this.applyViewProp({ prop: propName, value: value })
+        }
     }
 
     applyViewProp({ prop: propName, value: propValue }) {
+        const acceptedStyles = this.view.acceptedStyles()
+
+        if( ! acceptedStyles.includes( propName ) ) { return }
+
         if ( OInstance.isOInstance( propValue ) && propValue.compliesWith( ValueModelProtocol ) ) {
             propValue = propValue.getValue()
         }

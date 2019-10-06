@@ -2,7 +2,7 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
-const GtkIcons = require('../../../gui/gtk-views/GtkIcons')
+const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
 
 class SingleClassMenu {
     /// Definition
@@ -20,20 +20,31 @@ class SingleClassMenu {
 
         componentsRenderer.render(function (component) {
 
-            this.toolBar( function() {
+            this.horizontalStack( function () {
 
                 this.styles({
-                    viewCustomAttributes: {
-                        packExpand: false,
+                    viewAttributes: {
+                        stackSize: 'fixed',
                     }
                 })
 
-                this.item({
-                    label: 'Browse documentation',
-                    icon: GtkIcons.info,
-                    tooltip: 'Opens a DocumentationBrowser on the current selection.',
-                    action: props.openDocumentationBrowser,
+                this.toolBar( function() {
+
+                    this.styles({
+                        viewAttributes: {
+                            stackSize: 'fixed',
+                            stackAlign: 'end',
+                        }
+                    })
+
+                    this.item({
+                        label: 'Browse documentation',
+                        icon: GtkIcons.info,
+                        tooltip: 'Opens a class documentation browser on the current selection.',
+                        action: props.openDocumentationBrowser,
+                    })
                 })
+
             })
 
         })

@@ -2,7 +2,7 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
-const GtkIcons = require('../../../gui/gtk-views/GtkIcons')
+const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
 
 class ClassEditorMenuBar {
     /// Definition
@@ -21,8 +21,8 @@ class ClassEditorMenuBar {
             this.toolBar( function() {
 
                 this.styles({
-                    viewCustomAttributes: {
-                        packExpand: false,
+                    viewAttributes: {
+                        stackSize: 'fixed',
                     }
                 })
 

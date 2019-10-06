@@ -10,29 +10,67 @@ class FunctionDefinitionsCollector {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['collectedFunctionDefinitions']
+        this.instanceVariables = ['sourceFile', 'collectedFunctionDefinitions']
         this.assumes = [ParseTreeVisitor]
         this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
 
     collectFunctionDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
+        this.sourceFile = sourceFile
         this.collectedFunctionDefinitions = [] 
 
         this.visit(treeNode)
 
-        return this.collectedFunctionDefinitions.map( (parseNode) => {
-                return Function.new({ sourceFile: sourceFile, parseNode: parseNode })
-            })
+        return this.collectedFunctionDefinitions
     }
 
     /// Visiting
 
     visitMethodDefinition(methodDefinition) {
-        return this.collectedFunctionDefinitions.push( methodDefinition )
+        const methodName = this.visit( methodDefinition.key )
+
+        let params = this.visit( methodDefinition.value ).params
+
+        params = params.map( (param) => {
+            return param.left !== undefined ? param.left : param
+        })
+
+        const funct = this.newFunction({
+            name: methodName,
+            params: params,
+            parseNode: methodDefinition,
+        })
+
+        return this.collectedFunctionDefinitions
+                .push( funct )
     }
 
     visitFunctionDeclaration(functionDeclaration) {
-        return this.collectedFunctionDefinitions.push( functionDeclaration )
+        const functionName = this.visit( functionDeclaration.id )
+
+        const funct = this.newFunction({
+            name: functionName,
+            params: [],
+            parseNode: functionDeclaration,
+        })
+
+        return this.collectedFunctionDefinitions
+                .push( funct )
+    }
+
+    newFunction({ name: name, params: params, parseNode: parseNode }) {
+        return Function.new({
+            name: name,
+            params: params,
+            sourceFile: this.sourceFile,
+            parseNode: parseNode
+        })
+    }
+
+    visitRestElement(restElement) {
+        const paramName = this.visit( restElement.argument )
+
+        return '...' + paramName
     }
 }
 

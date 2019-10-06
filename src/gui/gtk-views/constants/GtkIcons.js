@@ -82,7 +82,7 @@ const GtkIcons = {
     printReport: Gtk.STOCK_PRINT_REPORT,
     printWarning: Gtk.STOCK_PRINT_WARNING,
     properties: Gtk.STOCK_PROPERTIES,
-    quite: Gtk.STOCK_QUIT,
+    quit: Gtk.STOCK_QUIT,
     redo: Gtk.STOCK_REDO,
     refresh: Gtk.STOCK_REFRESH,
     remove: Gtk.STOCK_REMOVE,
@@ -101,11 +101,26 @@ const GtkIcons = {
     underline: Gtk.STOCK_UNDERLINE,
     undo: Gtk.STOCK_UNDO,
     unindent: Gtk.STOCK_UNINDENT,
-    tes: Gtk.STOCK_YES,
+    yes: Gtk.STOCK_YES,
     zoom100: Gtk.STOCK_ZOOM_100,
     zoomFit: Gtk.STOCK_ZOOM_FIT,
     zoomIn: Gtk.STOCK_ZOOM_IN,
     zoomOut: Gtk.STOCK_ZOOM_OUT,
+}
+
+
+GtkIcons.size = {
+    _16x16: Gtk.IconSize.MENU,
+    _24x24: Gtk.IconSize.LARGE_TOOLBAR,
+    _32x32: Gtk.IconSize.DND,
+    _48x48: Gtk.IconSize.DIALOG,
+
+    menu: Gtk.IconSize.MENU,
+    smallToolbar: Gtk.IconSize.SMALL_TOOLBAR,
+    largeToolbal: Gtk.IconSize.LARGE_TOOLBAR,
+    button: Gtk.IconSize.BUTTON,
+    dragNdrop: Gtk.IconSize.DND,
+    dialog: Gtk.IconSize.DIALOG,
 }
 
 module.exports = GtkIcons

@@ -4,7 +4,9 @@ const ComponentsList = require('../../../gui/components/ComponentsList')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ListModelComponentProtocol_Implementation = require('../../../gui/protocols/ListModelComponentProtocol_Implementation')
 const SingleClassMenu = require('./SingleClassMenu')
+const FileFooterComponent = require('./FileFooterComponent')
 const Sirens = require('../../../Sirens')
+const Resource = require('../../objects/Resource')
 
 class ClassesComponent {
     /// Definition
@@ -18,47 +20,60 @@ class ClassesComponent {
         ]
     }
 
-    /// Icons
-
-    getMethodIcon() {
-        return path.resolve( __dirname + '/../../../../resources/icons/function.png' )
-    }
-
     /// Actions
 
     openDocumentationBrowser(classEditionModel) {
-        Sirens.browseDocumentation({ model: classEditionModel })
+        const classDefinition = classEditionModel.getClassDefinition()
+
+        Sirens.browseClassDocumentation({ classDefinition: classDefinition })
     }
 
     /// Rendering
+
+    renderWith(componentsRenderer) {
+        const footerModel = this.getProps().footerModel
+
+        const items = this.getModel().getList()
+
+        componentsRenderer.render( function(component) {
+
+            this.tabs({ aligment: 'left', id: 'tabs' }, function() {
+
+                items.forEach( (item, index) => {
+                    component.renderItem({ item: item, index: index, renderer: this })
+                })
+
+                this.tabPage({ label: 'Footer', fixedPosition: -1 }, function() {
+
+                    this.component(
+                        FileFooterComponent.new({
+                            model: footerModel,
+                        })
+                    )
+                })
+
+            })
+
+        })
+    }
 
     renderItem({ item: classEditionModel, index: index, renderer: renderer }) {
         const className = classEditionModel.getClassName()
 
         const component = this
 
-        renderer.behaveAsTabsPageBuilder()
-
         renderer.bindYourself( function() {
 
             this.tabPage({ label: 'Header' }, function() {
                 this.text({
                     model: classEditionModel.getHeaderSourceCodeModel(),
-                    splitProportion: 1.0 / 2,
+                    viewAttributes: { splitProportion: 1.0 / 2 },
                 })
             })
 
             this.tabPage({ label: className }, function() {
 
                 this.verticalStack( function() {
-
-                    this.component(
-                        SingleClassMenu.new({
-                            openDocumentationBrowser: () => {
-                                component.openDocumentationBrowser(classEditionModel)
-                            }
-                        })
-                    )
 
                     this.verticalSplitter( function() {
 
@@ -69,27 +84,36 @@ class ClassesComponent {
                             this.model( classEditionModel.getClassMethodsModel() )
 
                             this.styles({
-                                splitProportion: 1.0 / 2
+                                viewAttributes: { splitProportion: 1.0 / 2 },
+                                showHeaders: false,
                             })
 
                             this.column({
                                 label: '',
-                                getImageBlock: function(functionDefinition) { return component.getMethodIcon() },
-                                imageWidth: 16,
-                                imageHeight: 16,
+                                getImageBlock: function(functionDefinition) { return Resource.image.method },
+                                imageWidth: 24,
+                                imageHeight: 24,
                             })
 
                             this.column({
-                                getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionName() },
+                                getTextBlock: function(functionDefinition) { return functionDefinition.getDeclarationString() },
                             })
                         })
 
                         this.text({
                             model: classEditionModel.getSelectedMethodSourceCodeModel(),
-                            splitProportion: 1.0 / 2,
+                            viewAttributes: { splitProportion: 1.0 / 2 },
                         })
 
                     })
+
+                    this.component(
+                        SingleClassMenu.new({
+                            openDocumentationBrowser: () => {
+                                component.openDocumentationBrowser(classEditionModel)
+                            }
+                        })
+                    )
 
                 })
 

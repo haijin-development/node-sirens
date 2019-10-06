@@ -139,4 +139,28 @@ describe('When using an ObjectWithProps', () => {
             expect( result ) .to .eql('Prop a is undefined.')
         })        
     })
+
+    describe('when iterating props', () => {
+        it('iterates prop names and values', () => {
+            const object = ObjectWithProps.new()
+
+            object.mergeProps({
+                a: 1,
+                b: 2,
+                c: 3
+            })
+
+            const iteratedProps = {}
+
+            const result = object.propsAndValuesDo( (propName, value ) => {
+                iteratedProps[propName] = value
+            })
+
+            expect( iteratedProps ) .to .eql({
+                a: 1,
+                b: 2,
+                c: 3
+            })
+        })
+    })
 })

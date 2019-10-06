@@ -66,6 +66,20 @@ class ObjectWithProps {
 
         return this
     }
+
+    /// Iterating
+
+    propsAndValuesDo(closure) {
+        const props = this.props
+
+        for( const propName in props ) {
+            const value = props[ propName ]
+
+            closure(propName, value)
+        }
+
+        return this
+    }
 }
 
 module.exports = Classification.define(ObjectWithProps)

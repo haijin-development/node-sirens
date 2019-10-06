@@ -53,7 +53,11 @@ class SplitterView {
     /// Adding child views
 
     directChildViewAdd(childView) {
+        this.isFirstSizeAllocation = true
+
         const childHandle = childView.getMainHandle()
+
+        childHandle.showAll()
 
         let lastParent = this.paned
 
@@ -90,8 +94,6 @@ class SplitterView {
 
         lastParent.add( paned )
 
-        this.isFirstSizeAllocation = true
-
         this.paned.showAll()
     }
 
@@ -107,7 +109,7 @@ class SplitterView {
     /// Events
 
     handleSizeAllocate(rectangle) {
-        if(this.isFirstSizeAllocation != true) {
+        if( this.isFirstSizeAllocation != true ) {
             return
         }
 
@@ -150,7 +152,9 @@ class SplitterView {
 
             const secondChild = children[1]
 
-            const firstChildSize = totalSize * childView.splitProportion
+            const splitProportion = childView.getViewAttribute({ at: 'splitProportion' })
+
+            const firstChildSize = totalSize * splitProportion
 
             remainingSize = remainingSize - firstChildSize
 

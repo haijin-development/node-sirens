@@ -33,7 +33,7 @@ class ClassEditorModel {
         this.classesDefinitionsModel = ListModel.new({ list: [] })
 
         this.footerSourceCodeModel = BufferedAttributeModel.new({
-            attributeReader: this.getFooterDefinitionSourceCode.bind(this)
+            attributeReader: this.getFooterSourceCode.bind(this)
         })
     }
 
@@ -63,7 +63,7 @@ class ClassEditorModel {
         return classSourceFile.getFilePath()
     }
 
-    getFooterDefinitionSourceCode(footerDefinition) {
+    getFooterSourceCode(footerDefinition) {
         if( footerDefinition === undefined && this.sourceFile === null ) {
             return 'No source file selected.'
         }
@@ -95,14 +95,14 @@ class ClassEditorModel {
         this.sourceFilenameModel.setObject( this.sourceFile )
 
         const classesDefinitionsInFile =
-            this.sourceFile.getClassDefinitions().map( (classDefinition) =>{
+            this.sourceFile.getClasses().map( (classDefinition) =>{
                 return ClassEditionModel.new({ classDefinition: classDefinition })
             })
 
         this.classesDefinitionsModel.setList(classesDefinitionsInFile)
 
         this.footerSourceCodeModel.setObject(
-            this.sourceFile.getFooterDefinition()
+            this.sourceFile.getFooter()
         )
     }
 

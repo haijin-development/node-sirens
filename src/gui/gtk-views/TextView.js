@@ -1,7 +1,8 @@
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const GtkWrapModes = require('./GtkWrapModes')
+const GtkWrapModes = require('./constants/GtkWrapModes')
+const GtkScroll = require('./constants/GtkScroll')
 const MenuView = require('./MenuView')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
@@ -18,8 +19,29 @@ class TextView {
 
     acceptedStyles() {
         return this.previousClassificationDo( () => {
-            return this.acceptedStyles().concat(['wrapMode'])
+            return this.acceptedStyles().concat([
+                'wrapMode',
+                'hScroll', 'vScroll',
+            ])
         })
+    }
+
+    setHScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            GtkScroll[ value ],
+            vScroll
+        )
+    }
+
+    setVScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            hScroll,
+            GtkScroll[ value ]
+        )        
     }
 
     /// Initializing
@@ -33,13 +55,16 @@ class TextView {
     }
 
     initializeHandles() {
-        this.textView = new Gtk.TextView()
-
         this.scrolledWindow = new Gtk.ScrolledWindow()
 
-        this.scrolledWindow.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+        this.scrolledWindow.setPolicy(
+            GtkScroll.auto,
+            GtkScroll.auto
+        )
 
-        this.scrolledWindow.add(this.textView)
+        this.textView = new Gtk.TextView()
+
+        this.scrolledWindow.add( this.textView )
     }
 
     /// Accessing

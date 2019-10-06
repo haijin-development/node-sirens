@@ -1,18 +1,19 @@
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const GdkPixbuf = nodeGtk.require('GdkPixbuf')
-const GtkTypes = require('./GtkTypes')
+const GtkTypes = require('./constants/GtkTypes')
+const GtkScroll = require('./constants/GtkScroll')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
+const GtkImage = require('./GtkImage')
 
 class ListView {
     /// Definition
 
     static definition() {
         this.instanceVariables = [
-            'scrolledView', 'listStore', 'treeView', 'columns',
+            'scrolledWindow', 'listStore', 'treeView', 'columns',
             'onSelectionChanged', 'onSelectionAction',
             'allowSelectionChange',
         ]
@@ -24,7 +25,13 @@ class ListView {
 
     acceptedStyles() {
         return this.previousClassificationDo( () => {
-            return this.acceptedStyles().concat(['columns'])
+            return this.acceptedStyles().concat(
+                [
+                    'showHeaders', 'clickableHeaders',
+                    'columns',
+                    'hScroll', 'vScroll',
+                ]
+            )
         })
     }
 
@@ -50,8 +57,11 @@ class ListView {
     }
 
     initializeHandles() {
-        this.scrolledView = new Gtk.ScrolledWindow()
-        this.scrolledView.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        this.scrolledWindow = new Gtk.ScrolledWindow()
+        this.scrolledWindow.setPolicy(
+            GtkScroll.auto,
+            GtkScroll.auto
+        )
 
         this.listStore = new Gtk.ListStore()
         this.treeView = null
@@ -70,7 +80,7 @@ class ListView {
 
         this.listStore.setColumnTypes(listStoreTypes)
 
-        this.treeView = new Gtk.TreeView({model: this.listStore})
+        this.treeView = new Gtk.TreeView({ model: this.listStore })
 
         this.treeView.getSelection().setSelectFunction( this.onSelectFunction.bind(this) )
 
@@ -78,7 +88,7 @@ class ListView {
             this.addColumn(eachColumn)
         })
 
-        this.scrolledView.add(this.treeView)
+        this.scrolledWindow.add( this.treeView )
     }
 
     addColumn(column) {
@@ -114,7 +124,7 @@ class ListView {
     /// Querying
 
     getMainHandle() {
-        return this.scrolledView
+        return this.scrolledWindow
     }
 
     /*
@@ -237,11 +247,11 @@ class ListView {
                     }
                 })
 
-                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
-                    imageFile,
-                    column.getImageWidth(),
-                    column.getImageHeight()
-                )
+                const pixbuf = GtkImage.pixbufAt({
+                        filename: imageFile,
+                        width: column.getImageWidth(),
+                        height: column.getImageHeight()
+                    })
 
                 this.setIterImage(pixbuf, iter, columnIndex)
 
@@ -352,6 +362,24 @@ class ListView {
 
     getClickableHeaders() {
         return this.treeView.getHeadersClickable()
+    }
+
+    setHScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            GtkScroll[ value ],
+            vScroll
+        )
+    }
+
+    setVScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            hScroll,
+            GtkScroll[ value ]
+        )        
     }
 }
 

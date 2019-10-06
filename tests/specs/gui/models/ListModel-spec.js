@@ -34,7 +34,7 @@ describe('When using a ListModel', () => {
         it('triggers a list-changed event', () => {
             const list_model = ListModel.new()
 
-            list_model.on('list-changed', (event) => {
+            list_model.onListChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldList) .to .eql([])
@@ -51,7 +51,7 @@ describe('When using a ListModel', () => {
         it('adds an item', () => {
             const list_model = ListModel.new()
 
-            list_model.on('items-added', (event) => {
+            list_model.onItemsAdded( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql([1])
@@ -68,7 +68,7 @@ describe('When using a ListModel', () => {
         it('adds many items', () => {
             const list_model = ListModel.new()
 
-            list_model.on('items-added', (event) => {
+            list_model.onItemsAdded( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql([1, 2, 3])
@@ -87,7 +87,7 @@ describe('When using a ListModel', () => {
 
             list_model.push(1, 2, 3)
 
-            list_model.on('items-added', (event) => {
+            list_model.onItemsAdded( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql([1, 4, 2, 3])
@@ -106,7 +106,7 @@ describe('When using a ListModel', () => {
 
             list_model.push(1, 2, 3)
 
-            list_model.on('items-added', (event) => {
+            list_model.onItemsAdded( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql([1, 4, 5, 6, 2, 3])
@@ -125,7 +125,7 @@ describe('When using a ListModel', () => {
         it('updates an item', () => {
             const list_model = ListModel.new({ list: [1, 2, 3] })
 
-            list_model.on('items-updated', (event) => {
+            list_model.onItemsUpdated( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql([1, 'a', 3])
@@ -142,7 +142,7 @@ describe('When using a ListModel', () => {
         it('updates many items', () => {
             const list_model = ListModel.new({ list: [1, 2, 3] })
 
-            list_model.on('items-updated', (event) => {
+            list_model.onItemsUpdated( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql(['a', 'b', 3])
@@ -161,7 +161,7 @@ describe('When using a ListModel', () => {
         it('removes an item', () => {
             const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
 
-            list_model.on('items-removed', (event) => {
+            list_model.onItemsRemoved( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql(['a', 'c'])
@@ -178,7 +178,7 @@ describe('When using a ListModel', () => {
         it('removes many items', () => {
             const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
 
-            list_model.on('items-removed', (event) => {
+            list_model.onItemsRemoved( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql(['c'])
@@ -195,7 +195,7 @@ describe('When using a ListModel', () => {
         it('removes an item at an index', () => {
             const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
 
-            list_model.on('items-removed', (event) => {
+            list_model.onItemsRemoved( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql(['a', 'c'])
@@ -212,7 +212,7 @@ describe('When using a ListModel', () => {
         it('removes many items at indices', () => {
             const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
 
-            list_model.on('items-removed', (event) => {
+            list_model.onItemsRemoved( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.list) .to .eql(['a'])

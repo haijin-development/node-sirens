@@ -1,13 +1,47 @@
 # Changelog
 
-## v0.7.0 (next release)
+## v0.8.0 (next release)
+
+## v0.7.0
+
+### Sirens
+
+- Updated README.md.
+- Code cleanup.
+- Implemented the full javascript sintax visitor for esprima.
+- Integrated comments to statements and expressions in esprima.
+- Added 'Open file in new window ...' menu to ClassBrowser.
+- Implemented the ClassDocumentationBrowser.
+- Cleaned up the evaluation of scripts in the ObjectBrowser.
+- Cleaned up accessing to the images resources.
+- Improved existing icons.
+
+### gui
+
+- Implemented MenuSeparator.
+- Rewrote Tabs and TabPage to include Components, not just Widgets.
+- Implemented ToogleToolButton.
+- Implemented Container to add scrolled containers.
+- Implemented Separator.
+- Implemented ImageFile widget.
+- Implemented StockIcon widget
+- Components can be easily re-rendered when a model changes.
+- Implemented widget align attribute.
+- Implemented widget margin attribute.
+- Changed packFill, packExpand, packPadding to stackSize(filled, fixed, spread) and stackPadding.
+- Images used in widgets are loaded from file only once and cached from there on.
+- In widgets wrapped by a GtkScrolledWindow hscroll and vscroll bars are now configurable.
+
+### O language
+
+- Implemented ObjectWithProps.propsAndValuesDo
 
 ## v0.6.0
 
 ### Sirens
 
 - Updated README.md.
-- Rewrote StackView packExpand and packFill using viewCustomAttributes.
+- Rewrote StackView packExpand and packFill using viewAttributes.
 - Implemented ClassEditor.
 - Added ClassEditor bin file to package.json.
 - Added https://travis-ci.org/ CI.
@@ -15,7 +49,7 @@
 ### gui
 
 - Implemented MenuBar.
-- Added viewCustomAttributes to GtkView classification.
+- Added viewAttributes to GtkView classification.
 - Implemented FileChooser dialog.
 - Implemented Tab pages.
 - Implemented ToolBar.

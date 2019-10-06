@@ -40,7 +40,7 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.on('value-changed', (event) => {
+            model.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)
@@ -75,7 +75,7 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.on('value-changed', (event) => {
+            model.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)
@@ -110,7 +110,7 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.on('value-changed', (event) => {
+            model.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)

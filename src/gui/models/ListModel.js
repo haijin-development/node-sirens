@@ -1,5 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
+const ListModelProtocol = require('../protocols/ListModelProtocol')
 
 class ListModel {
     /// Definition
@@ -7,6 +8,7 @@ class ListModel {
     static definition() {
         this.instanceVariables = ['list']
         this.assumes = [Model]
+        this.implements = [ListModelProtocol]
     }
 
     /// Initializing
@@ -93,13 +95,7 @@ class ListModel {
 
     // Removes the first ocurrence of the item from the list.
     remove({ item: item }) {
-        if( item === undefined ) { throw new Error(`{ item: } is undefined. Are you trying to use ListModel.removeAll instead?`) }
-
-        const index = this.list.indexOf(item)
-
-        this.list.splice(index, 1)
-
-        this.emit('items-removed', { list: this.list, items: [item], indices: [index] })
+        return this.removeAll({ items: [item] })
     }
 
     removeAll({ items: items }) {
@@ -146,6 +142,32 @@ class ListModel {
         })
 
         return indices
+    }
+
+    /// Events
+
+    onListChanged(closure) {
+        this.on('list-changed', closure)
+
+        return this
+    }
+
+    onItemsAdded(closure) {
+        this.on('items-added', closure)
+
+        return this
+    }
+
+    onItemsUpdated(closure) {
+        this.on('items-updated', closure)
+
+        return this
+    }
+
+    onItemsRemoved(closure) {
+        this.on('items-removed', closure)
+
+        return this
     }
 }
 

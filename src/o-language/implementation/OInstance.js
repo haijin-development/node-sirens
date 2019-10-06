@@ -42,6 +42,14 @@ class OInstance {
         })
     }
 
+    compliesWith(protocol) {
+        const objectClassifications = this.classifications()
+
+        return objectClassifications.some( (classification) => {
+            return classification.compliesWith({ protocol: protocol })
+        })
+    }
+
     /// Behaviours
 
     /*

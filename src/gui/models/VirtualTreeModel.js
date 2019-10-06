@@ -1,5 +1,6 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Model = require('./Model')
+const VirtualTreeModelProtocol = require('../protocols/VirtualTreeModelProtocol')
 
 class VirtualTreeModel {
     /// Definition
@@ -7,6 +8,7 @@ class VirtualTreeModel {
     static definition() {
         this.instanceVariables = ['getChildrenBlock', 'roots']
         this.assumes = [Model]
+        this.implements = [VirtualTreeModelProtocol]
     }
 
     /// Initializing
@@ -116,6 +118,15 @@ class VirtualTreeModel {
 
         return hierarchy
     }
+
+    /// Events
+
+    onRootsChanged(closure) {
+        this.on('roots-changed', closure)
+
+        return this
+    }
+
 }
 
 // Tree node class

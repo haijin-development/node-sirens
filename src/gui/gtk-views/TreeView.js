@@ -1,11 +1,12 @@
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const GObject = nodeGtk.require('GObject')
-const GdkPixbuf = nodeGtk.require('GdkPixbuf')
-const GtkTypes = require('./GtkTypes')
+const GtkTypes = require('./constants/GtkTypes')
+const GtkScroll = require('./constants/GtkScroll')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
+const GtkImage = require('./GtkImage')
 
 class TreeView {
     /// Definition
@@ -45,7 +46,10 @@ class TreeView {
 
     initializeHandles() {
         this.scrolledWindow = new Gtk.ScrolledWindow()
-        this.scrolledWindow.setPolicy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        this.scrolledWindow.setPolicy(
+            GtkScroll.auto,
+            GtkScroll.auto
+        )
 
         this.treeStore = new Gtk.TreeStore()
 
@@ -58,8 +62,9 @@ class TreeView {
         return this.previousClassificationDo( () => {
             return this.acceptedStyles().concat(
                 [
-                    'columns', 'showHeaders', 'clickableHeaders',
-                    'onSelectedValueChanged', 'onSelectionAction',
+                    'columns',
+                    'showHeaders', 'clickableHeaders',
+                    'hScroll', 'vScroll',
                 ]
             )
         })
@@ -119,6 +124,24 @@ class TreeView {
         }
 
         this.treeView.appendColumn(col)
+    }
+
+    setHScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            GtkScroll[ value ],
+            vScroll
+        )
+    }
+
+    setVScroll(value) {
+        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+
+        this.scrolledWindow.setPolicy(
+            hScroll,
+            GtkScroll[ value ]
+        )        
     }
 
     /// Accessing
@@ -258,11 +281,11 @@ class TreeView {
                     }
                 })
 
-                const pixbuf = GdkPixbuf.Pixbuf.newFromFileAtSize(
-                    imageFile,
-                    column.getImageWidth(),
-                    column.getImageHeight()
-                )
+                const pixbuf = GtkImage.pixbufAt({
+                        filename: imageFile,
+                        width: column.getImageWidth(),
+                        height: column.getImageHeight()
+                    })
 
                 this.setIterImage(pixbuf, iter, columnIndex)
 

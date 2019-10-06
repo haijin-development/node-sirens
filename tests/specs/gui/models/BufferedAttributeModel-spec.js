@@ -31,7 +31,7 @@ describe('When using an BufferedAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.on('value-changed', (event) => {
+            this.valueModel.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)
@@ -62,7 +62,7 @@ describe('When using an BufferedAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.on('value-changed', (event) => {
+            this.valueModel.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)
@@ -89,7 +89,7 @@ describe('When using an BufferedAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.on('value-changed', (event) => {
+            this.valueModel.onValueChanged( (event) => {
                 this.triggeredEvent = true
 
                 expect(event.oldValue) .to .equal(1)

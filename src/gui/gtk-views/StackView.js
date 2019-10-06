@@ -36,18 +36,61 @@ class StackView {
     }
 
     directChildViewAdd(childView) {
-        const packExpand = childView.getViewCustomAttribute({ at: 'packExpand', ifAbsent: true })
-        const packFill = childView.getViewCustomAttribute({ at: 'packFill', ifAbsent: true })
-        const packPadding = childView.getViewCustomAttribute({ at: 'packPadding', ifAbsent: 0 })
+        let expand = true
+        let fill = true
+        const padding = childView.getViewAttribute({ at: 'stackPadding', ifAbsent: 0 })
+
+        const stackSize = childView.getViewAttribute({ at: 'stackSize', ifAbsent: 'filled' })
+
+        switch( stackSize ) {
+            case 'filled':
+                expand = true
+                fill = true
+                break
+
+            case 'fixed':
+                expand = false
+                fill = false
+                break
+
+            case 'spread':
+                expand = false
+                fill = true
+                break
+
+            default:
+                throw new Error(`Uknown stack size: '${stackSize}'`)
+                break
+        }
+
+        const packAlign = childView.getViewAttribute({ at: 'stackAlign', ifAbsent: 'begining' })
 
         const childHandle = childView.getMainHandle()
 
-        this.box.packStart(
-            childHandle,
-            packExpand,
-            packFill,
-            packPadding
-        )
+        switch( packAlign ) {
+            case 'begining':
+                this.box.packStart(
+                    childHandle,
+                    expand,
+                    fill,
+                    padding
+                )
+                break
+
+            case 'end':
+                this.box.packEnd(
+                    childHandle,
+                    expand,
+                    fill,
+                    padding
+                )
+                break
+
+            default:
+                throw new Error(`Uknown stack aligment: '${packAlign}'`)
+                break
+        }
+
 
         this.box.showAll()
     }

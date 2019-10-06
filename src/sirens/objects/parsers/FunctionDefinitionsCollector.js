@@ -1,6 +1,9 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('./ParseTreeVisitor')
-const FunctionDefinition = require('../js-statements/FunctionDefinition')
+const FunctionDeclaration = require('../source-code/FunctionDeclaration')
+const FunctionDefinition = require('../source-code/FunctionDefinition')
+const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
+const EmptyJsStatement = require('../source-code/EmptyJsStatement')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
@@ -9,89 +12,96 @@ class FunctionDefinitionsCollector {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['sourceFile', 'collectedFunctionDefinitions']
         this.assumes = [ParseTreeVisitor]
+        this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
 
     collectFunctionDefinitionsIn({ treeNode: treeNode, sourceFile: sourceFile }) {
-        const functionDeclarations = this.visit(treeNode)
+        this.sourceFile = sourceFile
+        this.collectedFunctionDefinitions = [] 
 
-        return functionDeclarations.map( (parseNode) => {
-                return FunctionDefinition.new({ parseNode: parseNode, sourceFile: sourceFile })
-            })
+        this.visit(treeNode)
+
+        return this.collectedFunctionDefinitions
     }
 
     /// Visiting
 
-    defaultVisitResult() {
-        return []
-    }
+    visitMethodDefinition(methodDefinition) {
+        const methodName = this.visit( methodDefinition.key )
 
-    visit(treeNode) {
-        const result = this.previousClassificationDo( () => {
-            return this.visit(treeNode)
+        let params = this.visit( methodDefinition.value ).params
+
+        params = params.map( (param) => {
+            return param.left !== undefined ? param.left : param
         })
 
-        if( result !== undefined ) {
-            return result
+        const funct = this.newFunctionDefinition({
+            name: methodName,
+            params: params,
+            parseNode: methodDefinition,
+        })
+
+        return this.collectedFunctionDefinitions
+                .push( funct )
+    }
+
+    visitFunctionDeclaration(functionDeclaration) {
+        const functionName = this.visit( functionDeclaration.id )
+
+        const funct = this.newFunctionDefinition({
+            name: functionName,
+            params: [],
+            parseNode: functionDeclaration,
+        })
+
+        return this.collectedFunctionDefinitions
+                .push( funct )
+    }
+
+    newFunctionDefinition({ name: name, params: params, parseNode: parseNode }) {
+        const functionDeclaration = FunctionDeclaration.new({
+            name: name,
+            params: params,
+            sourceFile: this.sourceFile,
+            parseNode: parseNode,
+        })
+
+
+        const comment = this.getCommentOn({ parseNode: parseNode })
+
+        return FunctionDefinition.new({
+            comment: comment,
+            declaration: functionDeclaration,
+        })
+    }
+
+    visitRestElement(restElement) {
+        const paramName = this.visit( restElement.argument )
+
+        return '...' + paramName
+    }
+
+    getCommentOn({ parseNode: parseNode }) {
+        const Comment = require('../source-code/Comment')
+
+        if( parseNode.comment === undefined ) {
+            return this.buildMissingComment({ parseNode: parseNode })
         }
 
-        return this.defaultVisitResult()
+        return Comment.new({
+            sourceFile: this.sourceFile,
+            parseNode: parseNode.comment,
+        })
     }
 
-
-    visitProgram(treeNode) {
-        const childNodes = treeNode.body
-
-        return childNodes.reduce(
-            (functionDefinitions, node) => {
-                return functionDefinitions.concat( this.visit(node) )
-            },
-            []
-        )
-    }
-
-    visitClassDeclaration(treeNode) {
-        const childNodes = treeNode.body.body
-
-        return childNodes.reduce(
-            (functionDefinitions, node) => {
-                return functionDefinitions.concat( this.visit(node) )
-            },
-            []
-        )
-    }
-
-    visitMethodDefinition(treeNode) {
-        return [treeNode]
-    }
-
-    visitFunctionDeclaration(treeNode) {
-        return [treeNode]
-    }
-
-    visitExpressionStatement(treeNode) {
-        return this.visit(treeNode.expression)
-    }
-
-    visitAssignmentExpression(treeNode) {
-        let functionDefinitions = []
-
-        functionDefinitions = functionDefinitions.concat( this.visit(treeNode.left) )
-        functionDefinitions = functionDefinitions.concat( this.visit(treeNode.right) )
-
-        return functionDefinitions
-    }
-
-    visitVariableDeclaration(treeNode) {
-        const childNodes = treeNode.declarations
-
-        return childNodes.reduce(
-            (functionDefinitions, node) => {
-                return functionDefinitions.concat( this.visit(node) )
-            },
-            []
-        )
+    buildMissingComment({ parseNode: parseNode }) {
+        return EmptyJsStatement.new({
+            sourceFile: this.sourceFile,
+            lineNumber: parseNode.loc.start.line,
+            columnNumber: parseNode.loc.start.column,
+        })
     }
 }
 

@@ -24,14 +24,6 @@ class Splitter {
 
     synchronizeViewFromModel() {
     }
-
-    addChildComponent(component) {
-        component.getView().splitProportion = component.getProps().splitProportion
-
-        this.previousClassificationDo( () => {
-            this.addChildComponent(component)
-        })
-    }
 }
 
 module.exports = Classification.define(Splitter)

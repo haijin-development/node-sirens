@@ -28,22 +28,22 @@ class CustomComponent {
                 this.verticalSplitter( function() {
 
                     this.label({
-                        splitProportion: 3.0/6,
+                        viewAttributes: { splitProportion: 3.0/6 },
                         text: 'Label 1'
                     })
 
                     this.label({
-                        splitProportion: 1.0/6,
+                        viewAttributes: { splitProportion: 1.0/6 },
                         text: 'Label 2'
                     })
 
                     this.label({
-                        splitProportion: 1.0/6,
+                        viewAttributes: { splitProportion: 1.0/6 },
                         text: 'Label 3'
                     })
 
                     this.label({
-                        splitProportion: 1.0/6,
+                        viewAttributes: { splitProportion: 1.0/6 },
                         text: 'Label 4'
                     })
 

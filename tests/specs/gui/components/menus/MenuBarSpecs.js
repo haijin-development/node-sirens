@@ -23,11 +23,11 @@ describe('When using a MenuBar', () => {
         expect( menuBar.getChildComponents()[0].getView().isBehavingAs(MenuGroupView) ) .to .be .true
     })
 
-    it('adds 1 menu group with 1 meni item', () => {
+    it('adds 1 menu group with 1 menu item', () => {
         const menuBar = Component.render( function(renderer) {
             this.menuBar( function() {
                 this.menuGroup({ label: 'group 1' }, function() {
-                    this.item({ label: 'item 1' })
+                    this.item({ label: 'item 1', action: () => {} })
                 })
             })
         })

@@ -205,6 +205,14 @@ class Classification {
 
         return this
     }
+
+    compliesWith({ protocol: protocol }) {
+        const implementedProtocols = this.getImplementedProtocols()
+
+        return implementedProtocols.some( (implementedProtocol) => {
+            return protocol === implementedProtocol
+        })
+    }
 }
 
 module.exports = {Classification, setMessageDispatcher}

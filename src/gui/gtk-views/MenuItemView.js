@@ -15,6 +15,10 @@ class MenuItemView {
     /// Initializing
 
     initialize({ label: label, enabled: enabled, action: action }) {
+        if( typeof( action ) !== 'function' ) {
+            throw new Error(`Menu action '${label}' must be a function, got ${action}.`)
+        }
+
         this.label = label
         this.enabled = enabled === undefined ? true : enabled
         this.action = action

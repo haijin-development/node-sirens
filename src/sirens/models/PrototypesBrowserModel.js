@@ -45,28 +45,23 @@ class PrototypesBrowserModel {
     }
 
     connectModels() {
-        this.objectPrototypesListModel.getSelectionModel().on(
-            'value-changed',
+        this.objectPrototypesListModel.onSelectionChanged(
             this.updatePrototypeProps.bind(this)
         )
 
-        this.selectedPrototypePropsModel.getSelectionModel().on(
-            'value-changed',
+        this.selectedPrototypePropsModel.onSelectionChanged(
             this.onPropSelectionChanged.bind(this)
         )
 
-        this.showInheritedModel.on(
-            'value-changed',
+        this.showInheritedModel.onValueChanged(
             this.updatePrototypeProps.bind(this)
         )
 
-        this.showFunctionsModel.on(
-            'value-changed',
+        this.showFunctionsModel.onValueChanged(
             this.updatePrototypeProps.bind(this)
         )
 
-        this.showPropsModel.on(
-            'value-changed',
+        this.showPropsModel.onValueChanged(
             this.updatePrototypeProps.bind(this)
         )
     }

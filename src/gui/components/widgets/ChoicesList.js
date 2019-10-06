@@ -71,13 +71,12 @@ class ChoicesList {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().getListModel().on('list-changed', this.onItemsListChanged.bind(this))
+        this.getModel().onChoicesChanged( this.onItemsListChanged.bind(this) )
+        this.getModel().onChoicesAdded( this.onItemsAdded.bind(this) )
+        this.getModel().onChoicesUpdated( this.onItemsUpdated.bind(this) )
+        this.getModel().onChoicesRemoved( this.onItemsRemoved.bind(this) )
 
-        this.getModel().getListModel().on('items-added', this.onItemsAdded.bind(this))
-        this.getModel().getListModel().on('items-updated', this.onItemsUpdated.bind(this))
-        this.getModel().getListModel().on('items-removed', this.onItemsRemoved.bind(this))
-
-        this.getModel().getSelectionModel().on('value-changed', this.onSelectedValueChanged.bind(this))
+        this.getModel().onSelectionChanged( this.onSelectedValueChanged.bind(this) )
     }
 
     onItemsListChanged() {

@@ -24,12 +24,12 @@ class ClassEditionModel {
         this.classDefinition = classDefinition
 
         this.headerSourceCodeModel = BufferedAttributeModel.new({
-            object: classDefinition.getHeaderDefinition(), 
+            object: classDefinition.getHeader(),
             attributeReader: this.getHeaderSourceCode.bind(this),
         })
 
         this.classMethodsModel = ChoiceModel.new({
-            choices: classDefinition.getFunctionDefinitions(),
+            choices: classDefinition.getMethods(),
             selection: undefined,
         })
 
@@ -41,6 +41,10 @@ class ClassEditionModel {
     }
 
     /// Accessing
+
+    getClassDefinition() {
+        return this.classDefinition
+    }
 
     getClassName() {
         return this.classDefinition.getClassName() + ' class'
@@ -67,14 +71,13 @@ class ClassEditionModel {
     getMethodSourceCode(selectedMethod) {
         if( selectedMethod === undefined ) { return '' }
 
-        return selectedMethod.getFormattedSourceCode()
+        return selectedMethod.getFunctionFormattedSourceCode()
     }
 
     /// Events
 
     connectModels() {
-        this.classMethodsModel.getSelectionModel().on(
-            'value-changed',
+        this.classMethodsModel.onSelectionChanged(
             this.onSelectedMethodChanged.bind(this)
         )
     }

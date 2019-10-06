@@ -38,8 +38,7 @@ class ObjectBrowserModel {
     }
 
     connectModels() {
-        this.objectPropertiesTreeModel.getSelectionModel().on(
-            'value-changed',
+        this.objectPropertiesTreeModel.onSelectionChanged(
             this.onInstVarSelectionChanged.bind(this)
         )
     }

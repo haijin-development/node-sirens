@@ -2,6 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const WidgetBuilder = require('./WidgetBuilder')
 const ToolBar = require('../components/menus/ToolBar')
 const ToolButton = require('../components/menus/ToolButton')
+const ToogleToolButton = require('../components/menus/ToogleToolButton')
 const ToolBarSeparator = require('../components/menus/ToolBarSeparator')
 
 class ToolBarBuilder {
@@ -34,13 +35,25 @@ class ToolBarBuilder {
         return toolBar
     }
 
-    item({label: label, icon: icon, tooltip: tooltip, enabled: enabled, action: action}) {
+    item({ label: label, icon: icon, tooltip: tooltip, enabled: enabled, action: action }) {
         const menuItem = ToolButton.new({
             label: label,
             icon: icon,
             tooltip: tooltip,
             enabled: enabled,
-            action: action
+            action: action,
+        })
+
+        this.toolBarItems.push(menuItem)
+    }
+
+    toggleButton({ model: model, label: label, icon: icon, tooltip: tooltip, enabled: enabled }) {
+        const menuItem = ToogleToolButton.new({
+            model: model,
+            label: label,
+            icon: icon,
+            tooltip: tooltip,
+            enabled: enabled,
         })
 
         this.toolBarItems.push(menuItem)

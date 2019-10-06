@@ -57,8 +57,8 @@ class ObjectPropertiesComponent {
                 this.column({
                     label: '',
                     getImageBlock: function(instVar) { return instVar.icon() },
-                    imageWidth: 16,
-                    imageHeight: 16,
+                    imageWidth: 24,
+                    imageHeight: 24,
                 })
 
                 this.column({

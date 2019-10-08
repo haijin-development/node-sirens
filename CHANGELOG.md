@@ -7,10 +7,12 @@
 ### Sirens
 
 - Updated version number.
+- When opening files the ClassEditor now remembers the last folder opened.
 
 ### gui
 
 - Added params type cheking to all protocols.
+- Added the optional parameter initialFolder to FileChooser
 
 ### O language
 

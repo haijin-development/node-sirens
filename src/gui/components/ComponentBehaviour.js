@@ -3,8 +3,7 @@ const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProto
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 const OInstance = require('../../o-language/classifications/OInstance')
 const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
-const ValueModelBehaviour = require('../models/ValueModelBehaviour')
-const ValueModel = require('../models/ValueModel')
+
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 
 class ComponentBehaviour {

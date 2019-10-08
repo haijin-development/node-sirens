@@ -1,11 +1,6 @@
 const Protocol = require('../../o-language/classifications/Protocol')
 
 class GtkViewProtocol_Implementation {
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = []
-    }
 
     /// Accessing
 
@@ -65,7 +60,9 @@ class GtkViewProtocol_Implementation {
         GtkStackView, GtkSplitterView and GtkTabs do.
 
     */
-    directChildViewAdd(childView) {}
+    directChildViewAdd(childView) {
+        this.param(childView) .compliesWith( _GtkViewProtocol_Implementation )
+    }
 
     /*
         A parent GtkView that owns a Gtk container handle will receive this message when
@@ -86,7 +83,9 @@ class GtkViewProtocol_Implementation {
         GtkStackView, GtkSplitterView and GtkTabs do.
 
     */
-    directChildViewRemove(childView) {}
+    directChildViewRemove(childView) {
+        this.param(childView) .compliesWith( _GtkViewProtocol_Implementation )
+    }
 
     /*
         Iterate over this GtkView and its descendant GtkViews until the leafs that are own Gtk handles.
@@ -94,7 +93,11 @@ class GtkViewProtocol_Implementation {
         This method is a convenient way for a parent GtkView to reach only its own children owning
         concrete Gtk widget handles ignoring all the intermediate ComponentViews.
     */
-    concreteViewsDo(closure) {}
+    concreteViewsDo(closure) {
+        this.param(closure) .isFunction()
+    }
 }
 
-module.exports = Protocol.define(GtkViewProtocol_Implementation)
+_GtkViewProtocol_Implementation = Protocol.define(GtkViewProtocol_Implementation)
+
+module.exports = _GtkViewProtocol_Implementation

@@ -1,6 +1,22 @@
 # Changelog
 
-## v0.8.0 (next release)
+## v0.9.0 (next release)
+
+## v0.8.0 
+
+### Sirens
+
+- Updated version number.
+
+### gui
+
+- Added params type cheking to all protocols.
+
+### O language
+
+- Implemented ParamsChecker to add dynamic strict params validation to any object.
+- Implemented ClassificationWithTypeChecking to add dynamic strict params validation to all new defined Classifications.
+- Added recursive `implements` to declared `implements` in protocols.
 
 ## v0.7.0
 

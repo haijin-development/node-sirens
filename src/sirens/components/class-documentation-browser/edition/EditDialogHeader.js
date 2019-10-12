@@ -1,3 +1,4 @@
+const fs = require('fs')
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
@@ -19,6 +20,8 @@ class EditDialogHeader {
         const title = this.getProps().title
         const subtitle = this.getProps().subtitle
 
+        const imageIsFile = fs.existsSync( mainIcon )
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
@@ -29,14 +32,28 @@ class EditDialogHeader {
                     },
                 })
 
-                this.image({
-                    filename: mainIcon,
-                    width: 48,
-                    height: 48,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
-                })
+                if( imageIsFile ) {
+
+                    this.image({
+                        filename: mainIcon,
+                        width: 48,
+                        height: 48,
+                        viewAttributes: {
+                            stackSize: 'fixed',
+                        },
+                    })
+
+                } else {
+
+                    this.image({
+                        iconName: mainIcon,
+                        size: GtkIcons.size._48x48,
+                        viewAttributes: {
+                            stackSize: 'fixed',
+                        },
+                    })
+
+                }
 
                 this.image({
                     iconName: GtkIcons.edit,
@@ -60,8 +77,6 @@ class EditDialogHeader {
                 })
 
             })
-
-            this.verticalSeparator()
 
         })
 

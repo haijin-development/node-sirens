@@ -47,8 +47,6 @@ class MethodCommentHeader {
 
             })
 
-            this.verticalSeparator()
-
         })
     }
 }

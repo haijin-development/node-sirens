@@ -8,6 +8,7 @@
 
 - Updated version number.
 - When opening files the ClassEditor now remembers the last folder opened.
+- Implemented edition of a class documentation.
 
 ### gui
 

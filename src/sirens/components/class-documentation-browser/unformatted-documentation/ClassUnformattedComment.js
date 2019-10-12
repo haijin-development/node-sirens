@@ -5,6 +5,7 @@ const ComponentProtocol_Implementation = require('../../../../gui/protocols/Comp
 const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
 const ClassCommentHeader = require ('../ClassCommentHeader')
 const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
+const EditClassDescriptionHeader = require('../EditClassDescriptionHeader')
 
 class ClassUnformattedComment {
     /// Definition
@@ -60,13 +61,25 @@ class ClassUnformattedComment {
 
             this.verticalStack( function() {
 
+                if( isInEditionMode ) {
+                    this.component(
+                        EditClassDescriptionHeader.new({
+                            model: model,
+                            editionClosure: editionClosure,
+                        })
+                    )
+
+                    this.verticalSeparator()
+                }
+
                 this.component(
                     ClassCommentHeader.new({
                         className: className,
                         window: this.getProps().window,
-                        editionClosure: editionClosure,
                     })
                 )
+
+                this.verticalSeparator()
 
                 this.text({
                     text: unformattedComment,

@@ -3,6 +3,7 @@ const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
 const Resource = require('../../../objects/Resource')
+const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
 
 class ExampleHeader {
     /// Definition
@@ -16,7 +17,11 @@ class ExampleHeader {
     /// Building
 
     renderWith(componentsRenderer) {
-        const exampleNumber = this.getProps().exampleNumber + 1
+        const model = this.getModel()
+
+        const isInEditionMode = model.isInEditionMode()
+
+        const exampleNumber = this.getProps().index + 1
 
         const exampleDescription = this.getProps().exampleDescription
 
@@ -50,11 +55,62 @@ class ExampleHeader {
                     })
                 })
 
+                if( isInEditionMode ) {
+
+                    this.verticalStack( function() {
+
+                        this.styles({
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                                stackAlign: 'end',
+                            },
+                        })
+
+                        this.textButton({
+                            text: 'Edit...',
+                            image: {
+                                iconName: GtkIcons.edit,
+                                size: GtkIcons.size._16x16,
+                            },
+                            onClicked: component.handleEditExample.bind(component),                        
+                        })
+
+                        this.textButton({
+                            text: 'Delete',
+                            image: {
+                                filename: Resource.image.false,
+                                width: 16,
+                                height: 16,
+                            },
+                            onClicked: component.handleDeleteExample.bind(component),                        
+                        })
+
+                    })
+                }
+
             })
 
-            this.verticalSeparator()
         })
     }
+
+    /// Events
+
+    handleEditExample() {
+        const exampleIndex = this.getProps().index
+
+        this.getProps().editExample({
+            atIndex: exampleIndex
+        })
+    }
+
+    handleDeleteExample() {
+        const exampleIndex = this.getProps().index
+
+        this.getProps().deleteExample({
+            atIndex: exampleIndex
+        })
+    }
+
 }
 
 module.exports = Classification.define(ExampleHeader)

@@ -65,6 +65,8 @@ class EditClassCommentDialog {
                         })
                     )
 
+                    this.verticalSeparator()
+
                     this.text({
                         id: 'classDescription',
                         text: description,

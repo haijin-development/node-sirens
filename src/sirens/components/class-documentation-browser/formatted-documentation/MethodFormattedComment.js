@@ -76,7 +76,11 @@ class MethodFormattedComment {
                         })
                     )
     
+                    this.verticalSeparator()
+
                     params.forEach( (param, index) => {
+                        this.verticalSeparator()
+
                         this.component(
                             ParamDocumentation.new({
                                 paramIndex: index,
@@ -86,6 +90,8 @@ class MethodFormattedComment {
                     })
 
                     if( returns !== undefined ) {
+                        this.verticalSeparator()
+
                         this.component(
                             ReturnsDocumentation.new({
                                 returns: returns,
@@ -94,20 +100,30 @@ class MethodFormattedComment {
                     }
 
                     implementationNotes.forEach( (implementationNote, index) => {
+
+                        this.verticalSeparator()
+
                         this.component(
                             ImplementationNoteDocumentation.new({
+                                model: model,
                                 index: index,
                                 implementationNote: implementationNote,
                             })
                         )
+
                     })
 
                     examples.forEach( (example) => {
+
+                        this.verticalSeparator()
+
                         this.component(
                             ExampleDocumentation.new({
-                                model: example,
+                                model: model,
+                                example: example,
                             })
                         )
+
                     })
 
                 })

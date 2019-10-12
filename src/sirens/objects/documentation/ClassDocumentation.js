@@ -88,6 +88,13 @@ class ClassDocumentation {
         this.implementationNotes.push( implementationNote )
     }
 
+    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
+        this.implementationNotes[index] = implementationNoteText
+    }
+
+    deleteImplementationNoteAt({ index: index }) {
+        this.implementationNotes.splice( index, 1 )
+    }
 
     getTags() {
         return this.tags
@@ -106,6 +113,14 @@ class ClassDocumentation {
         example.index = this.examples.length
 
         this.examples.push( example )
+    }
+
+    updateExampleAt({ index: index, example: example }) {
+        this.examples[index] = example
+    }
+
+    deleteExampleAt({ index: index }) {
+        this.examples.splice( index, 1 )
     }
 
     /// Generating class comment

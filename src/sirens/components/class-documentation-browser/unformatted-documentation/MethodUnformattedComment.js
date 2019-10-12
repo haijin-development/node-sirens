@@ -50,6 +50,8 @@ class MethodUnformattedComment {
                     })
                 )
 
+                this.verticalSeparator()
+
                 this.text({
                     text: methodUnformattedComment,
                 })

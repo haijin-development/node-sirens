@@ -1,8 +1,8 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
-const Resource = require('../../objects/Resource')
+const Classification = require('../../../../../src/o-language/classifications/Classification')
+const Component = require('../../../../gui/components/Component')
+const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+const Resource = require('../../../objects/Resource')
 
 class ParamDocumentation {
     /// Definition
@@ -29,7 +29,7 @@ class ParamDocumentation {
                     },
                 })
 
-                this.fileImage({
+                this.image({
                     filename: Resource.image.param,
                     width: 48,
                     height: 48,

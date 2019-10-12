@@ -2,30 +2,37 @@ const Classification = require('../../o-language/classifications/Classification'
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
+const GtkImageBuilder = require('./constants/GtkImageBuilder')
 
 class TextButtonView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['button', 'onClickedClosure']
+        this.instanceVariables = ['button', 'image', 'onClickedClosure']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({ onClicked: onClickedClosure }) {
+    initialize({ onClicked: onClickedClosure, image: image }) {
+        this.onClickedClosure = onClickedClosure
+        this.image = image
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
-
-        this.onClickedClosure = onClickedClosure
-
-        this.initializeHandles()
     }
 
     initializeHandles() {
-        this.button = new Gtk.Button({label: ''})
+        this.button = new Gtk.Button({ label: '' })
+
+        if( this.image !== undefined ) {
+            const imageHandle = GtkImageBuilder.build( this.image )
+
+            this.button.setImage( imageHandle )
+            this.button.setAlwaysShowImage( true )
+        }
     }
 
     /// Accessing
@@ -35,17 +42,17 @@ class TextButtonView {
     }
 
     setText(text) {
-        this.button.label = text
+        this.button.setLabel( text )
     }
 
     getText() {
-        return this.button.label
+        return this.button.getLabel()
     }
 
     /// Events
 
-    subscribeToGUISignals(props) {
-        this.button.on('clicked', this.handleClick.bind(this))
+    subscribeToGUISignals() {
+        this.button.on( 'clicked', this.handleClick.bind(this) )
     }
 
     handleClick() {

@@ -13,6 +13,8 @@
 
 - Added params type cheking to all protocols.
 - Added the optional parameter initialFolder to FileChooser
+- Renamed toolBar.item to toolBar.button.
+- Implemented Dialog.
 
 ### O language
 

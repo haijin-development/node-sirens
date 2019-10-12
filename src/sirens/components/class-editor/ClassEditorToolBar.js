@@ -26,14 +26,14 @@ class ClassEditorMenuBar {
                     }
                 })
 
-                this.item({
+                this.button({
                     label: 'Open file...',
                     icon: GtkIcons.open,
                     tooltip: 'Opens a file to edit its class.',
                     action: component.getProps().openFile,
                 })
 
-                this.item({
+                this.button({
                     label: 'Open file in new window...',
                     icon: GtkIcons.add,
                     tooltip: 'Opens a file in a new window to edit its class.',
@@ -42,7 +42,7 @@ class ClassEditorMenuBar {
 
                 this.skip().separator()
 
-                this.skip().item({
+                this.skip().button({
                     label: 'Save file',
                     icon: GtkIcons.save,
                     tooltip: 'Saves the edited file.',

@@ -34,6 +34,10 @@ class ClassDefinition {
         return this.declaration.getSourceFile()
     }
 
+    getDeclaration() {
+        return this.declaration
+    }
+
     getHeader() {
         return this.header
     }
@@ -75,6 +79,30 @@ class ClassDefinition {
     getEndingColumn() {
         return this.declaration.getStartingColumn()
     }
+
+    /// Actions
+
+    /*
+     * Returns all the class definitions in the file.
+     */
+    reload() {
+        const className = this.getClassName()
+
+        const sourceFile = this.getSourceFile()
+
+        sourceFile.reload()
+
+        const classDefinitions = sourceFile.getClassDefinitions()
+
+        const newClassDefinition = classDefinitions.find( (eachClassDefinition) => {
+            return eachClassDefinition.getClassName() === className
+        })
+
+        this.declaration = newClassDefinition.getDeclaration()
+        this.comment = newClassDefinition.getComment()
+        this.header = newClassDefinition.getHeader()
+    }
+
 }
 
 module.exports = Classification.define(ClassDefinition)

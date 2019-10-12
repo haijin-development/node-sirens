@@ -1,9 +1,9 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const Widget = require('../Widget')
-const FileImageView = require('../../gtk-views/FileImageView')
+const ImageView = require('../../gtk-views/ImageView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
-class FileImage {
+class Image {
     /// Definition
 
     static definition() {
@@ -19,14 +19,16 @@ class FileImage {
     }
 
     createView() {
-        const filename = this.getProps().filename
-        const width = this.getProps().width
-        const height = this.getProps().height
+        const props = this.getProps()
 
-        return FileImageView.new({
-            filename: filename,
-            width: width,
-            height: height,
+        return ImageView.new({
+            imageProps: {
+                filename: props.filename,
+                width: props.width,
+                height: props.height,
+                iconName: props.iconName,
+                size: props.size,
+            }
         })
     }
 
@@ -36,4 +38,4 @@ class FileImage {
     }
 }
 
-module.exports = Classification.define(FileImage)
+module.exports = Classification.define(Image)

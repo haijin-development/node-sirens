@@ -49,6 +49,7 @@ class FileChooserView {
         this.dialog.setTitle(title)
         this.dialog.setTransientFor(windowHandle)
         this.dialog.setModal(true)
+
         this.dialog.addButton('Cancel', Gtk.ResponseType.CANCEL)
         this.dialog.addButton(label, Gtk.ResponseType.ACCEPT)
 

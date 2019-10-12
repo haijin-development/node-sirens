@@ -84,6 +84,27 @@ class StringStream {
 
         return this
     }
+
+    /// Iterating
+
+    forEach({ in: collection, do: eachClosure, inBetweenDo: inBetweenClosure }) {
+        const n = collection.length
+
+        for( let i = 0; i < n; i++ ) {
+            const item = collection[i]
+
+            eachClosure( item, i )
+
+            if( i < n - 1 ) {
+                inBetweenClosure({
+                    leftItem: item,
+                    rightItem: collection[i + 1],
+                    leftIndex: i,
+                    rightIndex: i + 1
+                })
+            }
+        }
+    }
 }
 
 module.exports = Classification.define(StringStream)

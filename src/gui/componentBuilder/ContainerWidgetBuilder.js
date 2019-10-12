@@ -4,6 +4,7 @@ const MenuBuilder = require('./MenuBuilder')
 const ToolBarBuilder = require('./ToolBarBuilder')
 
 const Window = require('../components/containers/Window')
+const Dialog = require('../components/dialogs/Dialog')
 const Container = require('../components/containers/Container')
 const Stack = require('../components/containers/Stack')
 const Splitter = require('../components/containers/Splitter')
@@ -17,8 +18,7 @@ const Text = require('../components/widgets/Text')
 const CheckBox = require('../components/widgets/CheckBox')
 const TextButton = require('../components/widgets/TextButton')
 const RadioButton = require('../components/widgets/RadioButton')
-const FileImage = require('../components/widgets/FileImage')
-const StockIcon = require('../components/widgets/StockIcon')
+const Image = require('../components/widgets/Image')
 
 const WidgetBuilder = require('./WidgetBuilder')
 
@@ -68,6 +68,20 @@ class ContainerWidgetBuilder {
             })
 
         const window = Window.new( builder.getProps() )
+
+        window.addAllChildrenComponents( builder.getChildComponents() )
+
+        this.childComponents.push(window)
+    }
+
+    dialog(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = this.thisClassification().new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const window = Dialog.new( builder.getProps() )
 
         window.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -310,26 +324,14 @@ class ContainerWidgetBuilder {
         this.childComponents.push(toolBar)
     }
 
-    fileImage(props, closure) {
+    image(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
         const builder = WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const image = FileImage.new( builder.getProps() )
-
-        this.childComponents.push(image)
-    }
-
-    stockIcon(props, closure) {
-        [props, closure] = this.normalizeArguments(props, closure)
-
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
-                builder.build(closure)
-            })
-
-        const image = StockIcon.new( builder.getProps() )
+        const image = Image.new( builder.getProps() )
 
         this.childComponents.push(image)
     }

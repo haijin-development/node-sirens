@@ -29,7 +29,7 @@ class MethodCommentHeader {
                     },
                 })
 
-                this.fileImage({
+                this.image({
                     filename: Resource.image.method,
                     width: 48,
                     height: 48,

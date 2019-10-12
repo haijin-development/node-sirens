@@ -84,6 +84,14 @@ class SourceCodeText {
         return this.formatText( this.text )
     }
 
+    setIndentationCount(indentationCount) {
+        this.indentationCount = indentationCount
+    }
+
+    setIndentationChar(indentationChar) {
+        this.indentationChar = indentationChar
+    }
+
     /// Querying
 
     getLines() {

@@ -1,24 +1,24 @@
+const path = require('path')
+const fs = require('fs')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
-const GtkImage = require ('./GtkImage')
+const GtkImageBuilder = require('./constants/GtkImageBuilder')
 
-class StockIconView {
+class ImageView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['image', 'iconName', 'size']
+        this.instanceVariables = ['image', 'imageProps']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({ iconName: iconName, size: size }) {
-
-        this.iconName = iconName
-        this.size = size
+    initialize({ imageProps: imageProps }) {
+        this.imageProps = imageProps
 
         this.previousClassificationDo( () => {
             this.initialize()
@@ -26,7 +26,7 @@ class StockIconView {
     }
 
     initializeHandles() {
-        this.image = Gtk.Image.newFromIconName( this.iconName, this.size )
+        this.image = GtkImageBuilder.build( this.imageProps )
     }
 
     /// Accessing
@@ -41,4 +41,4 @@ class StockIconView {
     }
 }
 
-module.exports = Classification.define(StockIconView)
+module.exports = Classification.define(ImageView)

@@ -3,8 +3,8 @@ const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const ClassMethodsDocumentation = require('./ClassMethodsDocumentation')
-const ClassUnformattedComment = require('./ClassUnformattedComment')
-const ClassFormattedComment = require('./ClassFormattedComment')
+const ClassUnformattedComment = require('./unformatted-documentation/ClassUnformattedComment')
+const ClassFormattedComment = require('./formatted-documentation/ClassFormattedComment')
 
 class DocumentationBrowserBody {
     /// Definition
@@ -18,13 +18,15 @@ class DocumentationBrowserBody {
     /// Building
 
     reRenderWhen() {
-        const showUnformattedCommentsModel = this.getModel().getShowUnformattedCommentsModel()
+        const documentationChangedModel = this.getModel().getDocumentationChangedModel()
 
-        this.reRenderOnValueChangeOf( showUnformattedCommentsModel )
+        this.reRenderOnValueChangeOf( documentationChangedModel )
     }
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
+
+        const showsUnformattedComments = model.showsUnformattedComments()
 
         componentsRenderer.render( function(component) {
 
@@ -32,11 +34,12 @@ class DocumentationBrowserBody {
 
                 this.tabPage({ label: 'Class comment' }, function() {
 
-                    if( model.showsUnformattedComments() ) {
+                    if( showsUnformattedComments ) {
 
                         this.component(
                             ClassUnformattedComment.new({
-                                model: model
+                                model: model,
+                                window: this.getProps().window,
                             })
                         )
 
@@ -44,7 +47,8 @@ class DocumentationBrowserBody {
 
                         this.component(
                             ClassFormattedComment.new({
-                                model: model
+                                model: model,
+                                window: this.getProps().window,
                             })
                         )
 

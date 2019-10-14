@@ -10,7 +10,7 @@ class DocumentationBrowserBody {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['selectedTabPageIndex', 'isRendering']
         this.assumes = [Component]
         this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
     }
@@ -23,6 +23,16 @@ class DocumentationBrowserBody {
         this.reRenderOnValueChangeOf( documentationChangedModel )
     }
 
+    reRender() {
+        this.isRendering = true
+
+        this.previousClassificationDo( () => {
+            this.reRender()
+        })
+
+        this.isRendering = false
+    }
+
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
@@ -31,6 +41,10 @@ class DocumentationBrowserBody {
         componentsRenderer.render( function(component) {
 
             this.tabs({ aligment: 'top', id: 'tabs' }, function() {
+
+                this.handlers({
+                    onTabPageChanged: component.onTabPageChanged.bind(component),
+                })
 
                 this.tabPage({ label: 'Class comment' }, function() {
 
@@ -69,7 +83,24 @@ class DocumentationBrowserBody {
             })
 
         })
+
+        this.selectPreviousSelectedTabPage()
+    }
+
+    selectPreviousSelectedTabPage() {
+        if( this.selectedTabPageIndex < 0 ) { return }
+
+        const tabsComponent = this.getChildComponent({ id: 'tabs' })
+
+        tabsComponent.showTabPageAt({ index: this.selectedTabPageIndex })
+    }
+
+    onTabPageChanged({ tabPageIndex: tabPageIndex }) {
+        if( this.isRendering === true ) { return }
+
+        this.selectedTabPageIndex = tabPageIndex
     }
 }
+
 
 module.exports = Classification.define(DocumentationBrowserBody)

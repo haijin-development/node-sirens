@@ -75,7 +75,7 @@ class StackTraceBrowserModel {
     /// Formatting
 
     getFunctionSourceCode(functionDefinition) {
-        if( functionDefinition === undefined ) { return '' }
+        if( functionDefinition === null ) { return '' }
 
         return functionDefinition.getFunctionSourceCode()
     }
@@ -91,14 +91,14 @@ class StackTraceBrowserModel {
     }
 
     getFunctionDefinitionFrom(stackFrame) {
+        if( stackFrame === null ) { return null }
+
         return FunctionDefinition.from({
             file: stackFrame.getFileName(),
             line: stackFrame.getLineNumber(),
             colum: stackFrame.getColumnNumber(),
         })
     }
-
-    /// Displaying
     
 }
 

@@ -41,7 +41,7 @@ class EmptyJsStatement {
         return ''
     }
 
-    getString() {
+    getContents() {
         return ''
     }
 

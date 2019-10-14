@@ -8,7 +8,7 @@ class TabsView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['notebook', 'tabLabels']
+        this.instanceVariables = ['notebook', 'tabLabels', 'onTabPageChanged']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -22,6 +22,14 @@ class TabsView {
     }
 
     /// Initializing
+
+    initialize(props) {
+        this.onTabPageChanged = props.onTabPageChanged
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+    }
 
     initializeHandles() {
         this.notebook = new Gtk.Notebook()
@@ -112,6 +120,7 @@ class TabsView {
     }
 
     subscribeToGUISignals(props) {
+        this.notebook.on('switch-page', this.handleSwitchPage.bind(this))
     }
 
     ensureFixedPosition(childView) {
@@ -148,6 +157,14 @@ class TabsView {
         this.previousClassificationDo( () => {
             this.removeChildView( childView )
         })
+    }
+
+    /// Events
+
+    handleSwitchPage(newTabPageHandle, newTabPageIndex) {
+        if( this.onTabPageChanged === undefined ) { return }
+
+        this.onTabPageChanged({ tabPageIndex: newTabPageIndex })
     }
 }
 

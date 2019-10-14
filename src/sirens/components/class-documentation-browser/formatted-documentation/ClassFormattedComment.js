@@ -71,9 +71,9 @@ class ClassFormattedComment {
 
         documentation.addImplementationNote( implementationNoteText )
 
-        const rawClassComment = documentation.generateComment()
-
-        model.updateClassRawComment( rawClassComment )
+        this.updateClassDocumentation({
+            documentation: documentation,
+        })
     }
 
     deleteImplementationNote({ atIndex: index }) {
@@ -149,9 +149,9 @@ class ClassFormattedComment {
 
         documentation.addExample( example )
 
-        const rawClassComment = documentation.generateComment()
-
-        model.updateClassRawComment( rawClassComment )
+        this.updateClassDocumentation({
+            documentation: documentation,
+        })
     }
 
     editExampleAt({ index: index, example: example }) {
@@ -203,11 +203,17 @@ class ClassFormattedComment {
 
 
     updateClassDocumentation({ documentation: documentation }) {
-        const rawClassComment = documentation.generateComment()
+        const classCommentContents = documentation.generateCommentContents()
 
         const model = this.getModel()
 
-        model.updateClassRawComment( rawClassComment )
+        const classDefinition = model.getClassDefinition()
+
+        const classComment = classDefinition.getComment()
+
+        classComment.writeFormattedContents( classCommentContents )
+
+        model.reload()
     }
 
     /// Building

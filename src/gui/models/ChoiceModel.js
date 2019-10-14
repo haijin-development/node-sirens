@@ -46,6 +46,10 @@ class ChoiceModel {
     }
 
     setSelectionValue(newSelection) {
+        if( newSelection === undefined ) {
+            newSelection = null
+        }
+
         return this.selectionModel.setValue(newSelection)
     }
 
@@ -58,7 +62,7 @@ class ChoiceModel {
     setSelectionIndex({ index: index }) {
         const item = this.listModel.getItemAt({ index: index })
 
-        return this.selectionModel.setValue(item)
+        return this.setSelectionValue(item)
     }
 
     /// Events

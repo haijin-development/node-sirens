@@ -26,7 +26,6 @@ class ClassMethodsDocumentation {
 
             this.horizontalSplitter( function() {
 
-                
                 if( showsUnformattedComments ) {
 
                     this.component(

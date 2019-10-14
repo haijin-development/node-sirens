@@ -30,22 +30,37 @@ class Comment {
 
     /// Accessing
 
-    /*
-     * Returns the name of the class.
-     */
-    getString() {
+    getContents() {
         const commentNode = this.getFirstNode()
 
         return commentNode.value
     }
 
-    getFormattedString() {
-        let originalSourceCode = this.getString()
+    getFormattedContents() {
+        let originalSourceCode = this.getContents()
 
         const sourceCodeText = SourceCodeText.new({ text: originalSourceCode })
 
         return sourceCodeText.getFormattedText()
     }
+
+    writeFormattedContents(formattedComment) {
+        const commentText = SourceCodeText.new({ text: this.getSourceCode() })
+        const indentationCount = commentText.getIndentationCount()
+        const indentationChar = commentText.getIndentationChar()
+
+        const sourceCodeText = SourceCodeText.new({ text: this.getContents() })
+        formattedComment = sourceCodeText.unformatBackText( formattedComment )
+
+        const comment =
+            '/*' + 
+            formattedComment +
+            `\n` + indentationChar.repeat( indentationCount ) + '*/'
+
+
+        this.writeRawSourceCode({ rawSourceCode: comment })
+    }
+
 }
 
 module.exports = Classification.define(Comment)

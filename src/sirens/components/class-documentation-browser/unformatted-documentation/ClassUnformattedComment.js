@@ -34,9 +34,13 @@ class ClassUnformattedComment {
     updateClassComment({ newClassDescription: newClassDescription }) {
         const model = this.getModel()
 
-        const newClassComment = `/*\n${newClassDescription}\n*/`
+        const classDefinition = model.getClassDefinition()
 
-        model.updateClassRawComment( newClassComment )
+        const classComment = classDefinition.getComment()
+
+        classComment.writeRawSourceCode({ rawSourceCode: newClassDescription })
+
+        model.reload()
     }
 
     /// Building

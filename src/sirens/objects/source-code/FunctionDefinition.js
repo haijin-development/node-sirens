@@ -1,5 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
+const MethodDocumentation = require('../documentation/MethodDocumentation')
 
 /*
  * The definition of a javascript function.
@@ -74,6 +75,22 @@ class FunctionDefinition {
 
     getEndingColumn() {
         return this.declaration.getEndingColumn()
+    }
+
+    getDocumentation() {
+        const unformattedComment = this.getComment().getContents()
+
+        return MethodDocumentation.isDocumentationString({
+            string: unformattedComment,
+            ifTrue: (documentation) => {
+                return documentation
+            },
+            ifFalse: () => {
+                const documentation = MethodDocumentation.new()
+                documentation.setDescription( unformattedComment )
+                return documentation
+            },
+        })
     }
 }
 

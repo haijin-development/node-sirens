@@ -1,7 +1,7 @@
 const Classification = require('../../src/o-language/classifications/Classification')
 const ClassificationWithTypeChecking = require('../../src/o-language/classifications/ClassificationWithTypeChecking')
 /// Enable dynamic strict type checking
-Classification.behaveAs( ClassificationWithTypeChecking )
+//Classification.behaveAs( ClassificationWithTypeChecking )
 const Sirens = require('../../src/Sirens')
 
 class User {

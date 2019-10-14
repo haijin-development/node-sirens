@@ -19,7 +19,9 @@ class Tabs {
     }
 
     createView() {
-        return TabsView.new()
+        return TabsView.new({
+            onTabPageChanged: this.onTabPageChanged.bind(this)
+        })
     }
 
     synchronizeViewFromModel() {
@@ -53,7 +55,17 @@ class Tabs {
     /// Actions
 
     showTabPageAt({ index: index }) {
-        this.getView().showTabPageAt({ index: 0 })
+        this.getView().showTabPageAt({ index: index })
+    }
+
+    /// Events
+
+    onTabPageChanged({ tabPageIndex: tabPageIndex }) {
+        const tabPageChangedHandler = this.getProps().onTabPageChanged
+
+        if( tabPageChangedHandler === undefined ) { return }
+
+        tabPageChangedHandler({ tabPageIndex: tabPageIndex })
     }
 }
 

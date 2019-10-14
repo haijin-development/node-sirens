@@ -17,8 +17,12 @@ class ObjectAttributeModel {
     initialize(
         { object: object, attributeReader: attributeReader, attributeWriter: attributeWriter }
         =
-        { object: undefined, attributeReader: undefined, attributeWriter: undefined }
+        { object: null, attributeReader: null, attributeWriter: null }
     ) {
+        if( object === undefined ) { object = null }
+        if( attributeReader === undefined ) { attributeReader = null }
+        if( attributeWriter === undefined ) { attributeWriter = null }
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -31,7 +35,7 @@ class ObjectAttributeModel {
     /// Reading
 
     doGetValue() {
-        if( this.attributeReader === undefined ) { return }
+        if( this.attributeReader === null ) { return }
 
         return this.attributeReader( this.object )
     }
@@ -51,6 +55,8 @@ class ObjectAttributeModel {
     /// Writing
 
     setObject(newObject) {
+        if( newObject === undefined ) { newObject = null }
+
         const oldValue = this.doGetValue()
 
         this.object = newObject
@@ -81,7 +87,8 @@ class ObjectAttributeModel {
     }
 
     doSetValue(newValue) {
-        if( this.attributeWriter === undefined ) { return }
+        if( newValue === undefined ) { newValue = null }
+        if( this.attributeWriter === null ) { return }
 
         this.attributeWriter( this.object, newValue )
     }

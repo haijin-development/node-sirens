@@ -90,7 +90,7 @@ class EditExampleDialog {
                     size: GtkIcons.size._16x16,
                 },
                 label: acceptButtonLabel,
-                action: () => { this.handleUpdateImplementationNote() },
+                action: () => { this.handleUpdateExample() },
             },
         ]
 
@@ -103,7 +103,7 @@ class EditExampleDialog {
 
     /// Events
 
-    handleUpdateImplementationNote() {
+    handleUpdateExample() {
         const exampleDescriptionComponent = this.getChildComponent({
             id: 'exampleDescription'
         })

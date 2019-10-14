@@ -46,43 +46,31 @@ function globalFunction_1(param) {
 */
 class Address {
     /*
-        Param({
-            Name: 'streetName',
-            Protocols: [ String ],
-            Description: `The name of the street. Does not include the street number.`,
-        })
+       Example({
+          Description: `
+             Creates an Address with a given street name and number.
+          `,
+          Code: `
+             const Address = require('../../../examples/samples/Address')
 
-        Param({
-            Name: 'number',
-            Protocols: [ int ],
-            Description: `The number of the address in the street.`,
-        })
+             new Address({ streetName: 'Evergreen', number: 742 })
+          `,
+       })
 
-        Example({
-            Description: `
-                Creates an Address with a given street name and number.
-            `,
-            Code: `
-                const Address = require('../../../examples/samples/Address')
+       Example({
+          Description: `
+             Creates an empty Address.
+          `,
+          Code: `
+             const Address = require('../../../examples/samples/Address')
 
-                new Address({ streetName: 'Evergreen', number: 742 })
-            `,
-        })
+             new Address()
+          `,
+       })
 
-        Example({
-            Description: `
-                Creates an empty Address.
-            `,
-            Code: `
-                const Address = require('../../../examples/samples/Address')
-
-                new Address()
-            `,
-        })
-
-        Tags([
-            `constructor`,
-        ])
+       Tags([
+          'constructor'
+       ])
     */
     constructor({ streetName: streetName, number: number } = {}) {
         this.streetName = streetName

@@ -9,6 +9,8 @@
 - Updated version number.
 - When opening files the ClassEditor now remembers the last folder opened.
 - Implemented edition of a class documentation.
+- Fixed errors when lists and trees had no items selected.
+- Implemented edition of a method documentation.
 
 ### gui
 
@@ -16,6 +18,7 @@
 - Added the optional parameter initialFolder to FileChooser
 - Renamed toolBar.item to toolBar.button.
 - Implemented Dialog.
+- ChoiceModel sets to null instead of undefined when it has no item selection.
 
 ### O language
 

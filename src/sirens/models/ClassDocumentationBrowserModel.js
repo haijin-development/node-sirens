@@ -85,13 +85,13 @@ class ClassDocumentationBrowserModel {
     }
 
     getClassUnformattedComment() {
-        return this.classDefinition.getComment().getString()
+        return this.classDefinition.getComment().getSourceCode()
     }
 
     getClassDocumentation() {
         const className = this.classDefinition.getClassName()
 
-        const unformattedComment = this.getClassUnformattedComment()
+        const unformattedComment = this.classDefinition.getComment().getContents()
 
         return ClassDocumentation.isDocumentationString({
             string: unformattedComment,
@@ -126,7 +126,7 @@ class ClassDocumentationBrowserModel {
             })
         }
 
-        const unformattedComment = method.getComment().getString()
+        const unformattedComment = method.getComment().getContents()
 
         return MethodDocumentation.isDocumentationString({
             string: unformattedComment,
@@ -155,14 +155,6 @@ class ClassDocumentationBrowserModel {
         )
 
         this.triggerDocumentationChanged()
-    }
-
-    updateClassRawComment(classRawComment) {
-        const classComment = this.classDefinition.getComment()
-
-        classComment.writeSourceCode( classRawComment )
-
-        this.reload()
     }
 
     /// Events

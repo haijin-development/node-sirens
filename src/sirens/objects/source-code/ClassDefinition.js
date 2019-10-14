@@ -34,6 +34,18 @@ class ClassDefinition {
         return this.declaration.getSourceFile()
     }
 
+    getSourceCode() {
+        return  this.header.getSourceCode() +
+                this.comment.getSourceCode() +
+                this.declaration.getSourceCode()
+    }
+
+    getFormattedSourceCode() {
+        return  this.header.getFormattedSourceCode() +
+                this.comment.getFormattedSourceCode() +
+                this.declaration.getFormattedSourceCode()
+    }
+
     getDeclaration() {
         return this.declaration
     }
@@ -78,6 +90,16 @@ class ClassDefinition {
 
     getEndingColumn() {
         return this.declaration.getStartingColumn()
+    }
+
+    /// Writing
+
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {
+        throw new Error(`Not implemented`)
+    }
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {
+        throw new Error(`Not implemented`)
     }
 
     /// Actions

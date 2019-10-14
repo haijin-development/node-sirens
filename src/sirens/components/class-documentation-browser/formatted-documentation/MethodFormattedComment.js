@@ -387,7 +387,7 @@ class MethodFormattedComment {
 
         const methodComment = method.getComment()
 
-        methodComment.writeFormattedContents( methodCommentContents )
+        methodComment.writeFormattedContents({ commentContents: methodCommentContents })
 
         model.reload()
     }

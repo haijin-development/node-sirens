@@ -85,6 +85,19 @@ class StringStream {
         return this
     }
 
+    appendLinesIn({ string: string }) {
+        const lines = string.split( "\n" )
+
+        lines.forEach( (line) => {
+
+            if( line.trim() === '' ) {
+                this.cr()
+            } else {
+                this.appendLine({ string: line })
+            }
+        })
+    }
+
     /// Iterating
 
     forEach({ in: collection, do: eachClosure, inBetweenDo: inBetweenClosure }) {

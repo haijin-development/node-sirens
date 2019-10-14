@@ -236,10 +236,7 @@ class DslDocumentationWriter {
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            this.appendsLinesTo({
-                string: description,
-                stringStream: stringStream,
-            })
+            stringStream.appendLinesIn({ string: description })
 
         })
 
@@ -251,10 +248,7 @@ class DslDocumentationWriter {
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            this.appendsLinesTo({
-                string: description,
-                stringStream: stringStream,
-            })
+            stringStream.appendLinesIn({ string: description })
 
         })
 
@@ -270,10 +264,7 @@ class DslDocumentationWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                this.appendsLinesTo({
-                    string: param.Name,
-                    stringStream: stringStream,
-                })
+                stringStream.appendLinesIn({ string: param.Name })
 
             })
 
@@ -283,10 +274,7 @@ class DslDocumentationWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                this.appendsLinesTo({
-                    string: param.Description,
-                    stringStream: stringStream,
-                })
+                stringStream.appendLinesIn({ string: param.Description })
 
             })
 
@@ -305,10 +293,7 @@ class DslDocumentationWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                this.appendsLinesTo({
-                    string: returns.Description,
-                    stringStream: stringStream,
-                })
+                stringStream.appendLinesIn({ string: returns.Description })
 
             })
 
@@ -323,10 +308,7 @@ class DslDocumentationWriter {
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            this.appendsLinesTo({
-                string: implementationNote,
-                stringStream: stringStream,
-            })
+            stringStream.appendLinesIn({ string: implementationNote })
 
         })
 
@@ -342,10 +324,7 @@ class DslDocumentationWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                this.appendsLinesTo({
-                    string: example.Description,
-                    stringStream: stringStream,
-                })
+                stringStream.appendLinesIn({ string: example.Description })
 
             })
 
@@ -355,10 +334,7 @@ class DslDocumentationWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                this.appendsLinesTo({
-                    string: example.Code,
-                    stringStream: stringStream,
-                })
+                stringStream.appendLinesIn({ string: example.Code })
 
             })
 
@@ -390,20 +366,6 @@ class DslDocumentationWriter {
 
         stringStream.appendLine({ string: '])' })        
     }
-
-    appendsLinesTo({ string: string, stringStream: stringStream }) {
-        const lines = string.split( "\n" )
-
-        lines.forEach( (line) => {
-
-            if( line.trim() === '' ) {
-                stringStream.cr()
-            } else {
-                stringStream.appendLine({ string: line })
-            }
-        })
-    }
-
 }
 
 module.exports = Classification.define(DslDocumentationWriter)

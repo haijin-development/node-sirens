@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatement = require('./JsStatement')
-const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
+const JsCommentProtocol = require('../../protocols/JsCommentProtocol')
 const SourceCodeText = require('../SourceCodeText')
 
 /*
@@ -14,7 +14,7 @@ class Comment {
     static definition() {
         this.instanceVariables = []
         this.assumes = [JsStatement]
-        this.implements = [JsStatementProtocol]
+        this.implements = [JsCommentProtocol]
     }
 
     /// Initializing
@@ -44,17 +44,17 @@ class Comment {
         return sourceCodeText.getFormattedText()
     }
 
-    writeFormattedContents(formattedComment) {
+    writeFormattedContents({ commentContents: commentContents }) {
         const commentText = SourceCodeText.new({ text: this.getSourceCode() })
         const indentationCount = commentText.getIndentationCount()
         const indentationChar = commentText.getIndentationChar()
 
         const sourceCodeText = SourceCodeText.new({ text: this.getContents() })
-        formattedComment = sourceCodeText.unformatBackText( formattedComment )
+        commentContents = sourceCodeText.unformatBackText( commentContents )
 
         const comment =
             '/*' + 
-            formattedComment +
+            commentContents +
             `\n` + indentationChar.repeat( indentationCount ) + '*/'
 
 

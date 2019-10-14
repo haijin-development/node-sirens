@@ -35,6 +35,16 @@ class FunctionDefinition {
         return this.declaration.getSourceFile()
     }
 
+    getSourceCode() {
+        return  this.comment.getSourceCode() +
+                this.declaration.getSourceCode()
+    }
+
+    getFormattedSourceCode() {
+        return  this.comment.getFormattedSourceCode() +
+                this.declaration.getFormattedSourceCode()
+    }
+
     getComment() {
         return this.comment
     }
@@ -91,6 +101,16 @@ class FunctionDefinition {
                 return documentation
             },
         })
+    }
+
+    /// Writing
+
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {
+        throw new Error(`Not implemented`)
+    }
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {
+        throw new Error(`Not implemented`)
     }
 }
 

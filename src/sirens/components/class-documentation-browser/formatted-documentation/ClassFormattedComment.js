@@ -227,7 +227,7 @@ class ClassFormattedComment {
 
         const classComment = classDefinition.getComment()
 
-        classComment.writeFormattedContents( classCommentContents )
+        classComment.writeFormattedContents({ commentContents: classCommentContents })
 
         model.reload()
     }

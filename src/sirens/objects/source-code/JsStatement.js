@@ -177,6 +177,17 @@ class JsStatement {
         this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
 
+    detectIdentation() {
+        const sourceCodeText = SourceCodeText.new({
+            text: this.getSourceCode(),
+        })
+
+        return {
+            indentationChar: sourceCodeText.getIndentationChar(),
+            indentationCount: sourceCodeText.getIndentationCount(),
+        }
+    }
+
 }
 
 module.exports = Classification.define(JsStatement)

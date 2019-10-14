@@ -70,6 +70,8 @@ class MethodFormattedComment {
     addNewParam() {
         const model = this.getModel()
 
+        const method = model.getSelectedMethod()
+
         const newParam = {
             Name: 'Add the name of the parameter here ...',
             Description: 'Add the parameter description ...',
@@ -77,6 +79,7 @@ class MethodFormattedComment {
 
         const dialog = EditParamDialog.new({
             model: model,
+            method: method,
             param: newParam,
             window: this.getProps().window,
             onUpdateParam: this.addParam.bind(this),
@@ -103,8 +106,11 @@ class MethodFormattedComment {
     editParamAt({ index: index, param: param }) {
         const model = this.getModel()
 
+        const method = model.getSelectedMethod()
+
         const dialog = EditParamDialog.new({
             model: model,
+            method: method,
             param: param,
             window: this.getProps().window,
             onUpdateParam: ({ param: param }) => {
@@ -159,6 +165,7 @@ class MethodFormattedComment {
 
         const dialog = EditReturnsDialog.new({
             model: model,
+            method: method,
             returns: documentation.getReturns(),
             window: this.getProps().window,
             onUpdateReturns: this.updateReturns.bind(this),
@@ -185,12 +192,18 @@ class MethodFormattedComment {
     addNewImplementationNote() {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
+        const method = model.getSelectedMethod()
+
         const dialog = EditImplementationNoteDialog.new({
             model: model,
             implementationNoteText: 'Add the new implementation note here ...',
             window: this.getProps().window,
             onUpdateImplementationNote: this.addImplementationNote.bind(this),
             acceptButtonLabel: `Add implementation note`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
         })
 
         dialog.open()
@@ -228,6 +241,10 @@ class MethodFormattedComment {
     editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
+        const method = model.getSelectedMethod()
+
         const dialog = EditImplementationNoteDialog.new({
             model: model,
             implementationNoteText: implementationNoteText,
@@ -239,6 +256,8 @@ class MethodFormattedComment {
                 })
             },
             acceptButtonLabel: `Update implementation note`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
         })
 
         dialog.open()
@@ -264,6 +283,10 @@ class MethodFormattedComment {
     addNewExample() {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
+        const method = model.getSelectedMethod()
+
         const newExample = {
             Description: 'Add the example description here ...',
             Code: 'Add the example code here ...',
@@ -275,6 +298,8 @@ class MethodFormattedComment {
             window: this.getProps().window,
             onUpdateExample: this.addExample.bind(this),
             acceptButtonLabel: `Add example`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
         })
 
         dialog.open()
@@ -297,6 +322,10 @@ class MethodFormattedComment {
     editExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
+        const method = model.getSelectedMethod()
+
         const dialog = EditExampleDialog.new({
             model: model,
             example: example,
@@ -308,6 +337,8 @@ class MethodFormattedComment {
                 })
             },
             acceptButtonLabel: `Update example`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
         })
 
         dialog.open()

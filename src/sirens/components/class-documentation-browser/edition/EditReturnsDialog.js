@@ -22,6 +22,8 @@ class EditReturnsDialog {
 
         const className = model.getClassName()
 
+        const method = this.getProps().method
+
         let returns = this.getProps().returns
 
         if( returns === undefined ) {
@@ -45,8 +47,8 @@ class EditReturnsDialog {
                     this.component(
                         EditDialogHeader.new({
                             mainIcon: Resource.image.returns,
-                            title:  `${className} return value.`,
-                            subtitle: `You are editing the return value.`,
+                            title:  `${className}.${method.getFunctionSignatureString()}`,
+                            subtitle: `You are editing the return value of the method ${className}.${method.getName()}.`,
                         })
                     )
 

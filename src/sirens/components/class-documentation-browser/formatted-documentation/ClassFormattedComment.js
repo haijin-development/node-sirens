@@ -53,12 +53,16 @@ class ClassFormattedComment {
     addNewImplementationNote() {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
         const dialog = EditImplementationNoteDialog.new({
             model: model,
             implementationNoteText: 'Add the new implementation note here ...',
             window: this.getProps().window,
             onUpdateImplementationNote: this.addImplementationNote.bind(this),
             acceptButtonLabel: `Add implementation note`,
+            title:  `${className} implementation note.`,
+            subtitle: `You are editing an implementation note of the class ${className}.`,
         })
 
         dialog.open()
@@ -92,6 +96,8 @@ class ClassFormattedComment {
     editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
         const dialog = EditImplementationNoteDialog.new({
             model: model,
             implementationNoteText: implementationNoteText,
@@ -103,6 +109,8 @@ class ClassFormattedComment {
                 })
             },
             acceptButtonLabel: `Update implementation note`,
+            title:  `${className} implementation note.`,
+            subtitle: `You are editing an implementation note of the class ${className}.`,
         })
 
         dialog.open()
@@ -131,12 +139,16 @@ class ClassFormattedComment {
             Code: 'Add the example code here ...',
         }
 
+        const className = model.getClassName()
+
         const dialog = EditExampleDialog.new({
             model: model,
             example: newExample,
             window: this.getProps().window,
             onUpdateExample: this.addExample.bind(this),
             acceptButtonLabel: `Add example`,
+            title: `${className} example.`,
+            subtitle: `You are editing an example of the class ${className}.`,
         })
 
         dialog.open()
@@ -157,6 +169,8 @@ class ClassFormattedComment {
     editExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
+        const className = model.getClassName()
+
         const dialog = EditExampleDialog.new({
             model: model,
             example: example,
@@ -168,6 +182,8 @@ class ClassFormattedComment {
                 })
             },
             acceptButtonLabel: `Update example note`,
+            title: `${className} example.`,
+            subtitle: `You are editing an example of the class ${className}.`,
         })
 
         dialog.open()

@@ -22,6 +22,8 @@ class EditParamDialog {
 
         const className = model.getClassName()
 
+        const method = this.getProps().method
+
         const param = this.getProps().param
 
         componentsRenderer.render( function(component) {
@@ -39,8 +41,8 @@ class EditParamDialog {
                     this.component(
                         EditDialogHeader.new({
                             mainIcon: Resource.image.param,
-                            title:  `${className} parameter.`,
-                            subtitle: `You are editing a parameter of the class ${className}.`,
+                            title:  `${className}.${method.getFunctionSignatureString()}`,
+                            subtitle: `You are editing a parameter of the method ${className}.${method.getName()}.`,
                         })
                     )
 

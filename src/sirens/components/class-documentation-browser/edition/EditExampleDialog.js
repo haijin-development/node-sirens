@@ -40,8 +40,8 @@ class EditExampleDialog {
                     this.component(
                         EditDialogHeader.new({
                             mainIcon: Resource.image.haiku,
-                            title:  `${className} example.`,
-                            subtitle: `You are editing an example of the class ${className}.`,
+                            title:  component.getProps().title,
+                            subtitle: component.getProps().subtitle,
                         })
                     )
 

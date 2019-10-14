@@ -38,8 +38,8 @@ class EditImplementationNoteDialog {
                     this.component(
                         EditDialogHeader.new({
                             mainIcon: GtkIcons.dialogWarning,
-                            title:  `${className} implementation note.`,
-                            subtitle: `You are editing an implementation note of the class ${className}.`,
+                            title:  component.getProps().title,
+                            subtitle: component.getProps().subtitle,
                         })
                     )
 

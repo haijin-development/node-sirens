@@ -53,6 +53,13 @@ class ChoiceModel {
         return this.selectionModel.setValue(newSelection)
     }
 
+    setSelectionSuchThat({ matches: matchingClosure }) {
+        const matchingItem = this.getChoices().find( matchingClosure )
+
+        this.setSelectionValue( matchingItem )
+    }
+
+
     getSelectionIndex() {
         const item = this.getSelectionValue()
 

@@ -74,7 +74,7 @@ class MethodUnformattedComment {
 
         componentsRenderer.render(function (component) {
 
-            this.verticalStack( function() {
+            this.verticalStack({ width: 600, }, function() {
 
                 if( method !== null && isInEditionMode ) {
                     this.component(

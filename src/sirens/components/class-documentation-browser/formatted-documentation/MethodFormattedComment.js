@@ -428,7 +428,7 @@ class MethodFormattedComment {
 
         componentsRenderer.render( function(component) {
 
-            this.container( { hScroll: 'never' }, function() {
+            this.container( { hScroll: 'never', width: 400, }, function() {
 
                 this.verticalStack( function() {
 

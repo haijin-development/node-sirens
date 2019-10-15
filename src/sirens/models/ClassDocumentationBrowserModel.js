@@ -148,11 +148,21 @@ class ClassDocumentationBrowserModel {
     /// Actions
 
     reload() {
+        const selectedMethod = this.getSelectedMethod()
+
         this.classDefinition.reload()
 
         this.classMethodsModel.setChoices(
             this.classDefinition.getMethods()
         )
+
+        if( selectedMethod !== null ) {
+            this.classMethodsModel.setSelectionSuchThat({
+                matches: (method) => {
+                    return method.getName() === selectedMethod.getName()
+                }
+            })
+        }
 
         this.triggerDocumentationChanged()
     }

@@ -3,14 +3,14 @@ const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const ClassMethodsDocumentation = require('./ClassMethodsDocumentation')
-const ClassUnformattedComment = require('./ClassUnformattedComment')
-const ClassFormattedComment = require('./ClassFormattedComment')
+const ClassUnformattedComment = require('./unformatted-documentation/ClassUnformattedComment')
+const ClassFormattedComment = require('./formatted-documentation/ClassFormattedComment')
 
 class DocumentationBrowserBody {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['selectedTabPageIndex', 'isRendering']
         this.assumes = [Component]
         this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
     }
@@ -18,25 +18,42 @@ class DocumentationBrowserBody {
     /// Building
 
     reRenderWhen() {
-        const showUnformattedCommentsModel = this.getModel().getShowUnformattedCommentsModel()
+        const documentationChangedModel = this.getModel().getDocumentationChangedModel()
 
-        this.reRenderOnValueChangeOf( showUnformattedCommentsModel )
+        this.reRenderOnValueChangeOf( documentationChangedModel )
+    }
+
+    reRender() {
+        this.isRendering = true
+
+        this.previousClassificationDo( () => {
+            this.reRender()
+        })
+
+        this.isRendering = false
     }
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
+        const showsUnformattedComments = model.showsUnformattedComments()
+
         componentsRenderer.render( function(component) {
 
             this.tabs({ aligment: 'top', id: 'tabs' }, function() {
 
+                this.handlers({
+                    onTabPageChanged: component.onTabPageChanged.bind(component),
+                })
+
                 this.tabPage({ label: 'Class comment' }, function() {
 
-                    if( model.showsUnformattedComments() ) {
+                    if( showsUnformattedComments ) {
 
                         this.component(
                             ClassUnformattedComment.new({
-                                model: model
+                                model: model,
+                                window: this.getProps().window,
                             })
                         )
 
@@ -44,7 +61,8 @@ class DocumentationBrowserBody {
 
                         this.component(
                             ClassFormattedComment.new({
-                                model: model
+                                model: model,
+                                window: this.getProps().window,
                             })
                         )
 
@@ -65,7 +83,24 @@ class DocumentationBrowserBody {
             })
 
         })
+
+        this.selectPreviousSelectedTabPage()
+    }
+
+    selectPreviousSelectedTabPage() {
+        if( this.selectedTabPageIndex < 0 ) { return }
+
+        const tabsComponent = this.getChildComponent({ id: 'tabs' })
+
+        tabsComponent.showTabPageAt({ index: this.selectedTabPageIndex })
+    }
+
+    onTabPageChanged({ tabPageIndex: tabPageIndex }) {
+        if( this.isRendering === true ) { return }
+
+        this.selectedTabPageIndex = tabPageIndex
     }
 }
+
 
 module.exports = Classification.define(DocumentationBrowserBody)

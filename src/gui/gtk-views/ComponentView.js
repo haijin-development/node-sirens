@@ -6,7 +6,7 @@ class ComponentView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['onClickedBlock']
+        this.instanceVariables = []
         this.assumes = [GtkView]
         this.implements = [GtkViewProtocol_Implementation]
     }

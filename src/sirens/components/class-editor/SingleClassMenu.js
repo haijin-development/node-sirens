@@ -37,7 +37,7 @@ class SingleClassMenu {
                         }
                     })
 
-                    this.item({
+                    this.button({
                         label: 'Browse documentation',
                         icon: GtkIcons.info,
                         tooltip: 'Opens a class documentation browser on the current selection.',

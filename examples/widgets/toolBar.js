@@ -46,7 +46,7 @@ class CustomComponent {
                             }
                         })
 
-                        this.item({
+                        this.button({
                             label: 'Open file...',
                             icon: GtkIcons.open,
                             tooltip: 'Opens a file',
@@ -56,7 +56,7 @@ class CustomComponent {
 
                         this.separator()
 
-                        this.item({
+                        this.button({
                             label: 'Save file',
                             icon: GtkIcons.save,
                             tooltip: 'Saves the file',

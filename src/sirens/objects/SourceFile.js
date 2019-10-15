@@ -36,6 +36,12 @@ class SourceFile {
         this.getParsedContents()
     }
 
+    reload() {
+        this.parseTree = undefined
+
+        this.doParseContents()
+    }
+
     /// Accessing
 
     getFilePath() {

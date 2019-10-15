@@ -3,85 +3,137 @@ const StringStream = require('./StringStream')
 const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
 /*
-    class(`
-        This classification adds indentation to the lines appended to a StringStream.
+           Class(`
+              This classification is a decorator of a StringStream object that adds indentation to the lines appended to it.
 
-        This classification is a decorator of a StringStream behaviour.
+              It can be instantiated as a standalone instance with:
 
-        In the object oriented languages based on classes decorators are different objects from the 
-        decorated objects, losing the decorated object identity.
+              		// See example # 1
 
-        This classification is an example of how in the O language decorators can be added to an object
-        without losing or changing the identity of the decorated object and, at the same time, mantain
-        the encapsulation and separation of concerns of the decoractor.
-    `)
+              		IndentedStringStream.new()
 
-    example({
-        description: `
-            Adds indentation to an existing StringStream.
-        `,
-        code: `
-            stringStream.behaveAs(IndentedStringStream)
 
-            stringStream.appendLine({ string: 'Text' })
-        `,
-    })
+              or it can be added to an existing object with
 
-    example({
-        description: `
-            Sets the indentation to an existing StringStream.
-        `,
-        code: `
-            stringStream.behaveAs(IndentedStringStream)
+              		// See example # 5
 
-            stringStream.setIndentationCount(3)
+              		stream.behaveAs( IndentedStringStream )
+           `)
 
-            stringStream.appendLine({ string: 'Text' })
-        `,
-    })
+           Implementation(`
+              In the object oriented languages based on classes decorators are different objects from the 
+              decorated objects, losing the decorated object identity.
 
-    example({
-        description: `
-            Increments and decrements the indentation to an existing StringStream.
-        `,
-        code: `
-            stringStream.behaveAs(IndentedStringStream)
+              This classification is an example of a behavioural decorator that, in the O language, can be added to an object
+              without losing or changing the identity of the decorated object and, at the same time, mantaining
+              the decorator encapsulation and separation of concerns.
+           `)
 
-            stringStream.incrementIndentation({ by: 1 })
+           Example({
+              Description: `
+                 Creates a IndentedStringStream.
+              `,
+              Code: `
 
-            stringStream.appendLine({ string: 'Text' })
+                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
-            stringStream.decrementIndentation({ by: 1 })
-        `,
-    })
+                 const stringStream = IndentedStringStream.new()
 
-    example({
-        description: `
-            Increments and decrements the indentation to an existing StringStream during the 
-            evaluation of a closure.
-        `,
-        code: `
-            stringStream.behaveAs(IndentedStringStream)
+                 stringStream.getString()
 
-            stringStream.incrementIndentation({ by: 1 })
+              `,
+           })
 
-            stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
-                stringStream.appendLine({ string: 'Text' })
-            })
-        `,
-    })
+           Example({
+              Description: `
+                 Sets the indentation level to an existing IndentedStringStream.
+              `,
+              Code: `
+                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
-    example({
-        description: `
-            Creates a StringStream behaving as a IndentedStringStream.
-        `,
-        code: `
-            const stringStream = IndentedStringStream.new()
-        `,
-        seeAlso: [
-            'IndentedStringStream.new'
-        ],
-    })
+                 const stringStream = IndentedStringStream.new()
+
+                 stringStream.setIndentationCount( 3 )
+
+                 stringStream.appendLine({ string: 'One line with indentation.' })
+
+                 stringStream.getString()
+              `,
+           })
+
+           Example({
+              Description: `
+                 Increments and decrements the indentation to an IndentedStringStream.
+              `,
+              Code: `
+                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+
+                 const stringStream = IndentedStringStream.new()
+
+                 stringStream.incrementIndentation({ by: 3 })
+
+                 stringStream.appendLine({ string: 'One line with indentation.' })
+
+                 stringStream.decrementIndentation({ by: 1 })
+                 stringStream.appendLine({ string: 'Another line with less indentation.' })
+                 stringStream.getString()
+              `,
+           })
+
+           Example({
+              Description: `
+                 Increments and decrements the indentation to an IndentedStringStream during the 
+                 evaluation of a closure.
+              `,
+              Code: `
+                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+
+                 const stringStream = IndentedStringStream.new()
+
+                 stringStream.appendLine({ string: 'One line with no indentation.' })
+
+                 stringStream.whileIncrementingIndentationDo({ by: 3 }, () => {
+                     stringStream.appendLine({ string: 'A line with indentation.' })
+                 })
+                 stringStream.appendLine({ string: 'One more line with no indentation.' })
+
+                 stringStream.getString()
+              `,
+           })
+
+           Example({
+              Description: `
+                 A IndentedStringStream can be instantiated with
+
+                 	IndentedStringStream.new()
+
+                 but the classification can also be used to decorate any object that behaves as a StringStream.
+              `,
+              Code: `
+                 const StringStream = require('sirens/src/o-language/classifications/StringStream')
+                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+
+                 // Create a StringStream object
+                 const stringStream = StringStream.new()
+
+                 // Add a regular line
+                 stringStream.appendLine({ string: 'One line with no indentation.' })
+
+                 // Decorate it with the IndentedStringStream behaviour
+                 stringStream.behaveAs( IndentedStringStream )
+                 stringStream.setIndentationCount( 3 )
+
+                 // Add an indented line
+                 stringStream.appendLine({ string: 'One line with indentation.' })
+
+                 // Drop the IndentedStringStream behaviour
+                 stringStream.dropBehaviour( IndentedStringStream )
+                 stringStream.appendLine({ string: 'Another line without indentation.' })
+
+                 // Get the stream contents
+                 stringStream.getString()
+              `,
+           })
 */
 class IndentedStringStream {
     /// Definition
@@ -101,12 +153,24 @@ class IndentedStringStream {
         this.indentation = ''
     }
 
+    /*
+     Method(`
+        Returns the default string to use as an indentation unit when no identation char is given.
+     `)
+     Returns({
+        Description: `
+           Returns the default string to use as an indentation unit when no identation char is given.
+        `,
+     })
+    */
     defaultIndentationChar() {
         return '   '
     }
 
     /// Accessing
 
+    /*
+    */
     getIndentationCount() {
         return this.indentationCount
     }
@@ -133,6 +197,8 @@ class IndentedStringStream {
 
     /// Indentation
 
+    /*
+    */
     incrementIndentation({ by: n } = { by: 1 }) {
         this.setIndentationCount( this.indentationCount + n )
     }

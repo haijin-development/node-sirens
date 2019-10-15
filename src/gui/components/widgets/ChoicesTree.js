@@ -92,7 +92,7 @@ class ChoicesTree {
         this.duringClassificationDo( UpdatingView, () => {
             let selectionIndices = this.getModel().getSelectionIndices()
 
-            selectionIndices = selectionIndices === null ?
+            selectionIndices = selectionIndices.length === 0 ?
                 [] : [selectionIndices]
 
             this.getView().setSelectionIndices(selectionIndices)

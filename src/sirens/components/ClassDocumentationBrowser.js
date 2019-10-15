@@ -63,6 +63,7 @@ class ClassDocumentationBrowser {
                     this.component(
                         DocumentationBrowserBody.new({
                             model: model,
+                            window: this,
                         })
                     )
 

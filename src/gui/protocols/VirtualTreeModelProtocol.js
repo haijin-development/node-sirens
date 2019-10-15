@@ -6,24 +6,48 @@ class VirtualTreeModelProtocol {
 
     getRoots() {}
 
-    setRoots(newRoots) {}
+    setRoots(newRoots) {
+        this.param(newRoots) .isArray()
+    }
 
-    getItemAt(path) {}
+    getItemAt(path) {
+        this.param(path) .isArray()
 
-    getChildrenAt(path) {}
+        path.forEach( (index) => {
+            this.param(index) .isInteger()
+        })
+    }
+
+    getChildrenAt(path) {
+        this.param(path) .isArray()
+
+        path.forEach( (index) => {
+            this.param(index) .isInteger()
+        })
+    }
 
     /**
      * Given a hierarchy of objects in the tree, returns an array with the path indices.
      */
-    getPathOf(objectsHierarchy) {}
+    getPathOf(objectsHierarchy) {
+        this.param(objectsHierarchy) .isArray()
+    }
 
     /*
      * Given a path returns an array with the objects on each tree level corresponding to each index
      * in the path.
      */
-    getObjectsHierarchyAt(path) {}
+    getObjectsHierarchyAt(path) {
+        this.param(path) .isArray()
 
-    onRootsChanged(closure) {}
+        path.forEach( (index) => {
+            this.param(index) .isInteger()
+        })
+    }
+
+    onRootsChanged(closure) {
+        this.param(closure) .isFunction()
+    }
 }
 
 module.exports = Protocol.define(VirtualTreeModelProtocol)

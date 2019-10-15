@@ -1,14 +1,21 @@
+const Classification = require('../../src/o-language/classifications/Classification')
+const ClassificationWithTypeChecking = require('../../src/o-language/classifications/ClassificationWithTypeChecking')
+/// Enable dynamic strict type checking
+//Classification.behaveAs( ClassificationWithTypeChecking )
 const Sirens = require('../../src/Sirens')
-const {Address, User} = require('../samples/AddressAndUser')
 
-const address = new Address({
-    streetName: 'Evergreen', number: 742
-})
+class User {
+    constructor({names: names, lastNames: lastNames, addresses: addresses}) {
+        this.names = names
+        this.lastNames = lastNames
+        this.addresses = addresses
+    }
+}
 
 const user = new User({
     names: ['Lisa'],
     lastNames: ['Simpson'],
-    addresses: [address]
+    addresses: []
 })
 
 Sirens.do( () => {

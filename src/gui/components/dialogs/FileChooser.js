@@ -28,6 +28,7 @@ class FileChooser {
             title: this.getProps().title,
             mode: this.getProps().mode,
             windowView: windowView,
+            initialFolder: this.getProps().initialFolder,
         })
     }
 
@@ -43,15 +44,15 @@ FileChooser = Classification.define(FileChooser)
 
 /// Constructors
 
-FileChooser.openFile = function({ title: title,  window: windowComponent }) {
+FileChooser.openFile = function({ title: title,  window: windowComponent, initialFolder: initialFolder }) {
     const dialog = this.new({
         title: title,
         mode: 'chooseFile',
-        window: windowComponent
+        window: windowComponent,
+        initialFolder: initialFolder,
     })
 
     return dialog.open()
 }
-
 
 module.exports = FileChooser

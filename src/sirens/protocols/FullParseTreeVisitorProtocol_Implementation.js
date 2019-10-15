@@ -4,12 +4,6 @@ const Protocol = require('../../o-language/classifications/Protocol')
  * A visitor of a javascript parse tree that collects all the function definitions.
  */
 class FullParseTreeVisitorProtocol_Implementation {
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = []
-    }
-
     /// Visiting
 
     visit(treeNode) {}

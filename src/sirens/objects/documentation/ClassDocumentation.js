@@ -1,6 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
-const ClassDocumentationBuilder = require('./ClassDocumentationBuilder')
-
+const ClassDslDocumentationReader = require('./ClassDslDocumentationReader')
+const DslDocumentationWriter = require('./DslDocumentationWriter')
 
 class ClassDocumentationInstantiator {
     /// Definition
@@ -15,7 +15,7 @@ class ClassDocumentationInstantiator {
     fromString(documentationDslString) {
         const classDocumentation = ClassDocumentation.new()
 
-        ClassDocumentationBuilder.new({ classDocumentation: classDocumentation })
+        ClassDslDocumentationReader.new({ classDocumentation: classDocumentation })
             .buildFromString( documentationDslString )
 
         return classDocumentation
@@ -88,6 +88,13 @@ class ClassDocumentation {
         this.implementationNotes.push( implementationNote )
     }
 
+    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
+        this.implementationNotes[index] = implementationNoteText
+    }
+
+    deleteImplementationNoteAt({ index: index }) {
+        this.implementationNotes.splice( index, 1 )
+    }
 
     getTags() {
         return this.tags
@@ -107,10 +114,34 @@ class ClassDocumentation {
 
         this.examples.push( example )
     }
+
+    updateExampleAt({ index: index, example: example }) {
+        this.examples[index] = example
+    }
+
+    deleteExampleAt({ index: index }) {
+        this.examples.splice( index, 1 )
+    }
+
+    /// Generating class comment
+
+    generateComment() {
+        return this.getDocumentationWriter().generateClassComment({
+            classDocumentation: this
+        })
+    }
+
+    generateCommentContents() {
+        return this.getDocumentationWriter().generateClassCommentContents({
+            classDocumentation: this
+        })
+    }
+
+    getDocumentationWriter() {
+        return DslDocumentationWriter.new()
+    }
 }
 
 ClassDocumentation = Classification.define(ClassDocumentation)
-
-
 
 module.exports = ClassDocumentation

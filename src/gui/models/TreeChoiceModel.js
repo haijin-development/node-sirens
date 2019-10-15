@@ -41,11 +41,11 @@ class TreeChoiceModel {
     getSelectionValue() {
         const selectionPath = this.getSelectionPath()
 
-        if(selectionPath === null) {
-            return
+        if( selectionPath.length === 0 ) {
+            return null
         }
 
-        return selectionPath[selectionPath.length - 1].getValue()
+        return selectionPath[ selectionPath.length - 1 ].getValue()
     }
 
     /**
@@ -137,12 +137,6 @@ class TreeChoiceModel {
     */
     getObjectsHierarchyAt(path) {
         return this.treeModel.getObjectsHierarchyAt(path)
-    }
-
-    /// Asking
-
-    hasSelection() {
-        return this.selectionModel.value != undefined && this.selectionModel.value.length > 0
     }
 
     /// Events

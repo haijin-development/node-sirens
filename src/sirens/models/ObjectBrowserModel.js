@@ -74,6 +74,10 @@ class ObjectBrowserModel {
     selectedValueString() {
         const selectedInstVarValue = this.getSelectedPropertyValue()
 
+        if( selectedInstVarValue === null ) {
+            return ''
+        }
+
         if (typeof selectedInstVarValue == 'function') {
             return selectedInstVarValue.toString()
         }

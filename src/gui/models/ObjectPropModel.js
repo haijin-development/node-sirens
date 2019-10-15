@@ -14,7 +14,10 @@ class ObjectPropModel {
 
     /// Initializing
 
-    initialize({ object: object, prop: prop } = { object: undefined, prop: undefined }) {
+    initialize({ object: object, prop: prop } = { object: null, prop: null }) {
+        if( object === undefined ) { object = null }
+        if( prop === undefined ) { prop = null }
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -50,6 +53,8 @@ class ObjectPropModel {
     }
 
     setProp(newProp) {
+        if( newProp === undefined ) { newProp = null }
+
         const oldValue = this.doGetValue()
 
         this.prop = newProp
@@ -60,6 +65,8 @@ class ObjectPropModel {
     }
 
     doSetValue(newValue) {
+        if( newValue === undefined ) { newValue = null }
+
         this.object[ this.prop ] = newValue
     }
 }

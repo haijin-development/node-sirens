@@ -31,7 +31,7 @@ describe('When using a ClassDefinition', () => {
 * for Sample.
 `
 
-        expect( comment.getFormattedString() ) .to .equal( expectedComment )
+        expect( comment.getFormattedContents() ) .to .equal( expectedComment )
     })
 
     it('gets the functions definitions', () => {

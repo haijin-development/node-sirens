@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
-const ValueModelBehaviour = require('./ValueModelBehaviour')
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')
+const ValueModelBehaviour = require('./ValueModelBehaviour')
 
 class ValueModel {
     /// Definition
@@ -9,7 +9,7 @@ class ValueModel {
     static definition() {
         this.instanceVariables = ['value']
         this.assumes = [ValueModelBehaviour]
-        this.implements = [ValueModelProtocol_Implementation, ValueModelProtocol]
+        this.implements = [ValueModelProtocol, ValueModelProtocol_Implementation]
     }
 
     /// Initializing

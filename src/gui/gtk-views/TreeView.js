@@ -187,7 +187,7 @@ class TreeView {
     }
 
     setSelectionIndices(indices) {
-        if( indices.length === 0) {
+        if( indices.length === 0 ) {
             this.treeView.getSelection().unselectAll()
             return
         }
@@ -199,13 +199,9 @@ class TreeView {
         })
 
         iterPaths.forEach( (iterPath, i) => {
-            if(indices[i].length > 1) {
-                const allIndicesButLast = indices[i].slice(0, indices[i].length-2)
+            const selection = this.treeView.getSelection()
 
-                //this.expand({ path: allIndicesButLast })
-            }
-
-            this.treeView.getSelection().selectPath(iterPath)
+            selection.selectPath(iterPath)
         })
 
         this.treeView.scrollToCell(iterPaths[0], null, false, 0.0, 0.0)

@@ -3,7 +3,7 @@ const ParseTreeVisitor = require('./ParseTreeVisitor')
 const FunctionDeclaration = require('../source-code/FunctionDeclaration')
 const FunctionDefinition = require('../source-code/FunctionDefinition')
 const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
-const EmptyJsStatement = require('../source-code/EmptyJsStatement')
+const AbsentComment = require('../source-code/AbsentComment')
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.
@@ -69,7 +69,10 @@ class FunctionDefinitionsCollector {
         })
 
 
-        const comment = this.getCommentOn({ parseNode: parseNode })
+        const comment = this.getCommentOn({
+            parseNode: parseNode,
+            functionDeclaration: functionDeclaration,
+        })
 
         return FunctionDefinition.new({
             comment: comment,
@@ -83,11 +86,14 @@ class FunctionDefinitionsCollector {
         return '...' + paramName
     }
 
-    getCommentOn({ parseNode: parseNode }) {
+    getCommentOn({ parseNode: parseNode, functionDeclaration: functionDeclaration }) {
         const Comment = require('../source-code/Comment')
 
         if( parseNode.comment === undefined ) {
-            return this.buildMissingComment({ parseNode: parseNode })
+            return this.buildMissingComment({
+                parseNode: parseNode,
+                functionDeclaration: functionDeclaration,
+            })
         }
 
         return Comment.new({
@@ -96,11 +102,15 @@ class FunctionDefinitionsCollector {
         })
     }
 
-    buildMissingComment({ parseNode: parseNode }) {
-        return EmptyJsStatement.new({
+    buildMissingComment({ parseNode: parseNode, functionDeclaration: functionDeclaration }) {
+        const { indentationChar, indentationCount } = functionDeclaration.detectIdentation()
+
+        return AbsentComment.new({
             sourceFile: this.sourceFile,
             lineNumber: parseNode.loc.start.line,
             columnNumber: parseNode.loc.start.column,
+            indentationCount: indentationCount,
+            indentationChar: indentationChar,
         })
     }
 }

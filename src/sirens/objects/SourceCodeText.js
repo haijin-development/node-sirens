@@ -15,12 +15,13 @@ class SourceCodeText {
     /// Initializing
 
     initialize({ text: text, removeIdentation: removeIdentation }) {
+        if( removeIdentation === undefined ) { removeIdentation = true }
 
         this.validateFirstLine({ text: text })
 
         this.text = text
 
-        this.removeIdentation = removeIdentation === undefined ? true : removeIdentation
+        this.removeIdentation = removeIdentation
 
         this.indentationChar = this.detectIndentationChar()
         this.indentationCount = this.detectIndentationCount()
@@ -82,6 +83,22 @@ class SourceCodeText {
         if( this.removeIdentation === false ) { return this.getOriginalText() }
 
         return this.formatText( this.text )
+    }
+
+    getIndentationCount() {
+        return this.indentationCount
+    }
+
+    setIndentationCount(indentationCount) {
+        this.indentationCount = indentationCount
+    }
+
+    getIndentationChar() {
+        return this.indentationChar
+    }
+
+    setIndentationChar(indentationChar) {
+        this.indentationChar = indentationChar
     }
 
     /// Querying

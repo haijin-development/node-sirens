@@ -182,7 +182,7 @@ class PrototypesBrowserModel {
     onPropSelectionChanged() {
         const selectedProp = this.getSelectedProp()
 
-        const text = selectedProp === undefined ? '' : this.displayStringOf(selectedProp)
+        const text = this.displayStringOf( selectedProp )
 
         this.selectedPropDescriptionModel.setValue(text)
     }
@@ -190,6 +190,8 @@ class PrototypesBrowserModel {
     /// Displaying
 
     displayStringOf(objectProperty) {
+        if( objectProperty === null ) { return '' }
+
         if(objectProperty.isFunction()) {
             return objectProperty.getValue().toString()
         } else {

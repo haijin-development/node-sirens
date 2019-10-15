@@ -22,13 +22,23 @@ class ClassificationProtocol {
 
     getDefinedMethodNames() {}
 
-    definesMethod(methodName) {}
+    definesMethod(methodName) {
+        this.param(methodName) .isString()
+    }
 
     getDefinedInstanceVariables() {}
 
-    setDefinedInstanceVariables(instanceVariables) {}
+    setDefinedInstanceVariables(instanceVariables) {
+        this.param(instanceVariables) .isArray()
 
-    definesInstanceVariable(name) {}
+        instanceVariables.forEach( (instanceVariable) => {
+            this.param(instanceVariable) .isString()
+        })
+    }
+
+    definesInstanceVariable(name) {
+        this.param(name) .isString()
+    }
 
     getAssumptions() {}
 

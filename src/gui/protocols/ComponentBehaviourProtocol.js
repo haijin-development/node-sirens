@@ -6,10 +6,6 @@ const Protocol = require('../../o-language/classifications/Protocol')
  */
 class ComponentBehaviourProtocol {
 
-    /// Initializing
-
-    initialize(props = {}) {}
-
     /// Accessing
 
     getChildComponents() {}
@@ -24,17 +20,28 @@ class ComponentBehaviourProtocol {
 
     getId() {}
 
-    getChildComponent({ id: childComponentId }) {}
+    getChildComponent({ id: childComponentId }) {
+        this.param(childComponentId) .isString()        
+    }
 
     /// Sub-components
 
-    addChildComponent(component) {}
+    addChildComponent(component) {
+        this.param(component) .compliesWith( _ComponentBehaviourProtocol )
+    }
 
-    addAllChildrenComponents(components) {}
+    addAllChildrenComponents(components) {
+        this.param(components) .isArray()
+    }
 
-    removeChildComponent(component) {}
+    removeChildComponent(component) {
+        this.param(component) .compliesWith( _ComponentBehaviourProtocol )
+    }
 
-    removeAllChildrenComponents(components) {}
+    removeAllChildrenComponents() {
+    }
 }
 
-module.exports = Protocol.define(ComponentBehaviourProtocol)
+_ComponentBehaviourProtocol = Protocol.define(ComponentBehaviourProtocol)
+
+module.exports = _ComponentBehaviourProtocol

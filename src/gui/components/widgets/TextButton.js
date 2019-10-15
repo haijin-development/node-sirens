@@ -24,7 +24,8 @@ class TextButton {
 
     createView() {
         return TextButtonView.new({
-            onClicked: this.onClicked.bind(this)
+            onClicked: this.onClicked.bind(this),
+            image: this.getProps().image,
         })
     }
 

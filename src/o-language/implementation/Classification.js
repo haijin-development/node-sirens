@@ -49,11 +49,13 @@ class Classification {
      * Returns a new O instance with this OInstance classification instantiated in it.
      */
     new(...props) {
-        return this.createObject().yourself( (object) => {
-            object
-                .behaveAs(this)
-                .initialize(...props)
-        })
+        const newInstance = this.createObject()
+
+        newInstance.behaveAs(this)
+
+        newInstance.initialize( ...props )
+
+        return newInstance
     }
 
     /// Accessing
@@ -198,6 +200,23 @@ class Classification {
         })
     }
 
+    getExpectedProtocols() {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationGetExpectedClassifications({
+            classificationDefinition: classificationDefinition,
+        })
+    }
+
+    setExpectedProtocols(protocols) {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationSetExpectedClassifications({
+            classificationDefinition: classificationDefinition,
+            protocols: protocols,
+        })
+    }
+
     implements({ protocol: protocol }) {
         protocol.isImplementedBy({
             classification: this
@@ -210,7 +229,12 @@ class Classification {
         const implementedProtocols = this.getImplementedProtocols()
 
         return implementedProtocols.some( (implementedProtocol) => {
-            return protocol === implementedProtocol
+
+            const recursiveImplementedProtocols = implementedProtocol.getAssumptionsChain()
+
+            return recursiveImplementedProtocols.some( (implementedProtocol) => {
+                return protocol === implementedProtocol
+            })
         })
     }
 }

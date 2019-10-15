@@ -17,8 +17,11 @@ class BufferedAttributeModel {
     initialize(
         { object: object, attributeReader: attributeReader }
         =
-        { object: undefined, attributeReader: undefined }
+        { object: null, attributeReader: null }
     ) {
+        if( object === undefined ) { object = null }
+        if( attributeReader === undefined ) { attributeReader = null }
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -45,6 +48,8 @@ class BufferedAttributeModel {
     /// Writing
 
     setObject(newObject) {
+        if( newObject === undefined ) { newObject = null }
+
         const oldValue = this.doGetValue()
 
         this.object = newObject
@@ -69,11 +74,13 @@ class BufferedAttributeModel {
     }
 
     doSetValue(newValue) {
+        if( newValue === undefined ) { newValue = null }
+
         this.attributeValue = newValue
     }
 
     doGetObjectAttributeValue() {
-        if( this.attributeReader === undefined ) { return }
+        if( this.attributeReader === null ) { return }
 
         return this.attributeReader( this.object )
     }

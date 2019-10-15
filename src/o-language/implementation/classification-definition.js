@@ -138,6 +138,16 @@ class ClassificationDefinition {
         classificationDefinition.implements = implementedProtocols.slice()
     }
 
+    static getExpectedProtocols({ classificationDefinition: classificationDefinition }) {
+        return classificationDefinition.expects.slice()
+    }
+
+    static setExpectedProtocols({
+        classificationDefinition: classificationDefinition, expectedProtocols: expectedProtocols }
+    ) {
+        classificationDefinition.expects = expectedProtocols.slice()
+    }
+
     /// beforeMethod/afterMethod optimization
 
     static implementsBeforeAfterMethods({ classificationDefinition: classificationDefinition }) {

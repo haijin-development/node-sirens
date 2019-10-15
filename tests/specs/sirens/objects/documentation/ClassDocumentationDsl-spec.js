@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const ClassDocumentation = require('../../../../../src/sirens/objects/documentation/ClassDocumentation')
 
-describe('When using a ClassDocumentation', () => {
+describe('When reading a ClassDocumentation', () => {
     describe('to document a Class description', () => {
 
         it('builds a Class description from a template literal', () => {
@@ -35,6 +35,28 @@ describe('When using a ClassDocumentation', () => {
         })
 
     })
+
+    describe('to document an implementation note', () => {
+
+        it('builds a Method Implementation from a template literal', () => {
+
+            const exampleComment =
+    `
+    Implementation(\`
+        Assumes that the street is not empty.
+    \`)
+    `
+            const classDocumentation = ClassDocumentation.fromString( exampleComment )
+
+            const implementationNotes = classDocumentation.getImplementationNotes()
+
+            expect( implementationNotes ) .to .eql([
+                'Assumes that the street is not empty.',
+            ])
+        })
+
+    })
+
 
     describe('to document an example', () => {
 
@@ -84,27 +106,6 @@ describe('When using a ClassDocumentation', () => {
 
     })
 
-    describe('to document an implementation note', () => {
-
-        it('builds a Method Implementation from a template literal', () => {
-
-            const exampleComment =
-    `
-    Implementation(\`
-        Assumes that the street is not empty.
-    \`)
-    `
-            const classDocumentation = ClassDocumentation.fromString( exampleComment )
-
-            const implementationNotes = classDocumentation.getImplementationNotes()
-
-            expect( implementationNotes ) .to .eql([
-                'Assumes that the street is not empty.',
-            ])
-        })
-
-    })
-
     describe('to document a tag', () => {
 
         it('builds a Method Tag from a template literal', () => {
@@ -123,6 +124,123 @@ describe('When using a ClassDocumentation', () => {
                 'getters', 'accessors'
             ])
         })
+
+    })
+
+})
+
+describe('When writing a ClassDocumentation', () => {
+
+    it('generates a Class description', () => {
+
+        const classDocumentation = ClassDocumentation.new()
+
+        classDocumentation.setDescription( 'A class description.' )
+
+        const generatedClassComment = classDocumentation.generateComment()
+
+        const expectedClassComment =
+`/*
+   Class(\`
+      A class description.
+   \`)
+*/`
+
+        expect( generatedClassComment ) .to .equal( expectedClassComment )
+
+    })
+
+    it('generates the implementation notes', () => {
+
+        const classDocumentation = ClassDocumentation.new()
+
+        classDocumentation.addImplementationNote( 'Implementation note 1.' )
+        classDocumentation.addImplementationNote( 'Implementation note 2.' )
+
+        const generatedClassComment = classDocumentation.generateComment()
+
+        const expectedClassComment =
+`/*
+   Implementation(\`
+      Implementation note 1.
+   \`)
+
+   Implementation(\`
+      Implementation note 2.
+   \`)
+*/`
+
+        expect( generatedClassComment ) .to .equal( expectedClassComment )
+
+    })
+
+    it('generates the implementation notes', () => {
+
+        const classDocumentation = ClassDocumentation.new()
+
+        classDocumentation.addExample({
+            Description: 'Example 1.',
+            Code: 
+`const o = 'abc'
+
+o.toUpperCase()`,
+        })
+
+        classDocumentation.addExample({
+            Description: 'Example 2.',
+            Code: 
+`const o = 'cba'
+
+o.toUpperCase()`,
+        })
+
+        const generatedClassComment = classDocumentation.generateComment()
+
+        const expectedClassComment =
+`/*
+   Example({
+      Description: \`
+         Example 1.
+      \`,
+      Code: \`
+         const o = 'abc'
+
+         o.toUpperCase()
+      \`,
+   })
+
+   Example({
+      Description: \`
+         Example 2.
+      \`,
+      Code: \`
+         const o = 'cba'
+
+         o.toUpperCase()
+      \`,
+   })
+*/`
+
+        expect( generatedClassComment ) .to .equal( expectedClassComment )
+
+    })
+
+    it('generates the tags', () => {
+
+        const classDocumentation = ClassDocumentation.new()
+
+        classDocumentation.setTags([ 'tag1', 'tag2' ])
+
+        const generatedClassComment = classDocumentation.generateComment()
+
+        const expectedClassComment =
+`/*
+   Tags([
+      'tag1', 'tag2'
+   ])
+*/`
+
+        expect( generatedClassComment ) .to .equal( expectedClassComment )
 
     })
 

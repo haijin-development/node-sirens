@@ -28,6 +28,14 @@ class AbsentFunction {
         return this.sourceFile
     }
 
+    getSourceCode() {
+        return 'Function not found'
+    }
+
+    getFormattedSourceCode() {
+        return 'Function not found'
+    }
+
     /// Queyring
 
     getName() {
@@ -66,6 +74,16 @@ class AbsentFunction {
 
     getSourceCode() {
         return 'Source code not found'
+    }
+
+    /// Writing
+
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {
+        throw new Error(`Not implemented`)
+    }
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {
+        throw new Error(`Not implemented`)
     }
 }
 

@@ -1,6 +1,30 @@
 # Changelog
 
-## v0.8.0 (next release)
+## v0.9.0 (next release)
+
+## v0.8.0 
+
+### Sirens
+
+- Updated version number.
+- When opening files the ClassEditor now remembers the last folder opened.
+- Implemented edition of a class documentation.
+- Fixed errors when lists and trees had no items selected.
+- Implemented edition of a method documentation.
+
+### gui
+
+- Added params type cheking to all protocols.
+- Added the optional parameter initialFolder to FileChooser
+- Renamed toolBar.item to toolBar.button.
+- Implemented Dialog.
+- ChoiceModel sets to null instead of undefined when it has no item selection.
+
+### O language
+
+- Implemented ParamsChecker to add dynamic strict params validation to any object.
+- Implemented ClassificationWithTypeChecking to add dynamic strict params validation to all new defined Classifications.
+- Added recursive `implements` to declared `implements` in protocols.
 
 ## v0.7.0
 

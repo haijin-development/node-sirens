@@ -29,7 +29,7 @@ class ClassCommentHeader {
                     },
                 })
 
-                this.fileImage({
+                this.image({
                     filename: Resource.image.class,
                     width: 48,
                     height: 48,
@@ -46,8 +46,6 @@ class ClassCommentHeader {
                 })
 
             })
-
-            this.verticalSeparator()
 
         })
     }

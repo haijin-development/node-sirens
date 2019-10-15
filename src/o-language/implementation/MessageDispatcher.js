@@ -341,6 +341,12 @@ class MessageDispatcher {
         })
     }
 
+    classificationGetExpectedClassifications({ classificationDefinition: classificationDefinition }) {
+        return ClassificationDefinition.getExpectedProtocols({
+            classificationDefinition: classificationDefinition
+        })
+    }
+
     classificationSetClassificationBehaviours({
         classificationDefinition: classificationDefinition, classificationsObjects: classificationsObjects
     }) {

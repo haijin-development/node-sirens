@@ -7,19 +7,35 @@ class StringStreamProcotol {
 
     getCrChar() {}
 
-    setCrChar(char) {}
+    setCrChar(char) {
+        this.param(char) .isString()
+    }
 
     /// Concatenating
 
-    append({ string: string, if: boolean }) {}
+    append({ string: string, if: condition }) {
+        this.param(string) .isString()
+        this.param(condition) .isUndefined() .or() .isBoolean()
+    }
 
-    prepend({ string: string, if: boolean }) {}
+    prepend({ string: string, if: condition }) {
+        this.param(string) .isString()
+        this.param(condition) .isUndefined() .or() .isBoolean()
+    }
 
-    cr({ if: boolean } = { if: true }) {}
+    cr({ if: condition } = { if: true }) {
+        this.param(condition) .isUndefined() .or() .isBoolean()
+    }
 
-    appendLine({ string: lineString, if: boolean }) {}
+    appendLine({ string: lineString, if: condition }) {
+        this.param(lineString) .isString()
+        this.param(condition) .isUndefined() .or() .isBoolean()
+    }
 
-    prependLine({ string: lineString, if: boolean }) {}
+    prependLine({ string: lineString, if: condition }) {
+        this.param(lineString) .isString()
+        this.param(condition) .isUndefined() .or() .isBoolean()
+    }
 }
 
 module.exports = Protocol.define(StringStreamProcotol)

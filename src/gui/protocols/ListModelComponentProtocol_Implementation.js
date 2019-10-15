@@ -4,22 +4,35 @@ const Protocol = require('../../o-language/classifications/Protocol')
  * Defines the implementation protocol for components that syncronize its contents with a ListModel.
  */
 class ListModelComponentProtocol_Implementation {
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = []
-        this.assumes = []
-    }
-
     /// Events
 
     onItemsListChanged() {}
 
-    onItemsAdded({list: list, items: items, index: index}) {}
+    onItemsAdded({list: list, items: items, index: index}) {
+        this.param(list) .isArray()
+        this.param(items) .isArray()
+        this.param(index) .isInteger()
+    }
 
-    onItemsUpdated({list: list, items: items, indices: indices}) {}
+    onItemsUpdated({list: list, items: items, indices: indices}) {
+        this.param(list) .isArray()
+        this.param(items) .isArray()
+        this.param(indices) .isArray()
 
-    onItemsRemoved({list: list, items: items, indices: indices}) {}
+        indices.forEach( (index) => {
+            this.param(index) .isInteger()
+        })
+    }
+
+    onItemsRemoved({list: list, items: items, indices: indices}) {
+        this.param(list) .isArray()
+        this.param(items) .isArray()
+        this.param(indices) .isArray()
+
+        indices.forEach( (index) => {
+            this.param(index) .isInteger()
+        })
+    }
 }
 
 module.exports = Protocol.define(ListModelComponentProtocol_Implementation)

@@ -7,15 +7,15 @@ class CheckBoxView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['checkButton', 'onClickedBlock']
+        this.instanceVariables = ['checkButton', 'onClickedClosure']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({ onClicked: onClickedBlock }) {
-        this.onClickedBlock = onClickedBlock
+    initialize({ onClicked: onClickedClosure }) {
+        this.onClickedClosure = onClickedClosure
 
         this.previousClassificationDo( () => {
             this.initialize()
@@ -23,7 +23,7 @@ class CheckBoxView {
     }
 
     initializeHandles() {
-        this.checkButton = new Gtk.CheckButton({label: ''})
+        this.checkButton = new Gtk.CheckButton({ label: '' })
     }
 
     /// Accessing
@@ -55,7 +55,7 @@ class CheckBoxView {
     }
 
     handleClick() {
-        this.onClickedBlock()
+        this.onClickedClosure()
     }
 }
 

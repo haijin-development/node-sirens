@@ -36,21 +36,33 @@ class ImplementationNoteDocumentation {
                     },
                 })
 
-                this.image({
-                    iconName: GtkIcons.dialogWarning,
-                    size: GtkIcons.size._32x32,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
-                })
-
                 this.verticalStack( function() {
-                    this.label({
-                        text: `Implementation note # ${index}`,
+
+                    this.horizontalStack( function() {
+
+                        this.image({
+                            iconName: GtkIcons.dialogWarning,
+                            size: GtkIcons.size._32x32,
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                            },
+                        })
+
+                        this.label({
+                            text: `Implementation note # ${index}`,
+                        })
+
                     })
 
-                    this.label({
-                        text: implementationNote,
+                    this.horizontalStack( function() {
+
+                        this.label({
+                            text: implementationNote,
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                            },
+                        })
+
                     })
                 })
 

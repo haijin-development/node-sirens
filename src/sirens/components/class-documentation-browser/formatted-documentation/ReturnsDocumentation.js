@@ -36,12 +36,13 @@ class ReturnsDocumentation {
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
+                    marginRight: 10,
                 })
 
                 this.label({
                     text: returns.Description,
                     viewAttributes: {
-                        stackSize: 'filled',
+                        stackSize: 'fixed',
                     },
                 })
 

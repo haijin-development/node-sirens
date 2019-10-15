@@ -8,20 +8,20 @@ const SourceCodeText = require('../SourceCodeText')
 /*
  * A visitor of a javascript parse tree that collects the documentation of a class.
  */
-class MethodDocumentationBuilder {
+class ClassDslDocumentationReader {
 
     static definition() {
-        this.instanceVariables = ['methodDocumentation']
+        this.instanceVariables = ['classDocumentation']
         this.assumes = [ParseTreeVisitor]
         this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
 
-    initialize({ methodDocumentation: methodDocumentation }) {
+    initialize({ classDocumentation: classDocumentation }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
-        this.methodDocumentation = methodDocumentation
+        this.classDocumentation = classDocumentation
     }
 
     buildFromString(documentationDslString) {
@@ -29,7 +29,7 @@ class MethodDocumentationBuilder {
 
         this.visit( parseTree )
 
-        return this.methodDocumentation
+        return this.classDocumentation
     }
 
     parseString(string) {
@@ -52,67 +52,24 @@ class MethodDocumentationBuilder {
         const firstArgument = args[0]
 
         switch( calledFunction ) {
-            case 'Method':
-                this.methodDocumentation.setDescription( firstArgument )
-                break
-
-            case 'Param':
-                const param = {
-                    Name: '',
-                    Protocols: [],
-                    Description: '',
-                }
-
-                firstArgument.forEach( (property) => {
-                    if( property.key === 'Name' ) {
-                        param.Name = property.value
-                    }
-
-                    if( property.key === 'Protocols' ) {
-                        param.Protocols = property.value
-                    }
-
-                    if( property.key === 'Description' ) {
-                        param.Description = property.value
-                    }
-                })
-
-                this.methodDocumentation.addParam( param )
-                break
-
-            case 'Returns':
-                const returns = {
-                    Protocols: [],
-                    Description: '',
-                }
-
-                firstArgument.forEach( (property) => {
-                    if( property.key === 'Protocols' ) {
-                        returns.Protocols = property.value
-                    }
-
-                    if( property.key === 'Description' ) {
-                        returns.Description = property.value
-                    }
-                })
-
-                this.methodDocumentation.setReturns( returns )
+            case 'Class':
+                this.classDocumentation.setDescription( firstArgument )
                 break
 
             case 'Implementation':
-                this.methodDocumentation.addImplementationNote( firstArgument )
+                this.classDocumentation.addImplementationNote( firstArgument )
 
                 break
 
             case 'Tags':
-                this.methodDocumentation.setTags( firstArgument )
+                this.classDocumentation.setTags( firstArgument )
 
                 break
 
             case 'Example':
                 const example = {
-                    Description: '',
-                    Code: '',
+                    Description: firstArgument.key,
+                    Code: firstArgument.value,
                 }
 
                 firstArgument.forEach( (property) => {
@@ -125,7 +82,7 @@ class MethodDocumentationBuilder {
                     }
                 })
 
-                this.methodDocumentation.addExample( example )
+                this.classDocumentation.addExample( example )
 
                 break
 
@@ -154,4 +111,4 @@ class MethodDocumentationBuilder {
     }
 }
 
-module.exports = Classification.define(MethodDocumentationBuilder)
+module.exports = Classification.define(ClassDslDocumentationReader)

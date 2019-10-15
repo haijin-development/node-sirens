@@ -3,8 +3,8 @@ const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const Resource = require('../../objects/Resource')
-const MethodUnformattedComment = require('./MethodUnformattedComment')
-const MethodFormattedComment = require('./MethodFormattedComment')
+const MethodUnformattedComment = require('./unformatted-documentation/MethodUnformattedComment')
+const MethodFormattedComment = require('./formatted-documentation/MethodFormattedComment')
 
 class ClassMethodsDocumentation {
     /// Definition
@@ -20,12 +20,13 @@ class ClassMethodsDocumentation {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
+        const showsUnformattedComments = model.showsUnformattedComments()
+
         componentsRenderer.render(function (component) {
 
             this.horizontalSplitter( function() {
 
-                
-                if( model.showsUnformattedComments() ) {
+                if( showsUnformattedComments ) {
 
                     this.component(
                         MethodUnformattedComment.new({

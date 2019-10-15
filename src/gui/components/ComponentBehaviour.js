@@ -1,9 +1,9 @@
 const Classification = require('../../o-language/classifications/Classification')
+const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProtocol')
+const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 const OInstance = require('../../o-language/classifications/OInstance')
 const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
-const ValueModelBehaviour = require('../models/ValueModelBehaviour')
-const ValueModel = require('../models/ValueModel')
-const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
+
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 
 class ComponentBehaviour {
@@ -12,7 +12,7 @@ class ComponentBehaviour {
     static definition() {
         this.instanceVariables = ['childComponents', 'view']
         this.assumes = [ObjectWithProps]
-        this.expects = [ComponentBehaviourProtocol_Implementation]
+        this.expects = [ComponentBehaviourProtocol, ComponentBehaviourProtocol_Implementation]
     }
 
     /// Initializing

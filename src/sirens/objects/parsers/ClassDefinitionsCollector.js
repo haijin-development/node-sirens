@@ -4,6 +4,7 @@ const ClassDefinition = require('../source-code/ClassDefinition')
 const ClassDeclaration = require('../source-code/ClassDeclaration')
 const ClassHeader = require('../source-code/ClassHeader')
 const EmptyJsStatement = require('../source-code/EmptyJsStatement')
+const AbsentComment = require('../source-code/AbsentComment')
 const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
 
 /*
@@ -54,7 +55,10 @@ class ClassDefinitionsCollector {
             parseNode: parseNode,
         })
 
-        const comment = this.getCommentOn({ parseNode: parseNode })
+        const comment = this.getCommentOn({
+            parseNode: parseNode,
+            classDeclaration: classDeclaration,
+        })
 
         const header = this.getHeader({ parseNode: parseNode })
 
@@ -65,11 +69,14 @@ class ClassDefinitionsCollector {
         })
     }
 
-    getCommentOn({ parseNode: parseNode }) {
+    getCommentOn({ parseNode: parseNode, classDeclaration: classDeclaration }) {
         const Comment = require('../source-code/Comment')
 
         if( parseNode.comment === undefined ) {
-            return this.buildMissingComment({ parseNode: parseNode })
+            return this.buildMissingComment({
+                parseNode: parseNode,
+                classDeclaration: classDeclaration,
+            })
         }
 
         return Comment.new({
@@ -78,11 +85,15 @@ class ClassDefinitionsCollector {
         })
     }
 
-    buildMissingComment({ parseNode: parseNode }) {
-        return EmptyJsStatement.new({
+    buildMissingComment({ parseNode: parseNode, classDeclaration: classDeclaration }) {
+        const { indentationChar, indentationCount } = classDeclaration.detectIdentation()
+
+        return AbsentComment.new({
             sourceFile: this.sourceFile,
             lineNumber: parseNode.loc.start.line,
             columnNumber: parseNode.loc.start.column,
+            indentationCount: indentationCount,
+            indentationChar: indentationChar,
         })
     }
 

@@ -6,83 +6,71 @@ function globalFunction_1(param) {
 }
 
 /*
-    Class(`
-        A regular js class to use in the classEditor example.
+   Class(`
+      A regular js class to use in the classEditor example.
 
-        An Address object models a street name and number.
-    `)
+      This class is a regular javascript class to show a use case of of the ClassDocumentationBrowser.
+   `)
 
-    Implementation(`
-        This class exists only as an example of its documentation. Do not take it as an example of good practices.
-    `)
+   Implementation(`
+      This class exists only as an example of its documentation. Do not take it as an example of good practices.
+   `)
 
-    Example({
-        Description: `
-            Creates an Address with a given street name and number.
-        `,
-        Code: `
-            const Address = require('../../../examples/samples/Address')
+   Example({
+      Description: `
+         Creates an Address with a given street name and number.
+      `,
+      Code: `
+         const Address = require('../../../examples/samples/Address')
 
-            const address = new Address({ streetName: 'Evergreen', number: 742 })
+         const address = new Address({ streetName: 'Evergreen', number: 742 })
 
-            address.getStreetName()
-            address.getNumber()
-        `,
-    })
+         address.getStreetName()
+         address.getNumber()
+      `,
+   })
 
-    Example({
-        Description: `
-            Creates an empty Address.
-        `,
-        Code: `
-            const Address = require('../../../examples/samples/Address')
+   Example({
+      Description: `
+         Creates an empty Address.
+      `,
+      Code: `
+         const Address = require('../../../examples/samples/Address')
 
-            const address = new Address()
+         const address = new Address()
 
-            address.getStreetName()
-            address.getNumber()
-        `,
-    })
+         address.getStreetName()
+         address.getNumber()
+      `,
+   })
 */
 class Address {
     /*
-        Param({
-            Name: 'streetName',
-            Protocols: [ String ],
-            Description: `The name of the street. Does not include the street number.`,
-        })
+       Example({
+          Description: `
+             Creates an Address with a given street name and number.
+          `,
+          Code: `
+             const Address = require('../../../examples/samples/Address')
 
-        Param({
-            Name: 'number',
-            Protocols: [ int ],
-            Description: `The number of the address in the street.`,
-        })
+             new Address({ streetName: 'Evergreen', number: 742 })
+          `,
+       })
 
-        Example({
-            Description: `
-                Creates an Address with a given street name and number.
-            `,
-            Code: `
-                const Address = require('../../../examples/samples/Address')
+       Example({
+          Description: `
+             Creates an empty Address.
+          `,
+          Code: `
+             const Address = require('../../../examples/samples/Address')
 
-                new Address({ streetName: 'Evergreen', number: 742 })
-            `,
-        })
+             new Address()
+          `,
+       })
 
-        Example({
-            Description: `
-                Creates an empty Address.
-            `,
-            Code: `
-                const Address = require('../../../examples/samples/Address')
-
-                new Address()
-            `,
-        })
-
-        Tags([
-            `constructor`,
-        ])
+       Tags([
+          'constructor'
+       ])
     */
     constructor({ streetName: streetName, number: number } = {}) {
         this.streetName = streetName

@@ -35,7 +35,7 @@ class ToolBarBuilder {
         return toolBar
     }
 
-    item({ label: label, icon: icon, tooltip: tooltip, enabled: enabled, action: action }) {
+    button({ label: label, icon: icon, tooltip: tooltip, enabled: enabled, action: action }) {
         const menuItem = ToolButton.new({
             label: label,
             icon: icon,

@@ -5,6 +5,7 @@ const ComponentProtocol_Implementation = require('../../../gui/protocols/Compone
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const ScriptEvaluator = require('../ScriptEvaluator')
 const Sirens = require('../../../Sirens')
+const ValueModel = require('../../../gui/models/ValueModel')
 
 class DocumentationPlayground {
     /// Definition
@@ -15,6 +16,8 @@ class DocumentationPlayground {
         this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
     }
 
+    /// Initializing
+
     initialize(props) {
         this.previousClassificationDo( () => {
             this.initialize( props )
@@ -22,6 +25,12 @@ class DocumentationPlayground {
 
         this.evaluationContext = {}
     }
+
+    defaultModel() {
+        return ValueModel.new({ value: '' })
+    }
+
+    /// Actions
 
     evaluateSelectedCode(selectedText) {
         const evaluationResult = ScriptEvaluator.evaluate({
@@ -32,15 +41,22 @@ class DocumentationPlayground {
         Sirens.browseObject( evaluationResult )
     }
 
+    /// Rendering
+
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         const text = "\n" + this.getProps().text + "\n"
+
+        model.setValue( text )
 
         componentsRenderer.render( function(component) {
 
             this.text( function() {
 
+                this.model( model )
+
                 this.styles({
-                    text: text,
                     hScroll: 'never',
                     vScroll: 'never',
                     viewAttributes: {

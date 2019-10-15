@@ -1,5 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
-const MethodDocumentationBuilder = require('./MethodDocumentationBuilder')
+const MethodDslDocumentationReader = require('./MethodDslDocumentationReader')
+const DslDocumentationWriter = require('./DslDocumentationWriter')
 
 class MethodDocumentationInstantiator {
     /// Definition
@@ -14,7 +15,7 @@ class MethodDocumentationInstantiator {
     fromString(documentationDslString) {
         const methodDocumentation = MethodDocumentation.new()
 
-        MethodDocumentationBuilder.new({ methodDocumentation: methodDocumentation })
+        MethodDslDocumentationReader.new({ methodDocumentation: methodDocumentation })
             .buildFromString( documentationDslString )
 
         return methodDocumentation
@@ -110,6 +111,14 @@ class MethodDocumentation {
         this.params.push( param )
     }
 
+    updateParamAt({ index: index, param: param }) {
+        this.params[index] = param
+    }
+
+    deleteParamAt({ index: index }) {
+        this.params.splice( index, 1 )
+    }
+
 
     getReturns() {
         return this.returns
@@ -128,6 +137,13 @@ class MethodDocumentation {
         this.implementationNotes.push( implementationNote )
     }
 
+    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
+        this.implementationNotes[index] = implementationNoteText
+    }
+
+    deleteImplementationNoteAt({ index: index }) {
+        this.implementationNotes.splice( index, 1 )
+    }
 
     getTags() {
         return this.tags
@@ -147,10 +163,36 @@ class MethodDocumentation {
 
         this.examples.push( example )
     }
+
+    updateExampleAt({ index: index, example: example }) {
+        this.examples[index] = example
+    }
+
+    deleteExampleAt({ index: index }) {
+        this.examples.splice( index, 1 )
+    }
+
+
+    /// Generating method comment
+
+    generateComment() {
+        return this.getDocumentationWriter().generateMethodComment({
+            methodDocumentation: this
+        })
+    }
+
+    generateCommentContents() {
+        return this.getDocumentationWriter().generateMethodCommentContents({
+            methodDocumentation: this
+        })
+    }
+
+    getDocumentationWriter() {
+        return DslDocumentationWriter.new()
+    }
 }
 
 MethodDocumentation = Classification.define(MethodDocumentation)
-
 
 
 

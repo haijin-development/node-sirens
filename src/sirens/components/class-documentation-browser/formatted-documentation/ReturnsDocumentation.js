@@ -1,10 +1,10 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
-const Resource = require('../../objects/Resource')
+const Classification = require('../../../../../src/o-language/classifications/Classification')
+const Component = require('../../../../gui/components/Component')
+const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+const Resource = require('../../../objects/Resource')
 
-class ParamDocumentation {
+class ReturnsDocumentation {
     /// Definition
 
     static definition() {
@@ -16,7 +16,7 @@ class ParamDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-        const param = this.getProps().param
+        const returns = this.getProps().returns
 
         componentsRenderer.render( function(component) {
 
@@ -29,35 +29,27 @@ class ParamDocumentation {
                     },
                 })
 
-                this.fileImage({
-                    filename: Resource.image.param,
+                this.image({
+                    filename: Resource.image.returns,
                     width: 48,
                     height: 48,
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
+                    marginRight: 10,
                 })
 
                 this.label({
-                    text: param.Name + ': ',
+                    text: returns.Description,
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
                 })
 
-                this.label({
-                    text: param.Description,
-                    viewAttributes: {
-                        stackSize: 'filled',
-                    },
-                })
-
             })
-
-            this.verticalSeparator()
 
         })
     }
 }
 
-module.exports = Classification.define(ParamDocumentation)
+module.exports = Classification.define(ReturnsDocumentation)

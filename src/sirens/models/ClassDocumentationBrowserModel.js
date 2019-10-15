@@ -12,7 +12,11 @@ class ClassDocumentationBrowserModel {
         this.instanceVariables = [
             'classDefinition',
 
+            'documentationChangedModel',
+
             'showUnformattedCommentsModel',
+
+            'editionModeModel',
 
             'classMethodsModel',
 
@@ -30,7 +34,11 @@ class ClassDocumentationBrowserModel {
 
         this.classDefinition = classDefinition
 
+        this.documentationChangedModel = ValueModel.new()
+
         this.showUnformattedCommentsModel = ValueModel.new({ value: false })
+
+        this.editionModeModel = ValueModel.new({ value: false })
 
         this.classMethodsModel = ChoiceModel.new({
             choices: classDefinition.getMethods(),
@@ -44,12 +52,24 @@ class ClassDocumentationBrowserModel {
 
     /// Accessing
 
+    getDocumentationChangedModel() {
+        return this.documentationChangedModel
+    }
+
     getShowUnformattedCommentsModel() {
         return this.showUnformattedCommentsModel
     }
 
+    getEditionModeModel() {
+        return this.editionModeModel
+    }
+
     showsUnformattedComments() {
         return this.showUnformattedCommentsModel.getValue() === true
+    }
+
+    isInEditionMode() {
+        return this.editionModeModel.getValue() === true
     }
 
     getClassDefinition() {
@@ -65,13 +85,13 @@ class ClassDocumentationBrowserModel {
     }
 
     getClassUnformattedComment() {
-        return this.classDefinition.getComment().getString()
+        return this.classDefinition.getComment().getSourceCode()
     }
 
     getClassDocumentation() {
         const className = this.classDefinition.getClassName()
 
-        const unformattedComment = this.getClassUnformattedComment()
+        const unformattedComment = this.classDefinition.getComment().getContents()
 
         return ClassDocumentation.isDocumentationString({
             string: unformattedComment,
@@ -106,7 +126,7 @@ class ClassDocumentationBrowserModel {
             })
         }
 
-        const unformattedComment = method.getComment().getString()
+        const unformattedComment = method.getComment().getContents()
 
         return MethodDocumentation.isDocumentationString({
             string: unformattedComment,
@@ -128,19 +148,40 @@ class ClassDocumentationBrowserModel {
     /// Actions
 
     reload() {
-        const value = this.showUnformattedCommentsModel.getValue()
+        const selectedMethod = this.getSelectedMethod()
 
-        this.showUnformattedCommentsModel.triggerValueChanged({ oldValue: value, newValue: value })
+        this.classDefinition.reload()
+
+        this.classMethodsModel.setChoices(
+            this.classDefinition.getMethods()
+        )
+
+        if( selectedMethod !== null ) {
+            this.classMethodsModel.setSelectionSuchThat({
+                matches: (method) => {
+                    return method.getName() === selectedMethod.getName()
+                }
+            })
+        }
+
+        this.triggerDocumentationChanged()
     }
 
     /// Events
 
     connectModels() {
         this.classMethodsModel.onSelectionChanged( this.onMethodSelectionChanged.bind(this) )
+
+        this.showUnformattedCommentsModel.onValueChanged( this.triggerDocumentationChanged.bind(this) )
+        this.editionModeModel.onValueChanged( this.triggerDocumentationChanged.bind(this) )
     }
 
     onMethodSelectionChanged({ oldValue: oldValue, newValue: newValue }) {
         this.selectedMethodModel.setValue( newValue )
+    }
+
+    triggerDocumentationChanged() {
+        this.documentationChangedModel.triggerValueChanged({ oldValue: undefined, newValue: undefined })
     }
 }
 

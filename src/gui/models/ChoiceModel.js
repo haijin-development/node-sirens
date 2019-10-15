@@ -46,8 +46,19 @@ class ChoiceModel {
     }
 
     setSelectionValue(newSelection) {
+        if( newSelection === undefined ) {
+            newSelection = null
+        }
+
         return this.selectionModel.setValue(newSelection)
     }
+
+    setSelectionSuchThat({ matches: matchingClosure }) {
+        const matchingItem = this.getChoices().find( matchingClosure )
+
+        this.setSelectionValue( matchingItem )
+    }
+
 
     getSelectionIndex() {
         const item = this.getSelectionValue()
@@ -58,7 +69,7 @@ class ChoiceModel {
     setSelectionIndex({ index: index }) {
         const item = this.listModel.getItemAt({ index: index })
 
-        return this.selectionModel.setValue(item)
+        return this.setSelectionValue(item)
     }
 
     /// Events

@@ -78,6 +78,8 @@ class WindowView {
         return this.getMainHandle().getDefaultSize()[1]
     }
 
+    /// Accessing
+
     getMainHandle() {
         return this.window
     }

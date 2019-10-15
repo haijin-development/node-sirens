@@ -191,6 +191,12 @@ class OInstance {
         })
     }
 
+    getClassificationNames() {
+        return this.classifications().map( (classification) => {
+            return classification.getName()
+        })
+    }
+
     /*
      * Returns the classification active in the method that called thisClassification().
      */

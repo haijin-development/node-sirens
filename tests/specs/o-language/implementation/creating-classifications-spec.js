@@ -204,6 +204,8 @@ describe('The Classification classification', () => {
             'setClassificationBehaviours',
             'getImplementedProtocols',
             'setImplementedProtocols',
+            'getExpectedProtocols',
+            'setExpectedProtocols',
             'implements',
             'compliesWith',
         ])
@@ -268,6 +270,7 @@ describe('The OInstance classification', () => {
             'afterMethod',
             'yourself',
             'classifications',
+            'getClassificationNames',
             'thisClassification',
             'previousClassification',
         ])

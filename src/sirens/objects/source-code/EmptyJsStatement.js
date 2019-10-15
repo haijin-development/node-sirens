@@ -1,5 +1,6 @@
 const Classification = require('../../../o-language/classifications/Classification')
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
+const StringStream = require('../../../o-language/classifications/StringStream')
 
 /*
  * An expected yet missing statement within a js valid file.
@@ -41,7 +42,7 @@ class EmptyJsStatement {
         return ''
     }
 
-    getString() {
+    getFormattedSourceCode() {
         return ''
     }
 
@@ -62,6 +63,47 @@ class EmptyJsStatement {
     getEndingColumn() {
         return this.columnNumber
     }
+
+    /// Writing
+
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {
+        const sourceCodeText = SourceCodeText.new({ text: this.getSourceCode() })
+
+        const rawSourceCode = sourceCodeText.unformatBackText( formattedSourceCode )
+
+        this.writeRawSourceCode({ rawSourceCode: rawSourceCode })
+    }
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {
+        const firstStatementStartLine = this.getStartingLine()
+        const firstStatementStartColumn = this.getStartingColumn()
+
+        const lastStatementEndLine = this.getEndingLine()
+        const lastStatementEndColumn = this.getEndingColumn()
+
+        const fileContentsBefore = this.getSourceFile().getOriginalSourceCode({
+            fromLine: 1,
+            fromColumn: 0,
+            toLine: firstStatementStartLine,
+            toColumn: firstStatementStartColumn,
+        })
+
+        const fileContentsAfter = this.getSourceFile().getOriginalSourceCode({
+            fromLine: lastStatementEndLine,
+            fromColumn: lastStatementEndColumn,
+        })
+
+        const newFileContents = StringStream.new()
+
+        newFileContents.append({ string: fileContentsBefore, if: fileContentsBefore !== '' })
+
+        newFileContents.append({ string: rawSourceCode, if: rawSourceCode !== '' })
+
+        newFileContents.append({ string: fileContentsAfter, if: fileContentsAfter !== '' })
+
+        this.getSourceFile().saveFileContents( newFileContents.getString() )
+    }
+
 }
 
 module.exports = Classification.define(EmptyJsStatement)

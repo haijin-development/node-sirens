@@ -9,7 +9,9 @@ class ValueModelProtocol {
 
     /// Listening
 
-    onValueChanged(closure) {}
+    onValueChanged(closure) {
+        this.param(closure) .isFunction()
+    }
 
     /// Comparing
 

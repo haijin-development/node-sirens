@@ -11,6 +11,10 @@ class JsStatementProtocol {
 
     getSourceFile() {}
 
+    getSourceCode() {}
+
+    getFormattedSourceCode() {}
+
     /// Querying
 
     getStartingLine() {}
@@ -20,6 +24,12 @@ class JsStatementProtocol {
     getEndingLine() {}
 
     getEndingColumn() {}
+
+    // Writing
+
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {}
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {}
 }
 
 module.exports = Protocol.define(JsStatementProtocol)

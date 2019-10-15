@@ -16,7 +16,13 @@ class MethodCommentHeader {
     /// Building
 
     renderWith(componentsRenderer) {
-        const methodDeclaration = this.getProps().methodDeclaration
+        const method = this.getProps().method
+
+        let methodDeclaration = 'No method is selected.'
+
+        if( method !== null ) {
+            methodDeclaration = method.getFunctionSignatureString()
+        }
 
         componentsRenderer.render( function(component) {
 
@@ -29,7 +35,7 @@ class MethodCommentHeader {
                     },
                 })
 
-                this.fileImage({
+                this.image({
                     filename: Resource.image.method,
                     width: 48,
                     height: 48,
@@ -46,8 +52,6 @@ class MethodCommentHeader {
                 })
 
             })
-
-            this.verticalSeparator()
 
         })
     }

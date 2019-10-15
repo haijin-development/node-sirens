@@ -30,16 +30,25 @@ class ClassDocumentationToolBar {
 
                 this.toggleButton({
                     model: model.getShowUnformattedCommentsModel(),
-                    label: 'Show unformatted comment',
+                    label: 'Show unformatted comment.',
                     icon: GtkIcons.revertToSave,
                     tooltip: 'Shows the unformatted comment as it appears in the file.',
                 })
 
-                this.item({
+                this.button({
                     label: 'Reload documentation.',
                     icon: GtkIcons.refresh,
                     tooltip: 'Realoads the original documentation.',
                     action: () => { model.reload() },
+                })
+
+                this.separator()
+
+                this.toggleButton({
+                    model: model.getEditionModeModel(),
+                    label: 'Edition mode.',
+                    icon: GtkIcons.edit,
+                    tooltip: 'Turn it on to edit the documentation.',
                 })
 
             })

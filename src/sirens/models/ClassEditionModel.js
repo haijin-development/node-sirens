@@ -69,7 +69,7 @@ class ClassEditionModel {
     }
 
     getMethodSourceCode(selectedMethod) {
-        if( selectedMethod === undefined ) { return '' }
+        if( selectedMethod === null ) { return '' }
 
         return selectedMethod.getFunctionFormattedSourceCode()
     }

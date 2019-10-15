@@ -139,11 +139,15 @@ class JsStatement {
 
     /// Writing
 
-    writeSourceCode(formattedSourceCode) {
+    writeFormattedSourceCode({ sourceCode: formattedSourceCode }) {
         const sourceCodeText = SourceCodeText.new({ text: this.getSourceCode() })
 
-        const sourceCode = sourceCodeText.unformatBackText( formattedSourceCode )
+        const rawSourceCode = sourceCodeText.unformatBackText( formattedSourceCode )
 
+        this.writeRawSourceCode({ rawSourceCode: rawSourceCode })
+    }
+
+    writeRawSourceCode({ rawSourceCode: rawSourceCode }) {
         const firstStatementStartLine = this.getStartingLine()
         const firstStatementStartColumn = this.getStartingColumn()
 
@@ -166,12 +170,24 @@ class JsStatement {
 
         newFileContents.append({ string: fileContentsBefore, if: fileContentsBefore !== '' })
 
-        newFileContents.append({ string: sourceCode, if: sourceCode !== '' })
+        newFileContents.append({ string: rawSourceCode, if: rawSourceCode !== '' })
 
         newFileContents.append({ string: fileContentsAfter, if: fileContentsAfter !== '' })
 
         this.getSourceFile().saveFileContents( newFileContents.getString() )
     }
+
+    detectIdentation() {
+        const sourceCodeText = SourceCodeText.new({
+            text: this.getSourceCode(),
+        })
+
+        return {
+            indentationChar: sourceCodeText.getIndentationChar(),
+            indentationCount: sourceCodeText.getIndentationCount(),
+        }
+    }
+
 }
 
 module.exports = Classification.define(JsStatement)

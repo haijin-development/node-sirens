@@ -92,10 +92,17 @@ node_modules/.bin/classEditor [javascript-filename.js]
 
 ### Screenshots
 
+**Browsing an object**
+
 ![Gtk browser](./docs/browsing-object.gif)
 
-![Class documentation browser](./docs/browsing-class-documentation.gif)
+**Browsing documentation**
 
+![Browsing documentation](./docs/browsing-documentation.gif)
+
+**Writing documentation**
+
+![Writing documentation](./docs/writing-browseable-documentation.gif)
 
 ### Pre-requisites
 

@@ -3,7 +3,7 @@ const StringStream = require('./StringStream')
 const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
 /*
-    class(`
+    Class(`
         This classification adds indentation to the lines appended to a StringStream.
 
         This classification is a decorator of a StringStream behaviour.
@@ -11,27 +11,27 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
         In the object oriented languages based on classes decorators are different objects from the 
         decorated objects, losing the decorated object identity.
 
-        This classification is an example of how in the O language decorators can be added to an object
-        without losing or changing the identity of the decorated object and, at the same time, mantain
+        This classification is an example of a behavioral decorator, a decorator can be added to an object
+        without losing or changing the identity of the decorated object and at the same time mantaining
         the encapsulation and separation of concerns of the decoractor.
     `)
 
-    example({
-        description: `
+    Example({
+        Description: `
             Adds indentation to an existing StringStream.
         `,
-        code: `
+        Code: `
             stringStream.behaveAs(IndentedStringStream)
 
             stringStream.appendLine({ string: 'Text' })
         `,
     })
 
-    example({
-        description: `
+    Example({
+        Description: `
             Sets the indentation to an existing StringStream.
         `,
-        code: `
+        Code: `
             stringStream.behaveAs(IndentedStringStream)
 
             stringStream.setIndentationCount(3)
@@ -40,11 +40,11 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
         `,
     })
 
-    example({
-        description: `
+    Example({
+        Description: `
             Increments and decrements the indentation to an existing StringStream.
         `,
-        code: `
+        Code: `
             stringStream.behaveAs(IndentedStringStream)
 
             stringStream.incrementIndentation({ by: 1 })
@@ -55,12 +55,12 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
         `,
     })
 
-    example({
-        description: `
+    Example({
+        Description: `
             Increments and decrements the indentation to an existing StringStream during the 
             evaluation of a closure.
         `,
-        code: `
+        Code: `
             stringStream.behaveAs(IndentedStringStream)
 
             stringStream.incrementIndentation({ by: 1 })
@@ -71,16 +71,13 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
         `,
     })
 
-    example({
-        description: `
+    Example({
+        Description: `
             Creates a StringStream behaving as a IndentedStringStream.
         `,
-        code: `
+        Code: `
             const stringStream = IndentedStringStream.new()
         `,
-        seeAlso: [
-            'IndentedStringStream.new'
-        ],
     })
 */
 class IndentedStringStream {

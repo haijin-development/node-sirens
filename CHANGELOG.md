@@ -2,6 +2,12 @@
 
 ## v0.9.0 (next release)
 
+### Sirens
+
+### gui
+
+### O language
+
 ## v0.8.0 
 
 ### Sirens

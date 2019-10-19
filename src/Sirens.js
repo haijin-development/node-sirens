@@ -47,7 +47,7 @@ const callsites = require('callsites')
 
  Example({
     Description: `
-       Browse the functions defined on each prototype of an object of a given object.
+       Browses the functions defined on each prototype of an object of a given object.
 
        The browser includes the function source code if available.
     `,
@@ -67,10 +67,11 @@ const callsites = require('callsites')
        A class browser allows to browse all the classes defined in a file.
 
        The difference with the PrototypesBrowser is that the ClassBrowser parses the javascript source code
-       while the PrototypeBrowser uses the JS API to get an object properties, functions and source code.
+       while the PrototypeBrowser uses the Javascript API to dynamically get an object properties, functions and source code.
 
        Because the ClassBrowsers has access to the full source code it can, and does, parse and read the documentation
-       of classes and method writen in its comments.
+       of classes and method writen in its comments, and in the future it will also be able to cross references between classes
+       in the same project as long as they are documented.
 
        Note that if a nmp package makes use of classes then with the ClassBrowser you can browse all of its source code and documentation
        offline and while you are developing your application or experimenting with that package just by dowloading the package with
@@ -80,9 +81,11 @@ const callsites = require('callsites')
        and opening its files with the ClassEditor.
     `,
     Code: `
+
        const Sirens = require('sirens')
 
        Sirens.openClassEditor()
+
     `,
  })
 */

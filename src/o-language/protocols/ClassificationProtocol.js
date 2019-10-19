@@ -79,7 +79,7 @@ class ClassificationProtocol {
     circle.behaveAs(Circle)
 
 
-    A classification can have any number of assumptions and the nested assumtpions are attached to the target object recursively.
+    A classification can have any number of assumptions and the nested assumptions are attached to the target object recursively.
 
     In a sense a classification assumptions defines a loose inheritance relationship between classifications, except that this
     relationship is dynamic instead of static.
@@ -103,9 +103,11 @@ class ClassificationProtocol {
 
     # this.expects = []
 
-    A classification expectations declares that an object the is behaving as that classification should comply with the declared protocol.
+    A classification expectations declares that an object that is behaving as that classification should comply with the all the protocols
+    declared as expectations.
 
-    It is similar to this.implements with the difference that the compliance is not checked at the moment of the classification definition.
+    It is similar to this.implements with the difference that the compliance to the protocol is not checked (and can not be checked )
+    at the moment of the classification definition.
 
     Here's an example:
 
@@ -239,7 +241,7 @@ class ClassificationProtocol {
 
  Returns({
     Description: `
-       A new OInstance object that behaves as a Classification.
+       A new OInstance object that behaves as a Classification instance.
     `,
  })
 
@@ -274,9 +276,10 @@ class ClassificationProtocol {
     Description: `
        Creates a Circle classification that assumes a Shape behaviour.
 
-       That is, the Circle instances will also behave a Shape instances.
+       That is, the Circle instances will also behave as Shape instances.
     `,
     Code: `
+
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -323,6 +326,7 @@ class ClassificationProtocol {
        circle.setRadious( 10 )
 
        circle.getPosition()
+
     `,
  })
 
@@ -668,7 +672,7 @@ getClassificationDefinition() {}
 
     /*
  Method(`
-    Sets the classification definition from which this classifiction is defined.
+    Sets the classification definition from which this classification is defined.
 
     The classification definition is where the classification method lookup searches for methods to activate when an object receives
     a message.
@@ -678,8 +682,8 @@ getClassificationDefinition() {}
  `)
 
  Implementation(`
-    Althou it is possible to change the classification definition of a classification after it has been defined once by calling this method,
-    currently it is not recomended to do so.
+    Although it is possible to change the classification definition of a classification after it has been defined by calling this method,
+    at the moment it is not recomended to do so.
 
     The instances behaving as that classification will not be updated with the new classification definition, making instances of the
     same classification to behave differently to the same method call.
@@ -692,7 +696,6 @@ getClassificationDefinition() {}
        Dynamically sets the definition of a classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        const classificationObject = Classification.define( class {} )

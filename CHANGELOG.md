@@ -4,9 +4,13 @@
 
 ### Sirens
 
+- Improved error handling when evaluating code on the browsers.
+
 ### gui
 
 ### O language
+
+- Documenting classifications.
 
 ## v0.8.0 
 

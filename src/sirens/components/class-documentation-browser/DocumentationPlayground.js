@@ -3,7 +3,7 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
-const ScriptEvaluator = require('../ScriptEvaluator')
+const ScriptEvaluator = require('../../objects/ScriptEvaluator')
 const Sirens = require('../../../Sirens')
 const ValueModel = require('../../../gui/models/ValueModel')
 

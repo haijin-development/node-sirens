@@ -8,7 +8,18 @@ describe('When using an ObjectWithProps', () => {
         expect( object.getProps() ) .to .be .eql( {} )
     })
 
-    it('adds a prop', () => {
+    it('sets a prop', () => {
+        const object = ObjectWithProps.new()
+
+        object.setProp({
+            key: 'a',
+            value: 1
+        })
+
+        expect( object.getProps() ) .to .be .eql({ a: 1 })
+    })
+
+    it('merges a prop', () => {
         const object = ObjectWithProps.new()
 
         object.mergeProps({
@@ -43,7 +54,7 @@ describe('When using an ObjectWithProps', () => {
         expect( object.getProps() ) .to .be .eql( {} )
     })
 
-    it('sets the props', () => {
+    it('sets all the props', () => {
         const object = ObjectWithProps.new()
 
         object.setProps({

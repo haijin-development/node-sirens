@@ -6,7 +6,7 @@ const ObjectBrowserModel = require('../models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
-const ScriptEvaluator = require('./ScriptEvaluator')
+const ScriptEvaluator = require('../objects/ScriptEvaluator')
 
 class ObjectBrowser {
     /// Definition

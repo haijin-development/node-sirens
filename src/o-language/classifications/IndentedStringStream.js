@@ -686,7 +686,7 @@ Example({
 
     /*
      Method(`
-        Appends a carriage return and optionally indentation at the begining of the new line.
+        Appends a carriage return and, optionally, appends indentation at the begining of the new line.
 
         Returns this same StringStream object.
      `)
@@ -742,7 +742,6 @@ Example({
            Appends a carriage return with indentation.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
@@ -751,7 +750,6 @@ Example({
            stream.cr({ indent: true })
 
            stream.getString()
-
         `,
      })
     */

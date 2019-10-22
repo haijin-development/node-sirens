@@ -31,17 +31,21 @@ class ObjectBrowser {
 
     /// Actions
 
+    inspectSelectedCode() {
+        const evaluationResult = this.evaluateSelectedCode()
+
+        Sirens.browseObject( evaluationResult )
+    }
+
     evaluateSelectedCode() {
         const selectedValue = this.getModel().getSelectedPropertyValue()
 
         const selectedText = this.getSelectedText()
 
-        const evaluationResult = ScriptEvaluator.evaluate({
+        return ScriptEvaluator.evaluate({
             thisObject: selectedValue,
             script: selectedText,
         })
-
-        Sirens.browseObject( evaluationResult )
     }
 
     /// Querying
@@ -95,9 +99,17 @@ class ObjectBrowser {
                             this.separator()
 
                             this.item({
+                                label: 'Evaluate selected code',
+                                enabled: selectedObject !== undefined,
+                                action: () => { component.evaluateSelectedCode() },
+                            })
+
+                            this.separator()
+
+                            this.item({
                                 label: 'Inspect selected code',
                                 enabled: selectedObject !== undefined,
-                                action: component.evaluateSelectedCode.bind(component),
+                                action: () => { component.inspectSelectedCode() },
                             })
                         })
                     })

@@ -32,13 +32,17 @@ class DocumentationPlayground {
 
     /// Actions
 
+    inspectSelectedCode(selectedText) {
+        const evaluationResult = this.evaluateSelectedCode( selectedText )
+
+        Sirens.browseObject( evaluationResult )
+    }
+
     evaluateSelectedCode(selectedText) {
-        const evaluationResult = ScriptEvaluator.evaluate({
+        return ScriptEvaluator.evaluate({
             thisObject: this.evaluationContext,
             script: selectedText,
         })
-
-        Sirens.browseObject( evaluationResult )
     }
 
     /// Rendering
@@ -70,9 +74,17 @@ class DocumentationPlayground {
                     this.separator()
 
                     this.item({
-                        label: 'Inspect selected code',
+                        label: 'Evaluate selected code',
                         enabled: selectedText !== '',
                         action: () => { component.evaluateSelectedCode( selectedText ) },
+                    })
+
+                    this.separator()
+
+                    this.item({
+                        label: 'Inspect selected code',
+                        enabled: selectedText !== '',
+                        action: () => { component.inspectSelectedCode( selectedText ) },
                     })
                 })
 

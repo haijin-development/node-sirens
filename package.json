@@ -14,7 +14,7 @@
     "mocha": "^6.2.1"
   },
   "scripts": {
-    "test": "node ./node_modules/.bin/mocha --recursive ./tests/specs/"
+    "test": "node ./node_modules/.bin/mocha --file tests/beforeAll.js --recursive ./tests/specs/"
   },
   "bin": {
     "classEditor": "./bin/classEditor.js"

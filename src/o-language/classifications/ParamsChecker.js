@@ -124,7 +124,7 @@ const MethodValidator = require('./params-validation/MethodValidator')
        circle.behaveAs(ParamsChecker)
 
        // Set an valid radious.
-       // Try also setting a string, null, a function or any object other that a numeric value
+       // Also try setting a string, null, a function or any object other than a numeric value.
        circle.setRadious( undefined )
 
        circle.getRadious()
@@ -149,14 +149,14 @@ class ParamsChecker {
      Method(`
         Proxy method that is called before the actual method activation.
 
-        Is this method this classification does the following:
+        In this proxy method the ParamsChecker classification does the following:
 
         	- Asks for all the protocols implemented by this instance
         	- For each of those protocols
-        		- If the protocol declares the method being activated, validate it
+        		- If the protocol declares the method being activated, validates it
 
 
-        If the validation fails raises an error.
+              - If the validation fails raises an error.
 
         If the validation succeds continues with the regular method activation.
      `)

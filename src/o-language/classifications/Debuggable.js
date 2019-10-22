@@ -2,6 +2,7 @@ const Classification = require('./Classification')
 const OInstance = require('./OInstance')
 const DebuggableProtocol = require('../protocols/DebuggableProtocol')
 const IndentedStringStream = require('./IndentedStringStream')
+const Sirens = require('../../Sirens')
 
 /*
  Class(`
@@ -175,6 +176,9 @@ class Debuggable {
         return stream.getString()
     }
 
+    inspect() {
+      Sirens.browseObject( this )
+    }
 }
 
 function printValueString({ value: value, stream: stream }) {

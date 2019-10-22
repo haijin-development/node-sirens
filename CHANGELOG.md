@@ -5,12 +5,17 @@
 ### Sirens
 
 - Improved error handling when evaluating code on the browsers.
+- Added 'Evaluate selected code' to the playground context menu.
 
 ### gui
 
 ### O language
 
+- Added a simple yet more meaningful toString() function to OInstances objects.
+- Implemented ExtendedClassification and ExtendedInstantiator classifications to replace ParamsCheckerCreator.
+- Added Debuggable.inspect() method.
 - Documenting classifications.
+- Evaluates beforeAll.js before all running the tests.
 
 ## v0.8.0 
 

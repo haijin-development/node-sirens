@@ -14,7 +14,7 @@
 - Added a simple yet more meaninggul toString() function to OInstances objects.
 - Implemented ExtendedClassification and ExtendedInstantiator classifications to replace ParamsCheckerCreator.
 - Added Debuggable.inspect() method.
-- Documenting classifications.
+- Documented classifications and protocols.
 - Evaluates beforeAll.js before all running the tests.
 
 ## v0.8.0 

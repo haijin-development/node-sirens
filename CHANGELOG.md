@@ -11,7 +11,7 @@
 
 ### O language
 
-- Added a simple yet more meaningful toString() function to OInstances objects.
+- Added a simple yet more meaninggul toString() function to OInstances objects.
 - Implemented ExtendedClassification and ExtendedInstantiator classifications to replace ParamsCheckerCreator.
 - Added Debuggable.inspect() method.
 - Documenting classifications.

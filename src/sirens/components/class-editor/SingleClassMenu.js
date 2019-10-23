@@ -39,7 +39,10 @@ class SingleClassMenu {
 
                     this.button({
                         label: 'Browse documentation',
-                        icon: GtkIcons.info,
+                        image: {
+                            iconName: GtkIcons.info,
+                            size: GtkIcons.size._24x24,
+                        },
                         tooltip: 'Opens a class documentation browser on the current selection.',
                         action: props.openDocumentationBrowser,
                     })

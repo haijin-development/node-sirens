@@ -3,7 +3,7 @@ const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 
-class ClassEditorMenuBar {
+class ClassDocumentationMenuBar {
     /// Definition
 
     static definition() {
@@ -25,31 +25,9 @@ class ClassEditorMenuBar {
                     }
                 })
 
-                this.menuGroup({ label: 'File' }, function() {
-                    this.item({
-                        label: 'Open file...',
-                        enabled: true,
-                        action: component.getProps().openFile,
-                    })
-
-                    this.item({
-                        label: 'Open file in a new class browser...',
-                        enabled: true,
-                        action: component.getProps().openFileInNewWindow,
-                    })
-
-                    this.skip().separator()
-
-                    this.skip().item({
-                        label: 'Save file',
-                        enabled: true,
-                        action: component.getProps().saveFile,
-                    })
-                })
-
                 this.menuGroup({ label: 'Browsers' }, function() {
                     this.item({
-                        label: 'Open another class editor...',
+                        label: 'Open a class editor...',
                         enabled: true,
                         action: component.getProps().openClassEditor,
                     })
@@ -67,4 +45,4 @@ class ClassEditorMenuBar {
     }
 }
 
-module.exports = Classification.define(ClassEditorMenuBar)
+module.exports = Classification.define(ClassDocumentationMenuBar)

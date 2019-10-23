@@ -2,20 +2,21 @@ const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const GtkWidget = require('./GtkWidget')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
+const GtkImageBuilder = require('./constants/GtkImageBuilder')
 
 class ToolButtonView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [ 'toolButton', 'icon', 'label', 'enabled', 'action', 'tooltip']
+        this.instanceVariables = [ 'toolButton', 'imageProps', 'label', 'enabled', 'action', 'tooltip']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
     /// Initializing
 
-    initialize({ icon: icon, label: label, tooltip: tooltip, enabled: enabled, action: action }) {
-        this.icon = icon
+    initialize({ imageProps: imageProps, label: label, tooltip: tooltip, enabled: enabled, action: action }) {
+        this.imageProps = imageProps
         this.label = label !== undefined ? label : ''
         this.enabled = enabled === undefined ? true : enabled
         this.action = action
@@ -37,9 +38,11 @@ class ToolButtonView {
     }
 
     initializeMainHandle() {
-        this.toolButton.setStockId( this.icon )
+        {
+            const image = GtkImageBuilder.build( this.imageProps )
 
-        this.toolButton.setLabel( this.label )
+            this.toolButton.setLabelWidget( image )
+        }
 
         this.toolButton.setTooltipText( this.tooltip )
 

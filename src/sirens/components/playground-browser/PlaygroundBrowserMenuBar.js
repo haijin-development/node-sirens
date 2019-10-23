@@ -1,15 +1,14 @@
 const Classification = require('../../../../src/o-language/classifications/Classification')
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 
-class ClassEditorMenuBar {
+class PlaygroundBrowserMenuBar {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Building
@@ -33,14 +32,14 @@ class ClassEditorMenuBar {
                     })
 
                     this.item({
-                        label: 'Open file in a new class browser...',
+                        label: 'Open file in new window...',
                         enabled: true,
                         action: component.getProps().openFileInNewWindow,
                     })
 
-                    this.skip().separator()
+                    this.separator()
 
-                    this.skip().item({
+                    this.item({
                         label: 'Save file',
                         enabled: true,
                         action: component.getProps().saveFile,
@@ -48,23 +47,25 @@ class ClassEditorMenuBar {
                 })
 
                 this.menuGroup({ label: 'Browsers' }, function() {
+
                     this.item({
-                        label: 'Open another class editor...',
+                        label: 'Open a class editor...',
                         enabled: true,
                         action: component.getProps().openClassEditor,
                     })
 
                     this.item({
-                        label: 'Open a playground...',
+                        label: 'Open another playground...',
                         enabled: true,
                         action: component.getProps().openPlayground,
                     })
 
                 })
+
             })
 
         })
     }
 }
 
-module.exports = Classification.define(ClassEditorMenuBar)
+module.exports = Classification.define(PlaygroundBrowserMenuBar)

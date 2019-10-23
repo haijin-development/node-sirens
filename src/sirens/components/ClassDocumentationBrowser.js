@@ -4,8 +4,10 @@ const Component = require('../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
 const ClassDocumentationBrowserModel = require('../models/ClassDocumentationBrowserModel')
+const ClassDocumentationMenuBar = require('./class-documentation-browser/ClassDocumentationMenuBar')
 const ClassDocumentationToolBar = require('./class-documentation-browser/ClassDocumentationToolBar')
 const DocumentationBrowserBody = require('./class-documentation-browser/DocumentationBrowserBody')
+const Sirens = require('../../Sirens')
 
 class ClassDocumentationBrowser {
     /// Definition
@@ -28,6 +30,24 @@ class ClassDocumentationBrowser {
         return ClassDocumentationBrowserModel.new({
             classDefinition: classDefinition,
         })
+    }
+
+    /// Actions
+
+    openClassEditor() {
+        Sirens.openClassEditor()
+    }
+
+    openClassDocumentation() {
+        const classDefinition = this.getProps().classDefinition
+
+        Sirens.browseClassDocumentation({
+            classDefinition: classDefinition
+        })
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
     }
 
     /// Querying
@@ -55,8 +75,19 @@ class ClassDocumentationBrowser {
                 this.verticalStack( function () {
 
                     this.component(
+                        ClassDocumentationMenuBar.new({
+                            model: model,
+                            openClassEditor: component.openClassEditor.bind(component),
+                            openPlayground: component.openPlayground.bind(component),
+                        })
+                    )
+
+                    this.component(
                         ClassDocumentationToolBar.new({
                             model: model,
+                            openClassEditor: component.openClassEditor.bind(component),
+                            openPlayground: component.openPlayground.bind(component),
+                            openClassDocumentation: component.openClassDocumentation.bind(component),
                         })
                     )
 

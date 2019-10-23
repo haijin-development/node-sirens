@@ -4,7 +4,7 @@ const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
 const ClassCommentHeader = require ('../ClassCommentHeader')
-const DocumentationPlayground = require ('../DocumentationPlayground')
+const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
 const EditClassDescriptionHeader = require('../EditClassDescriptionHeader')
 const ImplementationNotesEditionHeader = require ('./ImplementationNotesEditionHeader')
@@ -287,8 +287,13 @@ class ClassFormattedComment {
                     )
 
                     this.component(
-                        DocumentationPlayground.new({
-                            text: description,
+                        PlaygroundComponent.new({
+                            text: "\n" + description + "\n",
+                            hScroll: 'never',
+                            vScroll: 'never',
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                            },
                         })
                     )
     

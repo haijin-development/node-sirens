@@ -492,6 +492,23 @@ class MessageDispatcher {
             instantiatedClassifications: objectInitialClassifications,
         })
 
+        // Add some meaningfull display string to O instances.
+        object.toString = function() {
+            const classifications = MessageDispatcherInstance.objectGetClassifications({ object: this })
+
+            const classificationNames = []
+
+            classifications.forEach( (classificationObject) => {
+                const classificationName = MessageDispatcherInstance.classificationGetName({
+                    classificationObject: classificationObject
+                })
+
+                classificationNames.push( classificationName )
+            })
+
+            return `OInstance( ` + classificationNames.join(', ') + ` )`
+        }
+
         return object
     }
 

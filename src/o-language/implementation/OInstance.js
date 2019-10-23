@@ -4,16 +4,70 @@ function setMessageDispatcher(messageDispatcher) {
     MessageDispatcherInstance = messageDispatcher
 }
 
+/*
+ Class(`
+
+    OInstance is the only classification that is attach by default to all objects.
+
+    OInstance classification has the bare minimum behaviour to allow the object to adquire and drop other behaviours.
+
+ `)
+*/
 class OInstance {
 
+    /*
+     Method(`
+        This Classification definition.
+     `)
+    */
     static definition() {
     }
 
     /// Initializing
 
     /*
-     * Does nothing but serves as a null implementation for constructors that assume a polymorphic
-     * initialization of objects.
+     Method(`
+        Private.
+        This method does nothing but serves as a null implementation for constructors.
+     `)
+
+     Example({
+        Description: `
+           Defines a Circle classification that calls initialize on its previous classification.
+
+           If OInstance would have not defined an
+
+           	initialize()
+
+           hook method, Circle classification would need to change its implementation depending on whether its previous
+           classification is OInstance or a different one.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           	}
+
+           	initialize({ radious: radious }) {
+           		this.radious = radious
+
+           		this.previousClassificationDo( () => {
+           			this.initialize()
+           		})
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+
+
+           Circle.new({ radious: 10 })
+
+        `,
+     })
      */
     initialize() {
     }
@@ -21,8 +75,55 @@ class OInstance {
     /// Asking
 
     /*
-     * Answers true if this O instance is behaving as the given classification, false otherwise.
-     * This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     Method(`
+        Returns true if this object is behaving as the given classification, false otherwise.
+
+        This method would be the equivalent of isKindOf in the classic object oriented paradigm.
+     `)
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           The Classification to check if it has been attached to it.
+        `,
+     })
+
+     Returns({
+        Description: `
+           Boolean.
+           True if this object is behaving as the given Classification, false if it is not.
+        `,
+     })
+
+     Example({
+        Description: `
+           Asks it an object is behaving as a Circle and as a Square.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Circle {
+           }
+
+           Circle = Classification.define(Circle)
+
+           class Square {
+           }
+
+           Square = Classification.define(Square)
+
+
+           const circle = Circle.new()
+
+           circle.isBehavingAs(Circle)
+
+           circle.isBehavingAs(Square)
+
+        `,
+     })
      */
     isBehavingAs(classification) {
         return MessageDispatcherInstance.objectIsBehavingAs({
@@ -32,8 +133,52 @@ class OInstance {
     }
 
     /*
-     * Answers true if the receiver understands the given message, false otherwise.
-     * An object responds to a message if any of its classifications does.
+     Method(`
+        Returns true if the receiver understands the given message, false otherwise.
+
+        An object responds to a message if any of its current classifications does.
+     `)
+
+     Param({
+        Name: `
+           message
+        `,
+        Description: `
+           The name of the message to ask if the object responds to.
+        `,
+     })
+
+     Returns({
+        Description: `
+           Boolean.
+           True if this object responds to the given message, false if it is not.
+        `,
+     })
+
+     Example({
+        Description: `
+           Asks if an object responds to the messages 'getColor' and 'getPosition'.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Circle {
+           	getColor() {
+           		// ...
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+
+           circle.respondsTo( 'getColor' )
+
+           circle.respondsTo( 'getPosition' )
+
+        `,
+     })
      */
     respondsTo(message) {
         return MessageDispatcherInstance.objectRespondsTo({
@@ -42,6 +187,57 @@ class OInstance {
         })
     }
 
+    /*
+     Method(`
+        Returns true if this object complies with the given protocol.
+
+        To comply with the given protocol means that at least one classification attached to this object declares that implements
+        the given protocol.
+     `)
+
+     Example({
+        Description: `
+           Asks if an object complies with the CircleProtocol and with the SquareProtocol.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+
+           class CircleProtocol {
+           	getRadious() {}
+           }
+
+           CircleProtocol = Protocol.define(CircleProtocol)
+
+           class SquareProtocol {
+           	getLength() {}
+           }
+
+           SquareProtocol = Protocol.define(SquareProtocol)
+
+
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           		this.implements = [CircleProtocol]
+           	}
+
+           	getRadious() {
+           		return this.radious
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+
+           circle.compliesWith(CircleProtocol)
+
+           circle.compliesWith(SquareProtocol)
+        `,
+     })
+    */
     compliesWith(protocol) {
         const objectClassifications = this.classifications()
 
@@ -53,9 +249,97 @@ class OInstance {
     /// Behaviours
 
     /*
-     * Makes this O instance to adquire the behaviour defined in the given classification.
-     * If the instance already behaves as the given classification this method does nothing.
-     * This behaviour can be dropped from this instance by sending dropBehaviour(classification).
+     Method(`
+        Makes this object to adquire the behaviour defined in the given classification.
+
+        If the instance already behaves as the given classification this method does nothing.
+
+        This behaviour can be dropped from this instance by calling
+
+        	object.dropBehaviour(classification)
+     `)
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           A Classification.
+        `,
+     })
+
+     Returns({
+        Description: `
+           object.
+           This object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Makes an object to start behaving as a Circle.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           	}
+
+           	setRadious(radious) {
+           		this.radious = radious
+           	}
+           	getRadious() {
+           		return this.radious
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const object = OInstance.new()
+           // Try commenting this line to get an error when treating the object as a Circle
+           object.behaveAs(Circle)
+           object.setRadious( 10 )
+
+           object.getRadious()
+        `,
+     })
+
+     Example({
+        Description: `
+           Adds the Circle behaviour to an object that already had it.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           	}
+
+           	setRadious(radious) {
+           		this.radious = radious
+           	}
+           	getRadious() {
+           		return this.radious
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const object = OInstance.new()
+
+           object.behaveAs(Circle)
+           object.setRadious( 10 )
+
+           // Does nothing and preserves the current state of the object.
+           object.behaveAs(Circle)
+           object.getRadious()
+        `,
+     })
      */
     behaveAs(classification) {
         const isBehavingAs = MessageDispatcherInstance.objectIsBehavingAs({
@@ -85,8 +369,25 @@ class OInstance {
     }
 
     /*
-        Makes this O instance to instantiate and push the given classification on top of its instantiated 
-        classifications even if it already behaves as that classification.
+        Method(`
+           Unlike
+
+           	OInstance.behaveAs(classification)
+
+           that is an idempotent operation, this method makes this object to instantiate and push the given
+           classification on top of its instantiated classifications even if it already behaves as that classification.
+
+           The reasons and uses for this method will be clear in the future.
+        `)
+
+        Param({
+           Name: `
+              classification
+           `,
+           Description: `
+              A Classification.
+           `,
+        })
      */
     pushBehaviour(classification) {
         MessageDispatcherInstance.objectPushBehaviour({
@@ -98,9 +399,55 @@ class OInstance {
     }
 
     /*
-     * Makes this O instance to stop behaving with the behaviour defined in the given classification.
-     * An O instance that drops a classification is exactly the same as if it had not previously
-     * had that classification and there is no way to distinguish bots scenarios.
+     Method(`
+        Makes this object to stop behaving as the given classification.
+
+        An object that drops a classification is exactly the same as if it had not previously had that classification 
+        and there is no way to distinguish boths scenarios.
+     `)
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           A Classification.
+        `,
+     })
+
+     Example({
+        Description: `
+           Add the example description here ...
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           	}
+
+           	setRadious(radious) {
+           		this.radious = radious
+           	}
+           	getRadious() {
+           		return this.radious
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const object = OInstance.new()
+
+           object.behaveAs(Circle)
+           object.setRadious(10)
+
+           object.dropBehaviour(Circle)
+
+           object.getRadious()
+        `,
+     })
      */
     dropBehaviour(classification) {
         MessageDispatcherInstance.objectDropBehaviour({
@@ -114,8 +461,69 @@ class OInstance {
     /// Evaluating
 
     /*
-     * Evaluates the given closure but starting the method lookup in the previous classification to the one
-     * active in the method that called previousClassificationDo().
+     Method(`
+        Private.
+
+        This method is intended to be called from within another method in the same classification.
+
+        It evaluates the given closure starting the method lookup in the previous classification to the one active in the
+        method that called previousClassificationDo().
+     `)
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           Function.
+
+           The function that is evaluated with the method lookup starting on the previous classification to the one that is calling this method.
+
+           It expects the following signature
+
+           	function() {
+           		// ...
+           	}
+        `,
+     })
+
+     Example({
+        Description: `
+           A Circle classification overrides the method displayString() from the Shape classification and calls it using
+
+           	previousClassificationDo( () => {
+           		...
+           	})
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Shape {
+           	displayString() {
+           		return 'A Shape'
+           	}
+           }
+
+           Shape = Classification.define(Shape)
+
+           class Circle {
+           	static definition() {
+           		this.assumes = [Shape]
+           	}
+
+           	displayString() {
+           		return this.previousClassificationDo( () => {
+           			return this.displayString() + ' and a Circle'
+           		})
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+           circle.displayString()
+        `,
+     })
      */
     previousClassificationDo(closure) {
         return MessageDispatcherInstance.duringPreviousClassificationDo({
@@ -125,8 +533,52 @@ class OInstance {
     }
 
     /*
-     * Instantiates the given classification to this object, evaluates the closure and drops the instantiated
-     * classification.
+     Method(`
+        Instantiates the given classification to this object, evaluates the closure and drops the instantiated classification.
+
+        This method is useful to make an object to adquire a behaviour only during the evaluation of a given code.
+     `)
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           Classification.
+           The classification to make this object to behave like during the evaluation of the given closure.
+        `,
+     })
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           Function.
+           A function to evaluate while this object is behaving as the given classification.
+        `,
+     })
+
+     Example({
+        Description: `
+           Adds the Debuggable classification during the evaluation of a debug method.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+
+           const object  = OInstance.new()
+           object.duringClassificationDo( Debuggable, () => {
+           	const debugString = object.debugString()
+
+           	console.log(debugString)
+           	return debugString
+           })
+
+        `,
+     })
      */
     duringClassificationDo(classification, closure) {
         this.behaveAs(classification)
@@ -138,6 +590,65 @@ class OInstance {
         }
     }
 
+    /*
+     Method(`
+        Iterates on all of the instance variables names and values of a classification instantiated in this object.
+     `)
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           Classification.
+           The classification to iterate its instance variables instantiated in this object.
+        `,
+     })
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           Function.
+           A function to apply to each instance variable of this classification instantiated in this object.
+
+           It expects the following signature:
+
+           	function(name, value) {
+           	}
+        `,
+     })
+
+     Example({
+        Description: `
+           Add the example description here ...
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Circle {
+           	static definition() {
+           		this.instanceVariables = ['radious']
+           	}
+
+           	initialize({ radious: radious }) {
+           		this.radious = radious
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+
+
+           const circle = Circle.new({ radious: 10 })
+
+           circle.classificationInstanceVariablesDo( Circle, (name, value) => {
+           	console.log( name + ': ' + value.toString() )
+           })
+        `,
+     })
+    */
     classificationInstanceVariablesDo(classification, closure) {
         MessageDispatcherInstance.classificationInstanceVariablesDo({
             object: this,
@@ -149,7 +660,61 @@ class OInstance {
     }
 
     /*
-     * Evaluates the given closure starting the method lookup on the given classification.
+     Method(`
+        Evaluates the given closure starting the method lookup on the given classification.
+
+        This method is similar to
+
+        	previousClassificationDo()
+
+        but this method is public.
+     `)
+
+     Example({
+        Description: `
+           Creates a Circle and calls its method
+
+           		circle.displayString()
+
+           but starting at the Shape classification, not Circle.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Shape {
+           	displayString() {
+           		return 'A Shape'
+           	}
+           }
+
+           Shape = Classification.define(Shape)
+
+           class Circle {
+           	static definition() {
+           		this.assumes = [Shape]
+           	}
+
+           	displayString() {
+           		return this.previousClassificationDo( () => {
+           			return this.displayString() + ' and a Circle'
+           		})
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+
+           // Compare the regular method call
+           circle.displayString()
+           // with the same method call but starting the method lookup on the Shape classification
+           circle.withClassificationDo( Shape, () => {
+           	return circle.displayString()
+           })
+
+        `,
+     })
      */
     withClassificationDo(classification, closure) {
         return MessageDispatcherInstance.withClassificationDo({
@@ -159,22 +724,531 @@ class OInstance {
         })
     }
 
+    /*
+     Method(`
+        Evaluates the given closure binding
+
+        	this
+
+        to this object during the evaluation and returns this object.
+
+        It's similar to calling
+
+        	closure.call( object, params )
+
+        	return object
+
+        in plain javascript.
+     `)
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           Function.
+           A function to evaluate with this object bound to the pseudovariable this.
+
+           Its expected signature is the following
+
+           	function() {
+           		...
+           	}
+
+           The return value is ignored.
+
+           This method will not bind 'this' to the object with an arrow function:
+
+           	() => {
+           		///...
+           	}
+
+           The reason is that in javascript arrow functions are bound to the context where they are defined and that binding can not
+           be changed.
+        `,
+     })
+
+     Param({
+        Name: `
+           ...params
+        `,
+        Description: `
+           Array.
+           The arguments to pass along to the closure evaluation.
+        `,
+     })
+
+     Returns({
+        Description: `
+           object.
+           Returns this object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Calls bindYourself on an object.
+        `,
+        Code: `
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           const object = OInstance.new()
+
+           object.bindYourself( function() {
+           	console.log( this.isBehavingAs(OInstance) )
+           })
+        `,
+     })
+    */
     bindYourself(closure, ...params) {
         closure.call(this, ...params)
 
         return this
     }
 
+    /*
+     Method(`
+        This method is a special proxy method that is called for every object (if defined) before every method activation.
+
+        It receives as its arguments the method, parameters and classifications of the method to activate.
+
+        It allows to perform some metaprogramming like logging method calls, invoke remote calls or validate parameters.
+
+        It is a simple implementation of what is sometimes called aspect programming.
+
+        This method also allows to change the parameters, cancel the method activation or call a different method instead.
+     `)
+
+     Param({
+        Name: `
+           methodName
+        `,
+        Description: `
+           String.
+           The name of the method to activate.
+        `,
+     })
+
+     Param({
+        Name: `
+           params
+        `,
+        Description: `
+           Array.
+           The array with the method arguments.
+        `,
+     })
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           Classification.
+           The classification that owns the method to activate.
+        `,
+     })
+
+     Returns({
+        Description: `
+           To cancel the method call return
+
+           {
+           	callMethod: null,
+           }
+
+           To change the method called return
+
+           {
+           	callMethod: 'someOtherMethod',
+           }
+
+           To change the arguments of the method call return
+
+           {
+           	callParams: [ 1, 2, 3 ],
+           }
+
+           The last two can also be combined
+
+           {
+           	callMethod: 'someOtherMethod',
+           	callParams: [ 1, 2, 3 ],
+           }
+
+
+           Any other return value is ignored and will make the method call to be activated as usual.
+        `,
+     })
+
+     Implementation(`
+        Although beforeMethod is defined in the OInstance classification, if no other classification attached to this object defines
+
+        	beforeMethod(...)
+
+        or
+
+        	afterMethod(...)
+
+        then the OInstance.beforeMethod(...) is not activated.
+
+        It is an optimization to avoid one more method activation on every method call.
+
+        The method
+
+        	OInstance.beforeMethod(...)
+
+        is defined here mainly for documentation purposes but actually it is never called.
+     `)
+
+     Example({
+        Description: `
+           Creates a Proxy that cancels the activation of the method appendLine of a StringStream object.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+           		if( methodName === 'appendLine' ) {
+           			        return {
+                       				callMethod: null,
+                   			}
+           		}
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular behaviour of the StringStream object.
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+           stream.appendLine({ string: 'A line' })
+
+           stream.getString()
+        `,
+     })
+
+     Example({
+        Description: `
+           Creates a Proxy that changes the parameters of the method call.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+           		if( methodName === 'appendLine' ) {
+           				const stringParam = params[0].string
+           				const newParam = stringParam + ' plus an addition'
+
+           			        return {
+                       				callParams: [{ string: newParam }],
+                   			}
+           		}
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular behaviour of the StringStream object.
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+           stream.appendLine({ string: 'A line' })
+
+           stream.getString()
+        `,
+     })
+
+     Example({
+        Description: `
+           Creates a Proxy that changes the method called on a StringStream object.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+           		if( methodName === 'appendLine' ) {
+           				const stringParam = params[0].string
+           				const newParam = ' ' + stringParam + ' plus an addition'
+
+           			        return {
+           					callMethod: 'append',
+                       				callParams: [{ string: newParam }],
+                   			}
+           		}
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular behaviour of the StringStream object.
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+           stream.appendLine({ string: 'A line' })
+
+           stream.getString()
+        `,
+     })
+
+     Example({
+        Description: `
+           Creates a Proxy that logs all the method calls on a StringStream object.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+           		console.log( methodName )
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular behaviour of the StringStream object.
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+           stream.appendLine({ string: 'A line' })
+
+           stream.getString()
+        `,
+     })
+    */
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
     }
 
+    /*
+     Method(`
+        This method is a special proxy method that is called for every object (if defined) after every method activation.
+
+        It receives as its arguments the method, parameters, method result and classifications of the method activated.
+
+        It allows to perform some metaprogramming like logging or validate method results.
+
+        It is a simple implementation of what is sometimes called aspect programming.
+
+        This method also allows to change the method result.
+     `)
+
+     Param({
+        Name: `
+           methodName
+        `,
+        Description: `
+           String.
+           The name of the method to activate.
+        `,
+     })
+
+     Param({
+        Name: `
+           params
+        `,
+        Description: `
+           Array.
+           The array with the method arguments.
+        `,
+     })
+
+     Param({
+        Name: `
+           classification
+        `,
+        Description: `
+           Classification.
+           The classification that owns the method to activate.
+        `,
+     })
+
+     Param({
+        Name: `
+           result
+        `,
+        Description: `
+           object.
+           The result of the activated method.
+        `,
+     })
+
+     Returns({
+        Description: `
+           To change the result of the method called return
+
+           {
+           	callResult: 'someOtherResult',
+           }
+
+           Any other return value is ignored.
+        `,
+     })
+
+     Implementation(`
+        Although afterMethod is defined in the OInstance classification, if no other classification attached to this object defines
+
+        	beforeMethod(...)
+
+        or
+
+        	afterMethod(...)
+
+        then the OInstance.afterMethod(...) is not activated.
+
+        It is an optimization to avoid one more method activation on every method call.
+
+        The method
+
+        	OInstance.afterMethod(...)
+
+        is defined here mainly for documentation purposes but actually it is never called.
+     `)
+
+     Example({
+        Description: `
+           Creates a Proxy that changes the result of the method StringStream.appendLine
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
+           		if( methodName === 'appendLine' ) {
+           			        return {
+                       				callResult: 123,
+                   			}
+           		}
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular result of the StringStream.appendLine().
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+
+           stream.appendLine({ string: 'A line' })
+        `,
+     })
+
+     Example({
+        Description: `
+           Creates a Proxy that logs all the results of all the method calls of a StringStream object.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           class Proxy {
+           	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
+           		console.log( methodName + ' returned ' + result.toString() )
+           	}
+           }
+
+           Proxy = Classification.define(Proxy)
+
+           const stream = StringStream.new()
+
+           // Try not adding the Proxy behaviour to see the regular behaviour of the StringStream object.
+           stream.behaveAs(Proxy)
+
+           stream.append({ string: 'Text' })
+           stream.appendLine({ string: 'A line' })
+
+           stream.getString()
+
+        `,
+     })
+    */
     afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
     }
 
     /// Querying
 
     /*
-     * Evaluates the given closure with this object as its parameters and returns this object.
+     Method(`
+        Evaluates the given closure with this object as its parameters and returns this object.
+
+        The difference with
+
+        	object.bindYourself()
+
+        is that this method does not change the binding of the closure.
+     `)
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           Function.
+           A function to evaluate with this object as its only parameter.
+
+           The expected signature of the function is the following:
+
+           	function(object) {
+           		/// ...
+           	}
+
+           Unlike
+
+           	object.bindYourself()
+
+           in this case it is possible to use arrow functions too
+
+           	(object) => {
+           		/// ...
+           	}
+        `,
+     })
+
+     Returns({
+        Description: `
+           object.
+           This object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Uses the method yourself instead of writing
+
+           const stream =  StringStream.new()
+           stream.setCrChar('<br>')
+        `,
+        Code: `
+
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           StringStream.new().yourself( (stream) => {
+           	stream.setCrChar('<br>')
+           })
+
+        `,
+     })
      */
     yourself(closure) {
         closure(this)
@@ -183,7 +1257,30 @@ class OInstance {
     }
 
     /*
-     * Returns an array of all of the instantiated classifications bound this object.
+     Method(`
+        Returns an array with all the classifications attached to this object.
+     `)
+     Returns({
+        Description: `
+           Array of Classification.
+           An array with all the classifications attached to this object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Gets all the classifications attached to an object.
+        `,
+        Code: `
+
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           const stream = StringStream.new()
+
+           stream.classifications()
+
+        `,
+     })
      */
     classifications() {
         return MessageDispatcherInstance.objectGetClassifications({
@@ -191,6 +1288,32 @@ class OInstance {
         })
     }
 
+    /*
+     Method(`
+        Returns an array with all the names of the classifications attached to this object.
+     `)
+     Returns({
+        Description: `
+           Array of Classification.
+           An array with all the classifications attached to this object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Gets all the names of the classifications attached to an object.
+        `,
+        Code: `
+
+           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+
+           const stream = StringStream.new()
+
+           stream.getClassificationNames()
+
+        `,
+     })
+    */
     getClassificationNames() {
         return this.classifications().map( (classification) => {
             return classification.getName()
@@ -198,7 +1321,50 @@ class OInstance {
     }
 
     /*
-     * Returns the classification active in the method that called thisClassification().
+     Method(`
+        Private.
+
+        Gets the classification active in the method that called thisClassification().
+     `)
+     Returns({
+        Description: `
+           Classification.
+           The classification that owns the active method.
+        `,
+     })
+
+     Example({
+        Description: `
+           Gets the current active classification in the active method.
+        `,
+        Code: `
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Shape {
+           	displayString() {
+           		return 'A Shape'
+           	}
+           }
+
+           Shape = Classification.define(Shape)
+
+           class Circle {
+           	static definition() {
+           		this.assumes = [Shape]
+           	}
+
+           	getThisClassificationName() {
+           		return this.thisClassification().getName()
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+
+           circle.getThisClassificationName()
+        `,
+     })
      */
     thisClassification() {
         return MessageDispatcherInstance.objectGetThisClassification({
@@ -207,8 +1373,52 @@ class OInstance {
     }
 
     /*
-     * Returns the previous classification to the active classification in the method that 
-     * called previousClassification().
+     Method(`
+        Private.
+
+        Returns the classification previous to the active classification in the method that called previousClassification().
+     `)
+     Returns({
+        Description: `
+           Classification.
+           The classification previous to the classification that owns the active method.
+        `,
+     })
+
+     Example({
+        Description: `
+           Gets the classification previous to thisClassification().
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+
+           class Shape {
+           	displayString() {
+           		return 'A Shape'
+           	}
+           }
+
+           Shape = Classification.define(Shape)
+
+           class Circle {
+           	static definition() {
+           		this.assumes = [Shape]
+           	}
+
+           	getPreviousClassificationName() {
+           		return this.previousClassification().getName()
+           	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           const circle = Circle.new()
+
+           circle.getPreviousClassificationName()
+
+        `,
+     })
      */
     previousClassification() {
         return MessageDispatcherInstance.getPreviousClassificationOfObject({

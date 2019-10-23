@@ -5,7 +5,7 @@ const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
 const Resource = require('../../objects/Resource')
 
-class ClassEditorMenuBar {
+class PlaygroundBrowserToolBar {
     /// Definition
 
     static definition() {
@@ -33,7 +33,7 @@ class ClassEditorMenuBar {
                         iconName: GtkIcons.open,
                         size: GtkIcons.size._24x24,
                     },
-                    tooltip: 'Opens a file to edit its class.',
+                    tooltip: 'Opens a file.',
                     action: component.getProps().openFile,
                 })
 
@@ -43,32 +43,32 @@ class ClassEditorMenuBar {
                         iconName: GtkIcons.add,
                         size: GtkIcons.size._24x24,
                     },
-                    tooltip: 'Opens a file in a new window to edit its class.',
+                    tooltip: 'Opens a file in a new window.',
                     action: component.getProps().openFileInNewWindow,
                 })
 
-                this.skip().separator()
+                this.separator()
 
-                this.skip().button({
+                this.button({
                     label: 'Save file',
                     image: {
                         iconName: GtkIcons.save,
                         size: GtkIcons.size._24x24,
                     },
-                    tooltip: 'Saves the edited file.',
+                    tooltip: 'Saves the opened file.',
                     action: component.getProps().saveFile,
                 })
 
                 this.separator()
 
                 this.button({
-                    label: 'Open another class editor',
+                    label: 'Open class editor',
                     image: {
                         filename: Resource.image.class,
                         width: 24,
                         height: 24,
                     },
-                    tooltip: 'Opens another class editor.',
+                    tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
                 })
 
@@ -89,4 +89,4 @@ class ClassEditorMenuBar {
     }
 }
 
-module.exports = Classification.define(ClassEditorMenuBar)
+module.exports = Classification.define(PlaygroundBrowserToolBar)

@@ -3,30 +3,42 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const OInstance = require('../../../../src/o-language/classifications/OInstance')
 const Protocol = require('../../../../src/o-language/classifications/Protocol')
 
-class Point {
-    static definition() {
-        this.instanceVariables = ['x', 'y']
-    }
-
-    initialize({ x: x, y: y } = { x: undefined, y: undefined }) {
-        this.x = x
-        this.y = y
-    }
-
-    getX() {
-        return this.x
-    }
-
-    getY() {
-        return this.y
-    }
-}
-
-const pointDefinition = Point
-
-Point = Classification.define(Point)
+let extendedBehaviours
+let pointDefinition
+let Point
 
 describe('The Classification classification', () => {
+    before( () => {
+        extendedBehaviours = Classification.getExtendedBehaviours()
+
+        Classification.setExtendedBehaviours([])
+
+        pointDefinition = class Point {
+            static definition() {
+                this.instanceVariables = ['x', 'y']
+            }
+
+            initialize({ x: x, y: y } = { x: undefined, y: undefined }) {
+                this.x = x
+                this.y = y
+            }
+
+            getX() {
+                return this.x
+            }
+
+            getY() {
+                return this.y
+            }
+        }
+
+        Point = Classification.define(pointDefinition)
+    })
+
+    after( () => {
+        Classification.setExtendedBehaviours( extendedBehaviours )
+    })
+
     it('defines a new classification', () => {
         expect( Point.isBehavingAs(Classification) ) .to .be .true
     })

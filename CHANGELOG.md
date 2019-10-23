@@ -1,6 +1,12 @@
 # Changelog
 
-## v0.9.0 (next release)
+## v0.10.0 (next release)
+
+### Sirens
+### gui
+### O language
+
+## v0.9.0
 
 ### Sirens
 

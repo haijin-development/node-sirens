@@ -35,10 +35,10 @@ class ToolBarBuilder {
         return toolBar
     }
 
-    button({ label: label, icon: icon, tooltip: tooltip, enabled: enabled, action: action }) {
+    button({ label: label, image: imageProps, tooltip: tooltip, enabled: enabled, action: action }) {
         const menuItem = ToolButton.new({
             label: label,
-            icon: icon,
+            imageProps: imageProps,
             tooltip: tooltip,
             enabled: enabled,
             action: action,
@@ -47,11 +47,11 @@ class ToolBarBuilder {
         this.toolBarItems.push(menuItem)
     }
 
-    toggleButton({ model: model, label: label, icon: icon, tooltip: tooltip, enabled: enabled }) {
+    toggleButton({ model: model, label: label, image: imageProps, tooltip: tooltip, enabled: enabled }) {
         const menuItem = ToogleToolButton.new({
             model: model,
             label: label,
-            icon: icon,
+            imageProps: imageProps,
             tooltip: tooltip,
             enabled: enabled,
         })

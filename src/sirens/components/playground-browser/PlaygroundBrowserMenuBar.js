@@ -47,11 +47,19 @@ class PlaygroundBrowserMenuBar {
                 })
 
                 this.menuGroup({ label: 'Browsers' }, function() {
+
                     this.item({
-                        label: 'Open class editor...',
+                        label: 'Open a class editor...',
                         enabled: true,
                         action: component.getProps().openClassEditor,
                     })
+
+                    this.item({
+                        label: 'Open another playground...',
+                        enabled: true,
+                        action: component.getProps().openPlayground,
+                    })
+
                 })
 
             })

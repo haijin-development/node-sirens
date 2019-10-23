@@ -77,7 +77,11 @@ class PlaygroundBrowser {
     }
 
     openClassEditor() {
-        Sirens.openClassEditor()        
+        Sirens.openClassEditor()
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
     }
 
     /// Building
@@ -102,6 +106,7 @@ class PlaygroundBrowser {
                             openFileInNewWindow: component.openFileInNewWindow.bind(component),
                             saveFile: component.saveFile.bind(component),
                             openClassEditor: component.openClassEditor.bind(component),
+                            openPlayground: component.openPlayground.bind(component),
                         })
                     )
 

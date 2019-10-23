@@ -33,7 +33,7 @@ class ClassEditorMenuBar {
                     })
 
                     this.item({
-                        label: 'Open file in new window...',
+                        label: 'Open file in a new class browser...',
                         enabled: true,
                         action: component.getProps().openFileInNewWindow,
                     })
@@ -47,6 +47,20 @@ class ClassEditorMenuBar {
                     })
                 })
 
+                this.menuGroup({ label: 'Browsers' }, function() {
+                    this.item({
+                        label: 'Open another class editor...',
+                        enabled: true,
+                        action: component.getProps().openClassEditor,
+                    })
+
+                    this.item({
+                        label: 'Open a playground...',
+                        enabled: true,
+                        action: component.getProps().openPlayground,
+                    })
+
+                })
             })
 
         })

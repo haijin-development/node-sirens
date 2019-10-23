@@ -48,7 +48,10 @@ class CustomComponent {
 
                         this.button({
                             label: 'Open file...',
-                            icon: GtkIcons.open,
+                            image: {
+                                iconName: GtkIcons.open,
+                                size: GtkIcons.size._24x24,
+                            },
                             tooltip: 'Opens a file',
                             enabled: true,
                             action: component.openFile.bind(component),
@@ -58,7 +61,10 @@ class CustomComponent {
 
                         this.button({
                             label: 'Save file',
-                            icon: GtkIcons.save,
+                            image: {
+                                iconName: GtkIcons.save,
+                                size: GtkIcons.size._24x24,
+                            },
                             tooltip: 'Saves the file',
                             enabled: true,
                             action: component.createFile.bind(component),

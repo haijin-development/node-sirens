@@ -28,14 +28,20 @@ class PlaygroundBrowserToolBar {
 
                 this.button({
                     label: 'Open file...',
-                    icon: GtkIcons.open,
+                    image: {
+                        iconName: GtkIcons.open,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Opens a file.',
                     action: component.getProps().openFile,
                 })
 
                 this.button({
                     label: 'Open file in new window...',
-                    icon: GtkIcons.add,
+                    image: {
+                        iconName: GtkIcons.add,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Opens a file in a new window.',
                     action: component.getProps().openFileInNewWindow,
                 })
@@ -44,7 +50,10 @@ class PlaygroundBrowserToolBar {
 
                 this.button({
                     label: 'Save file',
-                    icon: GtkIcons.save,
+                    image: {
+                        iconName: GtkIcons.save,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Saves the opened file.',
                     action: component.getProps().saveFile,
                 })

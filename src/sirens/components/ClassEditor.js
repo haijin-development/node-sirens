@@ -91,6 +91,14 @@ class ClassEditor {
         tabsComponent.showTabPageAt({ index: 0 })
     }
 
+    openClassEditor() {
+        Sirens.openClassEditor()
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
+
     /// Building
 
     renderWith(componentsRenderer) {
@@ -112,6 +120,8 @@ class ClassEditor {
                             openFile: component.openFile.bind(component),
                             openFileInNewWindow: component.openFileInNewWindow.bind(component),
                             saveFile: component.saveFile.bind(component),
+                            openClassEditor: component.openClassEditor.bind(component),
+                            openPlayground: component.openPlayground.bind(component),
                         })
                     )
 

@@ -11,6 +11,8 @@
 
 ### gui
 
+- ToolBarButtons supports file images, not just icons.
+
 ### O language
 
 - Added a simple yet more meaninggul toString() function to OInstances objects.

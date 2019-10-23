@@ -1,19 +1,17 @@
-const path = require('path')
 const Classification = require('../../../../src/o-language/classifications/Classification')
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
+const ValueModel = require('../../../gui/models/ValueModel')
 const ScriptEvaluator = require('../../objects/ScriptEvaluator')
 const Sirens = require('../../../Sirens')
-const ValueModel = require('../../../gui/models/ValueModel')
 
-class DocumentationPlayground {
+class PlaygroundComponent {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['evaluationContext']
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Initializing
@@ -24,74 +22,95 @@ class DocumentationPlayground {
         })
 
         this.evaluationContext = {}
+
+        if( this.getProps().text !== undefined ) {
+            this.getModel().setValue( props.text )
+        }
+
+        this.removeProp({ key: 'text' })
     }
 
     defaultModel() {
         return ValueModel.new({ value: '' })
     }
 
+    /// Querying
+
+    getSelectedCode() {
+        const playgroundComponent = this.getChildComponent({ id: 'playground' })
+
+        let selectedText = playgroundComponent.getSelectedText()
+
+        if(selectedText == '') {
+            selectedText = playgroundComponent.getModel().getValue()
+        }
+
+        return selectedText
+    }
+
     /// Actions
 
-    inspectSelectedCode(selectedText) {
-        const evaluationResult = this.evaluateSelectedCode( selectedText )
+    inspectSelectedCode() {
+        const evaluationResult = this.evaluateSelectedCode()
 
         Sirens.browseObject( evaluationResult )
     }
 
-    evaluateSelectedCode(selectedText) {
+    evaluateSelectedCode() {
+        const selectedCode = this.getSelectedCode()
+
         return ScriptEvaluator.evaluate({
             thisObject: this.evaluationContext,
-            script: selectedText,
+            script: selectedCode,
         })
     }
 
-    /// Rendering
+    /// Building
+
+    getTextStyles() {
+        const defaultStyles = {
+            id: 'playground',
+            wrapMode: 'wordChar',
+        }
+
+        const textStyles = Object.assign( defaultStyles, this.getProps() )
+
+        delete textStyles.model
+
+        return textStyles
+    }
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const text = "\n" + this.getProps().text + "\n"
-
-        model.setValue( text )
+        const textStyles = this.getTextStyles()
 
         componentsRenderer.render( function(component) {
 
             this.text( function() {
-
                 this.model( model )
 
-                this.styles({
-                    hScroll: 'never',
-                    vScroll: 'never',
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
+                this.styles( textStyles )
 
-                this.popupMenu( function({ ownerView: ownerView }) {
-                    const selectedText = ownerView.getSelectedText().trim()
-
+                this.popupMenu( function() {
                     this.separator()
 
                     this.item({
                         label: 'Evaluate selected code',
-                        enabled: selectedText !== '',
-                        action: () => { component.evaluateSelectedCode( selectedText ) },
+                        action: () => { component.evaluateSelectedCode() },
                     })
 
                     this.separator()
 
                     this.item({
                         label: 'Inspect selected code',
-                        enabled: selectedText !== '',
-                        action: () => { component.inspectSelectedCode( selectedText ) },
+                        action: () => { component.inspectSelectedCode() },
                     })
                 })
-
             })
 
         })
     }
 }
 
-module.exports = Classification.define(DocumentationPlayground)
+module.exports = Classification.define(PlaygroundComponent)

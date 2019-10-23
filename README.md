@@ -56,6 +56,21 @@ const Sirens = require('sirens')
 Sirens.browseStack(arguments)
 ```
 
+A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code
+using the Sirens ObjectBrowser with the same access to the npm modules that your application has.
+
+Think of it a javascript console in 3 dimensions.
+
+Open a Playground with
+
+```javascript
+const Sirens = require('sirens')
+
+Sirens.openPlayground()
+```
+
+A Class Editor lets you inspect the classes defined in a file and its documentation.
+
 Open a class editor with
 
 ```javascript
@@ -64,7 +79,7 @@ const Sirens = require('sirens')
 Sirens.openClassEditor()
 ```
 
-### ClassEditor command line
+### Sirens command line
 
 If you install `Sirens` globally
 
@@ -72,7 +87,13 @@ If you install `Sirens` globally
 npm install sirens -g
 ```
 
-you can open a javascript ClassEditor from the command line with:
+you can open a javascript Playground from the command line with:
+
+```
+playground [javascript-filename.js]
+```
+
+and a javascript ClassEditor from the command line with:
 
 ```
 classEditor [javascript-filename.js]
@@ -84,7 +105,13 @@ If you install `Sirens` in the scope of a project with
 npm install sirens --save-dev
 ```
 
-you can open a javascript ClassEditor from the project folder with
+you can open a javascript Playground from the project folder with
+
+```
+node_modules/.bin/playground [javascript-filename.js]
+```
+
+and a javascript ClassEditor from the project folder with
 
 ```
 node_modules/.bin/classEditor [javascript-filename.js]

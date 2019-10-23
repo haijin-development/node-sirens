@@ -296,11 +296,11 @@ class Sirens {
         `,
      })
     */
-    static openClassEditor({ filename: __filename } = { filename: undefined }) {
+    static openClassEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
             const ClassEditor = require('../src/sirens/components/ClassEditor')
 
-            ClassEditor.openOn({ filename: __filename })
+            ClassEditor.openOn({ filename: filename })
         })
     }
 
@@ -326,6 +326,64 @@ class Sirens {
 
             ClassDocumentationBrowser.openOn({ classDefinition: classDefinition })
         })
+    }
+
+    /*
+     Method(`
+        Opens a playground browser.
+
+        It can receive an optional parameter with a filename to open on.
+
+           const Sirens = require('sirens')
+
+           const aFilename = './somefile.js'
+
+           Sirens.openPlayground({ filename: aFilename })
+     `)
+
+     Param({
+        Name: `
+           filename
+        `,
+        Description: `
+           Optional string.
+
+           The path to a file.
+
+           The playground browser will open on given filename.
+        `,
+     })
+
+     Example({
+        Description: `
+           Opens a playground browser with no file selected.
+        `,
+        Code: `
+           const Sirens = require('sirens')
+
+           Sirens.openPlayground()
+        `,
+     })
+
+     Example({
+        Description: `
+           Opens a playground browser on the given filename.
+        `,
+        Code: `
+           const Sirens = require('sirens')
+
+           const aFilename = './somefile.js'
+
+           Sirens.openPlayground({ filename: aFilename })
+        `,
+     })
+    */
+    static openPlayground({ filename: filename } = { filename: undefined }) {
+        this.do( () => {
+            const PlaygroundBrowser = require('../src/sirens/components/PlaygroundBrowser')
+
+            PlaygroundBrowser.openOn({ filename: filename })
+        })      
     }
 
     /*

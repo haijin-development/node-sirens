@@ -21,6 +21,7 @@ function globalFunction_1(param) {
          Creates an Address with a given street name and number.
       `,
       Code: `
+
          const Address = require('../../../examples/samples/Address')
 
          const address = new Address({ streetName: 'Evergreen', number: 742 })

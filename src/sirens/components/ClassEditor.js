@@ -32,7 +32,7 @@ class ClassEditor {
             const filename = this.getProps().filename
 
             if( filename !== undefined ) {
-                model.openFile( { filename: filename })
+                model.openFile({ filename: filename })
             }
         })
     }

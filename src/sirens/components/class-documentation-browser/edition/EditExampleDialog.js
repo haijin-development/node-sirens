@@ -5,7 +5,7 @@ const ComponentProtocol_Implementation = require('../../../../gui/protocols/Comp
 const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 const EditDialogHeader = require('./EditDialogHeader')
-const DocumentationPlayground = require ('../DocumentationPlayground')
+const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 class EditExampleDialog {
     /// Definition
@@ -56,10 +56,13 @@ class EditExampleDialog {
                         })
 
                         this.component(
-                            DocumentationPlayground.new({
-                                id: 'exampleCode',
-                                text: example.Code,
-                                viewAttributes: { splitProportion: 3.0/4.0 },
+                            PlaygroundComponent.new({
+                                text: "\n" + example.Code + "\n",
+                                hScroll: 'never',
+                                vScroll: 'never',
+                                viewAttributes: {
+                                    splitProportion: 3.0/4.0
+                                },
                             })
                         )
 
@@ -109,7 +112,7 @@ class EditExampleDialog {
         })
 
         const exampleCodeComponent = this.getChildComponent({
-            id: 'exampleCode'
+            id: 'playground'
         })
 
         const example = {

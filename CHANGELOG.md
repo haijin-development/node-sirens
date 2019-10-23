@@ -6,6 +6,8 @@
 
 - Improved error handling when evaluating code on the browsers.
 - Added 'Evaluate selected code' to the playground context menu.
+- Implemented the node Playground.
+- Added the bin/playground.js script.
 
 ### gui
 

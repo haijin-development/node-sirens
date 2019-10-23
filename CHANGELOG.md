@@ -2,6 +2,25 @@
 
 ## v0.9.0 (next release)
 
+### Sirens
+
+- Improved error handling when evaluating code on the browsers.
+- Added 'Evaluate selected code' to the playground context menu.
+- Implemented node Playground.
+- Added the bin/playground.js script.
+
+### gui
+
+- ToolBarButtons supports file images, not just icons.
+
+### O language
+
+- Added a simple yet more meaninggul toString() function to OInstances objects.
+- Implemented ExtendedClassification and ExtendedInstantiator classifications to replace ParamsCheckerCreator.
+- Added Debuggable.inspect() method.
+- Documented classifications and protocols.
+- Evaluates beforeAll.js script before running the tests.
+
 ## v0.8.0 
 
 ### Sirens

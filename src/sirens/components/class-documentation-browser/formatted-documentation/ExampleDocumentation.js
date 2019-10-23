@@ -3,7 +3,7 @@ const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
 const ExampleHeader = require ('./ExampleHeader')
-const DocumentationPlayground = require ('../DocumentationPlayground')
+const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 
 class ExampleDocumentation {
@@ -37,8 +37,13 @@ class ExampleDocumentation {
             this.verticalSeparator()
 
             this.component(
-                DocumentationPlayground.new({
-                    text: example.Code,
+                PlaygroundComponent.new({
+                    text: "\n" + example.Code + "\n",
+                    hScroll: 'never',
+                    vScroll: 'never',
+                    viewAttributes: {
+                        stackSize: 'fixed',
+                    },
                 })
             )
         })

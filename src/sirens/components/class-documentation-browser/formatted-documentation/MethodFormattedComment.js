@@ -4,7 +4,7 @@ const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
 
-const DocumentationPlayground = require ('../DocumentationPlayground')
+const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 const MethodCommentHeader = require ('../MethodCommentHeader')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
@@ -457,11 +457,17 @@ class MethodFormattedComment {
                     )
 
                     this.component(
-                        DocumentationPlayground.new({
-                            text: description,
+                        PlaygroundComponent.new({
+                            text: "\n" + description + "\n",
+                            hScroll: 'never',
+                            vScroll: 'never',
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                            },
                         })
                     )
-    
+
+
                     this.verticalSeparator()
 
                     if( isInEditionMode ) {

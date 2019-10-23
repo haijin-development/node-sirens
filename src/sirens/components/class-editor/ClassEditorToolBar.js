@@ -3,6 +3,7 @@ const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
 const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
 const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
+const Resource = require('../../objects/Resource')
 
 class ClassEditorMenuBar {
     /// Definition
@@ -28,14 +29,20 @@ class ClassEditorMenuBar {
 
                 this.button({
                     label: 'Open file...',
-                    icon: GtkIcons.open,
+                    image: {
+                        iconName: GtkIcons.open,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Opens a file to edit its class.',
                     action: component.getProps().openFile,
                 })
 
                 this.button({
                     label: 'Open file in new window...',
-                    icon: GtkIcons.add,
+                    image: {
+                        iconName: GtkIcons.add,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Opens a file in a new window to edit its class.',
                     action: component.getProps().openFileInNewWindow,
                 })
@@ -44,9 +51,36 @@ class ClassEditorMenuBar {
 
                 this.skip().button({
                     label: 'Save file',
-                    icon: GtkIcons.save,
+                    image: {
+                        iconName: GtkIcons.save,
+                        size: GtkIcons.size._24x24,
+                    },
                     tooltip: 'Saves the edited file.',
                     action: component.getProps().saveFile,
+                })
+
+                this.separator()
+
+                this.button({
+                    label: 'Open another class editor',
+                    image: {
+                        filename: Resource.image.class,
+                        width: 24,
+                        height: 24,
+                    },
+                    tooltip: 'Opens another class editor.',
+                    action: component.getProps().openClassEditor,
+                })
+
+                this.button({
+                    label: 'Open playground',
+                    image: {
+                        filename: Resource.image.haiku,
+                        width: 24,
+                        height: 24,
+                    },
+                    tooltip: 'Opens a playground.',
+                    action: component.getProps().openPlayground,
                 })
 
             })

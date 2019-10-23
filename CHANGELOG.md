@@ -6,7 +6,7 @@
 
 - Improved error handling when evaluating code on the browsers.
 - Added 'Evaluate selected code' to the playground context menu.
-- Implemented the node Playground.
+- Implemented node Playground.
 - Added the bin/playground.js script.
 
 ### gui
@@ -19,7 +19,7 @@
 - Implemented ExtendedClassification and ExtendedInstantiator classifications to replace ParamsCheckerCreator.
 - Added Debuggable.inspect() method.
 - Documented classifications and protocols.
-- Evaluates beforeAll.js before all running the tests.
+- Evaluates beforeAll.js script before running the tests.
 
 ## v0.8.0 
 

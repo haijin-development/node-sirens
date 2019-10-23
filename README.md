@@ -124,6 +124,10 @@ node_modules/.bin/classEditor [javascript-filename.js]
 
 ![Gtk browser](./docs/browsing-object.gif)
 
+**Playground**
+
+![Playground](./docs/playground.gif)
+
 **Browsing documentation**
 
 ![Browsing documentation](./docs/browsing-documentation.gif)

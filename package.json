@@ -17,7 +17,8 @@
     "test": "node ./node_modules/.bin/mocha --file tests/beforeAll.js --recursive ./tests/specs/"
   },
   "bin": {
-    "classEditor": "./bin/classEditor.js"
+    "classEditor": "./bin/classEditor.js",
+    "playground": "./bin/playground.js"
   },
   "keywords": [
     "development tools",

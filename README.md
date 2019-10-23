@@ -57,7 +57,8 @@ Sirens.browseStack(arguments)
 ```
 
 A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code
-using the Sirens ObjectBrowser with the same access to the npm modules that your application has.
+using the Sirens ObjectBrowser with the same access to the npm modules that your application has, although
+currently it does not handle the evaluation of promises nor asynchronous code, only synchronous calls.
 
 Think of it a javascript console in 3 dimensions.
 

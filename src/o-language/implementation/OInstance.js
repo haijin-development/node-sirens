@@ -48,11 +48,11 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
 
            		this.previousClassificationDo( () => {
            			this.initialize()
@@ -64,7 +64,7 @@ class OInstance {
 
 
 
-           Circle.new({ radious: 10 })
+           Circle.new({ radius: 10 })
 
         `,
      })
@@ -204,7 +204,7 @@ class OInstance {
            const Protocol = require('sirens/src/o-language/classifications/Protocol')
 
            class CircleProtocol {
-           	getRadious() {}
+           	getRadius() {}
            }
 
            CircleProtocol = Protocol.define(CircleProtocol)
@@ -219,12 +219,12 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            		this.implements = [CircleProtocol]
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -285,14 +285,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -301,9 +301,9 @@ class OInstance {
            const object = OInstance.new()
            // Try commenting this line to get an error when treating the object as a Circle
            object.behaveAs(Circle)
-           object.setRadious( 10 )
+           object.setRadius( 10 )
 
-           object.getRadious()
+           object.getRadius()
         `,
      })
 
@@ -317,14 +317,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -333,11 +333,11 @@ class OInstance {
            const object = OInstance.new()
 
            object.behaveAs(Circle)
-           object.setRadious( 10 )
+           object.setRadius( 10 )
 
            // Does nothing and preserves the current state of the object.
            object.behaveAs(Circle)
-           object.getRadious()
+           object.getRadius()
         `,
      })
      */
@@ -425,14 +425,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -441,11 +441,11 @@ class OInstance {
            const object = OInstance.new()
 
            object.behaveAs(Circle)
-           object.setRadious(10)
+           object.setRadius(10)
 
            object.dropBehaviour(Circle)
 
-           object.getRadious()
+           object.getRadius()
         `,
      })
      */
@@ -629,11 +629,11 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
            }
 
@@ -641,7 +641,7 @@ class OInstance {
 
 
 
-           const circle = Circle.new({ radious: 10 })
+           const circle = Circle.new({ radius: 10 })
 
            circle.classificationInstanceVariablesDo( Circle, (name, value) => {
            	console.log( name + ': ' + value.toString() )

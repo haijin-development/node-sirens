@@ -102,16 +102,16 @@ const Shape = Classification.define( class {
 
 const Circle = Classification.define( class {
     static definition() {
-        this.instanceVariables = ['radious']
+        this.instanceVariables = ['radius']
         this.assumes = [Shape]
     }
 
-    setRadious(radious) {
-        this.radious = radious
+    setRadius(radius) {
+        this.radius = radius
     }
 
-    getRadious() {
-        return this.radious
+    getRadius() {
+        return this.radius
     }
 })
 

@@ -573,7 +573,7 @@ class OInstance {
            object.duringClassificationDo( Debuggable, () => {
            	const debugString = object.debugString()
 
-           	console.log(debugString)
+           	console.info(debugString)
            	return debugString
            })
 
@@ -644,7 +644,7 @@ class OInstance {
            const circle = Circle.new({ radius: 10 })
 
            circle.classificationInstanceVariablesDo( Circle, (name, value) => {
-           	console.log( name + ': ' + value.toString() )
+           	console.info( name + ': ' + value.toString() )
            })
         `,
      })
@@ -795,7 +795,7 @@ class OInstance {
            const object = OInstance.new()
 
            object.bindYourself( function() {
-           	console.log( this.isBehavingAs(OInstance) )
+           	console.info( this.isBehavingAs(OInstance) )
            })
         `,
      })
@@ -1016,7 +1016,7 @@ class OInstance {
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
-           		console.log( methodName )
+           		console.info( methodName )
            	}
            }
 

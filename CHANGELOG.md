@@ -3,7 +3,17 @@
 ## v0.10.0 (next release)
 
 ### Sirens
+
+- Replaced the binary classEditor by appBrowser.
+- Implemented AppBrowser.
+- DocumentationBrowser opens on the selected method.
+- DocumentationBrowser shows the methods tabs instead of the class tab.
+- Fixed the resize error on ClassDocumentation browser.
+
 ### gui
+
+- Fixed the resize error on SplitterView when adding or removing child views.
+
 ### O language
 
 ## v0.9.0

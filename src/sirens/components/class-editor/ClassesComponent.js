@@ -25,7 +25,12 @@ class ClassesComponent {
     openDocumentationBrowser(classEditionModel) {
         const classDefinition = classEditionModel.getClassDefinition()
 
-        Sirens.browseClassDocumentation({ classDefinition: classDefinition })
+        const selectedMethodName = classEditionModel.getSelectedMethodName()
+
+        Sirens.browseClassDocumentation({
+            classDefinition: classDefinition,
+            methodName: selectedMethodName,
+        })
     }
 
     /// Rendering

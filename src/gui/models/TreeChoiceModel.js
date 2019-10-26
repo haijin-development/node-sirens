@@ -41,11 +41,13 @@ class TreeChoiceModel {
     getSelectionValue() {
         const selectionPath = this.getSelectionPath()
 
-        if( selectionPath.length === 0 ) {
+        if( selectionPath === null || selectionPath.length === 0 ) {
             return null
         }
 
-        return selectionPath[ selectionPath.length - 1 ].getValue()
+        const lastItemInSelectionPath = selectionPath[ selectionPath.length - 1 ]
+
+        return lastItemInSelectionPath
     }
 
     /**

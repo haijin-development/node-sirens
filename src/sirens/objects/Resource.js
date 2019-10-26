@@ -9,6 +9,8 @@ const Resource = {
         array: iconsFolder + 'array.png',
         class: iconsFolder + 'class.png',
         false: iconsFolder + 'false.png',
+        file: iconsFolder + 'file.png',
+        folder: iconsFolder + 'folder.png',
         function: iconsFolder + 'function.png',
         haiku: iconsFolder + 'haiku.png',
         method: iconsFolder + 'method.png',

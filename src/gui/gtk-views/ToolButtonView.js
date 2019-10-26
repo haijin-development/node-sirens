@@ -16,6 +16,8 @@ class ToolButtonView {
     /// Initializing
 
     initialize({ imageProps: imageProps, label: label, tooltip: tooltip, enabled: enabled, action: action }) {
+        if( typeof(action) !== 'function' ) { throw new Error(`ToolButtonView invalid action callback: ${action}.`) }
+
         this.imageProps = imageProps
         this.label = label !== undefined ? label : ''
         this.enabled = enabled === undefined ? true : enabled

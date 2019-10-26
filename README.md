@@ -80,6 +80,16 @@ const Sirens = require('sirens')
 Sirens.openClassEditor()
 ```
 
+An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.
+
+Open an AppBrowser with
+
+```javascript
+const Sirens = require('sirens')
+
+Sirens.openAppBrowser()
+```
+
 ### Sirens command line
 
 If you install `Sirens` globally
@@ -94,10 +104,10 @@ you can open a javascript Playground from the command line with:
 playground [javascript-filename.js]
 ```
 
-and a javascript ClassEditor from the command line with:
+and a javascript AppBrowser from the command line with:
 
 ```
-classEditor [javascript-filename.js]
+appBrowser [folder]
 ```
 
 If you install `Sirens` in the scope of a project with
@@ -112,10 +122,10 @@ you can open a javascript Playground from the project folder with
 node_modules/.bin/playground [javascript-filename.js]
 ```
 
-and a javascript ClassEditor from the project folder with
+and a javascript AppBrowser from the project folder with
 
 ```
-node_modules/.bin/classEditor [javascript-filename.js]
+node_modules/.bin/appBrowser [folder]
 ```
 
 ### Screenshots

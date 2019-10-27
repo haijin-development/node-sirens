@@ -71,14 +71,14 @@ class FunctionsComponent {
 
                     this.column({
                         label: '',
-                        getImageBlock: function(objectProperty) { return objectProperty.icon() },
+                        getImageClosure: function(objectProperty) { return objectProperty.icon() },
                         imageWidth: 24,
                         imageHeight: 24,
                     })
 
                     this.column({
                         label: 'Properties',
-                        getTextBlock: function(objectProperty) { return objectProperty.getKey() },
+                        getTextClosure: function(objectProperty) { return objectProperty.getKey() },
                     })
 
                     this.popupMenu( function() {

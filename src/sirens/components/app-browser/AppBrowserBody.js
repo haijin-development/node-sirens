@@ -57,14 +57,14 @@ class AppBrowserBody {
 
                     this.column({
                         label: '',
-                        getImageBlock: function(pathObject) { return pathObject.getIcon() },
+                        getImageClosure: function(pathObject) { return pathObject.getIcon() },
                         imageWidth: 16,
                         imageHeight: 16,
                     })
 
                     this.column({
                         label: '',
-                        getTextBlock: function(pathObject) { return pathObject.getBaseName() },
+                        getTextClosure: function(pathObject) { return pathObject.getBaseName() },
                     })
 
                     this.popupMenu( function() {

@@ -22,9 +22,56 @@ const Image = require('../components/widgets/Image')
 
 const WidgetBuilder = require('./WidgetBuilder')
 
+/*
+ Class(`
+    This object is used to build a container widget using the builder DSL.
+
+    A container widget can have one or more children.
+
+    This ContainerWidgetBuilder defines the DSL methods to create and add these children.
+
+    The usage of a ContainerWidgetBuilder typically consists in instantiating it, calling its
+
+    	containerWidgetBuilder.build()
+
+    getting the defined props and children and setting them to the container widget.
+ `)
+
+ Example({
+    Description: `
+       Builds a Window props and children using a ContainerWidgetBuilder object.
+    `,
+    Code: `
+
+       const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
+       const Window = require('sirens/src/gui/components/containers/Window')
+
+       const builder = ContainerWidgetBuilder.new({ title: 'A window' })
+
+       builder.build( function() {
+       	this.styles({
+       		width: 100,
+       		height: 100,
+       	})
+
+       	this.checkBox({ label: 'A checkbox' })
+       })
+
+       const window = Window.new( builder.getProps() )
+
+       window.addAllChildrenComponents( builder.getChildComponents() )
+
+    `,
+ })
+*/
 class ContainerWidgetBuilder {
     /// Definition
 
+    /*
+     Method(`
+        This classification definition.
+     `)
+    */
     static definition() {
         this.instanceVariables = ['childComponents']
         this.assumes = [WidgetBuilder]
@@ -32,6 +79,11 @@ class ContainerWidgetBuilder {
 
     /// Initializing
 
+    /*
+     Method(`
+        Initializes this ContainerWidgetBuilder and sets its initial properties with the given props.
+     `)
+    */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
             this.initialize(props)

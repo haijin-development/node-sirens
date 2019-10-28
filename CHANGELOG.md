@@ -13,6 +13,9 @@
 ### gui
 
 - Fixed the resize error on SplitterView when adding or removing child views.
+- Renamed getTextBlock to getTextClosure
+- Renamed getImageBlock to getImageClosure
+- Documented classifications
 
 ### O language
 

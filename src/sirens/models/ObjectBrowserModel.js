@@ -45,20 +45,26 @@ class ObjectBrowserModel {
 
     /// Accessing
 
-    getRootObject() {
-        return this.objectPropertiesTreeModel.getRoots()[0].getValue()
-    }
-
     getObjectPropertiesTreeModel() {
         return this.objectPropertiesTreeModel
     }
 
-    getSelectedPropertyValue() {
+    getSelectedPropertyTextModel() {
+        return this.selectedObjectTextModel
+    }
+
+    /// Querying
+
+    getRootObject() {
+        return this.objectPropertiesTreeModel.getRoots()[0].getValue()
+    }
+
+    getSelectedInstVarProperty() {
         return this.objectPropertiesTreeModel.getSelectionValue()
     }
 
-    getSelectedPropertyTextModel() {
-        return this.selectedObjectTextModel
+    getSelectedPropertyValue() {
+        return this.getSelectedInstVarProperty().getValue()
     }
 
     /// Events

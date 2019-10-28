@@ -22,7 +22,7 @@ describe('When using a ChoicesTree', () => {
 
     describe('model', () => {
         it('has a ChoiceModel', () => {
-            expect(this.tree.getModel().getSelectionPath()) .to .eql(null)
+            expect(this.tree.getModel().getSelectionValue()) .to .eql(null)
             expect(this.tree.getModel().getRoots()) .to .eql([])
         })
 
@@ -60,7 +60,7 @@ describe('When using a ChoicesTree', () => {
                 })
             })
 
-            expect(this.tree.getModel().getSelectionPath()) .to .eql(['c'])
+            expect(this.tree.getModel().getSelectionValue()) .to .eql('c')
             expect(this.tree.getModel().getRoots()) .to .eql(['a','b','c'])
 
             expect(this.tree.getView().getSelectionIndices()) .to .eql([[2]])

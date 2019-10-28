@@ -213,7 +213,7 @@ class TreeView {
         this.treeStore.clear()
     }
 
-    setRoots(roots) {
+    setRoots({ items: roots }) {
         this.clearItems()
 
         this.addItems({
@@ -382,7 +382,7 @@ class TreeView {
 
         const indicesPath = this.pathStringToPathIndices(treePath)
 
-        const children = this.getChildrenAt({path: indicesPath})
+        const children = this.getChildrenAt({ path: indicesPath })
 
         this.treeStore.remove(childIter)
 

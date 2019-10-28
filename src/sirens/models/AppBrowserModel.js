@@ -111,9 +111,9 @@ class AppBrowserModel {
     openFolder({ appFolder: appFolder }) {
         this.appFolder = Folder.new({ path: appFolder })
 
-        this.appFilesTreeModel.setRoots([
-            this.appFolder
-        ])
+        this.appFilesTreeModel.setRoots({
+            items: [this.appFolder]
+        })
 
         this.titleModel.setValue( 'App Browser - ' + this.appFolder.getPath() )
     }

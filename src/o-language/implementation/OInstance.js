@@ -1164,7 +1164,7 @@ class OInstance {
 
            class Proxy {
            	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
-           		console.log( methodName + ' returned ' + result.toString() )
+           		console.info( methodName + ' returned ' + result.toString() )
            	}
            }
 

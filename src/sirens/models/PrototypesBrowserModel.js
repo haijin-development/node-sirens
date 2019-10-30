@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
-const ObjectProperty = require('../objects/ObjectProperty')
+const OInstanceObjectProperty = require('../objects/OInstanceObjectProperty')
 
 class PrototypesBrowserModel {
     /// Definition
@@ -128,7 +128,7 @@ class PrototypesBrowserModel {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            return ObjectProperty.new({
+            return OInstanceObjectProperty.new({
                 key: key,
                 value: object[key]
             })

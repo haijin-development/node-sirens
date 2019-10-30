@@ -1,7 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
-const ObjectProperty = require('../objects/ObjectProperty')
+const OInstanceObjectProperty = require('../objects/OInstanceObjectProperty')
 
 class ObjectBrowserModel {
     /// Definition
@@ -32,7 +32,7 @@ class ObjectBrowserModel {
     }
 
     getRootPropertiesFrom(inspectedObject) {
-        const root = ObjectProperty.new({ key: null, value: inspectedObject })
+        const root = OInstanceObjectProperty.new({ key: null, value: inspectedObject })
 
         return [root]
     }

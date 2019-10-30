@@ -385,7 +385,10 @@ class MessageDispatcher {
     objectProxyGetProp(object, prop) {
         // Node calls the method named Symbol.for('nodejs.util.inspect.custom') to print an object.
         // The proxy handles this method calling the toString() on the OInstance object.
-        if( prop === Symbol.for('nodejs.util.inspect.custom') ) {
+        const isNodePrintMethod =
+            prop === Symbol.for('nodejs.util.inspect.custom') || prop === Symbol.toPrimitive
+
+        if( isNodePrintMethod ) {
             const toStringMethod = 'toString'
             const lookupInitialIndex = ClassificationLookup.getInitialLookupIndex({ object: object })
 

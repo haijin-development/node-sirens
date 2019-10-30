@@ -168,7 +168,7 @@ const TreeNodeClassification = Classification.define( class TreeNode {
         const children = this.getChildrenBlock( this.value )
 
         if( children === undefined ) {
-            children = []
+            return []
         }
 
         return children

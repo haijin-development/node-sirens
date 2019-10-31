@@ -259,6 +259,7 @@ describe('The OInstance classification', () => {
             'respondsTo',
             'compliesWith',
             'behaveAs',
+            'behaveAsAll',
             'pushBehaviour',
             'dropBehaviour',
             'previousClassificationDo',

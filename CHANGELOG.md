@@ -12,6 +12,8 @@
 - ObjectBrowser shows OInstance objects.
 - Fixed error when displaying the selected property in the ObjectBrowser.
 - Added vertical scroll bars to edition dialogs.
+- Uses of ObjectProperty now follows the pluggable behaviour pattern
+- ObjectProperty inspector can be customized through Preferences.objectPropertiesInspectorPlugins
 
 ### gui
 
@@ -25,7 +27,7 @@
 ### O language
 
 - Functions Symbol.for('nodejs.util.inspect.custom') and Symbol.toPrimitive are treated differently when called to an OInstance.
-
+- Implemented OInstance.behaveAsAll method
 
 ## v0.9.0
 

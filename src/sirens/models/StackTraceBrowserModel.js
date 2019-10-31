@@ -4,7 +4,8 @@ const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel'
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
 const FunctionDefinition = require('../objects/source-code/FunctionDefinition')
-const OInstanceObjectProperty = require('../objects/OInstanceObjectProperty')
+const ObjectProperty = require('../objects/ObjectProperty')
+const Preferences = require('../objects/Preferences')
 
 class StackTraceBrowserModel {
     /// Definition
@@ -39,7 +40,9 @@ class StackTraceBrowserModel {
     }
 
     getRootPropertiesFrom(object) {
-        const objectProperty = OInstanceObjectProperty.new({ key: null, value: object })
+        const objectProperty = ObjectProperty.new({ key: null, value: object })
+
+        objectProperty.behaveAsAll( Preferences.objectPropertiesInspectorPlugins )
 
         return [objectProperty]
     }

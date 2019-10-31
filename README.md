@@ -8,7 +8,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-![Object browser](./docs/browsing-stack.gif)
+![App browser](./docs/browsing-app.gif)
 
 Next release:
 
@@ -119,13 +119,13 @@ npm install sirens --save-dev
 you can open a javascript Playground from the project folder with
 
 ```
-node_modules/.bin/playground [javascript-filename.js]
+./node_modules/.bin/playground [javascript-filename.js]
 ```
 
 and a javascript AppBrowser from the project folder with
 
 ```
-node_modules/.bin/appBrowser [folder]
+./node_modules/.bin/appBrowser [folder]
 ```
 
 ### Screenshots
@@ -138,13 +138,9 @@ node_modules/.bin/appBrowser [folder]
 
 ![Playground](./docs/playground.gif)
 
-**Browsing documentation**
+**Browsing application**
 
-![Browsing documentation](./docs/browsing-documentation.gif)
-
-**Writing documentation**
-
-![Writing documentation](./docs/writing-browseable-documentation.gif)
+![App browser](./docs/browsing-app.gif)
 
 ### Pre-requisites
 

@@ -369,6 +369,100 @@ class OInstance {
     }
 
     /*
+     Method(`
+        Makes this object to behave as all the classifications in the given classificationsArray.
+     `)
+
+     Param({
+        Name: `
+           classificationsArray
+        `,
+        Description: `
+           Array of Classification.
+           An array of Classification objects.
+        `,
+     })
+
+     Returns({
+        Description: `
+           object.
+           This object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Makes an object to start behaving as a Circle and as a Positionable.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           class Circle {
+           	static definition() {
+              		this.instanceVariables = ['radius']
+           	}
+
+           	setRadius(radius) {
+              		this.radius = radius
+            	}
+
+           	getRadius() {
+              		return this.radius
+            	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           class Positionable {
+           	static definition() {
+              		this.instanceVariables = ['x', 'y']
+           	}
+
+           	setPosition({ x: x, y: y}) {
+              		this.x = x
+           		this.y = y
+            	}
+
+           	getPosition() {
+              		return {
+           			x: this.x,
+           			y: this.y,
+           		}
+            	}
+           }
+
+
+
+
+           Positionable = Classification.define(Positionable)
+
+
+
+
+           const object = OInstance.new()
+           // Try commenting this line to get an error when treating
+           // the object as a Circle or as a Positionable
+           object.behaveAsAll([ Circle, Positionable ])
+
+           object.setRadius( 10 )
+           object.setRadius({ x: 1, y: 1 })
+
+           object.getRadius()
+
+        `,
+     })
+     */
+    behaveAsAll(classificationsArray) {
+      classificationsArray.forEach( (classification) => {
+        this.behaveAs( classification )
+      })
+
+      return this
+    }
+
+    /*
         Method(`
            Unlike
 

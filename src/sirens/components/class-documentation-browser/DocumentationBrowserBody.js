@@ -46,6 +46,16 @@ class DocumentationBrowserBody {
                     onTabPageChanged: component.onTabPageChanged.bind(component),
                 })
 
+                this.tabPage({ label: 'Class methods' }, function() {
+
+                    this.component(
+                        ClassMethodsDocumentation.new({
+                            model: model
+                        })
+                    )
+
+                })
+
                 this.tabPage({ label: 'Class comment' }, function() {
 
                     if( showsUnformattedComments ) {
@@ -67,16 +77,6 @@ class DocumentationBrowserBody {
                         )
 
                     }
-
-                })
-
-                this.tabPage({ label: 'Class methods' }, function() {
-
-                    this.component(
-                        ClassMethodsDocumentation.new({
-                            model: model
-                        })
-                    )
 
                 })
 

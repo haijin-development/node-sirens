@@ -24,16 +24,16 @@ class _Shape {
 
 class _Circle {
     static definition() {
-        this.instanceVariables = ['radious']
+        this.instanceVariables = ['radius']
         this.assumes = []
     }
 
-    setRadious(radious) {
-        this.radious = radious
+    setRadius(radius) {
+        this.radius = radius
     }
 
-    getRadious() {
-        return this.radious
+    getRadius() {
+        return this.radius
     }
 }
 
@@ -136,24 +136,24 @@ describe('When dynamically setting a classification definition', () => {
     it('it responds its defined methods names', () => {
         expect( Shape.getDefinedMethodNames() ) .to .eql([
             'constructor',
-            'setRadious',
-            'getRadious',
+            'setRadius',
+            'getRadius',
         ])
     })
 
     it('it responds if its defines a method', () => {
-        expect( Shape.definesMethod('setRadious') ) .to .be .true
+        expect( Shape.definesMethod('setRadius') ) .to .be .true
         expect( Shape.definesMethod('setPos') ) .to .be .false
     })
 
     it('it responds its defined instance variables', () => {
         expect( Shape.getDefinedInstanceVariables() ) .to .eql([
-            'radious',
+            'radius',
         ])
     })
 
     it('it responds if its defines an instance variable', () => {
-        expect( Shape.definesInstanceVariable('radious') ) .to .be .true
+        expect( Shape.definesInstanceVariable('radius') ) .to .be .true
         expect( Shape.definesInstanceVariable('z') ) .to .be .false
     })
 
@@ -259,6 +259,7 @@ describe('The OInstance classification', () => {
             'respondsTo',
             'compliesWith',
             'behaveAs',
+            'behaveAsAll',
             'pushBehaviour',
             'dropBehaviour',
             'previousClassificationDo',

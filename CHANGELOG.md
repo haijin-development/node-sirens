@@ -1,6 +1,35 @@
 # Changelog
 
-## v0.9.0 (next release)
+## v0.10.0 (next release)
+
+### Sirens
+
+- Replaced the binary classEditor by appBrowser.
+- Implemented AppBrowser.
+- DocumentationBrowser opens on the selected method.
+- DocumentationBrowser shows the methods tabs instead of the class tab.
+- Fixed the resize error on ClassDocumentation browser.
+- ObjectBrowser shows OInstance objects.
+- Fixed error when displaying the selected property in the ObjectBrowser.
+- Added vertical scroll bars to edition dialogs.
+- Uses of ObjectProperty now follows the pluggable behaviour pattern
+- ObjectProperty inspector can be customized through Preferences.objectPropertiesInspectorPlugins
+
+### gui
+
+- Documenting componentBuilder classifications.
+- Fixed the resize error on SplitterView when adding or removing child views.
+- Renamed getTextBlock to getTextClosure
+- Renamed getImageBlock to getImageClosure
+- Improved Tree methods signatures.
+- Made Labels selectable.
+
+### O language
+
+- Functions Symbol.for('nodejs.util.inspect.custom') and Symbol.toPrimitive are treated differently when called to an OInstance.
+- Implemented OInstance.behaveAsAll method
+
+## v0.9.0
 
 ### Sirens
 

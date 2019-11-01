@@ -16,6 +16,10 @@ class ValueModelProtocol {
     /// Comparing
 
     isSameValue(newValue) {}
+
+    /// Triggering
+
+    triggerValueChanged({ oldValue: oldValue, newValue: newValue }) {}
 }
 
 module.exports = Protocol.define(ValueModelProtocol)

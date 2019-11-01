@@ -50,16 +50,24 @@ class EditParamDialog {
 
                     this.verticalSplitter( function() {
 
-                        this.text({
-                            id: 'paramName',
-                            text: param.Name,
-                            viewAttributes: { splitProportion: 1.0/4.0 },
+                        this.container( function() {
+
+                            this.text({
+                                id: 'paramName',
+                                text: param.Name,
+                                viewAttributes: { splitProportion: 1.0/4.0 },
+                            })
+
                         })
 
-                        this.text({
-                            id: 'paramDescription',
-                            text: param.Description,
-                            viewAttributes: { splitProportion: 3.0/4.0 },
+                        this.container( function() {
+
+                            this.text({
+                                id: 'paramDescription',
+                                text: param.Description,
+                                viewAttributes: { splitProportion: 3.0/4.0 },
+                            })
+
                         })
 
                     })

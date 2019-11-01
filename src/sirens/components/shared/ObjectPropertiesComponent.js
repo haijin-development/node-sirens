@@ -56,14 +56,14 @@ class ObjectPropertiesComponent {
 
                 this.column({
                     label: '',
-                    getImageBlock: function(instVar) { return instVar.icon() },
+                    getImageClosure: function(instVar) { return instVar.icon() },
                     imageWidth: 24,
                     imageHeight: 24,
                 })
 
                 this.column({
                     label: '',
-                    getTextBlock: function(instVar) { return instVar.displayString() },
+                    getTextClosure: function(instVar) { return instVar.displayString() },
                 })
 
                 this.popupMenu( function() {

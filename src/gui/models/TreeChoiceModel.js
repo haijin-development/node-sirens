@@ -41,11 +41,13 @@ class TreeChoiceModel {
     getSelectionValue() {
         const selectionPath = this.getSelectionPath()
 
-        if( selectionPath.length === 0 ) {
+        if( selectionPath === null || selectionPath.length === 0 ) {
             return null
         }
 
-        return selectionPath[ selectionPath.length - 1 ].getValue()
+        const lastItemInSelectionPath = selectionPath[ selectionPath.length - 1 ]
+
+        return lastItemInSelectionPath
     }
 
     /**
@@ -54,7 +56,7 @@ class TreeChoiceModel {
     * selected item.
     * The selectionModel model triggers an announcement that its value changed.
     */
-    setSelectionPath(objectsHierarchy) {
+    setSelectionPath({ objectsHierarchy: objectsHierarchy }) {
         this.selectionModel.setValue(objectsHierarchy)
     }
 
@@ -69,7 +71,7 @@ class TreeChoiceModel {
             return []
         }
 
-        return this.getPathOf(objectsHierarchy)
+        return this.getPathOf({ objectsHierarchy: objectsHierarchy })
     }
 
     /**
@@ -78,10 +80,10 @@ class TreeChoiceModel {
     * selected item.
     * The selectionModel model triggers an announcement that its value changed.
     */
-    setSelectionFromPath(path) {
-        const objectsHierarchy = this.getObjectsHierarchyAt(path)
+    setSelectionFromIndices({ indices: path }) {
+        const objectsHierarchy = this.getObjectsHierarchyAt({ indices: path })
 
-        this.setSelectionPath(objectsHierarchy)
+        this.setSelectionPath({ objectsHierarchy: objectsHierarchy })
     }
 
     /**
@@ -96,8 +98,8 @@ class TreeChoiceModel {
     * Sets the tree model roots.
     * Announces that the tree changed.
     */
-    setRoots(items) {
-        this.treeModel.setRoots(items)
+    setRoots({ items: items }) {
+        this.treeModel.setRoots({ items: items })
     }
 
     /**
@@ -114,29 +116,29 @@ class TreeChoiceModel {
     * Example:
     *       [1, 0, 3] returns the item taken from the second root, its first child and its fourth child.
     */
-    getItemAt(path) {
+    getItemAt({ indices: path }) {
         return this.treeModel.itemAt(path)
     }
 
     /**
     * Returns an array with the children of the item in the tree at the given path.
     */
-    getChildrenAt(path) {
-        return this.treeModel.getChildrenAt(path)
+    getChildrenAt({ indices: path }) {
+        return this.treeModel.getChildrenAt({ indices: path })
     }
 
     /**
     * Given a hierarchy of objects in the tree, returns an array with the path indices.
     */
-    getPathOf(objectsHierarchy) {
-        return this.treeModel.getPathOf(objectsHierarchy)
+    getPathOf({ objectsHierarchy: objectsHierarchy }) {
+        return this.treeModel.getPathOf({ objectsHierarchy: objectsHierarchy })
     }
 
     /**
     * Given a path returns an array with the objects on each tree level corresponding to each index in the path.
     */
-    getObjectsHierarchyAt(path) {
-        return this.treeModel.getObjectsHierarchyAt(path)
+    getObjectsHierarchyAt({ indices: path }) {
+        return this.treeModel.getObjectsHierarchyAt({ indices: path })
     }
 
     /// Events

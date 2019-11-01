@@ -28,10 +28,10 @@ class VirtualTreeModel {
 
         this.roots = []
 
-        this.setRoots(roots)
+        this.setRoots({ items: roots })
     }
 
-    newTreeNodeOn(item) {
+    newTreeNodeOn({ item: item }) {
         return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
     }
 
@@ -43,34 +43,34 @@ class VirtualTreeModel {
         })
     }
 
-    setRoots(newRoots) {
+    setRoots({ items: newRoots }) {
         const oldRoots = this.roots
 
         this.roots = newRoots.map((item) => {
-            return this.newTreeNodeOn(item)
+            return this.newTreeNodeOn({ item: item })
         })
 
         this.emit('roots-changed', {newRoots: newRoots, oldRoots: oldRoots})
     }
 
-    getNodeAt(path) {
-        let node = this.roots[path[0]]
+    getNodeAt({ indices: pathIndices }) {
+        let node = this.roots[pathIndices[0]]
 
-        const allIndicesButFirst = path.slice(1, path.length)
+        const allIndicesButFirst = pathIndices.slice(1, pathIndices.length)
 
         allIndicesButFirst.forEach((childIndex) => {
-            node = node.childAt(childIndex)
+            node = node.childAt({ index: childIndex })
         })
 
         return node
     }
 
-    getItemAt(path) {
-        return this.getNodeAt(path).getValue()
+    getItemAt({ indices: pathIndices }) {
+        return this.getNodeAt({ indices: pathIndices }).getValue()
     }
 
-    getChildrenAt(path) {
-        return this.getNodeAt(path).getChildren().map((node) => {
+    getChildrenAt({ indices: pathIndices }) {
+        return this.getNodeAt({ indices: pathIndices }).getChildren().map((node) => {
             return node.getValue()
         })
     }
@@ -78,29 +78,29 @@ class VirtualTreeModel {
     /**
      * Given a hierarchy of objects in the tree, returns an array with the path indices.
      */
-    getPathOf(objectsHierarchy) {
+    getPathOf({ objectsHierarchy: objectsHierarchy }) {
         let objects = this.roots
-        const path = []
+        const pathIndices = []
 
         objectsHierarchy.forEach((each_object) => {
             const index = objects.findIndex((node) => {
                 return node.getValue() == each_object
             })
 
-            path.push(index)
+            pathIndices.push(index)
 
             objects = objects[index].getChildren()
         })
 
-        return path
+        return pathIndices
     }
 
     /*
-     * Given a path returns an array with the objects on each tree level corresponding to each index
+     * Given a pathIndices returns an array with the objects on each tree level corresponding to each index
      * in the path.
      */
-    getObjectsHierarchyAt(path) {
-        if (path === undefined) {
+    getObjectsHierarchyAt({ indices: pathIndices }) {
+        if (pathIndices === undefined) {
             return []
         }
 
@@ -108,7 +108,7 @@ class VirtualTreeModel {
 
         const hierarchy = []
 
-        path.forEach((index) => {
+        pathIndices.forEach((index) => {
             const node = nodes[index]
 
             hierarchy.push(node.getValue())
@@ -160,12 +160,18 @@ const TreeNodeClassification = Classification.define( class TreeNode {
         return this.children
     }
 
-    childAt(index) {
+    childAt({ index: index }) {
         return this.children[index]
     }
 
     _getChildItems() {
-        return this.getChildrenBlock(this.value)
+        const children = this.getChildrenBlock( this.value )
+
+        if( children === undefined ) {
+            return []
+        }
+
+        return children
     }
 
     _getChildNodes() {

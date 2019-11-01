@@ -5,6 +5,7 @@ const ChoiceModel = require('../../gui/models/ChoiceModel')
 const callsites = require('callsites')
 const FunctionDefinition = require('../objects/source-code/FunctionDefinition')
 const ObjectProperty = require('../objects/ObjectProperty')
+const Preferences = require('../objects/Preferences')
 
 class StackTraceBrowserModel {
     /// Definition
@@ -40,6 +41,8 @@ class StackTraceBrowserModel {
 
     getRootPropertiesFrom(object) {
         const objectProperty = ObjectProperty.new({ key: null, value: object })
+
+        objectProperty.behaveAsAll( Preferences.objectPropertiesInspectorPlugins )
 
         return [objectProperty]
     }

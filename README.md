@@ -8,7 +8,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-![Object browser](./docs/browsing-stack.gif)
+![App browser](./docs/browsing-app.gif)
 
 Next release:
 
@@ -60,7 +60,7 @@ A Playground is a text editor where you can select, evaluate and inspect snippet
 using the Sirens ObjectBrowser with the same access to the npm modules that your application has, although
 currently it does not handle the evaluation of promises nor asynchronous code, only synchronous calls.
 
-Think of it a javascript console in 3 dimensions.
+Think of it as a javascript console in 3 dimensions.
 
 Open a Playground with
 
@@ -80,6 +80,16 @@ const Sirens = require('sirens')
 Sirens.openClassEditor()
 ```
 
+An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.
+
+Open an AppBrowser with
+
+```javascript
+const Sirens = require('sirens')
+
+Sirens.openAppBrowser()
+```
+
 ### Sirens command line
 
 If you install `Sirens` globally
@@ -94,10 +104,10 @@ you can open a javascript Playground from the command line with:
 playground [javascript-filename.js]
 ```
 
-and a javascript ClassEditor from the command line with:
+and a javascript AppBrowser from the command line with:
 
 ```
-classEditor [javascript-filename.js]
+appBrowser [folder]
 ```
 
 If you install `Sirens` in the scope of a project with
@@ -109,13 +119,13 @@ npm install sirens --save-dev
 you can open a javascript Playground from the project folder with
 
 ```
-node_modules/.bin/playground [javascript-filename.js]
+./node_modules/.bin/playground [javascript-filename.js]
 ```
 
-and a javascript ClassEditor from the project folder with
+and a javascript AppBrowser from the project folder with
 
 ```
-node_modules/.bin/classEditor [javascript-filename.js]
+./node_modules/.bin/appBrowser [folder]
 ```
 
 ### Screenshots
@@ -128,13 +138,9 @@ node_modules/.bin/classEditor [javascript-filename.js]
 
 ![Playground](./docs/playground.gif)
 
-**Browsing documentation**
+**Browsing application**
 
-![Browsing documentation](./docs/browsing-documentation.gif)
-
-**Writing documentation**
-
-![Writing documentation](./docs/writing-browseable-documentation.gif)
+![App browser](./docs/browsing-app.gif)
 
 ### Pre-requisites
 

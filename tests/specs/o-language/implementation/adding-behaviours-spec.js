@@ -36,15 +36,15 @@ const Shape = Classification.define( class {
 
 const Circle = Classification.define( class {
     static definition() {
-        this.instanceVariables = ['radious']
+        this.instanceVariables = ['radius']
     }
 
-    setRadious(radious) {
-        this.radious = radious
+    setRadius(radius) {
+        this.radius = radius
     }
 
-    getRadious() {
-        return this.radious
+    getRadius() {
+        return this.radius
     }
 })
 
@@ -68,10 +68,10 @@ describe('When adding behaviour to an O instance', () => {
         object.behaveAs(Circle)
 
         object.setPosition({ x: 10, y: 20})
-        object.setRadious(3)
+        object.setRadius(3)
 
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
-        expect(object.getRadious()) .to .eql(3)
+        expect(object.getRadius()) .to .eql(3)
 
         expect(object.classifications().length) .to .eql(3)
     })
@@ -83,7 +83,7 @@ describe('When adding behaviour to an O instance', () => {
         object.behaveAs(Circle)
 
         object.setPosition({ x: 10, y: 20})
-        object.setRadious(3)
+        object.setRadius(3)
 
         object.behaveAs(Shape)
         object.behaveAs(Circle)

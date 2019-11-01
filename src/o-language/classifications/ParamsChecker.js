@@ -35,11 +35,11 @@ const MethodValidator = require('./params-validation/MethodValidator')
 
        // Define the CircleProtocol
        class CircleProtocol {
-              	getRadious() {}
+              	getRadius() {}
 
-       	// Define that the radious must be a number
-              	setRadious(radious) {
-       		this.param(radious) .isNumber()
+       	// Define that the radius must be a number
+              	setRadius(radius) {
+       		this.param(radius) .isNumber()
        	}
        }
 
@@ -48,16 +48,16 @@ const MethodValidator = require('./params-validation/MethodValidator')
        // Define the Circle classification and declare that it implements the CircleProtocol
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        		this.implements = [CircleProtocol]
        	}
 
-              	getRadious() {
-              		return this.radious
+              	getRadius() {
+              		return this.radius
               	}
 
-              	setRadious(radious) {
-              		this.radious = radious
+              	setRadius(radius) {
+              		this.radius = radius
        	}
        }
 
@@ -69,10 +69,10 @@ const MethodValidator = require('./params-validation/MethodValidator')
 
        circle.behaveAs(ParamsChecker)
 
-       // Set a valid radious
-       circle.setRadious( 10 )
+       // Set a valid radius
+       circle.setRadius( 10 )
 
-       circle.getRadious()
+       circle.getRadius()
     `,
  })
 
@@ -88,11 +88,11 @@ const MethodValidator = require('./params-validation/MethodValidator')
 
        // Define the CircleProtocol
        class CircleProtocol {
-              	getRadious() {}
+              	getRadius() {}
 
-       	// Define that the radious must be a number
-              	setRadious(radious) {
-       		this.param(radious) .isNumber()
+       	// Define that the radius must be a number
+              	setRadius(radius) {
+       		this.param(radius) .isNumber()
        	}
        }
 
@@ -101,16 +101,16 @@ const MethodValidator = require('./params-validation/MethodValidator')
        // Define the Circle classification and declare that it implements the CircleProtocol
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        		this.implements = [CircleProtocol]
        	}
 
-              	getRadious() {
-              		return this.radious
+              	getRadius() {
+              		return this.radius
               	}
 
-              	setRadious(radious) {
-              		this.radious = radious
+              	setRadius(radius) {
+              		this.radius = radius
        	}
        }
 
@@ -123,11 +123,11 @@ const MethodValidator = require('./params-validation/MethodValidator')
        // Also try commenting the line below to avoid doing any validation on the circle.
        circle.behaveAs(ParamsChecker)
 
-       // Set an valid radious.
+       // Set an valid radius.
        // Also try setting a string, null, a function or any object other than a numeric value.
-       circle.setRadious( undefined )
+       circle.setRadius( undefined )
 
-       circle.getRadious()
+       circle.getRadius()
 
     `,
  })

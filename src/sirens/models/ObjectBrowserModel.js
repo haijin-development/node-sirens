@@ -2,6 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const TreeChoiceModel = require('../../gui/models/TreeChoiceModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ObjectProperty = require('../objects/ObjectProperty')
+const Preferences = require('../objects/Preferences')
 
 class ObjectBrowserModel {
     /// Definition
@@ -34,6 +35,8 @@ class ObjectBrowserModel {
     getRootPropertiesFrom(inspectedObject) {
         const root = ObjectProperty.new({ key: null, value: inspectedObject })
 
+        root.behaveAsAll( Preferences.objectPropertiesInspectorPlugins )
+
         return [root]
     }
 
@@ -45,20 +48,26 @@ class ObjectBrowserModel {
 
     /// Accessing
 
-    getRootObject() {
-        return this.objectPropertiesTreeModel.getRoots()[0].getValue()
-    }
-
     getObjectPropertiesTreeModel() {
         return this.objectPropertiesTreeModel
     }
 
-    getSelectedPropertyValue() {
+    getSelectedPropertyTextModel() {
+        return this.selectedObjectTextModel
+    }
+
+    /// Querying
+
+    getRootObject() {
+        return this.objectPropertiesTreeModel.getRoots()[0].getValue()
+    }
+
+    getSelectedInstVarProperty() {
         return this.objectPropertiesTreeModel.getSelectionValue()
     }
 
-    getSelectedPropertyTextModel() {
-        return this.selectedObjectTextModel
+    getSelectedPropertyValue() {
+        return this.getSelectedInstVarProperty().getValue()
     }
 
     /// Events

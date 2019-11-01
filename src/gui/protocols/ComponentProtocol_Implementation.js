@@ -14,6 +14,8 @@ class ComponentProtocol_Implementation {
     renderWith(componentsRenderer) {
         this.param(componentsRenderer) .compliesWith( ComponentRendererProtocol )
     }
+
+    reRender() {}
 }
 
 module.exports = Protocol.define(ComponentProtocol_Implementation)

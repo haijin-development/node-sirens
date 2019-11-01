@@ -20,6 +20,10 @@ class ObjectProperty {
         this.value = value
     }
 
+    objectPropertyClassification() {
+        return this.thisClassification()
+    }
+
     /// Accessing
 
     getKey() {
@@ -46,7 +50,7 @@ class ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return this.thisClassification().new({
+            return this.objectPropertyClassification().new({
                 key: index,
                 value: item
             })
@@ -65,7 +69,7 @@ class ObjectProperty {
                 continue
             }
 
-            const instVar = this.thisClassification().new({
+            const instVar = this.objectPropertyClassification().new({
                 key: key,
                 value: instVarValue
             })
@@ -79,6 +83,8 @@ class ObjectProperty {
     valueType() {
         return typeof this.value
     }
+
+    /// Asking
 
     isArray() {
         return Array.isArray(this.value)

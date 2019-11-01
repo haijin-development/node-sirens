@@ -30,16 +30,16 @@ const Shape = Classification.define( class Shape {
 
 const Circle = Classification.define( class Circle {
     static definition() {
-        this.instanceVariables = ['radious', 'overriden']
+        this.instanceVariables = ['radius', 'overriden']
         this.assumes = [Debuggable]
     }
 
-    setRadious(radious) {
-        this.radious = radious
+    setRadius(radius) {
+        this.radius = radius
     }
 
-    getRadious() {
-        return this.radious
+    getRadius() {
+        return this.radius
     }
 
     setOverriden(value) {
@@ -76,7 +76,7 @@ OInstance {
 
         const expectedString = 
 `Circle {
-    radious: undefined
+    radius: undefined
     overriden: undefined
 }
 Shape {
@@ -109,7 +109,7 @@ OInstance {
     y: undefined
     overriden: 
         Circle {
-            radious: undefined
+            radius: undefined
             overriden: undefined
         }
         Debuggable {

@@ -1,5 +1,4 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const callsites = require('callsites')
 
 /*
  Class(`
@@ -165,84 +164,6 @@ class Sirens {
             const PrototypeBrowser = require('../src/sirens/components/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
-        })
-    }
-
-    /*
-     Method(`
-        Opens a StackBrowser on the current stack frame.
-     `)
-
-     Param({
-        Name: `
-           object
-        `,
-        Description: `
-           An optional object of the form
-
-                 { ... }
-
-
-           It usually will be the arguments of the current function and any other variable you would like to inspect.
-
-           For instance
-
-                 Sirens.browseStack({
-                       arguments: arguments,
-                       thisObject: this,
-                       someOtherVariable: someOtherVariable,
-                 })
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a StackBrowser on the current stack frame.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack()
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a browser on the current stack frame and also inspects the arguments of the current function.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack( arguments )
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a browser on the current stack frame and also inspects the arguments of the current function,
-           this object and another variable.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack({
-                 arguments: arguments,
-                 thisObject: this,
-                 someOtherVariable: someOtherVariable,
-           })
-
-        `,
-     })
-    */
-    static browseStack(object) {
-        const framesStack = callsites()
-
-        const allStackedFramesButThisOne = framesStack.slice(1)
-
-        this.do( () => {
-            const StackTraceBrowser = require('../src/sirens/components/StackTraceBrowser')
-
-            StackTraceBrowser.openOn({framesStack: allStackedFramesButThisOne, object: object})
         })
     }
 

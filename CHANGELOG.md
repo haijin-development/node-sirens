@@ -4,7 +4,11 @@
 
 ### Sirens
 
+- Removed the StackBrowser and its dependencies
+
 ### gui
+
+- Removed the implements of ComponentProtocol in all components that implements ComponentProtocol_Implementation since it is implicit.
 
 ### O language
 

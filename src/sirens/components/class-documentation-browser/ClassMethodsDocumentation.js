@@ -26,25 +26,35 @@ class ClassMethodsDocumentation {
 
             this.horizontalSplitter( function() {
 
-                if( showsUnformattedComments ) {
+                this.container( function() {
 
-                    this.component(
-                        MethodUnformattedComment.new({
-                            model: model,
-                            viewAttributes: { splitProportion: 2.0 / 3 },
-                        })
-                    )
+                    this.styles({
+                        viewAttributes: { splitProportion: 2.0/3.0 },
+                        hScroll: 'never',
+                        vScroll: 'never'
+                    })
 
-                } else {
+                    if( showsUnformattedComments ) {
 
-                    this.component(
-                        MethodFormattedComment.new({
-                            model: model,
-                            viewAttributes: { splitProportion: 2.0 / 3 },
-                        })
-                    )
+                        this.component(
+                            MethodUnformattedComment.new({
+                                model: model,
+                                viewAttributes: { splitProportion: 2.0 / 3 },
+                            })
+                        )
 
-                }
+                    } else {
+
+                        this.component(
+                            MethodFormattedComment.new({
+                                model: model,
+                                viewAttributes: { splitProportion: 2.0 / 3 },
+                            })
+                        )
+
+                    }
+
+                })
 
                 this.listChoice( function() {
 
@@ -57,13 +67,13 @@ class ClassMethodsDocumentation {
 
                     this.column({
                         label: '',
-                        getImageBlock: function(functionDefinition) { return Resource.image.method },
+                        getImageClosure: function(functionDefinition) { return Resource.image.method },
                         imageWidth: 24,
                         imageHeight: 24,
                     })
 
                     this.column({
-                        getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                        getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
                     })
                 })
 

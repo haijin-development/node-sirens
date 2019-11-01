@@ -47,25 +47,25 @@ const ExtendedInstantiator = require('./ExtendedInstantiator')
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
        Circle = Classification.define(Circle)
 
-       const circle = Circle.new({ radious: 10 })
+       const circle = Circle.new({ radius: 10 })
 
        circle.debugString()
 
@@ -129,25 +129,25 @@ class ExtendedClassification
 
            class Circle {
            	static definition() {
-                   	this.instanceVariables = ['radious']
+                   	this.instanceVariables = ['radius']
            	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
            }
 
            Circle = Classification.define(Circle)
 
-           const circle = Circle.new({ radious: 10 })
+           const circle = Circle.new({ radius: 10 })
 
            circle.debugString()
         `,

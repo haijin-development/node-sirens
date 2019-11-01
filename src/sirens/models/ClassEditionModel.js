@@ -46,10 +46,6 @@ class ClassEditionModel {
         return this.classDefinition
     }
 
-    getClassName() {
-        return this.classDefinition.getClassName() + ' class'
-    }
-
     getHeaderSourceCodeModel() {
         return this.headerSourceCodeModel
     }
@@ -61,6 +57,21 @@ class ClassEditionModel {
     getSelectedMethodSourceCodeModel() {
         return this.selectedMethodSourceCodeModel
     }
+
+    /// Querying
+
+    getClassName() {
+        return this.classDefinition.getClassName() + ' class'
+    }
+
+    getSelectedMethodName() {
+        const method = this.classMethodsModel.getSelectionValue()
+
+        if( method === null ) { return null }
+
+        return method.getName()
+    }
+
 
     /// Formatting
 

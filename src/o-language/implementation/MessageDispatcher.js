@@ -1,3 +1,4 @@
+const util = require('util')
 const ClassificationDefinition = require('./classification-definition')
 const ActiveClassification = require('./active-classification')
 const ClassificationLookup = require('./classification-lookup')
@@ -382,6 +383,23 @@ class MessageDispatcher {
      * to it.
      */
     objectProxyGetProp(object, prop) {
+        // Node calls the method named Symbol.for('nodejs.util.inspect.custom') to print an object.
+        // The proxy handles this method calling the toString() on the OInstance object.
+        const isNodePrintMethod =
+            prop === Symbol.for('nodejs.util.inspect.custom') || prop === Symbol.toPrimitive
+
+        if( isNodePrintMethod ) {
+            const toStringMethod = 'toString'
+            const lookupInitialIndex = ClassificationLookup.getInitialLookupIndex({ object: object })
+
+            return ClassificationLookup.lookupMethod({
+                lookupInitialIndex: lookupInitialIndex,
+                object: object,
+                methodName: toStringMethod,
+                proxyObject: this,
+            })
+        }
+
         // These properties are part of the method dispatch implementation and must be handled out of the
         // regular method dispatch logic
         if( prop === 'impl' ) {

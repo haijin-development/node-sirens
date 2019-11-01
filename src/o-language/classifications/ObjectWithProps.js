@@ -96,7 +96,7 @@ const Classification = require('./Classification')
        })
 
        object.propsAndValuesDo( (propName, value ) => {
-       	console.log(  'Prop name: ' + propName + ' value: ' + value )
+       	console.info(  'Prop name: ' + propName + ' value: ' + value )
        })
     `,
  })
@@ -125,7 +125,7 @@ const Classification = require('./Classification')
 
        object.getProp({
        	 key: 'color',
-       	ifUndefined: ({ key: key, owner: owner }) => { console.log( "Undefined prop " + key ) },
+       	ifUndefined: ({ key: key, owner: owner }) => { console.info( "Undefined prop " + key ) },
         })
     `,
  })
@@ -681,7 +681,7 @@ class ObjectWithProps {
            })
 
            object.propsAndValuesDo( (propName, value ) => {
-           	console.log(  'Prop name: ' + propName + ' value: ' + value )
+           	console.info(  'Prop name: ' + propName + ' value: ' + value )
            })
         `,
      })

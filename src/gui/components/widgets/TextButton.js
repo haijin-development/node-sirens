@@ -35,9 +35,9 @@ class TextButton {
         this.duringClassificationDo( UpdatingView, () => {
             const value = this.getModel().getValue()
 
-            const getTextBlock = this.getProps().getTextBlock
+            const getTextClosure = this.getProps().getTextClosure
 
-            const text = getTextBlock ? getTextBlock(value) : value.toString()
+            const text = getTextClosure ? getTextClosure(value) : value.toString()
 
             this.getView().setText(text)
         })

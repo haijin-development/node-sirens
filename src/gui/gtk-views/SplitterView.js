@@ -52,6 +52,14 @@ class SplitterView {
 
     /// Adding child views
 
+    directChildRemove(childView) {
+        this.isFirstSizeAllocation = true
+
+        this.previousClassificationDo( () => {
+            this.directChildRemove( childView )
+        })
+    }
+
     directChildViewAdd(childView) {
         this.isFirstSizeAllocation = true
 
@@ -171,10 +179,18 @@ class SplitterView {
     }
 
     setProportionalSize(childHandle, width, height, size) {
+        const allocation = childHandle.getAllocation()
+
         if(this.isHorizontal()) {
+            allocation.width = size
+
             childHandle.setSizeRequest(size, height)
+            childHandle.sizeAllocate(allocation)
         } else {
+            allocation.height = size
+
             childHandle.setSizeRequest(width, size)
+            childHandle.sizeAllocate(allocation)
         }
     }
 }

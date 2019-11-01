@@ -61,17 +61,17 @@ class StackTraceBrowser {
 
                             this.column({
                                 label: 'Functions calls',
-                                getTextBlock: function(stackFrame) { return stackFrame.getFunctionName() }
+                                getTextClosure: function(stackFrame) { return stackFrame.getFunctionName() }
                             })
 
                             this.column({
                                 label: 'File',
-                                getTextBlock: function(stackFrame) { return stackFrame.getFileName() }
+                                getTextClosure: function(stackFrame) { return stackFrame.getFileName() }
                             })
 
                             this.column({
                                 label: 'Line',
-                                getTextBlock: function(stackFrame) { return stackFrame.getLineNumber() }
+                                getTextClosure: function(stackFrame) { return stackFrame.getLineNumber() }
                             })
                         })
 

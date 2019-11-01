@@ -6,11 +6,11 @@ class VirtualTreeModelProtocol {
 
     getRoots() {}
 
-    setRoots(newRoots) {
+    setRoots({ items: newRoots }) {
         this.param(newRoots) .isArray()
     }
 
-    getItemAt(path) {
+    getItemAt({ indices: path }) {
         this.param(path) .isArray()
 
         path.forEach( (index) => {
@@ -18,7 +18,7 @@ class VirtualTreeModelProtocol {
         })
     }
 
-    getChildrenAt(path) {
+    getChildrenAt({ indices: path }) {
         this.param(path) .isArray()
 
         path.forEach( (index) => {
@@ -29,7 +29,7 @@ class VirtualTreeModelProtocol {
     /**
      * Given a hierarchy of objects in the tree, returns an array with the path indices.
      */
-    getPathOf(objectsHierarchy) {
+    getPathOf({ objectsHierarchy: objectsHierarchy }) {
         this.param(objectsHierarchy) .isArray()
     }
 
@@ -37,7 +37,7 @@ class VirtualTreeModelProtocol {
      * Given a path returns an array with the objects on each tree level corresponding to each index
      * in the path.
      */
-    getObjectsHierarchyAt(path) {
+    getObjectsHierarchyAt({ indices: path }) {
         this.param(path) .isArray()
 
         path.forEach( (index) => {

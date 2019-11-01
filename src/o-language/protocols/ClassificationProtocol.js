@@ -42,7 +42,7 @@ class ClassificationProtocol {
         		/// Definition
 
     		static definition() {
-            		this.instanceVariables = [ 'radious' ]
+            		this.instanceVariables = [ 'radius' ]
             		this.assumes = [ Shape ]
             		this.implements = [ ShapeProtocol ]
             		this.expects = []
@@ -52,7 +52,7 @@ class ClassificationProtocol {
 
     Each property is explained below.
 
-    # this.instanceVariables = [ 'radious' ]
+    # this.instanceVariables = [ 'radius' ]
 
     Is an array with the instance variables of the pair (object, classification).
 
@@ -136,7 +136,7 @@ class ClassificationProtocol {
         		/// Definition
 
     		static definition() {
-            		this.instanceVariables = ['radious' ]
+            		this.instanceVariables = ['radius' ]
             		this.implements = [ShapeProtocol]
             		this.expects = []
             		this.classificationBehaviours = [ ShapeBuilder ]
@@ -254,15 +254,15 @@ class ClassificationProtocol {
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -306,16 +306,16 @@ class ClassificationProtocol {
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
                	this.assumes = [ Shape ]
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -323,7 +323,7 @@ class ClassificationProtocol {
 
        const circle = Circle.new()
        circle.setPosition({ x: 1, y: 1 })
-       circle.setRadious( 10 )
+       circle.setRadius( 10 )
 
        circle.getPosition()
 
@@ -339,9 +339,9 @@ class ClassificationProtocol {
        const Protocol = require('sirens/src/o-language/classifications/Protocol')
 
        class CircleProtocol {
-       	getRadious() {}
+       	getRadius() {}
 
-       	setRadious(radious) {}
+       	setRadius(radius) {}
 
        	drawOn({ canvas: canvas }) {}
        }
@@ -352,16 +352,16 @@ class ClassificationProtocol {
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
                	this.implements = [ CircleProtocol ]
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        	drawOn({ canvas: canvas }) {
        		// ...
@@ -525,33 +525,33 @@ createObject() {}
 
  Example({
     Description: `
-       Creates a new instance of the classification Circle, initialized with the given radious
+       Creates a new instance of the classification Circle, initialized with the given radius
     `,
     Code: `
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
        Circle = Classification.define(Circle)
 
-       const  circle = Circle.new({ radious: 10 })
-       circle.getRadious()
+       const  circle = Circle.new({ radius: 10 })
+       circle.getRadius()
     `,
  })
 */
@@ -594,19 +594,19 @@ new(...props) {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -646,19 +646,19 @@ getName() {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -701,19 +701,19 @@ getClassificationDefinition() {}
        const classificationObject = Classification.define( class {} )
        classificationObject.setClassificationDefinition( class DynamicClassificationDefinintion {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        })
        classificationObject.getClassificationDefinition()
@@ -742,19 +742,19 @@ setClassificationDefinition(classificationDefinition) {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -791,26 +791,26 @@ getDefinedMethodNames() {}
 
      Example({
         Description: `
-           Asks if the Circle classification defines the methods 'getPosition' and 'getRadious'.
+           Asks if the Circle classification defines the methods 'getPosition' and 'getRadius'.
         `,
         Code: `
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
            	static definition() {
-                   	this.instanceVariables = ['radious']
+                   	this.instanceVariables = ['radius']
                	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
            }
 
@@ -820,7 +820,7 @@ getDefinedMethodNames() {}
            Circle.definesMethod( 'getPosition' )
 
            // Returns true
-           Circle.definesMethod( 'getRadious' )
+           Circle.definesMethod( 'getRadius' )
         `,
      })
     */
@@ -849,19 +849,19 @@ getDefinedMethodNames() {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -911,19 +911,19 @@ getDefinedInstanceVariables() {}
 
            class Circle {
            	static definition() {
-                   	this.instanceVariables = ['radious']
+                   	this.instanceVariables = ['radius']
                	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
            }
 
@@ -933,7 +933,7 @@ getDefinedInstanceVariables() {}
 
            // Add more instance variables to the existing classification
            Circle.setDefinedInstanceVariables([
-           	'radious', 'color', 'border'
+           	'radius', 'color', 'border'
            ])
 
            Circle.getDefinedInstanceVariables()
@@ -966,7 +966,7 @@ getDefinedInstanceVariables() {}
 
      Example({
         Description: `
-           Asks if the Circle classification defines the instance variables named 'radious' and 'color'.
+           Asks if the Circle classification defines the instance variables named 'radius' and 'color'.
         `,
         Code: `
 
@@ -974,19 +974,19 @@ getDefinedInstanceVariables() {}
 
            class Circle {
            	static definition() {
-                   	this.instanceVariables = ['radious']
+                   	this.instanceVariables = ['radius']
                	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
            }
 
@@ -994,7 +994,7 @@ getDefinedInstanceVariables() {}
 
            Circle.definesInstanceVariable( 'color' )
 
-           Circle.definesInstanceVariable( 'radious' )
+           Circle.definesInstanceVariable( 'radius' )
         `,
      })
     */
@@ -1047,26 +1047,26 @@ getDefinedInstanceVariables() {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        		this.assumes = [ Shape ]
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
        Circle = Classification.define(Circle)
 
-       const circle = Circle.new({ radious: 10 })
+       const circle = Circle.new({ radius: 10 })
 
        circle.isBehavingAs( Shape )
 
@@ -1128,19 +1128,19 @@ getAssumptions() {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -1148,7 +1148,7 @@ getAssumptions() {}
        // Try commenting this line to get an error in the code below
        Circle.setAssumptions([ Shape ])
 
-       const circle = Circle.new({ radious: 10 })
+       const circle = Circle.new({ radius: 10 })
 
        circle.isBehavingAs( Shape )
 
@@ -1211,20 +1211,20 @@ setAssumptions(assumptions) {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        		this.assumes = [ Shape ]
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -1283,20 +1283,20 @@ getRecursiveAssumptions() {}
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
        		this.assumes = [ Shape ]
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 
@@ -1337,30 +1337,30 @@ getAssumptionsChain() {}
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class CircleProtocol {
-       	getRadious() {}
+       	getRadius() {}
 
-       	setRadious(radious) {}
+       	setRadius(radius) {}
        }
 
        CircleProtocol = Protocol.define(CircleProtocol)
 
        class Circle {
        	static definition() {
-               	this.instanceVariables = ['radious']
+               	this.instanceVariables = ['radius']
            	}
 
-       	initialize({ radious: radious }) {
-       		this.radious = radious
+       	initialize({ radius: radius }) {
+       		this.radius = radius
        	}
 
        	// Try deleting any of these methods to make the protocol validation to fail.
 
-       	getRadious() {
-       		return this.radious
+       	getRadius() {
+       		return this.radius
        	}
 
-       	setRadious(radious) {
-       		this.radious = radious
+       	setRadius(radius) {
+       		this.radius = radius
        	}
        }
 

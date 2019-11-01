@@ -59,7 +59,7 @@ class EditExampleDialog {
                             PlaygroundComponent.new({
                                 text: "\n" + example.Code + "\n",
                                 hScroll: 'never',
-                                vScroll: 'never',
+                                vScroll: 'auto',
                                 viewAttributes: {
                                     splitProportion: 3.0/4.0
                                 },

@@ -51,6 +51,8 @@ class ClassEditorModel {
         return this.footerSourceCodeModel
     }
 
+    /// Querying
+
     getFilePath(classSourceFile) {
         if( classSourceFile === null && this.sourceFile === null ) {
             return 'No source file selected.'
@@ -73,6 +75,18 @@ class ClassEditorModel {
         }
 
         return footerDefinition.getSourceCode()
+    }
+
+    getClassesEditionModels() {
+        return this.classesDefinitionsModel.getList()
+    }
+
+    getClassesDefinitions() {
+        const classEditionModels = this.getClassesEditionModels()
+
+        return classEditionModels.map( (classEditionModel) => {
+            return classEditionModel.getClassDefinition()
+        })
     }
 
     /// Actions    

@@ -29,11 +29,11 @@ class ChoicesTree {
         })
 
         if(this.getProps().roots !== undefined) {
-            model.setRoots( this.getProps().roots )
+            model.setRoots({ items: this.getProps().roots })
         }
 
-        if(this.getProps().setSelectionPath !== undefined) {
-            model.setSelectionPath( this.getProps().setSelectionPath )
+        if(this.getProps().selectionPath !== undefined) {
+            model.setSelectionPath({ objectsHierarchy: this.getProps().selectionPath })
         }
 
         return model
@@ -48,7 +48,7 @@ class ChoicesTree {
     }
 
     getChildrenAt(itemPath) {
-        return this.getModel().getChildrenAt(itemPath)
+        return this.getModel().getChildrenAt({ indices: itemPath })
     }
 
     /// Synchronizing
@@ -84,7 +84,7 @@ class ChoicesTree {
         this.duringClassificationDo( UpdatingView, () => {
             const roots = this.getModel().getRoots()
 
-            this.getView().setRoots(roots)
+            this.getView().setRoots({ items: roots })
         })
     }
 
@@ -103,7 +103,7 @@ class ChoicesTree {
         this.duringClassificationDo( UpdatingModel, () => {
             const selectedPath = this.getView().getSelectionIndices()
 
-            this.getModel().setSelectionFromPath(selectedPath[0])
+            this.getModel().setSelectionFromIndices({ indices: selectedPath[0] })
         })
     }
 

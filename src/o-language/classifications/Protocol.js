@@ -25,7 +25,7 @@ const Classification = require('./Classification')
 
            class Circle {
     	       	static definition() {
-            	       	this.instanceVariables = ['radious']
+            	       	this.instanceVariables = ['radius']
                    		this.implements = [ CircleProtocol ]
            		}
 
@@ -49,9 +49,9 @@ const Classification = require('./Classification')
        const Protocol = require('sirens/src/o-language/classifications/Protocol')
 
        class CircleProtocol {
-           getRadious() {}
+           getRadius() {}
 
-           setRadious(radious) {}
+           setRadius(radius) {}
 
            drawOn({ canvas: canvas }) {}
        }

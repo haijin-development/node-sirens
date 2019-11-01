@@ -243,7 +243,7 @@ class ListView {
                 const imageFile = column.getImageFileOf({
                     item: item,
                     onUndefined: () => {
-                        throwError `The image file for ${item} is undefined. Is the return statement present in the getImageBlock of the column-${columnIndex}?`
+                        throw new Error(`The image file for ${item.toString()} is undefined. Is the return statement present in the getImageClosure of the column-${columnIndex}?`) 
                     }
                 })
 
@@ -259,7 +259,7 @@ class ListView {
                 const text = column.getDisplayTextOf({
                     item: item,
                     onUndefined: () => {
-                        throwError `The display text for ${item} is undefined. Is the return statement present in the getTextBlock of the column-${columnIndex}?`
+                        throw new Error(`The display text for ${item.toString()} is undefined. Is the return statement present in the getTextClosure of the column-${columnIndex}?`)
                     }
                 })
 

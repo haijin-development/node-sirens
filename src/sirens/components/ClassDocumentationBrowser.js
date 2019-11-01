@@ -27,8 +27,11 @@ class ClassDocumentationBrowser {
     defaultModel() {
         const classDefinition = this.getProps().classDefinition
 
+        const selectedMethodName = this.getProps().methodName
+
         return ClassDocumentationBrowserModel.new({
             classDefinition: classDefinition,
+            selectedMethodName: selectedMethodName,
         })
     }
 
@@ -102,6 +105,14 @@ class ClassDocumentationBrowser {
 
             })
         })
+
+        const methodName = this.getProps().methodName
+
+        if( methodName === undefined || methodName === null ) {
+            const tabsComponent = this.getChildComponent({ id: 'tabs' })
+
+            tabsComponent.showTabPageAt({ index: 1 })
+        }
     }
 }
 

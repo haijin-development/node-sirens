@@ -48,11 +48,11 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
 
            		this.previousClassificationDo( () => {
            			this.initialize()
@@ -64,7 +64,7 @@ class OInstance {
 
 
 
-           Circle.new({ radious: 10 })
+           Circle.new({ radius: 10 })
 
         `,
      })
@@ -204,7 +204,7 @@ class OInstance {
            const Protocol = require('sirens/src/o-language/classifications/Protocol')
 
            class CircleProtocol {
-           	getRadious() {}
+           	getRadius() {}
            }
 
            CircleProtocol = Protocol.define(CircleProtocol)
@@ -219,12 +219,12 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            		this.implements = [CircleProtocol]
            	}
 
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -285,14 +285,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -301,9 +301,9 @@ class OInstance {
            const object = OInstance.new()
            // Try commenting this line to get an error when treating the object as a Circle
            object.behaveAs(Circle)
-           object.setRadious( 10 )
+           object.setRadius( 10 )
 
-           object.getRadious()
+           object.getRadius()
         `,
      })
 
@@ -317,14 +317,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -333,11 +333,11 @@ class OInstance {
            const object = OInstance.new()
 
            object.behaveAs(Circle)
-           object.setRadious( 10 )
+           object.setRadius( 10 )
 
            // Does nothing and preserves the current state of the object.
            object.behaveAs(Circle)
-           object.getRadious()
+           object.getRadius()
         `,
      })
      */
@@ -366,6 +366,100 @@ class OInstance {
         }        
 
         return this
+    }
+
+    /*
+     Method(`
+        Makes this object to behave as all the classifications in the given classificationsArray.
+     `)
+
+     Param({
+        Name: `
+           classificationsArray
+        `,
+        Description: `
+           Array of Classification.
+           An array of Classification objects.
+        `,
+     })
+
+     Returns({
+        Description: `
+           object.
+           This object.
+        `,
+     })
+
+     Example({
+        Description: `
+           Makes an object to start behaving as a Circle and as a Positionable.
+        `,
+        Code: `
+
+           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+
+           class Circle {
+           	static definition() {
+              		this.instanceVariables = ['radius']
+           	}
+
+           	setRadius(radius) {
+              		this.radius = radius
+            	}
+
+           	getRadius() {
+              		return this.radius
+            	}
+           }
+
+           Circle = Classification.define(Circle)
+
+           class Positionable {
+           	static definition() {
+              		this.instanceVariables = ['x', 'y']
+           	}
+
+           	setPosition({ x: x, y: y}) {
+              		this.x = x
+           		this.y = y
+            	}
+
+           	getPosition() {
+              		return {
+           			x: this.x,
+           			y: this.y,
+           		}
+            	}
+           }
+
+
+
+
+           Positionable = Classification.define(Positionable)
+
+
+
+
+           const object = OInstance.new()
+           // Try commenting this line to get an error when treating
+           // the object as a Circle or as a Positionable
+           object.behaveAsAll([ Circle, Positionable ])
+
+           object.setRadius( 10 )
+           object.setRadius({ x: 1, y: 1 })
+
+           object.getRadius()
+
+        `,
+     })
+     */
+    behaveAsAll(classificationsArray) {
+      classificationsArray.forEach( (classification) => {
+        this.behaveAs( classification )
+      })
+
+      return this
     }
 
     /*
@@ -425,14 +519,14 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	setRadious(radious) {
-           		this.radious = radious
+           	setRadius(radius) {
+           		this.radius = radius
            	}
-           	getRadious() {
-           		return this.radious
+           	getRadius() {
+           		return this.radius
            	}
            }
 
@@ -441,11 +535,11 @@ class OInstance {
            const object = OInstance.new()
 
            object.behaveAs(Circle)
-           object.setRadious(10)
+           object.setRadius(10)
 
            object.dropBehaviour(Circle)
 
-           object.getRadious()
+           object.getRadius()
         `,
      })
      */
@@ -573,7 +667,7 @@ class OInstance {
            object.duringClassificationDo( Debuggable, () => {
            	const debugString = object.debugString()
 
-           	console.log(debugString)
+           	console.info(debugString)
            	return debugString
            })
 
@@ -629,11 +723,11 @@ class OInstance {
 
            class Circle {
            	static definition() {
-           		this.instanceVariables = ['radious']
+           		this.instanceVariables = ['radius']
            	}
 
-           	initialize({ radious: radious }) {
-           		this.radious = radious
+           	initialize({ radius: radius }) {
+           		this.radius = radius
            	}
            }
 
@@ -641,10 +735,10 @@ class OInstance {
 
 
 
-           const circle = Circle.new({ radious: 10 })
+           const circle = Circle.new({ radius: 10 })
 
            circle.classificationInstanceVariablesDo( Circle, (name, value) => {
-           	console.log( name + ': ' + value.toString() )
+           	console.info( name + ': ' + value.toString() )
            })
         `,
      })
@@ -795,7 +889,7 @@ class OInstance {
            const object = OInstance.new()
 
            object.bindYourself( function() {
-           	console.log( this.isBehavingAs(OInstance) )
+           	console.info( this.isBehavingAs(OInstance) )
            })
         `,
      })
@@ -1016,7 +1110,7 @@ class OInstance {
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
-           		console.log( methodName )
+           		console.info( methodName )
            	}
            }
 
@@ -1164,7 +1258,7 @@ class OInstance {
 
            class Proxy {
            	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
-           		console.log( methodName + ' returned ' + result.toString() )
+           		console.info( methodName + ' returned ' + result.toString() )
            	}
            }
 

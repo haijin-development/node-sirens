@@ -304,6 +304,15 @@ class Sirens {
         })
     }
 
+
+    static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
+        this.do( () => {
+            const AppBrowser = require('../src/sirens/components/AppBrowser')
+
+            AppBrowser.openOn({ appFolder: appFolder })
+        })
+    }
+
     /*
      Method(`
         Private.
@@ -316,15 +325,30 @@ class Sirens {
            classDefinition
         `,
         Description: `
-           A ClassDefinition object.
+           ClassDefinition.
+           The ClassDefinition object to browse its documentation.
+        `,
+     })
+     Param({
+        Name: `
+           methodName
+        `,
+        Description: `
+           Optional.
+           String, null or undefined.
+           A method name to open the browser on.
+           It is expected to be the name of a method defined in the given classDefinition.
         `,
      })
     */
-    static browseClassDocumentation({ classDefinition: classDefinition }) {
+    static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
         this.do( () => {
             const ClassDocumentationBrowser = require('../src/sirens/components/ClassDocumentationBrowser')
 
-            ClassDocumentationBrowser.openOn({ classDefinition: classDefinition })
+            ClassDocumentationBrowser.openOn({
+              classDefinition: classDefinition,
+              methodName: methodName
+            })
         })
     }
 

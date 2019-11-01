@@ -25,7 +25,12 @@ class ClassesComponent {
     openDocumentationBrowser(classEditionModel) {
         const classDefinition = classEditionModel.getClassDefinition()
 
-        Sirens.browseClassDocumentation({ classDefinition: classDefinition })
+        const selectedMethodName = classEditionModel.getSelectedMethodName()
+
+        Sirens.browseClassDocumentation({
+            classDefinition: classDefinition,
+            methodName: selectedMethodName,
+        })
     }
 
     /// Rendering
@@ -90,13 +95,13 @@ class ClassesComponent {
 
                             this.column({
                                 label: '',
-                                getImageBlock: function(functionDefinition) { return Resource.image.method },
+                                getImageClosure: function(functionDefinition) { return Resource.image.method },
                                 imageWidth: 24,
                                 imageHeight: 24,
                             })
 
                             this.column({
-                                getTextBlock: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                                getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
                             })
                         })
 

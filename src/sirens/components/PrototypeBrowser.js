@@ -73,14 +73,14 @@ class PrototypeBrowser {
 
                             this.column({
                                 label: '',
-                                getImageBlock: function(object) { return component.getPrototypeIcon() },
+                                getImageClosure: function(object) { return component.getPrototypeIcon() },
                                 imageWidth: 24,
                                 imageHeight: 24,
                             })
 
                             this.column({
                                 label: 'Prototypes',
-                                getTextBlock: function(object) { return object.constructor.name },
+                                getTextClosure: function(object) { return object.constructor.name },
                             })
 
                             this.popupMenu( function() {

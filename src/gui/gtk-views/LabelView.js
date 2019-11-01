@@ -16,6 +16,8 @@ class LabelView {
 
     initializeHandles() {
         this.labelView = new Gtk.Label()
+
+        this.labelView.setSelectable( true )
     }
 
     /// Accessing

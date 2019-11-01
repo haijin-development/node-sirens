@@ -35,15 +35,15 @@ const Shape = Classification.define( class {
 
 const Circle = Classification.define( class {
     static definition() {
-        this.instanceVariables = ['radious']
+        this.instanceVariables = ['radius']
     }
 
-    setRadious(radious) {
-        this.radious = radious
+    setRadius(radius) {
+        this.radius = radius
     }
 
-    getRadious() {
-        return this.radious
+    getRadius() {
+        return this.radius
     }
 
     setOverriden(value) {
@@ -78,7 +78,7 @@ describe('The OInstance classification', () => {
         object.behaveAs(Shape)
 
         expect( object.respondsTo('getPosition') ) .to .be .true
-        expect( object.respondsTo('getRadious') ) .to .be .false
+        expect( object.respondsTo('getRadius') ) .to .be .false
         expect( object.respondsTo('respondsTo') ) .to .be .true
     })
 

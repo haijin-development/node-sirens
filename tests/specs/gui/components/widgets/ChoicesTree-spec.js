@@ -22,19 +22,19 @@ describe('When using a ChoicesTree', () => {
 
     describe('model', () => {
         it('has a ChoiceModel', () => {
-            expect(this.tree.getModel().getSelectionPath()) .to .eql(null)
+            expect(this.tree.getModel().getSelectionValue()) .to .eql(null)
             expect(this.tree.getModel().getRoots()) .to .eql([])
         })
 
         it('updates the selection when the model selection changes', () => {
-            this.tree.getModel().setRoots(['a', 'b', 'c'])
-            this.tree.getModel().setSelectionPath(['c'])
+            this.tree.getModel().setRoots({ items: ['a', 'b', 'c'] })
+            this.tree.getModel().setSelectionPath({ objectsHierarchy: ['c'] })
 
             expect(this.tree.getView().getSelectionIndices()) .to .eql([ [2] ])
         })
 
         it('updates the items when the model roots changes', () => {
-            this.tree.getModel().setRoots(['a', 'b', 'c'])
+            this.tree.getModel().setRoots({ items: ['a', 'b', 'c'] })
 
             expect(this.tree.getView().getRows()) .to .eql(['a','b','c'])
         })
@@ -51,7 +51,7 @@ describe('When using a ChoicesTree', () => {
                 this.treeChoice( function() {
                     this.styles({
                         roots: ['a','b','c'],
-                        setSelectionPath: ['c']
+                        selectionPath: ['c']
                     })
 
                     this.column({
@@ -60,7 +60,7 @@ describe('When using a ChoicesTree', () => {
                 })
             })
 
-            expect(this.tree.getModel().getSelectionPath()) .to .eql(['c'])
+            expect(this.tree.getModel().getSelectionValue()) .to .eql('c')
             expect(this.tree.getModel().getRoots()) .to .eql(['a','b','c'])
 
             expect(this.tree.getView().getSelectionIndices()) .to .eql([[2]])

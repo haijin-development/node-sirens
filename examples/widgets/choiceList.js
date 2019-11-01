@@ -41,7 +41,7 @@ class CustomComponent {
 
                     this.column({
                         label: 'Column 1',
-                        getTextBlock: (n) => { return n.toString() },
+                        getTextClosure: (n) => { return n.toString() },
                     })
 
                     this.column({

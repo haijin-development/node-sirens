@@ -6,15 +6,11 @@ const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol
 const modes = {
     chooseFile: Gtk.FileChooserAction.OPEN,
     saveFile: Gtk.FileChooserAction.SAVE,
-    chooseFolder: Gtk.FileChooserAction.SELECT_FOLDER,
-    createFolder: Gtk.FileChooserAction.CREATE_FOLDER,
 }
 
 const defaultLabels = {
     chooseFile: 'Open file',
     saveFile: 'Save file',
-    chooseFolder: 'Choose folder',
-    createFolder: 'Create folder',
 }
 
 class FileChooserView {

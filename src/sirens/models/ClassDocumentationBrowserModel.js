@@ -27,7 +27,7 @@ class ClassDocumentationBrowserModel {
 
     /// Initializing
 
-    initialize({ classDefinition: classDefinition }) {
+    initialize({ classDefinition: classDefinition, selectedMethodName: selectedMethodName }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -48,6 +48,8 @@ class ClassDocumentationBrowserModel {
         this.selectedMethodModel = ValueModel.new()
 
         this.connectModels()
+
+        this.setSelectedMethod({ named: selectedMethodName })
     }
 
     /// Accessing
@@ -64,54 +66,19 @@ class ClassDocumentationBrowserModel {
         return this.editionModeModel
     }
 
-    showsUnformattedComments() {
-        return this.showUnformattedCommentsModel.getValue() === true
-    }
-
-    isInEditionMode() {
-        return this.editionModeModel.getValue() === true
-    }
-
     getClassDefinition() {
         return this.classDefinition
-    }
-
-    getClassName() {
-        return this.classDefinition.getClassName()
     }
 
     getClassMethodsModel() {
         return this.classMethodsModel
     }
 
-    getClassUnformattedComment() {
-        return this.classDefinition.getComment().getSourceCode()
-    }
-
-    getClassDocumentation() {
-        const className = this.classDefinition.getClassName()
-
-        const unformattedComment = this.classDefinition.getComment().getContents()
-
-        return ClassDocumentation.isDocumentationString({
-            string: unformattedComment,
-            ifTrue: (documentation) => {
-                documentation.setClassName( className )
-                return documentation
-            },
-            ifFalse: () => {
-                const documentation = ClassDocumentation.new()
-                documentation.setClassName( className )
-                documentation.setDescription( unformattedComment )
-                return documentation
-            },
-        })
-    }
-
-
     getSelectedMethodModel() {
         return this.selectedMethodModel
     }
+
+    /// Querying
 
     getSelectedMethod() {
         return this.selectedMethodModel.getValue()
@@ -142,6 +109,48 @@ class ClassDocumentationBrowserModel {
                 documentation.setDescription( unformattedComment )
                 return documentation
             },
+        })
+    }
+
+    showsUnformattedComments() {
+        return this.showUnformattedCommentsModel.getValue() === true
+    }
+
+    isInEditionMode() {
+        return this.editionModeModel.getValue() === true
+    }
+
+    getClassName() {
+        return this.classDefinition.getClassName()
+    }
+
+    getClassUnformattedComment() {
+        return this.classDefinition.getComment().getSourceCode()
+    }
+
+    getClassDocumentation() {
+        const className = this.classDefinition.getClassName()
+
+        const unformattedComment = this.classDefinition.getComment().getContents()
+
+        return ClassDocumentation.isDocumentationString({
+            string: unformattedComment,
+            ifTrue: (documentation) => {
+                documentation.setClassName( className )
+                return documentation
+            },
+            ifFalse: () => {
+                const documentation = ClassDocumentation.new()
+                documentation.setClassName( className )
+                documentation.setDescription( unformattedComment )
+                return documentation
+            },
+        })
+    }
+
+    setSelectedMethod({ named: selectedMethodName }) {
+        this.classMethodsModel.setSelectionSuchThat({
+            matches: (method) => { return method.getName() === selectedMethodName }
         })
     }
 

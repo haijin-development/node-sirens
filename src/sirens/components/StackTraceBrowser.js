@@ -5,7 +5,7 @@ const Sirens = require('../../Sirens')
 const StackTraceBrowserModel = require('../models/StackTraceBrowserModel')
 const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
 
 class StackTraceBrowser {
     /// Definition
@@ -13,7 +13,7 @@ class StackTraceBrowser {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

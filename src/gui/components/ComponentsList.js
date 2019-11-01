@@ -1,6 +1,7 @@
 const Classification = require('../../o-language/classifications/Classification')
 const Component = require('./Component')
 const ListModelComponentProtocol_Implementation = require('../protocols/ListModelComponentProtocol_Implementation')
+
 const ComponentProtocol = require('../protocols/ComponentProtocol')
 const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
 const ListModel = require('../models/ListModel')

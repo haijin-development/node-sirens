@@ -17,7 +17,7 @@ const Classification = require('../../o-language/classifications/Classification'
                 static definition() {
                     this.instanceVariables = []
                     this.assumes = [Component]
-                    this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+                    this.implements = [ComponentProtocol_Implementation]
                     this.classificationBehaviours = [ComponentInstantiator]
                 }
 

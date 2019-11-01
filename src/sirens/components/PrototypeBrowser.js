@@ -5,7 +5,7 @@ const Sirens = require('../../Sirens')
 const PrototypesBrowserModel = require('../models/PrototypesBrowserModel')
 const FunctionsComponent = require('./prototype-browser/FunctionsComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
 const Resource = require('../objects/Resource')
 
 class PrototypeBrowser {
@@ -14,7 +14,7 @@ class PrototypeBrowser {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

@@ -3,8 +3,9 @@ const ComponentBehaviour = require('./ComponentBehaviour')
 const ComponentView = require('../gtk-views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
-const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 const ComponentProtocol = require('../protocols/ComponentProtocol')
+const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
+
 const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
 const ComponentInstantiator = require('./ComponentInstantiator')
 
@@ -14,10 +15,7 @@ class Component {
     static definition() {
         this.instanceVariables = []
         this.assumes = [ComponentBehaviour]
-        this.implements = [
-            ComponentBehaviourProtocol_Implementation,
-            ComponentProtocol,
-        ]
+        this.implements = [ComponentBehaviourProtocol_Implementation, ComponentProtocol]
         this.expects = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }

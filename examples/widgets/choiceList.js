@@ -2,7 +2,7 @@ const Classification = require('../../src/o-language/classifications/Classificat
 const Sirens = require('../../src/Sirens')
 const Component = require('../../src/gui/components/Component')
 const ComponentProtocol_Implementation = require('../../src/gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../src/gui/protocols/ComponentProtocol')
+
 const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
 const ChoiceModel = require('../../src/gui/models/ChoiceModel')
 
@@ -12,7 +12,7 @@ class CustomComponent {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

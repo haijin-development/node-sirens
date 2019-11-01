@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../../src/gui/components/Component')
-const ComponentProtocol = require('../../../../../src/gui/protocols/ComponentProtocol')
+
 const ComponentProtocol_Implementation = require('../../../../../src/gui/protocols/ComponentProtocol_Implementation')
 const ComponentsList = require('../../../../../src/gui/components/ComponentsList')
 const ListModelComponentProtocol_Implementation = require('../../../../../src/gui/protocols/ListModelComponentProtocol_Implementation')
@@ -14,7 +14,7 @@ class ParentComponent {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     renderWith(componentsRenderer) {

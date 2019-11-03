@@ -69,6 +69,12 @@ class GtkView {
         return false
     }
 
+    acceptsStyle({ name: styleName }) {
+        const acceptedStyles = this.acceptedStyles()
+
+        return acceptedStyles.includes( styleName )
+    }
+
     /// Accessing
 
     getChildViews() {

@@ -10,6 +10,9 @@ const MethodCommentHeader = require ('../MethodCommentHeader')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
 const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
 
+const TagsDocumentation = require ('./TagsDocumentation')
+const EditTagsDialog = require ('../edition/EditTagsDialog')
+
 const ParamsEditionHeader = require ('./ParamsEditionHeader')
 const ParamDocumentation = require('./ParamDocumentation')
 const EditParamDialog = require ('../edition/EditParamDialog')
@@ -61,6 +64,41 @@ class MethodFormattedComment {
         const documentation = method.getDocumentation()
 
         documentation.setDescription( methodNewDescription )
+
+        this.updateMethodDocumentation({
+            documentation: documentation,
+        })
+    }
+
+    editMethodTags() {
+        const model = this.getModel()
+
+        const method = model.getSelectedMethod()
+
+        const documentation = method.getDocumentation()
+
+        const tags = documentation.getTags()
+
+        const dialog = EditTagsDialog.new({
+            model: model,
+            method: method,
+            tags: tags,
+            window: this.getProps().window,
+            onUpdateTags: this.upateMethodTags.bind(this),
+            acceptButtonLabel: `Update method tags`,
+        })
+
+        dialog.open()
+    }
+
+    upateMethodTags({ newTags: newTags }) {
+        const model = this.getModel()
+
+        const method = model.getSelectedMethod()
+
+        const documentation = method.getDocumentation()
+
+        documentation.setTags( newTags )
 
         this.updateMethodDocumentation({
             documentation: documentation,
@@ -467,6 +505,18 @@ class MethodFormattedComment {
                         })
                     )
 
+
+                    this.verticalSeparator()
+
+                    this.component(
+                        TagsDocumentation.new({
+                            model: model,
+                            method: method,
+                            editMethodTags: component.editMethodTags.bind(component)
+                        })
+                    )
+
+                    this.verticalSeparator()
 
                     this.verticalSeparator()
 

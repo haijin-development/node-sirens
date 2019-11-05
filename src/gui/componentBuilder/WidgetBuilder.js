@@ -187,7 +187,7 @@ class WidgetBuilder {
 
            builder.build( function() {
            	this.handlers({
-           		onClicked: () => { console.log('clicked') },
+           		onClicked: () => { console.info('clicked') },
            	})
            })
 

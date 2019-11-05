@@ -117,6 +117,10 @@ class Sirens {
            Sirens.browseObject( anyObject )
         `,
      })
+
+     Tags([
+        'public'
+     ])
     */
     static browseObject(object) {
         this.do( () => {

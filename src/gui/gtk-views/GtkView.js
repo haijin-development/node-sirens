@@ -1,4 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Gdk = require('node-gtk').require('Gdk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
@@ -215,6 +216,48 @@ class GtkView {
     setMarginVertical(margin) {
         this.getMainHandle().setMarginTop(margin)
         this.getMainHandle().setMarginBottom(margin)
+    }
+
+   setBackgroundColor(colorSpec) {
+        const color = new Gdk.RGBA()
+
+        if( typeof( colorSpec) === 'string' ) {
+            const state = Gtk.StateFlags.NORMAL
+            color.parse( colorSpec )
+
+            this.getMainHandle().overrideBackgroundColor(state, color)
+
+            return
+        }
+
+        for(const key in colorSpec) {
+            const state = Gtk.StateFlags[key.toUpperCase()]
+
+            color.parse( colorSpec[key] )            
+
+            this.getMainHandle().overrideBackgroundColor(state, color)
+        }
+    }
+
+    setForegroundColor(colorSpec) {
+        const color = new Gdk.RGBA()
+
+        if( typeof( colorSpec) === 'string' ) {
+            const state = Gtk.StateFlags.NORMAL
+            color.parse( colorSpec )
+
+            this.getMainHandle().overrideColor(state, color)
+
+            return
+        }
+
+        for(const key in colorSpec) {
+            const state = Gtk.StateFlags[key.toUpperCase()]
+
+            color.parse( colorSpec[key] )            
+
+            this.getMainHandle().overrideColor(state, color)
+        }
     }
 
     /// View custom attributes

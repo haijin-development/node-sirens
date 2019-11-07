@@ -75,6 +75,10 @@ class ExtendedInstantiator {
      Method(`
         The classification definition.
      `)
+
+     Tags([
+        'implementation', 'definition'
+     ])
     */
     static definition() {
         this.instanceVariables = ['extendedBehaviours']
@@ -104,7 +108,6 @@ class ExtendedInstantiator {
            Adds the Debuggable behaviour to all the objects behaving as Circle.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const ExtendedInstantiator = require('sirens/src/o-language/classifications/ExtendedInstantiator')
            const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
@@ -139,9 +142,12 @@ class ExtendedInstantiator {
            const circle = Circle.new({ radius: 10 })
 
            circle.debugString()
-
         `,
      })
+
+     Tags([
+        'public', 'setters', 'accessors'
+     ])
     */
     setExtendedBehaviours( extendedBehaviours ) {
         this.extendedBehaviours = extendedBehaviours
@@ -157,6 +163,10 @@ class ExtendedInstantiator {
            An array of classification objects that this classification attaches to the instances it creates.
         `,
      })
+
+     Tags([
+        'public', 'getters', 'accessors'
+     ])
     */
     getExtendedBehaviours() {
         return this.extendedBehaviours
@@ -171,6 +181,10 @@ class ExtendedInstantiator {
 
         method to add the extended behaviour to the created instances.
      `)
+
+     Tags([
+        'public', 'creating objects'
+     ])
     */
     new(...params) {
         const extendedBehaviours = this.getExtendedBehaviours()

@@ -218,22 +218,21 @@ class GtkView {
         this.getMainHandle().setMarginBottom(margin)
     }
 
-   setBackgroundColor(colorSpec) {
-        const color = new Gdk.RGBA()
+    setBackgroundColor(colorSpec) {
+        const styleContext = this.getMainHandle().getStyleContext()
 
-        if( typeof( colorSpec) === 'string' ) {
-            const state = Gtk.StateFlags.NORMAL
-            color.parse( colorSpec )
-
-            this.getMainHandle().overrideBackgroundColor(state, color)
-
-            return
+        if( typeof( colorSpec ) === 'string' ) {
+            colorSpec = {
+                normal: colorSpec
+            }
         }
 
         for(const key in colorSpec) {
-            const state = Gtk.StateFlags[key.toUpperCase()]
+            const color = new Gdk.RGBA()
 
             color.parse( colorSpec[key] )            
+
+            const state = Gtk.StateFlags[key.toUpperCase()]
 
             this.getMainHandle().overrideBackgroundColor(state, color)
         }
@@ -242,19 +241,18 @@ class GtkView {
     setForegroundColor(colorSpec) {
         const color = new Gdk.RGBA()
 
-        if( typeof( colorSpec) === 'string' ) {
-            const state = Gtk.StateFlags.NORMAL
-            color.parse( colorSpec )
-
-            this.getMainHandle().overrideColor(state, color)
-
-            return
+        if( typeof( colorSpec ) === 'string' ) {
+            colorSpec = {
+                normal: colorSpec
+            }
         }
 
         for(const key in colorSpec) {
-            const state = Gtk.StateFlags[key.toUpperCase()]
+            const color = new Gdk.RGBA()
 
             color.parse( colorSpec[key] )            
+
+            const state = Gtk.StateFlags[key.toUpperCase()]
 
             this.getMainHandle().overrideColor(state, color)
         }

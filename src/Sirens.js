@@ -119,7 +119,7 @@ class Sirens {
      })
 
      Tags([
-        'public'
+        'public', 'browsers'
      ])
     */
     static browseObject(object) {
@@ -153,15 +153,17 @@ class Sirens {
            Opens a browser on the prototypes of the array [ 1, 2, 3 ].
         `,
         Code: `
-
            const Sirens = require('sirens')
 
            const anyObject = [ 1, 2, 3 ]
 
            Sirens.browsePrototypes( anyObject )
-
         `,
      })
+
+     Tags([
+        'public', 'browsers'
+     ])
     */
     static browsePrototypes(object) {
         this.do( () => {
@@ -220,6 +222,10 @@ class Sirens {
            Sirens.openClassEditor({ filename: aFilename })
         `,
      })
+
+     Tags([
+        'public', 'browsers'
+     ])
     */
     static openClassEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
@@ -230,6 +236,11 @@ class Sirens {
     }
 
 
+    /*
+     Tags([
+        'public', 'browsers'
+     ])
+    */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
         this.do( () => {
             const AppBrowser = require('../src/sirens/components/AppBrowser')
@@ -254,6 +265,7 @@ class Sirens {
            The ClassDefinition object to browse its documentation.
         `,
      })
+
      Param({
         Name: `
            methodName
@@ -265,6 +277,10 @@ class Sirens {
            It is expected to be the name of a method defined in the given classDefinition.
         `,
      })
+
+     Tags([
+        'public', 'browsers'
+     ])
     */
     static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
         this.do( () => {
@@ -326,6 +342,10 @@ class Sirens {
            Sirens.openPlayground({ filename: aFilename })
         `,
      })
+
+     Tags([
+        'public', 'browsers'
+     ])
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
         this.do( () => {
@@ -372,12 +392,11 @@ class Sirens {
            call.
         `,
         Code: `
-
            const Sirens = require('sirens')
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
-           
+
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
 
            class CustomComponent {
@@ -411,9 +430,12 @@ class Sirens {
            Sirens.do( () => {
                CustomComponent.new().open()
            })
-
         `,
      })
+
+     Tags([
+        'public', 'evaluating'
+     ])
     */
     static do(closure) {
         if(this.gtkIsRunningTheMainLoop === true) {
@@ -460,6 +482,10 @@ class Sirens {
            Sirens.initialize()
         `,
      })
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     static initialize() {
         if(this.gtkWasInitialize === true) {
@@ -487,6 +513,10 @@ class Sirens {
      Implementation(`
         See also WindowView.initialize() method.
      `)
+
+     Tags([
+        'implementation'
+     ])
     */
     static registerWindow() {
         if(this.registeredWindows === undefined) {
@@ -512,6 +542,10 @@ class Sirens {
      Implementation(`
         See also WindowView.handleDestroy() method.
      `)
+
+     Tags([
+        'implementation'
+     ])
     */
     static unregisterWindow() {
         this.registeredWindows -= 1

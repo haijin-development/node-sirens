@@ -81,6 +81,10 @@ class ExtendedClassification
      Method(`
         The classification definition.
      `)
+
+     Tags([
+        'implementation', 'definition'
+     ])
     */
     static definition() {
         this.instanceVariables = ['extendedBehaviours']
@@ -152,6 +156,10 @@ class ExtendedClassification
            circle.debugString()
         `,
      })
+
+     Tags([
+        'public', 'setters', 'accessors'
+     ])
     */
     setExtendedBehaviours( extendedBehaviours ) {
         this.extendedBehaviours = extendedBehaviours
@@ -167,6 +175,10 @@ class ExtendedClassification
            An array of classification objects that will be attached to all instances created by the classifications defined from that moment.
         `,
      })
+
+     Tags([
+        'public', 'getters', 'accessors'
+     ])
     */
     getExtendedBehaviours() {
         return this.extendedBehaviours
@@ -181,6 +193,10 @@ class ExtendedClassification
 
         to make the new classification being defined behave as an ExtendedInstantiator with the given extended classifications.
      `)
+
+     Tags([
+        'public', 'creating classifications'
+     ])
     */
     define(classificationDefinition) {
         const newClassificationInstance = this.previousClassificationDo( () => {

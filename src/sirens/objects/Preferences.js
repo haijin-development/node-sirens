@@ -13,8 +13,11 @@ class Preferences {
 Preferences.browseDocumentation = true
 Preferences.objectPropertiesInspectorPlugins = [ OInstanceObjectProperty ]
 Preferences.tags = {
-    public:  { color: '#000080', },
-    private: { color: 'red', },
+    definition: { color: 'white', },
+    public: { color: '#000080', },
+    implementation: { color: 'red', },
+    getters: { color: 'green', },
+    setters: { color: 'yellow', },
     default: { color: '#e7e774', },
 }
 

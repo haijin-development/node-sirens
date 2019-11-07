@@ -30,7 +30,7 @@ class TagsDocumentation {
         if( method !== null ) {
             const methodDocumentation = method.getDocumentation()
 
-            tags = methodDocumentation.getTags()
+            tags = methodDocumentation.getTags().slice().sort()
         }
 
         componentsRenderer.render( function(component) {
@@ -63,6 +63,8 @@ class TagsDocumentation {
                                 text: tag,
                                 backgroundColor: color,
                                 foregroundColor: 'black',
+                                borderWidth: 10,
+                                borderColor: 'white',
                                 viewAttributes: {
                                     stackSize: 'fixed',
                                     stackPadding: 3,

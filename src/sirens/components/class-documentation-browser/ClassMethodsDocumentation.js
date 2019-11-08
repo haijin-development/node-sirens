@@ -22,24 +22,19 @@ class ClassMethodsDocumentation {
 
         const showsUnformattedComments = model.showsUnformattedComments()
 
+        const methodTags = model.getAllMethodsTags().sort()
+
         componentsRenderer.render(function (component) {
 
             this.horizontalSplitter( function() {
 
-                this.container( function() {
-
-                    this.styles({
-                        viewAttributes: { splitProportion: 2.0/3.0 },
-                        hScroll: 'never',
-                        vScroll: 'never'
-                    })
+                this.container({ viewAttributes: { splitProportion: 2.0/3.0 }, hasSrollBars: false, }, function() {
 
                     if( showsUnformattedComments ) {
 
                         this.component(
                             MethodUnformattedComment.new({
                                 model: model,
-                                viewAttributes: { splitProportion: 2.0 / 3 },
                             })
                         )
 
@@ -48,7 +43,6 @@ class ClassMethodsDocumentation {
                         this.component(
                             MethodFormattedComment.new({
                                 model: model,
-                                viewAttributes: { splitProportion: 2.0 / 3 },
                             })
                         )
 
@@ -56,25 +50,40 @@ class ClassMethodsDocumentation {
 
                 })
 
-                this.listChoice( function() {
+                this.verticalStack({ viewAttributes: { splitProportion: 1.0 / 3.0 }, showHeaders: false, }, function() {
 
-                    this.model( model.getClassMethodsModel() )
+                    this.listChoice({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
+                        this.model( model.getClassMethodsModel() )
 
-                    this.styles({
-                        viewAttributes: { splitProportion: 1.0 / 3 },
-                        showHeaders: false,
+                        this.column({
+                            label: '',
+                            getImageClosure: function(functionDefinition) { return Resource.image.method },
+                            imageWidth: 24,
+                            imageHeight: 24,
+                        })
+
+                        this.column({
+                            getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                        })
                     })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(functionDefinition) { return Resource.image.method },
-                        imageWidth: 24,
-                        imageHeight: 24,
+                    this.container( function() {
+
+                        this.verticalStack({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
+
+                            methodTags.forEach( (tag) => {
+
+                                this.checkBox({
+                                    label: tag,
+                                    value: true,
+                                    viewAttributes: { stackSize: 'fixed' },
+                                })
+                            })
+
+                        })
+
                     })
 
-                    this.column({
-                        getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
-                    })
                 })
 
             })

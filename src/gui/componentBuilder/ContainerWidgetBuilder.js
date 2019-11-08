@@ -71,6 +71,10 @@ class ContainerWidgetBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['childComponents']
@@ -117,6 +121,10 @@ class ContainerWidgetBuilder {
            builder.getProps()
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -153,7 +161,6 @@ class ContainerWidgetBuilder {
            Builds 3 components using a ContainerWidgetBuilder object and gets them.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -165,9 +172,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getChildComponents() {
         return this.childComponents
@@ -211,6 +221,10 @@ class ContainerWidgetBuilder {
            builder.getLastChildComponent()
         `,
      })
+
+     Tags([
+        'querying', 'implementation'
+     ])
     */
     getLastChildComponent() {
         return this.childComponents[ this.childComponents.length - 1 ]
@@ -247,7 +261,6 @@ class ContainerWidgetBuilder {
            Adds a custom component.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
            const Component = require('sirens/src/gui/components/Component')
@@ -296,9 +309,12 @@ class ContainerWidgetBuilder {
            // Ask for the built components
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     component(component) {
         if( component === undefined ) {
@@ -420,6 +436,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     window(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -545,6 +565,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     dialog(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -671,6 +695,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     container(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -818,6 +846,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -969,6 +1001,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1106,6 +1142,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1242,6 +1282,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1372,6 +1416,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     tabs(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1486,6 +1534,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     tabPage(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1511,7 +1563,6 @@ class ContainerWidgetBuilder {
            Builds a verticalSeparator between two components in a verticalStack component.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -1540,9 +1591,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalSeparator(props) {
         const defaultProps = {
@@ -1569,7 +1623,6 @@ class ContainerWidgetBuilder {
            Builds an horizontalSeparator between two components in an horizontalStack component.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -1598,9 +1651,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalSeparator(props) {
         const defaultProps = {
@@ -1747,6 +1803,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     listChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1890,6 +1950,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     treeChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1978,6 +2042,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     label(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2079,6 +2147,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     text(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2169,6 +2241,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     checkBox(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2267,6 +2343,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     textButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2381,6 +2461,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     radioButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2447,6 +2531,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     menuBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2520,6 +2608,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     toolBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2613,6 +2705,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     image(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)

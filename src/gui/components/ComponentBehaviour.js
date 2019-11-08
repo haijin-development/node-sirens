@@ -34,6 +34,10 @@ class ComponentBehaviour {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['childComponents', 'view']
@@ -48,6 +52,10 @@ class ComponentBehaviour {
         Private.
         Initialize this classification instance variables.
      `)
+
+     Tags([
+        'initializing', 'implementation'
+     ])
     */
     afterInstantiation() {
         this.childComponents = []
@@ -84,6 +92,10 @@ class ComponentBehaviour {
         	// them in sync. The default is to call this.subscribeToModelEvents
                 this.initializeEvents()
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -109,6 +121,10 @@ class ComponentBehaviour {
 
         The default implementation does nothing.
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initializeProps() {
     }
@@ -122,6 +138,10 @@ class ComponentBehaviour {
 
         	this.onPropValueChanged()
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initializePropModels() {
         this.propsAndValuesDo( (prop, value) => {
@@ -149,6 +169,10 @@ class ComponentBehaviour {
 
         and set it as the component model.
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initializeModel() {
         if( this.getModel() !== undefined ) { return }
@@ -167,6 +191,10 @@ class ComponentBehaviour {
 
         to get a new instance of the component view.
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initializeView() {
         this.view = this.createView()
@@ -184,6 +212,10 @@ class ComponentBehaviour {
         The default implementation is to call
         	this.subscribeToModelEvents()
      `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
     */
     initializeEvents() {
         this.subscribeToModelEvents()
@@ -214,6 +246,10 @@ class ComponentBehaviour {
            	}
         `,
      })
+
+     Tags([
+        'synchronizing', 'implementation'
+     ])
     */
     applyViewProps({ props: propsToApply }) {
         for( const propName in propsToApply ) {
@@ -242,6 +278,10 @@ class ComponentBehaviour {
 
         If the view does not accept the property named prop this method does nothing.
      `)
+
+     Tags([
+        'synchronizing', 'implementation'
+     ])
     */
     applyViewProp({ prop: propName, value: propValue }) {
         if( ! this.view.acceptsStyle({ name: propName }) ) { return }
@@ -270,6 +310,10 @@ class ComponentBehaviour {
 
         	this.applyViewProp({ prop: propName, value: newValue })
      `)
+
+     Tags([
+        'implementation', 'synchronizing', 'model events'
+     ])
     */
     onPropValueChanged({ propName: propName, newValue: newValue, oldValue: oldValue }) {
         this.applyViewProp({ prop: propName, value: newValue })
@@ -287,6 +331,10 @@ class ComponentBehaviour {
            An array with this component children.
         `,
      })
+
+     Tags([
+        'child components', 'public', 'querying', 'accessing'
+     ])
     */
     getChildComponents() {
         return this.childComponents
@@ -312,6 +360,10 @@ class ComponentBehaviour {
            This component child at the index-th position.
         `,
      })
+
+     Tags([
+        'child components', 'querying', 'public'
+     ])
     */
     getChildComponentAt({ index: index }) {
         return this.childComponents[index]
@@ -332,6 +384,10 @@ class ComponentBehaviour {
      Implementation(`
         The component model is kept as a regular property named 'model' but this implementation may change in the future.
      `)
+
+     Tags([
+        'public', 'querying'
+     ])
     */
     getModel() {
         return this.getProps().model
@@ -345,6 +401,10 @@ class ComponentBehaviour {
      Implementation(`
         The component model is kept as a regular property named 'model' but this implementation may change in the future.
      `)
+
+     Tags([
+        'public', 'setting'
+     ])
     */
     setModel(model) {
         this.getProps().model = model
@@ -364,6 +424,10 @@ class ComponentBehaviour {
            This component view.
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getView() {
         return this.view
@@ -390,6 +454,10 @@ class ComponentBehaviour {
            	}
         `,
      })
+
+     Tags([
+        'public', 'settings props'
+     ])
     */
     mergeProps(newProps) {
         this.previousClassificationDo( () => {
@@ -416,6 +484,10 @@ class ComponentBehaviour {
            May be undefined.
         `,
      })
+
+     Tags([
+        'getting props', 'public', 'querying'
+     ])
     */
     getId() {
         return this.getProps().id
@@ -442,6 +514,10 @@ class ComponentBehaviour {
            The first child whose id equals the given childComponentId or undefined if no child does.
         `,
      })
+
+     Tags([
+        'child components', 'querying', 'public'
+     ])
     */
     getChildComponent({ id: childComponentId }) {
         const length = this.childComponents.length
@@ -479,6 +555,10 @@ class ComponentBehaviour {
            The child component to add to this component.
         `,
      })
+
+     Tags([
+        'adding', 'child components', 'public'
+     ])
     */
     addChildComponent(childComponent) {
         this.childComponents.push(childComponent)
@@ -500,6 +580,10 @@ class ComponentBehaviour {
            Array of ComponentBehaviour to add to this component as children.
         `,
      })
+
+     Tags([
+        'adding', 'child components', 'public'
+     ])
     */
     addAllChildrenComponents(childComponents) {
         childComponents.forEach( (eachComponent) => {
@@ -520,6 +604,10 @@ class ComponentBehaviour {
            The childComponent to remove from this component.
         `,
      })
+
+     Tags([
+        'child components', 'removing', 'public'
+     ])
     */
     removeChildComponent(childComponent) {
         this.view.removeChildView( childComponent.getView() )
@@ -533,6 +621,10 @@ class ComponentBehaviour {
      Method(`
         Removes all this component children.
      `)
+
+     Tags([
+        'child components', 'removing', 'public'
+     ])
     */
     removeAllChildrenComponents() {
         this.childComponents.forEach( (eachComponent) => {
@@ -558,6 +650,10 @@ class ComponentBehaviour {
            A closure to evaluate on the children that are Widgets.
         `,
      })
+
+     Tags([
+        'child components', 'iterating', 'implementation'
+     ])
     */
     concreteComponentsDo(closure) {
         this.getChildComponents().forEach( (childComponent) => {
@@ -576,6 +672,10 @@ class ComponentBehaviour {
 
         The default implementation is to do nothing.
      `)
+
+     Tags([
+        'events', 'implementation', 'initializing'
+     ])
     */
     subscribeToModelEvents() {
     }

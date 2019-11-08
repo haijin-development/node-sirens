@@ -44,14 +44,14 @@ class EditTagsDialog {
                         EditDialogHeader.new({
                             mainIcon: Resource.image.tag,
                             title:  `${className}.${method.getFunctionSignatureString()}`,
-                            subtitle: `You are editing the tags value of the method ${className}.${method.getName()}.`,
+                            subtitle: `You are editing the tags of the method ${className}.${method.getName()}.`,
                         })
                     )
 
                     this.verticalSeparator()
 
                     this.label({
-                        text: 'Tags list separated by a "," character.',
+                        text: 'Tags list separated by a character ",".',
                         viewAttributes: {
                             stackSize: 'fixed',
                         },
@@ -110,6 +110,7 @@ class EditTagsDialog {
         let tagsString = tagsComponent.getModel().getValue()
 
         const newTags = tagsString.split( ',' )
+            .sort()
             .map( (tag) => { return tag.trim() })
 
         this.getProps().onUpdateTags({

@@ -83,7 +83,7 @@ class ExtendedClassification
      `)
 
      Tags([
-        'implementation', 'definition'
+        'definition', 'implementation'
      ])
     */
     static definition() {
@@ -158,7 +158,7 @@ class ExtendedClassification
      })
 
      Tags([
-        'public', 'setters', 'accessors'
+        'setters', 'public'
      ])
     */
     setExtendedBehaviours( extendedBehaviours ) {
@@ -177,7 +177,7 @@ class ExtendedClassification
      })
 
      Tags([
-        'public', 'getters', 'accessors'
+        'public', 'querying', 'getters'
      ])
     */
     getExtendedBehaviours() {

@@ -76,6 +76,14 @@ class MethodUnformattedComment {
 
             this.verticalStack({ width: 600, }, function() {
 
+                this.component(
+                    MethodCommentHeader.new({
+                        method: method,
+                    })
+                )
+
+                this.verticalSeparator()
+
                 if( method !== null && isInEditionMode ) {
                     this.component(
                         EditMethodDescriptionHeader.new({
@@ -87,12 +95,6 @@ class MethodUnformattedComment {
 
                     this.verticalSeparator()
                 }
-
-                this.component(
-                    MethodCommentHeader.new({
-                        method: method,
-                    })
-                )
 
                 this.verticalSeparator()
 

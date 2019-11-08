@@ -476,35 +476,11 @@ class MethodFormattedComment {
                         },
                     })
 
-                    if( isInEditionMode ) {
-                        this.component(
-                            EditMethodDescriptionHeader.new({
-                                model: model,
-                                method: method,
-                                editionClosure: editionClosure,
-                            })
-                        )
-
-                        this.verticalSeparator()
-                    }
-
                     this.component(
                         MethodCommentHeader.new({
                             method: method,
                         })
                     )
-
-                    this.component(
-                        PlaygroundComponent.new({
-                            text: "\n" + description + "\n",
-                            hScroll: 'never',
-                            vScroll: 'never',
-                            viewAttributes: {
-                                stackSize: 'fixed',
-                            },
-                        })
-                    )
-
 
                     this.verticalSeparator()
 
@@ -517,6 +493,32 @@ class MethodFormattedComment {
                     )
 
                     this.verticalSeparator()
+
+                    if( isInEditionMode ) {
+                        this.component(
+                            EditMethodDescriptionHeader.new({
+                                model: model,
+                                method: method,
+                                editionClosure: editionClosure,
+                            })
+                        )
+
+                        this.verticalSeparator()
+                    }
+
+                    this.verticalSeparator()
+
+                    this.component(
+                        PlaygroundComponent.new({
+                            text: "\n" + description + "\n",
+                            hScroll: 'never',
+                            vScroll: 'never',
+                            viewAttributes: {
+                                stackSize: 'fixed',
+                            },
+                        })
+                    )
+
 
                     this.verticalSeparator()
 

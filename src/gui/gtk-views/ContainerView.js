@@ -8,7 +8,7 @@ class ContainerView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['scrolledWindow']
+        this.instanceVariables = ['container']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -27,34 +27,42 @@ class ContainerView {
 
     /// Initializing
 
-    initializeHandles() {
-        this.scrolledWindow = new Gtk.ScrolledWindow()
+    initialize({ hasScrollBars: hasScrollBars }) {
+        if( hasScrollBars === false ) {
+            this.container = new Gtk.Frame()
+        } else {
+            this.container = new Gtk.ScrolledWindow()
 
-        this.scrolledWindow.setPolicy(
-            GtkScroll.auto,
-            GtkScroll.auto
-        )
+            this.container.setPolicy(
+                GtkScroll.auto,
+                GtkScroll.auto
+            )
+        }
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     getMainHandle() {
-        return this.scrolledWindow
+        return this.container
     }
 
     /// Styles
 
     setHScroll(value) {
-        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+        const [hScroll, vScroll] = this.container.getPolicy()
 
-        this.scrolledWindow.setPolicy(
+        this.container.setPolicy(
             GtkScroll[ value ],
             vScroll
         )
     }
 
     setVScroll(value) {
-        const [hScroll, vScroll] = this.scrolledWindow.getPolicy()
+        const [hScroll, vScroll] = this.container.getPolicy()
 
-        this.scrolledWindow.setPolicy(
+        this.container.setPolicy(
             hScroll,
             GtkScroll[ value ]
         )        

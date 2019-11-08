@@ -146,7 +146,7 @@ class ExtendedInstantiator {
      })
 
      Tags([
-        'public', 'setters', 'accessors'
+        'public', 'setters'
      ])
     */
     setExtendedBehaviours( extendedBehaviours ) {
@@ -165,7 +165,7 @@ class ExtendedInstantiator {
      })
 
      Tags([
-        'public', 'getters', 'accessors'
+        'public', 'querying', 'getters'
      ])
     */
     getExtendedBehaviours() {

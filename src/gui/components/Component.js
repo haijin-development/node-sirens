@@ -100,6 +100,10 @@ class Component {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -160,10 +164,12 @@ class Component {
            })
 
            component.getProps()
-
-
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -204,7 +210,6 @@ class Component {
            Every time any of those ValueModels changes the component is rendered again.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
@@ -290,9 +295,12 @@ class Component {
 
            // Evaluate the line below to trigger a reRender of the component
            this.model2.setValue( 'Different text 2' )
-
         `,
      })
+
+     Tags([
+        'events', 'initializing', 'rendering', 'implementation'
+     ])
     */
     reRenderWhen() {
     }
@@ -358,6 +366,10 @@ class Component {
            Window.open()
         `,
      })
+
+     Tags([
+        'creating objects', 'implementation', 'querying'
+     ])
     */
     defaultModel() {
         return undefined
@@ -409,6 +421,10 @@ class Component {
 
         `,
      })
+
+     Tags([
+        'implementation', 'rendering', 'events'
+     ])
     */
     reRenderOnValueChangeOf(valueModel) {
         valueModel.onValueChanged( () => {
@@ -429,6 +445,10 @@ class Component {
 
         	reRender()
      `)
+
+     Tags([
+        'rendering', 'implementation'
+     ])
     */
     build() {
         const componentsRenderer = ComponentRenderer.new({ rootComponent: this })
@@ -446,6 +466,10 @@ class Component {
         Unlike WidgetViews that usually have a visual representation a ComponentView does not have a visual representation but
         it holds this child Views.
      `)
+
+     Tags([
+        'creating objects', 'implementation'
+     ])
     */
     createView() {
         return ComponentView.new()
@@ -457,6 +481,10 @@ class Component {
 
         The default implementation is to do nothing since an abstract component does not have a default model.
      `)
+
+     Tags([
+        'synchronizing', 'implementation'
+     ])
     */
     synchronizeViewFromModel() {
     }
@@ -502,6 +530,10 @@ Method(`
 
    	}
 `)
+
+Tags([
+   'rendering', 'implementation'
+])
 */
     renderWith(componentsRenderer) {
         throw Error(`The class ${this.constructor.name} must implement the method ::renderWith()`)
@@ -523,6 +555,10 @@ Method(`
 
         for more details.
      `)
+
+     Tags([
+        'rendering', 'public'
+     ])
     */
     reRender() {
         this.removeAllChildrenComponents()
@@ -555,6 +591,10 @@ Method(`
            Otherwise it raises an error.
         `,
      })
+
+     Tags([
+        'querying', 'implementation'
+     ])
     */
     getMainComponent() {
         if( this.getChildComponents().length === 0 ) {
@@ -581,6 +621,10 @@ Method(`
 
         `,
      })
+
+     Tags([
+        'opening', 'public'
+     ])
     */
     open() {
         return this.getMainComponent().open()

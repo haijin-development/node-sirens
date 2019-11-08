@@ -93,6 +93,14 @@ class AppBrowserModel {
         return classEditorModel.getClassesDefinitions()
     }
 
+    getClassesDefinitionsCount() {
+        return this.getClassesDefinitions().length
+    }
+
+    hasNoClassDefinition() {
+        return this.getClassesDefinitionsCount() === 0
+    }
+
     /// Events
 
     connectModels() {

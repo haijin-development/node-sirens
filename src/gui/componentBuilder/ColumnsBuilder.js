@@ -41,6 +41,10 @@ class ColumnsBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -59,12 +63,15 @@ class ColumnsBuilder {
            Instantiates a ColumnsBuilder.
         `,
         Code: `
-
            const ColumnsBuilder = require('sirens/src/gui/componentBuilder/ColumnsBuilder')
 
            ColumnsBuilder.new()
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props) {
         this.previousClassificationDo( () => {
@@ -109,7 +116,6 @@ class ColumnsBuilder {
            Defines two columns with a label and a getTextClosure each one.
         `,
         Code: `
-
            const ColumnsBuilder = require('sirens/src/gui/componentBuilder/ColumnsBuilder')
 
            const builder = ColumnsBuilder.new()
@@ -129,9 +135,12 @@ class ColumnsBuilder {
            })
 
            builder.getProps().columns
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     column(columnProps) {
         const column = Column.new(columnProps)

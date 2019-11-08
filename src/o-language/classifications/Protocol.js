@@ -157,6 +157,10 @@ class Protocol {
            CircleProtocol.isImplementedBy({ classification: Circle })
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     isImplementedBy({ classification: classification, ifNot: closure }) {
         if( closure === undefined ) {
@@ -283,6 +287,10 @@ class Protocol {
            CircleProtocol.isImplementedByAll({ classifications: [Circle] })
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     isImplementedByAll({ classifications: classifications, ifNot: closure }) {
         if( closure === undefined ) {

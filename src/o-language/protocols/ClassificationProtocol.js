@@ -279,7 +279,6 @@ class ClassificationProtocol {
        That is, the Circle instances will also behave as Shape instances.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -326,7 +325,6 @@ class ClassificationProtocol {
        circle.setRadius( 10 )
 
        circle.getPosition()
-
     `,
  })
 
@@ -454,6 +452,10 @@ class ClassificationProtocol {
        circle.getY()
     `,
  })
+
+ Tags([
+    'public', 'defining classifications'
+ ])
 */
 define(classificationDefinition) {}
 
@@ -485,6 +487,10 @@ define(classificationDefinition) {}
        object.isBehavingAs( OInstance )
     `,
  })
+
+ Tags([
+    'public', 'creating objects'
+ ])
 */
 createObject() {}
 
@@ -554,6 +560,10 @@ createObject() {}
        circle.getRadius()
     `,
  })
+
+ Tags([
+    'public', 'creating objects'
+ ])
 */
 new(...props) {}
 
@@ -589,7 +599,6 @@ new(...props) {}
        Gets the name of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Circle {
@@ -613,9 +622,12 @@ new(...props) {}
        Circle = Classification.define(Circle)
 
        Circle.getName()
-
     `,
  })
+
+ Tags([
+    'public', 'querying'
+ ])
 */
 getName() {}
 
@@ -667,6 +679,10 @@ getName() {}
        Circle.getClassificationDefinition()
     `,
  })
+
+ Tags([
+    'public', 'querying', 'getters'
+ ])
 */
 getClassificationDefinition() {}
 
@@ -719,6 +735,10 @@ getClassificationDefinition() {}
        classificationObject.getClassificationDefinition()
     `,
  })
+
+ Tags([
+    'setters', 'public'
+ ])
 */
 setClassificationDefinition(classificationDefinition) {}
 
@@ -763,6 +783,10 @@ setClassificationDefinition(classificationDefinition) {}
        Circle.getDefinedMethodNames()
     `,
  })
+
+ Tags([
+    'public', 'querying', 'classification methods'
+ ])
 */
 getDefinedMethodNames() {}
 
@@ -823,6 +847,10 @@ getDefinedMethodNames() {}
            Circle.definesMethod( 'getRadius' )
         `,
      })
+
+     Tags([
+        'asking', 'public', 'classification methods'
+     ])
     */
     definesMethod(methodName) {
         this.param(methodName) .isString()
@@ -844,7 +872,6 @@ getDefinedMethodNames() {}
        Returns the names of all the instance variables defined in the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Circle {
@@ -868,9 +895,12 @@ getDefinedMethodNames() {}
        Circle = Classification.define(Circle)
 
        Circle.getDefinedInstanceVariables()
-
     `,
  })
+
+ Tags([
+    'getters', 'public', 'querying', 'classification instance variables'
+ ])
 */
 getDefinedInstanceVariables() {}
 
@@ -906,7 +936,6 @@ getDefinedInstanceVariables() {}
            Dynamically adds instance variables to a classification.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -937,9 +966,12 @@ getDefinedInstanceVariables() {}
            ])
 
            Circle.getDefinedInstanceVariables()
-
         `,
      })
+
+     Tags([
+        'public', 'setters', 'classification instance variables'
+     ])
     */
     setDefinedInstanceVariables(instanceVariables) {
         this.param(instanceVariables) .isArray()
@@ -969,7 +1001,6 @@ getDefinedInstanceVariables() {}
            Asks if the Circle classification defines the instance variables named 'radius' and 'color'.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -997,6 +1028,10 @@ getDefinedInstanceVariables() {}
            Circle.definesInstanceVariable( 'radius' )
         `,
      })
+
+     Tags([
+        'asking', 'public', 'classification instance variables'
+     ])
     */
     definesInstanceVariable(name) {
         this.param(name) .isString()
@@ -1075,6 +1110,10 @@ getDefinedInstanceVariables() {}
        circle.getX()
     `,
  })
+
+ Tags([
+    'getters', 'public', 'querying', 'classification assumptions'
+ ])
 */
 getAssumptions() {}
 
@@ -1100,7 +1139,6 @@ getAssumptions() {}
        Sets the assumptions to the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1155,9 +1193,12 @@ getAssumptions() {}
        circle.setX(1)
 
        circle.getX()
-
     `,
  })
+
+ Tags([
+    'public', 'setters', 'classification assumptions'
+ ])
 */
 setAssumptions(assumptions) {}
 
@@ -1183,7 +1224,6 @@ setAssumptions(assumptions) {}
        Gets the recursive assumptions of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1233,6 +1273,10 @@ setAssumptions(assumptions) {}
        Circle.getRecursiveAssumptions()
     `,
  })
+
+ Tags([
+    'public', 'querying', 'classification assumptions'
+ ])
 */
 getRecursiveAssumptions() {}
 
@@ -1255,7 +1299,6 @@ getRecursiveAssumptions() {}
        Gets the assumptions chain of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1303,11 +1346,138 @@ getRecursiveAssumptions() {}
        Circle = Classification.define(Circle)
 
        Circle.getAssumptionsChain()
-
     `,
  })
+
+ Tags([
+    'public', 'querying', 'classification assumptions'
+ ])
 */
 getAssumptionsChain() {}
+
+
+
+    /*
+     Method(`
+        Returns the classificationBehaviours of this Classification.
+
+        The classificationBehaviours are the declared behaviours of this Classification object, not is the instances it creates.
+
+        They are similar to the class side methods, or static methods, of the languages based on clases, except that in the
+        O language the methods of a classification object can be defined in different other classifications.
+     `)
+     Returns({
+        Description: `
+           Array of Classifications.
+           Returns the classificationBehaviours of this Classification.
+        `,
+     })
+
+     Tags([
+        'classification behaviours', 'public', 'querying', 'getters'
+     ])
+    */
+    getClassificationBehaviours() {}
+
+    /*
+     Method(`
+        Sets the classificationBehaviours of this Classification.
+
+        The classificationBehaviours are the declared behaviours of this Classification object, not is the instances it creates.
+
+        They are similar to the class side methods, or static methods, of the languages based on clases, except that in the
+        O language the methods of a classification object can be defined in different other classifications.
+     `)
+
+     Param({
+        Name: `
+           otherClassifications
+        `,
+        Description: `
+           Array of Classifications.
+           The classificationBehaviours of this Classification.
+        `,
+     })
+
+     Tags([
+        'classification behaviours', 'public', 'setters'
+     ])
+    */
+    setClassificationBehaviours(otherClassifications) {}
+
+    /*
+     Method(`
+        Returns an array with the protocols this classification declares to implement.
+     `)
+     Returns({
+        Description: `
+           Array of Protocol.
+           An array with the Protocols this classification declares to implement.
+        `,
+     })
+
+     Tags([
+        'implemented protocols', 'public', 'querying', 'getters'
+     ])
+    */
+    getImplementedProtocols() {}
+
+    /*
+     Method(`
+        Sets the array with the protocols this classifications declares to implement.
+     `)
+
+     Param({
+        Name: `
+           protocols
+        `,
+        Description: `
+           The protocols this classifications declares to implement.
+        `,
+     })
+
+     Tags([
+        'implemented protocols', 'public', 'setters'
+     ])
+    */
+    setImplementedProtocols(protocols) {}
+
+    /*
+     Method(`
+        Returns an array with the protocols this classification expects to implement.
+     `)
+     Returns({
+        Description: `
+           Array of Protocol.
+           An array with the Protocols this classification expects to implement.
+        `,
+     })
+
+     Tags([
+        'expected protocols', 'public', 'querying', 'getters'
+     ])
+    */
+    getExpectedProtocols() {}
+
+    /*
+     Method(`
+        Sets an array with the protocols this classifications expects to implement.
+     `)
+
+     Param({
+        Name: `
+           protocols
+        `,
+        Description: `
+           The protocols this classification expects to implement.
+        `,
+     })
+
+     Tags([
+        'expected protocols', 'public', 'setters'
+     ])
+    */
+    setExpectedProtocols(protocols) {}
 
     /*
  Method(`
@@ -1332,46 +1502,68 @@ getAssumptionsChain() {}
        Validates that the Circle classification implements the CircleProtocol.
     `,
     Code: `
-
        const Protocol = require('sirens/src/o-language/classifications/Protocol')
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class CircleProtocol {
-       	getRadius() {}
+        getRadius() {}
 
-       	setRadius(radius) {}
+        setRadius(radius) {}
        }
 
        CircleProtocol = Protocol.define(CircleProtocol)
 
        class Circle {
-       	static definition() {
-               	this.instanceVariables = ['radius']
-           	}
+        static definition() {
+                this.instanceVariables = ['radius']
+            }
 
-       	initialize({ radius: radius }) {
-       		this.radius = radius
-       	}
+        initialize({ radius: radius }) {
+            this.radius = radius
+        }
 
-       	// Try deleting any of these methods to make the protocol validation to fail.
+        // Try deleting any of these methods to make the protocol validation to fail.
 
-       	getRadius() {
-       		return this.radius
-       	}
+        getRadius() {
+            return this.radius
+        }
 
-       	setRadius(radius) {
-       		this.radius = radius
-       	}
+        setRadius(radius) {
+            this.radius = radius
+        }
        }
 
        Circle = Classification.define(Circle)
 
        Circle.implements({ protocol: CircleProtocol })
-
     `,
  })
+
+ Tags([
+    'implemented protocols', 'validating', 'public'
+ ])
 */
-implements({ protocol: protocol }) {}
+    implements({ protocol: protocol }) {}
+
+    /*
+     Method(`
+        Validates that this classification complies with the given protocol.
+
+        If it does not raises an error.
+
+
+        The difference between implements({ procotol: protocol }) and compliesWith({ procotol: protocol }) is that implements
+        does the actual validation that this Classifications defines each method declared in the protocol while compliesWith
+        only checks that this Classification declares that it implements a protocol.
+
+        compliesWith is used during the validation of parameters to quickly validate that an object implements a protocol.
+     `)
+
+     Tags([
+        'implemented protocols', 'public', 'validating'
+     ])
+    */
+    compliesWith({ protocol: protocol }) {}
 }
 
 module.exports = Protocol.define(ClassificationProtocol)

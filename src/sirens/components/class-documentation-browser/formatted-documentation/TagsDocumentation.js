@@ -30,7 +30,21 @@ class TagsDocumentation {
         if( method !== null ) {
             const methodDocumentation = method.getDocumentation()
 
-            tags = methodDocumentation.getTags().slice().sort()
+            const allTags = methodDocumentation.getTagsSortedAlphabetically()
+
+            const prioritizedTags = []
+
+            const unprioritizedTags = allTags.filter( (tag) => {
+                const prioritizesTag = Preferences.prioritizesTag({ tag: tag })
+
+                if( prioritizesTag === true ) {
+                    prioritizedTags.push( tag )
+                }
+
+                return prioritizesTag === false
+            })
+
+            tags = prioritizedTags.concat( unprioritizedTags )
         }
 
         componentsRenderer.render( function(component) {
@@ -52,6 +66,7 @@ class TagsDocumentation {
                         height: 24,
                         viewAttributes: {
                             stackSize: 'fixed',
+                            stackPadding: 10,
                         },
                     })
 
@@ -67,13 +82,20 @@ class TagsDocumentation {
                                 borderColor: 'white',
                                 viewAttributes: {
                                     stackSize: 'fixed',
-                                    stackPadding: 3,
+                                    stackPadding: 6,
                                 },
                             })
                         })
                     })
 
                     if( isInEditionMode ) {
+
+                        // To center the button keeping its size
+                        this.label({
+                            viewAttributes: {
+                                stackSize: 'filled',
+                            },
+                        })
 
                         this.textButton({
                             text: 'Edit method tags ...',
@@ -84,10 +106,15 @@ class TagsDocumentation {
                             onClicked: component.handleEditMethodTags.bind(component),                        
                             viewAttributes: {
                                 stackSize: 'fixed',
-                                stackAlign: 'end',
                             },
                         })
 
+                        // To center the button keeping its size
+                        this.label({
+                            viewAttributes: {
+                                stackSize: 'filled',
+                            },
+                        })
                     }
 
                 })

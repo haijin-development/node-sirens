@@ -139,6 +139,10 @@ class ParamsChecker {
      Method(`
         The definition of this classification.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -204,6 +208,10 @@ class ParamsChecker {
            If the validation of the method protocol fails it raises an error.
         `,
      })
+
+     Tags([
+        'proxy methods', 'implementation'
+     ])
     */
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
         const protocols = new Set()

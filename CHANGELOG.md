@@ -2,15 +2,22 @@
 
 ## v0.11.0 (next release)
 
+
 ### Sirens
 
 - Removed the StackBrowser and its dependencies
+- AppBrowserModel shows the methods tab page when the selected file contains a class definition.
+- Removed the StackTraceBrowser and its dependencies.
+- Added method tags to class documentation.
 
 ### gui
 
 - Removed the implements of ComponentProtocol in all components that implements ComponentProtocol_Implementation since it is implicit.
 
 ### O language
+
+- Renamed Debuggable.inspect() to Debuggable.browse()
+- Tagged classification methods
 
 ## v0.10.0
 

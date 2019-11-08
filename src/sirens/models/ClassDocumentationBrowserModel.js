@@ -154,6 +154,24 @@ class ClassDocumentationBrowserModel {
         })
     }
 
+    getAllMethodsTags() {
+        const allMethodsDefinition = this.classDefinition.getMethods()
+
+        const allMethodsTagsSet = new Set()
+
+        allMethodsDefinition.forEach( (methodDefinition) => {
+            const methodTags = methodDefinition.getDocumentation().getTags()
+
+            methodTags.forEach( (tag) => {
+                allMethodsTagsSet.add( tag )
+            })
+        })
+
+        const allMethodsTags = allMethodsTagsSet.values()
+
+        return Array.from( allMethodsTags )
+    }
+
     /// Actions
 
     reload() {

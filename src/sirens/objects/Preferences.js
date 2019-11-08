@@ -8,6 +8,10 @@ class Preferences {
 
         return Preferences.tags[tagName].color
     }
+
+    static prioritizesTag({ tag: tag }) {
+        return this.prioritizedTags.includes( tag )
+    }
 }
 
 Preferences.browseDocumentation = true
@@ -20,6 +24,9 @@ Preferences.tags = {
     setters: { color: 'yellow', },
     default: { color: '#e7e774', },
 }
+Preferences.prioritizedTags = [
+    'public', 'implementation'
+]
 
 
 module.exports = Preferences

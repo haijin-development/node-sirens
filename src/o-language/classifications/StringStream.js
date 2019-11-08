@@ -95,6 +95,10 @@ class StringStream {
         Private.
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['buffer', 'crChar']
@@ -136,6 +140,10 @@ class StringStream {
            character or a new line.
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize({ string: string, cr: cr } = { string: '', cr: undefined }) {
         this.buffer = string === undefined ? '' : string
@@ -151,6 +159,10 @@ class StringStream {
            The default string to use as a carriage return when not cr character is given.
         `,
      })
+
+     Tags([
+        'constants', 'querying', 'public'
+     ])
     */
     defaultCrChar() {
         return "\n"
@@ -181,85 +193,94 @@ class StringStream {
 
         getString() is the public API to get the final string, getBuffer() is used internally during the building of the string.
      `)
+
+     Tags([
+        'implementation', 'querying', 'getters'
+     ])
     */
     getBuffer() {
         return this.buffer
     }
 
     /*
-        Method(`
-            Returns the generated string of this StringStream object.
+ Method(`
+    Returns the generated string of this StringStream object.
 
-            Usually you would call this method after finishing appending text to this StringStream to get the final string.
- `      )
-        Returns({
-            Description: `
-                String.
-                The string generated in this StringStream.
-            `,
-        })
+    Usually you would call this method after finishing appending text to this StringStream to get the final string.
+ `)
+ Returns({
+    Description: `
+       String.
+       The string generated in this StringStream.
+    `,
+ })
 
-        Example({
-            Description: `
-                Gets the generated string after appending text to a StringStream.
-            `,
-            Code: `
+ Example({
+    Description: `
+       Gets the generated string after appending text to a StringStream.
+    `,
+    Code: `
+       const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
-                const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const stream = StringStream.new()
 
-                const stream = StringStream.new()
+       stream.append({ string: 'Some' })
+       stream.append({ string: ' ' })
+       stream.append({ string: 'text' })
 
-                stream.append({ string: 'Some' })
-                stream.append({ string: ' ' })
-                stream.append({ string: 'text' })
+       stream.getString()
+    `,
+ })
 
-                stream.getString()
-            `,
-        })
-    */
+ Tags([
+    'querying', 'public'
+ ])
+ */
     getString() {
         return this.buffer
     }
 
     /*
         Method(`
-            Returns the character used as carriage return when appending a
+           Returns the character used as carriage return when appending a
 
-                stringStream.cr()
+               stringStream.cr()
 
-            character.
+           character.
 
-            It can be set with the method
+           It can be set with the method
 
-                const crChar = "<br>"
+               const crChar = "<br>"
 
-                stringStream.setCrChar( crChar )
+               stringStream.setCrChar( crChar )
         `)
-
         Returns({
-            Description: `
-                String.
-                The string currently used to append a carriage return when using the methods
+           Description: `
+              String.
+              The string currently used to append a carriage return when using the methods
 
-                    stringStream.cr()
-                    stringStream.appendLine()
-                    stringStream.prependLine()
-            `,
+                  stringStream.cr()
+                  stringStream.appendLine()
+                  stringStream.prependLine()
+           `,
         })
 
         Example({
-            Description: `
-                Gets the current carriage return string.
-            `,
-            Code: `
+           Description: `
+              Gets the current carriage return string.
+           `,
+           Code: `
+              const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
-                const StringStream = require('sirens/src/o-language/classifications/StringStream')
+              const stream = StringStream.new()
 
-                const stream = StringStream.new()
-
-                stream.getCrChar()
-            `,
+              stream.getCrChar()
+           `,
         })
+
+        Tags([
+           'public', 'querying', 'getters'
+        ])
     */
     getCrChar() {
         return this.crChar
@@ -268,43 +289,45 @@ class StringStream {
 
     /*
         Method(`
-            Sets the character used as carriage return when appending a
+           Sets the character used as carriage return when appending a
 
-                stringStream.cr()
+               stringStream.cr()
 
-            character.
+           character.
         `)
 
         Param({
-            Name: `
-                char
-            `,
-            Description: `
-                String.
-                The string to be used as a carriage return when calling the methods
+           Name: `
+              char
+           `,
+           Description: `
+              String.
+              The string to be used as a carriage return when calling the methods
 
-                    stringStream.cr()
-                    stringStream.appendLine()
-                    stringStream.prependLine()
-            `,
+                  stringStream.cr()
+                  stringStream.appendLine()
+                  stringStream.prependLine()
+           `,
         })
 
         Example({
-            Description: `
-                Sets the carriage return to '<br>'
-            `,
-            Code: `
+           Description: `
+              Sets the carriage return to '<br>'
+           `,
+           Code: `
+              const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
-               const StringStream = require('sirens/src/o-language/classifications/StringStream')
+              const stream = StringStream.new()
 
-               const stream = StringStream.new()
+              stream.setCrChar( '<br>' )
 
-               stream.setCrChar( '<br>' )
-
-                stream.getCrChar()
-
-            `,
+               stream.getCrChar()
+           `,
         })
+
+        Tags([
+           'public', 'setters'
+        ])
     */
     setCrChar(char) {
         return this.crChar = char
@@ -386,6 +409,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     append({ string: string, if: boolean }) {
         if( boolean === false ) { return }
@@ -450,6 +477,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     prepend({ string: string, if: boolean }) {
         if( boolean === false ) { return }
@@ -525,6 +556,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     cr({ if: boolean } = { if: true }) {
         if( boolean === false ) { return }
@@ -587,6 +622,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     appendLine({ string: lineString, if: boolean }) {
         if( boolean === false ) { return }
@@ -651,6 +690,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     prependLine({ string: lineString, if: boolean }) {
         if( boolean === false ) { return }
@@ -693,19 +736,21 @@ class StringStream {
            To the example more clear firt set the cr char to '<br>'.
         `,
         Code: `
-
            const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
            const stream = StringStream.new()
 
            stream.setCrChar('<br>')
 
-           stream.appendLinesIn({ string: "First line\\nSecond line\\nThird line" })
+           stream.appendLinesIn({ string: "First line\nSecond line\nThird line" })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     appendLinesIn({ string: string }) {
         const lines = string.split( "\n" )
@@ -781,7 +826,7 @@ class StringStream {
            Function.
            A function to evaluate between two consecutive elements.
 
-           In this function it is possible to append a separator between consecutive items, such as ',', '-' or '\\n'.
+           In this function it is possible to append a separator between consecutive items, such as ',', '-' or '\n'.
 
            The signature of the function is
 
@@ -795,7 +840,6 @@ class StringStream {
            	function() {
            		// ...
            	}
-
         `,
      })
 
@@ -819,6 +863,10 @@ class StringStream {
            stream.getString()
         `,
      })
+
+     Tags([
+        'iterating', 'public'
+     ])
     */
     forEach({ in: collection, do: eachClosure, inBetweenDo: inBetweenClosure }) {
         const n = collection.length

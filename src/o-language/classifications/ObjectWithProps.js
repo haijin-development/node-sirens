@@ -138,6 +138,10 @@ class ObjectWithProps {
         Private.
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['props']
@@ -150,6 +154,10 @@ class ObjectWithProps {
         Private.
         Initializes this classification after it is instantiated on this object.
      `)
+
+     Tags([
+        'initializing', 'implementation'
+     ])
     */
     afterInstantiation() {
         this.props = {}
@@ -184,7 +192,6 @@ class ObjectWithProps {
            Queries an object for a defined property named 'color' and for an undefined property named 'x'.
         `,
         Code: `
-
            const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
 
            const object = ObjectWithProps.new()
@@ -198,6 +205,10 @@ class ObjectWithProps {
            object.hasProp({ key: 'color' })
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     hasProp({ key: propName }) {
         return this.props[propName] !== undefined
@@ -234,6 +245,10 @@ class ObjectWithProps {
            object.getProps()
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getProps() {
         return this.props
@@ -339,7 +354,6 @@ class ObjectWithProps {
            Gets the evaluation of an absentClosure.
         `,
         Code: `
-
            const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
 
            const object = ObjectWithProps.new()
@@ -348,9 +362,12 @@ class ObjectWithProps {
            	 key: 'color',
            	ifUndefined: ({ key: key, owner: owner }) => { throw new Error( "Undefined prop " + key ) },
             })
-
         `,
      })
+
+     Tags([
+        'querying', 'public'
+     ])
     */
     getProp({ key: key, ifUndefined: absentClosure, defaultValue: defaultValue }) {
         const value = this.props[key]
@@ -386,7 +403,6 @@ class ObjectWithProps {
            Defines and removes all the properties of an object.
         `,
         Code: `
-
            const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
 
            const object = ObjectWithProps.new()
@@ -400,9 +416,12 @@ class ObjectWithProps {
            object.clearAllProps()
 
            object.getProps()
-
         `,
      })
+
+     Tags([
+        'removing', 'public'
+     ])
     */
     clearAllProps() {
         this.setProps( {} )
@@ -461,6 +480,10 @@ class ObjectWithProps {
            object.getProps()
         `,
      })
+
+     Tags([
+        'adding', 'public'
+     ])
     */
     setProp({ key: key, value: value }) {
         const newProp = {}
@@ -517,6 +540,10 @@ class ObjectWithProps {
            object.getProps()
         `,
      })
+
+     Tags([
+        'adding', 'setters', 'public'
+     ])
     */
     setProps(newProps) {
         this.props = newProps
@@ -550,7 +577,6 @@ class ObjectWithProps {
            Merges properties into an object.
         `,
         Code: `
-
            const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
 
            const object = ObjectWithProps.new()
@@ -565,9 +591,12 @@ class ObjectWithProps {
            })
 
            object.getProps()
-
         `,
      })
+
+     Tags([
+        'adding', 'public'
+     ])
     */
     mergeProps(additionalProps) {
         const newProps = Object.assign(this.props, additionalProps)
@@ -620,6 +649,10 @@ class ObjectWithProps {
            object.getProps()
         `,
      })
+
+     Tags([
+        'removing', 'public'
+     ])
     */
     removeProp({ key: key }) {
         delete this.props[key]
@@ -685,6 +718,10 @@ class ObjectWithProps {
            })
         `,
      })
+
+     Tags([
+        'iterating', 'public'
+     ])
     */
     propsAndValuesDo(closure) {
         const props = this.props

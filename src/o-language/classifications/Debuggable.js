@@ -76,7 +76,7 @@ class Debuggable {
      `)
 
      Tags([
-        'implementation', 'definition'
+        'definition', 'implementation'
      ])
     */
     static definition() {
@@ -114,7 +114,7 @@ class Debuggable {
            String.
            A string to use as the indentation tab character in the debug string.
 
-           Usually it is the character "\ t" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
+           Usually it is the character " t" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
         `,
      })
 
@@ -167,7 +167,7 @@ class Debuggable {
      })
 
      Tags([
-        'public', 'displaying'
+        'displaying', 'public'
      ])
     */
     debugString({ cr: cr, tab: tab } = { cr: undefined, tab: undefined }) {
@@ -186,10 +186,10 @@ class Debuggable {
 
     /*
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
-    inspect() {
+    browse() {
       Sirens.browseObject( this )
     }
 }

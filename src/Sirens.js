@@ -119,7 +119,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static browseObject(object) {
@@ -162,7 +162,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static browsePrototypes(object) {
@@ -224,7 +224,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static openClassEditor({ filename: filename } = { filename: undefined }) {
@@ -237,8 +237,22 @@ class Sirens {
 
 
     /*
+     Method(`
+        Opens an application (or a project) browser.
+     `)
+
+     Param({
+        Name: `
+           appFolder
+        `,
+        Description: `
+           String.
+           A path string to set as the initial folder in the browser.
+        `,
+     })
+
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
@@ -279,7 +293,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
@@ -344,7 +358,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'browsers'
+        'browsers', 'public'
      ])
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
@@ -434,7 +448,7 @@ class Sirens {
      })
 
      Tags([
-        'public', 'evaluating'
+        'evaluating', 'public'
      ])
     */
     static do(closure) {
@@ -484,7 +498,7 @@ class Sirens {
      })
 
      Tags([
-        'implementation', 'initializing'
+        'initializing', 'implementation'
      ])
     */
     static initialize() {

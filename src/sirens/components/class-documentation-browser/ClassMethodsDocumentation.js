@@ -24,6 +24,8 @@ class ClassMethodsDocumentation {
 
         const methodTags = model.getAllMethodsTags().sort()
 
+        const selectedTagsModel = model.getSelectedTagsModel()
+
         componentsRenderer.render(function (component) {
 
             this.horizontalSplitter( function() {
@@ -56,26 +58,35 @@ class ClassMethodsDocumentation {
                         this.model( model.getClassMethodsModel() )
 
                         this.column({
-                            label: '',
                             getImageClosure: function(functionDefinition) { return Resource.image.method },
                             imageWidth: 24,
                             imageHeight: 24,
                         })
 
                         this.column({
+                            label: 'Methods',
                             getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
                         })
                     })
+
+                    this.verticalSeparator()
+
+                    this.label({
+                        text: 'Tags',
+                        viewAttributes: { stackSize: 'fixed' },
+                    })
+
+                    this.verticalSeparator()
 
                     this.container( function() {
 
                         this.verticalStack({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
 
                             methodTags.forEach( (tag) => {
-
-                                this.checkBox({
+                                this.multipleCheckBox({
+                                    model: selectedTagsModel,
+                                    item: tag,
                                     label: tag,
-                                    value: true,
                                     viewAttributes: { stackSize: 'fixed' },
                                 })
                             })

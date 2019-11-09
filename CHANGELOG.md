@@ -13,6 +13,8 @@
 ### gui
 
 - Removed the implements of ComponentProtocol in all components that implements ComponentProtocol_Implementation since it is implicit.
+- Refactored CheckBox to SingleSelectionCheckBox.
+- Implemented MultipleSelectionCheckBox.
 
 ### O language
 

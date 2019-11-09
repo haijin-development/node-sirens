@@ -15,7 +15,8 @@ const ChoicesList = require('../components/widgets/ChoicesList')
 const ChoicesTree = require('../components/widgets/ChoicesTree')
 const Label = require('../components/widgets/Label')
 const Text = require('../components/widgets/Text')
-const CheckBox = require('../components/widgets/CheckBox')
+const SingleSelectionCheckBox = require('../components/widgets/SingleSelectionCheckBox')
+const MultipleSelectionCheckBox = require('../components/widgets/MultipleSelectionCheckBox')
 const TextButton = require('../components/widgets/TextButton')
 const RadioButton = require('../components/widgets/RadioButton')
 const Image = require('../components/widgets/Image')
@@ -2166,9 +2167,9 @@ class ContainerWidgetBuilder {
 
     /*
      Method(`
-        Adds a CheckBox component to the array of built components.
+        Adds a SingleSelectionCheckBox component to the array of built components.
 
-        A CheckBox is an editable widget with two possible states, unchecked or checked.
+        A SingleSelectionCheckBox is an editable widget with two possible states, unchecked or checked.
 
         It uses a ValueModelBehaviour to get and update the value (checked or unchecked) it displays.
      `)
@@ -2200,7 +2201,7 @@ class ContainerWidgetBuilder {
            	'populatePopupMenuBlock',
            	'viewAttributes',
 
-           	// CheckBox properties
+           	// SingleSelectionCheckBox properties
 
            	model:  ValueModelBehaviour,
 
@@ -2223,7 +2224,7 @@ class ContainerWidgetBuilder {
 
      Example({
         Description: `
-           Builds a CheckBox initially checked.
+           Builds a SingleSelectionCheckBox initially checked.
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
@@ -2232,7 +2233,8 @@ class ContainerWidgetBuilder {
 
            builder.build( function() {
 
-           	this.text({
+           	this.checkbox({
+              label: 'A label',
            		value: true,
            	})
 
@@ -2253,7 +2255,79 @@ class ContainerWidgetBuilder {
                 builder.build(closure)
             })
 
-        const text = CheckBox.new( builder.getProps() )
+        const text = SingleSelectionCheckBox.new( builder.getProps() )
+
+        this.childComponents.push(text)
+    }
+
+    /*
+     Method(`
+        Adds a MultipleSelectionCheckBox component to the array of built components.
+
+        A MultipleSelectionCheckBox is an editable widget with two possible states, unchecked or checked,
+        that depend on whether the MultipleSelectionCheckBox.item is included or not in the value of its
+        model.
+
+        Its models is a ValueModelBehaviour with a collection of items.
+     `)
+
+     Param({
+        Name: `
+           props
+        `,
+        Description: `
+           Optional.
+           Object.
+           An optional object defining one or more of the following styles for the label component
+
+           [
+            // Common properties
+
+            'width',
+            'height',
+            'backgroundColor',
+            'foregroundColor',
+            'alignHorizontal',
+            'alignVertical',
+            'marginLeft',
+            'marginRight',
+            'marginTop',
+            'marginBottom',
+            'marginHorizontal',
+            'marginVertical',
+            'populatePopupMenuBlock',
+            'viewAttributes',
+
+            // MultipleSelectionCheckBox properties
+
+            model:  ValueModelBehaviour,
+           ]
+
+           Each of these styles can be a value or a ValueModelBehaviour.
+        `,
+     })
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           An optional closure to evaluate and set additional properties in it.
+        `,
+     })
+
+     Tags([
+        'dsl', 'public'
+     ])
+    */
+    multipleCheckBox(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const text = MultipleSelectionCheckBox.new( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -2366,8 +2440,8 @@ class ContainerWidgetBuilder {
 
         A RadioButton is button with two possible states, unchecked or checked.
 
-        The difference with a CheckBox is that RadioButtons are grouped and whenever a RadioButton is checked all
-        the buttons in its group are unchecked.
+        The difference with a SingleSelectionCheckBox is that RadioButtons are grouped and whenever a
+        RadioButton is checked all the buttons in its group are unchecked.
 
         A RadioButton model is a ChoiceModel object shared with all the other RadioButtons in its group.
 

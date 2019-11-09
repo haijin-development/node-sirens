@@ -29,6 +29,8 @@ const ExampleDocumentation = require('./ExampleDocumentation')
 const ExamplesEditionHeader = require('./ExamplesEditionHeader')
 const EditExampleDialog = require('../edition/EditExampleDialog')
 
+const MethodSourceCodeDocumentation = require('./MethodSourceCodeDocumentation')
+
 class MethodFormattedComment {
     /// Definition
 
@@ -637,6 +639,13 @@ class MethodFormattedComment {
 
                     })
 
+                    this.verticalSeparator()
+
+                    this.component(
+                        MethodSourceCodeDocumentation.new({
+                            method: method,
+                        })
+                    )
                 })
 
             })

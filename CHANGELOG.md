@@ -8,7 +8,8 @@
 - Removed the StackBrowser and its dependencies
 - AppBrowserModel shows the methods tab page when the selected file contains a class definition.
 - Removed the StackTraceBrowser and its dependencies.
-- Added method tags to class documentation.
+- Added tags to methods documentation and a filter by tags of a class methods.
+- Added the method source code to class documentation.
 
 ### gui
 

@@ -49,7 +49,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         Initialize this classification instance variables.
      `)
 
@@ -131,7 +130,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         The component properties may be values, objects or ValueModels.
 
         For those that are value models this method hooks its changes to update the component calling 
@@ -162,7 +160,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         If the current properties do not include a property named 'model' ask the component for a default model calling the method
 
         	this.defaultModel()
@@ -182,7 +179,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         All components have a View. This method creates it, initializes it and synchronizes it with the component and its model.
 
         This method calls
@@ -206,7 +202,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         In this method the component calls one or more methods to hook changes in its model and its view to keep them in sync.
 
         The default implementation is to call
@@ -223,7 +218,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         Applies the given properties to the view calling the method
 
         	this.applyViewProp({ prop: propName, value: value })
@@ -261,7 +255,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         If this component view accepts a style name propName call the setter of that view style.
 
         For example if this component is called with
@@ -303,7 +296,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         This method is called whenever a component property that is a ValueModelBeahviour changes.
 
         Its default implementation is to update the component view calling
@@ -634,7 +626,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         Components can be Widgets with a visual representation or Components with no logic but no visual representation.
 
         This method iterates through its children looking for the ones that have a visual representation to evaluate the given closure
@@ -665,7 +656,6 @@ class ComponentBehaviour {
 
     /*
      Method(`
-        Private.
         Each component classification can use this method to hook the events triggered by its model to keep its view in sync with it.
 
         If this component does not have a model this method does nothing.

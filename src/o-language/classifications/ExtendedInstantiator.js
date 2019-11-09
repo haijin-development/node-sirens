@@ -174,7 +174,6 @@ class ExtendedInstantiator {
 
     /*
      Method(`
-        Private.
         Overrides the
 
         	Classification.new(...params)

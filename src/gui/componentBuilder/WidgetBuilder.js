@@ -313,8 +313,6 @@ class WidgetBuilder {
 
     /*
      Method(`
-        Private.
-
         Returns an array of [props, closure].
 
         If the arguments props is undefined creates an empty object {} to return as the first parameter.

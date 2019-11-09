@@ -135,7 +135,6 @@ class ObjectWithProps {
 
     /*
      Method(`
-        Private.
         This classification definition.
      `)
 
@@ -151,7 +150,6 @@ class ObjectWithProps {
 
     /*
      Method(`
-        Private.
         Initializes this classification after it is instantiated on this object.
      `)
 

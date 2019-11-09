@@ -731,8 +731,6 @@ class Classification {
 
     /*
      Method(`
-        Private.
-
         This method makes sure that this Classification definintion has the following properties:
 
         [

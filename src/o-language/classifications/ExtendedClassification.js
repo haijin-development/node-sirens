@@ -186,7 +186,6 @@ class ExtendedClassification
 
     /*
      Method(`
-        Private.
         Overrides the
 
         	Classification.define(classificationDefinintion)

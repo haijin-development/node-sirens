@@ -265,8 +265,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         Opens a class documentation browser on the given classDefinition.
      `)
 
@@ -371,8 +369,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         Initializes GTK, or the GUI framework, and starts its main event loop.
 
         Then it evaluates the given closure.
@@ -472,7 +468,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
         Initializes the GTK library.
 
         Usually this method is not called by the main program since the method
@@ -513,8 +508,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         This method is private and must not be called by the main program.
 
         Every time a new Window or Dialog is opened this method is called to keep track of all of
@@ -542,8 +535,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         This method is private and must not be called by the main program.
 
         Every time a Window or Dialog is closed this method is called to keep track of all of

@@ -183,7 +183,6 @@ class Component {
 
     /*
      Method(`
-        Private.
         This method is a hook method called when the Component is initialized.
 
         This method is the recomended place to call
@@ -307,7 +306,6 @@ class Component {
 
     /*
      Method(`
-        Private.
         Other Component classifications may override this method to return a custom model.
 
         By default this method returns undefined.
@@ -377,7 +375,6 @@ class Component {
 
     /*
      Method(`
-        Private.
         Calling this method with a ValueModelBehaviour will make this Component to listen to changes on the ValueModelBehaviour and
         call
 
@@ -434,7 +431,6 @@ class Component {
 
     /*
      Method(`
-        Private.
         Creates a ComponentRenderer on this Component and calls
 
         	this.renderWith(componentsRenderer)
@@ -458,7 +454,6 @@ class Component {
 
     /*
      Method(`
-        Private.
         This method is a hook method called during this Component initialization.
 
         It creates and returns a ComponentView.
@@ -580,8 +575,6 @@ Tags([
 
     /*
      Method(`
-        Private.
-
         If the component has exactly one child compoent it returns that child.
 
         Otherwise it throws an error.

@@ -186,7 +186,6 @@ class ContainerWidgetBuilder {
 
     /*
      Method(`
-        Private.
         Returns the last components created during the call of the
 
         	builder.build( function() {

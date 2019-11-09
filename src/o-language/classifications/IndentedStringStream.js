@@ -141,7 +141,6 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         The classification definition.
      `)
 
@@ -159,7 +158,6 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         Initializes the instantiated classification right after it is attached to this object.
      `)
 
@@ -176,7 +174,6 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         Returns the default string to use as an indentation unit when no identation char is given.
      `)
      Returns({

@@ -583,8 +583,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
-
         This method is intended to be called from within another method in the same classification.
 
         It evaluates the given closure starting the method lookup in the previous classification to the one active in the
@@ -1525,8 +1523,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
-
         Returns the classification previous to the active classification in the method that called previousClassification().
      `)
      Returns({

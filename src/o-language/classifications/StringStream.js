@@ -92,7 +92,6 @@ class StringStream {
 
     /*
      Method(`
-        Private.
         This classification definition.
      `)
 
@@ -110,7 +109,6 @@ class StringStream {
 
     /*
      Method(`
-        Private.
         Initializes a new OInstance object to behave as a StringStream.
 
         It takes two optional arguments, the initial text and the string to use as the carriage return.

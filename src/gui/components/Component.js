@@ -493,11 +493,9 @@ class Component {
 
     /*
 Method(`
-   Private.
    This method is a hook method called during the build() method.
 
-   Other classifications can (and usually do) override this method to render its contents using the componentsRenderer given
-   as a parameter.
+   Other classifications can (and usually do) override this method to render its contents using the given componentsRenderer.
 
    Typically this method looks like the following source code
 
@@ -530,6 +528,17 @@ Method(`
 
    	}
 `)
+
+Param({
+   Name: `
+      componentsRenderer
+   `,
+   Description: `
+      ComponentRenderer.
+      The ComponentRenderer object to build this Component styles and children through its component builder DSL.
+
+   `,
+})
 
 Tags([
    'rendering', 'implementation'

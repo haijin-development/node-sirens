@@ -74,6 +74,10 @@ class Debuggable {
      Method(`
         The classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -97,7 +101,7 @@ class Debuggable {
            String.
            A string to use as the carriage return character in the debug string.
 
-           It usually is the character '\ n', but if the debug string is to be rendered on an HTML browser then '<br>' can be use.
+           Usually it is the character ' n', but if the debug string is to be rendered on an HTML browser then '<br>' can be use.
         `,
      })
 
@@ -110,7 +114,7 @@ class Debuggable {
            String.
            A string to use as the indentation tab character in the debug string.
 
-           It usually is the character "\\ t" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
+           Usually it is the character " t" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
         `,
      })
 
@@ -161,6 +165,10 @@ class Debuggable {
            })
         `,
      })
+
+     Tags([
+        'displaying', 'public'
+     ])
     */
     debugString({ cr: cr, tab: tab } = { cr: undefined, tab: undefined }) {
         if( cr === undefined ) { cr = "\n" }
@@ -176,7 +184,12 @@ class Debuggable {
         return stream.getString()
     }
 
-    inspect() {
+    /*
+     Tags([
+        'browsers', 'public'
+     ])
+    */
+    browse() {
       Sirens.browseObject( this )
     }
 }

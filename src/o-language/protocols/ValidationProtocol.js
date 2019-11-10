@@ -1,9 +1,19 @@
 const Protocol = require('../classifications/Protocol')
 
 class ValidationProtocol {
-    getValidationResultOn({ value: value }) {}
+    /*
+ Tags([
+    'public', 'evaluating'
+ ])
+*/
+getValidationResultOn({ value: value }) {}
 
-    evaluateOn({ value: value }) {}
+    /*
+ Tags([
+    'public', 'evaluating'
+ ])
+*/
+evaluateOn({ value: value }) {}
 }
 
 module.exports = Protocol.define(ValidationProtocol)

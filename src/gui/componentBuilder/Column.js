@@ -182,6 +182,10 @@ class Column {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -326,6 +330,10 @@ class Column {
            column.getImageFileOf({ item: 123 })
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -361,7 +369,6 @@ class Column {
            Asks if a text column displays images.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -369,7 +376,6 @@ class Column {
            })
 
            column.isImage()
-
         `,
      })
 
@@ -388,6 +394,10 @@ class Column {
            column.isImage()
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     isImage() {
         return this.hasImageClosure()
@@ -409,7 +419,6 @@ class Column {
            Asks a Column if it has a text closure defined.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -417,7 +426,6 @@ class Column {
            })
 
            column.hasTextClosure()
-
         `,
      })
 
@@ -433,6 +441,10 @@ class Column {
            column.hasTextClosure()
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     hasTextClosure() {
         return this.hasProp({ key: 'getTextClosure' })
@@ -454,7 +466,6 @@ class Column {
            Asks a Column if it has an image closure defined.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -462,7 +473,6 @@ class Column {
            })
 
            column.hasImageClosure()
-
         `,
      })
 
@@ -478,6 +488,10 @@ class Column {
            column.hasImageClosure()
         `,
      })
+
+     Tags([
+        'asking', 'public'
+     ])
     */
     hasImageClosure() {
         return this.hasProp({ key: 'getImageClosure' })
@@ -514,6 +528,10 @@ class Column {
            column.getLabel()
         `,
      })
+
+     Tags([
+        'querying', 'public'
+     ])
     */
     getLabel() {
         return this.getProp({ key: 'label' })
@@ -530,6 +548,10 @@ class Column {
            Can be undefined.
         `,
      })
+
+     Tags([
+        'querying', 'public'
+     ])
     */
     getTextClosure() {
         return this.getProp({ key: 'getTextClosure' })
@@ -546,6 +568,10 @@ class Column {
            Can be undefined.
         `,
      })
+
+     Tags([
+        'querying', 'public'
+     ])
     */
     getImageClosure() {
         return this.getProp({ key: 'getImageClosure' })
@@ -562,6 +588,10 @@ class Column {
            Returns 'image' if the Column has a getImageClosure.
         `,
      })
+
+     Tags([
+        'querying', 'public'
+     ])
     */
     getType() {
         if( this.isImage() ) {
@@ -636,6 +666,10 @@ class Column {
            })
         `,
      })
+
+     Tags([
+        'displaying', 'public'
+     ])
     */
     getDisplayTextOf({ item: item, onUndefined: undefinedHandler }) {
         if( ! this.hasTextClosure() ) {
@@ -699,7 +733,6 @@ class Column {
            Gets the image filename to display in the column the number 1.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -718,9 +751,12 @@ class Column {
            	item: 0,
            	onUndefined: () => { return 'Undefined' }
            })
-
         `,
      })
+
+     Tags([
+        'displaying', 'public'
+     ])
     */
     getImageFileOf({ item: item, onUndefined: undefinedHandler }) {
         const imageBlock = this.getImageClosure()
@@ -754,7 +790,6 @@ class Column {
            Gets the width of the images used in this column.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -763,9 +798,12 @@ class Column {
            })
 
            column.getImageWidth()
-
         `,
      })
+
+     Tags([
+        'public', 'querying'
+     ])
     */
     getImageWidth() {
         return this.getProp({ key: 'imageWidth' })
@@ -791,7 +829,6 @@ class Column {
            Gets the height of the images used in this column.
         `,
         Code: `
-
            const Column = require('sirens/src/gui/componentBuilder/Column')
 
            const column = Column.new({
@@ -800,9 +837,12 @@ class Column {
            })
 
            column.getImageHeight()
-
         `,
      })
+
+     Tags([
+        'public', 'querying'
+     ])
     */
     getImageHeight() {
         return this.getProp({ key: 'imageHeight' })

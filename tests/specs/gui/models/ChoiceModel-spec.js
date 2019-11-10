@@ -2,7 +2,6 @@ const expect = require('chai').expect
 const ChoiceModel = require('../../../../src/gui/models/ChoiceModel')
 const ListModel = require('../../../../src/gui/models/ListModel')
 const ValueModel = require('../../../../src/gui/models/ValueModel')
-const callsites = require('callsites')
 
 describe('When using a ChoiceModel', () => {
     beforeEach( () => {

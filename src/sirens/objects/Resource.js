@@ -21,6 +21,7 @@ const Resource = {
         prototype: iconsFolder + 'prototype.png',
         returns: iconsFolder + 'returns.png',
         string: iconsFolder + 'string.png',
+        tag: iconsFolder + 'tag.png',
         true: iconsFolder + 'true.png',
         undefined: iconsFolder + 'undefined.png',
     }

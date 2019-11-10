@@ -4,6 +4,11 @@ const ValidationProtocol = require('../../protocols/ValidationProtocol')
 class OrValidation {
     /// Definition
 
+    /*
+     Tags([
+        'definition', 'implementation'
+     ])
+    */
     static definition() {
         this.instanceVariables = ['leftValidation', 'rightValidation']
         this.assumes = []
@@ -12,16 +17,31 @@ class OrValidation {
 
     /// Accessing
 
+    /*
+     Tags([
+        'setters', 'public'
+     ])
+    */
     setLeftValidation(validation) {
         this.leftValidation = validation
     }
 
+    /*
+     Tags([
+        'setters', 'public'
+     ])
+    */
     setRightValidation(validation) {
         this.rightValidation = validation
     }
 
     /// Evaluating
 
+    /*
+     Tags([
+        'evaluating', 'public'
+     ])
+    */
     getValidationResultOn({ value: value }) {
         const leftValidationResult = this.leftValidation.getValidationResultOn({ value: value })
 
@@ -45,6 +65,11 @@ class OrValidation {
         }
     }
 
+    /*
+     Tags([
+        'evaluating', 'public'
+     ])
+    */
     evaluateOn({ value: value }) {
         const validationResult = this.getValidationResultOn({ value: value })
 
@@ -56,6 +81,11 @@ class OrValidation {
 
     /// Raising errors
 
+    /*
+     Tags([
+        'raising errors', 'implementation'
+     ])
+    */
     raiseValidationError({ errorMessage: errorMessage }) {
         throw new Error( errorMessage )
     }

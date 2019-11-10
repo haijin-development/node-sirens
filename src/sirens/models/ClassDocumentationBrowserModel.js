@@ -21,6 +21,8 @@ class ClassDocumentationBrowserModel {
             'classMethodsModel',
 
             'selectedMethodModel',
+
+            'selectedTagsModel',
         ]
     }
 
@@ -46,6 +48,10 @@ class ClassDocumentationBrowserModel {
         })
 
         this.selectedMethodModel = ValueModel.new()
+
+        this.selectedTagsModel = ValueModel.new({
+            value: []
+        })
 
         this.connectModels()
 
@@ -76,6 +82,10 @@ class ClassDocumentationBrowserModel {
 
     getSelectedMethodModel() {
         return this.selectedMethodModel
+    }
+
+    getSelectedTagsModel() {
+        return this.selectedTagsModel
     }
 
     /// Querying
@@ -154,6 +164,24 @@ class ClassDocumentationBrowserModel {
         })
     }
 
+    getAllMethodsTags() {
+        const allMethodsTagsSet = new Set()
+
+        const allMethodsDefinition = this.classDefinition.getMethods()
+
+        allMethodsDefinition.forEach( (methodDefinition) => {
+            const methodTags = methodDefinition.getDocumentation().getTags()
+
+            methodTags.forEach( (tag) => {
+                allMethodsTagsSet.add( tag )
+            })
+        })
+
+        const allMethodsTags = allMethodsTagsSet.values()
+
+        return Array.from( allMethodsTags )
+    }
+
     /// Actions
 
     reload() {
@@ -183,6 +211,7 @@ class ClassDocumentationBrowserModel {
 
         this.showUnformattedCommentsModel.onValueChanged( this.triggerDocumentationChanged.bind(this) )
         this.editionModeModel.onValueChanged( this.triggerDocumentationChanged.bind(this) )
+        this.selectedTagsModel.onValueChanged( this.onSelectedTagsChanged.bind(this) )
     }
 
     onMethodSelectionChanged({ oldValue: oldValue, newValue: newValue }) {
@@ -191,6 +220,38 @@ class ClassDocumentationBrowserModel {
 
     triggerDocumentationChanged() {
         this.documentationChangedModel.triggerValueChanged({ oldValue: undefined, newValue: undefined })
+    }
+
+    onSelectedTagsChanged() {
+        const selectedTags = this.selectedTagsModel.getValue()
+
+        const methodsWithSelectedTags = this.getMethodDefinitionsFilteredByTags({
+            tagsFilter: selectedTags,
+        })
+
+        this.classMethodsModel.setChoices( methodsWithSelectedTags )
+    }
+
+    getMethodDefinitionsFilteredByTags({ tagsFilter: tagsFilter }) {
+        const methodDefinitions = this.classDefinition.getMethods()
+
+        if( tagsFilter.length === 0 ) { return methodDefinitions }
+
+        const methodsWithSelectedTags = []
+
+        methodDefinitions.forEach( (methodDefinition) => {
+            const methodTags = methodDefinition.getDocumentation().getTags()
+
+            const includeMethod = tagsFilter.every( (tagFilter) => {
+                return methodTags.includes( tagFilter )
+            })
+
+            if( includeMethod === true ) {
+                methodsWithSelectedTags.push( methodDefinition )
+            }
+        })
+
+        return methodsWithSelectedTags
     }
 }
 

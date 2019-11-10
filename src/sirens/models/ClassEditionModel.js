@@ -67,7 +67,7 @@ class ClassEditionModel {
     getSelectedMethodName() {
         const method = this.classMethodsModel.getSelectionValue()
 
-        if( method === null ) { return null }
+        if( method === undefined || method === null ) { return null }
 
         return method.getName()
     }

@@ -76,6 +76,10 @@ class MenuBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['menuGroups']
@@ -88,6 +92,10 @@ class MenuBuilder {
      Method(`
         Initializes this MenuBuilder and sets its initial properties with the given props.
      `)
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -119,7 +127,6 @@ class MenuBuilder {
            Creates 2 menu groups and gets them.
         `,
         Code: `
-
            const MenuBuilder = require('sirens/src/gui/componentBuilder/MenuBuilder')
 
            const builder = MenuBuilder.new()
@@ -160,6 +167,10 @@ class MenuBuilder {
            builder.getMenuGroups()
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getMenuGroups() {
         return this.menuGroups
@@ -236,6 +247,10 @@ class MenuBuilder {
            menu
         `,
      })
+
+     Tags([
+        'creating objects', 'public'
+     ])
     */
     createFromClosure(closure) {
         this.build(closure)
@@ -290,7 +305,6 @@ class MenuBuilder {
            Creates 2 MenuGroups.
         `,
         Code: `
-
            const MenuBuilder = require('sirens/src/gui/componentBuilder/MenuBuilder')
 
            const builder = MenuBuilder.new()
@@ -329,9 +343,12 @@ class MenuBuilder {
            })
 
            menu
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     menuGroup(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)

@@ -56,6 +56,10 @@ class MenuGroupBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['menuItems']
@@ -68,6 +72,10 @@ class MenuGroupBuilder {
      Method(`
         Initializes this MenuGroupBuilder and sets its initial properties with the given props.
      `)
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -117,6 +125,10 @@ class MenuGroupBuilder {
            builder.getMenuItems()
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getMenuItems() {
         return this.menuItems
@@ -145,6 +157,10 @@ class MenuGroupBuilder {
            A new MenuGroup with the items created during the evaluation of given closure.
         `,
      })
+
+     Tags([
+        'creating objects', 'public'
+     ])
     */
     createFromClosure(closure) {
         this.build(closure)
@@ -206,7 +222,6 @@ class MenuGroupBuilder {
            Builds a MenuGroup with 2 items.
         `,
         Code: `
-
            const MenuGroupBuilder = require('sirens/src/gui/componentBuilder/MenuGroupBuilder')
            const MenuBar = require('sirens/src/gui/components/menus/MenuBar')
 
@@ -227,9 +242,12 @@ class MenuGroupBuilder {
            })
 
            menuGroup
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     item({label: label, enabled: enabled, action: action}) {
         const menuItem = MenuItem.new({
@@ -245,6 +263,10 @@ class MenuGroupBuilder {
      Method(`
         Adds a visual separation between two menu items in this MenuGroup.
      `)
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     separator() {
         const menuItemSeparator = MenuItemSeparator.new()

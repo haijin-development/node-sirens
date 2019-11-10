@@ -1,7 +1,7 @@
 const Classification = require('../../../../src/o-language/classifications/Classification')
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
+
 const Resource = require('../../objects/Resource')
 const MethodUnformattedComment = require('./unformatted-documentation/MethodUnformattedComment')
 const MethodFormattedComment = require('./formatted-documentation/MethodFormattedComment')
@@ -12,7 +12,7 @@ class ClassMethodsDocumentation {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Building
@@ -22,24 +22,21 @@ class ClassMethodsDocumentation {
 
         const showsUnformattedComments = model.showsUnformattedComments()
 
+        const methodTags = model.getAllMethodsTags().sort()
+
+        const selectedTagsModel = model.getSelectedTagsModel()
+
         componentsRenderer.render(function (component) {
 
             this.horizontalSplitter( function() {
 
-                this.container( function() {
-
-                    this.styles({
-                        viewAttributes: { splitProportion: 2.0/3.0 },
-                        hScroll: 'never',
-                        vScroll: 'never'
-                    })
+                this.container({ viewAttributes: { splitProportion: 2.0/3.0 }, hasSrollBars: false, }, function() {
 
                     if( showsUnformattedComments ) {
 
                         this.component(
                             MethodUnformattedComment.new({
                                 model: model,
-                                viewAttributes: { splitProportion: 2.0 / 3 },
                             })
                         )
 
@@ -48,7 +45,6 @@ class ClassMethodsDocumentation {
                         this.component(
                             MethodFormattedComment.new({
                                 model: model,
-                                viewAttributes: { splitProportion: 2.0 / 3 },
                             })
                         )
 
@@ -56,25 +52,49 @@ class ClassMethodsDocumentation {
 
                 })
 
-                this.listChoice( function() {
+                this.verticalStack({ viewAttributes: { splitProportion: 1.0 / 3.0 }, showHeaders: false, }, function() {
 
-                    this.model( model.getClassMethodsModel() )
+                    this.listChoice({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
+                        this.model( model.getClassMethodsModel() )
 
-                    this.styles({
-                        viewAttributes: { splitProportion: 1.0 / 3 },
-                        showHeaders: false,
+                        this.column({
+                            getImageClosure: function(functionDefinition) { return Resource.image.method },
+                            imageWidth: 24,
+                            imageHeight: 24,
+                        })
+
+                        this.column({
+                            label: 'Methods',
+                            getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                        })
                     })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(functionDefinition) { return Resource.image.method },
-                        imageWidth: 24,
-                        imageHeight: 24,
+                    this.verticalSeparator()
+
+                    this.label({
+                        text: 'Tags',
+                        viewAttributes: { stackSize: 'fixed' },
                     })
 
-                    this.column({
-                        getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                    this.verticalSeparator()
+
+                    this.container( function() {
+
+                        this.verticalStack({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
+
+                            methodTags.forEach( (tag) => {
+                                this.multipleCheckBox({
+                                    model: selectedTagsModel,
+                                    item: tag,
+                                    label: tag,
+                                    viewAttributes: { stackSize: 'fixed' },
+                                })
+                            })
+
+                        })
+
                     })
+
                 })
 
             })

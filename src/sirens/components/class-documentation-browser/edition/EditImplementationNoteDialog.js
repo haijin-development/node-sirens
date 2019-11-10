@@ -1,6 +1,6 @@
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../gui/components/Component')
-const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
 const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
 const EditDialogHeader = require('./EditDialogHeader')

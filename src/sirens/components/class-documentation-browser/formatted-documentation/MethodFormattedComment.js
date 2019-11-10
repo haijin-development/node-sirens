@@ -2,13 +2,16 @@ const path = require('path')
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+
 
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 const MethodCommentHeader = require ('../MethodCommentHeader')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
 const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
+
+const TagsDocumentation = require ('./TagsDocumentation')
+const EditTagsDialog = require ('../edition/EditTagsDialog')
 
 const ParamsEditionHeader = require ('./ParamsEditionHeader')
 const ParamDocumentation = require('./ParamDocumentation')
@@ -26,13 +29,15 @@ const ExampleDocumentation = require('./ExampleDocumentation')
 const ExamplesEditionHeader = require('./ExamplesEditionHeader')
 const EditExampleDialog = require('../edition/EditExampleDialog')
 
+const MethodSourceCodeDocumentation = require('./MethodSourceCodeDocumentation')
+
 class MethodFormattedComment {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Actions
@@ -61,6 +66,41 @@ class MethodFormattedComment {
         const documentation = method.getDocumentation()
 
         documentation.setDescription( methodNewDescription )
+
+        this.updateMethodDocumentation({
+            documentation: documentation,
+        })
+    }
+
+    editMethodTags() {
+        const model = this.getModel()
+
+        const method = model.getSelectedMethod()
+
+        const documentation = method.getDocumentation()
+
+        const tags = documentation.getTags()
+
+        const dialog = EditTagsDialog.new({
+            model: model,
+            method: method,
+            tags: tags,
+            window: this.getProps().window,
+            onUpdateTags: this.upateMethodTags.bind(this),
+            acceptButtonLabel: `Update method tags`,
+        })
+
+        dialog.open()
+    }
+
+    upateMethodTags({ newTags: newTags }) {
+        const model = this.getModel()
+
+        const method = model.getSelectedMethod()
+
+        const documentation = method.getDocumentation()
+
+        documentation.setTags( newTags )
 
         this.updateMethodDocumentation({
             documentation: documentation,
@@ -438,6 +478,24 @@ class MethodFormattedComment {
                         },
                     })
 
+                    this.component(
+                        MethodCommentHeader.new({
+                            method: method,
+                        })
+                    )
+
+                    this.verticalSeparator()
+
+                    this.component(
+                        TagsDocumentation.new({
+                            model: model,
+                            method: method,
+                            editMethodTags: component.editMethodTags.bind(component)
+                        })
+                    )
+
+                    this.verticalSeparator()
+
                     if( isInEditionMode ) {
                         this.component(
                             EditMethodDescriptionHeader.new({
@@ -450,11 +508,7 @@ class MethodFormattedComment {
                         this.verticalSeparator()
                     }
 
-                    this.component(
-                        MethodCommentHeader.new({
-                            method: method,
-                        })
-                    )
+                    this.verticalSeparator()
 
                     this.component(
                         PlaygroundComponent.new({
@@ -585,6 +639,13 @@ class MethodFormattedComment {
 
                     })
 
+                    this.verticalSeparator()
+
+                    this.component(
+                        MethodSourceCodeDocumentation.new({
+                            method: method,
+                        })
+                    )
                 })
 
             })

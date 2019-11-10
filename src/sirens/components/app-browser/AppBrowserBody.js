@@ -31,8 +31,7 @@ class AppBrowserBody {
 
                     this.styles({
                         viewAttributes: { splitProportion: 2.0/3.0 },
-                        hScroll: 'never',
-                        vScroll: 'never'
+                        hasScrollBars: false,
                     })
 
                     this.component(

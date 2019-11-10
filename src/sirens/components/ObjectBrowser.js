@@ -5,7 +5,7 @@ const Sirens = require('../../Sirens')
 const ObjectBrowserModel = require('../models/ObjectBrowserModel')
 const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
 const ScriptEvaluator = require('../objects/ScriptEvaluator')
 
 class ObjectBrowser {
@@ -14,7 +14,7 @@ class ObjectBrowser {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

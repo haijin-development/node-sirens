@@ -1,7 +1,7 @@
 const Classification = require('../../../../src/o-language/classifications/Classification')
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
+
 const ClassMethodsDocumentation = require('./ClassMethodsDocumentation')
 const ClassUnformattedComment = require('./unformatted-documentation/ClassUnformattedComment')
 const ClassFormattedComment = require('./formatted-documentation/ClassFormattedComment')
@@ -12,7 +12,7 @@ class DocumentationBrowserBody {
     static definition() {
         this.instanceVariables = ['selectedTabPageIndex', 'isRendering']
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Building

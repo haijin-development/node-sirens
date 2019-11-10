@@ -7,6 +7,11 @@ const OrValidation = require('./OrValidation')
 class ParamValidator {
     /// Definition
 
+    /*
+     Tags([
+        'definition', 'implementation'
+     ])
+    */
     static definition() {
         this.instanceVariables = ['valueToValidate', 'validation']
         this.assumes = []
@@ -15,18 +20,33 @@ class ParamValidator {
 
     /// Initializing
 
+    /*
+     Tags([
+        'setters', 'public'
+     ])
+    */
     setValue(value) {
         this.valueToValidate = value
     }
 
     /// Evaluating
 
+    /*
+     Tags([
+        'evaluating', 'public'
+     ])
+    */
     evaluate() {
         this.validation.evaluateOn({ value: this.valueToValidate })
     }
 
     /// Validations
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isNull() {
         this.isExpectedTo( (value) => {
             return {
@@ -38,6 +58,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     notNull() {
         this.isExpectedTo( (value) => {
             return {
@@ -49,6 +74,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isUndefined() {
         this.isExpectedTo( (value) => {
             return {
@@ -60,6 +90,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     notUndefined() {
         this.isExpectedTo( (value) => {
             return {
@@ -71,6 +106,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isBoolean() {
         this.isExpectedTo( (value) => {
             return {
@@ -82,6 +122,11 @@ class ParamValidator {
         return this        
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isNumber() {
         this.isExpectedTo( (value) => {
             const type = typeof(value)
@@ -95,6 +140,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isInteger() {
         this.isExpectedTo( (value) => {
             return {
@@ -106,6 +156,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isString() {
         this.isExpectedTo( (value) => {
             const type = typeof(value)
@@ -119,6 +174,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isArray() {
         this.isExpectedTo( (value) => {
             return {
@@ -130,6 +190,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isObject() {
         this.isExpectedTo( (value) => {
             return {
@@ -142,6 +207,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isFunction() {
         this.isExpectedTo( (value) => {
             return {
@@ -153,6 +223,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isAnyOf(values) {
         this.isExpectedTo( (value) => {
             return {
@@ -164,6 +239,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     compliesWith(protocol) {
         this.isExpectedTo( (value) => {
             const isOInstance = OInstance.isOInstance( value )
@@ -186,14 +266,11 @@ class ParamValidator {
         return this
     }
 
-    isExpectedTo(closure) {
-        this.validation = this.newValidation()
-
-        this.validation.setValidationClosure( closure )
-
-        return this
-    }
-
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isExpectedTo(closure) {
         const validation = this.newValidation()
 
@@ -208,6 +285,11 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     or() {
         const orValidation = this.newOrValidation()
 
@@ -219,10 +301,20 @@ class ParamValidator {
         return this
     }
 
+    /*
+     Tags([
+        'creating objects', 'implementation'
+     ])
+    */
     newValidation() {
         return Validation.new()
     }
 
+    /*
+     Tags([
+        'implementation', 'creating objects'
+     ])
+    */
     newOrValidation() {
         return OrValidation.new()
     }

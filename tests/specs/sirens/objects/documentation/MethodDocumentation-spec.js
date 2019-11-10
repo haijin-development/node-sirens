@@ -155,17 +155,30 @@ describe('When using a MethodDocumentation', () => {
 
     describe('to document a tag', () => {
 
+            const exampleComment =
+                `
+                Tags([
+                    "getters", "accessors"
+                ])
+                `
+
+
         it('builds a Method Tag from a template literal', () => {
 
-            const exampleComment =
-    `
-    Tags([
-        "getters", "accessors"
-    ])
-    `
             const methodDocumentation = MethodDocumentation.fromString( exampleComment )
 
             const tags = methodDocumentation.getTags()
+
+            expect( tags ) .to .eql([
+                'getters', 'accessors'
+            ])
+        })
+
+        it('gets the method tags sorted alphabetically in reversed order', () => {
+
+            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+
+            const tags = methodDocumentation.getTagsSortedAlphabetically({ reversed: true })
 
             expect( tags ) .to .eql([
                 'getters', 'accessors'

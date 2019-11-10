@@ -48,14 +48,6 @@ const Sirens = require('sirens')
 Sirens.browsePrototypes(object)
 ```
 
-Open a browser on the stack call with
-
-```javascript
-const Sirens = require('sirens')
-
-Sirens.browseStack(arguments)
-```
-
 A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code
 using the Sirens ObjectBrowser with the same access to the npm modules that your application has, although
 currently it does not handle the evaluation of promises nor asynchronous code, only synchronous calls.

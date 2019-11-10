@@ -1,5 +1,6 @@
+const path = require('path')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const callsites = require('callsites')
+const Gdk = require('node-gtk').require('Gdk')
 
 /*
  Class(`
@@ -118,6 +119,10 @@ class Sirens {
            Sirens.browseObject( anyObject )
         `,
      })
+
+     Tags([
+        'browsers', 'public'
+     ])
     */
     static browseObject(object) {
         this.do( () => {
@@ -150,99 +155,23 @@ class Sirens {
            Opens a browser on the prototypes of the array [ 1, 2, 3 ].
         `,
         Code: `
-
            const Sirens = require('sirens')
 
            const anyObject = [ 1, 2, 3 ]
 
            Sirens.browsePrototypes( anyObject )
-
         `,
      })
+
+     Tags([
+        'browsers', 'public'
+     ])
     */
     static browsePrototypes(object) {
         this.do( () => {
             const PrototypeBrowser = require('../src/sirens/components/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
-        })
-    }
-
-    /*
-     Method(`
-        Opens a StackBrowser on the current stack frame.
-     `)
-
-     Param({
-        Name: `
-           object
-        `,
-        Description: `
-           An optional object of the form
-
-                 { ... }
-
-
-           It usually will be the arguments of the current function and any other variable you would like to inspect.
-
-           For instance
-
-                 Sirens.browseStack({
-                       arguments: arguments,
-                       thisObject: this,
-                       someOtherVariable: someOtherVariable,
-                 })
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a StackBrowser on the current stack frame.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack()
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a browser on the current stack frame and also inspects the arguments of the current function.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack( arguments )
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a browser on the current stack frame and also inspects the arguments of the current function,
-           this object and another variable.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.browseStack({
-                 arguments: arguments,
-                 thisObject: this,
-                 someOtherVariable: someOtherVariable,
-           })
-
-        `,
-     })
-    */
-    static browseStack(object) {
-        const framesStack = callsites()
-
-        const allStackedFramesButThisOne = framesStack.slice(1)
-
-        this.do( () => {
-            const StackTraceBrowser = require('../src/sirens/components/StackTraceBrowser')
-
-            StackTraceBrowser.openOn({framesStack: allStackedFramesButThisOne, object: object})
         })
     }
 
@@ -295,6 +224,10 @@ class Sirens {
            Sirens.openClassEditor({ filename: aFilename })
         `,
      })
+
+     Tags([
+        'browsers', 'public'
+     ])
     */
     static openClassEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
@@ -305,6 +238,25 @@ class Sirens {
     }
 
 
+    /*
+     Method(`
+        Opens an application (or a project) browser.
+     `)
+
+     Param({
+        Name: `
+           appFolder
+        `,
+        Description: `
+           String.
+           A path string to set as the initial folder in the browser.
+        `,
+     })
+
+     Tags([
+        'browsers', 'public'
+     ])
+    */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
         this.do( () => {
             const AppBrowser = require('../src/sirens/components/AppBrowser')
@@ -315,8 +267,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         Opens a class documentation browser on the given classDefinition.
      `)
 
@@ -329,6 +279,7 @@ class Sirens {
            The ClassDefinition object to browse its documentation.
         `,
      })
+
      Param({
         Name: `
            methodName
@@ -340,6 +291,10 @@ class Sirens {
            It is expected to be the name of a method defined in the given classDefinition.
         `,
      })
+
+     Tags([
+        'browsers', 'public'
+     ])
     */
     static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
         this.do( () => {
@@ -401,6 +356,10 @@ class Sirens {
            Sirens.openPlayground({ filename: aFilename })
         `,
      })
+
+     Tags([
+        'browsers', 'public'
+     ])
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
         this.do( () => {
@@ -412,8 +371,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         Initializes GTK, or the GUI framework, and starts its main event loop.
 
         Then it evaluates the given closure.
@@ -447,12 +404,11 @@ class Sirens {
            call.
         `,
         Code: `
-
            const Sirens = require('sirens')
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
-           const ComponentProtocol = require('sirens/src/gui/protocols/ComponentProtocol')
+
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
 
            class CustomComponent {
@@ -461,7 +417,7 @@ class Sirens {
                static definition() {
                    this.instanceVariables = []
                    this.assumes = [Component]
-                   this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+                   this.implements = [ComponentProtocol_Implementation]
                    this.classificationBehaviours = [ComponentInstantiator]
                }
 
@@ -486,9 +442,12 @@ class Sirens {
            Sirens.do( () => {
                CustomComponent.new().open()
            })
-
         `,
      })
+
+     Tags([
+        'evaluating', 'public'
+     ])
     */
     static do(closure) {
         if(this.gtkIsRunningTheMainLoop === true) {
@@ -504,6 +463,7 @@ class Sirens {
             closure.call(this)
 
             Gtk.main()
+
         } finally {
             this.gtkIsRunningTheMainLoop = false
         }
@@ -511,7 +471,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
         Initializes the GTK library.
 
         Usually this method is not called by the main program since the method
@@ -535,6 +494,10 @@ class Sirens {
            Sirens.initialize()
         `,
      })
+
+     Tags([
+        'initializing', 'implementation'
+     ])
     */
     static initialize() {
         if(this.gtkWasInitialize === true) {
@@ -544,12 +507,28 @@ class Sirens {
         this.gtkWasInitialize = true
 
         Gtk.init()
+
+        this.setGlobalStyles()
+    }
+
+    static setGlobalStyles() {
+      const screen = Gdk.Screen.getDefault()
+
+      const cssProvider = new Gtk.CssProvider()
+
+      const cssFilePath = path.resolve( __dirname + '/../resources/css/sirens.css' )
+
+      cssProvider.loadFromPath( cssFilePath )
+
+      Gtk.StyleContext.addProviderForScreen(
+        screen,
+        cssProvider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+      )
     }
 
     /*
      Method(`
-        Private.
-
         This method is private and must not be called by the main program.
 
         Every time a new Window or Dialog is opened this method is called to keep track of all of
@@ -562,6 +541,10 @@ class Sirens {
      Implementation(`
         See also WindowView.initialize() method.
      `)
+
+     Tags([
+        'implementation'
+     ])
     */
     static registerWindow() {
         if(this.registeredWindows === undefined) {
@@ -573,8 +556,6 @@ class Sirens {
 
     /*
      Method(`
-        Private.
-
         This method is private and must not be called by the main program.
 
         Every time a Window or Dialog is closed this method is called to keep track of all of
@@ -587,6 +568,10 @@ class Sirens {
      Implementation(`
         See also WindowView.handleDestroy() method.
      `)
+
+     Tags([
+        'implementation'
+     ])
     */
     static unregisterWindow() {
         this.registeredWindows -= 1

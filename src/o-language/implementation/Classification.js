@@ -23,6 +23,10 @@ class Classification {
      Method(`
         This Classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['classificationDefinition']
@@ -282,7 +286,6 @@ class Classification {
        That is, the Circle instances will also behave as Shape instances.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -329,7 +332,6 @@ class Classification {
        circle.setRadius( 10 )
 
        circle.getPosition()
-
     `,
  })
 
@@ -457,6 +459,10 @@ class Classification {
        circle.getY()
     `,
  })
+
+ Tags([
+    'defining classifications', 'public'
+ ])
 */
     define(classificationDefinition) {
         const Classification = MessageDispatcherInstance.getClassificationClassification()
@@ -508,6 +514,10 @@ class Classification {
        object.isBehavingAs( OInstance )
     `,
  })
+
+ Tags([
+    'creating objects', 'public'
+ ])
 */
     createObject() {
         return MessageDispatcherInstance.createObject()
@@ -579,6 +589,10 @@ class Classification {
        circle.getRadius()
     `,
  })
+
+ Tags([
+    'creating objects', 'public'
+ ])
 */
     new(...props) {
         const newInstance = this.createObject()
@@ -622,7 +636,6 @@ class Classification {
        Gets the name of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Circle {
@@ -646,9 +659,12 @@ class Classification {
        Circle = Classification.define(Circle)
 
        Circle.getName()
-
     `,
  })
+
+ Tags([
+    'querying', 'public'
+ ])
 */
     getName() {
         return MessageDispatcherInstance.classificationGetName({
@@ -704,6 +720,10 @@ class Classification {
        Circle.getClassificationDefinition()
     `,
  })
+
+ Tags([
+    'getters', 'public', 'querying'
+ ])
 */
     getClassificationDefinition() {
         return this.classificationDefinition
@@ -711,8 +731,6 @@ class Classification {
 
     /*
      Method(`
-        Private.
-
         This method makes sure that this Classification definintion has the following properties:
 
         [
@@ -726,6 +744,10 @@ class Classification {
         All of these properties are optional.
         If any of them is missing it creates a default definition.
      `)
+
+     Tags([
+        'defining classifications', 'initializing', 'implementation'
+     ])
     */
     initializeClassificationDefinition(classificationDefinition) {
         MessageDispatcherInstance.classificationDefinitionInitialize({
@@ -782,6 +804,10 @@ class Classification {
        classificationObject.getClassificationDefinition()
     `,
  })
+
+ Tags([
+    'public', 'setters'
+ ])
 */
     setClassificationDefinition(classificationDefinition) {
         this.initializeClassificationDefinition( classificationDefinition )
@@ -830,6 +856,10 @@ class Classification {
        Circle.getDefinedMethodNames()
     `,
  })
+
+ Tags([
+    'classification methods', 'public', 'querying'
+ ])
 */
     getDefinedMethodNames() {
         const classificationDefinition = this.classificationDefinition
@@ -896,6 +926,10 @@ class Classification {
            Circle.definesMethod( 'getRadius' )
         `,
      })
+
+     Tags([
+        'classification methods', 'public', 'asking'
+     ])
     */
     definesMethod(methodName) {
         const classificationDefinition = this.classificationDefinition
@@ -922,7 +956,6 @@ class Classification {
        Returns the names of all the instance variables defined in the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Circle {
@@ -946,9 +979,12 @@ class Classification {
        Circle = Classification.define(Circle)
 
        Circle.getDefinedInstanceVariables()
-
     `,
  })
+
+ Tags([
+    'classification instance variables', 'public', 'querying', 'getters'
+ ])
 */
     getDefinedInstanceVariables() {
         const classificationDefinition = this.classificationDefinition
@@ -990,7 +1026,6 @@ class Classification {
            Dynamically adds instance variables to a classification.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -1021,9 +1056,12 @@ class Classification {
            ])
 
            Circle.getDefinedInstanceVariables()
-
         `,
      })
+
+     Tags([
+        'classification instance variables', 'public', 'setters'
+     ])
     */
     setDefinedInstanceVariables(instanceVariables) {
         const classificationDefinition = this.classificationDefinition
@@ -1054,7 +1092,6 @@ class Classification {
            Asks if the Circle classification defines the instance variables named 'radius' and 'color'.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -1082,6 +1119,10 @@ class Classification {
            Circle.definesInstanceVariable( 'radius' )
         `,
      })
+
+     Tags([
+        'classification instance variables', 'public', 'asking'
+     ])
     */
     definesInstanceVariable(name) {
         return this.getDefinedInstanceVariables().includes( name ) 
@@ -1160,6 +1201,10 @@ class Classification {
        circle.getX()
     `,
  })
+
+ Tags([
+    'classification assumptions', 'public', 'querying', 'getters'
+ ])
 */
     getAssumptions() {
         const classificationDefinition = this.classificationDefinition
@@ -1191,7 +1236,6 @@ class Classification {
        Sets the assumptions to the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1246,9 +1290,12 @@ class Classification {
        circle.setX(1)
 
        circle.getX()
-
     `,
  })
+
+ Tags([
+    'classification assumptions', 'public', 'setters'
+ ])
 */
     setAssumptions(otherClassifications) {
         const classificationDefinition = this.classificationDefinition
@@ -1283,7 +1330,6 @@ class Classification {
        Gets the recursive assumptions of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1333,6 +1379,10 @@ class Classification {
        Circle.getRecursiveAssumptions()
     `,
  })
+
+ Tags([
+    'classification assumptions', 'public', 'querying'
+ ])
 */
     getRecursiveAssumptions() {
         let allAssumptions = []
@@ -1375,7 +1425,6 @@ class Classification {
        Gets the assumptions chain of the Circle classification.
     `,
     Code: `
-
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
        class Shape {
@@ -1423,9 +1472,12 @@ class Classification {
        Circle = Classification.define(Circle)
 
        Circle.getAssumptionsChain()
-
     `,
  })
+
+ Tags([
+    'classification assumptions', 'public', 'querying'
+ ])
 */
     getAssumptionsChain() {
         return this.getRecursiveAssumptions()
@@ -1447,6 +1499,10 @@ class Classification {
            Returns the classificationBehaviours of this Classification.
         `,
      })
+
+     Tags([
+        'classification behaviours', 'public', 'querying', 'getters'
+     ])
     */
     getClassificationBehaviours() {
         const classificationDefinition = this.classificationDefinition
@@ -1475,6 +1531,10 @@ class Classification {
            The classificationBehaviours of this Classification.
         `,
      })
+
+     Tags([
+        'classification behaviours', 'public', 'setters'
+     ])
     */
     setClassificationBehaviours(otherClassifications) {
         const classificationDefinition = this.classificationDefinition
@@ -1495,6 +1555,10 @@ class Classification {
            An array with the Protocols this classification declares to implement.
         `,
      })
+
+     Tags([
+        'implemented protocols', 'public', 'querying', 'getters'
+     ])
     */
     getImplementedProtocols() {
         const classificationDefinition = this.classificationDefinition
@@ -1517,6 +1581,10 @@ class Classification {
            The protocols this classifications declares to implement.
         `,
      })
+
+     Tags([
+        'implemented protocols', 'public', 'setters'
+     ])
     */
     setImplementedProtocols(protocols) {
         const classificationDefinition = this.classificationDefinition
@@ -1537,6 +1605,10 @@ class Classification {
            An array with the Protocols this classification expects to implement.
         `,
      })
+
+     Tags([
+        'expected protocols', 'public', 'querying', 'getters'
+     ])
     */
     getExpectedProtocols() {
         const classificationDefinition = this.classificationDefinition
@@ -1559,6 +1631,10 @@ class Classification {
            The protocols this classification expects to implement.
         `,
      })
+
+     Tags([
+        'expected protocols', 'public', 'setters'
+     ])
     */
     setExpectedProtocols(protocols) {
         const classificationDefinition = this.classificationDefinition
@@ -1592,7 +1668,6 @@ class Classification {
        Validates that the Circle classification implements the CircleProtocol.
     `,
     Code: `
-
        const Protocol = require('sirens/src/o-language/classifications/Protocol')
        const Classification = require('sirens/src/o-language/classifications/Classification')
 
@@ -1627,9 +1702,12 @@ class Classification {
        Circle = Classification.define(Circle)
 
        Circle.implements({ protocol: CircleProtocol })
-
     `,
  })
+
+ Tags([
+    'implemented protocols', 'validating', 'public'
+ ])
 */
     implements({ protocol: protocol }) {
         protocol.isImplementedBy({
@@ -1652,6 +1730,10 @@ class Classification {
 
         compliesWith is used during the validation of parameters to quickly validate that an object implements a protocol.
      `)
+
+     Tags([
+        'implemented protocols', 'public', 'validating'
+     ])
     */
     compliesWith({ protocol: protocol }) {
         const implementedProtocols = this.getImplementedProtocols()

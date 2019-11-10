@@ -44,6 +44,18 @@ class TextView {
         )        
     }
 
+    setCss(cssClasses) {
+        if( typeof(cssClasses) === 'string' ) {
+            cssClasses = cssClasses.trim().split( ' ' )
+        }
+
+        const styleContext = this.textView.getStyleContext()
+
+        cssClasses.forEach( (cssClass) => {
+            styleContext.addClass( cssClass.trim() )
+        })
+    }
+
     /// Initializing
 
     initialize({ onTextChanged: onTextChangedBlock }) {

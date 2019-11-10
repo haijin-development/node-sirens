@@ -1,5 +1,6 @@
 const Protocol = require('../../o-language/classifications/Protocol')
 const ComponentProtocol = require('./ComponentProtocol')
+
 const ComponentRendererProtocol = require('./ComponentRendererProtocol')
 
 class ComponentProtocol_Implementation {

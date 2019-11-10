@@ -102,6 +102,10 @@ class AntiComponent {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -127,6 +131,10 @@ class AntiComponent {
            In the afterMethod it replaces the return value by this object in case it receives more message calls.
         `,
      })
+
+     Tags([
+        'proxy methods', 'implementation'
+     ])
     */
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
         return {
@@ -173,6 +181,10 @@ class AntiComponent {
            			.thirdMethod()
         `,
      })
+
+     Tags([
+        'proxy methods', 'implementation'
+     ])
     */
     afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
         return {

@@ -20,7 +20,9 @@ class Container {
     }
 
     createView() {
-        return ContainerView.new()
+        const hasScrollBars = this.getProps().hasScrollBars
+
+        return ContainerView.new({ hasScrollBars: hasScrollBars })
     }
 
     synchronizeViewFromModel() {

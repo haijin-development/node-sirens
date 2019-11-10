@@ -35,6 +35,10 @@ class ComponentRenderer {
      Method(`
         This classification definintion.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['rootComponent']
@@ -75,6 +79,10 @@ class ComponentRenderer {
            	Component.build()
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize({ rootComponent: rootComponent }) {
         this.previousClassificationDo( () => {
@@ -117,6 +125,10 @@ class ComponentRenderer {
 
         for that reason.
      `)
+
+     Tags([
+        'rendering', 'public'
+     ])
     */
     render(closure) {
         this.build(closure, this.rootComponent)

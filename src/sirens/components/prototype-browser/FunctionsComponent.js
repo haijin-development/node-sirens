@@ -3,7 +3,7 @@ const Classification = require('../../../../src/o-language/classifications/Class
 const Sirens = require('../../../Sirens')
 const Component = require('../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../gui/protocols/ComponentProtocol')
+
 
 class FunctionsComponent {
     /// Definition
@@ -11,7 +11,7 @@ class FunctionsComponent {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Actions

@@ -15,7 +15,8 @@ const ChoicesList = require('../components/widgets/ChoicesList')
 const ChoicesTree = require('../components/widgets/ChoicesTree')
 const Label = require('../components/widgets/Label')
 const Text = require('../components/widgets/Text')
-const CheckBox = require('../components/widgets/CheckBox')
+const SingleSelectionCheckBox = require('../components/widgets/SingleSelectionCheckBox')
+const MultipleSelectionCheckBox = require('../components/widgets/MultipleSelectionCheckBox')
 const TextButton = require('../components/widgets/TextButton')
 const RadioButton = require('../components/widgets/RadioButton')
 const Image = require('../components/widgets/Image')
@@ -71,6 +72,10 @@ class ContainerWidgetBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['childComponents']
@@ -117,6 +122,10 @@ class ContainerWidgetBuilder {
            builder.getProps()
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -153,7 +162,6 @@ class ContainerWidgetBuilder {
            Builds 3 components using a ContainerWidgetBuilder object and gets them.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -165,9 +173,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getChildComponents() {
         return this.childComponents
@@ -175,7 +186,6 @@ class ContainerWidgetBuilder {
 
     /*
      Method(`
-        Private.
         Returns the last components created during the call of the
 
         	builder.build( function() {
@@ -211,6 +221,10 @@ class ContainerWidgetBuilder {
            builder.getLastChildComponent()
         `,
      })
+
+     Tags([
+        'querying', 'implementation'
+     ])
     */
     getLastChildComponent() {
         return this.childComponents[ this.childComponents.length - 1 ]
@@ -247,7 +261,6 @@ class ContainerWidgetBuilder {
            Adds a custom component.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
            const Component = require('sirens/src/gui/components/Component')
@@ -296,9 +309,12 @@ class ContainerWidgetBuilder {
            // Ask for the built components
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     component(component) {
         if( component === undefined ) {
@@ -362,8 +378,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -420,6 +434,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     window(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -491,8 +509,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -545,6 +561,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     dialog(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -613,8 +633,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -671,6 +689,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     container(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -757,8 +779,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -818,6 +838,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -908,8 +932,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -969,6 +991,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1046,8 +1072,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1106,6 +1130,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1182,8 +1210,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1242,6 +1268,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1312,8 +1342,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1372,6 +1400,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     tabs(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1432,8 +1464,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1486,6 +1516,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     tabPage(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1511,7 +1545,6 @@ class ContainerWidgetBuilder {
            Builds a verticalSeparator between two components in a verticalStack component.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -1540,9 +1573,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     verticalSeparator(props) {
         const defaultProps = {
@@ -1569,7 +1605,6 @@ class ContainerWidgetBuilder {
            Builds an horizontalSeparator between two components in an horizontalStack component.
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
 
            const builder = ContainerWidgetBuilder.new()
@@ -1598,9 +1633,12 @@ class ContainerWidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     horizontalSeparator(props) {
         const defaultProps = {
@@ -1662,8 +1700,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1747,6 +1783,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     listChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1803,8 +1843,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1890,6 +1928,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     treeChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -1926,8 +1968,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1978,6 +2018,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     label(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2016,8 +2060,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2079,6 +2121,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     text(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2094,9 +2140,9 @@ class ContainerWidgetBuilder {
 
     /*
      Method(`
-        Adds a CheckBox component to the array of built components.
+        Adds a SingleSelectionCheckBox component to the array of built components.
 
-        A CheckBox is an editable widget with two possible states, unchecked or checked.
+        A SingleSelectionCheckBox is an editable widget with two possible states, unchecked or checked.
 
         It uses a ValueModelBehaviour to get and update the value (checked or unchecked) it displays.
      `)
@@ -2115,8 +2161,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2128,7 +2172,7 @@ class ContainerWidgetBuilder {
            	'populatePopupMenuBlock',
            	'viewAttributes',
 
-           	// CheckBox properties
+           	// SingleSelectionCheckBox properties
 
            	model:  ValueModelBehaviour,
 
@@ -2151,7 +2195,7 @@ class ContainerWidgetBuilder {
 
      Example({
         Description: `
-           Builds a CheckBox initially checked.
+           Builds a SingleSelectionCheckBox initially checked.
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
@@ -2160,7 +2204,8 @@ class ContainerWidgetBuilder {
 
            builder.build( function() {
 
-           	this.text({
+           	this.checkbox({
+              label: 'A label',
            		value: true,
            	})
 
@@ -2169,6 +2214,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     checkBox(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2177,7 +2226,77 @@ class ContainerWidgetBuilder {
                 builder.build(closure)
             })
 
-        const text = CheckBox.new( builder.getProps() )
+        const text = SingleSelectionCheckBox.new( builder.getProps() )
+
+        this.childComponents.push(text)
+    }
+
+    /*
+     Method(`
+        Adds a MultipleSelectionCheckBox component to the array of built components.
+
+        A MultipleSelectionCheckBox is an editable widget with two possible states, unchecked or checked,
+        that depend on whether the MultipleSelectionCheckBox.item is included or not in the value of its
+        model.
+
+        Its models is a ValueModelBehaviour with a collection of items.
+     `)
+
+     Param({
+        Name: `
+           props
+        `,
+        Description: `
+           Optional.
+           Object.
+           An optional object defining one or more of the following styles for the label component
+
+           [
+            // Common properties
+
+            'width',
+            'height',
+            'alignHorizontal',
+            'alignVertical',
+            'marginLeft',
+            'marginRight',
+            'marginTop',
+            'marginBottom',
+            'marginHorizontal',
+            'marginVertical',
+            'populatePopupMenuBlock',
+            'viewAttributes',
+
+            // MultipleSelectionCheckBox properties
+
+            model:  ValueModelBehaviour,
+           ]
+
+           Each of these styles can be a value or a ValueModelBehaviour.
+        `,
+     })
+
+     Param({
+        Name: `
+           closure
+        `,
+        Description: `
+           An optional closure to evaluate and set additional properties in it.
+        `,
+     })
+
+     Tags([
+        'dsl', 'public'
+     ])
+    */
+    multipleCheckBox(props, closure) {
+        [props, closure] = this.normalizeArguments(props, closure)
+
+        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+                builder.build(closure)
+            })
+
+        const text = MultipleSelectionCheckBox.new( builder.getProps() )
 
         this.childComponents.push(text)
     }
@@ -2203,8 +2322,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2267,6 +2384,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     textButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2286,8 +2407,8 @@ class ContainerWidgetBuilder {
 
         A RadioButton is button with two possible states, unchecked or checked.
 
-        The difference with a CheckBox is that RadioButtons are grouped and whenever a RadioButton is checked all
-        the buttons in its group are unchecked.
+        The difference with a SingleSelectionCheckBox is that RadioButtons are grouped and whenever a
+        RadioButton is checked all the buttons in its group are unchecked.
 
         A RadioButton model is a ChoiceModel object shared with all the other RadioButtons in its group.
 
@@ -2308,8 +2429,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2381,6 +2500,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     radioButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2447,6 +2570,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     menuBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2520,6 +2647,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     toolBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
@@ -2552,8 +2683,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2613,6 +2742,10 @@ class ContainerWidgetBuilder {
            builder.getChildComponents()
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     image(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)

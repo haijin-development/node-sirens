@@ -67,6 +67,10 @@ class ToolBarBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['toolBarItems']
@@ -77,10 +81,12 @@ class ToolBarBuilder {
 
     /*
      Method(`
-
         Initializes this ToolBarBuilder and sets its initial properties with the given props.
-
      `)
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -112,7 +118,6 @@ class ToolBarBuilder {
            Builds a ToolBar with a ToolBarButton and a ToolBarToggleButton.
         `,
         Code: `
-
            const ToolBarBuilder = require('sirens/src/gui/componentBuilder/ToolBarBuilder')
            const GtkIcons = require('sirens/src/gui/gtk-views/constants/GtkIcons')
 
@@ -143,9 +148,12 @@ class ToolBarBuilder {
            })
 
            toolBar
-
         `,
      })
+
+     Tags([
+        'creating objects', 'public'
+     ])
     */
     createFromClosure(closure) {
         this.build(closure)
@@ -265,6 +273,10 @@ class ToolBarBuilder {
            toolBar
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     button({ label: label, image: imageProps, tooltip: tooltip, enabled: enabled, action: action }) {
         const menuItem = ToolButton.new({
@@ -361,7 +373,6 @@ class ToolBarBuilder {
            Builds a ToolBar with a ToolBarToggleButton.
         `,
         Code: `
-
            const ToolBarBuilder = require('sirens/src/gui/componentBuilder/ToolBarBuilder')
            const ValueModel = require('sirens/src/gui/models/ValueModel')
            const GtkIcons = require('sirens/src/gui/gtk-views/constants/GtkIcons')
@@ -384,9 +395,12 @@ class ToolBarBuilder {
            })
 
            toolBar
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     toggleButton({ model: model, label: label, image: imageProps, tooltip: tooltip, enabled: enabled }) {
         const menuItem = ToogleToolButton.new({
@@ -412,7 +426,6 @@ class ToolBarBuilder {
            Adds a ToolBar separator between 2 ToolBar items.
         `,
         Code: `
-
            const ToolBarBuilder = require('sirens/src/gui/componentBuilder/ToolBarBuilder')
            const GtkIcons = require('sirens/src/gui/gtk-views/constants/GtkIcons')
 
@@ -443,9 +456,12 @@ class ToolBarBuilder {
            })
 
            toolBar
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     separator() {
         const separator = ToolBarSeparator.new()

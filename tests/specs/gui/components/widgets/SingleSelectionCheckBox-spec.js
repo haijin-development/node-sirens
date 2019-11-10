@@ -1,9 +1,9 @@
 const expect = require('chai').expect
 const Component = require('../../../../../src/gui/components/Component')
 
-describe('When using a CheckBox', () => {
+describe('When using a SingleSelectionCheckBox', () => {
     describe('model', () => {
-        it('has a ValueModel with an empty text', () => {
+        it('has a ValueModel with a false value', () => {
             const widget = Component.render( function(renderer) {
                 this.checkBox()
             })

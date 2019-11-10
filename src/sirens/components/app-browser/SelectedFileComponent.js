@@ -21,6 +21,18 @@ class SelectedFileComponent {
         this.reRenderOnValueChangeOf( renderSelectedFileModel )
     }
 
+    showFirstTabPage() {
+        const tabsComponent = this.getChildComponent({ id: 'tabs' })
+
+        const hasNoClassDefinition = this.getModel().hasNoClassDefinition()
+
+        if( hasNoClassDefinition === true ) {
+            tabsComponent.showTabPageAt({ index: 0 })
+        } else {
+            tabsComponent.showTabPageAt({ index: 1 })
+        }
+    }
+
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
@@ -39,6 +51,8 @@ class SelectedFileComponent {
 
             })
         })
+
+        this.showFirstTabPage()
     }
 }
 

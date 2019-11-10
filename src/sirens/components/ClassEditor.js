@@ -6,7 +6,7 @@ const ClassEditorModel = require('../models/ClassEditorModel')
 const ClassEditorMenu = require('./class-editor/ClassEditorMenu')
 const ClassesComponent = require('./class-editor/ClassesComponent')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
 const FileChooser = require('../../gui/components/dialogs/FileChooser')
 const Sirens = require('../../Sirens')
 
@@ -16,7 +16,7 @@ class ClassEditor {
     static definition() {
         this.instanceVariables = ['lastOpenedFolder']
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

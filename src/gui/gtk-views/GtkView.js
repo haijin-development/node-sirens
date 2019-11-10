@@ -1,4 +1,5 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Gdk = require('node-gtk').require('Gdk', '3.0')
 const Classification = require('../../o-language/classifications/Classification')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
@@ -19,12 +20,12 @@ class GtkView {
     acceptedStyles() {
         return [
             'width', 'height',
-            'backgroundColor', 'foregroundColor',
             'alignHorizontal', 'alignVertical',
             'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
             'marginHorizontal', 'marginVertical',
             'populatePopupMenuBlock',
-            'viewAttributes'
+            'viewAttributes',
+            'css',
         ]
     }
 
@@ -67,6 +68,12 @@ class GtkView {
 
     isComponentView() {
         return false
+    }
+
+    acceptsStyle({ name: styleName }) {
+        const acceptedStyles = this.acceptedStyles()
+
+        return acceptedStyles.includes( styleName )
     }
 
     /// Accessing
@@ -209,6 +216,18 @@ class GtkView {
     setMarginVertical(margin) {
         this.getMainHandle().setMarginTop(margin)
         this.getMainHandle().setMarginBottom(margin)
+    }
+
+    setCss(cssClasses) {
+        if( typeof(cssClasses) === 'string' ) {
+            cssClasses = cssClasses.trim().split( ' ' )
+        }
+
+        const styleContext = this.getMainHandle().getStyleContext()
+
+        cssClasses.forEach( (cssClass) => {
+            styleContext.addClass( cssClass.trim() )
+        })
     }
 
     /// View custom attributes

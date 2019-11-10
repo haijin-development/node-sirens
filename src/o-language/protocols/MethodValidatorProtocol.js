@@ -1,9 +1,19 @@
 const Protocol = require('../classifications/Protocol')
 
 class MethodValidatorProtocol {
-    param(parameter) {}
+    /*
+ Tags([
+    'public', 'dsl'
+ ])
+*/
+param(parameter) {}
 
-    evaluateCollectedValidation() {}
+    /*
+ Tags([
+    'public', 'evaluating'
+ ])
+*/
+evaluateCollectedValidation() {}
 }
 
 module.exports = Protocol.define(MethodValidatorProtocol)

@@ -81,7 +81,7 @@ class DebuggableProtocol {
            String.
            A string to use as the carriage return character in the debug string.
 
-           It usually is the character '\\ n', but if the debug string is to be rendered on an HTML browser then '<br>' can be use.
+           Usually it is the character ' n', but if the debug string is to be rendered on an HTML browser then '<br>' can be use.
         `,
      })
 
@@ -94,7 +94,7 @@ class DebuggableProtocol {
            String.
            A string to use as the indentation tab character in the debug string.
 
-           It usually is the character "	" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
+           Usually it is the character "	" or a space, but if the debug string is to be rendered on an HTML browser then '&nbsp;' can be use.
         `,
      })
 
@@ -145,11 +145,22 @@ class DebuggableProtocol {
            })
         `,
      })
+
+     Tags([
+        'public', 'displaying'
+     ])
     */
     debugString({ cr: cr, tab: tab } = { cr: undefined, tab: undefined }) {
         this.param(cr) .isString() .or() .isUndefined()
         this.param(tab) .isString() .or() .isUndefined()
     }
+
+    /*
+     Tags([
+        'browsers', 'public'
+     ])
+    */
+    browse() {}
 }
 
 module.exports = Protocol.define(DebuggableProtocol)

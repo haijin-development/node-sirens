@@ -153,7 +153,6 @@ class MethodDocumentation {
         this.tags = tags
     }
 
-
     getExamples() {
         return this.examples
     }
@@ -172,6 +171,15 @@ class MethodDocumentation {
         this.examples.splice( index, 1 )
     }
 
+    getTagsSortedAlphabetically({ reversed: reversed } = { reversed: false }) {
+        const tags = this.getTags().slice()
+
+        if( reversed === true ) {
+            return tags.sort( (item1, item2) => { return item1 < item2 })
+        } else {
+            return tags.sort()
+        }
+    }
 
     /// Generating method comment
 

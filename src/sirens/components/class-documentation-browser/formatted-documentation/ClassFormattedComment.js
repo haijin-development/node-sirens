@@ -2,7 +2,7 @@ const path = require('path')
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+
 const ClassCommentHeader = require ('../ClassCommentHeader')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
@@ -20,7 +20,7 @@ class ClassFormattedComment {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Actions

@@ -4,20 +4,40 @@ const ValidationProtocol = require('../../protocols/ValidationProtocol')
 class Validation {
     /// Definition
 
+    /*
+     Tags([
+        'definition', 'implementation'
+     ])
+    */
     static definition() {
         this.instanceVariables = ['validationClosure']
         this.assumes = []
         this.implements = [ValidationProtocol]
     }
 
+    /*
+     Tags([
+        'setters', 'public'
+     ])
+    */
     setValidationClosure(validationClosure) {
         this.validationClosure = validationClosure
     }
 
+    /*
+     Tags([
+        'evaluating', 'public'
+     ])
+    */
     getValidationResultOn({ value: value }) {
         return this.validationClosure( value )
     }
 
+    /*
+     Tags([
+        'evaluating', 'public'
+     ])
+    */
     evaluateOn({ value: value }) {
         const validationResult = this.getValidationResultOn({ value: value })
 
@@ -29,6 +49,11 @@ class Validation {
 
     /// Raising errors
 
+    /*
+     Tags([
+        'raising errors', 'public'
+     ])
+    */
     raiseValidationError({ errorMessage: errorMessage }) {
         throw new Error( errorMessage )
     }

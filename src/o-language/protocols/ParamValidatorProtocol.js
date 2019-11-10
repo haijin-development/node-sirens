@@ -2,43 +2,134 @@ const Protocol = require('../classifications/Protocol')
 
 class ParamValidatorProtocol {
 
-    /// Accessing
-
+    /*
+     Tags([
+        'public', 'setters'
+     ])
+    */
     setValue(value) {}
 
-    /// Evaluating
 
+    /*
+     Tags([
+        'public', 'evaluating'
+     ])
+    */
     evaluate() {}
 
-    /// Validations
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isNull() {}
 
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     notNull() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isUndefined() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     notUndefined() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isBoolean() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isString() {}
 
-    isNumber() {}
-
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     isInteger() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
+    isNumber() {}
+
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
+    isInteger() {}
+
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isArray() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isObject() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isFunction() {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isAnyOf(values) {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     compliesWith(procotol) {}
 
+    /*
+     Tags([
+        'dsl', 'public'
+     ])
+    */
     isExpectedTo(closure) {}
+
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
+    or() {}
+
 }
 
 module.exports = Protocol.define(ParamValidatorProtocol)

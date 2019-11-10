@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
 const Component = require('../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../gui/protocols/ComponentProtocol')
+
 const ClassDocumentationBrowserModel = require('../models/ClassDocumentationBrowserModel')
 const ClassDocumentationMenuBar = require('./class-documentation-browser/ClassDocumentationMenuBar')
 const ClassDocumentationToolBar = require('./class-documentation-browser/ClassDocumentationToolBar')
@@ -15,7 +15,7 @@ class ClassDocumentationBrowser {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 

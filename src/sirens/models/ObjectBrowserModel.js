@@ -67,7 +67,11 @@ class ObjectBrowserModel {
     }
 
     getSelectedPropertyValue() {
-        return this.getSelectedInstVarProperty().getValue()
+        const instVarProperty =this.getSelectedInstVarProperty() 
+
+        if( instVarProperty === null ) { return null }
+
+        return instVarProperty.getValue()
     }
 
     /// Events

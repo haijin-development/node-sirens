@@ -19,6 +19,10 @@ class OInstance {
      Method(`
         This Classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
     }
@@ -27,7 +31,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
         This method does nothing but serves as a null implementation for constructors.
      `)
 
@@ -43,7 +46,6 @@ class OInstance {
            classification is OInstance or a different one.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -65,9 +67,12 @@ class OInstance {
 
 
            Circle.new({ radius: 10 })
-
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
      */
     initialize() {
     }
@@ -102,7 +107,6 @@ class OInstance {
            Asks it an object is behaving as a Circle and as a Square.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -121,9 +125,12 @@ class OInstance {
            circle.isBehavingAs(Circle)
 
            circle.isBehavingAs(Square)
-
         `,
      })
+
+     Tags([
+        'asking', 'object behaviours', 'public'
+     ])
      */
     isBehavingAs(classification) {
         return MessageDispatcherInstance.objectIsBehavingAs({
@@ -160,7 +167,6 @@ class OInstance {
            Asks if an object responds to the messages 'getColor' and 'getPosition'.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Circle {
@@ -176,9 +182,12 @@ class OInstance {
            circle.respondsTo( 'getColor' )
 
            circle.respondsTo( 'getPosition' )
-
         `,
      })
+
+     Tags([
+        'asking', 'object methods', 'public'
+     ])
      */
     respondsTo(message) {
         return MessageDispatcherInstance.objectRespondsTo({
@@ -237,6 +246,10 @@ class OInstance {
            circle.compliesWith(SquareProtocol)
         `,
      })
+
+     Tags([
+        'asking', 'implemented protocols', 'public'
+     ])
     */
     compliesWith(protocol) {
         const objectClassifications = this.classifications()
@@ -340,6 +353,10 @@ class OInstance {
            object.getRadius()
         `,
      })
+
+     Tags([
+        'object behaviours', 'public'
+     ])
      */
     behaveAs(classification) {
         const isBehavingAs = MessageDispatcherInstance.objectIsBehavingAs({
@@ -395,7 +412,6 @@ class OInstance {
            Makes an object to start behaving as a Circle and as a Positionable.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const OInstance = require('sirens/src/o-language/classifications/OInstance')
 
@@ -450,9 +466,12 @@ class OInstance {
            object.setRadius({ x: 1, y: 1 })
 
            object.getRadius()
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'public'
+     ])
      */
     behaveAsAll(classificationsArray) {
       classificationsArray.forEach( (classification) => {
@@ -482,6 +501,10 @@ class OInstance {
               A Classification.
            `,
         })
+
+        Tags([
+           'object behaviours', 'implementation'
+        ])
      */
     pushBehaviour(classification) {
         MessageDispatcherInstance.objectPushBehaviour({
@@ -542,6 +565,10 @@ class OInstance {
            object.getRadius()
         `,
      })
+
+     Tags([
+        'object behaviours', 'public'
+     ])
      */
     dropBehaviour(classification) {
         MessageDispatcherInstance.objectDropBehaviour({
@@ -556,8 +583,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
-
         This method is intended to be called from within another method in the same classification.
 
         It evaluates the given closure starting the method lookup in the previous classification to the one active in the
@@ -618,6 +643,10 @@ class OInstance {
            circle.displayString()
         `,
      })
+
+     Tags([
+        'implementation', 'object behaviours', 'evaluating'
+     ])
      */
     previousClassificationDo(closure) {
         return MessageDispatcherInstance.duringPreviousClassificationDo({
@@ -658,7 +687,6 @@ class OInstance {
            Adds the Debuggable classification during the evaluation of a debug method.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const OInstance = require('sirens/src/o-language/classifications/OInstance')
            const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
@@ -670,9 +698,12 @@ class OInstance {
            	console.info(debugString)
            	return debugString
            })
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'public', 'evaluating'
+     ])
      */
     duringClassificationDo(classification, closure) {
         this.behaveAs(classification)
@@ -742,6 +773,10 @@ class OInstance {
            })
         `,
      })
+
+     Tags([
+        'instance variables', 'public', 'iterating'
+     ])
     */
     classificationInstanceVariablesDo(classification, closure) {
         MessageDispatcherInstance.classificationInstanceVariablesDo({
@@ -773,7 +808,6 @@ class OInstance {
            but starting at the Shape classification, not Circle.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Shape {
@@ -806,9 +840,12 @@ class OInstance {
            circle.withClassificationDo( Shape, () => {
            	return circle.displayString()
            })
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'public', 'evaluating'
+     ])
      */
     withClassificationDo(classification, closure) {
         return MessageDispatcherInstance.withClassificationDo({
@@ -893,6 +930,10 @@ class OInstance {
            })
         `,
      })
+
+     Tags([
+        'public', 'evaluating'
+     ])
     */
     bindYourself(closure, ...params) {
         closure.call(this, ...params)
@@ -1127,6 +1168,10 @@ class OInstance {
            stream.getString()
         `,
      })
+
+     Tags([
+        'proxy methods', 'implementation'
+     ])
     */
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
     }
@@ -1252,7 +1297,6 @@ class OInstance {
            Creates a Proxy that logs all the results of all the method calls of a StringStream object.
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
            const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
@@ -1273,9 +1317,12 @@ class OInstance {
            stream.appendLine({ string: 'A line' })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'proxy methods', 'implementation'
+     ])
     */
     afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
     }
@@ -1334,15 +1381,17 @@ class OInstance {
            stream.setCrChar('<br>')
         `,
         Code: `
-
            const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
            StringStream.new().yourself( (stream) => {
            	stream.setCrChar('<br>')
            })
-
         `,
      })
+
+     Tags([
+        'public', 'evaluating'
+     ])
      */
     yourself(closure) {
         closure(this)
@@ -1366,15 +1415,17 @@ class OInstance {
            Gets all the classifications attached to an object.
         `,
         Code: `
-
            const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
            const stream = StringStream.new()
 
            stream.classifications()
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'public', 'querying'
+     ])
      */
     classifications() {
         return MessageDispatcherInstance.objectGetClassifications({
@@ -1398,15 +1449,17 @@ class OInstance {
            Gets all the names of the classifications attached to an object.
         `,
         Code: `
-
            const StringStream = require('sirens/src/o-language/classifications/StringStream')
 
            const stream = StringStream.new()
 
            stream.getClassificationNames()
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'public', 'querying'
+     ])
     */
     getClassificationNames() {
         return this.classifications().map( (classification) => {
@@ -1416,8 +1469,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
-
         Gets the classification active in the method that called thisClassification().
      `)
      Returns({
@@ -1459,6 +1510,10 @@ class OInstance {
            circle.getThisClassificationName()
         `,
      })
+
+     Tags([
+        'object behaviours', 'implementation'
+     ])
      */
     thisClassification() {
         return MessageDispatcherInstance.objectGetThisClassification({
@@ -1468,8 +1523,6 @@ class OInstance {
 
     /*
      Method(`
-        Private.
-
         Returns the classification previous to the active classification in the method that called previousClassification().
      `)
      Returns({
@@ -1484,7 +1537,6 @@ class OInstance {
            Gets the classification previous to thisClassification().
         `,
         Code: `
-
            const Classification = require('sirens/src/o-language/classifications/Classification')
 
            class Shape {
@@ -1510,9 +1562,12 @@ class OInstance {
            const circle = Circle.new()
 
            circle.getPreviousClassificationName()
-
         `,
      })
+
+     Tags([
+        'object behaviours', 'implementation'
+     ])
      */
     previousClassification() {
         return MessageDispatcherInstance.getPreviousClassificationOfObject({

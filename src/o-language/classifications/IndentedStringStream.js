@@ -141,9 +141,12 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         The classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = ['indentationCount', 'indentationChar', 'indentation']
@@ -155,9 +158,12 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         Initializes the instantiated classification right after it is attached to this object.
      `)
+
+     Tags([
+        'initializing', 'implementation'
+     ])
     */
     afterInstantiation() {
         this.indentationCount = 0
@@ -168,7 +174,6 @@ class IndentedStringStream {
 
     /*
      Method(`
-        Private.
         Returns the default string to use as an indentation unit when no identation char is given.
      `)
      Returns({
@@ -190,6 +195,10 @@ class IndentedStringStream {
            stream.defaultIndentationChar()
         `,
      })
+
+     Tags([
+        'constants', 'querying', 'implementation'
+     ])
     */
     defaultIndentationChar() {
         return '   '
@@ -221,15 +230,17 @@ Example({
       Gets the indentation level of this StringStream object.
    `,
    Code: `
-
       const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
       const stream = IndentedStringStream.new()
 
       stream.getIndentationCount()
-
    `,
 })
+
+Tags([
+   'getters', 'querying', 'public'
+])
 */
     getIndentationCount() {
         return this.indentationCount
@@ -275,6 +286,10 @@ Example({
            stream.getString()
         `,
      })
+
+     Tags([
+        'indentation', 'setters', 'public'
+     ])
     */
     setIndentationCount(n) {
         this.indentationCount = n
@@ -302,15 +317,17 @@ Example({
            Gets the indentation char used by a StringStream object.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
 
            stream.getIndentationChar()
-
         `,
      })
+
+     Tags([
+        'getters', 'querying', 'public'
+     ])
     */
     getIndentationChar() {
         return this.indentationChar
@@ -358,6 +375,10 @@ Example({
            stream.getString()
         `,
      })
+
+     Tags([
+        'setters', 'public'
+     ])
     */
     setIndentationChar(char) {
         this.indentationChar = char
@@ -400,7 +421,6 @@ Example({
       Increments the indentation level by 1 and appends a new line.
    `,
    Code: `
-
       const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
       const stream = IndentedStringStream.new()
@@ -410,9 +430,12 @@ Example({
       	.appendLine({ string: 'A line' })
 
       stream.getString()
-
    `,
 })
+
+Tags([
+   'indentation', 'public'
+])
 */
     incrementIndentation({ by: n } = { by: 1 }) {
         this.setIndentationCount( this.indentationCount + n )
@@ -451,7 +474,6 @@ Example({
            Sets the indentation level of a StringStream to 2, decrements it by 1 and appends a new line.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
@@ -462,9 +484,12 @@ Example({
            	.appendLine({ string: 'A line' })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'indentation', 'public'
+     ])
     */
     decrementIndentation({ by: n } = { by: 1 }) {
         this.incrementIndentation({ by: -n })
@@ -513,7 +538,6 @@ Example({
            Appends a line during the increment of the indentation level of a StringStream.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
@@ -527,9 +551,12 @@ Example({
            stream.appendLine({ string: 'Thrid line' })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'indentation', 'public'
+     ])
     */
     whileIncrementingIndentationDo({ by: n }, closure) {
         const currentIndentation = this.indentationCount
@@ -589,7 +616,6 @@ Example({
            Appends an indented line to a StringStream object.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
@@ -600,9 +626,12 @@ Example({
            	.appendLine({ string: 'Second line' })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     appendLine({ string: lineString, if: condition }) {
         lineString = this.indentation + lineString
@@ -659,7 +688,6 @@ Example({
            Prepends an indented line to a StringStream object.
         `,
         Code: `
-
            const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
 
            const stream = IndentedStringStream.new()
@@ -670,9 +698,12 @@ Example({
            	.prependLine({ string: 'Second line' })
 
            stream.getString()
-
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     prependLine({ string: lineString, if: condition }) {
         lineString = this.indentation + lineString
@@ -752,6 +783,10 @@ Example({
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     cr({ if: condition, indent: indent } = { if: true, indent: false }) {
         if( condition === undefined ) { condition = true }
@@ -795,6 +830,10 @@ Example({
            stream.getString()
         `,
      })
+
+     Tags([
+        'appending', 'public'
+     ])
     */
     appendIndentation() {
         this.append({ string: this.indentation })

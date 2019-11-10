@@ -41,6 +41,10 @@ class WidgetBuilder {
      Method(`
         This classification definition.
      `)
+
+     Tags([
+        'definition', 'implementation'
+     ])
     */
     static definition() {
         this.instanceVariables = []
@@ -74,7 +78,6 @@ class WidgetBuilder {
            Add the example description here ...
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
 
            const initialProps = {
@@ -86,9 +89,12 @@ class WidgetBuilder {
            const builder = WidgetBuilder.new( initialProps )
 
            builder.getProps()
-
         `,
      })
+
+     Tags([
+        'initializing', 'public'
+     ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -114,7 +120,6 @@ class WidgetBuilder {
            Sets the model using the method model()
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
            const ValueModel = require('sirens/src/gui/models/ValueModel')
 
@@ -127,9 +132,12 @@ class WidgetBuilder {
            })
 
            builder.getProps()
-
         `,
      })
+
+     Tags([
+        'props', 'public', 'dsl'
+     ])
     */
     model(model) {
         this.mergeProps({ model: model })
@@ -145,7 +153,6 @@ class WidgetBuilder {
            Add the example description here ...
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
 
            const builder = WidgetBuilder.new()
@@ -158,9 +165,12 @@ class WidgetBuilder {
            })
 
            builder.getProps()
-
         `,
      })
+
+     Tags([
+        'props', 'public', 'dsl'
+     ])
     */
     styles(props) {
         this.mergeProps(props)
@@ -180,21 +190,23 @@ class WidgetBuilder {
            Add the example description here ...
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
 
            const builder = WidgetBuilder.new()
 
            builder.build( function() {
            	this.handlers({
-           		onClicked: () => { console.log('clicked') },
+           		onClicked: () => { console.info('clicked') },
            	})
            })
 
            builder.getProps()
-
         `,
      })
+
+     Tags([
+        'props', 'public', 'dsl'
+     ])
     */
     handlers(props) {
         this.mergeProps(props)
@@ -220,7 +232,6 @@ class WidgetBuilder {
            Add the example description here ...
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
 
            const builder = WidgetBuilder.new()
@@ -235,9 +246,12 @@ class WidgetBuilder {
            })
 
            builder.getProps()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     popupMenu(populatePopupMenuBlock) {
         this.mergeProps({ populatePopupMenuBlock: populatePopupMenuBlock })
@@ -253,6 +267,10 @@ class WidgetBuilder {
 
         If the closure is undefined does nothing.
      `)
+
+     Tags([
+        'building', 'evaluating', 'public'
+     ])
     */
     build(closure, ...params) {
         if( closure === undefined ) { return }
@@ -270,7 +288,6 @@ class WidgetBuilder {
            Add the example description here ...
         `,
         Code: `
-
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
            const Window = require('sirens/src/gui/components/containers/Window')
 
@@ -283,9 +300,12 @@ class WidgetBuilder {
            })
 
            builder.getChildComponents()
-
         `,
      })
+
+     Tags([
+        'dsl', 'public'
+     ])
     */
     skip() {
         return AntiComponent.new()
@@ -293,8 +313,6 @@ class WidgetBuilder {
 
     /*
      Method(`
-        Private.
-
         Returns an array of [props, closure].
 
         If the arguments props is undefined creates an empty object {} to return as the first parameter.
@@ -361,15 +379,17 @@ class WidgetBuilder {
            Normalizes the parameters (undefined, closure)
         `,
         Code: `
-
            const WidgetBuilder = require('sirens/src/gui/componentBuilder/WidgetBuilder')
 
            const builder = WidgetBuilder.new()
 
            builder.normalizeArguments( function() {} )
-
         `,
      })
+
+     Tags([
+        'normalizing parameters', 'implementation'
+     ])
     */
     normalizeArguments(props, closure) {
         if (typeof (props) == 'function') {

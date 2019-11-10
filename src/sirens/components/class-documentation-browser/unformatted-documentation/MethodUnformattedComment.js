@@ -1,7 +1,7 @@
 const Classification = require('../../../../../src/o-language/classifications/Classification')
 const Component = require('../../../../gui/components/Component')
 const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const ComponentProtocol = require('../../../../gui/protocols/ComponentProtocol')
+
 const Resource = require('../../../objects/Resource')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
 const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
@@ -13,7 +13,7 @@ class MethodUnformattedComment {
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ComponentProtocol, ComponentProtocol_Implementation]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
     /// Actions
@@ -76,6 +76,14 @@ class MethodUnformattedComment {
 
             this.verticalStack({ width: 600, }, function() {
 
+                this.component(
+                    MethodCommentHeader.new({
+                        method: method,
+                    })
+                )
+
+                this.verticalSeparator()
+
                 if( method !== null && isInEditionMode ) {
                     this.component(
                         EditMethodDescriptionHeader.new({
@@ -87,12 +95,6 @@ class MethodUnformattedComment {
 
                     this.verticalSeparator()
                 }
-
-                this.component(
-                    MethodCommentHeader.new({
-                        method: method,
-                    })
-                )
 
                 this.verticalSeparator()
 

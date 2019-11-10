@@ -378,8 +378,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -511,8 +509,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -637,8 +633,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -785,8 +779,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -940,8 +932,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1082,8 +1072,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1222,8 +1210,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1356,8 +1342,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1480,8 +1464,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1718,8 +1700,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1863,8 +1843,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -1990,8 +1968,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2084,8 +2060,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2187,8 +2161,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2284,8 +2256,6 @@ class ContainerWidgetBuilder {
 
             'width',
             'height',
-            'backgroundColor',
-            'foregroundColor',
             'alignHorizontal',
             'alignVertical',
             'marginLeft',
@@ -2352,8 +2322,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2461,8 +2429,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',
@@ -2717,8 +2683,6 @@ class ContainerWidgetBuilder {
 
            	'width',
            	'height',
-           	'backgroundColor',
-           	'foregroundColor',
            	'alignHorizontal',
            	'alignVertical',
            	'marginLeft',

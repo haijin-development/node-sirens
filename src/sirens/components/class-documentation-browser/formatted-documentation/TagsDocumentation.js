@@ -72,14 +72,9 @@ class TagsDocumentation {
 
                     this.horizontalStack( function() {
                         tags.forEach( (tag) => {
-                            const color = Preferences.tagColor({ tag: tag })
-
                             this.label({
                                 text: tag,
-                                backgroundColor: color,
-                                foregroundColor: 'black',
-                                borderWidth: 10,
-                                borderColor: 'white',
+                                css: [ 'tag-label', tag ],
                                 viewAttributes: {
                                     stackSize: 'fixed',
                                     stackPadding: 6,

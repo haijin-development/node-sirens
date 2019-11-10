@@ -20,12 +20,12 @@ class GtkView {
     acceptedStyles() {
         return [
             'width', 'height',
-            'backgroundColor', 'foregroundColor',
             'alignHorizontal', 'alignVertical',
             'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
             'marginHorizontal', 'marginVertical',
             'populatePopupMenuBlock',
-            'viewAttributes'
+            'viewAttributes',
+            'css',
         ]
     }
 
@@ -218,44 +218,16 @@ class GtkView {
         this.getMainHandle().setMarginBottom(margin)
     }
 
-    setBackgroundColor(colorSpec) {
+    setCss(cssClasses) {
+        if( typeof(cssClasses) === 'string' ) {
+            cssClasses = cssClasses.trim().split( ' ' )
+        }
+
         const styleContext = this.getMainHandle().getStyleContext()
 
-        if( typeof( colorSpec ) === 'string' ) {
-            colorSpec = {
-                normal: colorSpec
-            }
-        }
-
-        for(const key in colorSpec) {
-            const color = new Gdk.RGBA()
-
-            color.parse( colorSpec[key] )            
-
-            const state = Gtk.StateFlags[key.toUpperCase()]
-
-            this.getMainHandle().overrideBackgroundColor(state, color)
-        }
-    }
-
-    setForegroundColor(colorSpec) {
-        const color = new Gdk.RGBA()
-
-        if( typeof( colorSpec ) === 'string' ) {
-            colorSpec = {
-                normal: colorSpec
-            }
-        }
-
-        for(const key in colorSpec) {
-            const color = new Gdk.RGBA()
-
-            color.parse( colorSpec[key] )            
-
-            const state = Gtk.StateFlags[key.toUpperCase()]
-
-            this.getMainHandle().overrideColor(state, color)
-        }
+        cssClasses.forEach( (cssClass) => {
+            styleContext.addClass( cssClass.trim() )
+        })
     }
 
     /// View custom attributes

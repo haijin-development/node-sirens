@@ -1,4 +1,6 @@
+const path = require('path')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
+const Gdk = require('node-gtk').require('Gdk')
 
 /*
  Class(`
@@ -461,6 +463,7 @@ class Sirens {
             closure.call(this)
 
             Gtk.main()
+
         } finally {
             this.gtkIsRunningTheMainLoop = false
         }
@@ -504,6 +507,24 @@ class Sirens {
         this.gtkWasInitialize = true
 
         Gtk.init()
+
+        this.setGlobalStyles()
+    }
+
+    static setGlobalStyles() {
+      const screen = Gdk.Screen.getDefault()
+
+      const cssProvider = new Gtk.CssProvider()
+
+      const cssFilePath = path.resolve( __dirname + '/../resources/css/sirens.css' )
+
+      cssProvider.loadFromPath( cssFilePath )
+
+      Gtk.StyleContext.addProviderForScreen(
+        screen,
+        cssProvider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+      )
     }
 
     /*

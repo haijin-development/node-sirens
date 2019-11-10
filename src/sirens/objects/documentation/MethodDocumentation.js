@@ -1,44 +1,5 @@
 const Classification = require('../../../o-language/classifications/Classification')
-const MethodDslDocumentationReader = require('./MethodDslDocumentationReader')
-const DslDocumentationWriter = require('./DslDocumentationWriter')
-
-class MethodDocumentationInstantiator {
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = []
-        this.assumes = []
-    }
-
-    /// Building
-
-    fromString(documentationDslString) {
-        const methodDocumentation = MethodDocumentation.new()
-
-        MethodDslDocumentationReader.new({ methodDocumentation: methodDocumentation })
-            .buildFromString( documentationDslString )
-
-        return methodDocumentation
-    }
-
-    isDocumentationString({
-        string: string, ifTrue: validDocumentationClosure, ifFalse: invalidDocumentationClosure
-    }) {
-        try {
-
-            const documentation = this.fromString( string )
-
-            return validDocumentationClosure( documentation )
-
-        } catch( e ) {
-
-            return invalidDocumentationClosure()
-
-        }
-    }
-}
-
-MethodDocumentationInstantiator = Classification.define(MethodDocumentationInstantiator)
+const DocumentationDslWriter = require('./documentationDsl/DocumentationDslWriter')
 
 class MethodDocumentation {
     /// Definition
@@ -55,7 +16,6 @@ class MethodDocumentation {
             'examples'
         ]
         this.assumes = []
-        this.classificationBehaviours = [MethodDocumentationInstantiator]
     }
 
     /// Initializing
@@ -196,7 +156,7 @@ class MethodDocumentation {
     }
 
     getDocumentationWriter() {
-        return DslDocumentationWriter.new()
+        return DocumentationDslWriter.new()
     }
 }
 

@@ -1,8 +1,7 @@
-const Classification = require('../../../o-language/classifications/Classification')
-const IndentedStringStream = require('../../../o-language/classifications/IndentedStringStream')
+const Classification = require('../../../../o-language/classifications/Classification')
+const IndentedStringStream = require('../../../../o-language/classifications/IndentedStringStream')
 
-
-class DslDocumentationWriter {
+class DocumentationDslWriter {
     /// Definition
 
     static definition() {
@@ -368,4 +367,4 @@ class DslDocumentationWriter {
     }
 }
 
-module.exports = Classification.define(DslDocumentationWriter)
+module.exports = Classification.define(DocumentationDslWriter)

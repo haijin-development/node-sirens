@@ -2,7 +2,7 @@ const Classification = require('../../o-language/classifications/Classification'
 const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
 const ValueModel = require('../../gui/models/ValueModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
-const ClassDocumentation = require('../objects/documentation/ClassDocumentation')
+const DocumentationReader = require('../objects/documentation/DocumentationReader')
 const MethodDocumentation = require('../objects/documentation/MethodDocumentation')
 
 class ClassDocumentationBrowserModel {
@@ -105,20 +105,10 @@ class ClassDocumentationBrowserModel {
 
         const unformattedComment = method.getComment().getContents()
 
-        return MethodDocumentation.isDocumentationString({
+        return DocumentationReader.readMethodDocumentationFromString({
             string: unformattedComment,
-            ifTrue: (documentation) => {
-                documentation.setMethodName( method.getName() )
-                documentation.setMethodParams( method.getParams() )
-                return documentation
-            },
-            ifFalse: () => {
-                const documentation = MethodDocumentation.new()
-                documentation.setMethodName( method.getName() )
-                documentation.setMethodParams( method.getParams() )
-                documentation.setDescription( unformattedComment )
-                return documentation
-            },
+            methodName: method.getName(),
+            params: method.getParams(),
         })
     }
 
@@ -143,18 +133,9 @@ class ClassDocumentationBrowserModel {
 
         const unformattedComment = this.classDefinition.getComment().getContents()
 
-        return ClassDocumentation.isDocumentationString({
+        return DocumentationReader.readClassDocumentationFromString({
             string: unformattedComment,
-            ifTrue: (documentation) => {
-                documentation.setClassName( className )
-                return documentation
-            },
-            ifFalse: () => {
-                const documentation = ClassDocumentation.new()
-                documentation.setClassName( className )
-                documentation.setDescription( unformattedComment )
-                return documentation
-            },
+            className: className,
         })
     }
 

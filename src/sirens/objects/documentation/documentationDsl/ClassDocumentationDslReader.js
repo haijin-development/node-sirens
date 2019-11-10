@@ -1,14 +1,14 @@
 const esprima = require('esprima')
-const Classification = require('../../../o-language/classifications/Classification')
-const ParseTreeVisitor = require('../parsers/ParseTreeVisitor')
-const ClassDefinition = require('../source-code/ClassDefinition')
-const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
-const SourceCodeText = require('../SourceCodeText')
+const Classification = require('../../../../o-language/classifications/Classification')
+const ParseTreeVisitor = require('../../parsers/ParseTreeVisitor')
+const ClassDefinition = require('../../source-code/ClassDefinition')
+const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
+const SourceCodeText = require('../../SourceCodeText')
 
 /*
  * A visitor of a javascript parse tree that collects the documentation of a class.
  */
-class ClassDslDocumentationReader {
+class ClassDocumentationDslReader {
 
     static definition() {
         this.instanceVariables = ['classDocumentation']
@@ -111,4 +111,4 @@ class ClassDslDocumentationReader {
     }
 }
 
-module.exports = Classification.define(ClassDslDocumentationReader)
+module.exports = Classification.define(ClassDocumentationDslReader)

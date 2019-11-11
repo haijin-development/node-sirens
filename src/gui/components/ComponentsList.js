@@ -6,6 +6,173 @@ const ComponentProtocol = require('../protocols/ComponentProtocol')
 const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
 const ListModel = require('../models/ListModel')
 
+/*
+ Class(`
+    A ComponentsList is a Component whose model is a ListModel renders a sub-component for each item in its model list.
+
+    A ComponentsList hooks its ListModel events to keep its View in sync with it.
+
+    Since a ComponentsList renders a component for each item in its model list instead of implementing the method
+
+    	renderWith(componentsRenderer)
+
+    it must implement the method
+
+    	renderItem({ item: item, index: index, renderer: componentsRenderer })
+
+
+    If the ComponentsList renders only a child component for each item then it does not need to do anythiing else besides providing
+    a method
+
+    	renderItem({ item: item, index: index, renderer: componentsRenderer }).
+
+    If the ComponentsList wants to render additional child components besides the ones of the list items then it can override the method
+
+    	renderWith(componentsRenderer)
+
+
+    A ComponentsList is less useful that it may seem since in most cases a regular Component can render a list of items with a simple
+    loop and is much less complex to use and debug.
+
+    You should use a ComponentsList if a part of a model changes its contents dynamically without changing the rest of the model.
+    In that case a ComponentsList can hook the changes in the list alone.
+ `)
+
+ Example({
+    Description: `
+       Evaluate the first parte of the example to create a CustomListComponent to show the contents of a ListModel of objects 
+       in a Window.
+
+       The evaluate the statements of the second part of the example, one by one, to modify the ListModel contents and
+       see how the opened CustomListComponent keeps it contents in sync with it.
+    `,
+    Code: `
+       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Component = require('sirens/src/gui/components/Component')
+       const ComponentsList = require('sirens/src/gui/components/ComponentsList')
+       const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
+       const ListModelComponentProtocol_Implementation = require('sirens/src/gui/protocols/ListModelComponentProtocol_Implementation')
+       const ListModel = require('sirens/src/gui/models/ListModel')
+
+       /// Define a ComponentsList 
+       class CustomListComponent {
+
+       	static definition() {
+       		this.instanceVariables = []
+       		this.assumes = [ComponentsList]
+       		this.implements = [
+       			ListModelComponentProtocol_Implementation
+       		]
+       	}
+
+       	renderItem({ item: item, index: index, renderer: componentsRenderer }) {
+
+       		componentsRenderer.bindYourself( function() {
+
+       			this.horizontalStack( function() {
+       				this.label({
+       					text: 'Item ' + item.id.toString() + ': ', 
+       				})
+
+       				this.textButton({
+       					text: item.name,
+       					onClicked: () => {},
+       				})
+       			})
+
+       		})
+       	}
+       }
+
+       CustomListComponent = Classification.define(CustomListComponent)
+
+       // Define a Window to contain the CustomListComponent
+       class CustomWindow {
+
+       	static definition() {
+       		this.instanceVariables = []
+       		this.assumes = [Component]
+       		this.implements = [ComponentProtocol_Implementation]
+       	}
+
+       	/// Building
+
+       	renderWith(componentsRenderer) {
+       		const itemsModel = this.getModel()
+
+       		componentsRenderer.render(function (component) {
+
+       			this.window( function() {
+
+       				this.verticalStack( function() {
+       					// Add the CustomListComponent and pass along the ListModel to it.
+       					this.component(
+       						CustomListComponent.new({
+       							model: itemsModel
+       						})
+       					)				
+       				})
+       			})
+
+       		})
+       	}
+
+       }
+
+       CustomWindow = Classification.define(CustomWindow)
+
+
+
+
+       // Create a ListModel with some initial items
+       const list = [
+       	{
+       		id: 1,
+       		name: 'Item 1',
+       	},
+       	{
+       		id: 2,
+       		name: 'Item 2',
+       	},
+       ]
+       this.itemsModel = ListModel.new({ list: list })
+
+
+
+       // Open the window
+
+       const window = CustomWindow.new({
+       	model: this.itemsModel
+       })
+
+       window.open()
+
+       /// --- Evaluate the previous code up to here to see the opened window with two items rendered. --- ///
+
+
+
+
+       /// --- Now evaluate the following to add, remove or update items and see how the window syncs its contents. --- ///
+
+       // Add a new item
+       this.itemsModel.push({
+       	id: 3,
+       	name: 'Item 3',
+       })
+
+       // Update and item
+       this.itemsModel.update({
+       	index: 1,
+       	item: { id: 2, name: 'Item 2' }
+       })
+
+       // Remove an item
+       this.itemsModel.removeAt({
+       	index: 1,
+       })
+    `,
+ })
+*/
 class ComponentsList {
     /// Definition
 
@@ -226,7 +393,7 @@ class ComponentsList {
            `,
            Description: `
               Array.
-              Array with the indices in the list of the updated items.
+              Array with the indices of the updated items in the list.
            `,
         })
 
@@ -274,7 +441,7 @@ class ComponentsList {
            `,
            Description: `
               Array.
-              Array with the indices in the old list of the removed items.
+              Array with the indices of the removed items in the old list.
            `,
         })
 

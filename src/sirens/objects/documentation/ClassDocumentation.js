@@ -1,6 +1,4 @@
 const Classification = require('../../../o-language/classifications/Classification')
-const ClassDocumentationDslReader = require('./documentationDsl/ClassDocumentationDslReader')
-const DocumentationDslWriter = require('./documentationDsl/DocumentationDslWriter')
 
 class ClassDocumentation {
     /// Definition
@@ -86,19 +84,15 @@ class ClassDocumentation {
     /// Generating class comment
 
     generateComment() {
-        return this.getDocumentationWriter().generateClassComment({
+        return this.generateClassComment({
             classDocumentation: this
         })
     }
 
     generateCommentContents() {
-        return this.getDocumentationWriter().generateClassCommentContents({
+        return this.generateClassCommentContents({
             classDocumentation: this
         })
-    }
-
-    getDocumentationWriter() {
-        return DocumentationDslWriter.new()
     }
 }
 

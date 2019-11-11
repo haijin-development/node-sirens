@@ -219,7 +219,9 @@ class ClassFormattedComment {
 
 
     updateClassDocumentation({ documentation: documentation }) {
-        const classCommentContents = documentation.generateCommentContents()
+        const classCommentContents = documentation.generateCommentContents({
+                methodDocumentation: documentation,
+            })
 
         const model = this.getModel()
 

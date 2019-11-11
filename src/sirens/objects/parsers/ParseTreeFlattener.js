@@ -21,7 +21,9 @@ class ParseTreeFlattener {
     /// Visiting
 
     visit(treeNode) {
-        this.flattenedExpressions.push(treeNode)
+        if( treeNode.type !== 'Program' ) {
+            this.flattenedExpressions.push(treeNode)
+        }
 
         this.previousClassificationDo( () => {
             this.visit(treeNode)

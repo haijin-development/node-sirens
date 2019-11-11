@@ -415,11 +415,10 @@ class MethodFormattedComment {
         })
     }
 
-
-
-
     updateMethodDocumentation({ documentation: documentation }) {
-        const methodCommentContents = documentation.generateCommentContents()
+        const methodCommentContents = documentation.generateCommentContents({
+                methodDocumentation: documentation,
+            })
 
         const model = this.getModel()
 

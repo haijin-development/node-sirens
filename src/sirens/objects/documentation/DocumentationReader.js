@@ -1,8 +1,7 @@
 const Classification = require('../../../o-language/classifications/Classification')
-const ClassDocumentationDslReader = require('./documentationDsl/ClassDocumentationDslReader')
-const MethodDocumentationDslReader = require('./documentationDsl/MethodDocumentationDslReader')
 const ClassDocumentation = require('./ClassDocumentation')
 const MethodDocumentation = require('./MethodDocumentation')
+const Preferences = require('../Preferences')
 
 class DocumentationReader {
 
@@ -16,16 +15,28 @@ class DocumentationReader {
 
         classDocumentation.setClassName( className )
 
-        try {
+        const documentationReaderClassifications = Preferences.documentationFormats
 
-            ClassDocumentationDslReader.new({ classDocumentation: classDocumentation })
-                .buildFromString( documentationString )
+        for( const readerClassification of documentationReaderClassifications ) {
 
-        } catch( e ) {
+            try {
+                const documentationReader = readerClassification.new()
 
-            classDocumentation.setDescription( documentationString )
+                documentationReader.readClassDocumentationFromString({
+                    string: documentationString,
+                    into: classDocumentation
+                })
 
+                // Attaching this behaviour the classDocumentation already knows how to write itself back to its
+                // original format
+                classDocumentation.behaveAs( readerClassification )
+
+                return classDocumentation
+
+            } catch( e ) {}
         }
+
+        classDocumentation.setDescription( documentationString )
 
         return classDocumentation
     }
@@ -39,16 +50,28 @@ class DocumentationReader {
         methodDocumentation.setMethodName( methodName )
         methodDocumentation.setMethodParams( params )
 
-        try {
+        const documentationReaderClassifications = Preferences.documentationFormats
 
-            MethodDocumentationDslReader.new({ methodDocumentation: methodDocumentation })
-                .buildFromString( documentationString )
+        for( const readerClassification of documentationReaderClassifications ) {
 
-        } catch( e ) {
+            try {
+                const documentationReader = readerClassification.new({ methodDocumentation: methodDocumentation })
+                
+                documentationReader.readMethodDocumentationFromString({
+                    string: documentationString,
+                    into: methodDocumentation
+                })
 
-            methodDocumentation.setDescription( documentationString )
+                // Attaching this behaviour the methodDocumentation already knows how to write itself back to its
+                // original format
+                methodDocumentation.behaveAs( readerClassification )
 
+                return methodDocumentation
+
+            } catch( e ) {}
         }
+
+        methodDocumentation.setDescription( documentationString )
 
         return methodDocumentation
     }

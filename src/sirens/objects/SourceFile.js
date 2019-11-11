@@ -87,13 +87,17 @@ class SourceFile {
             if( exp1.loc.start.line > exp2.loc.start.line ) { return 1 }
 
             if( exp1.loc.start.line === exp2.loc.start.line ) {
-                if( exp1.loc.start.column === exp2.loc.start.column ) { return 0 }
+                if( exp1.loc.start.column === exp2.loc.start.column ) {
+                    return 0
+                }
+                
                 if( exp1.loc.start.column < exp2.loc.start.column ) { return -1 }
                 if( exp1.loc.start.column > exp2.loc.start.column ) { return 1 }
             }
         });
 
         for(let i = 1; i < expressionsWithComments.length; i++ ) {
+
             const currentExpression = expressionsWithComments[ i ]
 
             if(
@@ -102,7 +106,6 @@ class SourceFile {
                 currentExpression.type === 'MethodDefinition'
               )
               {
-
                 const previousExpression = expressionsWithComments[ i - 1 ]
                 const previousPreviousExpression = expressionsWithComments[ i - 2 ]
 
@@ -115,7 +118,7 @@ class SourceFile {
                 //          type: 'Identifier',
                 //          name: 'constructor',
                 if(
-                    previousPreviousExpression.type === 'Block'
+                    previousPreviousExpression && previousPreviousExpression.type === 'Block'
                     &&
                     previousExpression.type === 'Identifier'
                   ) {

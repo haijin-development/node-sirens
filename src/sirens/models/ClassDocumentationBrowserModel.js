@@ -4,6 +4,7 @@ const ValueModel = require('../../gui/models/ValueModel')
 const ChoiceModel = require('../../gui/models/ChoiceModel')
 const DocumentationReader = require('../objects/documentation/DocumentationReader')
 const MethodDocumentation = require('../objects/documentation/MethodDocumentation')
+const Preferences = require('../objects/Preferences')
 
 class ClassDocumentationBrowserModel {
     /// Definition
@@ -100,6 +101,8 @@ class ClassDocumentationBrowserModel {
         if( method === null ) {
             return MethodDocumentation.new().yourself( (documentation) => {
                 documentation.setDescription( 'No method selected.' )
+
+                documentation.behaveAs( Preferences.documentationDefaultFormat )
             })
         }
 

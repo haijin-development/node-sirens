@@ -134,7 +134,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates a Class description', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setDescription( 'A class description.' )
 
@@ -153,7 +153,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addImplementationNote( 'Implementation note 1.' )
         classDocumentation.addImplementationNote( 'Implementation note 2.' )
@@ -177,7 +177,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addExample({
             Description: 'Example 1.',
@@ -228,7 +228,7 @@ o.toUpperCase()`,
 
     it('generates the tags', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setTags([ 'tag1', 'tag2' ])
 

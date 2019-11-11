@@ -1,35 +1,28 @@
 const esprima = require('esprima')
 const Classification = require('../../../../o-language/classifications/Classification')
 const ParseTreeVisitor = require('../../parsers/ParseTreeVisitor')
-const ClassDefinition = require('../../source-code/ClassDefinition')
 const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
 const SourceCodeText = require('../../SourceCodeText')
 
 /*
  * A visitor of a javascript parse tree that collects the documentation of a class.
  */
-class MethodDocumentationDslReader {
+class DocumentationDslReader {
 
     static definition() {
-        this.instanceVariables = ['methodDocumentation']
+        this.instanceVariables = ['documentation']
         this.assumes = [ParseTreeVisitor]
         this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
 
-    initialize({ methodDocumentation: methodDocumentation }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
+    readFromString({ string: documentationString, into: documentation }) {
+        this.documentation = documentation
 
-        this.methodDocumentation = methodDocumentation
-    }
-
-    buildFromString(documentationDslString) {
-        const parseTree = this.parseString( documentationDslString )
+        const parseTree = this.parseString( documentationString )
 
         this.visit( parseTree )
 
-        return this.methodDocumentation
+        return this.documentation
     }
 
     parseString(string) {
@@ -52,8 +45,12 @@ class MethodDocumentationDslReader {
         const firstArgument = args[0]
 
         switch( calledFunction ) {
+            case 'Class':
+                this.documentation.setDescription( firstArgument )
+                break
+
             case 'Method':
-                this.methodDocumentation.setDescription( firstArgument )
+                this.documentation.setDescription( firstArgument )
                 break
 
             case 'Param':
@@ -77,7 +74,7 @@ class MethodDocumentationDslReader {
                     }
                 })
 
-                this.methodDocumentation.addParam( param )
+                this.documentation.addParam( param )
                 break
 
             case 'Returns':
@@ -96,16 +93,16 @@ class MethodDocumentationDslReader {
                     }
                 })
 
-                this.methodDocumentation.setReturns( returns )
+                this.documentation.setReturns( returns )
                 break
 
             case 'Implementation':
-                this.methodDocumentation.addImplementationNote( firstArgument )
+                this.documentation.addImplementationNote( firstArgument )
 
                 break
 
             case 'Tags':
-                this.methodDocumentation.setTags( firstArgument )
+                this.documentation.setTags( firstArgument )
 
                 break
 
@@ -125,7 +122,7 @@ class MethodDocumentationDslReader {
                     }
                 })
 
-                this.methodDocumentation.addExample( example )
+                this.documentation.addExample( example )
 
                 break
 
@@ -154,4 +151,4 @@ class MethodDocumentationDslReader {
     }
 }
 
-module.exports = Classification.define(MethodDocumentationDslReader)
+module.exports = Classification.define(DocumentationDslReader)

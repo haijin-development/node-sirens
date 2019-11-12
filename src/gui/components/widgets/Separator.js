@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
 const SeparatorView = require('../../gtk-views/SeparatorView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')

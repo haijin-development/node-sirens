@@ -1,6 +1,6 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Gdk = require('node-gtk').require('Gdk', '3.0')
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')

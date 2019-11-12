@@ -1,5 +1,5 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
+const Classification = require('../../O').Classification
+const ObjectWithProps = require('../../O').ObjectWithProps
 const AntiComponent = require('./AntiComponent')
 
 /*

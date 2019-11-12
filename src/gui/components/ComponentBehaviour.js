@@ -1,8 +1,8 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
+const OInstance = require('../../O').OInstance
+const ObjectWithProps = require('../../O').ObjectWithProps
 const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProtocol')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
-const OInstance = require('../../o-language/classifications/OInstance')
-const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
 
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 

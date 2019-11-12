@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const RadioButtonView = require('../../gtk-views/RadioButtonView')

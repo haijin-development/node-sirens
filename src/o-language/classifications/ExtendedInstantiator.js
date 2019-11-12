@@ -27,10 +27,10 @@ const Classification = require('./Classification')
     `,
     Code: `
 
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const ExtendedInstantiator = require('sirens/src/o-language/classifications/ExtendedInstantiator')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
-       const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+       const Classification = require('sirens/src/O').Classification
+       const ExtendedInstantiator = require('sirens/src/O').ExtendedInstantiator
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
+       const Debuggable = require('sirens/src/O').Debuggable
 
        class Circle {
        	static definition() {
@@ -108,9 +108,9 @@ class ExtendedInstantiator {
            Adds the Debuggable behaviour to all the objects behaving as Circle.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const ExtendedInstantiator = require('sirens/src/o-language/classifications/ExtendedInstantiator')
-           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+           const Classification = require('sirens/src/O').Classification
+           const ExtendedInstantiator = require('sirens/src/O').ExtendedInstantiator
+           const Debuggable = require('sirens/src/O').Debuggable
 
            class Circle {
            	static definition() {

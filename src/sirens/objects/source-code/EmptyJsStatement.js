@@ -1,6 +1,6 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
-const StringStream = require('../../../o-language/classifications/StringStream')
+const StringStream = require('../../../O').StringStream
 
 /*
  * An expected yet missing statement within a js valid file.

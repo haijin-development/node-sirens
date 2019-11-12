@@ -1,12 +1,12 @@
 const path = require('path')
-const Classification = require('../../o-language/classifications/Classification')
-const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
-const Component = require('../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../O').Classification
+const Component = require('../../GUI').Component
+const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../GUI').ComponentInstantiator
 const PlaygroundComponent = require('./shared/PlaygroundComponent')
 const PlaygroundBrowserMenu = require('./playground-browser/PlaygroundBrowserMenu')
 const PlaygroundBrowserModel = require('../models/PlaygroundBrowserModel')
-const FileChooser = require('../../gui/components/dialogs/FileChooser')
+const FileChooser = require('../../GUI').FileChooser
 const Sirens = require('../../Sirens')
 
 class PlaygroundBrowser {

@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const ClassDocumentation = require('./ClassDocumentation')
 const MethodDocumentation = require('./MethodDocumentation')
 const Preferences = require('../Preferences')

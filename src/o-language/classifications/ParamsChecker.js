@@ -29,9 +29,9 @@ const MethodValidator = require('./params-validation/MethodValidator')
        Validates a valid method call on an object behaving as a Circle.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
 
        // Define the CircleProtocol
        class CircleProtocol {
@@ -82,9 +82,9 @@ const MethodValidator = require('./params-validation/MethodValidator')
     `,
     Code: `
 
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
 
        // Define the CircleProtocol
        class CircleProtocol {

@@ -1,12 +1,12 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
-const Component = require('../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../O').Classification
+const Component = require('../../GUI').Component
+const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../GUI').ComponentInstantiator
 const AppBrowserMenu = require('./app-browser/AppBrowserMenu')
 const AppBrowserBody = require('./app-browser/AppBrowserBody')
 const AppBrowserModel = require('../models/AppBrowserModel')
 const Sirens = require('../../Sirens')
-const FolderChooser = require('../../gui/components/dialogs/FolderChooser')
+const FolderChooser = require('../../GUI').FolderChooser
 
 class AppBrowser {
     /// Definition

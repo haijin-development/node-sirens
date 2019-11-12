@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const path = require('path')
 const fs = require('fs')
 const esprima = require('esprima')
@@ -7,7 +7,7 @@ const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
 const ParseTreeFlattener = require('./parsers/ParseTreeFlattener')
 const AbsentFunction = require('./source-code/AbsentFunction')
-const StringStream = require('../../o-language/classifications/StringStream')
+const StringStream = require('../../O').StringStream
 
 /*
  * A source file to query javascript definitions.

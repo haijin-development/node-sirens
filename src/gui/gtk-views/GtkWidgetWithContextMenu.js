@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const MenuView = require('./MenuView')
 
 class GtkWidgetWithContextMenu {

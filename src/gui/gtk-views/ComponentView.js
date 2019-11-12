@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const GtkView = require('./GtkView')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
 

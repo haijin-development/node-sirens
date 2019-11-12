@@ -1,10 +1,10 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
-const Component = require('../../gui/components/Component')
+const Classification = require('../../O').Classification
+const Component = require('../../GUI').Component
+const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../GUI').ComponentInstantiator
 const Sirens = require('../../Sirens')
 const PrototypesBrowserModel = require('../models/PrototypesBrowserModel')
 const FunctionsComponent = require('./prototype-browser/FunctionsComponent')
-const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 
 const Resource = require('../objects/Resource')
 

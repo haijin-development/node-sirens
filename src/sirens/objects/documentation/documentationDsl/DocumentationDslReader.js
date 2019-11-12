@@ -1,5 +1,5 @@
 const esprima = require('esprima')
-const Classification = require('../../../../o-language/classifications/Classification')
+const Classification = require('../../../../O').Classification
 const ParseTreeVisitor = require('../../parsers/ParseTreeVisitor')
 const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
 const SourceCodeText = require('../../SourceCodeText')

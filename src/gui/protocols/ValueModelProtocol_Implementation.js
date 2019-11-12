@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 const ValueModelProtocol = require('./ValueModelProtocol')
 
 class ValueModelProtocol_Implementation {

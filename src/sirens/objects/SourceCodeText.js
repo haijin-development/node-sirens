@@ -1,5 +1,5 @@
-const Classification = require('../../o-language/classifications/Classification')
-const IndentedStringStream = require('../../o-language/classifications/IndentedStringStream')
+const Classification = require('../../O').Classification
+const IndentedStringStream = require('../../O').IndentedStringStream
 
 /*
  * A piece of continuos text of javascript (or any other similar language) source code.

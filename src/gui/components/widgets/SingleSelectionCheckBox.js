@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const CheckBox = require('./CheckBox')
 const CheckBoxProtocol_Implementation = require('../../protocols/CheckBoxProtocol_Implementation')
 

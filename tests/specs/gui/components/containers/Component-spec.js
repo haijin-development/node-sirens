@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const Classification = require('../../../../../src/o-language/classifications/Classification')
+const Classification = require('../../../../../src/O').Classification
 const Component = require('../../../../../src/gui/components/Component')
 const LabelView = require('../../../../../src/gui/gtk-views/LabelView')
 

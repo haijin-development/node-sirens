@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const SourceFile = require('./SourceFile')
 const SourceFileFooter = require('./source-code/SourceFileFooter')
 const EmptyJsStatement = require('./source-code/EmptyJsStatement')

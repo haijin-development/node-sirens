@@ -1,8 +1,8 @@
 const fs = require('fs')
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../../GUI').ComponentProtocol_Implementation
+const GtkIcons = require('../../../../GUI').GtkIcons
 
 class EditDialogHeader {
     /// Definition

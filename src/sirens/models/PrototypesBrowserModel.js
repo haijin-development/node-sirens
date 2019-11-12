@@ -1,6 +1,6 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ChoiceModel = require('../../gui/models/ChoiceModel')
-const ValueModel = require('../../gui/models/ValueModel')
+const Classification = require('../../O').Classification
+const ChoiceModel = require('../../GUI').ChoiceModel
+const ValueModel = require('../../GUI').ValueModel
 const ObjectProperty = require('../objects/ObjectProperty')
 const Preferences = require('../objects/Preferences')
 

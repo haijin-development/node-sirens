@@ -1,6 +1,6 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ChoiceModel = require('../../gui/models/ChoiceModel')
-const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
+const Classification = require('../../O').Classification
+const ChoiceModel = require('../../GUI').ChoiceModel
+const BufferedAttributeModel = require('../../GUI').BufferedAttributeModel
 
 class ClassEditionModel {
     /// Definition

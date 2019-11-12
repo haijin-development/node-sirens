@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 
 /*
  * Defines the implementation protocol for components that syncronize its contents with a ListModel.

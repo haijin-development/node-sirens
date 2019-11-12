@@ -1,6 +1,6 @@
-const Classification = require('../../o-language/classifications/Classification')
-const BufferedAttributeModel = require('../../gui/models/BufferedAttributeModel')
-const ListModel = require('../../gui/models/ListModel')
+const Classification = require('../../O').Classification
+const BufferedAttributeModel = require('../../GUI').BufferedAttributeModel
+const ListModel = require('../../GUI').ListModel
 const ClassSourceFile = require('../../sirens/objects/ClassSourceFile')
 const ClassEditionModel = require('./ClassEditionModel')
 

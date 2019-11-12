@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const Classification = require('../../../../../src/o-language/classifications/Classification')
+const Classification = require('../../../../../src/O').Classification
 const Component = require('../../../../../src/gui/components/Component')
 
 const ComponentProtocol_Implementation = require('../../../../../src/gui/protocols/ComponentProtocol_Implementation')

@@ -1,4 +1,4 @@
-const Classification = require('../../../../o-language/classifications/Classification')
+const Classification = require('../../../../O').Classification
 const DocumentationDslReader = require('./DocumentationDslReader')
 const DocumentationDslWriter = require('./DocumentationDslWriter')
 

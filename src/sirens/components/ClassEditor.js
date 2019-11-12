@@ -1,13 +1,13 @@
 const path = require('path')
-const Classification = require('../../o-language/classifications/Classification')
-const ComponentInstantiator = require('../../gui/components/ComponentInstantiator')
-const Component = require('../../gui/components/Component')
+const Classification = require('../../O').Classification
+const Component = require('../../GUI').Component
+const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../GUI').ComponentInstantiator
 const ClassEditorModel = require('../models/ClassEditorModel')
 const ClassEditorMenu = require('./class-editor/ClassEditorMenu')
 const ClassesComponent = require('./class-editor/ClassesComponent')
-const ComponentProtocol_Implementation = require('../../gui/protocols/ComponentProtocol_Implementation')
 
-const FileChooser = require('../../gui/components/dialogs/FileChooser')
+const FileChooser = require('../../GUI').FileChooser
 const Sirens = require('../../Sirens')
 
 class ClassEditor {

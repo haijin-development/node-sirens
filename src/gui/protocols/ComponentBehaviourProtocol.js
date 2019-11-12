@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 
 /*
  * Defines the public protocol of an object behaving as a ComponentBehaviour.

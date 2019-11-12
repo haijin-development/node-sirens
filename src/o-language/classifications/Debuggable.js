@@ -14,8 +14,8 @@ const Sirens = require('../../Sirens')
        Adds a Debuggable behaviour to an object, in this example a StringStream instance.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
-       const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+       const StringStream = require('sirens/src/O').StringStream
+       const Debuggable = require('sirens/src/O').Debuggable
 
        const stream = StringStream.new()
        stream.append({ string: '123' })
@@ -31,8 +31,8 @@ const Sirens = require('../../Sirens')
        Gets a debug string on an object, in this example a StringStream instance.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
-       const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+       const StringStream = require('sirens/src/O').StringStream
+       const Debuggable = require('sirens/src/O').Debuggable
 
        const stream = StringStream.new()
        stream.append({ string: '123' })
@@ -50,8 +50,8 @@ const Sirens = require('../../Sirens')
     `,
     Code: `
 
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
-       const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+       const StringStream = require('sirens/src/O').StringStream
+       const Debuggable = require('sirens/src/O').Debuggable
 
        const stream = StringStream.new()
        stream.append({ string: '123' })
@@ -130,8 +130,8 @@ class Debuggable {
            Gets a debug sting on an object, in this example a StringStream instance.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
-           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+           const StringStream = require('sirens/src/O').StringStream
+           const Debuggable = require('sirens/src/O').Debuggable
 
            const stream = StringStream.new()
            stream.append({ string: '123' })
@@ -151,8 +151,8 @@ class Debuggable {
            on an HTML browser.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
-           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+           const StringStream = require('sirens/src/O').StringStream
+           const Debuggable = require('sirens/src/O').Debuggable
 
            const stream = StringStream.new()
            stream.append({ string: '123' })

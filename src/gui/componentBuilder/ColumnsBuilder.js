@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
 const Column = require('./Column')
 
@@ -15,7 +15,7 @@ const Column = require('./Column')
     `,
     Code: `
 
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const ColumnsBuilder = require('sirens/src/gui/componentBuilder/ColumnsBuilder')
 
        const builder = ColumnsBuilder.new()

@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 const ComponentProtocol = require('./ComponentProtocol')
 
 const ComponentRendererProtocol = require('./ComponentRendererProtocol')

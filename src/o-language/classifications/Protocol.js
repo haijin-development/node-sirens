@@ -46,7 +46,7 @@ const Classification = require('./Classification')
        Defines a CircleProtocol.
     `,
     Code: `
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
+       const Protocol = require('sirens/src/O').Protocol
 
        class CircleProtocol {
            getRadius() {}
@@ -103,8 +103,8 @@ class Protocol {
            A Circle classification validates that it implements the CircleProtocol and succeeds.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+           const Classification = require('sirens/src/O').Classification
+           const Protocol = require('sirens/src/O').Protocol
 
            // Define the CircleProtocol
 
@@ -136,8 +136,8 @@ class Protocol {
            A Circle classification validates that it implements the CircleProtocol and fails.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+           const Classification = require('sirens/src/O').Classification
+           const Protocol = require('sirens/src/O').Protocol
 
            // Define the CircleProtocol
 
@@ -221,8 +221,8 @@ class Protocol {
            A CircleProtocol validates that it is implemented by the Shape and Circle classifications and succeeds.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+           const Classification = require('sirens/src/O').Classification
+           const Protocol = require('sirens/src/O').Protocol
 
            // Define the CircleProtocol
 
@@ -262,8 +262,8 @@ class Protocol {
            A CircleProtocol validates that it is implemented by the Circle classifications and fails.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+           const Classification = require('sirens/src/O').Classification
+           const Protocol = require('sirens/src/O').Protocol
 
            // Define the CircleProtocol
 

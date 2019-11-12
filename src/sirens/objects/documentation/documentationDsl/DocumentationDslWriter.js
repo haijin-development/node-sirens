@@ -1,5 +1,5 @@
-const Classification = require('../../../../o-language/classifications/Classification')
-const IndentedStringStream = require('../../../../o-language/classifications/IndentedStringStream')
+const Classification = require('../../../../O').Classification
+const IndentedStringStream = require('../../../../O').IndentedStringStream
 
 class DocumentationDslWriter {
     /// Definition

@@ -1,5 +1,5 @@
-const Classification = require('../../o-language/classifications/Classification')
-const ObjectWithProps = require('../../o-language/classifications/ObjectWithProps')
+const Classification = require('../../O').Classification
+const ObjectWithProps = require('../../O').ObjectWithProps
 
 /*
  Class(`
@@ -18,7 +18,7 @@ const ObjectWithProps = require('../../o-language/classifications/ObjectWithProp
     `,
     Code: `
        const Sirens = require('sirens')
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
        const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -65,7 +65,7 @@ const ObjectWithProps = require('../../o-language/classifications/ObjectWithProp
     `,
     Code: `
        const Sirens = require('sirens')
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
        const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -120,7 +120,7 @@ const ObjectWithProps = require('../../o-language/classifications/ObjectWithProp
     Code: `
 
        const Sirens = require('sirens')
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
        const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')

@@ -1,5 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
-
+const Classification = require('../../O').Classification
 /*
     Class(`
        This classification can be attached to a component classification object to add the methods to create its
@@ -21,7 +20,7 @@ const Classification = require('../../o-language/classifications/Classification'
        `,
        Code: `
 
-          const Classification = require('sirens/src/o-language/classifications/Classification')
+          const Classification = require('sirens/src/O').Classification
           const Component = require('sirens/src/gui/components/Component')
           const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
           const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -102,7 +101,7 @@ class ComponentInstantiator {
         `,
         Code: `
 
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -176,7 +175,7 @@ class ComponentInstantiator {
         `,
         Code: `
 
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -261,7 +260,7 @@ class ComponentInstantiator {
         `,
         Code: `
 
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')

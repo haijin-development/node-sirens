@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const ValueModelBehaviour = require('./ValueModelBehaviour')
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')

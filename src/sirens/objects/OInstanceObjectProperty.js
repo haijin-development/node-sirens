@@ -1,6 +1,6 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const ObjectProperty = require('./ObjectProperty')
-const OInstance = require('../../o-language/classifications/OInstance')
+const OInstance = require('../../O').OInstance
 const GtkView = require('../../gui/gtk-views/GtkView')
 
 class OInstanceObjectProperty {

@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
 const ToolBar = require('../components/menus/ToolBar')
 const ToolButton = require('../components/menus/ToolButton')

@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const Component = require('./Component')
 const ListModelComponentProtocol_Implementation = require('../protocols/ListModelComponentProtocol_Implementation')
 
@@ -47,7 +47,7 @@ const ListModel = require('../models/ListModel')
        see how the opened CustomListComponent keeps it contents in sync with it.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentsList = require('sirens/src/gui/components/ComponentsList')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')

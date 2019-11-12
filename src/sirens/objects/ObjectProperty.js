@@ -1,5 +1,5 @@
 const path = require('path')
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const Resource = require('./Resource')
 
 class ObjectProperty {

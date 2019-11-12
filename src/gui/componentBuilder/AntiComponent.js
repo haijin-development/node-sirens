@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 
 /*
  Class(`
@@ -31,7 +31,7 @@ const Classification = require('../../o-language/classifications/Classification'
     `,
     Code: `
        const Sirens = require('sirens')
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
        const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')

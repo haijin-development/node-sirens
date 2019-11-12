@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 const GtkViewProtocol_Implementation = require('./GtkViewProtocol_Implementation')
 
 class GtkWidgetProtocol_Implementation {

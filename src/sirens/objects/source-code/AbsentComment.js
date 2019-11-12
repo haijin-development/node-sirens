@@ -1,7 +1,7 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const JsCommentProtocol = require('../../protocols/JsCommentProtocol')
 const EmptyJsStatement = require('./EmptyJsStatement')
-const IndentedStringStream = require('../../../o-language/classifications/IndentedStringStream')
+const IndentedStringStream = require('../../../O').IndentedStringStream
 
 /*
  * An expected yet missing statement within a js valid file.

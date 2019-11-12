@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const ColumnsBuilder = require('./ColumnsBuilder')
 const MenuBuilder = require('./MenuBuilder')
 const ToolBarBuilder = require('./ToolBarBuilder')
@@ -261,7 +261,7 @@ class ContainerWidgetBuilder {
            Adds a custom component.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const ContainerWidgetBuilder = require('sirens/src/gui/componentBuilder/ContainerWidgetBuilder')
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')

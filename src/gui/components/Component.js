@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const ComponentBehaviour = require('./ComponentBehaviour')
 const ComponentView = require('../gtk-views/ComponentView')
 const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
@@ -54,7 +54,7 @@ const ComponentInstantiator = require('./ComponentInstantiator')
        Defines a top level component with a Window.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/gui/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
        const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -129,7 +129,7 @@ class Component {
            Creates a new Component object with given properties and gets them.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
 
@@ -209,7 +209,7 @@ class Component {
            Every time any of those ValueModels changes the component is rendered again.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
@@ -325,7 +325,7 @@ class Component {
            Defines a CustomComponent with a default model.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/gui/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')

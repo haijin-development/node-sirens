@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
 const LabelView = require('../../gtk-views/LabelView')
 const ValueModel = require('../../models/ValueModel')

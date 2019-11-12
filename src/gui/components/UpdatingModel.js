@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 
 /*
  * This Classification can be added to a Component object while it is synchronizing the model value

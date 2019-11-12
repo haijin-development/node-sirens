@@ -1,6 +1,6 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const GtkPositions = require('./constants/GtkPositions')
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const GtkWidget = require('./GtkWidget')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 

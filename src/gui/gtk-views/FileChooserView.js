@@ -49,7 +49,7 @@ class FileChooserView {
         this.dialog.addButton('Cancel', Gtk.ResponseType.CANCEL)
         this.dialog.addButton(label, Gtk.ResponseType.ACCEPT)
 
-        if( initialFolder !== undefined ) {
+        if( initialFolder ) {
             this.dialog.setCurrentFolder( initialFolder )
         }
     }

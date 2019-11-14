@@ -36,7 +36,7 @@ class AppBrowserModel {
 
         this.appFilesTreeModel = TreeChoiceModel.new({
             roots: [],
-            getChildrenBlock: (path) => { return this.getPathChildren({ path: path }) },
+            getChildrenClosure: (path) => { return this.getPathChildren({ path: path }) },
         })
 
         this.connectModels()

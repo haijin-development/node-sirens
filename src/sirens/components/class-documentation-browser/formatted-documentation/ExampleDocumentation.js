@@ -38,6 +38,7 @@ class ExampleDocumentation {
 
             this.component(
                 PlaygroundComponent.new({
+                    id: 'playground',
                     text: "\n" + example.Code + "\n",
                     hScroll: 'never',
                     vScroll: 'never',

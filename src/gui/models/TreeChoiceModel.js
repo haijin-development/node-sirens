@@ -11,7 +11,7 @@ class TreeChoiceModel {
 
     /// Initializing
 
-    initialize({ selectionModel: selectionModel, roots: roots, getChildrenBlock: getChildrenBlock }) {
+    initialize({ selectionModel: selectionModel, roots: roots, getChildrenClosure: getChildrenClosure }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -23,7 +23,7 @@ class TreeChoiceModel {
 
         this.treeModel = VirtualTreeModel.new({
             roots: roots,
-            getChildrenBlock: getChildrenBlock
+            getChildrenClosure: getChildrenClosure
         })
     }
 
@@ -100,6 +100,8 @@ class TreeChoiceModel {
     */
     setRoots({ items: items }) {
         this.treeModel.setRoots({ items: items })
+
+        return this
     }
 
     /**
@@ -108,6 +110,12 @@ class TreeChoiceModel {
      */
     getRoots() {
         return this.treeModel.getRoots()
+    }
+
+    setGetChildrenClosure(closure) {
+        this.treeModel.setGetChildrenClosure(closure)
+
+        return this
     }
 
     /**

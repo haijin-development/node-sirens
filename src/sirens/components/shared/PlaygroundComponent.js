@@ -25,9 +25,9 @@ class PlaygroundComponent {
 
         if( this.getProps().text !== undefined ) {
             this.getModel().setValue( props.text )
-        }
 
-        this.removeProp({ key: 'text' })
+            this.removeProp({ key: 'text' })
+        }
     }
 
     defaultModel() {
@@ -37,7 +37,7 @@ class PlaygroundComponent {
     /// Querying
 
     getSelectedCode() {
-        const playgroundComponent = this.getChildComponent({ id: 'playground' })
+        const playgroundComponent = this.getOnlyChildComponent()
 
         let selectedText = playgroundComponent.getSelectedText()
 
@@ -65,11 +65,23 @@ class PlaygroundComponent {
         })
     }
 
+    getText() {
+        this.getModel().getValue()
+    }
+
+    setText(string) {
+        this.getModel().setValue(string)
+    }
+
+    setEvaluationContextBinding(object) {
+        this.evaluationContext = object
+    }
+
     /// Building
 
     getTextStyles() {
         const defaultStyles = {
-            id: 'playground',
+            css: 'playground',
             wrapMode: 'wordChar',
         }
 

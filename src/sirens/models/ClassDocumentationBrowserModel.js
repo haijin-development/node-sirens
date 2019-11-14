@@ -4,7 +4,7 @@ const ValueModel = require('../../GUI').ValueModel
 const ChoiceModel = require('../../GUI').ChoiceModel
 const DocumentationReader = require('../objects/documentation/DocumentationReader')
 const MethodDocumentation = require('../objects/documentation/MethodDocumentation')
-const Preferences = require('../objects/Preferences')
+const Pluggables = require('../objects/Pluggables')
 
 class ClassDocumentationBrowserModel {
     /// Definition
@@ -102,7 +102,7 @@ class ClassDocumentationBrowserModel {
             return MethodDocumentation.new().yourself( (documentation) => {
                 documentation.setDescription( 'No method selected.' )
 
-                documentation.behaveAs( Preferences.documentationDefaultFormat )
+                documentation.behaveAs( Pluggables.documentationFormats.default )
             })
         }
 

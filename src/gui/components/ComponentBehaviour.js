@@ -511,7 +511,13 @@ class ComponentBehaviour {
         'child components', 'querying', 'public'
      ])
     */
-    getChildComponent({ id: childComponentId }) {
+    getChildComponent({ id: childComponentId, ifNone: absentClosure }) {
+        if( absentClosure === undefined ) {
+            absentClosure = function({ id: childComponentId }) {
+                throw new Error(`Could find any child component with id: '${childComponentId}'`)
+            }
+        }
+
         const length = this.childComponents.length
 
         for (let i = 0; i < length; i++) {
@@ -521,14 +527,24 @@ class ComponentBehaviour {
                 return childComponent
             }
 
-            const found = childComponent.getChildComponent({ id: childComponentId })
+            const found = childComponent.getChildComponent({ id: childComponentId, ifNone: null })
 
             if(found !== null) {
                 return found
             }
         }
 
-        return null
+        if( typeof( absentClosure ) !== 'function' ) { return absentClosure }
+
+        return absentClosure({ id: childComponentId })
+    }
+
+    getOnlyChildComponent() {
+        if( this.childComponents.length !== 1 ) {
+            throw new Error(`The component was expected to have exactly one child`)
+        }
+
+        return this.childComponents[0]
     }
 
     /// Child components

@@ -23,7 +23,7 @@ class ClassEditor {
     /// Initializing
 
     /**
-     * Returns a new ObjectBrowserModel.
+     * Returns a new ClassEditorModel.
      * If the props include a props.object defined the that props.object is the browsed object,
      * otherwise the browsed object is undefined.
      */

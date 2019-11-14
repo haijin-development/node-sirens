@@ -290,6 +290,7 @@ class ClassFormattedComment {
 
                     this.component(
                         PlaygroundComponent.new({
+                            id: 'playground',
                             text: "\n" + description + "\n",
                             hScroll: 'never',
                             vScroll: 'never',

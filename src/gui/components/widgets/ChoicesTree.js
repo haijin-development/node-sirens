@@ -25,15 +25,25 @@ class ChoicesTree {
     defaultModel() {
         const model = TreeChoiceModel.new({
             roots: [],
-            getChildrenBlock: () => { return [] }
+            getChildrenClosure: () => { return [] }
         })
 
-        if(this.getProps().roots !== undefined) {
-            model.setRoots({ items: this.getProps().roots })
+        if( this.getProps().getChildrenClosure !== undefined ) {
+            model.setGetChildrenClosure( this.getProps().getChildrenClosure )
+
+            this.removeProp({ key: 'getChildrenClosure' })
         }
 
-        if(this.getProps().selectionPath !== undefined) {
+        if( this.getProps().roots !== undefined ) {
+            model.setRoots({ items: this.getProps().roots })
+
+            this.removeProp({ key: 'roots' })
+        }
+
+        if( this.getProps().selectionPath !== undefined ) {
             model.setSelectionPath({ objectsHierarchy: this.getProps().selectionPath })
+
+            this.removeProp({ key: 'selectionPath' })
         }
 
         return model
@@ -41,7 +51,7 @@ class ChoicesTree {
 
     createView() {
         return TreeView.new({
-            getChildrenBlock: this.getChildrenAt.bind(this),
+            getChildrenClosure: this.getChildrenAt.bind(this),
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this)
         })
@@ -49,6 +59,18 @@ class ChoicesTree {
 
     getChildrenAt(itemPath) {
         return this.getModel().getChildrenAt({ indices: itemPath })
+    }
+
+    setRoots({ items: items }) {
+        this.getModel().setRoots({ items: items })
+
+        return this
+    }
+
+    setGetChildrenClosure(closure) {
+        this.getModel().setGetChildrenClosure(closure)
+
+        return this        
     }
 
     /// Synchronizing
@@ -100,17 +122,25 @@ class ChoicesTree {
     }
 
     onUserSelectionChanged() {
+        const oldSelection = this.getModel().getSelectionValue()
+
         this.duringClassificationDo( UpdatingModel, () => {
             const selectedPath = this.getView().getSelectionIndices()
 
             this.getModel().setSelectionFromIndices({ indices: selectedPath[0] })
         })
+
+        const onSelectionChangedHandler = this.getProps().onSelectionChanged
+
+        if( onSelectionChangedHandler === undefined ) { return }
+
+        const newSelection = this.getModel().getSelectionValue()
+
+        onSelectionChangedHandler({ oldSelection: oldSelection, newSelection: newSelection })
     }
 
     onUserSelectionAction() {
-        if(this.getProps().onAction === undefined) {
-            return
-        }
+        if( this.getProps().onAction === undefined ) { return }
 
         this.getProps().onAction()
     }

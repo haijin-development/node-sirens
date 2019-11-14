@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const ClassDocumentation = require('./ClassDocumentation')
 const MethodDocumentation = require('./MethodDocumentation')
-const Preferences = require('../Preferences')
+const Pluggables = require('../Pluggables')
 
 class DocumentationReader {
 
@@ -15,7 +15,7 @@ class DocumentationReader {
 
         classDocumentation.setClassName( className )
 
-        const documentationReaderClassifications = Preferences.documentationFormats
+        const documentationReaderClassifications = Pluggables.documentationFormats.available
 
         for( const readerClassification of documentationReaderClassifications ) {
 
@@ -50,7 +50,7 @@ class DocumentationReader {
         methodDocumentation.setMethodName( methodName )
         methodDocumentation.setMethodParams( params )
 
-        const documentationReaderClassifications = Preferences.documentationFormats
+        const documentationReaderClassifications = Pluggables.documentationFormats.available
 
         for( const readerClassification of documentationReaderClassifications ) {
 

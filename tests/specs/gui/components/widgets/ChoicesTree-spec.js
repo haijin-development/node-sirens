@@ -6,7 +6,7 @@ describe('When using a ChoicesTree', () => {
     beforeEach( () => {
         const treeModel = TreeChoiceModel.new({
             roots: [],
-            getChildrenBlock: () => { return ['1', '2', '3'] }
+            getChildrenClosure: () => { return ['1', '2', '3'] }
         })
 
         this.tree = Component.render( function(renderer) {

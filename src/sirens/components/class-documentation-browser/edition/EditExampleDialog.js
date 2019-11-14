@@ -56,6 +56,7 @@ class EditExampleDialog {
 
                         this.component(
                             PlaygroundComponent.new({
+                                id: 'playground',
                                 text: "\n" + example.Code + "\n",
                                 hScroll: 'never',
                                 vScroll: 'auto',
@@ -116,7 +117,7 @@ class EditExampleDialog {
 
         const example = {
             Description: exampleDescriptionComponent.getModel().getValue(),
-            Code: exampleCodeComponent.getModel().getValue(),
+            Code: exampleCodeComponent.getText(),
         }
 
         this.getProps().onUpdateExample({

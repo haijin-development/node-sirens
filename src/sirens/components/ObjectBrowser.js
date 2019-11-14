@@ -2,120 +2,89 @@ const Classification = require('../../O').Classification
 const Component = require('../../GUI').Component
 const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../GUI').ComponentInstantiator
-const Sirens = require('../../Sirens')
-const ObjectBrowserModel = require('../models/ObjectBrowserModel')
-const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
 
-const ScriptEvaluator = require('../objects/ScriptEvaluator')
+const PlaygroundComponent = require('./shared/PlaygroundComponent')
+const ObjectPropertiesComponent = require('./shared/ObjectPropertiesComponent')
+const Pluggables = require('../objects/Pluggables')
 
 class ObjectBrowser {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['propertiesTreeModel']
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
     }
 
-    /// Initializing
-
-    /**
-     * Returns a new ObjectBrowserModel.
-     * If the props include a props.object defined the that props.object is the browsed object,
-     * otherwise the browsed object is undefined.
-     */
-    defaultModel() {
-        return ObjectBrowserModel.new({ object: this.getProps().object })
-    }
-
-    /// Actions
-
-    inspectSelectedCode() {
-        const evaluationResult = this.evaluateSelectedCode()
-
-        Sirens.browseObject( evaluationResult )
-    }
-
-    evaluateSelectedCode() {
-        const selectedValue = this.getModel().getSelectedPropertyValue()
-
-        const selectedText = this.getSelectedText()
-
-        return ScriptEvaluator.evaluate({
-            thisObject: selectedValue,
-            script: selectedText,
-        })
-    }
-
-    /// Querying
-
-    getSelectedText() {
-        const playgroundComponent = this.getChildComponent({ id: 'playground' })
-
-        let selectedText = playgroundComponent.getSelectedText()
-
-        if(selectedText == '') {
-            selectedText = playgroundComponent.getModel().getValue()
-        }
-
-        return selectedText
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const inspectedObject = this.getProps().object
 
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
+                    css: ['window', 'object-browser'],
                     title: 'Object Browser',
                     width: 400,
                     height: 400,
                 })
 
                 this.verticalSplitter( function() {
+
                     this.component(
                         ObjectPropertiesComponent.new({
-                            model: model,
-                            viewAttributes: { splitProportion: 1.0/2.0 },
+                            id: 'objectProperties',
+                            rootObject: inspectedObject,
+                            onSelectionChanged: component.handleObjectPropertySelectionChanged.bind(component),
+                            viewAttributes: { splitProportion: 1.0/2.0 },                            
                         })
                     )
 
-                    this.text( function() {
-                        this.model( model.getSelectedPropertyTextModel() )
-
-                        this.styles({
-                            id: 'playground',
-                            viewAttributes: { splitProportion: 1.0/2.0 },
-                            wrapMode: 'wordChar'
+                    this.component(
+                        PlaygroundComponent.new({
+                            id: 'propertyPlayground',
+                            viewAttributes: { splitProportion: 1.0/2.0 },                            
                         })
+                    )
 
-                        this.popupMenu( function() {
-                            const selectedObject =
-                                component.getModel().getSelectedPropertyValue()
-
-                            this.separator()
-
-                            this.item({
-                                label: 'Evaluate selected code',
-                                enabled: selectedObject !== undefined,
-                                action: () => { component.evaluateSelectedCode() },
-                            })
-
-                            this.separator()
-
-                            this.item({
-                                label: 'Inspect selected code',
-                                enabled: selectedObject !== undefined,
-                                action: () => { component.inspectSelectedCode() },
-                            })
-                        })
-                    })
                 })
             })
         })
+
+        // Sync the playground with the tree with this call
+        this.handleObjectPropertySelectionChanged()
+    }
+
+    /// Events
+
+    handleObjectPropertySelectionChanged() {
+        const playground = this.getChildComponent({ id: 'propertyPlayground', ifNone: null })
+
+        if( playground === null ) { return }
+
+        const selectedValue = this.getSelectedPropertyValue()
+
+        const selectedValueString = this.propertySelectionValueStringFrom({ value: selectedValue })
+
+        playground.setText( selectedValueString )
+
+        playground.setEvaluationContextBinding( selectedValue )
+    }
+
+    getSelectedPropertyValue() {
+        const objectPropertiesTree = this.getChildComponent({ id: 'objectProperties', ifNone: null })
+
+        return objectPropertiesTree.getSelectedPropertyValue()
+    }
+
+    propertySelectionValueStringFrom({ value: value }) {
+        const valueToTextClassification = Pluggables.objectPropertiesInspector.playgroundTextConverter
+
+        const valueToText = valueToTextClassification.new()
+
+        return valueToText.getDisplayValueFrom({ value: value })
     }
 }
 

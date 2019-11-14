@@ -20,7 +20,7 @@ class CustomComponent {
     defaultModel() {
         const treeModel = TreeChoiceModel.new({
             roots: ['root1', 'root2'],
-            getChildrenBlock: function (item) {
+            getChildrenClosure: function (item) {
                 return ['child 1', 'child 2', 'child 3']
             },
         })

@@ -1,6 +1,6 @@
 const Classification = require('../../O').Classification
 const BufferedAttributeModel = require('../../GUI').BufferedAttributeModel
-const ListModel = require('../../GUI').ListModel
+const ValueModel = require('../../GUI').ValueModel
 const ClassSourceFile = require('../../sirens/objects/ClassSourceFile')
 const ClassEditionModel = require('./ClassEditionModel')
 const SourceFile = require('../objects/SourceFile')
@@ -9,13 +9,9 @@ class PlaygroundBrowserModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [
-            'sourceFile',
-            'titleModel',
-            'playgroundTextModel',
-        ]
+        this.instanceVariables = ['lastOpenedFolder']
+        this.assumes = [ValueModel]
     }
-
 
     /// Initializing
 
@@ -24,63 +20,59 @@ class PlaygroundBrowserModel {
             this.initialize()
         })
 
-        this.sourceFile = null
-
-        this.titleModel = BufferedAttributeModel.new({
-            attributeReader: this.getTitle.bind(this)
-        })
-
-        this.playgroundTextModel = BufferedAttributeModel.new({
-            attributeReader: this.getPlaygroundTextContents.bind(this)
-        })
+        this.lastOpenedFolder = null
     }
 
     /// Accessing
 
-    getTitleModel() {
-        return this.titleModel
+    getSourceFile() {
+        return this.getValue()
     }
 
-    getPlaygroundTextModel() {
-        return this.playgroundTextModel
+    setSourceFile({ filename: filename }) {
+        return this.setValue( filename )
     }
 
-    getTitle(sourceFile) {
-        if( sourceFile === null && this.sourceFile === null ) {
+    getLastOpenedFolder() {
+        return this.lastOpenedFolder
+    }
+
+    setLastOpenedFolder(folder) {
+        this.lastOpenedFolder = folder
+    }
+
+    /// Querying
+
+    getWindowTitle() {
+        const sourceFile = this.getSourceFile()
+
+        if( ! sourceFile ) {
             return 'Playground - No source file selected.'
         }
 
         return 'Playground - ' + sourceFile.getFilePath()
     }
 
-    getPlaygroundTextContents(sourceFile) {
-        if( sourceFile === null ) { return '' }
-
-        return sourceFile.getFileContents()
-    }
-
-    /// Actions    
+    /// Actions
 
     reloadFile() {
-        const filename = this.sourceFile.getFilePath()
+        const filename = this.getSourceFile().getFilePath()
 
         this.openFile({ filename: filename })
     }
 
     openFile({ filename: filename }) {
-        this.sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = SourceFile.new({ filepath: filename })
 
-        this.titleModel.setObject( this.sourceFile )
-
-        this.playgroundTextModel.setObject( this.sourceFile )
+        this.setSourceFile({ filename: sourceFile })
     }
 
-    saveFile() {
-        if( this.sourceFile === null ) { return }
+    saveFile({ fileContents: fileContents }) {
+        if( this.fileContents === null ) { return }
 
-        const sourceCode = this.playgroundTextModel.getValue()
+        const sourceFile = this.getSourceFile()
 
-        this.sourceFile.saveFileContents( sourceCode )
+        sourceFile.saveFileContents( fileContents )
     }
 }
 

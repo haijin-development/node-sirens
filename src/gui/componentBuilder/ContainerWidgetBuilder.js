@@ -1902,7 +1902,7 @@ class ContainerWidgetBuilder {
            const TreeChoiceModel = require('sirens/src/gui/models/TreeChoiceModel')
 
            const treeModel = TreeChoiceModel.new({
-           	getChildrenBlock: (item) => { return [] }
+           	getChildrenClosure: (item) => { return [] }
            })
 
            const builder = ContainerWidgetBuilder.new()

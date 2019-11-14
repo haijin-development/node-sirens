@@ -6,25 +6,25 @@ class VirtualTreeModel {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['getChildrenBlock', 'roots']
+        this.instanceVariables = ['getChildrenClosure', 'roots']
         this.assumes = [Model]
         this.implements = [VirtualTreeModelProtocol]
     }
 
     /// Initializing
 
-    initialize({ roots: roots, getChildrenBlock: getChildrenBlock }) {
+    initialize({ roots: roots, getChildrenClosure: getChildrenClosure }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
-        if(getChildrenBlock === undefined) {
+        if(getChildrenClosure === undefined) {
             throw new Error(
-                `A getChildrenBlock must be defined.`
+                `A getChildrenClosure must be defined.`
             )
         }
 
-        this.getChildrenBlock = getChildrenBlock
+        this.getChildrenClosure = getChildrenClosure
 
         this.roots = []
 
@@ -32,7 +32,7 @@ class VirtualTreeModel {
     }
 
     newTreeNodeOn({ item: item }) {
-        return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
+        return TreeNodeClassification.new({ value: item, getChildrenClosure: this.getChildrenClosure })
     }
 
     /// Accessing
@@ -51,6 +51,18 @@ class VirtualTreeModel {
         })
 
         this.emit('roots-changed', {newRoots: newRoots, oldRoots: oldRoots})
+
+        return this
+    }
+
+    setGetChildrenClosure(closure) {
+        const roots = this.roots
+
+        this.getChildrenClosure = closure
+
+        this.setRoots({ items: roots })
+
+        return this
     }
 
     getNodeAt({ indices: pathIndices }) {
@@ -135,17 +147,17 @@ const TreeNodeClassification = Classification.define( class TreeNode {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['value', 'children', 'getChildrenBlock']
+        this.instanceVariables = ['value', 'children', 'getChildrenClosure']
     }
 
-    initialize({ value: value, getChildrenBlock: getChildrenBlock }) {
+    initialize({ value: value, getChildrenClosure: getChildrenClosure }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
         this.value = value
         this.children = undefined
-        this.getChildrenBlock = getChildrenBlock
+        this.getChildrenClosure = getChildrenClosure
     }
 
     getValue() {
@@ -165,7 +177,7 @@ const TreeNodeClassification = Classification.define( class TreeNode {
     }
 
     _getChildItems() {
-        const children = this.getChildrenBlock( this.value )
+        const children = this.getChildrenClosure( this.value )
 
         if( children === undefined ) {
             return []
@@ -176,7 +188,7 @@ const TreeNodeClassification = Classification.define( class TreeNode {
 
     _getChildNodes() {
         return this._getChildItems().map( (item) => {
-            return TreeNodeClassification.new({ value: item, getChildrenBlock: this.getChildrenBlock })
+            return TreeNodeClassification.new({ value: item, getChildrenClosure: this.getChildrenClosure })
         })
     }
 })

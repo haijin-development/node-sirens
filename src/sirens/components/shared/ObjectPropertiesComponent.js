@@ -1,49 +1,47 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../GUI').Component
 const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
-const Sirens = require('../../../Sirens')
+const TreeChoiceModel = require('../../../GUI').TreeChoiceModel
 
+const ObjectProperty = require('../../objects/ObjectProperty')
+const Preferences = require('../../objects/Preferences')
+const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesComponent {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['propertiesTreeModel']
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
+    /// Initializing
 
-    getSelectedObject() {
-        let selectedValue = this.getModel().getSelectedPropertyValue()
-
-        if(selectedValue === undefined) {
-            selectedValue = this.getModel().getRootObject()
-        }
-
-        return selectedValue
+    initializeModel() {
+        this.propertiesTreeModel = TreeChoiceModel.new({
+            roots: this.getTreeRootProperties(),
+            getChildrenClosure: function (objectProperty) { return objectProperty.getChildProperties() }
+        })
     }
 
-    inspectSelectedObject() {
-        const selectedValue = this.getSelectedObject()
+    getTreeRootProperties() {
+        const inspectedObject = this.getRootObject()
 
-        Sirens.browseObject(selectedValue)
-    }
+        const root = ObjectProperty.new({ key: null, value: inspectedObject })
 
-    browseSelectedObjectPrototypes() {
-        const selectedValue = this.getSelectedObject()
-
-        Sirens.browsePrototypes(selectedValue)
+        return [root]
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
+        const propertiesTreeModel = this.propertiesTreeModel
+
         componentsRenderer.render( function(component) {
 
             this.treeChoice( function(tree) {
-                this.model( component.getModel().getObjectPropertiesTreeModel() )
+                this.model( propertiesTreeModel )
 
                 this.styles({
                     showHeaders: false,
@@ -51,6 +49,7 @@ class ObjectPropertiesComponent {
                 })
 
                 this.handlers({
+                    onSelectionChanged: component.getProps().onSelectionChanged,
                     onAction: component.inspectSelectedObject.bind(component),
                 })
 
@@ -67,8 +66,7 @@ class ObjectPropertiesComponent {
                 })
 
                 this.popupMenu( function() {
-                    const selectedObject =
-                        component.getModel().getSelectedPropertyValue()
+                    const selectedObject = component.getSelectedPropertyValue()
 
                     this.item({
                         label: 'Browse it',
@@ -86,6 +84,32 @@ class ObjectPropertiesComponent {
                 })
             })
         })
+    }
+
+    /// Accessing
+
+    getRootObject() {
+        return this.getProps().rootObject
+    }
+
+    getSelectedPropertyValue() {
+        const selectedTreePropertyWrapper = this.propertiesTreeModel.getSelectionValue()
+
+        return selectedTreePropertyWrapper.getValue()
+    }
+
+    /// Actions
+
+    inspectSelectedObject() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browseObject(selectedValue)
+    }
+
+    browseSelectedObjectPrototypes() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browsePrototypes(selectedValue)
     }
 }
 

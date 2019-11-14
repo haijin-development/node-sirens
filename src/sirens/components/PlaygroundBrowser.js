@@ -3,6 +3,7 @@ const Classification = require('../../O').Classification
 const Component = require('../../GUI').Component
 const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../GUI').ComponentInstantiator
+const BufferedAttributeModel = require('../../GUI').BufferedAttributeModel
 const PlaygroundComponent = require('./shared/PlaygroundComponent')
 const PlaygroundBrowserMenu = require('./playground-browser/PlaygroundBrowserMenu')
 const PlaygroundBrowserModel = require('../models/PlaygroundBrowserModel')
@@ -13,7 +14,7 @@ class PlaygroundBrowser {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['lastOpenedFolder']
+        this.instanceVariables = ['playgroundTextModel']
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
@@ -22,17 +23,79 @@ class PlaygroundBrowser {
     /// Initializing
 
     /**
-     * Returns a new ObjectBrowserModel.
+     * Returns a new PlaygroundBrowserModel.
      * If the props include a props.object defined the that props.object is the browsed object,
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        return PlaygroundBrowserModel.new().yourself( (model) => {
-            const filename = this.getProps().filename
+        const model = PlaygroundBrowserModel.new()
 
-            if( filename !== undefined ) {
-                model.openFile({ filename: filename })
-            }
+        model.onValueChanged( this.onOpenedFileChanged.bind(this) )
+
+        return model
+    }
+
+    /*
+     Method(`
+        Besides initializing the PlaygroundBrowserModel initialize another one for the Playrground component.
+     `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
+    */
+    initializeModel() {
+        this.previousClassificationDo( () => {
+            this.initializeModel()
+        })
+
+        this.playgroundTextModel = BufferedAttributeModel.new({
+            attributeReader: (object) => { 
+                return object ? object.getFileContents() : '' }
+        })
+
+        if( this.getProps().filename !== undefined ) {
+            this.getModel().openFile({ filename: this.getProps().filename })
+        }
+    }
+
+    /// Building
+
+    renderWith(componentsRenderer) {
+        const model = this.getModel()
+
+        const playgroundModel = this.playgroundTextModel
+
+        componentsRenderer.render( function(component) {
+            this.window( function() {
+                this.styles({
+                    id: 'window',
+                    title: model.getWindowTitle(),
+                    width: 900,
+                    height: 600,
+                })
+
+                this.verticalStack( function() {
+
+                    this.component(
+                        PlaygroundBrowserMenu.new({
+                            openFile: component.openFile.bind(component),
+                            openFileInNewWindow: component.openFileInNewWindow.bind(component),
+                            saveFile: component.saveFile.bind(component),
+                            openClassEditor: component.openClassEditor.bind(component),
+                            openPlayground: component.openPlayground.bind(component),
+                        })
+                    )
+
+                    this.component(
+                        PlaygroundComponent.new({
+                            id: 'playground',
+                            model: playgroundModel,
+                        })
+                    )
+
+                })
+            })
         })
     }
 
@@ -42,11 +105,13 @@ class PlaygroundBrowser {
         const filename = FileChooser.openFile({
             title: 'Choose a file',
             window: this,
-            initialFolder: this.lastOpenedFolder,
+            initialFolder: this.getModel().getLastOpenedFolder(),
         })
 
         if( filename !== null ) {
-            this.lastOpenedFolder = path.dirname( filename )
+            const lastOpenedFolder = path.dirname( filename )
+
+            this.getModel().setLastOpenedFolder( lastOpenedFolder )
         }
 
         return filename        
@@ -73,7 +138,9 @@ class PlaygroundBrowser {
     }
 
     saveFile() {
-        this.getModel().saveFile()
+        const fileTextContents = this.playgroundTextModel.getValue()
+
+        this.getModel().saveFile({ fileContents: fileTextContents })
     }
 
     openClassEditor() {
@@ -84,40 +151,19 @@ class PlaygroundBrowser {
         Sirens.openPlayground()
     }
 
-    /// Building
+    /// Events
 
-    renderWith(componentsRenderer) {
+    onOpenedFileChanged() {
         const model = this.getModel()
 
-        componentsRenderer.render( function(component) {
-            this.window( function() {
-                this.styles({
-                    title: model.getTitleModel(),
-                    width: 900,
-                    height: 600,
-                })
+        this.playgroundTextModel.setObject( model.getSourceFile() )
 
-                this.verticalStack( function() {
+        const window = this.getChildComponent({ id: 'window', ifNone: null })
 
-                    this.component(
-                        PlaygroundBrowserMenu.new({
-                            model: model,
-                            openFile: component.openFile.bind(component),
-                            openFileInNewWindow: component.openFileInNewWindow.bind(component),
-                            saveFile: component.saveFile.bind(component),
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openPlayground: component.openPlayground.bind(component),
-                        })
-                    )
+        if( window === null ) { return }
 
-                    this.component(
-                        PlaygroundComponent.new({
-                            model: model.getPlaygroundTextModel(),
-                        })
-                    )
-
-                })
-            })
+        window.mergeProps({
+            title: model.getWindowTitle(),
         })
     }
 }

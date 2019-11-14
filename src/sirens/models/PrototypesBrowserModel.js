@@ -134,8 +134,6 @@ class PrototypesBrowserModel {
                 value: object[key]
             })
 
-            objectProperty.behaveAsAll( Preferences.objectPropertiesInspectorPlugins )
-
             return objectProperty
         })
     }

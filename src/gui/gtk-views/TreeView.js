@@ -14,7 +14,7 @@ class TreeView {
     static definition() {
         this.instanceVariables = [
             'scrolledWindow', 'treeStore', 'treeView', 'columns',
-            'getChildrenBlock', 'onSelectionChanged', 'onSelectionAction',
+            'getChildrenClosure', 'onSelectionChanged', 'onSelectionAction',
             'placeholder'
         ]
         this.assumes = [GtkWidget]
@@ -24,12 +24,12 @@ class TreeView {
     /// Initializing
 
     initialize({
-            getChildrenBlock: getChildrenBlock,
+            getChildrenClosure: getChildrenClosure,
             onSelectionChanged: onSelectionChanged,
             onSelectionAction: onSelectionAction
      })
     {
-        this.getChildrenBlock = getChildrenBlock
+        this.getChildrenClosure = getChildrenClosure
 
         this.onSelectionChanged = onSelectionChanged
 
@@ -147,7 +147,7 @@ class TreeView {
     /// Accessing
 
     getChildrenAt({path: path}) {
-        return this.getChildrenBlock(path)
+        return this.getChildrenClosure(path)
     }
 
     /// Querying
@@ -363,7 +363,7 @@ class TreeView {
      * placeholder().
      * The first time a node is expanded if it has the child placeholder then the placeholder is
      * replaced with the actual node children.
-     * The actual children are get using the getChildrenBlock.
+     * The actual children are get using the getChildrenClosure.
      */
     handleRowExpanded(iter, treePath) {
         const [bool, childIter] = this.treeStore.iterNthChild(iter, 0)

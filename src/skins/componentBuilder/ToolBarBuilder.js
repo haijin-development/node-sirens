@@ -374,7 +374,7 @@ class ToolBarBuilder {
         `,
         Code: `
            const ToolBarBuilder = require('sirens/src/skins/componentBuilder/ToolBarBuilder')
-           const ValueModel = require('sirens/src/skins/models/ValueModel')
+           const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
            const GtkIcons = require('sirens/src/skins/gtk-views/constants/GtkIcons')
 
            const booleanModel = ValueModel.new({ value: false })

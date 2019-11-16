@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
 const LabelView = require('../../gtk-views/LabelView')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Label {

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const BufferedAttributeModel = require('../../../../src/skins/models/BufferedAttributeModel')
+const BufferedAttributeModel = require('../../../../src/finger-tips/models/BufferedAttributeModel')
 
 describe('When using an BufferedAttributeModel', () => {
     beforeEach( () => {

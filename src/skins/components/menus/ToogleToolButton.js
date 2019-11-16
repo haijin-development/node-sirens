@@ -2,8 +2,9 @@ const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
 const ToggleToolButtonView = require('../../gtk-views/ToggleToolButtonView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 const UpdatingModel = require('../UpdatingModel')
+
 
 class ToogleToolButton {
     /// Definition

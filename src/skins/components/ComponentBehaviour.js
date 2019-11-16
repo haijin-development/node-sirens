@@ -4,7 +4,7 @@ const ObjectWithProps = require('../../O').ObjectWithProps
 const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProtocol')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 
-const ValueModelProtocol = require('../protocols/ValueModelProtocol')
+const ValueModelProtocol = require('../../finger-tips/protocols/ValueModelProtocol')
 
 /*
  Class(`

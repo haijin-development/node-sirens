@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
 const TextButtonView = require('../../gtk-views/TextButtonView')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class TextButton {

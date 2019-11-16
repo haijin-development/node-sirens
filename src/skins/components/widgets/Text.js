@@ -2,7 +2,7 @@ const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const TextView = require('../../gtk-views/TextView')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Text {

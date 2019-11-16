@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ObjectAttributeModel = require('../../../../src/skins/models/ObjectAttributeModel')
+const ObjectAttributeModel = require('../../../../src/finger-tips/models/ObjectAttributeModel')
 
 describe('When using an ObjectAttributeModel', () => {
     beforeEach( () => {

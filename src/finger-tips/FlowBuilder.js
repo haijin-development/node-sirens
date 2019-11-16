@@ -1,11 +1,11 @@
-const Classification = require('../../O').Classification
-const ValueModel = require('./ValueModel')
-const ChoiceModel = require('./ChoiceModel')
-const ObjectAttributeModel = require('./ObjectAttributeModel')
-const BufferedAttributeModel = require('./BufferedAttributeModel')
-const TreeChoiceModel = require('./TreeChoiceModel')
+const Classification = require('../O').Classification
+const ValueModel = require('./models/ValueModel')
+const ChoiceModel = require('./models/ChoiceModel')
+const ObjectAttributeModel = require('./models/ObjectAttributeModel')
+const BufferedAttributeModel = require('./models/BufferedAttributeModel')
+const TreeChoiceModel = require('./models/TreeChoiceModel')
 
-class _ModelObjectBuilder {
+class _FlowBuilder {
     /// Definition
 
     static definition() {
@@ -30,7 +30,7 @@ class _ModelObjectBuilder {
 
     /// Building
 
-    build( closure ) {
+    main(closure) {
         this.bindYourself( closure, this.rootModel )
 
         return this
@@ -129,18 +129,18 @@ class _ModelObjectBuilder {
     ) {
         if( modelObject === undefined ) {
 
-            const ModelObject = require('./ModelObject')
+            const FlowModel = require('./models/FlowModel')
 
-            modelObject = ModelObject.new({ object: object, build: false })
+            modelObject = FlowModel.new({ object: object, build: false })
 
         }
 
         this.rootModel.addChildModel({ id: childId, model: modelObject })
 
         if( closure !== undefined ) {
-            const modelObjectBuilder = ModelObjectBuilder.new({ rootModel: modelObject })
+            const modelObjectBuilder = FlowBuilder.new({ rootModel: modelObject })
 
-            modelObjectBuilder.build( closure, modelObject )
+            modelObjectBuilder.main( closure, modelObject )
         }
 
         if( valueChangedClosure !== undefined ) {
@@ -153,6 +153,6 @@ class _ModelObjectBuilder {
     }
 }
 
-ModelObjectBuilder = Classification.define(_ModelObjectBuilder)
+FlowBuilder = Classification.define(_FlowBuilder)
 
-module.exports = ModelObjectBuilder
+module.exports = FlowBuilder

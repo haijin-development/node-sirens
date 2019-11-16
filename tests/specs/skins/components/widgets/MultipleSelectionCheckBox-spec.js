@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const Component = require('../../../../../src/skins/components/Component')
-const ValueModel = require('../../../../../src/skins/models/ValueModel')
+const ValueModel = require('../../../../../src/finger-tips/models/ValueModel')
 
 describe('When using a MultipleSelectionCheckBox-spec', () => {
     describe('model', () => {

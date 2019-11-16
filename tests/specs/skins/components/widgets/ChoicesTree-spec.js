@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const Component = require('../../../../../src/skins/components/Component')
-const TreeChoiceModel = require('../../../../../src/skins/models/TreeChoiceModel')
+const TreeChoiceModel = require('../../../../../src/finger-tips/models/TreeChoiceModel')
 
 describe('When using a ChoicesTree', () => {
     beforeEach( () => {

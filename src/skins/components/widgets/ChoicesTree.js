@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const TreeChoiceModel = require('../../models/TreeChoiceModel')
+const TreeChoiceModel = require('../../../finger-tips/models/TreeChoiceModel')
 const TreeView = require('../../gtk-views/TreeView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 

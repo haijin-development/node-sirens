@@ -4,13 +4,14 @@
 
 ### Sirens
 
-- Rewrote all the components using ModelObjects.
+- Rewrote all the components using FingerTips FlowModel.
 
 ### Skins
 
 - Renamed this library to Skins.
+- Moved the models classifications to a different project. See FingerTips.
 - Scrollbars in ListView now are optional.
-- Implemented ModelObject and its builder.
+- Implemented FlowModel and its FlowBuilder.
 
 ### O language
 

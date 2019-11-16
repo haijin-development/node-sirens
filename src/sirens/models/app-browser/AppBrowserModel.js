@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const Folder = require('../../objects/paths/Folder')
 const FileClassesEditionModel = require('../class-editor/FileClassesEditionModel')
 const ClassSourceFile = require('../../objects/ClassSourceFile')
@@ -10,17 +10,17 @@ class AppBrowserModel {
 
     static definition() {
         this.instanceVariables = ['lastOpenedFolder']
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
-                appModel.getChild({ id: 'windowTitle' }).setObject( appFolder )
-                appModel.getChild({ id: 'filesTree' }).setRoots({ items: [ appFolder ] })
+                application.getChild({ id: 'windowTitle' }).setObject( appFolder )
+                application.getChild({ id: 'filesTree' }).setRoots({ items: [ appFolder ] })
             })
 
             this.objectAttributeValue({
@@ -44,7 +44,7 @@ class AppBrowserModel {
                         if( ! sourceFile.isJavascriptFile() ) { sourceFile = null }
                     }
 
-                    appModel.getChild({ id: 'sourceFileEdition' }).setObject( sourceFile )
+                    application.getChild({ id: 'sourceFileEdition' }).setObject( sourceFile )
                 },
             })
 

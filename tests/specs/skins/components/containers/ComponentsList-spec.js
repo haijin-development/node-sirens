@@ -4,8 +4,8 @@ const Component = require('../../../../../src/skins/components/Component')
 
 const ComponentProtocol_Implementation = require('../../../../../src/skins/protocols/ComponentProtocol_Implementation')
 const ComponentsList = require('../../../../../src/skins/components/ComponentsList')
-const ListModelComponentProtocol_Implementation = require('../../../../../src/skins/protocols/ListModelComponentProtocol_Implementation')
-const ListModel = require('../../../../../src/skins/models/ListModel')
+const ListModelComponentProtocol_Implementation = require('../../../../../src/finger-tips/protocols/ListModelComponentProtocol_Implementation')
+const ListModel = require('../../../../../src/finger-tips/models/ListModel')
 const Label = require('../../../../../src/skins/components/widgets/Label')
 
 class ParentComponent {

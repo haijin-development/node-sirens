@@ -1,12 +1,12 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 
 class ObjectPropertiesModel {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['selectionChangedClosure']
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Initializing
@@ -21,19 +21,19 @@ class ObjectPropertiesModel {
 
     /// Building
 
-    buildWith(modelBuilder) {
+    buildWith(flow) {
         const selectionChangedClosure = this.selectionChangedClosure
 
-        modelBuilder.build( function(objectPropertiesModel) {
+        flow.main( function(objectProperties) {
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                const rootProperties = objectPropertiesModel.getRootProperties()
-                objectPropertiesModel.getChild({ id: 'properties' }).setRoots({ items: rootProperties })
+                const rootProperties = objectProperties.getRootProperties()
+                objectProperties.getChild({ id: 'properties' }).setRoots({ items: rootProperties })
             })
 
             this.treeChoice({
                 id: 'properties',
-                roots: objectPropertiesModel.getRootProperties(),
+                roots: objectProperties.getRootProperties(),
                 getChildrenClosure: function (objectProperty) {
                     return objectProperty.getChildProperties()
                 },

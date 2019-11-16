@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const CheckBox = require('./CheckBox')
 const CheckBoxProtocol_Implementation = require('../../protocols/CheckBoxProtocol_Implementation')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 
 class MultipleSelectionCheckBox {
     /// Definition

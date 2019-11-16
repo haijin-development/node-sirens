@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ValueModel = require('../../../../src/skins/models/ValueModel')
+const ValueModel = require('../../../../src/finger-tips/models/ValueModel')
 
 describe('When using a ValueModel', () => {
     describe('when setting and getting its value', () => {

@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const ChoiceModel = require('../../../../src/skins/models/ChoiceModel')
-const ListModel = require('../../../../src/skins/models/ListModel')
-const ValueModel = require('../../../../src/skins/models/ValueModel')
+const ChoiceModel = require('../../../../src/finger-tips/models/ChoiceModel')
+const ListModel = require('../../../../src/finger-tips/models/ListModel')
+const ValueModel = require('../../../../src/finger-tips/models/ValueModel')
 
 describe('When using a ChoiceModel', () => {
     beforeEach( () => {

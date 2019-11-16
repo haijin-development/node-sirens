@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const ObjectPropertiesModel = require('./ObjectPropertiesModel')
 const Pluggables = require('../../objects/Pluggables')
 
@@ -8,16 +8,16 @@ class ObjectBrowserModel {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                appModel.getChild({ id: 'objectProperties' }).setObject( object )
+                application.getChild({ id: 'objectProperties' }).setObject( object )
             })
 
             this.object({
@@ -25,7 +25,7 @@ class ObjectBrowserModel {
                 definedWith: ObjectPropertiesModel.new({
                     whenSelectionChanges: function({ selection: objectProperty }) {
                         const value = objectProperty.getValue()
-                        appModel.getChild({ id: 'playground' }).setObject( value )
+                        application.getChild({ id: 'playground' }).setObject( value )
                     }
                 }),
             })
@@ -33,7 +33,7 @@ class ObjectBrowserModel {
             this.objectAttributeValue({
                 id: 'playground',
                 attributeReader: (selectedValue) => { 
-                    return appModel.propertySelectionValueStringFrom({ value: selectedValue })
+                    return application.propertySelectionValueStringFrom({ value: selectedValue })
                 },
             })
 

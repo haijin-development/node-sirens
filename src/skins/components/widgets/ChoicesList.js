@@ -1,10 +1,10 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const ChoiceModel = require('../../models/ChoiceModel')
+const ChoiceModel = require('../../../finger-tips/models/ChoiceModel')
 const ListView = require('../../gtk-views/ListView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
-const ListModelComponentProtocol_Implementation = require('../../protocols/ListModelComponentProtocol_Implementation')
+const ListModelComponentProtocol_Implementation = require('../../../finger-tips/protocols/ListModelComponentProtocol_Implementation')
 
 class ChoicesList {
     /// Definition

@@ -121,7 +121,7 @@ class WidgetBuilder {
         `,
         Code: `
            const WidgetBuilder = require('sirens/src/skins/componentBuilder/WidgetBuilder')
-           const ValueModel = require('sirens/src/skins/models/ValueModel')
+           const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
 
            const model = ValueModel.new({ value: '' })
 

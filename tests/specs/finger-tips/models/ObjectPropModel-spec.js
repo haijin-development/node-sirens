@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ObjectPropModel = require('../../../../src/skins/models/ObjectPropModel')
+const ObjectPropModel = require('../../../../src/finger-tips/models/ObjectPropModel')
 
 describe('When using an ObjectPropModel', () => {
     beforeEach( () => {

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ListModel = require('../../../../src/skins/models/ListModel')
+const ListModel = require('../../../../src/finger-tips/models/ListModel')
 
 describe('When using a ListModel', () => {
     beforeEach( () => {

@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const ClassSourceFile = require('../../objects/ClassSourceFile')
 const FileClassesEditionModel = require('./FileClassesEditionModel')
 
@@ -9,17 +9,17 @@ class ClassEditorModel {
 
     static definition() {
         this.instanceVariables = ['lastOpenedFolder']
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                appModel.getChild({ id: 'windowTitle' }).setObject( sourceFile )
-                appModel.getChild({ id: 'sourceFileEdition' }).setObject( sourceFile )
+                application.getChild({ id: 'windowTitle' }).setObject( sourceFile )
+                application.getChild({ id: 'sourceFileEdition' }).setObject( sourceFile )
             })
 
             this.objectAttributeValue({

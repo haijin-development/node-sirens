@@ -43,7 +43,7 @@ function addClassificationsInFolder({ path: folderPath, namespace: namespace }) 
     })
 }
 
-addClassificationsInFolder({ path: __dirname +  '/skins/models' })
+addClassificationsInFolder({ path: __dirname +  '/finger-tips/models' })
 addClassificationsInFolder({ path: __dirname +  '/skins/protocols' })
 addClassificationsInFolder({ path: __dirname +  '/skins/components/dialogs' })
 

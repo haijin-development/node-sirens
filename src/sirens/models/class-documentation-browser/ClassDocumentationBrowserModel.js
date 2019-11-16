@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const DocumentationReader = require('../../objects/documentation/DocumentationReader')
 
 class ClassDocumentationBrowserModel {
@@ -7,24 +7,24 @@ class ClassDocumentationBrowserModel {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.object( 'browsingMode', function() {
 
                 this.toggle({
                     id: 'showsUnformattedComments',
-                    whenValueChanges: () => { appModel.reload() },
+                    whenValueChanges: () => { application.reload() },
                 })
 
                 this.toggle({
                     id: 'isEditingDocumentation',
-                    whenValueChanges: () => { appModel.reload() },
+                    whenValueChanges: () => { application.reload() },
                 })
 
             })
@@ -42,7 +42,7 @@ class ClassDocumentationBrowserModel {
                     }
 
                     classDefinitionModel.getChild({ id: 'classDocumentation' }).setValue(
-                        appModel.getClassDocumentationFrom({ classDefinition: classDefinition })
+                        application.getClassDocumentationFrom({ classDefinition: classDefinition })
                     )
                     classDefinitionModel.getChild({ id: 'classMethods' }).setChoices(
                         classDefinition.getMethods()

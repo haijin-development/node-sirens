@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const PlugabbleDisplayable = require('../../objects/PlugabbleDisplayable')
 
 class FileClassesEditionModel {
@@ -8,24 +8,24 @@ class FileClassesEditionModel {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(fileContents) {
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                appModel.getChild({ id: 'fileSections' }).setChoices( appModel.getSectionsDefinedInOpenedFile() )
-                appModel.getChild({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
+                fileContents.getChild({ id: 'fileSections' }).setChoices( fileContents.getSectionsDefinedInOpenedFile() )
+                fileContents.getChild({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
             })
 
             this.choice({
                 id: 'fileSections',
                 choices: [],
                 whenSelectionChanges: ({ newValue: fileSection }) => {
-                    appModel.getChild({ id: 'selectedSectionContents' }).setObject( fileSection )
+                    fileContents.getChild({ id: 'selectedSectionContents' }).setObject( fileSection )
                 },
             })
 
@@ -37,15 +37,15 @@ class FileClassesEditionModel {
                     let methods
                     let editedContents
 
-                    if( appModel.isHeader({ fileSection: fileSection }) ) {
+                    if( fileContents.isHeader({ fileSection: fileSection }) ) {
                         editedContents = fileSection.getSourceCode()
                     }
 
-                    if( appModel.isClassDefinition({ fileSection: fileSection }) ) {
+                    if( fileContents.isClassDefinition({ fileSection: fileSection }) ) {
                         methods = fileSection.getMethods()
                     }
 
-                    if( appModel.isFooter({ fileSection: fileSection }) ) {
+                    if( fileContents.isFooter({ fileSection: fileSection }) ) {
                         editedContents = fileSection.getSourceCode()
                     }
 

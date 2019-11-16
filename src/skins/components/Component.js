@@ -213,7 +213,7 @@ class Component {
            const Component = require('sirens/src/skins/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
-           const ValueModel = require('sirens/src/skins/models/ValueModel')
+           const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
            // Create a model external to the Component
            const model1 = ValueModel.new({ value: 'Text 1' })
            this.model1 = model1
@@ -329,7 +329,7 @@ class Component {
            const Component = require('sirens/src/skins/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
            const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
-           const ValueModel = require('sirens/src/skins/models/ValueModel')
+           const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
 
            class Window {
            	/// Definition

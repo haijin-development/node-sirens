@@ -2,9 +2,9 @@ const Classification = require('../../O').Classification
 const OInstance = require('../../O').OInstance
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
 const ValueModelBehaviour = require('./ValueModelBehaviour')
-const ModelObjectBuilder = require('./ModelObjectBuilder')
+const FlowBuilder = require('../FlowBuilder')
 
-class _ModelObject {
+class _FlowModel {
     /// Definition
 
     static definition() {
@@ -60,11 +60,11 @@ class _ModelObject {
     }
 
     build(closure) {
-        const modelObjectBuilder = ModelObjectBuilder.new({ rootModel: this })
+        const modelObjectBuilder = FlowBuilder.new({ rootModel: this })
 
         if( closure !== undefined ) {
 
-            modelObjectBuilder.build( closure )
+            modelObjectBuilder.main( closure )
 
         } else {
 
@@ -102,7 +102,7 @@ class _ModelObject {
         const children = Object.values( this.childModels )
 
         for( const eachChild of children ) {
-            if( ! OInstance.isOInstance(eachChild) || ! eachChild.isBehavingAs( ModelObject ) ) {
+            if( ! OInstance.isOInstance(eachChild) || ! eachChild.isBehavingAs( FlowModel ) ) {
                 continue
             }
 
@@ -133,6 +133,6 @@ class _ModelObject {
     }
 }
 
-ModelObject = Classification.define(_ModelObject)
+FlowModel = Classification.define(_FlowModel)
 
-module.exports = ModelObject
+module.exports = FlowModel

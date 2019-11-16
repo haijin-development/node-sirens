@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const SourceFile = require('../../objects/SourceFile')
 
 class PlaygroundBrowserModel {
@@ -8,17 +8,17 @@ class PlaygroundBrowserModel {
 
     static definition() {
         this.instanceVariables = ['lastOpenedFolder']
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
     /// Building
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                appModel.getChild({ id: 'windowTitle' }).setObject( sourceFile )
-                appModel.getChild({ id: 'fileContents' }).setObject( sourceFile )
+                application.getChild({ id: 'windowTitle' }).setObject( sourceFile )
+                application.getChild({ id: 'fileContents' }).setObject( sourceFile )
             })
 
             this.objectAttributeValue({

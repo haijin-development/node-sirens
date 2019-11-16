@@ -3,7 +3,7 @@ const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const CheckBoxView = require('../../gtk-views/CheckBoxView')
 const CheckBoxProtocol_Implementation = require('../../protocols/CheckBoxProtocol_Implementation')
-const ValueModel = require('../../models/ValueModel')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 
 class CheckBox {
     /// Definition

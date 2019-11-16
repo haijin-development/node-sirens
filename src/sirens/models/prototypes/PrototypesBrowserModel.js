@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesModel = require('./ClassPropertiesModel')
 
@@ -8,23 +8,23 @@ class PrototypesBrowserModel {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(appModel) {
+    buildWith(flow) {
+        flow.main( function(application) {
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                const classes = appModel.getChild({ id: 'classes' })
-                classes.setChoices( appModel._getClassesChainOfObject() )
+                const classes = application.getChild({ id: 'classes' })
+                classes.setChoices( application._getClassesChainOfObject() )
                 classes.setSelectionValue( object )
             })
 
             this.choice({
                 id: 'classes',
-                choices: appModel._getClassesChainOfObject(),
+                choices: application._getClassesChainOfObject(),
                 whenSelectionChanges: ({ newValue: aClass }) => {
-                    const selectedClass = appModel.getChild({ id: 'selectedClass' })
+                    const selectedClass = application.getChild({ id: 'selectedClass' })
                     selectedClass.setBrowsedObject( aClass )
                 },
             })

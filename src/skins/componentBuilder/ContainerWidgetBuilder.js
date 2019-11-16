@@ -1756,7 +1756,7 @@ class ContainerWidgetBuilder {
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
-           const ChoiceModel = require('sirens/src/skins/models/ChoiceModel')
+           const ChoiceModel = require('sirens/src/finger-tips/models/ChoiceModel')
 
            const choiceModel = ChoiceModel.new()
 
@@ -1899,7 +1899,7 @@ class ContainerWidgetBuilder {
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
-           const TreeChoiceModel = require('sirens/src/skins/models/TreeChoiceModel')
+           const TreeChoiceModel = require('sirens/src/finger-tips/models/TreeChoiceModel')
 
            const treeModel = TreeChoiceModel.new({
            	getChildrenClosure: (item) => { return [] }
@@ -2465,7 +2465,7 @@ class ContainerWidgetBuilder {
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
-           const ChoiceModel = require('sirens/src/skins/models/ChoiceModel')
+           const ChoiceModel = require('sirens/src/finger-tips/models/ChoiceModel')
 
            const choiceModel = ChoiceModel.new({
            	choices: [ 'a', 'b', 'c' ],

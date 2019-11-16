@@ -1,10 +1,10 @@
 const Classification = require('../../O').Classification
 const Component = require('./Component')
-const ListModelComponentProtocol_Implementation = require('../protocols/ListModelComponentProtocol_Implementation')
+const ListModelComponentProtocol_Implementation = require('../../finger-tips/protocols/ListModelComponentProtocol_Implementation')
 
 const ComponentProtocol = require('../protocols/ComponentProtocol')
 const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
-const ListModel = require('../models/ListModel')
+const ListModel = require('../../finger-tips/models/ListModel')
 
 /*
  Class(`
@@ -52,7 +52,7 @@ const ListModel = require('../models/ListModel')
        const ComponentsList = require('sirens/src/skins/components/ComponentsList')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
        const ListModelComponentProtocol_Implementation = require('sirens/src/skins/protocols/ListModelComponentProtocol_Implementation')
-       const ListModel = require('sirens/src/skins/models/ListModel')
+       const ListModel = require('sirens/src/finger-tips/models/ListModel')
 
        /// Define a ComponentsList 
        class CustomListComponent {

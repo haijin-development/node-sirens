@@ -2,7 +2,7 @@ const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
 const RadioButtonView = require('../../gtk-views/RadioButtonView')
-const ChoiceModel = require('../../models/ChoiceModel')
+const ChoiceModel = require('../../../finger-tips/models/ChoiceModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class RadioButton {

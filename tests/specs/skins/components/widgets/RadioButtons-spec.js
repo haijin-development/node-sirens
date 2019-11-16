@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ChoiceModel = require('../../../../../src/skins/models/ChoiceModel')
+const ChoiceModel = require('../../../../../src/finger-tips/models/ChoiceModel')
 const Component = require('../../../../../src/skins/components/Component')
 
 describe('When using a RadioButton group', () => {

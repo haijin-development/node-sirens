@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../Skins').ModelObject
+const FlowModel = require('../../../Skins').FlowModel
 const ObjectProperty = require('../../objects/ObjectProperty')
 
 class ClassPropertiesModel {
@@ -7,11 +7,11 @@ class ClassPropertiesModel {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ModelObject]
+        this.assumes = [FlowModel]
     }
 
-    buildWith(modelBuilder) {
-        modelBuilder.build( function(classProperties) {
+    buildWith(flow) {
+        flow.main( function(classProperties) {
 
             this.whenObjectChanges( ({ newValue: aClass }) => {
                 classProperties.updatePropertyChoices()

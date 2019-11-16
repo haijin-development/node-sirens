@@ -83,6 +83,18 @@ class ClassEditorMenuBar {
                     action: component.getProps().openPlayground,
                 })
 
+                this.separator()
+
+                this.button({
+                    label: 'Open documentation browser',
+                    image: {
+                        iconName: GtkIcons.info,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Opens a class documentation browser on the selected class.',
+                    action: component.getProps().openDocumentationBrowser,
+                })
+
             })
 
         })

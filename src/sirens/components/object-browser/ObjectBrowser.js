@@ -1,0 +1,69 @@
+const Classification = require('../../../O').Classification
+const Component = require('../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
+
+const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
+const PlaygroundComponent = require('../shared/PlaygroundComponent')
+const Pluggables = require('../../objects/Pluggables')
+const ObjectBrowserModel = require('../../models/object-browser/ObjectBrowserModel')
+
+class ObjectBrowser {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumes = [Component]
+        this.implements = [ComponentProtocol_Implementation]
+        this.classificationBehaviours = [ComponentInstantiator]
+    }
+
+    /// Initializing
+
+    defaultModel() {
+        const browsedObject = this.getProps().object
+
+        const model = ObjectBrowserModel.new()
+
+        model.browseObject( browsedObject )
+
+        return model
+    }
+
+    /// Building
+
+    renderWith(componentsRenderer) {
+        const model = this.getModel()
+
+        componentsRenderer.render( function(component) {
+            this.window( function() {
+                this.styles({
+                    css: ['window', 'object-browser'],
+                    title: 'Object Browser',
+                    width: 400,
+                    height: 400,
+                })
+
+                this.verticalSplitter( function() {
+
+                    this.component(
+                        ObjectPropertiesComponent.new({
+                            model: model.getChild({ id: 'objectProperties' }),
+                            viewAttributes: { splitProportion: 1.0/2.0 },                            
+                        })
+                    )
+
+                    this.component(
+                        PlaygroundComponent.new({
+                            model: model.getChild({ id: 'playground' }),
+                            viewAttributes: { splitProportion: 1.0/2.0 },                            
+                        })
+                    )
+
+                })
+            })
+        })
+    }
+}
+
+module.exports = Classification.define(ObjectBrowser)

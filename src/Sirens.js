@@ -126,7 +126,7 @@ class Sirens {
     */
     static browseObject(object) {
         this.do( () => {
-            const ObjectBrowser = require('../src/sirens/components/ObjectBrowser')
+            const ObjectBrowser = require('../src/sirens/components/object-browser/ObjectBrowser')
 
             ObjectBrowser.openOn({object: object})
         })
@@ -169,7 +169,7 @@ class Sirens {
     */
     static browsePrototypes(object) {
         this.do( () => {
-            const PrototypeBrowser = require('../src/sirens/components/PrototypeBrowser')
+            const PrototypeBrowser = require('../src/sirens/components/prototype-browser/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
         })
@@ -231,7 +231,7 @@ class Sirens {
     */
     static openClassEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
-            const ClassEditor = require('../src/sirens/components/ClassEditor')
+            const ClassEditor = require('../src/sirens/components/class-editor/ClassEditor')
 
             ClassEditor.openOn({ filename: filename })
         })
@@ -259,7 +259,7 @@ class Sirens {
     */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
         this.do( () => {
-            const AppBrowser = require('../src/sirens/components/AppBrowser')
+            const AppBrowser = require('../src/sirens/components/app-browser/AppBrowser')
 
             AppBrowser.openOn({ appFolder: appFolder })
         })
@@ -298,7 +298,7 @@ class Sirens {
     */
     static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
         this.do( () => {
-            const ClassDocumentationBrowser = require('../src/sirens/components/ClassDocumentationBrowser')
+            const ClassDocumentationBrowser = require('../src/sirens/components/class-documentation-browser/ClassDocumentationBrowser')
 
             ClassDocumentationBrowser.openOn({
               classDefinition: classDefinition,
@@ -363,7 +363,7 @@ class Sirens {
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
         this.do( () => {
-            const PlaygroundBrowser = require('../src/sirens/components/PlaygroundBrowser')
+            const PlaygroundBrowser = require('../src/sirens/components/playground-browser/PlaygroundBrowser')
 
             PlaygroundBrowser.openOn({ filename: filename })
         })      

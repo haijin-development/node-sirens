@@ -16,9 +16,7 @@ class EditImplementationNoteDialog {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        const className = model.getClassName()
+        const className = this.getProps().className
 
         const implementationNoteText = this.getProps().implementationNoteText
 

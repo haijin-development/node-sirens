@@ -24,8 +24,6 @@ class ClassMethodsDocumentation {
 
         const methodTags = model.getAllMethodsTags().sort()
 
-        const selectedTagsModel = model.getSelectedTagsModel()
-
         componentsRenderer.render(function (component) {
 
             this.horizontalSplitter( function() {
@@ -55,7 +53,7 @@ class ClassMethodsDocumentation {
                 this.verticalStack({ viewAttributes: { splitProportion: 1.0 / 3.0 }, showHeaders: false, }, function() {
 
                     this.listChoice({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
-                        this.model( model.getClassMethodsModel() )
+                        this.model( model.getChild({ id: 'classMethods' }) )
 
                         this.column({
                             getImageClosure: function(functionDefinition) { return Resource.image.method },
@@ -84,7 +82,7 @@ class ClassMethodsDocumentation {
 
                             methodTags.forEach( (tag) => {
                                 this.multipleCheckBox({
-                                    model: selectedTagsModel,
+                                    model: model.getChild({ id: 'selectedTags' }),
                                     item: tag,
                                     label: tag,
                                     viewAttributes: { stackSize: 'fixed' },

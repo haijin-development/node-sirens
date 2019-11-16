@@ -17,33 +17,10 @@ class EditClassCommentDialog {
 
     /// Building
 
-    getClassDescription() {
-        const model = this.getModel()
-
-        if( this.getProps().unformatted === true ) {
-
-            return model.getClassUnformattedComment()
-
-        } else {
-
-            const documentation = model.getClassDocumentation()
-
-            let description = documentation.getDescription()
-
-            if( description.trim() === '' ) {
-                description = 'This class has no documentation yet.'
-            }
-
-            return description
-        }
-    }
-
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const className = this.getProps().className
 
-        const className = model.getClassName()
-
-        const description = this.getClassDescription()
+        const description = this.getProps().classComment
 
         componentsRenderer.render( function(component) {
 

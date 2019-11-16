@@ -18,19 +18,21 @@ class DocumentationBrowserBody {
     /// Building
 
     reRenderWhen() {
-        const documentationChangedModel = this.getModel().getDocumentationChangedModel()
+        const model = this.getModel()
 
-        this.reRenderOnValueChangeOf( documentationChangedModel )
+        this.reRenderOnValueChangeOf( model.getChild({ id: 'classDefinition' }) )
     }
 
     reRender() {
-        this.isRendering = true
+        try {
+            this.isRendering = true
 
-        this.previousClassificationDo( () => {
-            this.reRender()
-        })
-
-        this.isRendering = false
+            this.previousClassificationDo( () => {
+                this.reRender()
+            })
+        } finally {
+            this.isRendering = false
+        }
     }
 
     renderWith(componentsRenderer) {

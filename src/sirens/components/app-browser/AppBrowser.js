@@ -1,18 +1,18 @@
-const Classification = require('../../O').Classification
-const Component = require('../../GUI').Component
-const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../GUI').ComponentInstantiator
-const AppBrowserMenu = require('./app-browser/AppBrowserMenu')
-const AppBrowserBody = require('./app-browser/AppBrowserBody')
-const AppBrowserModel = require('../models/AppBrowserModel')
-const Sirens = require('../../Sirens')
-const FolderChooser = require('../../GUI').FolderChooser
+const Classification = require('../../../O').Classification
+const Component = require('../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
+const FolderChooser = require('../../../GUI').FolderChooser
+const AppBrowserMenu = require('./AppBrowserMenu')
+const AppBrowserBody = require('./AppBrowserBody')
+const AppBrowserModel = require('../../models/app-browser/AppBrowserModel')
+const Sirens = require('../../../Sirens')
 
 class AppBrowser {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['lastOpenedFolder']
+        this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
         this.classificationBehaviours = [ComponentInstantiator]
@@ -26,13 +26,15 @@ class AppBrowser {
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        return AppBrowserModel.new().yourself( (model) => {
-            const appFolder = this.getProps().appFolder
+        const model = AppBrowserModel.new()
 
-            if( appFolder !== undefined ) {
-                model.openFolder({ appFolder: appFolder })
-            }
-        })
+        const appFolderPath = this.getProps().appFolder
+
+        if( appFolderPath ) {
+            model.openFolder({ path: appFolderPath })
+        }
+
+        return model
     }
 
     /// Actions
@@ -41,24 +43,18 @@ class AppBrowser {
         const chosenFolder = FolderChooser.chooseFolder({
             title: 'Choose a folder',
             window: this,
-            initialFolder: this.lastOpenedFolder,
+            initialFolder: this.getModel().getLastOpenedFolder(),
         })
-
-        if( chosenFolder !== null ) {
-            this.lastOpenedFolder = chosenFolder
-        }
 
         return chosenFolder        
     }
 
     openFolder() {
-        const appFolder = this.pickFolder()
+        const appFolderPath = this.pickFolder()
 
-        if( appFolder === null ) {
-            return
-        }
+        if( appFolderPath === null ) { return }
 
-        this.getModel().openFolder({ appFolder: appFolder })
+        this.getModel().openFolder({ path: appFolderPath })
     }
 
     openClassEditor() {
@@ -66,17 +62,13 @@ class AppBrowser {
 
         const selectedPath = model.getSelectedFilePath()
 
-        if( selectedPath === null ) {
-            Sirens.openClassEditor()
-        } else {
-            Sirens.openClassEditor({ filename: selectedPath })
-        }
+        Sirens.openClassEditor({ filename: selectedPath })
     }
 
     openClassDocumentation() {
         const model = this.getModel()
 
-        const classesDefinitions = model.getClassesDefinitions()
+        const classesDefinitions = model.getClassesDefinitionsInSelectedFile()
 
         if( classesDefinitions.length === 0 ) { return }
 
@@ -97,11 +89,10 @@ class AppBrowser {
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
-                    title: model.getTitleModel(),
+                    title: model.getChild({ id: 'windowTitle' }),
                     width: 900,
                     height: 600,
                 })
-
 
                 this.verticalStack( function() {
 

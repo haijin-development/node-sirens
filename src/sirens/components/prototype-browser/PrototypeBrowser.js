@@ -1,12 +1,12 @@
-const Classification = require('../../O').Classification
-const Component = require('../../GUI').Component
-const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../GUI').ComponentInstantiator
-const Sirens = require('../../Sirens')
-const PrototypesBrowserModel = require('../models/PrototypesBrowserModel')
-const FunctionsComponent = require('./prototype-browser/FunctionsComponent')
+const Classification = require('../../../O').Classification
+const Component = require('../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
+const Sirens = require('../../../Sirens')
+const PrototypesBrowserModel = require('../../models/prototypes/PrototypesBrowserModel')
+const ClassPropertiesComponent = require('./ClassPropertiesComponent')
 
-const Resource = require('../objects/Resource')
+const Resource = require('../../objects/Resource')
 
 class PrototypeBrowser {
     /// Definition
@@ -23,15 +23,19 @@ class PrototypeBrowser {
     defaultModel() {
         const object = this.getProps().prototype
 
-        return PrototypesBrowserModel.new({ object: object })
+        const model = PrototypesBrowserModel.new()
+
+        model.setBrowsedObject( object )
+
+        return model
     }
 
     /// Actions
 
     browseSelectedPrototype() {
-        const selectedPrototype = this.getModel().getSelectedPrototype()
+        const selectedClass = this.getModel().getSelectedClass()
 
-        Sirens.browsePrototypes(selectedPrototype)
+        Sirens.browsePrototypes(selectedClass)
     }
 
     /// Icons
@@ -43,7 +47,7 @@ class PrototypeBrowser {
     /// Building
 
     renderWith(componentsRenderer) {
-        const prototypesModel = this.getModel()
+        const model = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.window( function() {
@@ -61,7 +65,7 @@ class PrototypeBrowser {
                         })
 
                         this.listChoice( function() {
-                            this.model( prototypesModel.getPrototypesModel() )
+                            this.model( model.getChild({ id: 'classes' }) )
 
                             this.styles({
                                 viewAttributes: { splitProportion: 1.0/4.0 },
@@ -85,7 +89,7 @@ class PrototypeBrowser {
 
                             this.popupMenu( function() {
                                 const selectedObject =
-                                    component.getModel().getSelectedPrototype()
+                                    component.getModel().getSelectedClass()
 
                                 this.item({
                                     label: 'Browse it',
@@ -97,16 +101,17 @@ class PrototypeBrowser {
                         })
 
                         this.component(
-                            FunctionsComponent.new({
-                                model: prototypesModel,
+                            ClassPropertiesComponent.new({
+                                model: model.getChild({ id: 'selectedClass' }),
                                 viewAttributes: { splitProportion: 3.0/4.0 },
                             })
                         )
+
                     })
 
                     this.text({
+                        model: model.getChild({ id: 'selectedProp' }),
                         viewAttributes: { splitProportion: 1.0/3.0 },
-                        model: prototypesModel.getSelectedPropDescriptionModel(),
                     })
                 })
             })

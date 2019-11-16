@@ -1,14 +1,12 @@
-const path = require('path')
-const Classification = require('../../O').Classification
-const Component = require('../../GUI').Component
-const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../GUI').ComponentInstantiator
-const BufferedAttributeModel = require('../../GUI').BufferedAttributeModel
-const PlaygroundComponent = require('./shared/PlaygroundComponent')
-const PlaygroundBrowserMenu = require('./playground-browser/PlaygroundBrowserMenu')
-const PlaygroundBrowserModel = require('../models/PlaygroundBrowserModel')
-const FileChooser = require('../../GUI').FileChooser
-const Sirens = require('../../Sirens')
+const Classification = require('../../../O').Classification
+const Component = require('../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
+const FileChooser = require('../../../GUI').FileChooser
+const PlaygroundComponent = require('../shared/PlaygroundComponent')
+const PlaygroundBrowserMenu = require('./PlaygroundBrowserMenu')
+const PlaygroundBrowserModel = require('../../models/playground/PlaygroundBrowserModel')
+const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowser {
     /// Definition
@@ -30,33 +28,12 @@ class PlaygroundBrowser {
     defaultModel() {
         const model = PlaygroundBrowserModel.new()
 
-        model.onValueChanged( this.onOpenedFileChanged.bind(this) )
+        if( this.getProps().filename !== undefined ) {
+            const filename = this.getProps().filename
+            model.openFile({ filename: filename })
+        }
 
         return model
-    }
-
-    /*
-     Method(`
-        Besides initializing the PlaygroundBrowserModel initialize another one for the Playrground component.
-     `)
-
-     Tags([
-        'implementation', 'initializing'
-     ])
-    */
-    initializeModel() {
-        this.previousClassificationDo( () => {
-            this.initializeModel()
-        })
-
-        this.playgroundTextModel = BufferedAttributeModel.new({
-            attributeReader: (object) => { 
-                return object ? object.getFileContents() : '' }
-        })
-
-        if( this.getProps().filename !== undefined ) {
-            this.getModel().openFile({ filename: this.getProps().filename })
-        }
     }
 
     /// Building
@@ -64,13 +41,11 @@ class PlaygroundBrowser {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const playgroundModel = this.playgroundTextModel
-
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
                     id: 'window',
-                    title: model.getWindowTitle(),
+                    title: model.getChild({ id: 'windowTitle' }),
                     width: 900,
                     height: 600,
                 })
@@ -89,8 +64,7 @@ class PlaygroundBrowser {
 
                     this.component(
                         PlaygroundComponent.new({
-                            id: 'playground',
-                            model: playgroundModel,
+                            model: model.getChild({ id: 'fileContents' }),
                         })
                     )
 
@@ -108,21 +82,13 @@ class PlaygroundBrowser {
             initialFolder: this.getModel().getLastOpenedFolder(),
         })
 
-        if( filename !== null ) {
-            const lastOpenedFolder = path.dirname( filename )
-
-            this.getModel().setLastOpenedFolder( lastOpenedFolder )
-        }
-
         return filename        
     }
 
     openFile() {
         const filename = this.pickFile()
 
-        if( filename === null ) {
-            return
-        }
+        if( filename === null ) { return }
 
         this.getModel().openFile({ filename: filename })
     }
@@ -130,17 +96,13 @@ class PlaygroundBrowser {
     openFileInNewWindow() {
         const filename = this.pickFile()
 
-        if( filename === null ) {
-            return
-        }
+        if( filename === null ) { return }
 
         Sirens.openPlayground({ filename: filename })
     }
 
     saveFile() {
-        const fileTextContents = this.playgroundTextModel.getValue()
-
-        this.getModel().saveFile({ fileContents: fileTextContents })
+        this.getModel().saveOpenedFile()
     }
 
     openClassEditor() {
@@ -149,22 +111,6 @@ class PlaygroundBrowser {
 
     openPlayground() {
         Sirens.openPlayground()
-    }
-
-    /// Events
-
-    onOpenedFileChanged() {
-        const model = this.getModel()
-
-        this.playgroundTextModel.setObject( model.getSourceFile() )
-
-        const window = this.getChildComponent({ id: 'window', ifNone: null })
-
-        if( window === null ) { return }
-
-        window.mergeProps({
-            title: model.getWindowTitle(),
-        })
     }
 }
 

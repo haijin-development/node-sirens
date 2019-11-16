@@ -28,11 +28,19 @@ class ClassFormattedComment {
     editClassComment() {
         const model = this.getModel()
 
+        const className = model.getBrowsedClass().getClassName()
+
+        let classComment = this.getClassDocumentation().getDescription()
+
+        if( classComment.trim() === '' ) {
+            classComment = 'This class has no documentation yet.'
+        }
+
         const dialog = EditClassCommentDialog.new({
-            model: model,
+            className: className,
+            classComment: classComment,
             window: this.getProps().window,
             onUpdateClassComment: this.updateClassComment.bind(this),
-            unformatted: false,
         })
 
         dialog.open()
@@ -41,7 +49,7 @@ class ClassFormattedComment {
     updateClassComment({ newClassDescription: newClassDescription }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.setDescription( newClassDescription )
 
@@ -53,10 +61,10 @@ class ClassFormattedComment {
     addNewImplementationNote() {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
         const dialog = EditImplementationNoteDialog.new({
-            model: model,
+            className: className,
             implementationNoteText: 'Add the new implementation note here ...',
             window: this.getProps().window,
             onUpdateImplementationNote: this.addImplementationNote.bind(this),
@@ -71,7 +79,7 @@ class ClassFormattedComment {
     addImplementationNote({ implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.addImplementationNote( implementationNoteText )
 
@@ -83,7 +91,7 @@ class ClassFormattedComment {
     deleteImplementationNote({ atIndex: index }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.deleteImplementationNoteAt({ index: index })
 
@@ -96,10 +104,10 @@ class ClassFormattedComment {
     editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
         const dialog = EditImplementationNoteDialog.new({
-            model: model,
+            className: className,
             implementationNoteText: implementationNoteText,
             window: this.getProps().window,
             onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
@@ -119,7 +127,7 @@ class ClassFormattedComment {
     updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.updateImplementationNoteAt({
             index: index,
@@ -139,10 +147,10 @@ class ClassFormattedComment {
             Code: 'Add the example code here ...',
         }
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
         const dialog = EditExampleDialog.new({
-            model: model,
+            className: className,
             example: newExample,
             window: this.getProps().window,
             onUpdateExample: this.addExample.bind(this),
@@ -157,7 +165,7 @@ class ClassFormattedComment {
     addExample({ example: example }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.addExample( example )
 
@@ -169,10 +177,10 @@ class ClassFormattedComment {
     editExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
         const dialog = EditExampleDialog.new({
-            model: model,
+            className: className,
             example: example,
             window: this.getProps().window,
             onUpdateExample: ({ example: example }) => {
@@ -192,7 +200,7 @@ class ClassFormattedComment {
     updateExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.updateExampleAt({
             index: index,
@@ -207,7 +215,7 @@ class ClassFormattedComment {
     deleteExample({ atIndex: index }) {
         const model = this.getModel()
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
 
         documentation.deleteExampleAt({ index: index })
 
@@ -225,7 +233,7 @@ class ClassFormattedComment {
 
         const model = this.getModel()
 
-        const classDefinition = model.getClassDefinition()
+        const classDefinition = model.getBrowsedClass()
 
         const classComment = classDefinition.getComment()
 
@@ -239,14 +247,16 @@ class ClassFormattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const className = model.getClassName()
-
         const isInEditionMode = model.isInEditionMode()
 
         const editionClosure = isInEditionMode ?
             this.editClassComment.bind(this) : undefined
 
-        const documentation = model.getClassDocumentation()
+        const documentation = this.getClassDocumentation()
+
+        if( documentation === null ) { return }
+
+        const className = documentation.getClassName()
 
         let description = documentation.getDescription()
 
@@ -366,6 +376,10 @@ class ClassFormattedComment {
             })
 
         })
+    }
+
+    getClassDocumentation() {
+        return this.getModel().getChild({ id: 'classDocumentation' }).getValue()
     }
 }
 

@@ -44,10 +44,12 @@ class MethodFormattedComment {
     editMethodComment() {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
 
         const dialog = EditMethodCommentDialog.new({
-            model: model,
+            className: className,
             method: method,
             window: this.getProps().window,
             onUpdateMethodComment: this.updateMethodComment.bind(this),
@@ -60,7 +62,7 @@ class MethodFormattedComment {
     updateMethodComment({ methodNewDescription: methodNewDescription }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -74,14 +76,16 @@ class MethodFormattedComment {
     editMethodTags() {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
         const tags = documentation.getTags()
 
         const dialog = EditTagsDialog.new({
-            model: model,
+            className: className,
             method: method,
             tags: tags,
             window: this.getProps().window,
@@ -95,7 +99,7 @@ class MethodFormattedComment {
     upateMethodTags({ newTags: newTags }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -109,7 +113,9 @@ class MethodFormattedComment {
     addNewParam() {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
 
         const newParam = {
             Name: 'Add the name of the parameter here ...',
@@ -117,7 +123,7 @@ class MethodFormattedComment {
         }
 
         const dialog = EditParamDialog.new({
-            model: model,
+            className: className,
             method: method,
             param: newParam,
             window: this.getProps().window,
@@ -131,7 +137,7 @@ class MethodFormattedComment {
     addParam({ param: param }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -145,10 +151,12 @@ class MethodFormattedComment {
     editParamAt({ index: index, param: param }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
 
         const dialog = EditParamDialog.new({
-            model: model,
+            className: className,
             method: method,
             param: param,
             window: this.getProps().window,
@@ -167,7 +175,7 @@ class MethodFormattedComment {
     updateParamAt({ index: index, param: param }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -184,7 +192,7 @@ class MethodFormattedComment {
     deleteParam({ atIndex: index }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -198,12 +206,14 @@ class MethodFormattedComment {
     editReturns() {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
         const dialog = EditReturnsDialog.new({
-            model: model,
+            className: className,
             method: method,
             returns: documentation.getReturns(),
             window: this.getProps().window,
@@ -217,7 +227,7 @@ class MethodFormattedComment {
     updateReturns({ returns: returns }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -231,12 +241,12 @@ class MethodFormattedComment {
     addNewImplementationNote() {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const dialog = EditImplementationNoteDialog.new({
-            model: model,
+            className: className,
             implementationNoteText: 'Add the new implementation note here ...',
             window: this.getProps().window,
             onUpdateImplementationNote: this.addImplementationNote.bind(this),
@@ -251,7 +261,7 @@ class MethodFormattedComment {
     addImplementationNote({ implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -265,7 +275,7 @@ class MethodFormattedComment {
     deleteImplementationNote({ atIndex: index }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -280,12 +290,12 @@ class MethodFormattedComment {
     editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const dialog = EditImplementationNoteDialog.new({
-            model: model,
+            className: className,
             implementationNoteText: implementationNoteText,
             window: this.getProps().window,
             onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
@@ -305,7 +315,7 @@ class MethodFormattedComment {
     updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -322,9 +332,9 @@ class MethodFormattedComment {
     addNewExample() {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const newExample = {
             Description: 'Add the example description here ...',
@@ -332,7 +342,7 @@ class MethodFormattedComment {
         }
 
         const dialog = EditExampleDialog.new({
-            model: model,
+            className: className,
             example: newExample,
             window: this.getProps().window,
             onUpdateExample: this.addExample.bind(this),
@@ -347,7 +357,7 @@ class MethodFormattedComment {
     addExample({ example: example }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -361,12 +371,12 @@ class MethodFormattedComment {
     editExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const dialog = EditExampleDialog.new({
-            model: model,
+            className: className,
             example: example,
             window: this.getProps().window,
             onUpdateExample: ({ example: example }) => {
@@ -386,7 +396,7 @@ class MethodFormattedComment {
     updateExampleAt({ index: index, example: example }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -403,7 +413,7 @@ class MethodFormattedComment {
     deleteExample({ atIndex: index }) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const documentation = method.getDocumentation()
 
@@ -421,7 +431,7 @@ class MethodFormattedComment {
 
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const methodComment = method.getComment()
 
@@ -433,7 +443,9 @@ class MethodFormattedComment {
     /// Building
 
     reRenderWhen() {
-        const selectedMethodModel = this.getModel().getSelectedMethodModel()
+        const model = this.getModel()
+
+        const selectedMethodModel = model.getChild({ id: 'selectedMethod' })
 
         this.reRenderOnValueChangeOf( selectedMethodModel )
     }
@@ -441,14 +453,16 @@ class MethodFormattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
 
         const isInEditionMode = method != null && model.isInEditionMode()
 
         const editionClosure = isInEditionMode ?
             this.editMethodComment.bind(this) : undefined
 
-        const documentation = model.getSelectedMethodDocumentation()
+        const documentation = this.getCurrentMethodDocumentation()
+
+        if( documentation === null ) { return }
 
         let description = documentation.getDescription()
 
@@ -650,6 +664,14 @@ class MethodFormattedComment {
             })
 
         })
+    }
+
+    getCurrentMethod() {
+        return this.getModel().getChild({ id: 'selectedMethod' }).getValue()
+    }
+
+    getCurrentMethodDocumentation() {
+        return this.getModel().getChild({ id: 'selectedMethodDocumentation' }).getValue()
     }
 }
 

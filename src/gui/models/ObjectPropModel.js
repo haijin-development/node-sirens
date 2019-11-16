@@ -1,7 +1,6 @@
 const Classification = require('../../O').Classification
 const ValueModelBehaviour = require('./ValueModelBehaviour')
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
-const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 
 class ObjectPropModel {
     /// Definition
@@ -9,7 +8,7 @@ class ObjectPropModel {
     static definition() {
         this.instanceVariables = ['object', 'prop']
         this.assumes = [ValueModelBehaviour]
-        this.implements = [ValueModelProtocol_Implementation, ValueModelProtocol]
+        this.implements = [ValueModelProtocol_Implementation]
     }
 
     /// Initializing

@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../GUI').Component
 const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
-const SelectedFileComponent = require('./SelectedFileComponent')
+const SourceFileEditionComponent = require('./SourceFileEditionComponent')
 const Sirens = require('../../../Sirens')
 
 class AppBrowserBody {
@@ -35,14 +35,15 @@ class AppBrowserBody {
                     })
 
                     this.component(
-                        SelectedFileComponent.new({
-                            model: model,
+                        SourceFileEditionComponent.new({
+                            model: model.getChild({ id: 'sourceFileEdition' }),
                         })
                     )
+
                 })
 
                 this.treeChoice( function() {
-                    this.model( model.getAppFilesTreeModel() )
+                    this.model( model.getChild({ id: 'filesTree' }) )
 
                     this.styles({
                         viewAttributes: { splitProportion: 1.0/3.0 },
@@ -69,7 +70,7 @@ class AppBrowserBody {
                     this.popupMenu( function() {
                         const selectedFilePath = model.getSelectedFilePath()
 
-                        const classesDefinitions = model.getClassesDefinitions()
+                        const classesDefinitions = model.getClassesDefinitionsInSelectedFile()
 
                         this.item({
                             label: 'Browse it on a new window',

@@ -16,38 +16,12 @@ class MethodUnformattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    editMethodComment() {
-        const model = this.getModel()
-
-        const method = model.getSelectedMethod()
-
-        const dialog = EditMethodCommentDialog.new({
-            model: model,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: this.updateMethodComment.bind(this),
-            unformatted: true,
-        })
-
-        dialog.open()
-    }
-
-    updateMethodComment({ methodNewDescription: methodNewDescription }) {
-        const model = this.getModel()
-
-        const method = model.getSelectedMethod()
-
-        method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
-
-        model.reload()
-    }
-
     /// Building
 
     reRenderWhen() {
-        const selectedMethodModel = this.getModel().getSelectedMethodModel()
+        const model = this.getModel()
+
+        const selectedMethodModel = model.getChild({ id: 'selectedMethod' })
 
         this.reRenderOnValueChangeOf( selectedMethodModel )
     }
@@ -55,21 +29,19 @@ class MethodUnformattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        const method = this.getCurrentMethod()
+
+        if( ! method ) { return }
 
         const isInEditionMode = model.isInEditionMode()
 
         const editionClosure = isInEditionMode ?
             this.editMethodComment.bind(this) : undefined
 
-        let methodUnformattedComment = ''
+        let methodUnformattedComment = method.getComment().getSourceCode()
 
-        if( method !== null ) {
-            methodUnformattedComment = method.getComment().getSourceCode()
-
-            if( methodUnformattedComment.trim() === '' ) {
-                methodUnformattedComment = 'This method has no documentation yet.'
-            }
+        if( methodUnformattedComment.trim() === '' ) {
+            methodUnformattedComment = 'This method has no documentation yet.'
         }
 
         componentsRenderer.render(function (component) {
@@ -105,6 +77,40 @@ class MethodUnformattedComment {
             })
 
         })
+    }
+
+    /// Actions
+
+    editMethodComment() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const dialog = EditMethodCommentDialog.new({
+            className: className,
+            method: method,
+            window: this.getProps().window,
+            onUpdateMethodComment: this.updateMethodComment.bind(this),
+            unformatted: true,
+        })
+
+        dialog.open()
+    }
+
+    updateMethodComment({ methodNewDescription: methodNewDescription }) {
+        const model = this.getModel()
+
+        const method = this.getCurrentMethod()
+
+        method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
+
+        model.reload()
+    }
+
+    getCurrentMethod() {
+        return this.getModel().getChild({ id: 'selectedMethod' }).getValue()
     }
 }
 

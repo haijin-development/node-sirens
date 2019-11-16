@@ -3,9 +3,9 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../GUI').Component
 const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
 const Sirens = require('../../../Sirens')
+const ClassPropertiesModel = require('../../models/prototypes/ClassPropertiesModel')
 
-
-class FunctionsComponent {
+class ClassPropertiesComponent {
     /// Definition
 
     static definition() {
@@ -14,18 +14,24 @@ class FunctionsComponent {
         this.implements = [ComponentProtocol_Implementation]
     }
 
+    /// Initializing
+
+    defaultModel() {
+        return ClassPropertiesModel.new()
+    }
+
     /// Actions
 
     browseSelectedProperty() {
-        const selectedPropertyValue = this.getModel().getSelectedPropValue()
+        const selectedPropertyValue = this.getModel().getSelectedPropertyValue()
 
-        Sirens.browseObject(selectedPropertyValue)
+        Sirens.browseObject( selectedPropertyValue )
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
-        const prototypesModel = this.getModel()
+        const model = this.getModel()
 
         componentsRenderer.render(function (component) {
             this.verticalStack( function() {
@@ -38,7 +44,7 @@ class FunctionsComponent {
                     })
 
                     this.checkBox({
-                        model: prototypesModel.getShowInheritedModel(),
+                        model: model.getChild({ id: 'showInheritedProps' }),
                         label: 'Show inherited',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -46,7 +52,7 @@ class FunctionsComponent {
                     })
 
                     this.checkBox({
-                        model: prototypesModel.getShowFunctionsModel(),
+                        model: model.getChild({ id: 'showFunctionProps' }),
                         label: 'Show functions',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -54,7 +60,7 @@ class FunctionsComponent {
                     })
 
                     this.checkBox({
-                        model: prototypesModel.getShowPropsModel(),
+                        model: model.getChild({ id: 'showNonFunctionProps' }),
                         label: 'Show props',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -63,7 +69,7 @@ class FunctionsComponent {
                 })
 
                 this.listChoice( function() {
-                    this.model( prototypesModel.getSelectedPrototypePropsModel() )
+                    this.model( model.getChild({ id: 'properties' }) )
 
                     this.handlers({
                         onAction: component.browseSelectedProperty.bind(component),
@@ -82,8 +88,7 @@ class FunctionsComponent {
                     })
 
                     this.popupMenu( function() {
-                        const selectedObject =
-                            component.getModel().getSelectedPropValue()
+                        const selectedObject = model.getSelectedPropertyValue()
 
                         this.item({
                             label: 'Browse it',
@@ -98,4 +103,4 @@ class FunctionsComponent {
     }
 }
 
-module.exports = Classification.define(FunctionsComponent)
+module.exports = Classification.define(ClassPropertiesComponent)

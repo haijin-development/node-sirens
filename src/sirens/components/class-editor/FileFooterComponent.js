@@ -1,8 +1,6 @@
-const path = require('path')
 const Classification = require('../../../O').Classification
 const Component = require('../../../GUI').Component
 const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
-
 
 class FileFooterComponent {
     /// Definition
@@ -21,7 +19,7 @@ class FileFooterComponent {
         componentsRenderer.render( function(component) {
 
             this.text({
-                model: model,
+                model: model.getChild({ id: 'editedContents' }),
                 viewAttributes: { splitProportion: 1.0 / 2 },
             })
 

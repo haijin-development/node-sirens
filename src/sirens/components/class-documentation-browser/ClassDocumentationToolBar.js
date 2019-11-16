@@ -30,7 +30,7 @@ class ClassDocumentationToolBar {
                 })
 
                 this.toggleButton({
-                    model: model.getShowUnformattedCommentsModel(),
+                    model: model.getChild({ id: 'showsUnformattedComments' }),
                     label: 'Show unformatted comment.',
                     image: {
                         iconName: GtkIcons.revertToSave,
@@ -52,7 +52,7 @@ class ClassDocumentationToolBar {
                 this.separator()
 
                 this.toggleButton({
-                    model: model.getEditionModeModel(),
+                    model: model.getChild({ id: 'isEditingDocumentation' }),
                     label: 'Edition mode.',
                     image: {
                         iconName: GtkIcons.edit,

@@ -16,6 +16,7 @@ class ListView {
             'scrolledWindow', 'listStore', 'treeView', 'columns',
             'onSelectionChanged', 'onSelectionAction',
             'allowSelectionChange',
+            'hasScrollBars',
         ]
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
@@ -41,8 +42,13 @@ class ListView {
             onSelectionChanged: onSelectionChanged,
             onSelectionAction: onSelectionAction,
             allowSelectionChange: allowSelectionChange,
+            hasScrollBars: hasScrollBars,
         })
     {
+        if( hasScrollBars === undefined ) { hasScrollBars = true }
+
+        this.hasScrollBars = hasScrollBars
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -57,11 +63,15 @@ class ListView {
     }
 
     initializeHandles() {
-        this.scrolledWindow = new Gtk.ScrolledWindow()
-        this.scrolledWindow.setPolicy(
-            GtkScroll.auto,
-            GtkScroll.auto
-        )
+        if( this.hasScrollBars ) {
+
+            this.scrolledWindow = new Gtk.ScrolledWindow()
+            this.scrolledWindow.setPolicy(
+                GtkScroll.auto,
+                GtkScroll.auto
+            )
+
+        }
 
         this.listStore = new Gtk.ListStore()
         this.treeView = null
@@ -88,7 +98,9 @@ class ListView {
             this.addColumn(eachColumn)
         })
 
-        this.scrolledWindow.add( this.treeView )
+        if( this.hasScrollBars ) {
+            this.scrolledWindow.add( this.treeView )
+        }
     }
 
     addColumn(column) {
@@ -124,7 +136,11 @@ class ListView {
     /// Querying
 
     getMainHandle() {
-        return this.scrolledWindow
+        if( this.hasScrollBars ) {
+            return this.scrolledWindow
+        } else {
+            return this.treeView
+        }
     }
 
     /*

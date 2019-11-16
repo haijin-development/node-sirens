@@ -10,12 +10,13 @@
 
 ### Sirens
 
-- Removed the StackBrowser and its dependencies
+- Removed the StackBrowser and its dependencies.
 - AppBrowserModel shows the methods tab page when the selected file contains a class definition.
 - Removed the StackTraceBrowser and its dependencies.
 - Added tags to methods documentation and a filter by tags of a class methods.
-- Added the method source code to class documentation.
+- Added the method source code to class documentation..
 - The app loads its styles from resources/css/sirens.css
+- Rewrote all the components using ModelObjects.
 
 ### gui
 
@@ -24,11 +25,14 @@
 - Implemented MultipleSelectionCheckBox.
 - Added basic support for CSS styles.
 - Removed backgroundColor and foregroundColor.
+- Scroll bars are optional in ListView.
+- Implemented ModelObject and its builder.
 
 ### O language
 
 - Renamed Debuggable.inspect() to Debuggable.browse()
 - Tagged classification methods
+- Added context information to the ParamsChecker validation messages.
 
 ## v0.10.0
 

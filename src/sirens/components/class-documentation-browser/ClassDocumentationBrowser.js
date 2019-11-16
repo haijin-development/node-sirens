@@ -1,13 +1,13 @@
-const Classification = require('../../O').Classification
-const Component = require('../../GUI').Component
-const ComponentProtocol_Implementation = require('../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../GUI').ComponentInstantiator
+const Classification = require('../../../O').Classification
+const Component = require('../../../GUI').Component
+const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
 
-const ClassDocumentationBrowserModel = require('../models/ClassDocumentationBrowserModel')
-const ClassDocumentationMenuBar = require('./class-documentation-browser/ClassDocumentationMenuBar')
-const ClassDocumentationToolBar = require('./class-documentation-browser/ClassDocumentationToolBar')
-const DocumentationBrowserBody = require('./class-documentation-browser/DocumentationBrowserBody')
-const Sirens = require('../../Sirens')
+const ClassDocumentationBrowserModel = require('../../models/class-documentation-browser/ClassDocumentationBrowserModel')
+const ClassDocumentationMenuBar = require('./ClassDocumentationMenuBar')
+const ClassDocumentationToolBar = require('./ClassDocumentationToolBar')
+const DocumentationBrowserBody = require('./DocumentationBrowserBody')
+const Sirens = require('../../../Sirens')
 
 class ClassDocumentationBrowser {
     /// Definition
@@ -27,36 +27,21 @@ class ClassDocumentationBrowser {
     defaultModel() {
         const classDefinition = this.getProps().classDefinition
 
-        const selectedMethodName = this.getProps().methodName
+        const methodName = this.getProps().methodName
 
-        return ClassDocumentationBrowserModel.new({
-            classDefinition: classDefinition,
-            selectedMethodName: selectedMethodName,
-        })
-    }
+        const model = ClassDocumentationBrowserModel.new()
 
-    /// Actions
+        model.setBrowsedClass({ classDefinition: classDefinition })
 
-    openClassEditor() {
-        Sirens.openClassEditor()
-    }
+        model.setBrowsedMethod({ methodName: methodName })
 
-    openClassDocumentation() {
-        const classDefinition = this.getProps().classDefinition
-
-        Sirens.browseClassDocumentation({
-            classDefinition: classDefinition
-        })
-    }
-
-    openPlayground() {
-        Sirens.openPlayground()
+        return model
     }
 
     /// Querying
 
     getWindowTitle() {
-        const className = this.getModel().getClassName()
+        const className = this.getModel().getBrowsedClass().getClassName()
 
         return `Class ${className} documentation`
     }
@@ -106,13 +91,37 @@ class ClassDocumentationBrowser {
             })
         })
 
+        this.showClassTabPageIfNoMethodIsSelected()
+    }
+
+    /// Actions
+
+    openClassEditor() {
+        const filename = this.getModel().getBrowsedClass().getSourceFile().getFilePath()
+
+        Sirens.openClassEditor({ filename: filename })
+    }
+
+    openClassDocumentation() {
+        const classDefinition = this.getProps().classDefinition
+
+        Sirens.browseClassDocumentation({
+            classDefinition: classDefinition
+        })
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
+
+    showClassTabPageIfNoMethodIsSelected() {
         const methodName = this.getProps().methodName
 
         if( methodName === undefined || methodName === null ) {
             const tabsComponent = this.getChildComponent({ id: 'tabs' })
 
             tabsComponent.showTabPageAt({ index: 1 })
-        }
+        }        
     }
 }
 

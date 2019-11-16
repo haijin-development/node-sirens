@@ -17,6 +17,12 @@ class SourceFileFooter {
         this.assumes = [JsStatement]
         this.implements = [JsStatementProtocol]
     }
+
+    /// Asking
+
+    isFooter() {
+        return true
+    }
 }
 
 module.exports = Classification.define(SourceFileFooter)

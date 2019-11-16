@@ -15,6 +15,12 @@ class ClassHeader {
         this.assumes = [JsStatement]
         this.implements = [JsStatementProtocol]
     }
+
+    /// Asking
+
+    isHeader() {
+        return true
+    }
 }
 
 module.exports = Classification.define(ClassHeader)

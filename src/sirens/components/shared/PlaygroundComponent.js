@@ -66,7 +66,7 @@ class PlaygroundComponent {
     }
 
     getText() {
-        this.getModel().getValue()
+        return this.getModel().getValue()
     }
 
     setText(string) {

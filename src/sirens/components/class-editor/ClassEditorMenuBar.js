@@ -61,6 +61,15 @@ class ClassEditorMenuBar {
                     })
 
                 })
+
+                this.menuGroup({ label: 'Documentation' }, function() {
+                    this.item({
+                        label: 'Open a documentation browser...',
+                        enabled: true,
+                        action: component.getProps().openDocumentationBrowser,
+                    })
+
+                })
             })
 
         })

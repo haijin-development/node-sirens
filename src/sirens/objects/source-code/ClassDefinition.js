@@ -28,6 +28,12 @@ class ClassDefinition {
         this.header = header
     }
 
+    /// Asking
+
+    isClassDefinition() {
+        return true
+    }
+
     /// Accessing
 
     getSourceFile() {

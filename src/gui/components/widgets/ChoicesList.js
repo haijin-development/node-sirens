@@ -45,6 +45,7 @@ class ChoicesList {
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this),
             allowSelectionChange: this.allowSelectionChange.bind(this),
+            hasScrollBars: this.getProps().hasScrollBars,
         })
     }
 

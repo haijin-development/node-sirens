@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../GUI').ModelObject
+const ModelObject = require('../../../Skins').ModelObject
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesModel = require('./ClassPropertiesModel')
 

@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../GUI').ModelObject
+const ModelObject = require('../../../Skins').ModelObject
 const Folder = require('../../objects/paths/Folder')
 const FileClassesEditionModel = require('../class-editor/FileClassesEditionModel')
 const ClassSourceFile = require('../../objects/ClassSourceFile')

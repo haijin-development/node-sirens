@@ -1,9 +1,9 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const Component = require('../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
-const FileChooser = require('../../../GUI').FileChooser
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
+const FileChooser = require('../../../Skins').FileChooser
 const ClassEditorModel = require('../../models/class-editor/ClassEditorModel')
 const ClassEditorMenu = require('./ClassEditorMenu')
 const ClassEditorBody = require('./ClassEditorBody')
@@ -29,7 +29,7 @@ class ClassEditor {
     defaultModel() {
         const model = ClassEditorModel.new()
 
-        if( this.getProps().filename !== undefined ) {
+        if( this.getProps().filename ) {
             const filename = this.getProps().filename
 
             model.openFile({ filename: filename })

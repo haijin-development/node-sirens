@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const SourceFileEditionComponent = require('./SourceFileEditionComponent')
 const Sirens = require('../../../Sirens')
 
@@ -37,6 +37,7 @@ class AppBrowserBody {
                     this.component(
                         SourceFileEditionComponent.new({
                             model: model.getChild({ id: 'sourceFileEdition' }),
+                            openClassDocumentation: component.getProps().openClassDocumentation,
                         })
                     )
 

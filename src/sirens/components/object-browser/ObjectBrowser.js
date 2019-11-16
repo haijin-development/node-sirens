@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../GUI').ComponentInstantiator
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 
 const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')

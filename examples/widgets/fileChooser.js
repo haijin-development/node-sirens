@@ -1,4 +1,4 @@
-const FileChooser = require('../../src/GUI').FileChooser
+const FileChooser = require('../../src/Skins').FileChooser
 const Sirens = require('../../src/Sirens')
 
 

@@ -1,9 +1,9 @@
 const path = require('path')
 const Classification = require('../../../../O').Classification
-const Component = require('../../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../../GUI').ComponentProtocol_Implementation
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../../GUI').GtkIcons
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
 class ImplementationNoteDocumentation {

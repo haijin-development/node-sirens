@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../GUI').ComponentProtocol_Implementation
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ClassEditorBody = require('../class-editor/ClassEditorBody')
 const DocumentationBrowserBody = require('../class-documentation-browser/DocumentationBrowserBody')
 
@@ -31,6 +31,7 @@ class SourceFileEditionComponent {
                 this.component(
                     ClassEditorBody.new({
                         model: model,
+                        openDocumentationBrowser: component.getProps().openClassDocumentation,
                     })
                 )
 

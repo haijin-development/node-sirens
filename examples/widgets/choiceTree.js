@@ -1,8 +1,8 @@
 const Classification = require('../../src/O').Classification
-const Component = require('../../src/GUI').Component
-const ComponentProtocol_Implementation = require('../../src/GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../src/GUI').ComponentInstantiator
-const TreeChoiceModel = require('../../src/GUI').TreeChoiceModel
+const Component = require('../../src/Skins').Component
+const ComponentProtocol_Implementation = require('../../src/Skins').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../src/Skins').ComponentInstantiator
+const TreeChoiceModel = require('../../src/Skins').TreeChoiceModel
 const Sirens = require('../../src/Sirens')
 
 class CustomComponent {

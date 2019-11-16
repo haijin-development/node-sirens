@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../GUI').ModelObject
+const ModelObject = require('../../../Skins').ModelObject
 const ClassSourceFile = require('../../objects/ClassSourceFile')
 const FileClassesEditionModel = require('./FileClassesEditionModel')
 

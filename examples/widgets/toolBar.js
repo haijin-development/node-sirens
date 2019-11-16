@@ -1,9 +1,9 @@
 const Classification = require('../../src/O').Classification
-const Component = require('../../src/GUI').Component
-const ComponentProtocol_Implementation = require('../../src/GUI').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../src/GUI').ComponentInstantiator
+const Component = require('../../src/Skins').Component
+const ComponentProtocol_Implementation = require('../../src/Skins').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../src/Skins').ComponentInstantiator
 const Sirens = require('../../src/Sirens')
-const GtkIcons = require('../../../GUI').GtkIcons
+const GtkIcons = require('../../../Skins').GtkIcons
 
 class CustomComponent {
     /// Definition

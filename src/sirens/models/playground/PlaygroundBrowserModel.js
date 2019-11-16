@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ModelObject = require('../../../GUI').ModelObject
+const ModelObject = require('../../../Skins').ModelObject
 const SourceFile = require('../../objects/SourceFile')
 
 class PlaygroundBrowserModel {

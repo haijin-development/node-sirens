@@ -1,7 +1,7 @@
 const Classification = require('../../../../O').Classification
-const Component = require('../../../../GUI').Component
-const ComponentProtocol_Implementation = require('../../../../GUI').ComponentProtocol_Implementation
-const GtkIcons = require('../../../../GUI').GtkIcons
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 const EditDialogHeader = require('./EditDialogHeader')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')

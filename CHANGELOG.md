@@ -3,8 +3,18 @@
 ## v0.12.0 (next release)
 
 ### Sirens
-### gui
+
+- Rewrote all the components using ModelObjects.
+
+### Skins
+
+- Renamed this library to Skins.
+- Scrollbars in ListView now are optional.
+- Implemented ModelObject and its builder.
+
 ### O language
+
+- Added context information to the ParamsChecker validation messages.
 
 ## v0.11.0
 
@@ -14,25 +24,21 @@
 - AppBrowserModel shows the methods tab page when the selected file contains a class definition.
 - Removed the StackTraceBrowser and its dependencies.
 - Added tags to methods documentation and a filter by tags of a class methods.
-- Added the method source code to class documentation..
+- Added the method source code to class documentation.
 - The app loads its styles from resources/css/sirens.css
-- Rewrote all the components using ModelObjects.
 
-### gui
+### Skins
 
 - Removed the implements of ComponentProtocol in all components that implements ComponentProtocol_Implementation since it is implicit.
 - Refactored CheckBox to SingleSelectionCheckBox.
 - Implemented MultipleSelectionCheckBox.
 - Added basic support for CSS styles.
 - Removed backgroundColor and foregroundColor.
-- Scroll bars are optional in ListView.
-- Implemented ModelObject and its builder.
 
 ### O language
 
-- Renamed Debuggable.inspect() to Debuggable.browse()
-- Tagged classification methods
-- Added context information to the ParamsChecker validation messages.
+- Renamed Debuggable.inspect() to Debuggable.browse().
+- Tagged classification methods.
 
 ## v0.10.0
 

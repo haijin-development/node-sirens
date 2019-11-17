@@ -19,12 +19,25 @@ class ToolButton {
     }
 
     createView() {
-        return ToolButtonView.new( this.getProps() )
+        const props = this.getProps()
+
+        return ToolButtonView.new({
+            imageProps: props.imageProps,
+            label: props.label,
+            tooltip: props.tooltip,
+            action: (...params) => { this.handleAction(...params) },
+        })
     }
 
     /// Synchronizing
 
     synchronizeViewFromModel() {
+    }
+
+    handleAction(...params) {
+        const handler = this.getProps().action
+
+        handler( ...params )
     }
 }
 

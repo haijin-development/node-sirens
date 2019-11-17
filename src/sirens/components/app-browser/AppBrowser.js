@@ -5,7 +5,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const FolderChooser = require('../../../Skins').FolderChooser
 const AppBrowserMenu = require('./AppBrowserMenu')
 const AppBrowserBody = require('./AppBrowserBody')
-const AppBrowserModel = require('../../models/app-browser/AppBrowserModel')
+const AppBrowserFlow = require('../../models/app-browser/AppBrowserFlow')
 const Sirens = require('../../../Sirens')
 
 class AppBrowser {
@@ -21,12 +21,12 @@ class AppBrowser {
     /// Initializing
 
     /**
-     * Returns a new AppBrowserModel.
+     * Returns a new AppBrowserFlow.
      * If the props include a props.object defined the that props.object is the browsed object,
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        const model = AppBrowserModel.new()
+        const model = AppBrowserFlow.new()
 
         const appFolderPath = this.getProps().appFolder
 
@@ -35,50 +35,6 @@ class AppBrowser {
         }
 
         return model
-    }
-
-    /// Actions
-
-    pickFolder() {
-        const chosenFolder = FolderChooser.chooseFolder({
-            title: 'Choose a folder',
-            window: this,
-            initialFolder: this.getModel().getLastOpenedFolder(),
-        })
-
-        return chosenFolder        
-    }
-
-    openFolder() {
-        const appFolderPath = this.pickFolder()
-
-        if( appFolderPath === null ) { return }
-
-        this.getModel().openFolder({ path: appFolderPath })
-    }
-
-    openClassEditor() {
-        const model = this.getModel()
-
-        const selectedPath = model.getSelectedFilePath()
-
-        Sirens.openClassEditor({ filename: selectedPath })
-    }
-
-    openClassDocumentation() {
-        const model = this.getModel()
-
-        const classesDefinitions = model.getClassesDefinitionsInSelectedFile()
-
-        if( classesDefinitions.length === 0 ) { return }
-
-        Sirens.browseClassDocumentation({
-            classDefinition: classesDefinitions[0],
-        })
-    }
-
-    openPlayground() {
-        Sirens.openPlayground()
     }
 
     /// Building
@@ -100,17 +56,17 @@ class AppBrowser {
                         AppBrowserMenu.new({
                             model: model,
                             openFolder: component.openFolder.bind(component),
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openClassDocumentation: component.openClassDocumentation.bind(component),
-                            openPlayground: component.openPlayground.bind(component),
+                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
+                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
+                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
                         })
                     )
 
                     this.component(
                         AppBrowserBody.new({
                             model: model,
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openClassDocumentation: component.openClassDocumentation.bind(component),
+                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
+                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
                         })
                     )
 
@@ -118,6 +74,28 @@ class AppBrowser {
 
             })
         })
+    }
+
+    /// Actions
+
+    pickFolder() {
+        const chosenFolder = FolderChooser.chooseFolder({
+            title: 'Choose a folder',
+            window: this,
+            initialFolder: this.getModel().getLastOpenedFolder(),
+        })
+
+        return chosenFolder        
+    }
+
+    openFolder() {
+        const appFolderPath = this.pickFolder()
+
+        if( appFolderPath === null ) { return }
+
+        const handler = this.getModel().getActionHandler({ id: 'openApplicationFolder' })
+
+        handler({ folderPath: appFolderPath })
     }
 }
 

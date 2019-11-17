@@ -1,8 +1,9 @@
 const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
 const ObjectProperty = require('../../objects/ObjectProperty')
+const Sirens = require('../../../Sirens')
 
-class ClassPropertiesModel {
+class ClassPropertiesFlow {
     /// Definition
 
     static definition() {
@@ -12,6 +13,8 @@ class ClassPropertiesModel {
 
     buildWith(flow) {
         flow.main( function(classProperties) {
+
+            this.evaluate( classProperties.defineApplicationCommands, classProperties )
 
             this.whenObjectChanges( ({ newValue: aClass }) => {
                 classProperties.updatePropertyChoices()
@@ -48,6 +51,23 @@ class ClassPropertiesModel {
 
     }
 
+    defineApplicationCommands(classProperties) {
+        this.commands({ id: 'classPropertiesCommands' }, function() {
+
+            this.command({
+                id: 'browseSelectedProperty',
+                enabledIf: function() {
+                    return classProperties.getSelectedPropertyValue() != undefined
+                },
+                whenActioned: function() {
+                    const selectedPropertyValue = classProperties.getSelectedPropertyValue()
+                    Sirens.browseObject( selectedPropertyValue )
+                }
+            })
+
+        })
+    }
+
     /// Actions
 
     setBrowsedObject(object) {
@@ -68,6 +88,8 @@ class ClassPropertiesModel {
 
     getSelectedPropertyValue() {
         const objectProperty = this.getChild({ id: 'properties' }).getSelectionValue()
+
+        if( ! objectProperty ) { return null }
 
         return objectProperty.getValue()
     }
@@ -136,4 +158,4 @@ class ClassPropertiesModel {
     }
 }
 
-module.exports = Classification.define(ClassPropertiesModel)
+module.exports = Classification.define(ClassPropertiesFlow)

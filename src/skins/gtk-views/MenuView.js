@@ -1,5 +1,6 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../O').Classification
+const OInstance = require('../../O').OInstance
 
 class MenuViewBuilder {
     /// Instantiating
@@ -62,8 +63,12 @@ class MenuView {
     /// Adding
 
     item({label: label, enabled: enabled, action: action}) {
-        if(enabled === undefined) {
+        if( enabled === undefined ) {
             enabled = true
+        }
+
+        if( OInstance.isOInstance(enabled) && enabled.respondsTo('getValue') ) {
+            enabled = enabled.getValue() === true
         }
 
         const menuItemHandle = new Gtk.MenuItem({label: label})

@@ -6,7 +6,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
 const Pluggables = require('../../objects/Pluggables')
-const ObjectBrowserModel = require('../../models/object-browser/ObjectBrowserModel')
+const ObjectBrowserFlow = require('../../models/object-browser/ObjectBrowserFlow')
 
 class ObjectBrowser {
     /// Definition
@@ -23,7 +23,7 @@ class ObjectBrowser {
     defaultModel() {
         const browsedObject = this.getProps().object
 
-        const model = ObjectBrowserModel.new()
+        const model = ObjectBrowserFlow.new()
 
         model.browseObject( browsedObject )
 

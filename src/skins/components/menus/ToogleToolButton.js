@@ -25,13 +25,14 @@ class ToogleToolButton {
     }
 
     createView() {
-        const actionProp = {
-            action: () => { this.onClicked() }
-        }
+        const props = this.getProps()
 
-        const props = Object.assign( this.getProps(), actionProp )
-
-        return ToggleToolButtonView.new( props )
+        return ToggleToolButtonView.new({
+            imageProps: props.imageProps,
+            label: props.label,
+            tooltip: props.tooltip,
+            action: (...params) => { this.handleClick(...params) },
+        })
     }
 
     /// Synchronizing
@@ -56,7 +57,7 @@ class ToogleToolButton {
         this.synchronizeViewFromModel()
     }
 
-    onClicked() {
+    handleClick() {
         this.duringClassificationDo( UpdatingModel, () => {
             this.getModel().setValue( this.getView().getValue() )
         })
@@ -64,7 +65,7 @@ class ToogleToolButton {
 }
 
 class UpdatingView {
-    onClicked() {}
+    handleClick() {}
 }
 
 UpdatingView = Classification.define(UpdatingView)

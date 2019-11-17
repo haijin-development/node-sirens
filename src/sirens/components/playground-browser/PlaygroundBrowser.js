@@ -5,7 +5,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const FileChooser = require('../../../Skins').FileChooser
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
 const PlaygroundBrowserMenu = require('./PlaygroundBrowserMenu')
-const PlaygroundBrowserModel = require('../../models/playground/PlaygroundBrowserModel')
+const PlaygroundBrowserFlow = require('../../models/playground/PlaygroundBrowserFlow')
 const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowser {
@@ -21,12 +21,12 @@ class PlaygroundBrowser {
     /// Initializing
 
     /**
-     * Returns a new PlaygroundBrowserModel.
+     * Returns a new PlaygroundBrowserFlow.
      * If the props include a props.object defined the that props.object is the browsed object,
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        const model = PlaygroundBrowserModel.new()
+        const model = PlaygroundBrowserFlow.new()
 
         if( this.getProps().filename !== undefined ) {
             const filename = this.getProps().filename
@@ -54,11 +54,12 @@ class PlaygroundBrowser {
 
                     this.component(
                         PlaygroundBrowserMenu.new({
+                            model: model,
                             openFile: component.openFile.bind(component),
                             openFileInNewWindow: component.openFileInNewWindow.bind(component),
-                            saveFile: component.saveFile.bind(component),
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openPlayground: component.openPlayground.bind(component),
+                            saveFile: model.getActionHandler({ id: 'saveFile' }),
+                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
+                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
                         })
                     )
 
@@ -90,7 +91,7 @@ class PlaygroundBrowser {
 
         if( filename === null ) { return }
 
-        this.getModel().openFile({ filename: filename })
+        this.getModel().getActionHandler({ id: 'openFile' })({ filename: filename })
     }
 
     openFileInNewWindow() {
@@ -98,19 +99,7 @@ class PlaygroundBrowser {
 
         if( filename === null ) { return }
 
-        Sirens.openPlayground({ filename: filename })
-    }
-
-    saveFile() {
-        this.getModel().saveOpenedFile()
-    }
-
-    openClassEditor() {
-        Sirens.openClassEditor()
-    }
-
-    openPlayground() {
-        Sirens.openPlayground()
+        this.getModel().getActionHandler({ id: 'openFileInNewWindow' })({ filename: filename })
     }
 }
 

@@ -14,6 +14,8 @@ class AppBrowserMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         componentsRenderer.render(function (component) {
 
             this.menuBar( function() {
@@ -27,8 +29,8 @@ class AppBrowserMenuBar {
                 this.menuGroup({ label: 'App' }, function() {
                     this.item({
                         label: 'Open folder...',
-                        enabled: true,
                         action: component.getProps().openFolder,
+                        enabled: model.getChild({ id: 'openApplicationFolder' }),
                     })
 
                 })
@@ -36,15 +38,21 @@ class AppBrowserMenuBar {
                 this.menuGroup({ label: 'Browsers' }, function() {
 
                     this.item({
+                        label: 'Open class documentation browser',
+                        action: component.getProps().openClassDocumentation,
+                        enabled: model.getChild({ id: 'openClassDocumentation' }),
+                    })
+
+                    this.item({
                         label: 'Open a class editor...',
-                        enabled: true,
                         action: component.getProps().openClassEditor,
+                        enabled: model.getChild({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
-                        enabled: true,
                         action: component.getProps().openPlayground,
+                        enabled: model.getChild({ id: 'openPlayground' }),
                     })
 
                 })

@@ -250,6 +250,9 @@ class MenuGroupBuilder {
      ])
     */
     item({label: label, enabled: enabled, action: action}) {
+        if( label === undefined ) { label = '' }
+        if( enabled === undefined ) { enabled = true }
+
         const menuItem = MenuItem.new({
             label: label,
             enabled: enabled,

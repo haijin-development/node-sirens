@@ -1,9 +1,9 @@
 const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
-const ObjectPropertiesModel = require('./ObjectPropertiesModel')
+const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
 const Pluggables = require('../../objects/Pluggables')
 
-class ObjectBrowserModel {
+class ObjectBrowserFlow {
     /// Definition
 
     static definition() {
@@ -22,7 +22,7 @@ class ObjectBrowserModel {
 
             this.object({
                 id: 'objectProperties',
-                definedWith: ObjectPropertiesModel.new({
+                definedWith: ObjectPropertiesFlow.new({
                     whenSelectionChanges: function({ selection: objectProperty }) {
                         const value = objectProperty.getValue()
                         application.getChild({ id: 'playground' }).setObject( value )
@@ -36,6 +36,8 @@ class ObjectBrowserModel {
                     return application.propertySelectionValueStringFrom({ value: selectedValue })
                 },
             })
+
+            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
 
         })
     }
@@ -55,4 +57,4 @@ class ObjectBrowserModel {
     }
 }
 
-module.exports = Classification.define(ObjectBrowserModel)
+module.exports = Classification.define(ObjectBrowserFlow)

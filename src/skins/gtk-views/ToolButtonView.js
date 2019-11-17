@@ -8,19 +8,28 @@ class ToolButtonView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [ 'toolButton', 'imageProps', 'label', 'enabled', 'action', 'tooltip']
+        this.instanceVariables = [ 'toolButton', 'imageProps', 'label', 'action', 'tooltip']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
+    /// Styles
+
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat([
+                'enabled',
+            ])
+        })
+    }
+
     /// Initializing
 
-    initialize({ imageProps: imageProps, label: label, tooltip: tooltip, enabled: enabled, action: action }) {
+    initialize({ imageProps: imageProps, label: label, tooltip: tooltip, action: action }) {
         if( typeof(action) !== 'function' ) { throw new Error(`ToolButtonView invalid action callback: ${action}.`) }
 
         this.imageProps = imageProps
         this.label = label !== undefined ? label : ''
-        this.enabled = enabled === undefined ? true : enabled
         this.action = action
         this.tooltip = tooltip !== undefined ? tooltip : ''
 
@@ -48,11 +57,15 @@ class ToolButtonView {
 
         this.toolButton.setTooltipText( this.tooltip )
 
-        this.toolButton.setSensitive( this.enabled )
-
         this.toolButton.on('clicked', this.handleClicked.bind(this) )
 
         this.toolButton.show()
+    }
+
+    /// Properties
+
+    setEnabled(boolean) {
+        this.toolButton.setSensitive( boolean )
     }
 
     /// Querying

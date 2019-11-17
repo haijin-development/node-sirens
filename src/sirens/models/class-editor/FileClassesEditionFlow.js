@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
 const PlugabbleDisplayable = require('../../objects/PlugabbleDisplayable')
 
-class FileClassesEditionModel {
+class FileClassesEditionFlow {
     /// Definition
 
     static definition() {
@@ -155,4 +155,4 @@ class FileClassesEditionModel {
     }
 }
 
-module.exports = Classification.define(FileClassesEditionModel)
+module.exports = Classification.define(FileClassesEditionFlow)

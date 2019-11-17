@@ -7,20 +7,29 @@ class MenuItemView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [ 'menuItem', 'label', 'enabled', 'action']
+        this.instanceVariables = [ 'menuItem', 'label', 'action']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
 
+    /// Styles
+
+    acceptedStyles() {
+        return this.previousClassificationDo( () => {
+            return this.acceptedStyles().concat([
+                'enabled',
+            ])
+        })
+    }
+
     /// Initializing
 
-    initialize({ label: label, enabled: enabled, action: action }) {
+    initialize({ label: label, action: action }) {
         if( typeof( action ) !== 'function' ) {
             throw new Error(`Menu action '${label}' must be a function, got ${action}.`)
         }
 
         this.label = label
-        this.enabled = enabled === undefined ? true : enabled
         this.action = action
 
         this.previousClassificationDo( () => {
@@ -31,11 +40,15 @@ class MenuItemView {
     initializeHandles() {
         this.menuItem = new Gtk.MenuItem({ label: this.label })
 
-        this.menuItem.setSensitive( this.enabled )
-
         this.menuItem.on('activate', this.handleActivate.bind(this) )
 
         this.menuItem.show()
+    }
+
+    /// Properties
+
+    setEnabled(boolean) {
+        this.menuItem.setSensitive( boolean )
     }
 
     /// Querying

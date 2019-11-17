@@ -13,12 +13,6 @@ class AppBrowserBody {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    browseSelectedDocumentation() {
-
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {

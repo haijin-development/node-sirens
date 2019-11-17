@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
 
-class ObjectPropertiesModel {
+class ObjectPropertiesFlow {
     /// Definition
 
     static definition() {
@@ -65,4 +65,4 @@ class ObjectPropertiesModel {
     }
 }
 
-module.exports = Classification.define(ObjectPropertiesModel)
+module.exports = Classification.define(ObjectPropertiesFlow)

@@ -1,8 +1,10 @@
 const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
+const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
 const DocumentationReader = require('../../objects/documentation/DocumentationReader')
+const Sirens = require('../../../Sirens')
 
-class ClassDocumentationBrowserModel {
+class ClassDocumentationBrowserFlow {
     /// Definition
 
     static definition() {
@@ -13,18 +15,25 @@ class ClassDocumentationBrowserModel {
     /// Building
 
     buildWith(flow) {
+        const commandsRouter = ApplicationCommandsRouter.new()
+        commandsRouter.setApplication( this )
+
         flow.main( function(application) {
+
+            this.setCommandsRouter( commandsRouter )
+
+            this.evaluate( application.defineApplicationCommands, application )
 
             this.object( 'browsingMode', function() {
 
                 this.toggle({
                     id: 'showsUnformattedComments',
-                    whenValueChanges: () => { application.reload() },
+                    whenValueChanges: () => { application.reloadClassDefinition() },
                 })
 
                 this.toggle({
                     id: 'isEditingDocumentation',
-                    whenValueChanges: () => { application.reload() },
+                    whenValueChanges: () => { application.reloadClassDefinition() },
                 })
 
             })
@@ -67,7 +76,7 @@ class ClassDocumentationBrowserModel {
                     id: 'selectedTags',
                     value: [],
                     whenValueChanges: ({ newValue: tags }) => {
-                        const filterdMethods = appModel.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
+                        const filterdMethods = application.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
                         classDefinitionModel.getChild({ id: 'classMethods' }).setChoices(filterdMethods)
                     },
                 })
@@ -88,12 +97,54 @@ class ClassDocumentationBrowserModel {
 
             })
 
+            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
+
+        })
+    }
+
+    defineApplicationCommands(application) {
+        this.commands({ id: 'applicationCommands' }, function() {
+
+            this.command({
+                id: 'reloadClassDefinition',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    application.reloadClassDefinition()
+                }
+            })
+
+            this.command({
+                id: 'openClassEditor',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    const filename = application.getBrowsedClass().getSourceFile().getFilePath()
+                    Sirens.openClassEditor({ filename: filename })
+                }
+            })
+
+            this.command({
+                id: 'openClassDocumentation',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    const classDefinition = application.getChild({ id: 'classDefinition' }).getObject()
+                    Sirens.browseClassDocumentation({ classDefinition: classDefinition })
+                }
+            })
+
+            this.command({
+                id: 'openPlayground',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    Sirens.openPlayground()
+                }
+            })
+
         })
     }
 
     /// Actions
 
-    reload() {
+    reloadClassDefinition() {
         const classDefinition = this.getBrowsedClass()
 
         const selectedMethod = this.getChild({ id: 'selectedMethod' }).getValue()
@@ -201,4 +252,4 @@ class ClassDocumentationBrowserModel {
     }
 }
 
-module.exports = Classification.define(ClassDocumentationBrowserModel)
+module.exports = Classification.define(ClassDocumentationBrowserFlow)

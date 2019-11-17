@@ -15,6 +15,8 @@ class ClassEditorMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         componentsRenderer.render(function (component) {
 
             this.menuBar( function() {
@@ -28,36 +30,28 @@ class ClassEditorMenuBar {
                 this.menuGroup({ label: 'File' }, function() {
                     this.item({
                         label: 'Open file...',
-                        enabled: true,
                         action: component.getProps().openFile,
+                        enabled: model.getChild({ id: 'openFile' }),
                     })
 
                     this.item({
                         label: 'Open file in a new class browser...',
-                        enabled: true,
                         action: component.getProps().openFileInNewWindow,
-                    })
-
-                    this.skip().separator()
-
-                    this.skip().item({
-                        label: 'Save file',
-                        enabled: true,
-                        action: component.getProps().saveFile,
+                        enabled: model.getChild({ id: 'openFileInNewWindow' }),
                     })
                 })
 
                 this.menuGroup({ label: 'Browsers' }, function() {
                     this.item({
                         label: 'Open another class editor...',
-                        enabled: true,
                         action: component.getProps().openClassEditor,
+                        enabled: model.getChild({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
-                        enabled: true,
                         action: component.getProps().openPlayground,
+                        enabled: model.getChild({ id: 'openPlayground' }),
                     })
 
                 })
@@ -65,8 +59,8 @@ class ClassEditorMenuBar {
                 this.menuGroup({ label: 'Documentation' }, function() {
                     this.item({
                         label: 'Open a documentation browser...',
-                        enabled: true,
                         action: component.getProps().openDocumentationBrowser,
+                        enabled: model.getChild({ id: 'openDocumentationBrowser' }),
                     })
 
                 })

@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ObjectPropertiesModel = require('../../models/object-browser/ObjectPropertiesModel')
+const ObjectPropertiesFlow = require('../../models/object-browser/ObjectPropertiesFlow')
 const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesComponent {
@@ -16,7 +16,7 @@ class ObjectPropertiesComponent {
     /// Initializing
 
     defaultModel() {
-        return ObjectPropertiesModel.new()
+        return ObjectPropertiesFlow.new()
     }
 
     /// Building

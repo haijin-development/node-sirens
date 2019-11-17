@@ -279,6 +279,10 @@ class ToolBarBuilder {
      ])
     */
     button({ label: label, image: imageProps, tooltip: tooltip, enabled: enabled, action: action }) {
+        if( label === undefined ) { label = '' }
+        if( tooltip === undefined ) { tooltip = '' }
+        if( enabled === undefined ) { enabled = true }
+
         const menuItem = ToolButton.new({
             label: label,
             imageProps: imageProps,
@@ -403,6 +407,10 @@ class ToolBarBuilder {
      ])
     */
     toggleButton({ model: model, label: label, image: imageProps, tooltip: tooltip, enabled: enabled }) {
+        if( label === undefined ) { label = '' }
+        if( tooltip === undefined ) { tooltip = '' }
+        if( enabled === undefined ) { enabled = true }
+
         const menuItem = ToogleToolButton.new({
             model: model,
             label: label,

@@ -37,9 +37,21 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens an app folder.',
                     action: component.getProps().openFolder,
+                    enabled: model.getChild({ id: 'openApplicationFolder' }),
                 })
 
                 this.separator()
+
+                this.button({
+                    label: 'Open class documentation browser',
+                    image: {
+                        iconName: GtkIcons.info,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Opens a class documentation browser.',
+                    action: component.getProps().openClassDocumentation,
+                    enabled: model.getChild({ id: 'openClassDocumentation' }),
+                })
 
                 this.button({
                     label: 'Open class editor',
@@ -50,16 +62,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
-                })
-
-                this.button({
-                    label: 'Open class documenation browser',
-                    image: {
-                        iconName: GtkIcons.info,
-                        size: GtkIcons.size._24x24,
-                    },
-                    tooltip: 'Opens a class documenation browser.',
-                    action: component.getProps().openClassDocumentation,
+                    enabled: model.getChild({ id: 'openClassEditor' }),
                 })
 
                 this.separator()
@@ -73,6 +76,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
+                    enabled: model.getChild({ id: 'openPlayground' }),
                 })
 
             })

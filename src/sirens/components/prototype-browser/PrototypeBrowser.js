@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const Sirens = require('../../../Sirens')
-const PrototypesBrowserModel = require('../../models/prototypes/PrototypesBrowserModel')
+const PrototypesBrowserFlow = require('../../models/prototypes/PrototypesBrowserFlow')
 const ClassPropertiesComponent = require('./ClassPropertiesComponent')
 
 const Resource = require('../../objects/Resource')
@@ -23,19 +23,11 @@ class PrototypeBrowser {
     defaultModel() {
         const object = this.getProps().prototype
 
-        const model = PrototypesBrowserModel.new()
+        const model = PrototypesBrowserFlow.new()
 
         model.setBrowsedObject( object )
 
         return model
-    }
-
-    /// Actions
-
-    browseSelectedPrototype() {
-        const selectedClass = this.getModel().getSelectedClass()
-
-        Sirens.browsePrototypes(selectedClass)
     }
 
     /// Icons
@@ -72,7 +64,7 @@ class PrototypeBrowser {
                             })
 
                             this.handlers({
-                                onAction: component.browseSelectedPrototype.bind(component),
+                                onAction: model.getActionHandler({ id: 'browseSelectedPrototype' }),
                             })
 
                             this.column({
@@ -88,13 +80,10 @@ class PrototypeBrowser {
                             })
 
                             this.popupMenu( function() {
-                                const selectedObject =
-                                    component.getModel().getSelectedClass()
-
                                 this.item({
                                     label: 'Browse it',
-                                    enabled: selectedObject !== undefined,
-                                    action: component.browseSelectedPrototype.bind(component),
+                                    enabled: model.getChild({ id: 'browseSelectedPrototype' }),
+                                    action: model.getActionHandler({ id: 'browseSelectedPrototype' }),
                                 })
                             })
 

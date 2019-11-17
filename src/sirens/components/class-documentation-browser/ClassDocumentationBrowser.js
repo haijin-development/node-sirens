@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 
-const ClassDocumentationBrowserModel = require('../../models/class-documentation-browser/ClassDocumentationBrowserModel')
+const ClassDocumentationBrowserFlow = require('../../models/class-documentation-browser/ClassDocumentationBrowserFlow')
 const ClassDocumentationMenuBar = require('./ClassDocumentationMenuBar')
 const ClassDocumentationToolBar = require('./ClassDocumentationToolBar')
 const DocumentationBrowserBody = require('./DocumentationBrowserBody')
@@ -22,14 +22,14 @@ class ClassDocumentationBrowser {
     /// Initializing
 
     /**
-     * Returns a new ClassDocumentationBrowserModel.
+     * Returns a new ClassDocumentationBrowserFlow.
      */
     defaultModel() {
         const classDefinition = this.getProps().classDefinition
 
         const methodName = this.getProps().methodName
 
-        const model = ClassDocumentationBrowserModel.new()
+        const model = ClassDocumentationBrowserFlow.new()
 
         model.setBrowsedClass({ classDefinition: classDefinition })
 
@@ -65,17 +65,20 @@ class ClassDocumentationBrowser {
                     this.component(
                         ClassDocumentationMenuBar.new({
                             model: model,
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openPlayground: component.openPlayground.bind(component),
+                            reloadClassDefinition: model.getActionHandler({ id: 'reloadClassDefinition' }),
+                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
+                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
+                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
                         })
                     )
 
                     this.component(
                         ClassDocumentationToolBar.new({
                             model: model,
-                            openClassEditor: component.openClassEditor.bind(component),
-                            openPlayground: component.openPlayground.bind(component),
-                            openClassDocumentation: component.openClassDocumentation.bind(component),
+                            reloadClassDefinition: model.getActionHandler({ id: 'reloadClassDefinition' }),
+                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
+                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
+                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
                         })
                     )
 
@@ -95,24 +98,6 @@ class ClassDocumentationBrowser {
     }
 
     /// Actions
-
-    openClassEditor() {
-        const filename = this.getModel().getBrowsedClass().getSourceFile().getFilePath()
-
-        Sirens.openClassEditor({ filename: filename })
-    }
-
-    openClassDocumentation() {
-        const classDefinition = this.getProps().classDefinition
-
-        Sirens.browseClassDocumentation({
-            classDefinition: classDefinition
-        })
-    }
-
-    openPlayground() {
-        Sirens.openPlayground()
-    }
 
     showClassTabPageIfNoMethodIsSelected() {
         const methodName = this.getProps().methodName

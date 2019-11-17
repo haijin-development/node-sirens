@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const Sirens = require('../../../Sirens')
-const ClassPropertiesModel = require('../../models/prototypes/ClassPropertiesModel')
+const ClassPropertiesFlow = require('../../models/prototypes/ClassPropertiesFlow')
 
 class ClassPropertiesComponent {
     /// Definition
@@ -17,15 +17,7 @@ class ClassPropertiesComponent {
     /// Initializing
 
     defaultModel() {
-        return ClassPropertiesModel.new()
-    }
-
-    /// Actions
-
-    browseSelectedProperty() {
-        const selectedPropertyValue = this.getModel().getSelectedPropertyValue()
-
-        Sirens.browseObject( selectedPropertyValue )
+        return ClassPropertiesFlow.new()
     }
 
     /// Building
@@ -72,7 +64,7 @@ class ClassPropertiesComponent {
                     this.model( model.getChild({ id: 'properties' }) )
 
                     this.handlers({
-                        onAction: component.browseSelectedProperty.bind(component),
+                        onAction: model.getActionHandler({ id: 'browseSelectedProperty' }),
                     })
 
                     this.column({
@@ -88,12 +80,14 @@ class ClassPropertiesComponent {
                     })
 
                     this.popupMenu( function() {
-                        const selectedObject = model.getSelectedPropertyValue()
+                        model.getChild({ id: 'browseSelectedProperty' }).evaluateEnabledClosure({
+                            application: model
+                        })
 
                         this.item({
                             label: 'Browse it',
-                            enabled: selectedObject !== undefined,
-                            action: component.browseSelectedProperty.bind(component),
+                            enabled: model.getChild({ id: 'browseSelectedProperty' }),
+                            action: model.getActionHandler({ id: 'browseSelectedProperty' }),
                         })
                     })
                 })

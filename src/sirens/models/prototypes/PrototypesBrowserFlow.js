@@ -1,9 +1,11 @@
 const Classification = require('../../../O').Classification
+const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
 const FlowModel = require('../../../Skins').FlowModel
 const ObjectProperty = require('../../objects/ObjectProperty')
-const ClassPropertiesModel = require('./ClassPropertiesModel')
+const ClassPropertiesFlow = require('./ClassPropertiesFlow')
+const Sirens = require('../../../Sirens')
 
-class PrototypesBrowserModel {
+class PrototypesBrowserFlow {
     /// Definition
 
     static definition() {
@@ -12,7 +14,14 @@ class PrototypesBrowserModel {
     }
 
     buildWith(flow) {
+        const commandsRouter = ApplicationCommandsRouter.new()
+        commandsRouter.setApplication( this )
+
         flow.main( function(application) {
+
+            this.setCommandsRouter( commandsRouter )
+
+            this.evaluate( application.defineApplicationCommands, application )
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 const classes = application.getChild({ id: 'classes' })
@@ -31,11 +40,30 @@ class PrototypesBrowserModel {
 
             this.object({
                 id: 'selectedClass',
-                definedWith: ClassPropertiesModel.new(),
+                definedWith: ClassPropertiesFlow.new(),
             })
+
+            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
 
         })
 
+    }
+
+    defineApplicationCommands(application) {
+        this.commands({ id: 'applicationCommands' }, function() {
+
+            this.command({
+                id: 'browseSelectedPrototype',
+                enabledIf: function() {
+                    return application.getSelectedClass() ? true : false
+                },
+                whenActioned: function() {
+                    const selectedClass = application.getSelectedClass()
+                    Sirens.browsePrototypes(selectedClass)
+                }
+            })
+
+        })
     }
 
     /// Actions
@@ -67,4 +95,4 @@ class PrototypesBrowserModel {
     }
 }
 
-module.exports = Classification.define(PrototypesBrowserModel)
+module.exports = Classification.define(PrototypesBrowserFlow)

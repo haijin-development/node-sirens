@@ -1,5 +1,4 @@
 const Classification = require('../../O').Classification
-const OInstance = require('../../O').OInstance
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
 const ValueModelBehaviour = require('./ValueModelBehaviour')
 const FlowBuilder = require('../FlowBuilder')
@@ -81,6 +80,10 @@ class _FlowModel {
 
     /// Querying
 
+    getActionHandler({ id: commandId }) {
+        return this.getChild({ id: commandId }).getActionHandler()
+    }
+
     getChild({ id: childId }) {
         const child = this.findChild({ id: childId })
 
@@ -102,7 +105,7 @@ class _FlowModel {
         const children = Object.values( this.childModels )
 
         for( const eachChild of children ) {
-            if( ! OInstance.isOInstance(eachChild) || ! eachChild.isBehavingAs( FlowModel ) ) {
+            if( ! eachChild.respondsTo('findChild') ) {
                 continue
             }
 

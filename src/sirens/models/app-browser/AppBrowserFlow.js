@@ -1,10 +1,12 @@
 const Classification = require('../../../O').Classification
 const FlowModel = require('../../../Skins').FlowModel
+const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
 const Folder = require('../../objects/paths/Folder')
-const FileClassesEditionModel = require('../class-editor/FileClassesEditionModel')
+const FileClassesEditionFlow = require('../class-editor/FileClassesEditionFlow')
 const ClassSourceFile = require('../../objects/ClassSourceFile')
+const Sirens = require('../../../Sirens')
 
-class AppBrowserModel {
+class AppBrowserFlow {
 
     /// Definition
 
@@ -16,7 +18,14 @@ class AppBrowserModel {
     /// Building
 
     buildWith(flow) {
+        const commandsRouter = ApplicationCommandsRouter.new()
+        commandsRouter.setApplication( this )
+
         flow.main( function(application) {
+
+            this.setCommandsRouter( commandsRouter )
+
+            this.evaluate( application.defineApplicationCommands, application )
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
                 application.getChild({ id: 'windowTitle' }).setObject( appFolder )
@@ -50,7 +59,52 @@ class AppBrowserModel {
 
             this.object({
                 id: 'sourceFileEdition',
-                definedWith: FileClassesEditionModel.new(),
+                definedWith: FileClassesEditionFlow.new(),
+            })
+
+            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
+        })
+    }
+
+    defineApplicationCommands(application) {
+        this.commands({ id: 'applicationCommands' }, function() {
+
+            this.command({
+                id: 'openApplicationFolder',
+                enabledIf: function() { return true },
+                whenActioned: function({ folderPath: folderPath }) {
+                    application.openFolder({ path: folderPath })
+                }
+            })
+
+            this.command({
+                id: 'openClassDocumentation',
+                enabledIf: function(application) {
+                    const classesDefinitions = application.getClassesDefinitionsInSelectedFile()
+                    return classesDefinitions.length > 0
+                },
+                whenActioned: function() {
+                    const classesDefinitions = application.getClassesDefinitionsInSelectedFile()
+                    const firstClassDefinintion = classesDefinitions[0]
+                    Sirens.browseClassDocumentation({ classDefinition: firstClassDefinintion, })
+                }
+            })
+
+            this.command({
+                id: 'openPlayground',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    Sirens.openPlayground()
+                }
+            })
+
+            this.command({
+                id: 'openClassEditor',
+                enabledIf: function() { return true },
+                whenActioned: function() {
+                    const selectedPath = application.getSelectedFilePath()
+                    Sirens.openClassEditor({ filename: selectedPath })
+                }
             })
 
         })
@@ -91,4 +145,4 @@ class AppBrowserModel {
     }
 }
 
-module.exports = Classification.define(AppBrowserModel)
+module.exports = Classification.define(AppBrowserFlow)

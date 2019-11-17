@@ -15,6 +15,8 @@ class ClassDocumentationMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         componentsRenderer.render(function (component) {
 
             this.menuBar( function() {
@@ -25,17 +27,32 @@ class ClassDocumentationMenuBar {
                     }
                 })
 
+                this.menuGroup({ label: 'File' }, function() {
+                    this.item({
+                        label: 'Reload documentation.',
+                        action: component.getProps().reloadClassDefinition,
+                        enabled: model.getChild({ id: 'reloadClassDefinition' }),
+                    })
+
+                })
+
                 this.menuGroup({ label: 'Browsers' }, function() {
                     this.item({
+                        label: 'Open a new class documentation browser...',
+                        action: component.getProps().openClassDocumentation,
+                        enabled: model.getChild({ id: 'openClassDocumentation' }),
+                    })
+
+                    this.item({
                         label: 'Open a class editor...',
-                        enabled: true,
                         action: component.getProps().openClassEditor,
+                        enabled: model.getChild({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
-                        enabled: true,
                         action: component.getProps().openPlayground,
+                        enabled: model.getChild({ id: 'openPlayground' }),
                     })
 
                 })

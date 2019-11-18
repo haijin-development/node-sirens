@@ -4,14 +4,20 @@
 
 ### Sirens
 
-- Rewrote all the components using FingerTips FlowModel.
+- Rewrote all the components using Sirens Skins with FingerTips.
+- Renamed all application models from XYZModel to XYZFlow.
+- Rewrote all the commands using FingerTips commands and FlowModels.
+
+### FingerTips
+
+- Implemented FlowModel and its FlowBuilder.
+- Implemented Flow commands.
 
 ### Skins
 
 - Renamed this library to Skins.
 - Moved the models classifications to a different project. See FingerTips.
 - Scrollbars in ListView now are optional.
-- Implemented FlowModel and its FlowBuilder.
 
 ### O language
 

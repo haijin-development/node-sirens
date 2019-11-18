@@ -16,14 +16,13 @@ class PlaygroundBrowserFlow {
     /// Building
 
     buildWith(flow) {
-        const commandsRouter = ApplicationCommandsRouter.new()
-        commandsRouter.setApplication( this )
+        const commandsRouter = ApplicationCommandsRouter.new({ application: this })
 
         flow.main( function(application) {
 
             this.setCommandsRouter( commandsRouter )
 
-            this.evaluate( application.defineApplicationCommands, application )
+            this.evaluate({ closure: application.defineApplicationCommands, params: [application] })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 application.getChild({ id: 'windowTitle' }).setObject( sourceFile )
@@ -44,8 +43,7 @@ class PlaygroundBrowserFlow {
                 },
             })
 
-            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
-
+            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
         })
     }
 

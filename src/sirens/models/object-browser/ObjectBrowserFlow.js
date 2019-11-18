@@ -37,8 +37,7 @@ class ObjectBrowserFlow {
                 },
             })
 
-            this.notifyCommandsRouterOfEvent({ event: 'main-flow-built', id: null, params: [] })
-
+            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
         })
     }
 

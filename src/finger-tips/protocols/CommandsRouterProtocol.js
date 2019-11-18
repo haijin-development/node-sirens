@@ -10,7 +10,11 @@ class CommandsRouterProtocol {
         this.implements = []
     }
 
-    afterEvent({ event: eventName, id: childId, params: params }) {}
+    eventNofification({ flowPointId: flowPointId, event: eventName, params: params }) {}
+
+    executeEvent({
+        flowPointId: flowPointId, event: event, params: params, eventHandler: valueChangedClosure,
+    }) {}
 
     executeCommand({ command: command, params: params }) {}
 }

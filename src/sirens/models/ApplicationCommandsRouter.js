@@ -11,6 +11,12 @@ class ApplicationCommandsRouter {
         this.implements = [CommandsRouterProtocol]
     }
 
+    /// Initializing
+
+    initialize({ application: application }) {
+        this.application = application
+    }
+
     /// Accessing
 
     setApplication(application) {
@@ -27,14 +33,16 @@ class ApplicationCommandsRouter {
 
     /// Evaluating
 
-    afterEvent({ event: eventName, id: childId, params: params }) {
+    eventNofification({ flowPointId: flowPointId, event: event, params: params }) {
         this.enableCommands()
     }
 
-    enableCommands() {
-        const commandsGroup = this.getChild({ id: 'applicationCommands' })
+    executeEvent({
+        flowPointId: flowPointId, event: event, params: params, eventHandler: eventHandler,
+    }) {
+        eventHandler( ...params )
 
-        commandsGroup.evaluateCommandsEnabledClosure({ application: this.application })
+        this.enableCommands()
     }
 
     executeCommand({ command: command, params: params }) {
@@ -43,8 +51,15 @@ class ApplicationCommandsRouter {
         if( isEnabled === false ) { return }
 
         command.doExecute({ params: params })
+
+        this.enableCommands()
     }
 
+    enableCommands() {
+        const commandsGroup = this.getChild({ id: 'applicationCommands' })
+
+        commandsGroup.evaluateCommandsEnabledClosure({ application: this.application })
+    }
 }
 
 module.exports = Classification.define(ApplicationCommandsRouter)

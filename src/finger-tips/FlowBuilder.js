@@ -84,7 +84,9 @@ class _FlowBuilder {
         'dsl', 'public', 'evaluating'
      ])
     */
-    evaluate(closure, ...params) {
+    evaluate({ closure: closure, params: params }) {
+        if( params === undefined ) { params = [] }
+
         return this.bindYourself( closure, ...params )
     }
 
@@ -94,7 +96,7 @@ class _FlowBuilder {
      ])
     */
     main(closure) {
-        this.evaluate( closure, this.rootModel )
+        this.evaluate({ closure: closure, params: [this.rootModel] })
 
         return this
     }
@@ -128,12 +130,11 @@ class _FlowBuilder {
 
         if( valueChangedClosure !== undefined ) {
             valueModel.onValueChanged( (...params) => {
-                valueChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'valueChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: valueChangedClosure,
                 })
             })
         }
@@ -161,12 +162,11 @@ class _FlowBuilder {
 
         if( valueChangedClosure !== undefined ) {
             valueModel.onValueChanged( (...params) => {
-                valueChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'objectAttributeChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: valueChangedClosure,
                 })
             })
         }
@@ -193,12 +193,11 @@ class _FlowBuilder {
 
         if( valueChangedClosure !== undefined ) {
             valueModel.onValueChanged( (...params) => {
-                valueChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'bufferedAttributeChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: valueChangedClosure,
                 })
             })
         }
@@ -229,16 +228,14 @@ class _FlowBuilder {
 
         if( selectionChangedClosure !== undefined ) {
             choiceModel.onSelectionChanged( (...params) => {
-                selectionChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'choiceSelectionChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: selectionChangedClosure,
                 })
             })
         }
-
     }
 
     /*
@@ -261,12 +258,11 @@ class _FlowBuilder {
 
         if( selectionChangedClosure !== undefined ) {
             treeChoiceModel.onSelectionChanged( (...params) => {
-                selectionChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'treeSelectionChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: selectionChangedClosure,
                 })
             })
         }
@@ -302,12 +298,11 @@ class _FlowBuilder {
 
         if( valueChangedClosure !== undefined ) {
             modelObject.onValueChanged( (...params) => {
-                valueChangedClosure(...params)
-
-                this.notifyCommandsRouterOfEvent({
+                this.evaluateEventHandler({
+                    flowPointId: childId,
                     event: 'objectChanged',
-                    id: childId,
                     params: params,
+                    eventHandler: valueChangedClosure,
                 })
             })
         }
@@ -320,12 +315,11 @@ class _FlowBuilder {
     */
     whenObjectChanges(valueChangedClosure) {
         this.rootModel.onValueChanged( (...params) => {
-            valueChangedClosure(...params)
-
-            this.notifyCommandsRouterOfEvent({
+            this.evaluateEventHandler({
+                flowPointId: 'main',
                 event: 'objectChanged',
-                id: 'main',
                 params: params,
+                eventHandler: valueChangedClosure,
             })
         })
     }
@@ -348,20 +342,40 @@ class _FlowBuilder {
         return this.rootModel.getCommandsRouter()
     }
 
+    notifyCommandsRouterOfEvent({ event: event, flowPointId: flowPointId, params: params }) {
+        const commandsRouter = this.getCommandsRouter()
+
+        if( ! commandsRouter ) { return }
+
+        if( params === undefined ) { params = [] }
+
+        commandsRouter.eventNofification({
+            flowPointId: flowPointId,
+            event: event,
+            params: params,
+        })        
+    }
+
     /*
      Tags([
         'implementation'
      ])
     */
-    notifyCommandsRouterOfEvent({ event: eventName, id: childId, params: params,}) {
+    evaluateEventHandler({
+        flowPointId: flowPointId, event: event, params: params, eventHandler: eventHandler
+    }) {
         const commandsRouter = this.getCommandsRouter()
 
-        if( ! commandsRouter ) { return }
+        if( ! commandsRouter ) {
+            eventHandler( ...params )
+            return
+        }
 
-        commandsRouter.afterEvent({
-            event: eventName,
-            id: childId,
+        commandsRouter.executeEvent({
+            flowPointId: flowPointId,
+            event: event,
             params: params,
+            eventHandler: eventHandler,
         })
     }
 }

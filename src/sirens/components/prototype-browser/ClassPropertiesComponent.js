@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const Sirens = require('../../../Sirens')
-const ClassPropertiesFlow = require('../../models/prototypes/ClassPropertiesFlow')
+const ClassPropertiesFlow = require('../../flows/prototypes/ClassPropertiesFlow')
 
 class ClassPropertiesComponent {
     /// Definition

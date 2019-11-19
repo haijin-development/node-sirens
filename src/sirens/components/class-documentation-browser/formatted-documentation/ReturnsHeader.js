@@ -2,6 +2,8 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
+const EditReturnsDialog = require('../edition/EditReturnsDialog')
+
 const Resource = require('../../../objects/Resource')
 const GtkIcons = require('../../../../Skins').GtkIcons
 
@@ -51,7 +53,7 @@ class ReturnsHeader {
                         iconName: GtkIcons.edit,
                         size: GtkIcons.size._16x16,
                     },
-                    onClicked: component.handleEditReturns.bind(component),                        
+                    onClicked: component.editReturns.bind(component),                        
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
@@ -68,12 +70,33 @@ class ReturnsHeader {
         })
     }
 
-    /// Events
+    /// Edit returns
 
-    handleEditReturns() {
-        this.getProps().editReturns()
+    editReturns() {
+        const model = this.getModel()
+
+        model.executeCommandClosure({
+            commandId: 'editMethodDocumentationReturn',
+            closure: () => {
+                const className = model.getBrowsedClass().getClassName()
+
+                const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+                const documentation = method.getDocumentation()
+
+                const dialog = EditReturnsDialog.new({
+                    className: className,
+                    method: method,
+                    returns: documentation.getReturns(),
+                    window: this.getProps().window,
+                    onUpdateReturns: model.getActionHandler({ id: 'updateMethodDocumentationReturn' }),
+                    acceptButtonLabel: `Update returns`,
+                })
+
+                dialog.open()
+            }
+        })
     }
-
 }
 
 module.exports = Classification.define(ReturnsHeader)

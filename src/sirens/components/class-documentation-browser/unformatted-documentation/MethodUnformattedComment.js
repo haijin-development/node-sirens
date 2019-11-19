@@ -35,9 +35,6 @@ class MethodUnformattedComment {
 
         const isInEditionMode = model.isInEditionMode()
 
-        const editionClosure = isInEditionMode ?
-            this.editMethodComment.bind(this) : undefined
-
         let methodUnformattedComment = method.getComment().getSourceCode()
 
         if( methodUnformattedComment.trim() === '' ) {
@@ -61,7 +58,7 @@ class MethodUnformattedComment {
                         EditMethodDescriptionHeader.new({
                             model: model,
                             method: method,
-                            editionClosure: editionClosure,
+                            editionClosure: component.editMethodComment.bind(component),
                         })
                     )
 
@@ -79,34 +76,32 @@ class MethodUnformattedComment {
         })
     }
 
+
     /// Actions
 
     editMethodComment() {
         const model = this.getModel()
 
-        const className = model.getBrowsedClass().getClassName()
+        model.executeCommandClosure({
+            commandId: 'editClassComment',
+            closure: () => {
+                const model = this.getModel()
 
-        const method = this.getCurrentMethod()
+                const className = model.getBrowsedClass().getClassName()
 
-        const dialog = EditMethodCommentDialog.new({
-            className: className,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: this.updateMethodComment.bind(this),
-            unformatted: true,
+                const method = this.getCurrentMethod()
+
+                const dialog = EditMethodCommentDialog.new({
+                    className: className,
+                    method: method,
+                    window: this.getProps().window,
+                    onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodComment' }),
+                    unformatted: true,
+                })
+
+                dialog.open()
+            }
         })
-
-        dialog.open()
-    }
-
-    updateMethodComment({ methodNewDescription: methodNewDescription }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
-
-        model.reload()
     }
 
     getCurrentMethod() {

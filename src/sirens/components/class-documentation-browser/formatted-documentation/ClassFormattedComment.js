@@ -239,7 +239,7 @@ class ClassFormattedComment {
 
         classComment.writeFormattedContents({ commentContents: classCommentContents })
 
-        model.reload()
+        model.reloadClassDefinition()
     }
 
     /// Building

@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const Sirens = require('../../../Sirens')
-const PrototypesBrowserFlow = require('../../models/prototypes/PrototypesBrowserFlow')
+const PrototypesBrowserFlow = require('../../flows/prototypes/PrototypesBrowserFlow')
 const ClassPropertiesComponent = require('./ClassPropertiesComponent')
 
 const Resource = require('../../objects/Resource')

@@ -10,15 +10,12 @@ const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
 const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
 
 const TagsDocumentation = require ('./TagsDocumentation')
-const EditTagsDialog = require ('../edition/EditTagsDialog')
 
 const ParamsEditionHeader = require ('./ParamsEditionHeader')
 const ParamDocumentation = require('./ParamDocumentation')
-const EditParamDialog = require ('../edition/EditParamDialog')
 
 const ReturnsHeader = require('./ReturnsHeader')
 const ReturnsDocumentation = require('./ReturnsDocumentation')
-const EditReturnsDialog = require('../edition/EditReturnsDialog')
 
 const ImplementationNotesEditionHeader = require ('./ImplementationNotesEditionHeader')
 const ImplementationNoteDocumentation = require('./ImplementationNoteDocumentation')
@@ -67,171 +64,6 @@ class MethodFormattedComment {
         const documentation = method.getDocumentation()
 
         documentation.setDescription( methodNewDescription )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    editMethodTags() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        const tags = documentation.getTags()
-
-        const dialog = EditTagsDialog.new({
-            className: className,
-            method: method,
-            tags: tags,
-            window: this.getProps().window,
-            onUpdateTags: this.upateMethodTags.bind(this),
-            acceptButtonLabel: `Update method tags`,
-        })
-
-        dialog.open()
-    }
-
-    upateMethodTags({ newTags: newTags }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.setTags( newTags )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    addNewParam() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const newParam = {
-            Name: 'Add the name of the parameter here ...',
-            Description: 'Add the parameter description ...',
-        }
-
-        const dialog = EditParamDialog.new({
-            className: className,
-            method: method,
-            param: newParam,
-            window: this.getProps().window,
-            onUpdateParam: this.addParam.bind(this),
-            acceptButtonLabel: `Add param`,
-        })
-
-        dialog.open()
-    }
-
-    addParam({ param: param }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.addParam( param )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    editParamAt({ index: index, param: param }) {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditParamDialog.new({
-            className: className,
-            method: method,
-            param: param,
-            window: this.getProps().window,
-            onUpdateParam: ({ param: param }) => {
-                this.updateParamAt({
-                    index: index,
-                    param: param,
-                })
-            },
-            acceptButtonLabel: `Update param`,
-        })
-
-        dialog.open()
-    }
-
-    updateParamAt({ index: index, param: param }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.updateParamAt({
-            index: index,
-            param: param,
-        })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    deleteParam({ atIndex: index }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.deleteParamAt({ index: index })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    editReturns() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        const dialog = EditReturnsDialog.new({
-            className: className,
-            method: method,
-            returns: documentation.getReturns(),
-            window: this.getProps().window,
-            onUpdateReturns: this.updateReturns.bind(this),
-            acceptButtonLabel: `Update returns`,
-        })
-
-        dialog.open()
-    }
-
-    updateReturns({ returns: returns }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.setReturns( returns )
 
         this.updateMethodDocumentation({
             documentation: documentation,
@@ -437,7 +269,7 @@ class MethodFormattedComment {
 
         methodComment.writeFormattedContents({ commentContents: methodCommentContents })
 
-        model.reload()
+        model.reloadClassDefinition()
     }
 
     /// Building
@@ -502,7 +334,6 @@ class MethodFormattedComment {
                         TagsDocumentation.new({
                             model: model,
                             method: method,
-                            editMethodTags: component.editMethodTags.bind(component)
                         })
                     )
 
@@ -542,7 +373,6 @@ class MethodFormattedComment {
                             ParamsEditionHeader.new({
                                 model: model,
                                 method: method,
-                                addNewParam: component.addNewParam.bind(component),
                             })
                         )
 
@@ -557,13 +387,6 @@ class MethodFormattedComment {
                                 model: model,
                                 index: index,
                                 param: param,
-                                deleteParam: component.deleteParam.bind(component),
-                                editParam: ({ atIndex: index }) => {
-                                    component.editParamAt({
-                                        index: index,
-                                        param: param,
-                                    })
-                                },
                             })
                         )
                     })
@@ -572,7 +395,6 @@ class MethodFormattedComment {
                         this.component(
                             ReturnsHeader.new({
                                 model: model,
-                                editReturns: component.editReturns.bind(component),
                             })
                         )
 

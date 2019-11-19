@@ -2,6 +2,8 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
+const EditParamDialog = require ('../edition/EditParamDialog')
+
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
@@ -57,7 +59,7 @@ class ParamsEditionHeader {
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
-                    onClicked: component.handleAddNewParameter.bind(component),
+                    onClicked: component.addNewParam.bind(component),
                 })
 
                 // To center the button horizontally
@@ -72,8 +74,29 @@ class ParamsEditionHeader {
         })
     }
 
-    handleAddNewParameter() {
-        this.getProps().addNewParam()
+    addNewParam() {
+        const model = this.getModel()
+
+        model.executeCommandClosure({
+            commandId: 'createMethodDocumentationParam',
+            closure: () => {
+                const className = model.getBrowsedClass().getClassName()
+                const method = model.getChild({ id: 'selectedMethod' }).getValue()
+                const newParam = {
+                    Name: 'Add the name of the parameter here ...',
+                    Description: 'Add the parameter description ...',
+                }
+                const dialog = EditParamDialog.new({
+                    className: className,
+                    method: method,
+                    param: newParam,
+                    window: this.getProps().window,
+                    onUpdateParam: model.getActionHandler({ id: 'addMethodDocumentationParam' }),
+                    acceptButtonLabel: `Add param`,
+                })
+                dialog.open()
+            }
+        })
     }
 }
 

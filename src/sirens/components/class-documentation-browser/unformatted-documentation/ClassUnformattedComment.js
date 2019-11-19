@@ -21,32 +21,27 @@ class ClassUnformattedComment {
     editClassComment() {
         const model = this.getModel()
 
-        const classDefinition = model.getBrowsedClass()
+        model.executeCommandClosure({
+            commandId: 'editClassComment',
+            closure: () => {
+                const model = this.getModel()
 
-        const className = classDefinition.getClassName()
+                const classDefinition = model.getBrowsedClass()
 
-        const classComment = classDefinition.getComment().getSourceCode()
+                const className = classDefinition.getClassName()
 
-        const dialog = EditClassCommentDialog.new({
-            className: className,
-            classComment: classComment,
-            window: this.getProps().window,
-            onUpdateClassComment: this.updateClassComment.bind(this),
+                const classComment = classDefinition.getComment().getSourceCode()
+
+                const dialog = EditClassCommentDialog.new({
+                    className: className,
+                    classComment: classComment,
+                    window: this.getProps().window,
+                    onUpdateClassComment: model.getActionHandler({ id: 'updateClassComment' }),
+                })
+
+                dialog.open()
+            }
         })
-
-        dialog.open()
-    }
-
-    updateClassComment({ newClassDescription: newClassDescription }) {
-        const model = this.getModel()
-
-        const classDefinition = model.getBrowsedClass()
-
-        const classComment = classDefinition.getComment()
-
-        classComment.writeRawSourceCode({ rawSourceCode: newClassDescription })
-
-        model.reload()
     }
 
     /// Building
@@ -60,8 +55,7 @@ class ClassUnformattedComment {
 
         const isInEditionMode = model.isInEditionMode()
 
-        const editionClosure = isInEditionMode ?
-            this.editClassComment.bind(this) : undefined
+        const editionClosure = this.editClassComment.bind(this)
 
         let unformattedComment = classDefinition.getComment().getSourceCode()
 

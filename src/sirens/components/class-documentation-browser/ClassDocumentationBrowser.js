@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 
-const ClassDocumentationBrowserFlow = require('../../models/class-documentation-browser/ClassDocumentationBrowserFlow')
+const ClassDocumentationBrowserFlow = require('../../flows/class-documentation-browser/ClassDocumentationBrowserFlow')
 const ClassDocumentationMenuBar = require('./ClassDocumentationMenuBar')
 const ClassDocumentationToolBar = require('./ClassDocumentationToolBar')
 const DocumentationBrowserBody = require('./DocumentationBrowserBody')

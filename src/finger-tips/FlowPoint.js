@@ -21,6 +21,17 @@ class FlowPoint {
     getCommandsRouter() {
         return this.commandsRouter
     }
+
+    executeCommandClosure({ commandId: commandId, closure: closure }) {
+        const command = this.getChild({ id: commandId })
+
+        const commandsRouter = this.getCommandsRouter()
+
+        return commandsRouter.executeCommandClosure({
+            command: command,
+            closure: closure,
+        })
+    }
 }
 
 module.exports = Classification.define(FlowPoint)

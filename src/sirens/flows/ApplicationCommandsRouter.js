@@ -55,11 +55,24 @@ class ApplicationCommandsRouter {
         this.enableCommands()
     }
 
+    executeCommandClosure({ command: command, closure: closure }) {
+        const isEnabled = command.calculateEnableValue({ application: this.application })
+
+        if( isEnabled === false ) { return }
+
+        const result = closure()
+
+        this.enableCommands()
+
+        return result
+    }
+
     enableCommands() {
         const commandsGroup = this.getChild({ id: 'applicationCommands' })
 
         commandsGroup.evaluateCommandsEnabledClosure({ application: this.application })
     }
+
 }
 
 module.exports = Classification.define(ApplicationCommandsRouter)

@@ -5,7 +5,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const FolderChooser = require('../../../Skins').FolderChooser
 const AppBrowserMenu = require('./AppBrowserMenu')
 const AppBrowserBody = require('./AppBrowserBody')
-const AppBrowserFlow = require('../../models/app-browser/AppBrowserFlow')
+const AppBrowserFlow = require('../../flows/app-browser/AppBrowserFlow')
 const Sirens = require('../../../Sirens')
 
 class AppBrowser {

@@ -39,6 +39,8 @@ class ClassDocumentationBrowserFlow {
 
             this.object({ id: 'classDefinition' }, function(classDefinitionModel) {
 
+                this.evaluate({ closure: application.defineClassDefinitionCommands, params: [application] })
+
                 this.whenObjectChanges( ({ newValue: classDefinition }) => {
                     if( classDefinition === null ) {
                         classDefinitionModel.getChild({ id: 'classDocumentation' }).setValue(null)
@@ -134,6 +136,148 @@ class ClassDocumentationBrowserFlow {
                 enabledIf: function() { return true },
                 whenActioned: function() {
                     Sirens.openPlayground()
+                }
+            })
+
+        })
+    }
+
+    defineClassDefinitionCommands(application) {
+        this.commands({ id: 'classDefinitionCommands' }, function() {
+
+            this.command({
+                id: 'editClassComment',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'updateClassComment',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ newClassDescription: newClassDescription }) {
+                    const classDefinition = application.getBrowsedClass()
+                    const classComment = classDefinition.getComment()
+                    classComment.writeRawSourceCode({ rawSourceCode: newClassDescription })
+                    application.reloadClassDefinition()
+                }
+            })
+
+        })
+
+        this.commands({ id: 'methodDefinitionCommands' }, function() {
+
+            this.command({
+                id: 'editMethodComment',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'updateMethodComment',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ methodNewDescription: methodNewDescription }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
+                    application.reloadClassDefinition()
+                }
+            })
+
+            this.command({
+                id: 'editMethodDocumentationTags',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'updateMethodDocumentationTags',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ newTags: newTags }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    const documentation = method.getDocumentation()
+                    documentation.setTags( newTags )
+                    application.updateMethodDocumentation({ documentation: documentation })
+                }
+            })
+
+            this.command({
+                id: 'createMethodDocumentationParam',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'addMethodDocumentationParam',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ param: param }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    const documentation = method.getDocumentation()
+                    documentation.addParam( param )
+                    application.updateMethodDocumentation({ documentation: documentation })
+                }
+            })
+
+            this.command({
+                id: 'editMethodDocumentationParam',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'updateMethodDocumentationParam',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ atIndex: index, newParam: newParam }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    const documentation = method.getDocumentation()
+                    documentation.updateParamAt({ index: index, param: newParam })
+                    application.updateMethodDocumentation({ documentation: documentation })
+                }
+            })
+
+            this.command({
+                id: 'deleteMethodDocumentationParam',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ atIndex: index }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    const documentation = method.getDocumentation()
+                    documentation.deleteParamAt({ index: index })
+                    application.updateMethodDocumentation({ documentation: documentation })
+                }
+            })
+
+            this.command({
+                id: 'editMethodDocumentationReturn',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+            })
+
+            this.command({
+                id: 'updateMethodDocumentationReturn',
+                enabledIf: function() {
+                    return application.isInEditionMode() && application.getBrowsedClass()
+                },
+                whenActioned: function({ returns: returns }) {
+                    const method = application.getChild({ id: 'selectedMethod' }).getValue()
+                    const documentation = method.getDocumentation()
+                    documentation.setReturns( returns )
+                    application.updateMethodDocumentation({ documentation: documentation })
                 }
             })
 
@@ -247,6 +391,20 @@ class ClassDocumentationBrowserFlow {
         })
 
         return methodsWithSelectedTags
+    }
+
+    updateMethodDocumentation({ documentation: documentation }) {
+        const methodCommentContents = documentation.generateCommentContents({
+                methodDocumentation: documentation,
+            })
+
+        const method = this.getChild({ id: 'selectedMethod' }).getValue()
+
+        const methodComment = method.getComment()
+
+        methodComment.writeFormattedContents({ commentContents: methodCommentContents })
+
+        this.reloadClassDefinition()
     }
 }
 

@@ -6,7 +6,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
 const Pluggables = require('../../objects/Pluggables')
-const ObjectBrowserFlow = require('../../models/object-browser/ObjectBrowserFlow')
+const ObjectBrowserFlow = require('../../flows/object-browser/ObjectBrowserFlow')
 
 class ObjectBrowser {
     /// Definition

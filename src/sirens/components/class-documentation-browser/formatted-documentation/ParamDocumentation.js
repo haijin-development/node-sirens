@@ -2,6 +2,8 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
+const EditParamDialog = require ('../edition/EditParamDialog')
+
 const Resource = require('../../../objects/Resource')
 const GtkIcons = require('../../../../Skins').GtkIcons
 
@@ -99,24 +101,49 @@ class ParamDocumentation {
         })
     }
 
-    /// Events
+    /// Commands
 
     handleEditParam() {
+        const model = this.getModel()
+
+        const param = this.getProps().param
         const paramIndex = this.getProps().index
 
-        this.getProps().editParam({
-            atIndex: paramIndex
+        model.executeCommandClosure({
+            commandId: 'editMethodDocumentationParam',
+            closure: () => {
+                const paramIndex = this.getProps().index
+
+                const className = model.getBrowsedClass().getClassName()
+
+                const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+                const dialog = EditParamDialog.new({
+                    className: className,
+                    method: method,
+                    param: param,
+                    window: this.getProps().window,
+                    onUpdateParam: ({ param: newParam }) => {
+                        const actionHandler = model.getActionHandler({ id: 'updateMethodDocumentationParam' })
+                        actionHandler({ atIndex: paramIndex, newParam: newParam })
+                    },
+                    acceptButtonLabel: `Update param`,
+                })
+
+                dialog.open()
+            }
         })
     }
 
     handleDeleteParam() {
         const paramIndex = this.getProps().index
 
-        this.getProps().deleteParam({
-            atIndex: paramIndex
-        })
-    }
+        const model = this.getModel()
 
+        const actionHandler = model.getActionHandler({ id: 'deleteMethodDocumentationParam' })
+
+        actionHandler({ atIndex: paramIndex })
+    }
 }
 
 module.exports = Classification.define(ParamDocumentation)

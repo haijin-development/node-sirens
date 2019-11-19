@@ -5,7 +5,7 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const FileChooser = require('../../../Skins').FileChooser
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
 const PlaygroundBrowserMenu = require('./PlaygroundBrowserMenu')
-const PlaygroundBrowserFlow = require('../../models/playground/PlaygroundBrowserFlow')
+const PlaygroundBrowserFlow = require('../../flows/playground/PlaygroundBrowserFlow')
 const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowser {

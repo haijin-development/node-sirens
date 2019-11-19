@@ -14,7 +14,7 @@ class ClassPropertiesFlow {
     buildWith(flow) {
         flow.main( function(classProperties) {
 
-            this.evaluate( classProperties.defineApplicationCommands, classProperties )
+            this.evaluate({ closure: classProperties.defineApplicationCommands, params: [classProperties] })
 
             this.whenObjectChanges( ({ newValue: aClass }) => {
                 classProperties.updatePropertyChoices()

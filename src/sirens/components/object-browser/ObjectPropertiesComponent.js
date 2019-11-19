@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ObjectPropertiesFlow = require('../../models/object-browser/ObjectPropertiesFlow')
+const ObjectPropertiesFlow = require('../../flows/object-browser/ObjectPropertiesFlow')
 const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesComponent {

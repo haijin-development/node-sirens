@@ -74,6 +74,10 @@ class Command {
     doExecute({ params: params }) {
         const actionHandler = this.actionClosure
 
+        if( ! actionHandler ) {
+            throw new Error(`The actionHandler for the command '${this.id}' is not defined, the application should define it.`)
+        }
+
         actionHandler.call( this, ...params )        
     }
 

@@ -82,11 +82,9 @@ const Gdk = require('node-gtk').require('Gdk')
        and opening its files with the ClassEditor.
     `,
     Code: `
-
        const Sirens = require('sirens')
 
        Sirens.openClassEditor()
-
     `,
  })
 */
@@ -121,7 +119,7 @@ class Sirens {
      })
 
      Tags([
-        'browsers', 'public'
+        'public', 'browsers'
      ])
     */
     static browseObject(object) {

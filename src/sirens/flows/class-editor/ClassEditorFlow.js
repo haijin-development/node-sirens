@@ -97,7 +97,6 @@ class ClassEditorFlow {
                 whenActioned: function() {
                     const sourceFileEdition = application.getChild({ id: 'sourceFileEdition' })
                     const fileSection = sourceFileEdition.getSelectedClassDefinition()
-                    if( fileSection === null ) { return }
                     const methodName = sourceFileEdition.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ classDefinition: fileSection, methodName: methodName })
                 }

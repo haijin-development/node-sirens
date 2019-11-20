@@ -83,9 +83,10 @@ class AppBrowserFlow {
                     return classesDefinitions.length > 0
                 },
                 whenActioned: function() {
-                    const classesDefinitions = application.getClassesDefinitionsInSelectedFile()
-                    const firstClassDefinintion = classesDefinitions[0]
-                    Sirens.browseClassDocumentation({ classDefinition: firstClassDefinintion, })
+                    const sourceFileEdition = application.getChild({ id: 'sourceFileEdition' })
+                    const fileSection = sourceFileEdition.getSelectedClassDefinition()
+                    const methodName = sourceFileEdition.getSelectedMethodName()
+                    Sirens.browseClassDocumentation({ classDefinition: fileSection, methodName: methodName })
                 }
             })
 

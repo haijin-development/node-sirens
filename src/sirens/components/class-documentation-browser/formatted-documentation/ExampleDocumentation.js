@@ -28,9 +28,9 @@ class ExampleDocumentation {
                 ExampleHeader.new({
                     model: model,
                     index: example.index,
-                    exampleDescription: example.Description,
-                    deleteExample: component.getProps().deleteExample,
-                    editExample: component.getProps().editExample,
+                    example: example,
+                    editClosure: component.getProps().editClosure,
+                    deleteClosure: component.getProps().deleteClosure,
                 })
             )
 

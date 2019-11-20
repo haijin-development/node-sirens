@@ -19,6 +19,7 @@ class ImplementationNotesEditionHeader {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
 
         componentsRenderer.render( function(component) {
 
@@ -55,7 +56,7 @@ class ImplementationNotesEditionHeader {
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
-                    onClicked: component.handleAddNewImplementationNote.bind(component),
+                    onClicked: component.getProps().createClosure,
                 })
 
                 // To center the button horizontally
@@ -68,10 +69,6 @@ class ImplementationNotesEditionHeader {
             })
 
         })
-    }
-
-    handleAddNewImplementationNote() {
-        this.getProps().addNewImplementationNote()
     }
 }
 

@@ -21,6 +21,13 @@ class ReturnsHeader {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationReturn',
+            enabledIf: () => { return true },
+            whenActioned: this.editReturns.bind(this),
+        })
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
@@ -53,7 +60,7 @@ class ReturnsHeader {
                         iconName: GtkIcons.edit,
                         size: GtkIcons.size._16x16,
                     },
-                    onClicked: component.editReturns.bind(component),                        
+                    onClicked: model.getActionHandler({ id: 'editMethodDocumentationReturn' }),                        
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
@@ -75,27 +82,22 @@ class ReturnsHeader {
     editReturns() {
         const model = this.getModel()
 
-        model.executeCommandClosure({
-            commandId: 'editMethodDocumentationReturn',
-            closure: () => {
-                const className = model.getBrowsedClass().getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-                const method = model.getChild({ id: 'selectedMethod' }).getValue()
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
 
-                const documentation = method.getDocumentation()
+        const documentation = method.getDocumentation()
 
-                const dialog = EditReturnsDialog.new({
-                    className: className,
-                    method: method,
-                    returns: documentation.getReturns(),
-                    window: this.getProps().window,
-                    onUpdateReturns: model.getActionHandler({ id: 'updateMethodDocumentationReturn' }),
-                    acceptButtonLabel: `Update returns`,
-                })
-
-                dialog.open()
-            }
+        const dialog = EditReturnsDialog.new({
+            className: className,
+            method: method,
+            returns: documentation.getReturns(),
+            window: this.getProps().window,
+            onUpdateReturns: model.getActionHandler({ id: 'updateMethodDocumentationReturn' }),
+            acceptButtonLabel: `Update returns`,
         })
+
+        dialog.open()
     }
 }
 

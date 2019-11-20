@@ -29,6 +29,13 @@ class MethodUnformattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodUnformmatedComment',
+            enabledIf: () => { return true },
+            whenActioned: this.editMethodUnformmatedComment.bind(this),
+        })
+
         const method = this.getCurrentMethod()
 
         if( ! method ) { return }
@@ -58,7 +65,7 @@ class MethodUnformattedComment {
                         EditMethodDescriptionHeader.new({
                             model: model,
                             method: method,
-                            editionClosure: component.editMethodComment.bind(component),
+                            editionClosure: model.getActionHandler({ id: 'editMethodUnformmatedComment' }),
                         })
                     )
 
@@ -79,29 +86,22 @@ class MethodUnformattedComment {
 
     /// Actions
 
-    editMethodComment() {
+    editMethodUnformmatedComment() {
         const model = this.getModel()
 
-        model.executeCommandClosure({
-            commandId: 'editClassComment',
-            closure: () => {
-                const model = this.getModel()
+        const className = model.getBrowsedClass().getClassName()
 
-                const className = model.getBrowsedClass().getClassName()
+        const method = this.getCurrentMethod()
 
-                const method = this.getCurrentMethod()
-
-                const dialog = EditMethodCommentDialog.new({
-                    className: className,
-                    method: method,
-                    window: this.getProps().window,
-                    onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodComment' }),
-                    unformatted: true,
-                })
-
-                dialog.open()
-            }
+        const dialog = EditMethodCommentDialog.new({
+            className: className,
+            method: method,
+            window: this.getProps().window,
+            onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodUnformmatedComment' }),
+            unformatted: true,
         })
+
+        dialog.open()
     }
 
     getCurrentMethod() {

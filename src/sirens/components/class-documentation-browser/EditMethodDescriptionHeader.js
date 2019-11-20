@@ -1,6 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
+const EditMethodCommentDialog = require('./edition/EditMethodCommentDialog')
 
 const GtkIcons = require('../../../Skins').GtkIcons
 const Resource = require('../../objects/Resource')
@@ -17,6 +18,7 @@ class EditMethodDescriptionHeader {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
 
         componentsRenderer.render( function(component) {
 

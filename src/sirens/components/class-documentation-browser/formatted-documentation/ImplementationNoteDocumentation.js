@@ -83,7 +83,7 @@ class ImplementationNoteDocumentation {
                                 iconName: GtkIcons.edit,
                                 size: GtkIcons.size._16x16,
                             },
-                            onClicked: component.handleEditImplementationNote.bind(component),                        
+                            onClicked: component.getProps().editClosure,
                         })
 
                         this.textButton({
@@ -93,7 +93,7 @@ class ImplementationNoteDocumentation {
                                 width: 16,
                                 height: 16,
                             },
-                            onClicked: component.handleDeleteImplementationNote.bind(component),                        
+                            onClicked: component.getProps().deleteClosure,                    
                         })
 
                     })
@@ -101,24 +101,6 @@ class ImplementationNoteDocumentation {
                 }
             })
 
-        })
-    }
-
-    /// Events
-
-    handleEditImplementationNote() {
-        const implementationNodeIndex = this.getProps().index
-
-        this.getProps().editImplementationNote({
-            atIndex: implementationNodeIndex
-        })
-    }
-
-    handleDeleteImplementationNote() {
-        const implementationNodeIndex = this.getProps().index
-
-        this.getProps().deleteImplementationNote({
-            atIndex: implementationNodeIndex
         })
     }
 }

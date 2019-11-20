@@ -16,46 +16,23 @@ class ClassUnformattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    editClassComment() {
-        const model = this.getModel()
-
-        model.executeCommandClosure({
-            commandId: 'editClassComment',
-            closure: () => {
-                const model = this.getModel()
-
-                const classDefinition = model.getBrowsedClass()
-
-                const className = classDefinition.getClassName()
-
-                const classComment = classDefinition.getComment().getSourceCode()
-
-                const dialog = EditClassCommentDialog.new({
-                    className: className,
-                    classComment: classComment,
-                    window: this.getProps().window,
-                    onUpdateClassComment: model.getActionHandler({ id: 'updateClassComment' }),
-                })
-
-                dialog.open()
-            }
-        })
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editClassUnformattedComment',
+            enabledIf: () => { return true },
+            whenActioned: this.editClassUnformattedComment.bind(this),
+        })
 
         const classDefinition = model.getBrowsedClass()
 
         if( classDefinition === null ) { return }
 
         const isInEditionMode = model.isInEditionMode()
-
-        const editionClosure = this.editClassComment.bind(this)
 
         let unformattedComment = classDefinition.getComment().getSourceCode()
 
@@ -71,7 +48,7 @@ class ClassUnformattedComment {
                     this.component(
                         EditClassDescriptionHeader.new({
                             model: model,
-                            editionClosure: editionClosure,
+                            editionClosure: model.getActionHandler({ id: 'editClassUnformattedComment' }),
                         })
                     )
 
@@ -94,6 +71,29 @@ class ClassUnformattedComment {
             })
 
         })
+    }
+
+    /// Commands
+
+    editClassUnformattedComment() {
+        const model = this.getModel()
+
+        const classDefinition = model.getBrowsedClass()
+
+        const className = classDefinition.getClassName()
+
+        const classComment = classDefinition.getComment().getSourceCode()
+
+        console.log( classComment )
+
+        const dialog = EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: this.getProps().window,
+            onUpdateClassComment: model.getActionHandler({ id: 'updateClassUnformattedComment' }),
+        })
+
+        dialog.open()
     }
 }
 

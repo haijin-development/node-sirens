@@ -1,14 +1,12 @@
 # Changelog
 
-## v0.13.0 (next release)
-
 ## v0.12.0
 
 ### Sirens
 
-- Rewrote all the components using Sirens Skins with FingerTips.
+- Rewrote all the components using FingerTips commands.
 - Renamed all application models from XYZModel to XYZFlow.
-- Rewrote all the commands using FingerTips commands and FlowModels.
+- Added some basic update of the enabled/disabled state of Sirens commands.
 
 ### FingerTips
 

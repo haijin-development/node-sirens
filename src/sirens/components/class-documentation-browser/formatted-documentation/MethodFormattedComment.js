@@ -38,224 +38,6 @@ class MethodFormattedComment {
 
     /// Actions
 
-    editMethodComment() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditMethodCommentDialog.new({
-            className: className,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: this.updateMethodComment.bind(this),
-            unformatted: false,
-        })
-
-        dialog.open()
-    }
-
-    updateMethodComment({ methodNewDescription: methodNewDescription }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.setDescription( methodNewDescription )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    addNewImplementationNote() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditImplementationNoteDialog.new({
-            className: className,
-            implementationNoteText: 'Add the new implementation note here ...',
-            window: this.getProps().window,
-            onUpdateImplementationNote: this.addImplementationNote.bind(this),
-            acceptButtonLabel: `Add implementation note`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    addImplementationNote({ implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.addImplementationNote( implementationNoteText )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    deleteImplementationNote({ atIndex: index }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.deleteImplementationNoteAt({ index: index })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-
-    editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditImplementationNoteDialog.new({
-            className: className,
-            implementationNoteText: implementationNoteText,
-            window: this.getProps().window,
-            onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
-                this.updateImplementationNoteAt({
-                    index: index,
-                    implementationNoteText: implementationNoteText,
-                })
-            },
-            acceptButtonLabel: `Update implementation note`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.updateImplementationNoteAt({
-            index: index,
-            implementationNoteText: implementationNoteText,
-        })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    addNewExample() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const newExample = {
-            Description: 'Add the example description here ...',
-            Code: 'Add the example code here ...',
-        }
-
-        const dialog = EditExampleDialog.new({
-            className: className,
-            example: newExample,
-            window: this.getProps().window,
-            onUpdateExample: this.addExample.bind(this),
-            acceptButtonLabel: `Add example`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    addExample({ example: example }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.addExample( example )
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    editExampleAt({ index: index, example: example }) {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditExampleDialog.new({
-            className: className,
-            example: example,
-            window: this.getProps().window,
-            onUpdateExample: ({ example: example }) => {
-                this.updateExampleAt({
-                    index: index,
-                    example: example,
-                })
-            },
-            acceptButtonLabel: `Update example`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    updateExampleAt({ index: index, example: example }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.updateExampleAt({
-            index: index,
-            example: example,
-        })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    deleteExample({ atIndex: index }) {
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const documentation = method.getDocumentation()
-
-        documentation.deleteExampleAt({ index: index })
-
-        this.updateMethodDocumentation({
-            documentation: documentation,
-        })
-    }
-
     updateMethodDocumentation({ documentation: documentation }) {
         const methodCommentContents = documentation.generateCommentContents({
                 methodDocumentation: documentation,
@@ -285,12 +67,46 @@ class MethodFormattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationComment',
+            enabledIf: function() {
+                return model.isInEditionMode() && model.getBrowsedClass()
+            },
+            whenActioned: this.editMethodDocumentationComment.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createMethodDocumentationImplementationNote',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.createMethodDocumentationImplementationNote.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationImplementationNote',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.editMethodDocumentationImplementationNote.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createMethodDocumentationExample',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.createMethodDocumentationExample.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationExample',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.editMethodDocumentationExample.bind(this),
+        })
+
         const method = this.getCurrentMethod()
 
         const isInEditionMode = method != null && model.isInEditionMode()
-
-        const editionClosure = isInEditionMode ?
-            this.editMethodComment.bind(this) : undefined
 
         const documentation = this.getCurrentMethodDocumentation()
 
@@ -344,7 +160,7 @@ class MethodFormattedComment {
                             EditMethodDescriptionHeader.new({
                                 model: model,
                                 method: method,
-                                editionClosure: editionClosure,
+                                editionClosure: model.getActionHandler({ id: 'editMethodDocumentationComment' }),
                             })
                         )
 
@@ -415,7 +231,7 @@ class MethodFormattedComment {
                         this.component(
                             ImplementationNotesEditionHeader.new({
                                 model: model,
-                                addNewImplementationNote: component.addNewImplementationNote.bind(component),
+                                createClosure: model.getActionHandler({ id: 'createMethodDocumentationImplementationNote' }),
                             })
                         )
 
@@ -431,12 +247,13 @@ class MethodFormattedComment {
                                 model: model,
                                 index: index,
                                 implementationNote: implementationNote,
-                                deleteImplementationNote: component.deleteImplementationNote.bind(component),
-                                editImplementationNote: ({ atIndex: index }) => {
-                                    component.editImplementationNoteAt({
-                                        index: index,
-                                        implementationNoteText: implementationNote,
-                                    })
+                                editClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'editMethodDocumentationImplementationNote' })
+                                    handler({ atIndex: index, implementationNoteText: implementationNote })
+                                },
+                                deleteClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'deleteMethodDocumentationImplementationNote' })
+                                    handler({ atIndex: index })
                                 },
                             })
                         )
@@ -447,14 +264,14 @@ class MethodFormattedComment {
                         this.component(
                             ExamplesEditionHeader.new({
                                 model: model,
-                                addNewExample: component.addNewExample.bind(component),
+                                addClosure: model.getActionHandler({ id: 'createMethodDocumentationExample' }),
                             })
                         )
 
                         this.verticalSeparator()
                     }
 
-                    examples.forEach( (example) => {
+                    examples.forEach( (example, index) => {
 
                         this.verticalSeparator()
 
@@ -462,12 +279,13 @@ class MethodFormattedComment {
                             ExampleDocumentation.new({
                                 model: model,
                                 example: example,
-                                deleteExample: component.deleteExample.bind(component),
-                                editExample: ({ atIndex: index }) => {
-                                    component.editExampleAt({
-                                        index: index,
-                                        example: example,
-                                    })
+                                editClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'editMethodDocumentationExample' })
+                                    handler({ atIndex: index, example: example })
+                                },
+                                deleteClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'deleteMethodDocumentationExample' })
+                                    handler({ atIndex: index })
                                 },
                             })
                         )
@@ -486,6 +304,115 @@ class MethodFormattedComment {
             })
 
         })
+    }
+
+    editMethodDocumentationComment() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+        const dialog = EditMethodCommentDialog.new({
+            className: className,
+            method: method,
+            window: this.getProps().window,
+            onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodDocumentationComment' }),
+            unformatted: false,
+        })
+
+        dialog.open()
+    }
+
+    createMethodDocumentationImplementationNote() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const dialog = EditImplementationNoteDialog.new({
+            className: className,
+            implementationNoteText: 'Add the new implementation note here ...',
+            window: this.getProps().window,
+            onUpdateImplementationNote: model.getActionHandler({ id: 'addMethodDocumentationImplementationNote' }),
+            acceptButtonLabel: `Add implementation note`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
+        })
+
+        dialog.open()
+    }
+
+    editMethodDocumentationImplementationNote({ atIndex: index, implementationNoteText: implementationNoteText }) {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const dialog = EditImplementationNoteDialog.new({
+            className: className,
+            implementationNoteText: implementationNoteText,
+            window: this.getProps().window,
+            onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
+                const handler = model.getActionHandler({ id: 'updateMethodDocumentationImplementationNote' })
+                handler({ atIndex: index, implementationNoteText: implementationNoteText })
+            },
+            acceptButtonLabel: `Update implementation note`,
+            title:  `${className} implementation note.`,
+            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
+        })
+
+        dialog.open()
+    }
+
+    createMethodDocumentationExample() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const newExample = {
+            Description: 'Add the example description here ...',
+            Code: 'Add the example code here ...',
+        }
+
+        const dialog = EditExampleDialog.new({
+            className: className,
+            example: newExample,
+            window: this.getProps().window,
+            onUpdateExample: model.getActionHandler({ id: 'addMethodDocumentationExample' }),
+            acceptButtonLabel: `Add example`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
+        })
+
+        dialog.open()
+    }
+
+    editMethodDocumentationExample({ atIndex: index, example: example }) {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const dialog = EditExampleDialog.new({
+            className: className,
+            example: example,
+            window: this.getProps().window,
+            onUpdateExample: ({ example: example }) => {
+                const handler = model.getActionHandler({ id: 'updateMethodDocumentationExample' })
+                handler({ atIndex: index, example: example })
+            },
+            acceptButtonLabel: `Update example`,
+            title: `${className}.${method.getFunctionSignatureString()}`,
+            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
+        })
+
+        dialog.open()
     }
 
     getCurrentMethod() {

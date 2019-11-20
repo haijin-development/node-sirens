@@ -65,7 +65,7 @@ class PlaygroundBrowserFlow {
                 enabledIf: function() { return true },
                 whenActioned: function({ filename: filename }) {
                     if( ! filename ) { return }
-                    Sirens.openClassEditor({ filename: filename })
+                    Sirens.openPlayground({ filename: filename })
                 }
             })
 

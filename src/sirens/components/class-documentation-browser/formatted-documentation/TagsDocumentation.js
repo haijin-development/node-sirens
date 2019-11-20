@@ -20,8 +20,14 @@ class TagsDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-
         const model = this.getProps().model
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodTags',
+            enabledIf: () => { return true },
+            whenActioned: this.editMethodTags.bind(this),
+        })
 
         const method = this.getProps().method
 
@@ -100,7 +106,7 @@ class TagsDocumentation {
                                 iconName: GtkIcons.edit,
                                 size: GtkIcons.size._16x16,
                             },
-                            onClicked: component.editMethodTags.bind(component),                        
+                            onClicked: model.getActionHandler({ id: 'editMethodTags' }),
                             viewAttributes: {
                                 stackSize: 'fixed',
                             },
@@ -125,30 +131,24 @@ class TagsDocumentation {
     editMethodTags() {
         const model = this.getModel()
 
-        model.executeCommandClosure({
-            commandId: 'editMethodDocumentationTags',
-            closure: () => {
-                const className = model.getBrowsedClass().getClassName()
+        const className = model.getBrowsedClass().getClassName()
 
-                const method = model.getChild({ id: 'selectedMethod' }).getValue()
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
 
-                const documentation = method.getDocumentation()
+        const documentation = method.getDocumentation()
 
-                const tags = documentation.getTags()
+        const tags = documentation.getTags()
 
-                const dialog = EditTagsDialog.new({
-                    className: className,
-                    method: method,
-                    tags: tags,
-                    window: this.getProps().window,
-                    onUpdateTags: model.getActionHandler({ id: 'updateMethodDocumentationTags' }),
-                    acceptButtonLabel: `Update method tags`,
-                })
-
-                dialog.open()
-            }
+        const dialog = EditTagsDialog.new({
+            className: className,
+            method: method,
+            tags: tags,
+            window: this.getProps().window,
+            onUpdateTags: model.getActionHandler({ id: 'updateMethodDocumentationTags' }),
+            acceptButtonLabel: 'Update method tags',
         })
 
+        dialog.open()
     }
 }
 

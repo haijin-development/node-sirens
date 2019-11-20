@@ -14,12 +14,17 @@ class ExamplesEditionHeader {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createClassDocumentationExample',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.createClassDocumentationExample.bind(this),
+        })
 
         componentsRenderer.render( function(component) {
 
@@ -57,7 +62,7 @@ class ExamplesEditionHeader {
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
-                    onClicked: component.handleAddNewExample.bind(component),
+                    onClicked: component.getProps().addClosure,
                 })
 
                 // To center the button horizontally
@@ -70,10 +75,6 @@ class ExamplesEditionHeader {
             })
 
         })
-    }
-
-    handleAddNewExample() {
-        this.getProps().addNewExample()
     }
 }
 

@@ -22,15 +22,18 @@ class FlowPoint {
         return this.commandsRouter
     }
 
-    executeCommandClosure({ commandId: commandId, closure: closure }) {
-        const command = this.getChild({ id: commandId })
+    defineCommand({ id: commandId, enabledIf: enabledClosure, whenActioned: actionClosure }) {
+        const Command = require('./commands/Command')
 
-        const commandsRouter = this.getCommandsRouter()
-
-        return commandsRouter.executeCommandClosure({
-            command: command,
-            closure: closure,
+        const command = Command.new({
+            id: commandId,
+            enabledClosure: enabledClosure,
+            actionClosure: actionClosure
         })
+
+        this.addChildModel({ id: commandId, model: command })
+
+        return this
     }
 }
 

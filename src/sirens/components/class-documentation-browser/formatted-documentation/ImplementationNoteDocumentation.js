@@ -1,9 +1,9 @@
 const path = require('path')
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
 class ImplementationNoteDocumentation {
@@ -83,7 +83,7 @@ class ImplementationNoteDocumentation {
                                 iconName: GtkIcons.edit,
                                 size: GtkIcons.size._16x16,
                             },
-                            onClicked: component.handleEditImplementationNote.bind(component),                        
+                            onClicked: component.getProps().editClosure,
                         })
 
                         this.textButton({
@@ -93,7 +93,7 @@ class ImplementationNoteDocumentation {
                                 width: 16,
                                 height: 16,
                             },
-                            onClicked: component.handleDeleteImplementationNote.bind(component),                        
+                            onClicked: component.getProps().deleteClosure,                    
                         })
 
                     })
@@ -101,24 +101,6 @@ class ImplementationNoteDocumentation {
                 }
             })
 
-        })
-    }
-
-    /// Events
-
-    handleEditImplementationNote() {
-        const implementationNodeIndex = this.getProps().index
-
-        this.getProps().editImplementationNote({
-            atIndex: implementationNodeIndex
-        })
-    }
-
-    handleDeleteImplementationNote() {
-        const implementationNodeIndex = this.getProps().index
-
-        this.getProps().deleteImplementationNote({
-            atIndex: implementationNodeIndex
         })
     }
 }

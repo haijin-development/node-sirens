@@ -1,16 +1,11 @@
-const OInstanceObjectProperty = require('./OInstanceObjectProperty')
 
 class Preferences {
     static prioritizesTag({ tag: tag }) {
-        return this.prioritizedTags.includes( tag )
+        return this.methodTags.prioritizedTags.includes( tag )
     }
 }
 
-Preferences.browseDocumentation = true
-Preferences.objectPropertiesInspectorPlugins = [ OInstanceObjectProperty ]
-Preferences.prioritizedTags = [
-    'public', 'implementation'
-]
-
-
+Preferences.methodTags = {
+    prioritizedTags: [ 'public', 'implementation' ],
+}
 module.exports = Preferences

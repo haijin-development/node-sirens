@@ -1,34 +1,4 @@
-/* Tags */
-.tag-label {
-    border-style: solid;
-    border-width: 0.1em;
-    border-radius: 0.3em;
-    border-color: black;
-    padding: 0.2em;
-}
+@import url('./widgets.css');
+@import url('./class-editor.css');
+@import url('./tag-labels.css');
 
-/* Non specific tags color */
-.tag-label {
-    color: black;
-    background-color: #e7e774;
-}
-
-.tag-label.definition {
-    background-color: white;
-}
-
-.tag-label.public {
-    background-color: #000080;
-}
-
-.tag-label.implementation {
-    background-color: red;
-}
-
-.tag-label.getters {
-    background-color: green;
-}
-
-.tag-label.setters {
-    background-color: yellow;
-}

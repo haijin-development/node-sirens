@@ -29,9 +29,9 @@ const MethodValidator = require('./params-validation/MethodValidator')
        Validates a valid method call on an object behaving as a Circle.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
 
        // Define the CircleProtocol
        class CircleProtocol {
@@ -82,9 +82,9 @@ const MethodValidator = require('./params-validation/MethodValidator')
     `,
     Code: `
 
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
 
        // Define the CircleProtocol
        class CircleProtocol {
@@ -214,6 +214,8 @@ class ParamsChecker {
      ])
     */
     beforeMethod({ methodName: methodName, params: params, classification: classification }) {
+        if( classification === undefined ) { return }
+
         const protocols = new Set()
 
         classification.getImplementedProtocols().forEach( (protocol) => {
@@ -244,6 +246,12 @@ class ParamsChecker {
             // Instead of making the protocol to assume the MethodValidator behaviour
             // add it dynamically to this created instance only.
             protocolInstance.behaveAs( MethodValidator )
+
+            protocolInstance.setMethodInfo({
+                protocolName: protocol.getName(),
+                classificationName: classification.getName(),
+                methodName: methodName,
+            })
 
             // Evaluate the method of the protocol that validates the method in the classification.
             // It would look like

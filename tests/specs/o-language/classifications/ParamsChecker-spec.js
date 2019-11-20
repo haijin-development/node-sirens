@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Protocol = require('../../../../src/o-language/classifications/Protocol')
-const ParamsChecker = require('../../../../src/o-language/classifications/ParamsChecker')
+const Classification = require('../../../../src/O').Classification
+const Protocol = require('../../../../src/O').Protocol
+const ParamsChecker = require('../../../../src/O').ParamsChecker
 
 describe('When validating parameters', () => {
     describe('with isNull()', () => {
@@ -40,7 +40,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Expected a null value, got a undefined.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a null value, got a undefined.' )
         })
     })
 
@@ -80,7 +80,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( null )
-            }) .to .throw( Error, 'Expected a non null value, got null.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a non null value, got null.' )
         })
     })
 
@@ -120,7 +120,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( null )
-            }) .to .throw( Error, 'Expected an undefined value, got a object.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected an undefined value, got a object.' )
         })
     })
 
@@ -160,7 +160,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Expected a non undefined value, got undefined.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a non undefined value, got undefined.' )
         })
     })
 
@@ -210,7 +210,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Expected a Boolean, got a undefined.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a Boolean, got a undefined.' )
         })
     })
 
@@ -260,7 +260,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( '1' )
-            }) .to .throw( Error, 'Expected a Number, got a string.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a Number, got a string.' )
         })
     })
 
@@ -300,7 +300,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1.1 )
-            }) .to .throw( Error, 'Expected an Integer, got a number.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected an Integer, got a number.' )
         })
     })
 
@@ -340,7 +340,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Expected a String, got a number.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a String, got a number.' )
         })
     })
 
@@ -380,7 +380,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Expected an Array, got a number.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected an Array, got a number.' )
         })
     })
 
@@ -420,7 +420,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Expected an Object, got a number.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected an Object, got a number.' )
         })
     })
 
@@ -460,7 +460,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Expected a function, got a number.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected a function, got a number.' )
         })
     })
 
@@ -500,7 +500,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 2 )
-            }) .to .throw( Error, 'Expected any of [0,1] values, got 2.' )
+            }) .to .throw( Error, 'Method AProtocol.method expected any of [0,1] values, got 2.' )
         })
     })
 
@@ -562,7 +562,7 @@ describe('When validating parameters', () => {
 
         const protocol = Protocol.define( class AProtocol {
             method(p1) {
-                this.param(p1) .isExpectedTo( (value) => {
+                this.param(p1) .isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
                     return {
                         isValid: value > 0,
                         errorMessage: () => { return `Expected value to be > 0.` }
@@ -648,7 +648,7 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'The validation failed for all the branches in the .or() expression.' )
+            }) .to .throw( Error, 'Method AProtocol.method validation failed for all the branches in the .or() expression.' )
         })
     })
 

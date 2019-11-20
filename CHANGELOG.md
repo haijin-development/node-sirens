@@ -1,18 +1,40 @@
 # Changelog
 
-## v0.11.0 (next release)
-
+## v0.12.0
 
 ### Sirens
 
-- Removed the StackBrowser and its dependencies
+- Rewrote all the components using FingerTips commands.
+- Renamed all application models from XYZModel to XYZFlow.
+- Added some basic update of the enabled/disabled state of Sirens commands.
+
+### FingerTips
+
+- Implemented FlowModel and its FlowBuilder.
+- Implemented Flow commands.
+
+### Skins
+
+- Renamed this library to Skins.
+- Moved the models classifications to a different project. See FingerTips.
+- Scrollbars in ListView now are optional.
+
+### O language
+
+- Added context information to the ParamsChecker validation messages.
+
+## v0.11.0
+
+### Sirens
+
+- Removed the StackBrowser and its dependencies.
 - AppBrowserModel shows the methods tab page when the selected file contains a class definition.
 - Removed the StackTraceBrowser and its dependencies.
 - Added tags to methods documentation and a filter by tags of a class methods.
 - Added the method source code to class documentation.
 - The app loads its styles from resources/css/sirens.css
 
-### gui
+### Skins
 
 - Removed the implements of ComponentProtocol in all components that implements ComponentProtocol_Implementation since it is implicit.
 - Refactored CheckBox to SingleSelectionCheckBox.
@@ -22,8 +44,8 @@
 
 ### O language
 
-- Renamed Debuggable.inspect() to Debuggable.browse()
-- Tagged classification methods
+- Renamed Debuggable.inspect() to Debuggable.browse().
+- Tagged classification methods.
 
 ## v0.10.0
 

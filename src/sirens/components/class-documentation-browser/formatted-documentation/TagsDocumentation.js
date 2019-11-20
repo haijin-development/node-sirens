@@ -1,8 +1,10 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const EditTagsDialog = require ('../edition/EditTagsDialog')
+
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 const Preferences = require('../../../objects/Preferences')
 
@@ -18,8 +20,14 @@ class TagsDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-
         const model = this.getProps().model
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodTags',
+            enabledIf: () => { return true },
+            whenActioned: this.editMethodTags.bind(this),
+        })
 
         const method = this.getProps().method
 
@@ -98,7 +106,7 @@ class TagsDocumentation {
                                 iconName: GtkIcons.edit,
                                 size: GtkIcons.size._16x16,
                             },
-                            onClicked: component.handleEditMethodTags.bind(component),                        
+                            onClicked: model.getActionHandler({ id: 'editMethodTags' }),
                             viewAttributes: {
                                 stackSize: 'fixed',
                             },
@@ -118,10 +126,29 @@ class TagsDocumentation {
         })
     }
 
-    /// Events
+    /// Commands
 
-    handleEditMethodTags() {
-        this.getProps().editMethodTags()
+    editMethodTags() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+        const documentation = method.getDocumentation()
+
+        const tags = documentation.getTags()
+
+        const dialog = EditTagsDialog.new({
+            className: className,
+            method: method,
+            tags: tags,
+            window: this.getProps().window,
+            onUpdateTags: model.getActionHandler({ id: 'updateMethodDocumentationTags' }),
+            acceptButtonLabel: 'Update method tags',
+        })
+
+        dialog.open()
     }
 }
 

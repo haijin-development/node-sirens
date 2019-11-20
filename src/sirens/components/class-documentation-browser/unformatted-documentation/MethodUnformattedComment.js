@@ -1,6 +1,6 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
 const Resource = require('../../../objects/Resource')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
@@ -16,38 +16,12 @@ class MethodUnformattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    editMethodComment() {
-        const model = this.getModel()
-
-        const method = model.getSelectedMethod()
-
-        const dialog = EditMethodCommentDialog.new({
-            model: model,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: this.updateMethodComment.bind(this),
-            unformatted: true,
-        })
-
-        dialog.open()
-    }
-
-    updateMethodComment({ methodNewDescription: methodNewDescription }) {
-        const model = this.getModel()
-
-        const method = model.getSelectedMethod()
-
-        method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
-
-        model.reload()
-    }
-
     /// Building
 
     reRenderWhen() {
-        const selectedMethodModel = this.getModel().getSelectedMethodModel()
+        const model = this.getModel()
+
+        const selectedMethodModel = model.getChild({ id: 'selectedMethod' })
 
         this.reRenderOnValueChangeOf( selectedMethodModel )
     }
@@ -55,21 +29,23 @@ class MethodUnformattedComment {
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const method = model.getSelectedMethod()
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodUnformmatedComment',
+            enabledIf: () => { return true },
+            whenActioned: this.editMethodUnformmatedComment.bind(this),
+        })
+
+        const method = this.getCurrentMethod()
+
+        if( ! method ) { return }
 
         const isInEditionMode = model.isInEditionMode()
 
-        const editionClosure = isInEditionMode ?
-            this.editMethodComment.bind(this) : undefined
+        let methodUnformattedComment = method.getComment().getSourceCode()
 
-        let methodUnformattedComment = ''
-
-        if( method !== null ) {
-            methodUnformattedComment = method.getComment().getSourceCode()
-
-            if( methodUnformattedComment.trim() === '' ) {
-                methodUnformattedComment = 'This method has no documentation yet.'
-            }
+        if( methodUnformattedComment.trim() === '' ) {
+            methodUnformattedComment = 'This method has no documentation yet.'
         }
 
         componentsRenderer.render(function (component) {
@@ -89,7 +65,7 @@ class MethodUnformattedComment {
                         EditMethodDescriptionHeader.new({
                             model: model,
                             method: method,
-                            editionClosure: editionClosure,
+                            editionClosure: model.getActionHandler({ id: 'editMethodUnformmatedComment' }),
                         })
                     )
 
@@ -105,6 +81,31 @@ class MethodUnformattedComment {
             })
 
         })
+    }
+
+
+    /// Actions
+
+    editMethodUnformmatedComment() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = this.getCurrentMethod()
+
+        const dialog = EditMethodCommentDialog.new({
+            className: className,
+            method: method,
+            window: this.getProps().window,
+            onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodUnformmatedComment' }),
+            unformatted: true,
+        })
+
+        dialog.open()
+    }
+
+    getCurrentMethod() {
+        return this.getModel().getChild({ id: 'selectedMethod' }).getValue()
     }
 }
 

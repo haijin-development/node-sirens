@@ -1,10 +1,9 @@
-const Classification = require('../../src/o-language/classifications/Classification')
+const Classification = require('../../src/O').Classification
+const Component = require('../../src/Skins').Component
+const ComponentProtocol_Implementation = require('../../src/Skins').ComponentProtocol_Implementation
+const ComponentInstantiator = require('../../src/Skins').ComponentInstantiator
+const TreeChoiceModel = require('../../src/Skins').TreeChoiceModel
 const Sirens = require('../../src/Sirens')
-const Component = require('../../src/gui/components/Component')
-const ComponentProtocol_Implementation = require('../../src/gui/protocols/ComponentProtocol_Implementation')
-
-const ComponentInstantiator = require('../../src/gui/components/ComponentInstantiator')
-const TreeChoiceModel = require('../../src/gui/models/TreeChoiceModel')
 
 class CustomComponent {
     /// Definition
@@ -21,7 +20,7 @@ class CustomComponent {
     defaultModel() {
         const treeModel = TreeChoiceModel.new({
             roots: ['root1', 'root2'],
-            getChildrenBlock: function (item) {
+            getChildrenClosure: function (item) {
                 return ['child 1', 'child 2', 'child 3']
             },
         })

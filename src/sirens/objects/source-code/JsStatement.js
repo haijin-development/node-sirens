@@ -1,5 +1,5 @@
-const Classification = require('../../../o-language/classifications/Classification')
-const StringStream = require('../../../o-language/classifications/StringStream')
+const Classification = require('../../../O').Classification
+const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('../SourceCodeText')
 
 /*

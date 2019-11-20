@@ -1,4 +1,4 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 const path = require('path')
 const fs = require('fs')
 const esprima = require('esprima')
@@ -7,7 +7,7 @@ const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
 const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
 const ParseTreeFlattener = require('./parsers/ParseTreeFlattener')
 const AbsentFunction = require('./source-code/AbsentFunction')
-const StringStream = require('../../o-language/classifications/StringStream')
+const StringStream = require('../../O').StringStream
 
 /*
  * A source file to query javascript definitions.
@@ -87,13 +87,17 @@ class SourceFile {
             if( exp1.loc.start.line > exp2.loc.start.line ) { return 1 }
 
             if( exp1.loc.start.line === exp2.loc.start.line ) {
-                if( exp1.loc.start.column === exp2.loc.start.column ) { return 0 }
+                if( exp1.loc.start.column === exp2.loc.start.column ) {
+                    return 0
+                }
+                
                 if( exp1.loc.start.column < exp2.loc.start.column ) { return -1 }
                 if( exp1.loc.start.column > exp2.loc.start.column ) { return 1 }
             }
         });
 
         for(let i = 1; i < expressionsWithComments.length; i++ ) {
+
             const currentExpression = expressionsWithComments[ i ]
 
             if(
@@ -102,7 +106,6 @@ class SourceFile {
                 currentExpression.type === 'MethodDefinition'
               )
               {
-
                 const previousExpression = expressionsWithComments[ i - 1 ]
                 const previousPreviousExpression = expressionsWithComments[ i - 2 ]
 
@@ -115,7 +118,7 @@ class SourceFile {
                 //          type: 'Identifier',
                 //          name: 'constructor',
                 if(
-                    previousPreviousExpression.type === 'Block'
+                    previousPreviousExpression && previousPreviousExpression.type === 'Block'
                     &&
                     previousExpression.type === 'Identifier'
                   ) {

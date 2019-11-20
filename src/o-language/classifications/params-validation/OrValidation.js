@@ -10,12 +10,20 @@ class OrValidation {
      ])
     */
     static definition() {
-        this.instanceVariables = ['leftValidation', 'rightValidation']
+        this.instanceVariables = ['leftValidation', 'rightValidation', 'methodInfo']
         this.assumes = []
         this.implements = [ValidationProtocol]
     }
 
     /// Accessing
+
+    setMethodInfo(methodInfo) {
+        this.methodInfo = methodInfo
+    }
+
+    getMethodInfo() {
+        return this.methodInfo
+    }
 
     /*
      Tags([
@@ -59,9 +67,11 @@ class OrValidation {
             }
         }
 
+        const methodInfo = this.methodInfo
+
         return {
             isValid: false,
-            errorMessage: () => { return `The validation failed for all the branches in the .or() expression.` }
+            errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} validation failed for all the branches in the .or() expression.` }
         }
     }
 

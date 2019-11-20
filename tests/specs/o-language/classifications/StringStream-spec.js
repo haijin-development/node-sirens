@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const StringStream = require('../../../../src/o-language/classifications/StringStream')
+const StringStream = require('../../../../src/O').StringStream
 
 describe('A StringStream', () => {
     let stream

@@ -1,4 +1,4 @@
-const Protocol = require('../../o-language/classifications/Protocol')
+const Protocol = require('../../O').Protocol
 
 /*
  * A visitor of a javascript parse tree that collects all the function definitions.

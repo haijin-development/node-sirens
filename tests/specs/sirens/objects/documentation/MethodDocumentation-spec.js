@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const MethodDocumentation = require('../../../../../src/sirens/objects/documentation/MethodDocumentation')
+const DocumentationReader = require('../../../../../src/sirens/objects/documentation/DocumentationReader')
 
 describe('When using a MethodDocumentation', () => {
     describe('to document a Method description', () => {
@@ -13,7 +14,7 @@ describe('When using a MethodDocumentation', () => {
     \`)
     `
 
-            const methodDocumentation = MethodDocumentation.fromString( methodComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
             expect( methodDocumentation.getDescription() ) .to .equal(
                 'A regular js class to use in the classEditor example.'
@@ -27,7 +28,7 @@ describe('When using a MethodDocumentation', () => {
         "A regular js class to use in the classEditor example."
     )`
 
-            const methodDocumentation = MethodDocumentation.fromString( methodComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
             expect( methodDocumentation.getDescription() ) .to .equal(
                 'A regular js class to use in the classEditor example.'
@@ -52,7 +53,7 @@ describe('When using a MethodDocumentation', () => {
     })
     `
 
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
@@ -71,7 +72,7 @@ describe('When using a MethodDocumentation', () => {
         Code: "const o = 'abc'",
     })`
 
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
@@ -96,7 +97,7 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const params = methodDocumentation.getParams()
 
@@ -120,7 +121,7 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const returns = methodDocumentation.getReturns()
 
@@ -142,7 +143,7 @@ describe('When using a MethodDocumentation', () => {
         Assumes that the street is not empty.
     \`)
     `
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const implementationNotes = methodDocumentation.getImplementationNotes()
 
@@ -165,7 +166,7 @@ describe('When using a MethodDocumentation', () => {
 
         it('builds a Method Tag from a template literal', () => {
 
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const tags = methodDocumentation.getTags()
 
@@ -176,7 +177,7 @@ describe('When using a MethodDocumentation', () => {
 
         it('gets the method tags sorted alphabetically in reversed order', () => {
 
-            const methodDocumentation = MethodDocumentation.fromString( exampleComment )
+            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
             const tags = methodDocumentation.getTagsSortedAlphabetically({ reversed: true })
 

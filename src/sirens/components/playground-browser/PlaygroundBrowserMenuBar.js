@@ -1,6 +1,6 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
 class PlaygroundBrowserMenuBar {
     /// Definition
@@ -14,6 +14,8 @@ class PlaygroundBrowserMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         componentsRenderer.render(function (component) {
 
             this.menuBar( function() {
@@ -27,13 +29,13 @@ class PlaygroundBrowserMenuBar {
                 this.menuGroup({ label: 'File' }, function() {
                     this.item({
                         label: 'Open file...',
-                        enabled: true,
+                        enabled: model.getChild({ id: 'openFile' }),
                         action: component.getProps().openFile,
                     })
 
                     this.item({
                         label: 'Open file in new window...',
-                        enabled: true,
+                        enabled: model.getChild({ id: 'openFileInNewWindow' }),
                         action: component.getProps().openFileInNewWindow,
                     })
 
@@ -41,7 +43,7 @@ class PlaygroundBrowserMenuBar {
 
                     this.item({
                         label: 'Save file',
-                        enabled: true,
+                        enabled: model.getChild({ id: 'saveFile' }),
                         action: component.getProps().saveFile,
                     })
                 })
@@ -50,13 +52,13 @@ class PlaygroundBrowserMenuBar {
 
                     this.item({
                         label: 'Open a class editor...',
-                        enabled: true,
+                        enabled: model.getChild({ id: 'openClassEditor' }),
                         action: component.getProps().openClassEditor,
                     })
 
                     this.item({
                         label: 'Open another playground...',
-                        enabled: true,
+                        enabled: model.getChild({ id: 'openPlayground' }),
                         action: component.getProps().openPlayground,
                     })
 

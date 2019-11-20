@@ -1,45 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
-const ClassDslDocumentationReader = require('./ClassDslDocumentationReader')
-const DslDocumentationWriter = require('./DslDocumentationWriter')
-
-class ClassDocumentationInstantiator {
-    /// Definition
-
-    static definition() {
-        this.instanceVariables = []
-        this.assumes = []
-    }
-
-    /// Building
-
-    fromString(documentationDslString) {
-        const classDocumentation = ClassDocumentation.new()
-
-        ClassDslDocumentationReader.new({ classDocumentation: classDocumentation })
-            .buildFromString( documentationDslString )
-
-        return classDocumentation
-    }
-
-    isDocumentationString({
-        string: string, ifTrue: validDocumentationClosure, ifFalse: invalidDocumentationClosure
-    }) {
-        try {
-
-            const documentation = this.fromString( string )
-
-            return validDocumentationClosure( documentation )
-
-        } catch( e ) {
-
-            return invalidDocumentationClosure()
-
-        }
-    }
-}
-
-ClassDocumentationInstantiator = Classification.define(ClassDocumentationInstantiator)
-
+const Classification = require('../../../O').Classification
 
 class ClassDocumentation {
     /// Definition
@@ -47,7 +6,6 @@ class ClassDocumentation {
     static definition() {
         this.instanceVariables = ['className', 'description', 'implementationNotes', 'tags', 'examples']
         this.assumes = []
-        this.classificationBehaviours = [ClassDocumentationInstantiator]
     }
 
     /// Initializing
@@ -126,19 +84,15 @@ class ClassDocumentation {
     /// Generating class comment
 
     generateComment() {
-        return this.getDocumentationWriter().generateClassComment({
+        return this.generateClassComment({
             classDocumentation: this
         })
     }
 
     generateCommentContents() {
-        return this.getDocumentationWriter().generateClassCommentContents({
+        return this.generateClassCommentContents({
             classDocumentation: this
         })
-    }
-
-    getDocumentationWriter() {
-        return DslDocumentationWriter.new()
     }
 }
 

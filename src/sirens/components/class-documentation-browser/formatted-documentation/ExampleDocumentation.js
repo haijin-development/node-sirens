@@ -1,6 +1,6 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
 const ExampleHeader = require ('./ExampleHeader')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
@@ -28,9 +28,9 @@ class ExampleDocumentation {
                 ExampleHeader.new({
                     model: model,
                     index: example.index,
-                    exampleDescription: example.Description,
-                    deleteExample: component.getProps().deleteExample,
-                    editExample: component.getProps().editExample,
+                    example: example,
+                    editClosure: component.getProps().editClosure,
+                    deleteClosure: component.getProps().deleteClosure,
                 })
             )
 
@@ -38,6 +38,7 @@ class ExampleDocumentation {
 
             this.component(
                 PlaygroundComponent.new({
+                    id: 'playground',
                     text: "\n" + example.Code + "\n",
                     hScroll: 'never',
                     vScroll: 'never',

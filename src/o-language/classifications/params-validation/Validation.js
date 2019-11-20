@@ -10,9 +10,17 @@ class Validation {
      ])
     */
     static definition() {
-        this.instanceVariables = ['validationClosure']
+        this.instanceVariables = ['validationClosure', 'methodInfo']
         this.assumes = []
         this.implements = [ValidationProtocol]
+    }
+
+    setMethodInfo(methodInfo) {
+        this.methodInfo = methodInfo
+    }
+
+    getMethodInfo() {
+        return this.methodInfo
     }
 
     /*
@@ -30,7 +38,7 @@ class Validation {
      ])
     */
     getValidationResultOn({ value: value }) {
-        return this.validationClosure( value )
+        return this.validationClosure({ value: value, methodInfo: this.methodInfo })
     }
 
     /*

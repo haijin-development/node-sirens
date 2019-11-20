@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const ClassDocumentation = require('../../../../../src/sirens/objects/documentation/ClassDocumentation')
+const DocumentationReader = require('../../../../../src/sirens/objects/documentation/DocumentationReader')
 
 describe('When reading a ClassDocumentation', () => {
     describe('to document a Class description', () => {
@@ -13,7 +14,7 @@ describe('When reading a ClassDocumentation', () => {
     \`)
     `
 
-            const classDocumentation = ClassDocumentation.fromString( classComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .equal(
                 'A regular js class to use in the classEditor example.'
@@ -27,7 +28,7 @@ describe('When reading a ClassDocumentation', () => {
         "A regular js class to use in the classEditor example."
     )`
 
-            const classDocumentation = ClassDocumentation.fromString( classComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .equal(
                 'A regular js class to use in the classEditor example.'
@@ -46,7 +47,7 @@ describe('When reading a ClassDocumentation', () => {
         Assumes that the street is not empty.
     \`)
     `
-            const classDocumentation = ClassDocumentation.fromString( exampleComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
 
             const implementationNotes = classDocumentation.getImplementationNotes()
 
@@ -74,7 +75,7 @@ describe('When reading a ClassDocumentation', () => {
     })
     `
 
-            const classDocumentation = ClassDocumentation.fromString( exampleComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
 
             const examples = classDocumentation.getExamples()
 
@@ -93,7 +94,7 @@ describe('When reading a ClassDocumentation', () => {
         Code: "const o = 'abc'",
     })`
 
-            const classDocumentation = ClassDocumentation.fromString( exampleComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
 
             const examples = classDocumentation.getExamples()
 
@@ -116,7 +117,7 @@ describe('When reading a ClassDocumentation', () => {
         "getters", "accessors"
     ])
     `
-            const classDocumentation = ClassDocumentation.fromString( exampleComment )
+            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
 
             const tags = classDocumentation.getTags()
 
@@ -133,7 +134,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates a Class description', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setDescription( 'A class description.' )
 
@@ -152,7 +153,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addImplementationNote( 'Implementation note 1.' )
         classDocumentation.addImplementationNote( 'Implementation note 2.' )
@@ -176,7 +177,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addExample({
             Description: 'Example 1.',
@@ -227,7 +228,7 @@ o.toUpperCase()`,
 
     it('generates the tags', () => {
 
-        const classDocumentation = ClassDocumentation.new()
+        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setTags([ 'tag1', 'tag2' ])
 

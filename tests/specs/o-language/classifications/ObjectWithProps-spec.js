@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ObjectWithProps = require('../../../../src/o-language/classifications/ObjectWithProps')
+const ObjectWithProps = require('../../../../src/O').ObjectWithProps
 
 describe('When using an ObjectWithProps', () => {
     it('creates an object with no props defined', () => {

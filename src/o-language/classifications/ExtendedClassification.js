@@ -27,10 +27,10 @@ const ExtendedInstantiator = require('./ExtendedInstantiator')
     `,
     Code: `
 
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const ExtendedClassification = require('sirens/src/o-language/classifications/ExtendedClassification')
-       const ParamsChecker = require('sirens/src/o-language/classifications/ParamsChecker')
-       const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+       const Classification = require('sirens/src/O').Classification
+       const ExtendedClassification = require('sirens/src/O').ExtendedClassification
+       const ParamsChecker = require('sirens/src/O').ParamsChecker
+       const Debuggable = require('sirens/src/O').Debuggable
        // Try commenting this lines or setting an empty array as extended behaviour to get an error when calling
        // circle.debugString()
        
@@ -117,9 +117,9 @@ class ExtendedClassification
            Adds the Debuggable behaviour to all the objects.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const ExtendedClassification = require('sirens/src/o-language/classifications/ExtendedClassification')
-           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+           const Classification = require('sirens/src/O').Classification
+           const ExtendedClassification = require('sirens/src/O').ExtendedClassification
+           const Debuggable = require('sirens/src/O').Debuggable
 
            Classification.behaveAs( ExtendedClassification )
 

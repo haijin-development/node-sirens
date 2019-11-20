@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const JsStatement = require('./JsStatement')
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
@@ -26,6 +26,12 @@ class ClassDefinition {
         this.declaration = declaration
         this.comment = comment
         this.header = header
+    }
+
+    /// Asking
+
+    isClassDefinition() {
+        return true
     }
 
     /// Accessing

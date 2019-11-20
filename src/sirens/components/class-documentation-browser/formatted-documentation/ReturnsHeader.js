@@ -1,9 +1,11 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+
+const EditReturnsDialog = require('../edition/EditReturnsDialog')
 
 const Resource = require('../../../objects/Resource')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../../Skins').GtkIcons
 
 class ReturnsHeader {
     /// Definition
@@ -18,6 +20,13 @@ class ReturnsHeader {
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationReturn',
+            enabledIf: () => { return true },
+            whenActioned: this.editReturns.bind(this),
+        })
 
         componentsRenderer.render( function(component) {
 
@@ -51,7 +60,7 @@ class ReturnsHeader {
                         iconName: GtkIcons.edit,
                         size: GtkIcons.size._16x16,
                     },
-                    onClicked: component.handleEditReturns.bind(component),                        
+                    onClicked: model.getActionHandler({ id: 'editMethodDocumentationReturn' }),                        
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
@@ -68,12 +77,28 @@ class ReturnsHeader {
         })
     }
 
-    /// Events
+    /// Edit returns
 
-    handleEditReturns() {
-        this.getProps().editReturns()
+    editReturns() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+        const documentation = method.getDocumentation()
+
+        const dialog = EditReturnsDialog.new({
+            className: className,
+            method: method,
+            returns: documentation.getReturns(),
+            window: this.getProps().window,
+            onUpdateReturns: model.getActionHandler({ id: 'updateMethodDocumentationReturn' }),
+            acceptButtonLabel: `Update returns`,
+        })
+
+        dialog.open()
     }
-
 }
 
 module.exports = Classification.define(ReturnsHeader)

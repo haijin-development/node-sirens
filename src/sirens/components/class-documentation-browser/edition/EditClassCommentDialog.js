@@ -1,8 +1,8 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 const EditDialogHeader = require('./EditDialogHeader')
 
@@ -17,33 +17,10 @@ class EditClassCommentDialog {
 
     /// Building
 
-    getClassDescription() {
-        const model = this.getModel()
-
-        if( this.getProps().unformatted === true ) {
-
-            return model.getClassUnformattedComment()
-
-        } else {
-
-            const documentation = model.getClassDocumentation()
-
-            let description = documentation.getDescription()
-
-            if( description.trim() === '' ) {
-                description = 'This class has no documentation yet.'
-            }
-
-            return description
-        }
-    }
-
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const className = this.getProps().className
 
-        const className = model.getClassName()
-
-        const description = this.getClassDescription()
+        const description = this.getProps().classComment
 
         componentsRenderer.render( function(component) {
 

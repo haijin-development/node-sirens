@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const IndentedStringStream = require('../../../../src/o-language/classifications/IndentedStringStream')
+const IndentedStringStream = require('../../../../src/O').IndentedStringStream
 
 describe('An IndentedStringStream', () => {
     let stream

@@ -46,7 +46,7 @@ class OInstance {
            classification is OInstance or a different one.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
            	static definition() {
@@ -107,7 +107,7 @@ class OInstance {
            Asks it an object is behaving as a Circle and as a Square.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
            }
@@ -167,7 +167,7 @@ class OInstance {
            Asks if an object responds to the messages 'getColor' and 'getPosition'.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
            	getColor() {
@@ -209,8 +209,8 @@ class OInstance {
            Asks if an object complies with the CircleProtocol and with the SquareProtocol.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Protocol = require('sirens/src/o-language/classifications/Protocol')
+           const Classification = require('sirens/src/O').Classification
+           const Protocol = require('sirens/src/O').Protocol
 
            class CircleProtocol {
            	getRadius() {}
@@ -293,8 +293,8 @@ class OInstance {
            Makes an object to start behaving as a Circle.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const Classification = require('sirens/src/O').Classification
+           const OInstance = require('sirens/src/O').OInstance
 
            class Circle {
            	static definition() {
@@ -325,8 +325,8 @@ class OInstance {
            Adds the Circle behaviour to an object that already had it.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const Classification = require('sirens/src/O').Classification
+           const OInstance = require('sirens/src/O').OInstance
 
            class Circle {
            	static definition() {
@@ -412,8 +412,8 @@ class OInstance {
            Makes an object to start behaving as a Circle and as a Positionable.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const Classification = require('sirens/src/O').Classification
+           const OInstance = require('sirens/src/O').OInstance
 
            class Circle {
            	static definition() {
@@ -537,8 +537,8 @@ class OInstance {
            Add the example description here ...
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const Classification = require('sirens/src/O').Classification
+           const OInstance = require('sirens/src/O').OInstance
 
            class Circle {
            	static definition() {
@@ -615,7 +615,7 @@ class OInstance {
            	})
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Shape {
            	displayString() {
@@ -687,9 +687,9 @@ class OInstance {
            Adds the Debuggable classification during the evaluation of a debug method.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
-           const Debuggable = require('sirens/src/o-language/classifications/Debuggable')
+           const Classification = require('sirens/src/O').Classification
+           const OInstance = require('sirens/src/O').OInstance
+           const Debuggable = require('sirens/src/O').Debuggable
 
            const object  = OInstance.new()
            object.duringClassificationDo( Debuggable, () => {
@@ -750,7 +750,7 @@ class OInstance {
            Add the example description here ...
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
            	static definition() {
@@ -808,7 +808,7 @@ class OInstance {
            but starting at the Shape classification, not Circle.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Shape {
            	displayString() {
@@ -921,7 +921,7 @@ class OInstance {
            Calls bindYourself on an object.
         `,
         Code: `
-           const OInstance = require('sirens/src/o-language/classifications/OInstance')
+           const OInstance = require('sirens/src/O').OInstance
 
            const object = OInstance.new()
 
@@ -1041,8 +1041,8 @@ class OInstance {
            Creates a Proxy that cancels the activation of the method appendLine of a StringStream object.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
@@ -1075,8 +1075,8 @@ class OInstance {
            Creates a Proxy that changes the parameters of the method call.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
@@ -1110,8 +1110,8 @@ class OInstance {
            Creates a Proxy that changes the method called on a StringStream object.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
@@ -1146,8 +1146,8 @@ class OInstance {
            Creates a Proxy that logs all the method calls on a StringStream object.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	beforeMethod({ methodName: methodName, params: params, classification: classification }) {
@@ -1266,8 +1266,8 @@ class OInstance {
            Creates a Proxy that changes the result of the method StringStream.appendLine
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
@@ -1297,8 +1297,8 @@ class OInstance {
            Creates a Proxy that logs all the results of all the method calls of a StringStream object.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const Classification = require('sirens/src/O').Classification
+           const StringStream = require('sirens/src/O').StringStream
 
            class Proxy {
            	afterMethod({ methodName: methodName, params: params, result: result, classification: classification }) {
@@ -1381,7 +1381,7 @@ class OInstance {
            stream.setCrChar('<br>')
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            StringStream.new().yourself( (stream) => {
            	stream.setCrChar('<br>')
@@ -1415,7 +1415,7 @@ class OInstance {
            Gets all the classifications attached to an object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -1449,7 +1449,7 @@ class OInstance {
            Gets all the names of the classifications attached to an object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -1483,7 +1483,7 @@ class OInstance {
            Gets the current active classification in the active method.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Shape {
            	displayString() {
@@ -1537,7 +1537,7 @@ class OInstance {
            Gets the classification previous to thisClassification().
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Shape {
            	displayString() {

@@ -1,7 +1,7 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
-const ValueModel = require('../../../gui/models/ValueModel')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
+const ValueModel = require('../../../Skins').ValueModel
 const ScriptEvaluator = require('../../objects/ScriptEvaluator')
 const Sirens = require('../../../Sirens')
 
@@ -25,9 +25,9 @@ class PlaygroundComponent {
 
         if( this.getProps().text !== undefined ) {
             this.getModel().setValue( props.text )
-        }
 
-        this.removeProp({ key: 'text' })
+            this.removeProp({ key: 'text' })
+        }
     }
 
     defaultModel() {
@@ -37,7 +37,7 @@ class PlaygroundComponent {
     /// Querying
 
     getSelectedCode() {
-        const playgroundComponent = this.getChildComponent({ id: 'playground' })
+        const playgroundComponent = this.getOnlyChildComponent()
 
         let selectedText = playgroundComponent.getSelectedText()
 
@@ -65,11 +65,23 @@ class PlaygroundComponent {
         })
     }
 
+    getText() {
+        return this.getModel().getValue()
+    }
+
+    setText(string) {
+        this.getModel().setValue(string)
+    }
+
+    setEvaluationContextBinding(object) {
+        this.evaluationContext = object
+    }
+
     /// Building
 
     getTextStyles() {
         const defaultStyles = {
-            id: 'playground',
+            css: 'playground',
             wrapMode: 'wordChar',
         }
 

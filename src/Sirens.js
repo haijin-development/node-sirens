@@ -82,11 +82,9 @@ const Gdk = require('node-gtk').require('Gdk')
        and opening its files with the ClassEditor.
     `,
     Code: `
-
        const Sirens = require('sirens')
 
        Sirens.openClassEditor()
-
     `,
  })
 */
@@ -121,12 +119,12 @@ class Sirens {
      })
 
      Tags([
-        'browsers', 'public'
+        'public', 'browsers'
      ])
     */
     static browseObject(object) {
         this.do( () => {
-            const ObjectBrowser = require('../src/sirens/components/ObjectBrowser')
+            const ObjectBrowser = require('../src/sirens/components/object-browser/ObjectBrowser')
 
             ObjectBrowser.openOn({object: object})
         })
@@ -169,7 +167,7 @@ class Sirens {
     */
     static browsePrototypes(object) {
         this.do( () => {
-            const PrototypeBrowser = require('../src/sirens/components/PrototypeBrowser')
+            const PrototypeBrowser = require('../src/sirens/components/prototype-browser/PrototypeBrowser')
 
             PrototypeBrowser.openOn({prototype: object})
         })
@@ -231,7 +229,7 @@ class Sirens {
     */
     static openClassEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
-            const ClassEditor = require('../src/sirens/components/ClassEditor')
+            const ClassEditor = require('../src/sirens/components/class-editor/ClassEditor')
 
             ClassEditor.openOn({ filename: filename })
         })
@@ -259,7 +257,7 @@ class Sirens {
     */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
         this.do( () => {
-            const AppBrowser = require('../src/sirens/components/AppBrowser')
+            const AppBrowser = require('../src/sirens/components/app-browser/AppBrowser')
 
             AppBrowser.openOn({ appFolder: appFolder })
         })
@@ -298,7 +296,7 @@ class Sirens {
     */
     static browseClassDocumentation({ classDefinition: classDefinition, methodName: methodName }) {
         this.do( () => {
-            const ClassDocumentationBrowser = require('../src/sirens/components/ClassDocumentationBrowser')
+            const ClassDocumentationBrowser = require('../src/sirens/components/class-documentation-browser/ClassDocumentationBrowser')
 
             ClassDocumentationBrowser.openOn({
               classDefinition: classDefinition,
@@ -363,7 +361,7 @@ class Sirens {
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
         this.do( () => {
-            const PlaygroundBrowser = require('../src/sirens/components/PlaygroundBrowser')
+            const PlaygroundBrowser = require('../src/sirens/components/playground-browser/PlaygroundBrowser')
 
             PlaygroundBrowser.openOn({ filename: filename })
         })      
@@ -405,11 +403,11 @@ class Sirens {
         `,
         Code: `
            const Sirens = require('sirens')
-           const Classification = require('sirens/src/o-language/classifications/Classification')
-           const Component = require('sirens/src/gui/components/Component')
-           const ComponentProtocol_Implementation = require('sirens/src/gui/protocols/ComponentProtocol_Implementation')
+           const Classification = require('sirens/src/O').Classification
+           const Component = require('sirens/src/skins/components/Component')
+           const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
 
-           const ComponentInstantiator = require('sirens/src/gui/components/ComponentInstantiator')
+           const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
            class CustomComponent {
                /// Definition

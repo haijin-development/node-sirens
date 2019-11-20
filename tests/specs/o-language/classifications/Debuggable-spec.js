@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const OInstance = require('../../../../src/o-language/classifications/OInstance')
-const Debuggable = require('../../../../src/o-language/classifications/Debuggable')
+const Classification = require('../../../../src/O').Classification
+const OInstance = require('../../../../src/O').OInstance
+const Debuggable = require('../../../../src/O').Debuggable
 
 const Shape = Classification.define( class Shape {
 

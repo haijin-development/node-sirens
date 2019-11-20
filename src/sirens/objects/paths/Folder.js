@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const Path = require('./Path')
 const PathProtocol = require('../../protocols/PathProtocol')
 const Resource = require('../Resource')

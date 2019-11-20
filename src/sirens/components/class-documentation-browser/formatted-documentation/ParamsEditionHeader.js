@@ -1,8 +1,10 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const EditParamDialog = require ('../edition/EditParamDialog')
+
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
 class ParamsEditionHeader {
@@ -20,6 +22,14 @@ class ParamsEditionHeader {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createMethodDocumentationParam',
+            enabledIf: () => { return true },
+            whenActioned: this.createMethodDocumentationParam.bind(this),
+        })
 
         componentsRenderer.render( function(component) {
 
@@ -27,25 +37,19 @@ class ParamsEditionHeader {
 
                 this.styles({
                     marginVertical: 10,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
+                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.image({
                     filename: Resource.image.param,
                     width: 16,
                     height: 16,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
+                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 // To center the button horizontally
                 this.label({
-                    viewAttributes: {
-                        stackSize: 'filled',
-                    },
+                    viewAttributes: { stackSize: 'filled' },
                 })
 
                 this.textButton({
@@ -54,17 +58,13 @@ class ParamsEditionHeader {
                         iconName: GtkIcons.add,
                         size: GtkIcons.size._16x16,
                     },
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
-                    onClicked: component.handleAddNewParameter.bind(component),
+                    viewAttributes: { stackSize: 'fixed' },
+                    onClicked: model.getActionHandler({ id: 'createMethodDocumentationParam' }),
                 })
 
                 // To center the button horizontally
                 this.label({
-                    viewAttributes: {
-                        stackSize: 'filled',
-                    },
+                    viewAttributes: { stackSize: 'filled' },
                 })
 
             })
@@ -72,8 +72,25 @@ class ParamsEditionHeader {
         })
     }
 
-    handleAddNewParameter() {
-        this.getProps().addNewParam()
+    createMethodDocumentationParam() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
+        const newParam = {
+            Name: 'Add the name of the parameter here ...',
+            Description: 'Add the parameter description ...',
+        }
+        const dialog = EditParamDialog.new({
+            className: className,
+            method: method,
+            param: newParam,
+            window: this.getProps().window,
+            onUpdateParam: model.getActionHandler({ id: 'addMethodDocumentationParam' }),
+            acceptButtonLabel: `Add param`,
+        })
+
+        dialog.open()
     }
 }
 

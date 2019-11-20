@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const ParseTreeVisitor = require('./ParseTreeVisitor')
 const ClassDefinition = require('../source-code/ClassDefinition')
 const ClassDeclaration = require('../source-code/ClassDeclaration')

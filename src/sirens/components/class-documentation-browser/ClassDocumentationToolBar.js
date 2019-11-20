@@ -1,8 +1,8 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../Skins').GtkIcons
 const Resource = require('../../objects/Resource')
 
 class ClassDocumentationToolBar {
@@ -29,8 +29,21 @@ class ClassDocumentationToolBar {
                     }
                 })
 
+                this.button({
+                    label: 'Reload documentation.',
+                    image: {
+                        iconName: GtkIcons.refresh,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Realoads the original documentation.',
+                    action: component.getProps().reloadClassDefinition,
+                    enabled: model.getChild({ id: 'reloadClassDefinition' }),
+                })
+
+                this.separator()
+
                 this.toggleButton({
-                    model: model.getShowUnformattedCommentsModel(),
+                    model: model.getChild({ id: 'showsUnformattedComments' }),
                     label: 'Show unformatted comment.',
                     image: {
                         iconName: GtkIcons.revertToSave,
@@ -39,20 +52,8 @@ class ClassDocumentationToolBar {
                     tooltip: 'Shows the unformatted comment as it appears in the file.',
                 })
 
-                this.button({
-                    label: 'Reload documentation.',
-                    image: {
-                        iconName: GtkIcons.refresh,
-                        size: GtkIcons.size._24x24,
-                    },
-                    tooltip: 'Realoads the original documentation.',
-                    action: () => { model.reload() },
-                })
-
-                this.separator()
-
                 this.toggleButton({
-                    model: model.getEditionModeModel(),
+                    model: model.getChild({ id: 'isEditingDocumentation' }),
                     label: 'Edition mode.',
                     image: {
                         iconName: GtkIcons.edit,
@@ -71,6 +72,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a new class documentation browser.',
                     action: component.getProps().openClassDocumentation,
+                    enabled: model.getChild({ id: 'openClassDocumentation' }),
                 })
 
                 this.button({
@@ -82,6 +84,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
+                    enabled: model.getChild({ id: 'openClassEditor' }),
                 })
 
                 this.button({
@@ -93,6 +96,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
+                    enabled: model.getChild({ id: 'openPlayground' }),
                 })
 
             })

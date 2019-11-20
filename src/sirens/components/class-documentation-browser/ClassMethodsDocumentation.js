@@ -1,6 +1,6 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
 const Resource = require('../../objects/Resource')
 const MethodUnformattedComment = require('./unformatted-documentation/MethodUnformattedComment')
@@ -23,8 +23,6 @@ class ClassMethodsDocumentation {
         const showsUnformattedComments = model.showsUnformattedComments()
 
         const methodTags = model.getAllMethodsTags().sort()
-
-        const selectedTagsModel = model.getSelectedTagsModel()
 
         componentsRenderer.render(function (component) {
 
@@ -55,7 +53,7 @@ class ClassMethodsDocumentation {
                 this.verticalStack({ viewAttributes: { splitProportion: 1.0 / 3.0 }, showHeaders: false, }, function() {
 
                     this.listChoice({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
-                        this.model( model.getClassMethodsModel() )
+                        this.model( model.getChild({ id: 'classMethods' }) )
 
                         this.column({
                             getImageClosure: function(functionDefinition) { return Resource.image.method },
@@ -84,7 +82,7 @@ class ClassMethodsDocumentation {
 
                             methodTags.forEach( (tag) => {
                                 this.multipleCheckBox({
-                                    model: selectedTagsModel,
+                                    model: model.getChild({ id: 'selectedTags' }),
                                     item: tag,
                                     label: tag,
                                     viewAttributes: { stackSize: 'fixed' },

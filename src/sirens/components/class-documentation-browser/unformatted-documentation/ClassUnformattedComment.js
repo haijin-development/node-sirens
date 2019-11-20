@@ -1,7 +1,7 @@
 const path = require('path')
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
 const ClassCommentHeader = require ('../ClassCommentHeader')
 const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
@@ -16,46 +16,25 @@ class ClassUnformattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    editClassComment() {
-        const model = this.getModel()
-
-        const dialog = EditClassCommentDialog.new({
-            model: model,
-            window: this.getProps().window,
-            onUpdateClassComment: this.updateClassComment.bind(this),
-            unformatted: true,
-        })
-
-        dialog.open()
-    }
-
-    updateClassComment({ newClassDescription: newClassDescription }) {
-        const model = this.getModel()
-
-        const classDefinition = model.getClassDefinition()
-
-        const classComment = classDefinition.getComment()
-
-        classComment.writeRawSourceCode({ rawSourceCode: newClassDescription })
-
-        model.reload()
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editClassUnformattedComment',
+            enabledIf: () => { return true },
+            whenActioned: this.editClassUnformattedComment.bind(this),
+        })
+
+        const classDefinition = model.getBrowsedClass()
+
+        if( classDefinition === null ) { return }
 
         const isInEditionMode = model.isInEditionMode()
 
-        const editionClosure = isInEditionMode ?
-            this.editClassComment.bind(this) : undefined
-
-        let unformattedComment = model.getClassUnformattedComment()
+        let unformattedComment = classDefinition.getComment().getSourceCode()
 
         if( unformattedComment.trim() === '' ) {
             unformattedComment = 'This class has no documentation yet.'
@@ -69,7 +48,7 @@ class ClassUnformattedComment {
                     this.component(
                         EditClassDescriptionHeader.new({
                             model: model,
-                            editionClosure: editionClosure,
+                            editionClosure: model.getActionHandler({ id: 'editClassUnformattedComment' }),
                         })
                     )
 
@@ -78,7 +57,7 @@ class ClassUnformattedComment {
 
                 this.component(
                     ClassCommentHeader.new({
-                        className: className,
+                        className: classDefinition.getClassName(),
                         window: this.getProps().window,
                     })
                 )
@@ -92,6 +71,29 @@ class ClassUnformattedComment {
             })
 
         })
+    }
+
+    /// Commands
+
+    editClassUnformattedComment() {
+        const model = this.getModel()
+
+        const classDefinition = model.getBrowsedClass()
+
+        const className = classDefinition.getClassName()
+
+        const classComment = classDefinition.getComment().getSourceCode()
+
+        console.log( classComment )
+
+        const dialog = EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: this.getProps().window,
+            onUpdateClassComment: model.getActionHandler({ id: 'updateClassUnformattedComment' }),
+        })
+
+        dialog.open()
     }
 }
 

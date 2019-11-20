@@ -164,7 +164,7 @@ However please note that:
 
 - Sirens is still in [verion 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
 
-The [o-language](https://github.com/haijin-development/o-language/blob/development/README.md) and the [gui builder](./src/gui) used by Sirens browsers will be released as standalone libraries once they reach a estable public interface. This will happen once there are several new releases of Sirens with no modifications neither in the o-language nor in its gui builder public interfaces.
+The [O language](https://github.com/haijin-development/o-language/blob/development/README.md) and the [Skins](./src/skins) GUI builder used by Sirens browsers will be released as standalone libraries once they reach a stable public interface. This will happen once there are several new releases of Sirens with no modifications neither in the o-language nor in Skins public interfaces.
 
 ## Development
 

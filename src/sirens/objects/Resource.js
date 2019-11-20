@@ -1,5 +1,5 @@
 const path = require('path')
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
 
 const resourcesFolder = path.resolve( __dirname + '/../../../resources' )
 const iconsFolder = resourcesFolder + '/icons/'

@@ -1,8 +1,7 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 const EditDialogHeader = require('./EditDialogHeader')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
@@ -19,9 +18,7 @@ class EditExampleDialog {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        const className = model.getClassName()
+        const className = this.getProps().className
 
         const example = this.getProps().example
 
@@ -57,6 +54,7 @@ class EditExampleDialog {
 
                         this.component(
                             PlaygroundComponent.new({
+                                id: 'playground',
                                 text: "\n" + example.Code + "\n",
                                 hScroll: 'never',
                                 vScroll: 'auto',
@@ -117,7 +115,7 @@ class EditExampleDialog {
 
         const example = {
             Description: exampleDescriptionComponent.getModel().getValue(),
-            Code: exampleCodeComponent.getModel().getValue(),
+            Code: exampleCodeComponent.getText(),
         }
 
         this.getProps().onUpdateExample({

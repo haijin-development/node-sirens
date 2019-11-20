@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const OInstance = require('../../../../src/o-language/classifications/OInstance')
+const Classification = require('../../../../src/O').Classification
+const OInstance = require('../../../../src/O').OInstance
 
 let Shape
 let ShapeProxy

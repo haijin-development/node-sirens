@@ -1,8 +1,8 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../Skins').GtkIcons
 const Resource = require('../../objects/Resource')
 
 class ClassEditorMenuBar {
@@ -17,6 +17,8 @@ class ClassEditorMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
         componentsRenderer.render(function (component) {
 
             this.toolBar( function() {
@@ -35,6 +37,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a file to edit its class.',
                     action: component.getProps().openFile,
+                    enabled: model.getChild({ id: 'openFile' }),
                 })
 
                 this.button({
@@ -45,18 +48,20 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a file in a new window to edit its class.',
                     action: component.getProps().openFileInNewWindow,
+                    enabled: model.getChild({ id: 'openFileInNewWindow' }),
                 })
 
-                this.skip().separator()
+                this.separator()
 
-                this.skip().button({
-                    label: 'Save file',
+                this.button({
+                    label: 'Open documentation browser',
                     image: {
-                        iconName: GtkIcons.save,
+                        iconName: GtkIcons.info,
                         size: GtkIcons.size._24x24,
                     },
-                    tooltip: 'Saves the edited file.',
-                    action: component.getProps().saveFile,
+                    tooltip: 'Opens a class documentation browser on the selected class.',
+                    action: component.getProps().openDocumentationBrowser,
+                    enabled: model.getChild({ id: 'openDocumentationBrowser' }),
                 })
 
                 this.separator()
@@ -70,6 +75,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens another class editor.',
                     action: component.getProps().openClassEditor,
+                    enabled: model.getChild({ id: 'openClassEditor' }),
                 })
 
                 this.button({
@@ -81,6 +87,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
+                    enabled: model.getChild({ id: 'openPlayground' }),
                 })
 
             })

@@ -1,8 +1,10 @@
 const path = require('path')
-const Classification = require('../../o-language/classifications/Classification')
-const Resource = require('./Resource')
+const Classification = require('../../O').Classification
+const ValueType = require('../../O').ValueType
+const PropertyValueToText = require('./value-displayers/PropertyValueToText')
+const PropertyValueToImage = require('./value-displayers/PropertyValueToImage')
 
-class ObjectProperty {
+class _ObjectProperty {
     /// Definition
 
     static definition() {
@@ -11,6 +13,14 @@ class ObjectProperty {
 
     /// Initializing
 
+    afterInstantiation() {
+        const Pluggables = require('./Pluggables')
+
+        const pluggableClassifications = Pluggables.objectPropertiesInspector.plugins
+
+        this.behaveAsAll( pluggableClassifications )
+    }
+
     initialize({ key: key, value: value }) {
         this.previousClassificationDo( () => {
             this.initialize()
@@ -18,10 +28,6 @@ class ObjectProperty {
 
         this.key = key
         this.value = value
-    }
-
-    objectPropertyClassification() {
-        return this.thisClassification()
     }
 
     /// Accessing
@@ -37,11 +43,11 @@ class ObjectProperty {
     /// Querying
 
     getChildProperties() {
-        if( this.isArray() ) {
+        if( ValueType.isArray( this.value ) ) {
             return this.getArrayIndexedProperties()
         }
 
-        if( this.isObject() ) {
+        if( ValueType.isObject( this.value ) ) {
             return this.getObjectProperties()
         }
 
@@ -50,7 +56,7 @@ class ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return this.objectPropertyClassification().new({
+            return ObjectProperty.new({
                 key: index,
                 value: item
             })
@@ -69,7 +75,7 @@ class ObjectProperty {
                 continue
             }
 
-            const instVar = this.objectPropertyClassification().new({
+            const instVar = ObjectProperty.new({
                 key: key,
                 value: instVarValue
             })
@@ -80,42 +86,8 @@ class ObjectProperty {
         return instVars
     }
 
-    valueType() {
-        return typeof this.value
-    }
-
-    /// Asking
-
-    isArray() {
-        return Array.isArray(this.value)
-    }
-
-    isString() {
-        return this.valueType() === 'string'
-    }
-
-    isObject() {
-        return this.valueType() === 'object'
-    }
-
     isFunction() {
-        return this.valueType() === 'function'
-    }
-
-    isNumber() {
-        return this.valueType() === 'number' || this.valueType() === 'bigint'
-    }
-
-    isBoolean() {
-        return this.valueType() === 'boolean'
-    }
-
-    isNull() {
-        return this.value === null
-    }
-
-    isUndefined() {
-        return this.value === undefined
+        return ValueType.isFunction( this.value )
     }
 
     /// Displaying
@@ -133,102 +105,26 @@ class ObjectProperty {
     }
 
     keyDisplayString() {
-        if( typeof this.key === 'number' ) {
+        if( ValueType.isNumber( this.key ) ) {
             return `[${this.key.toString()}]`
-        } else {
-            return this.key.toString()
         }
+
+        return this.key.toString()
     }
 
     valueDisplayString() {
-        let description = null
+        const displayer = PropertyValueToText.new()
 
-        if(this.isUndefined()) {
-            return "undefined"
-        }
-
-        if(this.isNull()) {
-            return "null"
-        }
-
-        if(this.isArray()) {
-            description = `Array(${this.value.length})`
-        }
-
-        if(this.isString()) {
-            return `"${this.value}"`
-        }
-
-        if(this.isObject()) {
-            if(this.value.constructor !== undefined) {
-                description = `${this.value.constructor.name}`
-            } else {
-                description = 'object'
-            }
-
-        }
-
-        if(this.isFunction()) {
-            description = "function"
-            if (this.value.name !== undefined) {
-                description += " named '" + this.value.name + "'"
-            }
-        }
-
-        if(description === null) {
-            description = this.value.toString()
-        }
-
-        if(this.isNumber() || this.isBoolean()) {
-            return description
-        }
-
-        if(['a', 'e', 'i', 'o', 'A', 'E', 'I', 'O'].includes(description[0])) {
-            description = 'an ' + description
-        } else {
-            description = 'a ' + description
-        }
-
-        return description
+        return displayer.getDisplayValueFrom({ value: this.value })
     }
 
     icon() {
-        if(this.value === true) {
-            return Resource.image.true
-        }
+        const displayer = PropertyValueToImage.new()
 
-        if(this.value === false) {
-            return Resource.image.false
-        }
-
-        if(this.isUndefined()) {
-            return Resource.image.undefined
-        }
-
-        if(this.isNull()) {
-            return Resource.image.null
-        }
-
-        if(this.isNumber()) {
-            return Resource.image.number
-        }
-
-        if(this.isString()) {
-            return Resource.image.string
-        }
-
-        if(this.isArray()) {
-            return Resource.image.array
-        }
-
-        if(this.isFunction()) {
-            return Resource.image.function
-        }
-
-        if(this.isObject()) {
-            return Resource.image.object
-        }
+        return displayer.getDisplayValueFrom({ value: this.value })
     }
 }
 
-module.exports = Classification.define(ObjectProperty)
+ObjectProperty = Classification.define(_ObjectProperty)
+
+module.exports = ObjectProperty

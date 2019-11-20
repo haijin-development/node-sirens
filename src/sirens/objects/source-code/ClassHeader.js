@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const JsStatement = require('./JsStatement')
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
@@ -14,6 +14,12 @@ class ClassHeader {
         this.instanceVariables = []
         this.assumes = [JsStatement]
         this.implements = [JsStatementProtocol]
+    }
+
+    /// Asking
+
+    isHeader() {
+        return true
     }
 }
 

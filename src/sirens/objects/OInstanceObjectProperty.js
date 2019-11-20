@@ -1,18 +1,13 @@
-const Classification = require('../../o-language/classifications/Classification')
+const Classification = require('../../O').Classification
+const OInstance = require('../../O').OInstance
+const GtkView = require('../../skins/gtk-views/GtkView')
 const ObjectProperty = require('./ObjectProperty')
-const OInstance = require('../../o-language/classifications/OInstance')
-const GtkView = require('../../gui/gtk-views/GtkView')
 
 class OInstanceObjectProperty {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ObjectProperty]
-    }
-
-    objectPropertyClassification() {
-        return this.thisClassification()
     }
 
     /// Querying
@@ -40,7 +35,7 @@ class OInstanceObjectProperty {
 
         if( value.isBehavingAs( GtkView ) ) {
 
-            const instVar = this.objectPropertyClassification().new({
+            const instVar = ObjectProperty.new({
                 key: 'instance variables',
                 value: 'GTKView objects own Gtk handles and its instance variables are not shown.'
             })
@@ -52,11 +47,13 @@ class OInstanceObjectProperty {
 
         value.classifications().forEach( (classification) => {
 
+            const classificationName = classification.getName()
+
             value.classificationInstanceVariablesDo(classification, (instVarName, instVarValue) => {
 
-                const instVar = this.objectPropertyClassification().new({
-                    key: instVarName,
-                    value: instVarValue
+                const instVar = ObjectProperty.new({
+                    key: classificationName + '.' + instVarName,
+                    value: instVarValue,
                 })
 
                 instVars.push( instVar )

@@ -11,7 +11,7 @@ class MethodValidator {
      ])
     */
     static definition() {
-        this.instanceVariables = ['validators']
+        this.instanceVariables = ['validators', 'methodInfo']
         this.assumes = []
         this.implements = [MethodValidatorProtocol]
     }
@@ -25,6 +25,15 @@ class MethodValidator {
     */
     afterInstantiation() {
         this.validators = []
+        this.methodInfo = {}
+    }
+
+    setMethodInfo(methodInfo) {
+        this.methodInfo = methodInfo
+    }
+
+    getMethodInfo() {
+        return this.methodInfo
     }
 
     /*
@@ -45,6 +54,8 @@ class MethodValidator {
     */
     newParamValidator() {
         const validator = ParamValidator.new()
+
+        validator.setMethodInfo( this.methodInfo )
 
         this.addValidator({ validator: validator })
 

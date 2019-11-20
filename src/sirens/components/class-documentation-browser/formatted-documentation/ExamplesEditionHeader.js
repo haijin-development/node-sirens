@@ -1,8 +1,8 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
 class ExamplesEditionHeader {
@@ -14,12 +14,17 @@ class ExamplesEditionHeader {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-
     /// Building
 
     renderWith(componentsRenderer) {
+        const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createClassDocumentationExample',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.createClassDocumentationExample.bind(this),
+        })
 
         componentsRenderer.render( function(component) {
 
@@ -57,7 +62,7 @@ class ExamplesEditionHeader {
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
-                    onClicked: component.handleAddNewExample.bind(component),
+                    onClicked: component.getProps().addClosure,
                 })
 
                 // To center the button horizontally
@@ -70,10 +75,6 @@ class ExamplesEditionHeader {
             })
 
         })
-    }
-
-    handleAddNewExample() {
-        this.getProps().addNewExample()
     }
 }
 

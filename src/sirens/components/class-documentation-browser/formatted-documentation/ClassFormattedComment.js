@@ -1,11 +1,11 @@
 const path = require('path')
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
 const ClassCommentHeader = require ('../ClassCommentHeader')
-const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
+const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 const EditClassDescriptionHeader = require('../EditClassDescriptionHeader')
 const ImplementationNotesEditionHeader = require ('./ImplementationNotesEditionHeader')
 const ImplementationNoteDocumentation = require('./ImplementationNoteDocumentation')
@@ -23,228 +23,53 @@ class ClassFormattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    editClassComment() {
-        const model = this.getModel()
-
-        const dialog = EditClassCommentDialog.new({
-            model: model,
-            window: this.getProps().window,
-            onUpdateClassComment: this.updateClassComment.bind(this),
-            unformatted: false,
-        })
-
-        dialog.open()
-    }
-
-    updateClassComment({ newClassDescription: newClassDescription }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.setDescription( newClassDescription )
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    addNewImplementationNote() {
-        const model = this.getModel()
-
-        const className = model.getClassName()
-
-        const dialog = EditImplementationNoteDialog.new({
-            model: model,
-            implementationNoteText: 'Add the new implementation note here ...',
-            window: this.getProps().window,
-            onUpdateImplementationNote: this.addImplementationNote.bind(this),
-            acceptButtonLabel: `Add implementation note`,
-            title:  `${className} implementation note.`,
-            subtitle: `You are editing an implementation note of the class ${className}.`,
-        })
-
-        dialog.open()
-    }
-
-    addImplementationNote({ implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.addImplementationNote( implementationNoteText )
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    deleteImplementationNote({ atIndex: index }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.deleteImplementationNoteAt({ index: index })
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-
-    editImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const className = model.getClassName()
-
-        const dialog = EditImplementationNoteDialog.new({
-            model: model,
-            implementationNoteText: implementationNoteText,
-            window: this.getProps().window,
-            onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
-                this.updateImplementationNoteAt({
-                    index: index,
-                    implementationNoteText: implementationNoteText,
-                })
-            },
-            acceptButtonLabel: `Update implementation note`,
-            title:  `${className} implementation note.`,
-            subtitle: `You are editing an implementation note of the class ${className}.`,
-        })
-
-        dialog.open()
-    }
-
-    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.updateImplementationNoteAt({
-            index: index,
-            implementationNoteText: implementationNoteText,
-        })
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    addNewExample() {
-        const model = this.getModel()
-
-        const newExample = {
-            Description: 'Add the example description here ...',
-            Code: 'Add the example code here ...',
-        }
-
-        const className = model.getClassName()
-
-        const dialog = EditExampleDialog.new({
-            model: model,
-            example: newExample,
-            window: this.getProps().window,
-            onUpdateExample: this.addExample.bind(this),
-            acceptButtonLabel: `Add example`,
-            title: `${className} example.`,
-            subtitle: `You are editing an example of the class ${className}.`,
-        })
-
-        dialog.open()
-    }
-
-    addExample({ example: example }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.addExample( example )
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    editExampleAt({ index: index, example: example }) {
-        const model = this.getModel()
-
-        const className = model.getClassName()
-
-        const dialog = EditExampleDialog.new({
-            model: model,
-            example: example,
-            window: this.getProps().window,
-            onUpdateExample: ({ example: example }) => {
-                this.updateExampleAt({
-                    index: index,
-                    example: example,
-                })
-            },
-            acceptButtonLabel: `Update example note`,
-            title: `${className} example.`,
-            subtitle: `You are editing an example of the class ${className}.`,
-        })
-
-        dialog.open()
-    }
-
-    updateExampleAt({ index: index, example: example }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.updateExampleAt({
-            index: index,
-            example: example,
-        })
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-    deleteExample({ atIndex: index }) {
-        const model = this.getModel()
-
-        const documentation = model.getClassDocumentation()
-
-        documentation.deleteExampleAt({ index: index })
-
-        this.updateClassDocumentation({
-            documentation: documentation,
-        })
-    }
-
-
-
-    updateClassDocumentation({ documentation: documentation }) {
-        const classCommentContents = documentation.generateCommentContents()
-
-        const model = this.getModel()
-
-        const classDefinition = model.getClassDefinition()
-
-        const classComment = classDefinition.getComment()
-
-        classComment.writeFormattedContents({ commentContents: classCommentContents })
-
-        model.reload()
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
 
-        const className = model.getClassName()
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editClassDocumentationComment',
+            enabledIf: () => { return true },
+            whenActioned: this.editClassDocumentationComment.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createClassDocumentationImplementationNote',
+            enabledIf: () => { return true },
+            whenActioned: this.createClassDocumentationImplementationNote.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editClassDocumentationImplementationNote',
+            enabledIf: () => { return true },
+            whenActioned: this.editClassDocumentationImplementationNote.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'createClassDocumentationExample',
+            enabledIf: () => { return true },
+            whenActioned: this.createClassDocumentationExample.bind(this),
+        })
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editClassDocumentationExample',
+            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
+            whenActioned: this.editClassDocumentationExample.bind(this),
+        })
 
         const isInEditionMode = model.isInEditionMode()
 
-        const editionClosure = isInEditionMode ?
-            this.editClassComment.bind(this) : undefined
+        const documentation = model.getChild({ id: 'classDocumentation' }).getValue()
 
-        const documentation = model.getClassDocumentation()
+        if( documentation === null ) { return }
+
+        const className = documentation.getClassName()
 
         let description = documentation.getDescription()
 
@@ -272,7 +97,7 @@ class ClassFormattedComment {
                         this.component(
                             EditClassDescriptionHeader.new({
                                 model: model,
-                                editionClosure: editionClosure,
+                                editionClosure: model.getActionHandler({ id: 'editClassDocumentationComment' }),
                             })
                         )
 
@@ -288,6 +113,7 @@ class ClassFormattedComment {
 
                     this.component(
                         PlaygroundComponent.new({
+                            id: 'playground',
                             text: "\n" + description + "\n",
                             hScroll: 'never',
                             vScroll: 'never',
@@ -303,7 +129,7 @@ class ClassFormattedComment {
                         this.component(
                             ImplementationNotesEditionHeader.new({
                                 model: model,
-                                addNewImplementationNote: component.addNewImplementationNote.bind(component),
+                                createClosure: model.getActionHandler({ id: 'createClassDocumentationImplementationNote' }),
                             })
                         )
 
@@ -318,12 +144,13 @@ class ClassFormattedComment {
                                 model: model,
                                 index: index,
                                 implementationNote: implementationNote,
-                                deleteImplementationNote: component.deleteImplementationNote.bind(component),
-                                editImplementationNote: ({ atIndex: index }) => {
-                                    component.editImplementationNoteAt({
-                                        index: index,
-                                        implementationNoteText: implementationNote,
-                                    })
+                                editClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'editClassDocumentationImplementationNote' })
+                                    handler({ atIndex: index, implementationNoteText: implementationNote })
+                                },
+                                deleteClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'deleteClassDocumentationImplementationNote' })
+                                    handler({ atIndex: index })
                                 },
                             })
                         )
@@ -333,26 +160,27 @@ class ClassFormattedComment {
                         this.component(
                             ExamplesEditionHeader.new({
                                 model: model,
-                                addNewExample: component.addNewExample.bind(component),
+                                addClosure: model.getActionHandler({ id: 'createClassDocumentationExample' }),
                             })
                         )
 
                         this.verticalSeparator()
                     }
 
-                    examples.forEach( (example) => {
+                    examples.forEach( (example, index) => {
                         this.verticalSeparator()
 
                         this.component(
                             ExampleDocumentation.new({
                                 model: model,
                                 example: example,
-                                deleteExample: component.deleteExample.bind(component),
-                                editExample: ({ atIndex: index }) => {
-                                    component.editExampleAt({
-                                        index: index,
-                                        example: example,
-                                    })
+                                editClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'editClassDocumentationExample' })
+                                    handler({ atIndex: index, example: example })
+                                },
+                                deleteClosure: () => {
+                                    const handler = model.getActionHandler({ id: 'deleteClassDocumentationExample' })
+                                    handler({ atIndex: index })
                                 },
                             })
                         )
@@ -364,6 +192,113 @@ class ClassFormattedComment {
 
         })
     }
+
+    editClassDocumentationComment() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const classDocumentation = model.getChild({ id: 'classDocumentation' }).getValue()
+
+        let classComment = classDocumentation.getDescription()
+
+        if( classComment.trim() === '' ) {
+            classComment = 'This class has no documentation yet.'
+        }
+
+        const dialog = EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: this.getProps().window,
+            onUpdateClassComment: model.getActionHandler({ id: 'updateClassDocumentationComment' }),
+        })
+
+        dialog.open()
+    }
+
+    createClassDocumentationImplementationNote() {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const dialog = EditImplementationNoteDialog.new({
+            className: className,
+            implementationNoteText: 'Add the new implementation note here ...',
+            window: this.getProps().window,
+            onUpdateImplementationNote: model.getActionHandler({ id: 'addClassDocumentationImplementationNote' }),
+            acceptButtonLabel: `Add implementation note`,
+            title: `${className} implementation note.`,
+            subtitle: `You are editing an implementation note of the class ${className}.`,
+        })
+
+        dialog.open()
+    }
+
+    editClassDocumentationImplementationNote({ atIndex: index, implementationNoteText: implementationNoteText }) {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const dialog = EditImplementationNoteDialog.new({
+            className: className,
+            implementationNoteText: implementationNoteText,
+            window: this.getProps().window,
+            onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
+                const handler = model.getActionHandler({ id: 'updateClassDocumentationImplementationNote' })
+                handler({ atIndex: index, implementationNoteText: implementationNoteText })
+            },
+            acceptButtonLabel: `Update implementation note`,
+            title: `${className} implementation note.`,
+            subtitle: `You are editing an implementation note of the class ${className}.`,
+        })
+
+        dialog.open()
+    }
+
+    createClassDocumentationExample() {
+        const model = this.getModel()
+
+        const newExample = {
+            Description: 'Add the example description here ...',
+            Code: 'Add the example code here ...',
+        }
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const dialog = EditExampleDialog.new({
+            className: className,
+            example: newExample,
+            window: this.getProps().window,
+            onUpdateExample: model.getActionHandler({ id: 'addClassDocumentationExample' }),
+            acceptButtonLabel: `Add example`,
+            title: `${className} example.`,
+            subtitle: `You are editing an example of the class ${className}.`,
+        })
+
+        dialog.open()
+    }
+
+    editClassDocumentationExample({ atIndex: index, example: example }) {
+        const model = this.getModel()
+
+        const className = model.getBrowsedClass().getClassName()
+
+        const dialog = EditExampleDialog.new({
+            className: className,
+            example: example,
+            window: this.getProps().window,
+            onUpdateExample: ({ example: example }) => {
+                const handler = model.getActionHandler({ id: 'updateClassDocumentationExample' })
+                handler({ atIndex: index, example: example })
+            },
+            acceptButtonLabel: `Update example note`,
+            title: `${className} example.`,
+            subtitle: `You are editing an example of the class ${className}.`,
+        })
+
+        dialog.open()
+    }
+
 }
 
 module.exports = Classification.define(ClassFormattedComment)

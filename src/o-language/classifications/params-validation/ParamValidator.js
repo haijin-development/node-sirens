@@ -13,12 +13,20 @@ class ParamValidator {
      ])
     */
     static definition() {
-        this.instanceVariables = ['valueToValidate', 'validation']
+        this.instanceVariables = ['valueToValidate', 'validation', 'methodInfo']
         this.assumes = []
         this.implements = [ParamValidatorProtocol]
     }
 
     /// Initializing
+
+    setMethodInfo(methodInfo) {
+        this.methodInfo = methodInfo
+    }
+
+    getMethodInfo() {
+        return this.methodInfo
+    }
 
     /*
      Tags([
@@ -48,10 +56,10 @@ class ParamValidator {
      ])
     */
     isNull() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: value === null,
-                errorMessage: () => { return `Expected a null value, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a null value, got a ${typeof(value)}.` }
             }
         })
 
@@ -64,10 +72,10 @@ class ParamValidator {
      ])
     */
     notNull() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: value !== null,
-                errorMessage: () => { return `Expected a non null value, got null.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a non null value, got null.` }
             }
         })
 
@@ -80,10 +88,10 @@ class ParamValidator {
      ])
     */
     isUndefined() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: value === undefined,
-                errorMessage: () => { return `Expected an undefined value, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected an undefined value, got a ${typeof(value)}.` }
             }
         })
 
@@ -96,10 +104,10 @@ class ParamValidator {
      ])
     */
     notUndefined() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: value !== undefined,
-                errorMessage: () => { return `Expected a non undefined value, got undefined.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a non undefined value, got undefined.` }
             }
         })
 
@@ -112,10 +120,10 @@ class ParamValidator {
      ])
     */
     isBoolean() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: value === true || value === false,
-                errorMessage: () => { return `Expected a Boolean, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a Boolean, got a ${typeof(value)}.` }
             }
         })
 
@@ -128,12 +136,12 @@ class ParamValidator {
      ])
     */
     isNumber() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             const type = typeof(value)
 
             return {
                 isValid: type === 'number',
-                errorMessage: () => { return `Expected a Number, got a ${type}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a Number, got a ${type}.` }
             }
         })
 
@@ -146,10 +154,10 @@ class ParamValidator {
      ])
     */
     isInteger() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: Number.isInteger(value),
-                errorMessage: () => { return `Expected an Integer, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected an Integer, got a ${typeof(value)}.` }
             }
         })
 
@@ -162,12 +170,12 @@ class ParamValidator {
      ])
     */
     isString() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             const type = typeof(value)
 
             return {
                 isValid: type === 'string',
-                errorMessage: () => { return `Expected a String, got a ${type}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a String, got a ${type}.` }
             }
         })
 
@@ -180,10 +188,10 @@ class ParamValidator {
      ])
     */
     isArray() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: Array.isArray(value),
-                errorMessage: () => { return `Expected an Array, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected an Array, got a ${typeof(value)}.` }
             }
         })
 
@@ -196,11 +204,11 @@ class ParamValidator {
      ])
     */
     isObject() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 // typeof(null) is 'object' is js
                 isValid: value !== null && typeof(value) === 'object',
-                errorMessage: () => { return `Expected an Object, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected an Object, got a ${typeof(value)}.` }
             }
         })
 
@@ -213,10 +221,10 @@ class ParamValidator {
      ])
     */
     isFunction() {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: typeof(value) === 'function',
-                errorMessage: () => { return `Expected a function, got a ${typeof(value)}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected a function, got a ${typeof(value)}.` }
             }
         })
 
@@ -229,10 +237,10 @@ class ParamValidator {
      ])
     */
     isAnyOf(values) {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: values.includes(value),
-                errorMessage: () => { return `Expected any of [${values}] values, got ${value}.` }
+                errorMessage: () => { return `Method ${methodInfo.protocolName}.${methodInfo.methodName} expected any of [${values}] values, got ${value}.` }
             }
         })
 
@@ -245,7 +253,7 @@ class ParamValidator {
      ])
     */
     compliesWith(protocol) {
-        this.isExpectedTo( (value) => {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             const isOInstance = OInstance.isOInstance( value )
             const compliesWithProtocol = isOInstance && value.compliesWith( protocol )
 
@@ -307,7 +315,11 @@ class ParamValidator {
      ])
     */
     newValidation() {
-        return Validation.new()
+        const validation = Validation.new()
+
+        validation.setMethodInfo( this.methodInfo )
+
+        return validation
     }
 
     /*
@@ -316,7 +328,11 @@ class ParamValidator {
      ])
     */
     newOrValidation() {
-        return OrValidation.new()
+        const validation = OrValidation.new()
+
+        validation.setMethodInfo( this.methodInfo )
+
+        return validation
     }
 
 }

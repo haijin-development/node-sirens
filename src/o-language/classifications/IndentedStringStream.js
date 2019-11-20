@@ -10,7 +10,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
               		// See example # 1
 
-              		const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+              		const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
               		IndentedStringStream.new()
 
@@ -37,7 +37,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
                  Creates a IndentedStringStream.
               `,
               Code: `
-                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+                 const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
                  const stringStream = IndentedStringStream.new()
 
@@ -50,7 +50,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
                  Sets the indentation level to an existing IndentedStringStream.
               `,
               Code: `
-                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+                 const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
                  const stringStream = IndentedStringStream.new()
 
@@ -67,7 +67,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
                  Increments and decrements the indentation to an IndentedStringStream.
               `,
               Code: `
-                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+                 const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
                  const stringStream = IndentedStringStream.new()
 
@@ -87,7 +87,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
                  evaluation of a closure.
               `,
               Code: `
-                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+                 const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
                  const stringStream = IndentedStringStream.new()
 
@@ -111,8 +111,8 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
                  but the classification can also be used to decorate any object that behaves as a StringStream.
               `,
               Code: `
-                 const StringStream = require('sirens/src/o-language/classifications/StringStream')
-                 const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+                 const StringStream = require('sirens/src/O').StringStream
+                 const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
                  // Create a StringStream object
                  const stringStream = StringStream.new()
@@ -188,7 +188,7 @@ class IndentedStringStream {
            Gets the default indentation char of this StringStream object.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -230,7 +230,7 @@ Example({
       Gets the indentation level of this StringStream object.
    `,
    Code: `
-      const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+      const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
       const stream = IndentedStringStream.new()
 
@@ -275,7 +275,7 @@ Tags([
            Sets the indentation level to 3 and appends a line.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -317,7 +317,7 @@ Tags([
            Gets the indentation char used by a StringStream object.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -362,7 +362,7 @@ Tags([
            Sets the indentation char to a StringStream and appends a new line with that indentation char.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -421,7 +421,7 @@ Example({
       Increments the indentation level by 1 and appends a new line.
    `,
    Code: `
-      const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+      const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
       const stream = IndentedStringStream.new()
 
@@ -474,7 +474,7 @@ Tags([
            Sets the indentation level of a StringStream to 2, decrements it by 1 and appends a new line.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -538,7 +538,7 @@ Tags([
            Appends a line during the increment of the indentation level of a StringStream.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -616,7 +616,7 @@ Tags([
            Appends an indented line to a StringStream object.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -688,7 +688,7 @@ Tags([
            Prepends an indented line to a StringStream object.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -758,7 +758,7 @@ Tags([
            Appends a carriage return with no indentation.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
            stream.setIndentationCount( 3 )
@@ -773,7 +773,7 @@ Tags([
            Appends a carriage return with indentation.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
 
@@ -821,7 +821,7 @@ Tags([
            Appends indentation to a StringStream object.
         `,
         Code: `
-           const IndentedStringStream = require('sirens/src/o-language/classifications/IndentedStringStream')
+           const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
            stream.setIndentationCount( 3 )

@@ -1,5 +1,5 @@
+const FileChooser = require('../../src/Skins').FileChooser
 const Sirens = require('../../src/Sirens')
-const FileChooser = require('../../src/gui/components/dialogs/FileChooser')
 
 
 const selectedFilename = FileChooser.openFile({

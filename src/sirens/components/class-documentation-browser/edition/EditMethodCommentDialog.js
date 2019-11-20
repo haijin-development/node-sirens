@@ -1,8 +1,7 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 const EditDialogHeader = require('./EditDialogHeader')
 
@@ -39,11 +38,10 @@ class EditMethodCommentDialog {
     }
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
         const method = this.getProps().method
 
-        const classdName = model.getClassName()
+        const className = this.getProps().className
+
         const methodName = method.getName()
 
         const methodDeclaration = method.getFunctionSignatureString()
@@ -66,7 +64,7 @@ class EditMethodCommentDialog {
                         EditDialogHeader.new({
                             mainIcon: Resource.image.method,
                             title:  `${methodDeclaration}`,
-                            subtitle: `You are editing the description of the method ${classdName}.${methodName}.`,
+                            subtitle: `You are editing the description of the method ${className}.${methodName}.`,
                         })
                     )
 

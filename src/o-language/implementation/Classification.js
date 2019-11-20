@@ -257,7 +257,7 @@ class Classification {
        Creates a Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -286,7 +286,7 @@ class Classification {
        That is, the Circle instances will also behave as Shape instances.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Shape {
         static definition() {
@@ -340,8 +340,8 @@ class Classification {
        Creates a Circle classification that complies with the CircleProtocol
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
 
        class CircleProtocol {
         getRadius() {}
@@ -388,8 +388,8 @@ class Classification {
        For the moment the protocol expectations of a class is used only as a documentation. In the future it may also be validated.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
+       const Classification = require('sirens/src/O').Classification
+       const Protocol = require('sirens/src/O').Protocol
 
        class ShapeProtocol {
         drawOn({ canvas: canvas }) {}
@@ -413,7 +413,7 @@ class Classification {
        Creates a CircleBuilder to define additional methods on the Circle classification itself, not in the objects behaving a Circles.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class CircleBuilder {
         atPosition({ x: x, y: y }) {
@@ -507,8 +507,8 @@ class Classification {
        Creates a new OInstance object.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
-       const OInstance = require('sirens/src/o-language/classifications/OInstance')
+       const Classification = require('sirens/src/O').Classification
+       const OInstance = require('sirens/src/O').OInstance
 
        const object = Classification.createObject()
        object.isBehavingAs( OInstance )
@@ -563,7 +563,7 @@ class Classification {
        Creates a new instance of the classification Circle, initialized with the given radius
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -636,7 +636,7 @@ class Classification {
        Gets the name of the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -695,7 +695,7 @@ class Classification {
        Gets the classification definition of the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -781,7 +781,7 @@ class Classification {
        Dynamically sets the definition of a classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        const classificationObject = Classification.define( class {} )
        classificationObject.setClassificationDefinition( class DynamicClassificationDefinintion {
@@ -831,7 +831,7 @@ class Classification {
        Returns all the method names defined in the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -897,7 +897,7 @@ class Classification {
            Asks if the Circle classification defines the methods 'getPosition' and 'getRadius'.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
             static definition() {
@@ -956,7 +956,7 @@ class Classification {
        Returns the names of all the instance variables defined in the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Circle {
         static definition() {
@@ -1026,7 +1026,7 @@ class Classification {
            Dynamically adds instance variables to a classification.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
             static definition() {
@@ -1092,7 +1092,7 @@ class Classification {
            Asks if the Circle classification defines the instance variables named 'radius' and 'color'.
         `,
         Code: `
-           const Classification = require('sirens/src/o-language/classifications/Classification')
+           const Classification = require('sirens/src/O').Classification
 
            class Circle {
             static definition() {
@@ -1146,7 +1146,7 @@ class Classification {
        Returns the classifications assumed by the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Shape {
         static definition() {
@@ -1236,7 +1236,7 @@ class Classification {
        Sets the assumptions to the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Shape {
         static definition() {
@@ -1330,7 +1330,7 @@ class Classification {
        Gets the recursive assumptions of the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Shape {
         static definition() {
@@ -1425,7 +1425,7 @@ class Classification {
        Gets the assumptions chain of the Circle classification.
     `,
     Code: `
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Classification = require('sirens/src/O').Classification
 
        class Shape {
         static definition() {
@@ -1668,8 +1668,8 @@ class Classification {
        Validates that the Circle classification implements the CircleProtocol.
     `,
     Code: `
-       const Protocol = require('sirens/src/o-language/classifications/Protocol')
-       const Classification = require('sirens/src/o-language/classifications/Classification')
+       const Protocol = require('sirens/src/O').Protocol
+       const Classification = require('sirens/src/O').Classification
 
        class CircleProtocol {
         getRadius() {}

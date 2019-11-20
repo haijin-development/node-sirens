@@ -1,4 +1,4 @@
-const Classification = require('../../../o-language/classifications/Classification')
+const Classification = require('../../../O').Classification
 const JsStatement = require('./JsStatement')
 const JsStatementProtocol = require('../../protocols/JsStatementProtocol')
 
@@ -16,6 +16,12 @@ class SourceFileFooter {
         this.instanceVariables = []
         this.assumes = [JsStatement]
         this.implements = [JsStatementProtocol]
+    }
+
+    /// Asking
+
+    isFooter() {
+        return true
     }
 }
 

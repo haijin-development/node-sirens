@@ -1,6 +1,6 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
 const ClassMethodsDocumentation = require('./ClassMethodsDocumentation')
 const ClassUnformattedComment = require('./unformatted-documentation/ClassUnformattedComment')
@@ -18,19 +18,21 @@ class DocumentationBrowserBody {
     /// Building
 
     reRenderWhen() {
-        const documentationChangedModel = this.getModel().getDocumentationChangedModel()
+        const model = this.getModel()
 
-        this.reRenderOnValueChangeOf( documentationChangedModel )
+        this.reRenderOnValueChangeOf( model.getChild({ id: 'classDefinition' }) )
     }
 
     reRender() {
-        this.isRendering = true
+        try {
+            this.isRendering = true
 
-        this.previousClassificationDo( () => {
-            this.reRender()
-        })
-
-        this.isRendering = false
+            this.previousClassificationDo( () => {
+                this.reRender()
+            })
+        } finally {
+            this.isRendering = false
+        }
     }
 
     renderWith(componentsRenderer) {

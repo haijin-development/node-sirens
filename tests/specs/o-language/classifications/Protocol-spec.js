@@ -1,6 +1,6 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Protocol = require('../../../../src/o-language/classifications/Protocol')
+const Classification = require('../../../../src/O').Classification
+const Protocol = require('../../../../src/O').Protocol
 
 class PointProcotol {
     getX() {}

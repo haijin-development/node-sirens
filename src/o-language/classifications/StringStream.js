@@ -18,7 +18,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
        Appends a string to a StringStream object.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const StringStream = require('sirens/src/O').StringStream
 
        const stream = StringStream.new()
 
@@ -36,7 +36,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
        Prepends a string to a StringStream object.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const StringStream = require('sirens/src/O').StringStream
 
        const stream = StringStream.new()
 
@@ -53,7 +53,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
        Appends a line to a StringStream object.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const StringStream = require('sirens/src/O').StringStream
 
        const stream = StringStream.new()
 
@@ -72,7 +72,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
     `,
     Code: `
 
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const StringStream = require('sirens/src/O').StringStream
 
        const stream = StringStream.new()
 
@@ -218,7 +218,7 @@ class StringStream {
        Gets the generated string after appending text to a StringStream.
     `,
     Code: `
-       const StringStream = require('sirens/src/o-language/classifications/StringStream')
+       const StringStream = require('sirens/src/O').StringStream
 
        const stream = StringStream.new()
 
@@ -268,7 +268,7 @@ class StringStream {
               Gets the current carriage return string.
            `,
            Code: `
-              const StringStream = require('sirens/src/o-language/classifications/StringStream')
+              const StringStream = require('sirens/src/O').StringStream
 
               const stream = StringStream.new()
 
@@ -313,7 +313,7 @@ class StringStream {
               Sets the carriage return to '<br>'
            `,
            Code: `
-              const StringStream = require('sirens/src/o-language/classifications/StringStream')
+              const StringStream = require('sirens/src/O').StringStream
 
               const stream = StringStream.new()
 
@@ -377,7 +377,7 @@ class StringStream {
            Appends text to a StringStream object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -394,7 +394,7 @@ class StringStream {
            Appends text to a StringStream object only if a given condition is true.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -464,7 +464,7 @@ class StringStream {
            Prepends text to the beginning of a StringStream object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -520,7 +520,7 @@ class StringStream {
            Appends a carriage return to a StringStream object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -539,7 +539,7 @@ class StringStream {
            Appends a carriage return to a StringStream object only if the a condition is true.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -610,7 +610,7 @@ class StringStream {
            Appends a line to a StringStream object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -678,7 +678,7 @@ class StringStream {
            Prepends a line to a StringStream object.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -734,7 +734,7 @@ class StringStream {
            To the example more clear firt set the cr char to '<br>'.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const stream = StringStream.new()
 
@@ -846,7 +846,7 @@ class StringStream {
            Appends the items in the array [ 1, 2, 3 ] as strings separated by the character '_'.
         `,
         Code: `
-           const StringStream = require('sirens/src/o-language/classifications/StringStream')
+           const StringStream = require('sirens/src/O').StringStream
 
            const items = [ 1, 2, 3 ]
 

@@ -1,8 +1,8 @@
-const Classification = require('../../../../src/o-language/classifications/Classification')
-const Component = require('../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../O').Classification
+const Component = require('../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-const GtkIcons = require('../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../Skins').GtkIcons
 const Resource = require('../../objects/Resource')
 
 class AppBrowserToolBar {
@@ -37,9 +37,21 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens an app folder.',
                     action: component.getProps().openFolder,
+                    enabled: model.getChild({ id: 'openApplicationFolder' }),
                 })
 
                 this.separator()
+
+                this.button({
+                    label: 'Open class documentation browser',
+                    image: {
+                        iconName: GtkIcons.info,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Opens a class documentation browser.',
+                    action: component.getProps().openClassDocumentation,
+                    enabled: model.getChild({ id: 'openClassDocumentation' }),
+                })
 
                 this.button({
                     label: 'Open class editor',
@@ -50,16 +62,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
-                })
-
-                this.button({
-                    label: 'Open class documenation browser',
-                    image: {
-                        iconName: GtkIcons.info,
-                        size: GtkIcons.size._24x24,
-                    },
-                    tooltip: 'Opens a class documenation browser.',
-                    action: component.getProps().openClassDocumentation,
+                    enabled: model.getChild({ id: 'openClassEditor' }),
                 })
 
                 this.separator()
@@ -73,6 +76,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
+                    enabled: model.getChild({ id: 'openPlayground' }),
                 })
 
             })

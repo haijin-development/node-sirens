@@ -1,9 +1,11 @@
-const Classification = require('../../../../../src/o-language/classifications/Classification')
-const Component = require('../../../../gui/components/Component')
-const ComponentProtocol_Implementation = require('../../../../gui/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../O').Classification
+const Component = require('../../../../Skins').Component
+const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+
+const EditParamDialog = require ('../edition/EditParamDialog')
 
 const Resource = require('../../../objects/Resource')
-const GtkIcons = require('../../../../gui/gtk-views/constants/GtkIcons')
+const GtkIcons = require('../../../../Skins').GtkIcons
 
 class ParamDocumentation {
     /// Definition
@@ -18,6 +20,13 @@ class ParamDocumentation {
 
     renderWith(componentsRenderer) {
         const model = this.getModel()
+
+        // Since the application uses a custom dialog override this command.
+        model.defineCommand({
+            id: 'editMethodDocumentationParam',
+            enabledIf: () => { return true },
+            whenActioned: this.editMethodDocumentationParam.bind(this),
+        })
 
         const isInEditionMode = model.isInEditionMode()
 
@@ -52,31 +61,42 @@ class ParamDocumentation {
                         })
 
                         if( isInEditionMode ) {
-                            this.textButton({
-                                text: 'Edit...',
-                                image: {
-                                    iconName: GtkIcons.edit,
-                                    size: GtkIcons.size._16x16,
-                                },
-                                onClicked: component.handleEditParam.bind(component),
-                                viewAttributes: {
-                                    stackSize: 'fixed',
-                                    stackAlign: 'end',
-                                },
-                            })
 
-                            this.textButton({
-                                text: 'Delete',
-                                image: {
-                                    filename: Resource.image.false,
-                                    width: 16,
-                                    height: 16,
-                                },
-                                onClicked: component.handleDeleteParam.bind(component),
-                                viewAttributes: {
-                                    stackSize: 'fixed',
-                                    stackAlign: 'end',
-                                },
+                            this.verticalStack( function() {
+
+                                this.styles({
+                                    viewAttributes: {
+                                        stackSize: 'fixed',
+                                        stackAlign: 'end',
+                                    },
+                                })
+
+
+                                this.textButton({
+                                    text: 'Edit...',
+                                    image: {
+                                        iconName: GtkIcons.edit,
+                                        size: GtkIcons.size._16x16,
+                                    },
+                                    onClicked: model.getActionHandler({ id: 'editMethodDocumentationParam' }),
+                                    viewAttributes: { stackSize: 'fixed' },
+                                })
+
+                                this.textButton({
+                                    text: 'Delete',
+                                    image: {
+                                        filename: Resource.image.false,
+                                        width: 16,
+                                        height: 16,
+                                    },
+                                    onClicked: () => {
+                                        const paramIndex = component.getProps().index
+                                        const actionHandler = model.getActionHandler({ id: 'deleteMethodDocumentationParam' })
+                                        actionHandler({ atIndex: paramIndex })
+                                    },
+                                    viewAttributes: { stackSize: 'fixed' },
+                                })
+
                             })
                         }
 
@@ -86,9 +106,6 @@ class ParamDocumentation {
 
                         this.label({
                             text: param.Description,
-                            viewAttributes: {
-                                stackSize: 'fixed',
-                            },
                         })
 
                     })
@@ -99,24 +116,33 @@ class ParamDocumentation {
         })
     }
 
-    /// Events
+    /// Commands
 
-    handleEditParam() {
+    editMethodDocumentationParam() {
+        const model = this.getModel()
+
+        const param = this.getProps().param
+
         const paramIndex = this.getProps().index
 
-        this.getProps().editParam({
-            atIndex: paramIndex
+        const className = model.getBrowsedClass().getClassName()
+
+        const method = model.getChild({ id: 'selectedMethod' }).getValue()
+
+        const dialog = EditParamDialog.new({
+            className: className,
+            method: method,
+            param: param,
+            window: this.getProps().window,
+            onUpdateParam: ({ param: newParam }) => {
+                const actionHandler = model.getActionHandler({ id: 'updateMethodDocumentationParam' })
+                actionHandler({ atIndex: paramIndex, newParam: newParam })
+            },
+            acceptButtonLabel: `Update param`,
         })
+
+        dialog.open()
     }
-
-    handleDeleteParam() {
-        const paramIndex = this.getProps().index
-
-        this.getProps().deleteParam({
-            atIndex: paramIndex
-        })
-    }
-
 }
 
 module.exports = Classification.define(ParamDocumentation)

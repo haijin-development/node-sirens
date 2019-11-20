@@ -28,7 +28,7 @@ const Classification = require('./Classification')
        Sets and gets a property value.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -46,7 +46,7 @@ const Classification = require('./Classification')
        Removes a property.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -66,7 +66,7 @@ const Classification = require('./Classification')
        Merges and gets properties at once.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -85,7 +85,7 @@ const Classification = require('./Classification')
        Iterates the defined properties.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -106,7 +106,7 @@ const Classification = require('./Classification')
        Gets a property value or a default value if the property is not defined.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -119,7 +119,7 @@ const Classification = require('./Classification')
        Gets a property value or evaluates a closure if the property is not defined.
     `,
     Code: `
-       const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+       const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
        const object = ObjectWithProps.new()
 
@@ -190,7 +190,7 @@ class ObjectWithProps {
            Queries an object for a defined property named 'color' and for an undefined property named 'x'.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -230,7 +230,7 @@ class ObjectWithProps {
            Gets all the properties defined in an object.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -309,7 +309,7 @@ class ObjectWithProps {
            Gets a defined property value.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -326,7 +326,7 @@ class ObjectWithProps {
            Gets an undefined property value.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -339,7 +339,7 @@ class ObjectWithProps {
            Gets a given default value.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -352,7 +352,7 @@ class ObjectWithProps {
            Gets the evaluation of an absentClosure.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -401,7 +401,7 @@ class ObjectWithProps {
            Defines and removes all the properties of an object.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -466,7 +466,7 @@ class ObjectWithProps {
            Sets the value of a property named 'color' to the string 'blue'.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -522,7 +522,7 @@ class ObjectWithProps {
            Overrides the properties of an object.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -575,7 +575,7 @@ class ObjectWithProps {
            Merges properties into an object.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -632,7 +632,7 @@ class ObjectWithProps {
            Removes a property from an object.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 
@@ -701,7 +701,7 @@ class ObjectWithProps {
            Defines properties on an object and iterates them.
         `,
         Code: `
-           const ObjectWithProps = require('sirens/src/o-language/classifications/ObjectWithProps')
+           const ObjectWithProps = require('sirens/src/O').ObjectWithProps
 
            const object = ObjectWithProps.new()
 

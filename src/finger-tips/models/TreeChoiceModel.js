@@ -151,10 +151,18 @@ class TreeChoiceModel {
 
     /// Events
 
-    onSelectionChanged(closure) {
-        this.selectionModel.onValueChanged(closure)
+    onSelectionChanged({ with: object, do: closure }) {
+        this.selectionModel.onValueChanged({
+            with: object,
+            do: closure,
+        })
 
         return this
+    }
+
+    dropAllAnnouncementsFor({ listener: listener }) {
+        this.treeModel.dropAllAnnouncementsFor({ listener: listener })
+        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })        
     }
 }
 

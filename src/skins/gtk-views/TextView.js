@@ -120,9 +120,21 @@ class TextView {
     /// Events
 
     subscribeToGUISignals() {
-        this.textView.on( 'populate-popup', this.handlePopulateMenuPopup.bind(this) )
+        const eventsSubscriptor = this.getEventsSubscriptor()
 
-        this.textView.getBuffer().on( 'changed', this.handleTextChanged.bind(this) )
+        eventsSubscriptor.on({
+            event: 'populate-popup',
+            from: this.textView,
+            do: this.handlePopulateMenuPopup,
+            with: this,
+        })
+
+        eventsSubscriptor.on({
+            event: 'changed',
+            from: this.textView.getBuffer(),
+            do: this.handleTextChanged,
+            with: this,
+        })
     }
 
     handleTextChanged() {
@@ -161,6 +173,16 @@ class TextView {
 
     windowTextToText(windowText) {
         return windowText.split("\r").join( "\n" )
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

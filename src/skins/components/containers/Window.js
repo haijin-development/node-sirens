@@ -20,7 +20,9 @@ class Window {
     }
 
     createView() {
-        return WindowView.new()
+        return WindowView.new({
+            onClosed: this.onClosed.bind(this),
+        })
     }
 
     synchronizeViewFromModel() {
@@ -28,6 +30,12 @@ class Window {
 
     open() {
         this.getView().open()
+    }
+
+    // Events
+
+    onClosed() {
+        this.releaseComponent()
     }
 }
 

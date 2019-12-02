@@ -8,7 +8,7 @@ class WindowView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['window']
+        this.instanceVariables = ['window', 'onClosed']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -23,25 +23,40 @@ class WindowView {
 
     /// Initializing
 
-    initialize() {
+    initialize({ onClosed: onClosed }) {
+        this.onClosed = onClosed
+
         this.previousClassificationDo( () => {
             this.initialize()
         })
 
-        this.window = new Gtk.Window()
-
         Sirens.registerWindow()
+    }
 
-        this.window.on( 'delete-event', this.handleDeleteEvent.bind(this) )
+    initializeHandles() {
+        this.window = new Gtk.Window()
+    }
 
-        this.window.on( 'destroy', this.handleDestroy.bind(this) )
+    subscribeToGUISignals() {
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'delete-event',
+            from: this.window,
+            do: this.handleDeleteEvent,
+            with: this,
+        })
+
+        eventsSubscriptor.on({
+            event: 'destroy',
+            from: this.window,
+            do: this.handleDestroy,
+            with: this,
+        })
     }
 
     open() {
         this.window.showAll()
-    }
-
-    subscribeToGUISignals() {
     }
 
     /// Styles
@@ -91,7 +106,19 @@ class WindowView {
     }
 
     handleDestroy() {
+        this.onClosed()
+
         Sirens.unregisterWindow()
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

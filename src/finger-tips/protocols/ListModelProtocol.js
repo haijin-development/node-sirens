@@ -65,19 +65,23 @@ class ListModelProtocol {
 
     /// Events
 
-    onListChanged(closure) {
+    onListChanged({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 
-    onItemsAdded(closure) {
+    onItemsAdded({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 
-    onItemsUpdated(closure) {
+    onItemsUpdated({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 
-    onItemsRemoved(closure) {
+    onItemsRemoved({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 }

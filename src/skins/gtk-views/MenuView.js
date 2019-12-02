@@ -98,6 +98,16 @@ class MenuView {
         this.menuHandle.showAll()
         this.menuHandle.popupAtPointer()
     }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
 }
 
 MenuView = Classification.define(MenuView)

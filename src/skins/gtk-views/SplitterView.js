@@ -29,7 +29,14 @@ class SplitterView {
     }
 
     subscribeToGUISignals() {
-        this.paned.on('size-allocate', this.handleSizeAllocate.bind(this))
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'size-allocate',
+            from: this.paned,
+            do: this.handleSizeAllocate,
+            with: this,
+        })
     }
 
     /// Accessing
@@ -192,6 +199,16 @@ class SplitterView {
             childHandle.setSizeRequest(width, size)
             childHandle.sizeAllocate(allocation)
         }
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

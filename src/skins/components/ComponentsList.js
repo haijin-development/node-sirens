@@ -288,10 +288,22 @@ class ComponentsList {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().onListChanged( this.onItemsListChanged.bind(this) )
-        this.getModel().onItemsAdded( this.onItemsAdded.bind(this) )
-        this.getModel().onItemsUpdated( this.onItemsUpdated.bind(this) )
-        this.getModel().onItemsRemoved( this.onItemsRemoved.bind(this) )
+        this.getModel().onListChanged({
+          with: this,
+          do: this.onItemsListChanged,
+        })
+        this.getModel().onItemsAdded({
+          with: this,
+          do: this.onItemsAdded,
+        })
+        this.getModel().onItemsUpdated({
+          with: this,
+          do: this.onItemsUpdated,
+        })
+        this.getModel().onItemsRemoved({
+          with: this,
+          do: this.onItemsRemoved,
+        })
     }
 
     /*

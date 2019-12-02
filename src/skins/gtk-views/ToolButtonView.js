@@ -57,8 +57,6 @@ class ToolButtonView {
 
         this.toolButton.setTooltipText( this.tooltip )
 
-        this.toolButton.on('clicked', this.handleClicked.bind(this) )
-
         this.toolButton.show()
     }
 
@@ -77,10 +75,28 @@ class ToolButtonView {
     /// Events
 
     subscribeToGUISignals() {
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'clicked',
+            from: this.toolButton,
+            do: this.handleClicked,
+            with: this,
+        })
     }
 
     handleClicked() {
         this.action()
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

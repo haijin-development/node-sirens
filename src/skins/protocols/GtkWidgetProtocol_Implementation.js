@@ -10,6 +10,8 @@ class GtkWidgetProtocol_Implementation {
     }
 
     subscribeToGUISignals() {}
+
+    unsubscribeFromGUISignals() {}
 }
 
 module.exports = Protocol.define(GtkWidgetProtocol_Implementation)

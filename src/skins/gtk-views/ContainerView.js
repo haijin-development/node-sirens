@@ -72,6 +72,16 @@ class ContainerView {
 
     subscribeToGUISignals() {
     }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
 }
 
 module.exports = Classification.define(ContainerView)

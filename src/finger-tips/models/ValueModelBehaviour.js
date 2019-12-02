@@ -1,13 +1,13 @@
 const Classification = require('../../O').Classification
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
-const Model = require('./Model')
+const Announcer = require('../announcements/Announcer')
 
 class ValueModelBehaviour {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [Model]
+        this.assumes = [Announcer]
         this.expects = [ValueModelProtocol_Implementation]
     }
 
@@ -28,7 +28,7 @@ class ValueModelBehaviour {
 
         this.doSetValue( newValue )
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     /// Comparing
@@ -46,16 +46,23 @@ class ValueModelBehaviour {
             - drop the need of listeners to be aware of the naming conventions of the events
             - define a unique and well documented common protocol for listeners and models to comply with
     */
-    onValueChanged(closure) {
-        this.on('value-changed', closure)
+    onValueChanged({ with: object, do: eventHandler }) {
+        this.subscribe({
+            event: 'value-changed',
+            to: object,
+            doing: eventHandler,
+        })        
 
         return this
     }
 
     /// Triggering
 
-    triggerValueChanged({ oldValue: oldValue, newValue: newValue }) {
-        this.emit('value-changed', { oldValue: oldValue, newValue: newValue })
+    announceValueChanged({ oldValue: oldValue, newValue: newValue }) {
+        this.announce({
+            event: 'value-changed',
+            with: { oldValue: oldValue, newValue: newValue },
+        })
     }
 }
 

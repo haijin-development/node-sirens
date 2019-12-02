@@ -5,6 +5,8 @@ const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProto
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 
 const ValueModelProtocol = require('../../finger-tips/protocols/ValueModelProtocol')
+const Announcer = require('../../finger-tips/announcements/Announcer')
+const EventsSubscritions = require('./EventsSubscritions')
 
 /*
  Class(`
@@ -40,7 +42,7 @@ class ComponentBehaviour {
      ])
     */
     static definition() {
-        this.instanceVariables = ['childComponents', 'view']
+        this.instanceVariables = ['childComponents', 'view', 'eventsSubscriptions']
         this.assumes = [ObjectWithProps]
         this.expects = [ComponentBehaviourProtocol, ComponentBehaviourProtocol_Implementation]
     }
@@ -59,6 +61,11 @@ class ComponentBehaviour {
     afterInstantiation() {
         this.childComponents = []
         this.view = null
+        this.eventsSubscriptions = EventsSubscritions.new()
+    }
+
+    getEventsSubscriptions() {
+        return this.eventsSubscriptions
     }
 
     /*
@@ -142,6 +149,8 @@ class ComponentBehaviour {
      ])
     */
     initializePropModels() {
+        const subscriptions = this.eventsSubscriptions
+
         this.propsAndValuesDo( (prop, value) => {
             const isValueModel =
                 prop !== 'model' &&
@@ -151,9 +160,14 @@ class ComponentBehaviour {
             if( isValueModel ) {
                 const propModel = value
 
-                propModel.onValueChanged( ({ newValue: newValue, oldValue: oldValue }) => {
-                    this.onPropValueChanged({ propName: prop, newValue: newValue, oldValue: oldValue })
+                propModel.onValueChanged({
+                    with: this,
+                    do: ({ newValue: newValue, oldValue: oldValue }) => {
+                        this.onPropValueChanged({ propName: prop, newValue: newValue, oldValue: oldValue })
+                    },
                 })
+
+                subscriptions.addSubscriptionTo(propModel)
             }
         })
     }
@@ -172,9 +186,16 @@ class ComponentBehaviour {
      ])
     */
     initializeModel() {
-        if( this.getModel() !== undefined ) { return }
+        const model = this.getModel()
 
-        this.setModel( this.defaultModel() )
+        if( model !== undefined ) {
+            this.eventsSubscriptions.addSubscriptionTo(model)
+            return
+        }
+
+        const defaultModel = this.defaultModel()
+
+        this.setModel( defaultModel )
     }
 
     /*
@@ -399,7 +420,17 @@ class ComponentBehaviour {
      ])
     */
     setModel(model) {
+        const currentModel = this.getModel()
+
+        if( currentModel !== undefined ) {
+            this.eventsSubscriptions.dropSubscription({ announcer: announcer, listener: listener })
+        }
+
         this.getProps().model = model
+
+        if( model != undefined && model != null ) {
+            this.eventsSubscriptions.addSubscriptionTo(model)
+        }
     }
 
     /*
@@ -623,6 +654,8 @@ class ComponentBehaviour {
         this.childComponents = this.childComponents.filter( (eachComponent) => {
             return eachComponent !== childComponent
         })
+
+        childComponent.releaseComponent()
     }
 
     /*
@@ -684,6 +717,41 @@ class ComponentBehaviour {
      ])
     */
     subscribeToModelEvents() {
+    }
+
+    // Releasing
+
+    releaseComponent() {
+        this.unsubscribeFromPropModels()
+        this.unsubscribeFromModel()
+        this.releaseChildComponents()
+        this.releaseView()
+        this.releaseProps()
+    }
+
+    unsubscribeFromModel() {
+    }
+
+    unsubscribeFromPropModels() {
+        this.eventsSubscriptions.dropAllAnnouncementsFor({ listener: this })
+    }
+
+    releaseChildComponents() {
+        this.getChildComponents().forEach( (childComponent) => {
+            childComponent.releaseComponent()
+        })
+
+        this.childComponents = []
+    }
+
+    releaseView() {
+        this.view.releaseView()
+
+        this.view = null
+    }
+
+    releaseProps() {
+        this.clearAllProps()
     }
 }
 

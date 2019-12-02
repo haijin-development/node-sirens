@@ -8,15 +8,19 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
+**The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
+
 ![App browser](./docs/browsing-app.gif)
 
 Next release:
 
 [![Next Release Build Status](https://travis-ci.org/haijin-development/node-sirens.svg?branch=development)](https://travis-ci.org/haijin-development/node-sirens)
 
+**Note: the release of v0.13 will include a complete rewrite of the current implementation of components models, events and commands. The existing browsers will remain the same.**
+
 ### Installation
 
-**Note: please keep in mind that this project is not meant for production but only as an utility to be used during development**
+**Note: please keep in mind that this project is not meant for production but only as an utility to be used during development.**
 
 Add `Sirens` to your project with
 
@@ -49,8 +53,7 @@ Sirens.browsePrototypes(object)
 ```
 
 A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code
-using the Sirens ObjectBrowser with the same access to the npm modules that your application has, although
-currently it does not handle the evaluation of promises nor asynchronous code, only synchronous calls.
+using the Sirens ObjectBrowser with the same access to the npm modules that your application has.
 
 Think of it as a javascript console in 3 dimensions.
 
@@ -136,23 +139,13 @@ and a javascript AppBrowser from the project folder with
 
 ### Pre-requisites
 
-The current version does not work with node > v10.
+The current version does not work with node > v11.
 
 ```
 nvm install v10
 ```
 
 Please refer to the installation section of [node-gtk](https://www.npmjs.com/package/node-gtk#installing-and-building).
-
-
-In Ubuntu installing the [following libraries](./.travis.yml#L10)
-
-```
-sudo apt install libgtk-3-dev libgirepository1.0-dev gobject-introspection build-essential
-```
-
-should be enough to run [node-gtk](https://www.npmjs.com/package/node-gtk#installing-and-building) and `sirens`.
-
 
 ## Semantic versioning
 

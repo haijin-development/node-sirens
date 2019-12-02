@@ -120,7 +120,14 @@ class TabsView {
     }
 
     subscribeToGUISignals(props) {
-        this.notebook.on('switch-page', this.handleSwitchPage.bind(this))
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'switch-page',
+            from: this.notebook,
+            do: this.handleSwitchPage,
+            with: this,
+        })
     }
 
     ensureFixedPosition(childView) {
@@ -165,6 +172,16 @@ class TabsView {
         if( this.onTabPageChanged === undefined ) { return }
 
         this.onTabPageChanged({ tabPageIndex: newTabPageIndex })
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

@@ -7,7 +7,7 @@ class MenuItemSeparatorView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [ 'separatorMenuItem']
+        this.instanceVariables = ['separatorMenuItem']
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -29,6 +29,16 @@ class MenuItemSeparatorView {
     /// Events
 
     subscribeToGUISignals() {
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

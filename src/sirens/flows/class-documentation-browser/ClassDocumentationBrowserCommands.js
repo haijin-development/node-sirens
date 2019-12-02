@@ -390,7 +390,6 @@ function defineClassDefinitionCommands(application) {
                 return application.isInEditionMode() && application.getBrowsedClass()
             },
             whenActioned: function({ example: example }) {
-                console.log( example )
                 const method = application.getChild({ id: 'selectedMethod' }).getValue()
                 const documentation = method.getDocumentation()
                 documentation.addExample( example )

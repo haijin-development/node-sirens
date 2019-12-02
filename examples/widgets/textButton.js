@@ -26,7 +26,10 @@ class CustomComponent {
 
                 this.textButton({
                     text: 'A text button',
-                    onClicked: () => { console.info('clicked') },
+                    onClicked: () => {
+                        console.info('Clicked. You should see a log in 1 second.')
+                        setTimeout( () => { console.info('node event loop is working ...') }, 1000)
+                    },
                 })
             })
         })

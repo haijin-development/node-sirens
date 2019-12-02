@@ -111,6 +111,8 @@ class TreeView {
 
             col.addAttribute(renderer, 'pixbuf', columnIndex)
 
+            this.treeView.appendColumn(col)
+
         } else {
 
             const renderer = new Gtk.CellRendererText()
@@ -122,8 +124,6 @@ class TreeView {
             this.treeView.appendColumn(col)
 
         }
-
-        this.treeView.appendColumn(col)
     }
 
     setHScroll(value) {
@@ -325,17 +325,37 @@ class TreeView {
     /// Events
 
     subscribeToGUISignals() {
-        if(this.treeView === null) {
-            return
-        }
+        if( this.treeView === null ) { return }
 
-        this.treeView.getSelection().on('changed', this.handleSelectedRowChanged.bind(this))
+        const eventsSubscriptor = this.getEventsSubscriptor()
 
-        this.treeView.on('row-activated', this.handleSelectionActioned.bind(this))
+        eventsSubscriptor.on({
+            event: 'changed',
+            from: this.treeView.getSelection(),
+            do: this.handleSelectedRowChanged,
+            with: this,
+        })
 
-        this.treeView.on('row-expanded', this.handleRowExpanded.bind(this))
+        eventsSubscriptor.on({
+            event: 'row-activated',
+            from: this.treeView,
+            do: this.handleSelectionActioned,
+            with: this,
+        })
 
-        this.treeView.on('button-press-event', this.handleButtonPressed.bind(this))
+        eventsSubscriptor.on({
+            event: 'row-expanded',
+            from: this.treeView,
+            do: this.handleRowExpanded,
+            with: this,
+        })
+
+        eventsSubscriptor.on({
+            event: 'button-press-event',
+            from: this.treeView,
+            do: this.handleButtonPressed,
+            with: this,
+        })
     }
 
     handleButtonPressed(event) {
@@ -412,6 +432,16 @@ class TreeView {
 
     getClickableHeaders() {
         return this.treeView.getHeadersClickable()
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

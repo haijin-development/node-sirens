@@ -45,7 +45,8 @@ class VirtualTreeModelProtocol {
         })
     }
 
-    onRootsChanged(closure) {
+    onRootsChanged({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 }

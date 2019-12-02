@@ -1,6 +1,7 @@
 const path = require('path')
-const Gtk = require('node-gtk').require('Gtk', '3.0')
-const Gdk = require('node-gtk').require('Gdk')
+const nodeGtk = require('node-gtk')
+const Gtk = nodeGtk.require('Gtk', '3.0')
+const Gdk = nodeGtk.require('Gdk')
 
 /*
  Class(`
@@ -504,6 +505,7 @@ class Sirens {
 
         this.gtkWasInitialize = true
 
+        nodeGtk.startLoop()
         Gtk.init()
 
         this.setGlobalStyles()

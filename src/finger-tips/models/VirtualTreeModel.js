@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const Model = require('./Model')
+const Announcer = require('../announcements/Announcer')
 const VirtualTreeModelProtocol = require('../protocols/VirtualTreeModelProtocol')
 
 class VirtualTreeModel {
@@ -7,7 +7,7 @@ class VirtualTreeModel {
 
     static definition() {
         this.instanceVariables = ['getChildrenClosure', 'roots']
-        this.assumes = [Model]
+        this.assumes = [Announcer]
         this.implements = [VirtualTreeModelProtocol]
     }
 
@@ -50,7 +50,10 @@ class VirtualTreeModel {
             return this.newTreeNodeOn({ item: item })
         })
 
-        this.emit('roots-changed', {newRoots: newRoots, oldRoots: oldRoots})
+        this.announce({
+            event: 'roots-changed',
+            with: {newRoots: newRoots, oldRoots: oldRoots},
+        })
 
         return this
     }
@@ -133,8 +136,12 @@ class VirtualTreeModel {
 
     /// Events
 
-    onRootsChanged(closure) {
-        this.on('roots-changed', closure)
+    onRootsChanged({ with: object, do: closure }) {
+        this.subscribe({
+            event: 'roots-changed',
+            to: object,
+            doing: closure,
+        })        
 
         return this
     }

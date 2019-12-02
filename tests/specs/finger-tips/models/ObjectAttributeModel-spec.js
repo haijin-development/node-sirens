@@ -31,11 +31,14 @@ describe('When using an ObjectAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            this.valueModel.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(10)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(10)
+                },
             })
 
             this.valueModel.setValue(10)
@@ -56,11 +59,14 @@ describe('When using an ObjectAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            this.valueModel.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(10)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(10)
+                },
             })
 
             this.valueModel.setObject({
@@ -83,11 +89,14 @@ describe('When using an ObjectAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            this.valueModel.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(3)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(3)
+                },
             })
 
             this.valueModel.setAttributeReader( (object) => {
@@ -110,11 +119,14 @@ describe('When using an ObjectAttributeModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            this.valueModel.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            this.valueModel.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(1)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(1)
+                },
             })
 
             this.valueModel.setAttributeWriter( (object, newValue) => {

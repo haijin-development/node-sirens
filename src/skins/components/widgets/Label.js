@@ -43,7 +43,10 @@ class Label {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().onValueChanged( this.onValueChanged.bind(this) )
+        this.getModel().onValueChanged({
+            with: this,
+            do: this.onValueChanged.bind(this),
+        })
     }
 
     onValueChanged({ newValue: newValue, oldValue: oldValue }) {

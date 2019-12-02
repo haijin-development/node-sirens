@@ -57,7 +57,7 @@ class BufferedAttributeModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     setAttributeReader(closure) {
@@ -69,7 +69,7 @@ class BufferedAttributeModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     doSetValue(newValue) {

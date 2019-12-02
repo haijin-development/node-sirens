@@ -50,7 +50,10 @@ class ToogleToolButton {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().onValueChanged( this.onValueChanged.bind(this) )
+        this.getModel().onValueChanged({
+            with: this,
+            do: this.onValueChanged,
+        })
     }
 
     onValueChanged({newValue: newValue, oldValue: oldValue}) {

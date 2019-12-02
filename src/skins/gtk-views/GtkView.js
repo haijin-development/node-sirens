@@ -1,6 +1,7 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Gdk = require('node-gtk').require('Gdk', '3.0')
 const Classification = require('../../O').Classification
+const AnnouncementsSubscriptor = require('../../finger-tips/announcements/AnnouncementsSubscriptor')
 const Sirens = require('../../Sirens')
 const MenuView = require('./MenuView')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
@@ -11,7 +12,7 @@ class GtkView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['childViews', 'viewAttributes', 'parentHandleOwnerView']
+        this.instanceVariables = ['childViews', 'viewAttributes', 'parentHandleOwnerView', 'eventsSubscriptor']
         this.expects = [GtkViewProtocol_Implementation]
     }
 
@@ -34,6 +35,11 @@ class GtkView {
     afterInstantiation() {
         this.childViews = []
         this.viewAttributes = []
+        this.eventsSubscriptor = AnnouncementsSubscriptor.new()
+    }
+
+    getEventsSubscriptor() {
+        return this.eventsSubscriptor
     }
 
     addChildView(childView) {
@@ -255,6 +261,29 @@ class GtkView {
     */
     getOnlyChildViewMainHandle() {
         return this.getMainHandle()
+    }
+
+    // Releasing
+
+    releaseView() {
+        this.unsubscribeFromGUISignals()
+        this.releaseHandles()
+    }
+
+    unsubscribeFromGUISignals() {
+        this.dropAllSubscribedEvents()        
+    }
+
+    dropAllSubscribedEvents() {
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.dropAllAnnouncements()
+    }
+
+    releaseHandles() {
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

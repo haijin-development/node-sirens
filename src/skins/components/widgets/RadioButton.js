@@ -42,9 +42,10 @@ class RadioButton {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().onSelectionChanged(
-            this.onSelectedValueChanged.bind(this)
-        )
+        this.getModel().onSelectionChanged({
+            with: this,
+            do: this.onSelectedValueChanged,
+        })
     }
 
     onSelectedValueChanged() {

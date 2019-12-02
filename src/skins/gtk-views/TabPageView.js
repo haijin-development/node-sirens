@@ -32,6 +32,16 @@ class TabPageView {
     getLabel(label) {
         return this.label
     }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
 }
 
 module.exports = Classification.define(TabPageView)

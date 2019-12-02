@@ -48,7 +48,7 @@ class ObjectPropModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     setProp(newProp) {
@@ -60,7 +60,7 @@ class ObjectPropModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     doSetValue(newValue) {

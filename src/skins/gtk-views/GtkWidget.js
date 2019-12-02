@@ -60,6 +60,18 @@ class GtkWidget {
     concreteViewsDo(closure) {
         closure(this)
     }
+
+    releaseHandles() {
+        this.getMainHandle().destroy()
+
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
 }
 
 module.exports = Classification.define(GtkWidget)

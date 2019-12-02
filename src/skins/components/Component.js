@@ -424,9 +424,12 @@ class Component {
      ])
     */
     reRenderOnValueChangeOf(valueModel) {
-        valueModel.onValueChanged( () => {
-            this.reRender()
+        valueModel.onValueChanged({
+          with: this,
+          do: () => { this.reRender() },
         })
+
+        this.getEventsSubscriptions().addSubscriptionTo( valueModel )
     }
 
     /*

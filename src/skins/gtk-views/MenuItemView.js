@@ -40,8 +40,6 @@ class MenuItemView {
     initializeHandles() {
         this.menuItem = new Gtk.MenuItem({ label: this.label })
 
-        this.menuItem.on('activate', this.handleActivate.bind(this) )
-
         this.menuItem.show()
     }
 
@@ -60,10 +58,28 @@ class MenuItemView {
     /// Events
 
     subscribeToGUISignals() {
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'activate',
+            from: this.menuItem,
+            do: this.handleActivate,
+            with: this,
+        })
     }
 
     handleActivate() {
         this.action()
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

@@ -72,12 +72,27 @@ class ChoicesList {
             this.subscribeToModelEvents()
         })
 
-        this.getModel().onChoicesChanged( this.onItemsListChanged.bind(this) )
-        this.getModel().onChoicesAdded( this.onItemsAdded.bind(this) )
-        this.getModel().onChoicesUpdated( this.onItemsUpdated.bind(this) )
-        this.getModel().onChoicesRemoved( this.onItemsRemoved.bind(this) )
+        this.getModel().onChoicesChanged({
+            with: this,
+            do: this.onItemsListChanged,
+        })
+        this.getModel().onChoicesAdded({
+            with: this,
+            do: this.onItemsAdded,
+        })
+        this.getModel().onChoicesUpdated({
+            with: this,
+            do: this.onItemsUpdated,
+        })
+        this.getModel().onChoicesRemoved({
+            with: this,
+            do: this.onItemsRemoved,
+        })
 
-        this.getModel().onSelectionChanged( this.onSelectedValueChanged.bind(this) )
+        this.getModel().onSelectionChanged({
+            with: this,
+            do: this.onSelectedValueChanged,
+        })
     }
 
     onItemsListChanged() {

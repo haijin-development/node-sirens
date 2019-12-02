@@ -35,7 +35,6 @@ class ObjectPropertiesComponent {
                 })
 
                 this.handlers({
-                    onSelectionChanged: component.getProps().onSelectionChanged,
                     onAction: component.inspectSelectedObject.bind(component),
                 })
 

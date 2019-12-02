@@ -143,6 +143,16 @@ class DialogView {
 
         this.getMainHandle().showAll()
     }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
 }
 
 

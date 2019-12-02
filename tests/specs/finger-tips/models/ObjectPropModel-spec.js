@@ -40,11 +40,14 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            model.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(10)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(10)
+                },
             })
 
             model.setValue(10)
@@ -75,11 +78,14 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            model.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(10)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(10)
+                },
             })
 
             model.setObject({
@@ -110,11 +116,14 @@ describe('When using an ObjectPropModel', () => {
                     prop: 'a'
                 })
 
-            model.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            model.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .equal(1)
-                expect(event.newValue) .to .equal(2)
+                    expect(event.oldValue) .to .equal(1)
+                    expect(event.newValue) .to .equal(2)
+                },
             })
 
             model.setProp('b')

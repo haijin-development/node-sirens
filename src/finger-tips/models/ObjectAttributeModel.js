@@ -62,7 +62,7 @@ class ObjectAttributeModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     setAttributeReader(closure) {
@@ -72,7 +72,7 @@ class ObjectAttributeModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     setAttributeWriter(closure) {
@@ -82,7 +82,7 @@ class ObjectAttributeModel {
 
         const newValue = this.doGetValue()
 
-        this.triggerValueChanged({ oldValue: oldValue, newValue: newValue })
+        this.announceValueChanged({ oldValue: oldValue, newValue: newValue })
     }
 
     doSetValue(newValue) {

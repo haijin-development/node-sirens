@@ -74,34 +74,54 @@ class ChoiceModel {
 
     /// Events
 
-    onChoicesChanged(closure) {
-        this.listModel.onListChanged(closure)
+    onChoicesChanged({ with: listener, do: closure }) {
+        this.listModel.onListChanged({
+            with: listener,
+            do: closure,
+        })
 
         return this
     }
 
-    onChoicesAdded(closure) {
-        this.listModel.onItemsAdded(closure)
+    onChoicesAdded({ with: listener, do: closure }) {
+        this.listModel.onItemsAdded({
+            with: listener,
+            do: closure,
+        })
 
         return this
     }
 
-    onChoicesUpdated(closure) {
-        this.listModel.onItemsUpdated(closure)
+    onChoicesUpdated({ with: listener, do: closure }) {
+        this.listModel.onItemsUpdated({
+            with: listener,
+            do: closure,
+        })
 
         return this
     }
 
-    onChoicesRemoved(closure) {
-        this.listModel.onItemsRemoved(closure)
+    onChoicesRemoved({ with: listener, do: closure }) {
+        this.listModel.onItemsRemoved({
+            with: listener,
+            do: closure,
+        })
 
         return this
     }
 
-    onSelectionChanged(closure) {
-        this.selectionModel.onValueChanged(closure)
+    onSelectionChanged({ with: listener, do: closure }) {
+        this.selectionModel.onValueChanged({
+            with: listener,
+            do: closure,
+        })
 
         return this
+    }
+
+    dropAllAnnouncementsFor({ listener: listener }) {
+        this.listModel.dropAllAnnouncementsFor({ listener: listener })
+        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })        
     }
 }
 

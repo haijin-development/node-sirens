@@ -98,8 +98,14 @@ class ChoicesTree {
      * Subscribes this component to the model events
      */
     subscribeToModelEvents() {
-        this.getModel().getTreeModel().onRootsChanged( this.onChoicesChanged.bind(this) )
-        this.getModel().onSelectionChanged( this.onSelectedValueChanged.bind(this) )
+        this.getModel().getTreeModel().onRootsChanged({
+            with: this,
+            do: this.onChoicesChanged,
+        })
+        this.getModel().onSelectionChanged({
+            with: this,
+            do: this.onSelectedValueChanged,
+        })
     }
 
     onChoicesChanged() {
@@ -129,14 +135,6 @@ class ChoicesTree {
 
             this.getModel().setSelectionFromIndices({ indices: selectedPath[0] })
         })
-
-        const onSelectionChangedHandler = this.getProps().onSelectionChanged
-
-        if( onSelectionChangedHandler === undefined ) { return }
-
-        const newSelection = this.getModel().getSelectionValue()
-
-        onSelectionChangedHandler({ oldSelection: oldSelection, newSelection: newSelection })
     }
 
     onUserSelectionAction() {

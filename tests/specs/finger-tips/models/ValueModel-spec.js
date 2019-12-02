@@ -35,11 +35,14 @@ describe('When using a ValueModel', () => {
 
             const model = ValueModel.new()
 
-            model.onValueChanged( (event) => {
-                this.triggeredEvent = true
+            model.onValueChanged({
+                with: this,
+                do: (event) => {
+                    this.triggeredEvent = true
 
-                expect(event.oldValue) .to .be .null
-                expect(event.newValue) .to .equal(1)
+                    expect(event.oldValue) .to .be .null
+                    expect(event.newValue) .to .equal(1)
+                },
             })
 
             model.setValue(1)

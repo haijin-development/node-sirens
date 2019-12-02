@@ -84,8 +84,6 @@ class ClassUnformattedComment {
 
         const classComment = classDefinition.getComment().getSourceCode()
 
-        console.log( classComment )
-
         const dialog = EditClassCommentDialog.new({
             className: className,
             classComment: classComment,

@@ -129,13 +129,16 @@ class _FlowBuilder {
         this.rootModel.addChildModel({ id: childId, model: valueModel })
 
         if( valueChangedClosure !== undefined ) {
-            valueModel.onValueChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'valueChanged',
-                    params: params,
-                    eventHandler: valueChangedClosure,
-                })
+            valueModel.onValueChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'valueChanged',
+                        params: params,
+                        eventHandler: valueChangedClosure,
+                    })
+                },
             })
         }
     }
@@ -161,13 +164,16 @@ class _FlowBuilder {
         this.rootModel.addChildModel({ id: childId, model: valueModel })
 
         if( valueChangedClosure !== undefined ) {
-            valueModel.onValueChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'objectAttributeChanged',
-                    params: params,
-                    eventHandler: valueChangedClosure,
-                })
+            valueModel.onValueChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'objectAttributeChanged',
+                        params: params,
+                        eventHandler: valueChangedClosure,
+                    })
+                },
             })
         }
     }
@@ -192,13 +198,16 @@ class _FlowBuilder {
         this.rootModel.addChildModel({ id: childId, model: valueModel })
 
         if( valueChangedClosure !== undefined ) {
-            valueModel.onValueChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'bufferedAttributeChanged',
-                    params: params,
-                    eventHandler: valueChangedClosure,
-                })
+            valueModel.onValueChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'bufferedAttributeChanged',
+                        params: params,
+                        eventHandler: valueChangedClosure,
+                    })
+                },
             })
         }
     }
@@ -227,13 +236,16 @@ class _FlowBuilder {
         this.rootModel.addChildModel({ id: childId, model: choiceModel })
 
         if( selectionChangedClosure !== undefined ) {
-            choiceModel.onSelectionChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'choiceSelectionChanged',
-                    params: params,
-                    eventHandler: selectionChangedClosure,
-                })
+            choiceModel.onSelectionChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'choiceSelectionChanged',
+                        params: params,
+                        eventHandler: selectionChangedClosure,
+                    })
+                },
             })
         }
     }
@@ -257,13 +269,16 @@ class _FlowBuilder {
         this.rootModel.addChildModel({ id: childId, model: treeChoiceModel })
 
         if( selectionChangedClosure !== undefined ) {
-            treeChoiceModel.onSelectionChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'treeSelectionChanged',
-                    params: params,
-                    eventHandler: selectionChangedClosure,
-                })
+            treeChoiceModel.onSelectionChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'treeSelectionChanged',
+                        params: params,
+                        eventHandler: selectionChangedClosure,
+                    })
+                }
             })
         }
     }
@@ -297,13 +312,16 @@ class _FlowBuilder {
         }
 
         if( valueChangedClosure !== undefined ) {
-            modelObject.onValueChanged( (...params) => {
-                this.evaluateEventHandler({
-                    flowPointId: childId,
-                    event: 'objectChanged',
-                    params: params,
-                    eventHandler: valueChangedClosure,
-                })
+            modelObject.onValueChanged({
+                with: this,
+                do: (...params) => {
+                    this.evaluateEventHandler({
+                        flowPointId: childId,
+                        event: 'objectChanged',
+                        params: params,
+                        eventHandler: valueChangedClosure,
+                    })
+                },
             })
         }
     }
@@ -314,13 +332,16 @@ class _FlowBuilder {
      ])
     */
     whenObjectChanges(valueChangedClosure) {
-        this.rootModel.onValueChanged( (...params) => {
-            this.evaluateEventHandler({
-                flowPointId: 'main',
-                event: 'objectChanged',
-                params: params,
-                eventHandler: valueChangedClosure,
-            })
+        this.rootModel.onValueChanged({
+            with: this,
+            do: (...params) => {
+                this.evaluateEventHandler({
+                    flowPointId: 'main',
+                    event: 'objectChanged',
+                    params: params,
+                    eventHandler: valueChangedClosure,
+                })
+            },
         })
     }
 

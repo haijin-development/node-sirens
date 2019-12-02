@@ -52,11 +52,28 @@ class TextButtonView {
     /// Events
 
     subscribeToGUISignals() {
-        this.button.on( 'clicked', this.handleClick.bind(this) )
+        const eventsSubscriptor = this.getEventsSubscriptor()
+
+        eventsSubscriptor.on({
+            event: 'clicked',
+            from: this.button,
+            do: this.handleClick,
+            with: this,
+        })
     }
 
     handleClick() {
         this.onClickedClosure()
+    }
+
+    releaseHandles() {
+        this.previousClassificationDo( () => {
+            this.releaseHandles()
+        })
+
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
     }
 }
 

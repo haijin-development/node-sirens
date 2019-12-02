@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const Model = require('./Model')
+const Announcer = require('../announcements/Announcer')
 const ListModelProtocol = require('../protocols/ListModelProtocol')
 
 class ListModel {
@@ -7,7 +7,7 @@ class ListModel {
 
     static definition() {
         this.instanceVariables = ['list']
-        this.assumes = [Model]
+        this.assumes = [Announcer]
         this.implements = [ListModelProtocol]
     }
 
@@ -32,7 +32,10 @@ class ListModel {
 
         this.list = newList
 
-        this.emit('list-changed', { oldList: oldList, newList: newList })
+        this.announce({
+            event: 'list-changed',
+            with: { oldList: oldList, newList: newList },
+        })
     }
 
     getIndexOf({ item: item }) {
@@ -51,7 +54,10 @@ class ListModel {
         // optimized
         this.list.push(...items)
 
-        this.emit('items-added', { list: this.list, items: items, index: index })
+        this.announce({
+            event: 'items-added',
+            with: { list: this.list, items: items, index: index },
+        })
     }
 
     insert({ index: index, item: item }) {
@@ -65,7 +71,10 @@ class ListModel {
 
         this.list.splice(index, 0, ...items)
 
-        this.emit('items-added', { list: this.list, items: items, index: index })
+        this.announce({
+            event: 'items-added',
+            with: { list: this.list, items: items, index: index },
+        })
     }
 
     /// Updating
@@ -88,7 +97,10 @@ class ListModel {
             this.list[index] = item
         }
 
-        this.emit('items-updated', { list: this.list, items: items, indices: indices })
+        this.announce({
+            event: 'items-updated',
+            with: { list: this.list, items: items, indices: indices },
+        })
     }
 
     /// Removing
@@ -111,7 +123,10 @@ class ListModel {
             this.list.splice(index, 1)
         })
 
-        this.emit('items-removed', { list: this.list, items: removedItems, indices: removedIndices })
+        this.announce({
+            event: 'items-removed',
+            with: { list: this.list, items: removedItems, indices: removedIndices },
+        })
     }
 
     removeAt({ index: index }) {
@@ -129,7 +144,10 @@ class ListModel {
             this.list.splice( index, 1 )
         })
 
-        this.emit('items-removed', { list: this.list, items: removedItems, indices: removedIndices })
+        this.announce({
+            event: 'items-removed',
+            with: { list: this.list, items: removedItems, indices: removedIndices },
+        })
     }
 
     indicesOf(items) {
@@ -146,26 +164,42 @@ class ListModel {
 
     /// Events
 
-    onListChanged(closure) {
-        this.on('list-changed', closure)
+    onListChanged({ with: object, do: closure }) {
+        this.subscribe({
+            event: 'list-changed',
+            to: object,
+            doing: closure,
+        })        
 
         return this
     }
 
-    onItemsAdded(closure) {
-        this.on('items-added', closure)
+    onItemsAdded({ with: object, do: closure }) {
+        this.subscribe({
+            event: 'items-added',
+            to: object,
+            doing: closure,
+        })        
 
         return this
     }
 
-    onItemsUpdated(closure) {
-        this.on('items-updated', closure)
+    onItemsUpdated({ with: object, do: closure }) {
+        this.subscribe({
+            event: 'items-updated',
+            to: object,
+            doing: closure,
+        })        
 
         return this
     }
 
-    onItemsRemoved(closure) {
-        this.on('items-removed', closure)
+    onItemsRemoved({ with: object, do: closure }) {
+        this.subscribe({
+            event: 'items-removed',
+            to: object,
+            doing: closure,
+        })        
 
         return this
     }

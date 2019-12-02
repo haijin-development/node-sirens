@@ -9,7 +9,8 @@ class ValueModelProtocol {
 
     /// Listening
 
-    onValueChanged(closure) {
+    onValueChanged({ with: object, do: closure }) {
+        this.param(object) .isObject()
         this.param(closure) .isFunction()
     }
 
@@ -19,7 +20,7 @@ class ValueModelProtocol {
 
     /// Triggering
 
-    triggerValueChanged({ oldValue: oldValue, newValue: newValue }) {}
+    announceValueChanged({ oldValue: oldValue, newValue: newValue }) {}
 }
 
 module.exports = Protocol.define(ValueModelProtocol)

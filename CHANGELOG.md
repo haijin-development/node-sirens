@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.12.1
+
+### Skins
+
+- Fixed ListView and TreeView column assertion failure.
+- Releases subscriptions to events when Views and Components are removed or closed.
+- Initializes node events loop.
+
 ## v0.12.0
 
 ### Sirens

@@ -37,7 +37,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens an app folder.',
                     action: component.getProps().openFolder,
-                    enabled: model.getChild({ id: 'openApplicationFolder' }),
+                    enabled: model.getCommand({ id: 'pickAndOpenFolder' }),
                 })
 
                 this.separator()
@@ -50,7 +50,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a class documentation browser.',
                     action: component.getProps().openClassDocumentation,
-                    enabled: model.getChild({ id: 'openClassDocumentation' }),
+                    enabled: model.getCommand({ id: 'openClassDocumentation' }),
                 })
 
                 this.button({
@@ -62,7 +62,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
-                    enabled: model.getChild({ id: 'openClassEditor' }),
+                    enabled: model.getCommand({ id: 'openClassEditor' }),
                 })
 
                 this.separator()
@@ -76,7 +76,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getChild({ id: 'openPlayground' }),
+                    enabled: model.getCommand({ id: 'openPlayground' }),
                 })
 
             })

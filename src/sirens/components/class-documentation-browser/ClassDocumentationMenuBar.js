@@ -31,7 +31,7 @@ class ClassDocumentationMenuBar {
                     this.item({
                         label: 'Reload documentation.',
                         action: component.getProps().reloadClassDefinition,
-                        enabled: model.getChild({ id: 'reloadClassDefinition' }),
+                        enabled: model.getCommand({ id: 'reloadClassDefinition' }),
                     })
 
                 })
@@ -40,19 +40,19 @@ class ClassDocumentationMenuBar {
                     this.item({
                         label: 'Open a new class documentation browser...',
                         action: component.getProps().openClassDocumentation,
-                        enabled: model.getChild({ id: 'openClassDocumentation' }),
+                        enabled: model.getCommand({ id: 'openClassDocumentation' }),
                     })
 
                     this.item({
                         label: 'Open a class editor...',
                         action: component.getProps().openClassEditor,
-                        enabled: model.getChild({ id: 'openClassEditor' }),
+                        enabled: model.getCommand({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
                         action: component.getProps().openPlayground,
-                        enabled: model.getChild({ id: 'openPlayground' }),
+                        enabled: model.getCommand({ id: 'openPlayground' }),
                     })
 
                 })

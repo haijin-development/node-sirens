@@ -386,7 +386,9 @@ class MessageDispatcher {
         // Node calls the method named Symbol.for('nodejs.util.inspect.custom') to print an object.
         // The proxy handles this method calling the toString() on the OInstance object.
         const isNodePrintMethod =
-            prop === Symbol.for('nodejs.util.inspect.custom') || prop === Symbol.toPrimitive
+            prop === 'inspect' ||
+            prop === Symbol.for('nodejs.util.inspect.custom') ||
+            prop === Symbol.toPrimitive
 
         if( isNodePrintMethod ) {
             const toStringMethod = 'toString'

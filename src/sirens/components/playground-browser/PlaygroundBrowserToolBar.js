@@ -17,7 +17,7 @@ class PlaygroundBrowserToolBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -37,7 +37,7 @@ class PlaygroundBrowserToolBar {
                     },
                     tooltip: 'Opens a file.',
                     action: component.getProps().openFile,
-                    enabled: model.getChild({ id: 'openFile' }),
+                    enabled: flow.getCommand({ id: 'openFile' }),
                 })
 
                 this.button({
@@ -48,7 +48,7 @@ class PlaygroundBrowserToolBar {
                     },
                     tooltip: 'Opens a file in a new window.',
                     action: component.getProps().openFileInNewWindow,
-                    enabled: model.getChild({ id: 'openFileInNewWindow' }),
+                    enabled: flow.getCommand({ id: 'openFileInNewWindow' }),
                 })
 
                 this.separator()
@@ -61,7 +61,7 @@ class PlaygroundBrowserToolBar {
                     },
                     tooltip: 'Saves the opened file.',
                     action: component.getProps().saveFile,
-                    enabled: model.getChild({ id: 'saveFile' }),
+                    enabled: flow.getCommand({ id: 'saveFile' }),
                 })
 
                 this.separator()
@@ -75,7 +75,7 @@ class PlaygroundBrowserToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
-                    enabled: model.getChild({ id: 'openClassEditor' }),
+                    enabled: flow.getCommand({ id: 'openClassEditor' }),
                 })
 
                 this.button({
@@ -87,7 +87,7 @@ class PlaygroundBrowserToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getChild({ id: 'openPlayground' }),
+                    enabled: flow.getCommand({ id: 'openPlayground' }),
                 })
 
             })

@@ -56,6 +56,7 @@ class EditMethodCommentDialog {
                     title: `Method ${methodDeclaration} description edition`,
                     width: 900,
                     height: 600,
+                    window: component.getProps().window,
                 })
 
                 this.verticalStack( function() {

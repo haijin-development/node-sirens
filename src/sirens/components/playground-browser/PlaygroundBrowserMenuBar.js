@@ -14,7 +14,7 @@ class PlaygroundBrowserMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -29,13 +29,13 @@ class PlaygroundBrowserMenuBar {
                 this.menuGroup({ label: 'File' }, function() {
                     this.item({
                         label: 'Open file...',
-                        enabled: model.getChild({ id: 'openFile' }),
+                        enabled: flow.getCommand({ id: 'openFile' }),
                         action: component.getProps().openFile,
                     })
 
                     this.item({
                         label: 'Open file in new window...',
-                        enabled: model.getChild({ id: 'openFileInNewWindow' }),
+                        enabled: flow.getCommand({ id: 'openFileInNewWindow' }),
                         action: component.getProps().openFileInNewWindow,
                     })
 
@@ -43,22 +43,23 @@ class PlaygroundBrowserMenuBar {
 
                     this.item({
                         label: 'Save file',
-                        enabled: model.getChild({ id: 'saveFile' }),
+                        enabled: flow.getCommand({ id: 'saveFile' }),
                         action: component.getProps().saveFile,
                     })
+
                 })
 
                 this.menuGroup({ label: 'Browsers' }, function() {
 
                     this.item({
                         label: 'Open a class editor...',
-                        enabled: model.getChild({ id: 'openClassEditor' }),
+                        enabled: flow.getCommand({ id: 'openClassEditor' }),
                         action: component.getProps().openClassEditor,
                     })
 
                     this.item({
                         label: 'Open another playground...',
-                        enabled: model.getChild({ id: 'openPlayground' }),
+                        enabled: flow.getCommand({ id: 'openPlayground' }),
                         action: component.getProps().openPlayground,
                     })
 

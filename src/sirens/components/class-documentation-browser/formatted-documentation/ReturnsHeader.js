@@ -2,8 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const EditReturnsDialog = require('../edition/EditReturnsDialog')
-
 const Resource = require('../../../objects/Resource')
 const GtkIcons = require('../../../../Skins').GtkIcons
 
@@ -19,14 +17,7 @@ class ReturnsHeader {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodDocumentationReturn',
-            enabledIf: () => { return true },
-            whenActioned: this.editReturns.bind(this),
-        })
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
 
@@ -60,7 +51,11 @@ class ReturnsHeader {
                         iconName: GtkIcons.edit,
                         size: GtkIcons.size._16x16,
                     },
-                    onClicked: model.getActionHandler({ id: 'editMethodDocumentationReturn' }),                        
+                    onClicked: () => {
+                        flow.editMethodDocumentationReturn({
+                            parentWindow: component.getProps().window,
+                        })
+                    },
                     viewAttributes: {
                         stackSize: 'fixed',
                     },
@@ -75,29 +70,6 @@ class ReturnsHeader {
             })
 
         })
-    }
-
-    /// Edit returns
-
-    editReturns() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = model.getChild({ id: 'selectedMethod' }).getValue()
-
-        const documentation = method.getDocumentation()
-
-        const dialog = EditReturnsDialog.new({
-            className: className,
-            method: method,
-            returns: documentation.getReturns(),
-            window: this.getProps().window,
-            onUpdateReturns: model.getActionHandler({ id: 'updateMethodDocumentationReturn' }),
-            acceptButtonLabel: `Update returns`,
-        })
-
-        dialog.open()
     }
 }
 

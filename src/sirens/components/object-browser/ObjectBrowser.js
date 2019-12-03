@@ -5,7 +5,6 @@ const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 
 const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
-const Pluggables = require('../../objects/Pluggables')
 const ObjectBrowserFlow = require('../../flows/object-browser/ObjectBrowserFlow')
 
 class ObjectBrowser {
@@ -21,19 +20,21 @@ class ObjectBrowser {
     /// Initializing
 
     defaultModel() {
-        const browsedObject = this.getProps().object
+        const props = this.getProps()
 
-        const model = ObjectBrowserFlow.new()
+        const browsedObject = props.object
 
-        model.browseObject( browsedObject )
+        const flow = ObjectBrowserFlow.new().asFlowPoint()
 
-        return model
+        flow.browseObject( browsedObject )
+
+        return flow
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.window( function() {
@@ -45,21 +46,19 @@ class ObjectBrowser {
                 })
 
                 this.verticalSplitter( function() {
-
                     this.component(
                         ObjectPropertiesComponent.new({
-                            model: model.getChild({ id: 'objectProperties' }),
+                            model: flow.getFlowPoint({ id: 'objectProperties' }),
                             viewAttributes: { splitProportion: 1.0/2.0 },                            
                         })
                     )
 
                     this.component(
                         PlaygroundComponent.new({
-                            model: model.getChild({ id: 'playground' }),
+                            model: flow.getFlowPoint({ id: 'playground' }),
                             viewAttributes: { splitProportion: 1.0/2.0 },                            
                         })
                     )
-
                 })
             })
         })

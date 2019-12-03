@@ -1,64 +1,72 @@
 const Classification = require('../../../O').Classification
-const FlowModel = require('../../../Skins').FlowModel
-const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ApplicationCommandsController = require('../ApplicationCommandsController')
 const DocumentationReader = require('../../objects/documentation/DocumentationReader')
 const Sirens = require('../../../Sirens')
-const {defineApplicationCommands, defineClassDefinitionCommands} = require('./ClassDocumentationBrowserCommands')
+const {applicationCommands} = require('./application-commands')
+const {classDefinitionCommands} = require('./class-definition-commands')
+const {methodDefinitionCommands} = require('./method-definition-commands')
+const {guiClassDocumentationCommands} = require('./gui-class-documentation-commands')
+const {guiMethodDocumentationCommands} = require('./gui-method-documentation-commands')
 
 class ClassDocumentationBrowserFlow {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     /// Building
 
     buildWith(flow) {
-        const commandsRouter = ApplicationCommandsRouter.new({ application: this })
+        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main( function(application) {
+        flow.main({ id: 'classDocumentationBrowser' }, function(thisFlow) {
 
-            this.setCommandsRouter( commandsRouter )
+            this.setCommandsController( commandsController )
 
-            this.evaluate({ closure: defineApplicationCommands, params: [application] })
+            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: applicationCommands })
+            this.defineFlowCommandsIn({ method: classDefinitionCommands })
+            this.defineFlowCommandsIn({ method: methodDefinitionCommands })
 
-            this.object( 'browsingMode', function() {
+            this.defineFlowCommandsIn({ method: guiClassDocumentationCommands })
+            this.defineFlowCommandsIn({ method: guiMethodDocumentationCommands })
+            
+            this.value({ id: 'browsingMode'}, function() {
 
                 this.toggle({
                     id: 'showsUnformattedComments',
-                    whenValueChanges: () => { application.reloadClassDefinition() },
+                    whenValueChanges: () => { thisFlow.reloadClassDefinition() },
                 })
 
                 this.toggle({
                     id: 'isEditingDocumentation',
-                    whenValueChanges: () => { application.reloadClassDefinition() },
+                    whenValueChanges: () => { thisFlow.reloadClassDefinition() },
                 })
 
             })
 
-            this.object({ id: 'classDefinition' }, function(classDefinitionModel) {
-
-                this.evaluate({ closure: defineClassDefinitionCommands, params: [application] })
+            this.value({ id: 'classDefinition' }, function(classDefinitionModel) {
 
                 this.whenObjectChanges( ({ newValue: classDefinition }) => {
                     if( classDefinition === null ) {
-                        classDefinitionModel.getChild({ id: 'classDocumentation' }).setValue(null)
-                        classDefinitionModel.getChild({ id: 'classMethods' }).setChoices([])
-                        classDefinitionModel.getChild({ id: 'selectedTags' }).setValue([])
-                        classDefinitionModel.getChild({ id: 'selectedMethod' }).setValue(null)
-                        classDefinitionModel.getChild({ id: 'selectedMethodDocumentation' }).setValue(null)
+                        classDefinitionModel.getChildFlow({ id: 'classDocumentation' }).setValue(null)
+                        classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices([])
+                        classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue([])
+                        classDefinitionModel.getChildFlow({ id: 'selectedMethod' }).setValue(null)
+                        classDefinitionModel.getChildFlow({ id: 'selectedMethodDocumentation' }).setValue(null)
                         return
                     }
 
-                    classDefinitionModel.getChild({ id: 'classDocumentation' }).setValue(
-                        application.getClassDocumentationFrom({ classDefinition: classDefinition })
+                    classDefinitionModel.getChildFlow({ id: 'classDocumentation' }).setValue(
+                        thisFlow.getClassDocumentationFrom({ classDefinition: classDefinition })
                     )
-                    classDefinitionModel.getChild({ id: 'classMethods' }).setChoices(
+                    classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(
                         classDefinition.getMethods()
                     )
-                    classDefinitionModel.getChild({ id: 'selectedTags' }).setValue( [] )
+                    classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue( [] )
                 })
 
                 this.value({
@@ -69,7 +77,7 @@ class ClassDocumentationBrowserFlow {
                     id: 'classMethods',
                     choices: [],
                     whenSelectionChanges: ({ newValue: method }) => {
-                        const selectedMethod = classDefinitionModel.getChild({ id: 'selectedMethod' })
+                        const selectedMethod = classDefinitionModel.getChildFlow({ id: 'selectedMethod' })
                         selectedMethod.setValue( method )
                     },
                 })
@@ -78,17 +86,17 @@ class ClassDocumentationBrowserFlow {
                     id: 'selectedTags',
                     value: [],
                     whenValueChanges: ({ newValue: tags }) => {
-                        const filterdMethods = application.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
-                        classDefinitionModel.getChild({ id: 'classMethods' }).setChoices(filterdMethods)
+                        const filterdMethods = thisFlow.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
+                        classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(filterdMethods)
                     },
                 })
 
-                this.object({ id: 'selectedMethod' }, function() {
+                this.value({ id: 'selectedMethod' }, function() {
                     this.whenObjectChanges( ({ newValue: methodDefinition }) => {
                         const methodDocumentation = methodDefinition === null ?
                             null : methodDefinition.getDocumentation()
 
-                        classDefinitionModel.getChild({ id: 'selectedMethodDocumentation' })
+                        classDefinitionModel.getChildFlow({ id: 'selectedMethodDocumentation' })
                             .setValue( methodDocumentation )
                     })
                 })
@@ -99,7 +107,55 @@ class ClassDocumentationBrowserFlow {
 
             })
 
-            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
+            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
+        })
+    }
+
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
+
+            this.command({
+                id: 'getBrowsedClass',
+                whenActioned: function() {
+                    return thisFlow.getBrowsedClass()
+                }
+            })
+
+            this.command({
+                id: 'setBrowsedClass',
+                whenActioned: function({ classDefinition: classDefinition }) {
+                    thisFlow.setBrowsedClass({ classDefinition: classDefinition })
+                }
+            })
+
+            this.command({
+                id: 'setBrowsedMethod',
+                whenActioned: function({ methodName: methodName }) {
+                    thisFlow.setBrowsedMethod({ methodName: methodName })
+                }
+            })
+
+            this.command({
+                id: 'showsUnformattedComments',
+                whenActioned: function() {
+                    return thisFlow.showsUnformattedComments()
+                }
+            })
+
+            this.command({
+                id: 'getAllMethodsTags',
+                whenActioned: function() {
+                    return thisFlow.getAllMethodsTags()
+                }
+            })
+
+            this.command({
+                id: 'isInEditionMode',
+                whenActioned: function() {
+                    return thisFlow.getChildFlow({ id: 'browsingMode.isEditingDocumentation' }).getValue()
+                }
+            })
+
         })
     }
 
@@ -108,7 +164,7 @@ class ClassDocumentationBrowserFlow {
     reloadClassDefinition() {
         const classDefinition = this.getBrowsedClass()
 
-        const selectedMethod = this.getChild({ id: 'selectedMethod' }).getValue()
+        const selectedMethod = this.getChildFlow({ id: 'selectedMethod' }).getValue()
 
         this.setBrowsedClass({ classDefinition: null })
 
@@ -137,27 +193,23 @@ class ClassDocumentationBrowserFlow {
     /// Querying
 
     getBrowsedClass() {
-        return this.getChild({ id: 'classDefinition' }).getObject()
+        return this.getChildFlow({ id: 'classDefinition' }).getValue()
     }
 
     setBrowsedClass({ classDefinition: classDefinition }) {
-        return this.getChild({ id: 'classDefinition' }).setObject( classDefinition )
+        return this.getChildFlow({ id: 'classDefinition' }).setValue( classDefinition )
     }
 
     setBrowsedMethod({ methodName: methodName }) {
         if( methodName === null ) { return }
 
-        this.getChild({ id: 'classMethods' }).setSelectionSuchThat({
+        this.getChildFlow({ id: 'classMethods' }).setSelectionSuchThat({
             matches: (method) => { return method.getName() === methodName }
         })
     }
 
     showsUnformattedComments() {
-        return this.getChild({ id: 'showsUnformattedComments' }).getValue()
-    }
-
-    isInEditionMode() {
-        return this.getChild({ id: 'isEditingDocumentation' }).getValue()
+        return this.getChildFlow({ id: 'browsingMode.showsUnformattedComments' }).getValue()
     }
 
     getAllMethodsTags() {
@@ -180,6 +232,14 @@ class ClassDocumentationBrowserFlow {
         const allMethodsTags = allMethodsTagsSet.values()
 
         return Array.from( allMethodsTags )
+    }
+
+    isInEditionMode() {
+        return this.getChildFlow({ id: 'browsingMode.isEditingDocumentation' }).getValue()
+    }
+
+    isEditingAClass() {
+        return this.isInEditionMode() && this.getBrowsedClass()
     }
 
     getSelectedTagsModel() {
@@ -231,13 +291,21 @@ class ClassDocumentationBrowserFlow {
                 methodDocumentation: documentation,
             })
 
-        const method = this.getChild({ id: 'selectedMethod' }).getValue()
+        const method = this.getChildFlow({ id: 'selectedMethod' }).getValue()
 
         const methodComment = method.getComment()
 
         methodComment.writeFormattedContents({ commentContents: methodCommentContents })
 
         this.reloadClassDefinition()
+    }
+
+    getCurrentMethod() {
+        return this.getChildFlow({ id: 'selectedMethod' }).getValue()
+    }
+
+    getCurrentMethodDocumentation() {
+        return this.getChildFlow({ id: 'selectedMethodDocumentation' }).getValue()
     }
 }
 

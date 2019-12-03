@@ -1,6 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const FlowModel = require('../../../Skins').FlowModel
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const PlugabbleDisplayable = require('../../objects/PlugabbleDisplayable')
 
 class FileClassesEditionFlow {
@@ -8,30 +8,30 @@ class FileClassesEditionFlow {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     /// Building
 
     buildWith(flow) {
-        flow.main( function(fileContents) {
+        flow.main({ id: 'sourceFileEdition' }, function(fileContents) {
+
+            this.defineFlowCommandsIn({ method: fileContents.flowMethods })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                fileContents.getChild({ id: 'fileSections' }).setChoices( fileContents.getSectionsDefinedInOpenedFile() )
-                fileContents.getChild({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
+                this.getChildFlow({ id: 'fileSections' }).setChoices( fileContents.getSectionsDefinedInOpenedFile() )
+                this.getChildFlow({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
             })
 
             this.choice({
                 id: 'fileSections',
                 choices: [],
                 whenSelectionChanges: ({ newValue: fileSection }) => {
-                    fileContents.getChild({ id: 'selectedSectionContents' }).setObject( fileSection )
+                    fileContents.getChildFlow({ id: 'selectedSectionContents' }).setValue( fileSection )
                 },
             })
 
-            this.object({
-                id: 'selectedSectionContents',
-            }, function(selectedSectionContents) {
+            this.value({ id: 'selectedSectionContents' }, function(selectedSectionContents) {
 
                 this.whenObjectChanges( ({ newValue: fileSection }) => {
                     let methods
@@ -52,16 +52,16 @@ class FileClassesEditionFlow {
                     if( methods === undefined ) { methods = [] }
                     if( editedContents === undefined ) { editedContents = '' }
 
-                    selectedSectionContents.getChild({ id: 'classMethods' }).setChoices( methods )
+                    selectedSectionContents.getChildFlow({ id: 'classMethods' }).setChoices( methods )
 
-                    selectedSectionContents.getChild({ id: 'editedContents' }).setValue( editedContents )
+                    selectedSectionContents.getChildFlow({ id: 'editedContents' }).setValue( editedContents )
                  })
 
                 this.choice({
                     id: 'classMethods',
                     choices: [],
                     whenSelectionChanges: ({ newValue: methodDefinition }) => {
-                        const editedContents = selectedSectionContents.getChild({ id: 'editedContents' })
+                        const editedContents = selectedSectionContents.getChildFlow({ id: 'editedContents' })
 
                         if( methodDefinition === null ) {
                             editedContents.setValue('')
@@ -77,14 +77,25 @@ class FileClassesEditionFlow {
         })
     }
 
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
+            const methods = [
+                'getSourceFile',
+                'getSectionsDefinedInOpenedFile',
+            ]
+
+            this.defineCommandMethods({ methodNames: methods })
+        })
+    }
+
     /// Querying
 
     getSourceFile() {
-        return this.getObject()
+        return this.getValue()
     }
 
     setSourceFile({ sourceFile: sourceFile }) {
-        return this.setObject( sourceFile )
+        return this.setValue( sourceFile )
     }
 
     getSectionsDefinedInOpenedFile() {
@@ -131,15 +142,15 @@ class FileClassesEditionFlow {
     }
 
     getSelectedClassDefinition() {
-        const fileSection = this.getChild({ id: 'selectedSectionContents' }).getObject()
+        const fileSection = this.getChildFlow({ id: 'selectedSectionContents' }).getValue()
 
         if( ! fileSection ) { return null }
 
         if( this.isFooter({ fileSection: fileSection }) ) {
-            return this.getChild({ id: 'fileSections' }).getChoices()[1]            
+            return this.getChildFlow({ id: 'fileSections' }).getChoices()[1]            
         }
 
-        const sections = this.getChild({ id: 'fileSections' }).getChoices()
+        const sections = this.getChildFlow({ id: 'fileSections' }).getChoices()
 
         const index = sections.indexOf( fileSection )
 
@@ -147,7 +158,7 @@ class FileClassesEditionFlow {
     }
 
     getSelectedMethodName() {
-        const selectedMethod = this.getChild({ id: 'classMethods' }).getSelectionValue()
+        const selectedMethod = this.getChildFlow({ id: 'classMethods' }).getSelection()
 
         if( ! selectedMethod ) { return null }
 

@@ -16,7 +16,7 @@ class AppBrowserBody {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.horizontalSplitter( function() {
@@ -30,7 +30,7 @@ class AppBrowserBody {
 
                     this.component(
                         SourceFileEditionComponent.new({
-                            model: model.getChild({ id: 'sourceFileEdition' }),
+                            model: flow.getFlowPoint({ id: 'sourceFileEdition' }),
                             openClassDocumentation: component.getProps().openClassDocumentation,
                         })
                     )
@@ -38,7 +38,7 @@ class AppBrowserBody {
                 })
 
                 this.treeChoice( function() {
-                    this.model( model.getChild({ id: 'filesTree' }) )
+                    this.model( flow.getFlowPoint({ id: 'filesTree' }) )
 
                     this.styles({
                         viewAttributes: { splitProportion: 1.0/3.0 },
@@ -63,9 +63,9 @@ class AppBrowserBody {
                     })
 
                     this.popupMenu( function() {
-                        const selectedFilePath = model.getSelectedFilePath()
+                        const selectedFilePath = flow.getSelectedFilePath()
 
-                        const classesDefinitions = model.getClassesDefinitionsInSelectedFile()
+                        const classesDefinitions = flow.getClassesDefinitionsInSelectedFile()
 
                         this.item({
                             label: 'Browse it on a new window',

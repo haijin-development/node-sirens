@@ -1,96 +1,108 @@
 const Classification = require('../../O').Classification
-const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
-const ValueModelBehaviour = require('../models/ValueModelBehaviour')
-const FlowPoint = require('../FlowPoint')
 
 class Command {
-
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['id', 'isEnabled', 'enabledClosure', 'actionClosure']
-        this.assumes = [ValueModelBehaviour, FlowPoint]
-        this.implements = [ValueModelProtocol_Implementation]
+        this.instanceVariables = [
+            'id', 'idPath',
+            'actionHandlerClosure',
+            'commandsController',
+        ]
     }
 
     /// Initializing
 
-    initialize({ id: id, enabledClosure: enabledClosure, actionClosure: actionClosure }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
+    initialize({ id: id, idPath: idPath, actionHandlerClosure: actionHandlerClosure }) {
         this.id = id
-        this.isEnabled = false
-        this.enabledClosure = enabledClosure
-        this.actionClosure = actionClosure
-
-        if( this.actionClosure ) {
-            this.actionClosure
-        }
+        this.idPath = idPath ? `${idPath}.${id}` : id
+        this.actionHandlerClosure = actionHandlerClosure
     }
 
-    /// Accessing
+    /// Id
 
     getId() {
         return this.id
     }
 
-    getEnabledClosure() {
-        return this.enabledClosure
+    setId({ id: id, idPath: idPath }) {
+        this.id = id
+        this.idPath = idPath ? `${idPath}.${id}` : id
     }
 
-    getActionClosure() {
-        return this.actionClosure
+    getIdPath() {
+        return this.idPath
+    }
+
+    setActionHandlerClosure(actionHandlerClosure) {
+        this.actionHandlerClosure = actionHandlerClosure
+    }
+
+    // Commands
+
+    setCommandsController(commandsController) {
+        this.commandsController = commandsController
+    }
+
+    getCommandsController() {
+        return this.commandsController
+    }
+
+    hasActionHandler() {
+        return typeof( this.actionHandlerClosure ) === 'function'
+    }
+
+    isCommand() {
+        return true
+    }
+
+    /// Flow
+
+    allChildFlowsDo(closure) {}
+
+    findDirectChildFlow() { return undefined }
+
+    getChildFlows() { return [] }
+
+    asFlowPoint() {
+        throw new Error(`Another classification should implement this method.`)
+    }
+
+    /// Executing
+
+    execute({ params: params }) {
+        if( params === undefined ) { params = [] }
+
+        const commandsController = this.getCommandsController()
+
+        if( commandsController === undefined ) {
+            return this.executeActionHandlerClosure({ params: params })
+        }
+
+        const result = commandsController.doExecuteCommand({
+            command: this,
+            params: params
+        })
+
+        return result
+    }
+
+    executeActionHandlerClosure({ params: params }) {
+        if( ! this.hasActionHandler() ) {
+            throw new Error(`The actionHandler for the command '${this.idPath}' is not defined, the application should define it.`)
+        }
+
+        const actionHandler = this.actionHandlerClosure
+
+        return actionHandler( ... params)
     }
 
     getActionHandler() {
-        return this.actionHandlerWrapper.bind(this)
-    }
-
-    /// Evaluating
-
-    calculateEnableValue({ application: application }) {
-        return this.enabledClosure.call( application, application )
-    }
-
-    evaluateEnabledClosure({ application: application }) {
-        const isEnabled = this.calculateEnableValue({ application: application })
-
-        this.setValue( isEnabled )
-    }
-
-    actionHandlerWrapper(...params) {
-        const commandsRouter = this.getCommandsRouter()
-
-        if( ! commandsRouter ) {
-            this.doExecute({ params: params })
-            return
+        const actionHandler = (...params) => {
+            return this.execute({ params: params })
         }
 
-        commandsRouter.executeCommand({ command: this, params: params })
-    }
-
-    doExecute({ params: params }) {
-        const actionHandler = this.actionClosure
-
-        if( ! actionHandler ) {
-            throw new Error(`The actionHandler for the command '${this.id}' is not defined, the application should define it.`)
-        }
-
-        actionHandler.call( this, ...params )        
-    }
-
-    /// Reading
-
-    doGetValue() {
-        return this.isEnabled
-    }
-
-    /// Writing
-
-    doSetValue(boolean) {
-        this.isEnabled = boolean
+        return actionHandler
     }
 }
 

@@ -19,7 +19,7 @@ class FileFooterComponent {
         componentsRenderer.render( function(component) {
 
             this.text({
-                model: model.getChild({ id: 'editedContents' }),
+                model: model.getFlowPoint({ id: 'editedContents' }),
                 viewAttributes: { splitProportion: 1.0 / 2 },
             })
 

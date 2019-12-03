@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const FlowModel = require('../../../Skins').FlowModel
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
 const Pluggables = require('../../objects/Pluggables')
 
@@ -8,16 +8,18 @@ class ObjectBrowserFlow {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     /// Building
 
     buildWith(flow) {
-        flow.main( function(application) {
+        flow.main({ id: 'objectBrowser' }, function(thisFlow) {
+
+            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                application.getChild({ id: 'objectProperties' }).setObject( object )
+                thisFlow.getChildFlow({ id: 'objectProperties' }).setValue( object )
             })
 
             this.object({
@@ -25,30 +27,45 @@ class ObjectBrowserFlow {
                 definedWith: ObjectPropertiesFlow.new({
                     whenSelectionChanges: function({ selection: objectProperty }) {
                         const value = objectProperty.getValue()
-                        application.getChild({ id: 'playground' }).setObject( value )
+                        thisFlow.getChildFlow({ id: 'playground' }).setObject( value )
                     }
                 }),
             })
 
-            this.objectAttributeValue({
+            this.bufferedValue({
                 id: 'playground',
-                attributeReader: (selectedValue) => { 
-                    return application.propertySelectionValueStringFrom({ value: selectedValue })
+                convertToValueWith: ({ object: selectedValue }) => {
+                    return thisFlow.executeCommand({
+                        id: 'propertySelectionValueStringFrom',
+                        with: { value: selectedValue },
+                    })
                 },
             })
 
-            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
+            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 
-    /// Actions
+    /// Flow methods
+
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
+            const methods = [
+                'browseObject',
+                'propertySelectionValueStringFrom',
+            ]
+
+            this.defineCommandMethods({ methodNames: methods })
+        })
+    }
 
     browseObject(object) {
-        this.setObject( object )
+        this.setValue( object )
     }
 
     propertySelectionValueStringFrom({ value: value }) {
-        const valueToTextClassification = Pluggables.objectPropertiesInspector.playgroundTextConverter
+        const valueToTextClassification =
+            Pluggables.objectPropertiesInspector.playgroundTextConverter
 
         const valueToText = valueToTextClassification.new()
 

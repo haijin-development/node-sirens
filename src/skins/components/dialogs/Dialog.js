@@ -20,14 +20,16 @@ class Dialog {
     }
 
     createView() {
-        const window = this.getProps().window
+        const props = this.getProps()
+
+        const window = props.window
 
         const windowView = window !== undefined ? window.getView() : undefined
 
         return DialogView.new({
-            title: this.getProps().title,
-            buttons: this.getProps().buttons,
-            windowView: windowView,
+            title: props.title,
+            buttons: props.buttons,
+            //windowView: windowView,
             dialog: this,
         })
     }

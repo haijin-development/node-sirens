@@ -40,7 +40,7 @@ describe('When using a MultipleSelectionCheckBox-spec', () => {
             widget.getModel().setValue(['Item 2'])
 
             widget.getView().setValue( true )
-            widget.onClicked()
+            widget.handleClicked()
 
             expect( widget.getModel().getValue() ) .to .eql( ['Item 2', 'Item 1'] )
         })
@@ -55,7 +55,7 @@ describe('When using a MultipleSelectionCheckBox-spec', () => {
             widget.getModel().setValue(['Item 1'])
 
             widget.getView().setValue( true )
-            widget.onClicked()
+            widget.handleClicked()
 
             expect( widget.getModel().getValue() ) .to .eql( ['Item 1'] )
         })

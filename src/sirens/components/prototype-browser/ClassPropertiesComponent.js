@@ -14,16 +14,10 @@ class ClassPropertiesComponent {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Initializing
-
-    defaultModel() {
-        return ClassPropertiesFlow.new()
-    }
-
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
             this.verticalStack( function() {
@@ -36,7 +30,7 @@ class ClassPropertiesComponent {
                     })
 
                     this.checkBox({
-                        model: model.getChild({ id: 'showInheritedProps' }),
+                        model: flow.getFlowPoint({ id: 'showInheritedProps' }),
                         label: 'Show inherited',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -44,7 +38,7 @@ class ClassPropertiesComponent {
                     })
 
                     this.checkBox({
-                        model: model.getChild({ id: 'showFunctionProps' }),
+                        model: flow.getFlowPoint({ id: 'showFunctionProps' }),
                         label: 'Show functions',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -52,7 +46,7 @@ class ClassPropertiesComponent {
                     })
 
                     this.checkBox({
-                        model: model.getChild({ id: 'showNonFunctionProps' }),
+                        model: flow.getFlowPoint({ id: 'showNonFunctionProps' }),
                         label: 'Show props',
                         viewAttributes: {
                             stackSize: 'fixed',
@@ -61,10 +55,10 @@ class ClassPropertiesComponent {
                 })
 
                 this.listChoice( function() {
-                    this.model( model.getChild({ id: 'properties' }) )
+                    this.model( flow.getFlowPoint({ id: 'properties' }) )
 
                     this.handlers({
-                        onAction: model.getActionHandler({ id: 'browseSelectedProperty' }),
+                        onAction: () => { flow.browseSelectedProperty() }
                     })
 
                     this.column({
@@ -80,14 +74,12 @@ class ClassPropertiesComponent {
                     })
 
                     this.popupMenu( function() {
-                        model.getChild({ id: 'browseSelectedProperty' }).evaluateEnabledClosure({
-                            application: model
-                        })
+                        flow.getCommand({ id: 'browseSelectedProperty' }).updateEnabledState()
 
                         this.item({
                             label: 'Browse it',
-                            enabled: model.getChild({ id: 'browseSelectedProperty' }),
-                            action: model.getActionHandler({ id: 'browseSelectedProperty' }),
+                            enabled: flow.getFlowPoint({ id: 'browseSelectedProperty' }),
+                            action: () => { flow.browseSelectedProperty() }
                         })
                     })
                 })

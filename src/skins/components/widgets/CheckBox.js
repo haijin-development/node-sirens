@@ -25,7 +25,7 @@ class CheckBox {
 
     createView() {
         return CheckBoxView.new({
-            onClicked: this.onClicked.bind(this)
+            onClicked: this.handleClicked.bind(this)
         })
     }
 
@@ -50,15 +50,15 @@ class CheckBox {
 
         this.getModel().onValueChanged({
             with: this,
-            do: this.onValueChanged,
+            do: this.handleValueChanged,
         })
     }
 
-    onValueChanged(announcement) {
+    handleValueChanged(announcement) {
         this.synchronizeViewFromModel()
     }
 
-    onClicked() {
+    handleClicked() {
         const viewValue = this.getView().getValue()
 
         this.duringClassificationDo( UpdatingModel, () => {
@@ -68,7 +68,7 @@ class CheckBox {
 }
 
 class UpdatingView {
-    onClicked() {}
+    handleClicked() {}
 }
 
 UpdatingView = Classification.define(UpdatingView)

@@ -18,11 +18,11 @@ class ClassMethodsDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        const showsUnformattedComments = model.showsUnformattedComments()
+        const showsUnformattedComments = flow.showsUnformattedComments()
 
-        const methodTags = model.getAllMethodsTags().sort()
+        const methodTags = flow.getAllMethodsTags().sort()
 
         componentsRenderer.render(function (component) {
 
@@ -34,7 +34,7 @@ class ClassMethodsDocumentation {
 
                         this.component(
                             MethodUnformattedComment.new({
-                                model: model,
+                                model: flow,
                             })
                         )
 
@@ -42,7 +42,7 @@ class ClassMethodsDocumentation {
 
                         this.component(
                             MethodFormattedComment.new({
-                                model: model,
+                                model: flow,
                             })
                         )
 
@@ -53,7 +53,7 @@ class ClassMethodsDocumentation {
                 this.verticalStack({ viewAttributes: { splitProportion: 1.0 / 3.0 }, showHeaders: false, }, function() {
 
                     this.listChoice({ viewAttributes: { splitProportion: 1.0/2.0 }}, function() {
-                        this.model( model.getChild({ id: 'classMethods' }) )
+                        this.model( flow.getFlowPoint({ id: 'classMethods' }) )
 
                         this.column({
                             getImageClosure: function(functionDefinition) { return Resource.image.method },
@@ -82,7 +82,7 @@ class ClassMethodsDocumentation {
 
                             methodTags.forEach( (tag) => {
                                 this.multipleCheckBox({
-                                    model: model.getChild({ id: 'selectedTags' }),
+                                    model: flow.getFlowPoint({ id: 'selectedTags' }),
                                     item: tag,
                                     label: tag,
                                     viewAttributes: { stackSize: 'fixed' },

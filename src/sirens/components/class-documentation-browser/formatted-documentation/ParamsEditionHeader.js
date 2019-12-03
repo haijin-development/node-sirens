@@ -2,8 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const EditParamDialog = require ('../edition/EditParamDialog')
-
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
 
@@ -16,20 +14,10 @@ class ParamsEditionHeader {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'createMethodDocumentationParam',
-            enabledIf: () => { return true },
-            whenActioned: this.createMethodDocumentationParam.bind(this),
-        })
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
 
@@ -59,7 +47,11 @@ class ParamsEditionHeader {
                         size: GtkIcons.size._16x16,
                     },
                     viewAttributes: { stackSize: 'fixed' },
-                    onClicked: model.getActionHandler({ id: 'createMethodDocumentationParam' }),
+                    onClicked: () => {
+                        flow.createMethodDocumentationParam({
+                            parentWindow: component.getProps().window,
+                        })
+                    },
                 })
 
                 // To center the button horizontally
@@ -70,27 +62,6 @@ class ParamsEditionHeader {
             })
 
         })
-    }
-
-    createMethodDocumentationParam() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-        const method = model.getChild({ id: 'selectedMethod' }).getValue()
-        const newParam = {
-            Name: 'Add the name of the parameter here ...',
-            Description: 'Add the parameter description ...',
-        }
-        const dialog = EditParamDialog.new({
-            className: className,
-            method: method,
-            param: newParam,
-            window: this.getProps().window,
-            onUpdateParam: model.getActionHandler({ id: 'addMethodDocumentationParam' }),
-            acceptButtonLabel: `Add param`,
-        })
-
-        dialog.open()
     }
 }
 

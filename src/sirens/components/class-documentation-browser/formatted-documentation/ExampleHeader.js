@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const EditExampleDialog = require('../edition/EditExampleDialog')
 const Resource = require('../../../objects/Resource')
 const GtkIcons = require('../../../../Skins').GtkIcons
 

@@ -30,7 +30,7 @@ class AppBrowserMenuBar {
                     this.item({
                         label: 'Open folder...',
                         action: component.getProps().openFolder,
-                        enabled: model.getChild({ id: 'openApplicationFolder' }),
+                        enabled: model.getCommand({ id: 'pickAndOpenFolder' }),
                     })
 
                 })
@@ -40,19 +40,19 @@ class AppBrowserMenuBar {
                     this.item({
                         label: 'Open class documentation browser',
                         action: component.getProps().openClassDocumentation,
-                        enabled: model.getChild({ id: 'openClassDocumentation' }),
+                        enabled: model.getCommand({ id: 'openClassDocumentation' }),
                     })
 
                     this.item({
                         label: 'Open a class editor...',
                         action: component.getProps().openClassEditor,
-                        enabled: model.getChild({ id: 'openClassEditor' }),
+                        enabled: model.getCommand({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
                         action: component.getProps().openPlayground,
-                        enabled: model.getChild({ id: 'openPlayground' }),
+                        enabled: model.getCommand({ id: 'openPlayground' }),
                     })
 
                 })

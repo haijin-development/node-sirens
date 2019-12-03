@@ -14,12 +14,12 @@ class ClassHeaderComponent {
     /// Rendering
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
 
             this.text({
-                model: model.getChild({ id: 'editedContents' }),
+                model: flow.getFlowPoint({ id: 'editedContents' }),
                 viewAttributes: { splitProportion: 1.0 / 2 },
             })
 

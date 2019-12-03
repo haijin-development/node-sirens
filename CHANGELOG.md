@@ -1,5 +1,32 @@
 # Changelog
 
+## v0.13.0
+
+### Sirens
+
+- Rewrote all the browsers using the new Flows architecture. Components no longer define the logic of the application, which was moved to Commands on each browser Flow definition.
+
+### FingerTips
+
+- Dropped BufferedAttributeModel, AttributeModel and ObjectPropModel in favor of the new and more simple Flows architecture.
+- Implemented ValueFlow, BufferedValueFlow, ChoiceFlow and TreeChoiceFlow.
+- Implemented FlowPoints.
+- Separated the notification of events within a flow from the notifications of events to the FlowPoints.
+- Ensured that the inner events of a Flow are always handled before the notifications to its FlowPoints.
+- Made independent implementations of stateful commands that may be enabled or disabled from stateless commands that are always enabled.
+- Added shortcuts to define Commands from the FlowBuilder in a different function or file.
+- Removed the Flow object from the FlowPoint. A FlowPoint no longer has a reference to the Flow it is connected to, only to the push/pull functions to that Flow. This way the FlowPoint is isolated from the flow and unable to change or even get the Flow structure.
+- FlowPoints can not access any child Flow, only other child FlowPoints.
+- Removed the method FlowPoint.getActionHandler({ id: childId }). Now the a FlowPoint just makes the call to the Flow method of interest.
+- Made the Flow to choose which methods to allow to each FlowPoint it creates.
+
+### Skins
+
+- Adapted Components to the new Flows architecture.
+
+### O language
+
+
 ## v0.12.1
 
 ### Skins

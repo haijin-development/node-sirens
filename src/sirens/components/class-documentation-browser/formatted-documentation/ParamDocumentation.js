@@ -2,8 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
-const EditParamDialog = require ('../edition/EditParamDialog')
-
 const Resource = require('../../../objects/Resource')
 const GtkIcons = require('../../../../Skins').GtkIcons
 
@@ -19,16 +17,9 @@ class ParamDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodDocumentationParam',
-            enabledIf: () => { return true },
-            whenActioned: this.editMethodDocumentationParam.bind(this),
-        })
-
-        const isInEditionMode = model.isInEditionMode()
+        const isInEditionMode = flow.isInEditionMode()
 
         const param = this.getProps().param
 
@@ -78,7 +69,14 @@ class ParamDocumentation {
                                         iconName: GtkIcons.edit,
                                         size: GtkIcons.size._16x16,
                                     },
-                                    onClicked: model.getActionHandler({ id: 'editMethodDocumentationParam' }),
+                                    onClicked: () => {
+                                        flow.editMethodDocumentationParam({
+                                            parentWindow: component.getProps().window,
+                                            param: component.getProps().param,
+                                            paramIndex: component.getProps().index,
+
+                                        })
+                                    },
                                     viewAttributes: { stackSize: 'fixed' },
                                 })
 
@@ -91,8 +89,9 @@ class ParamDocumentation {
                                     },
                                     onClicked: () => {
                                         const paramIndex = component.getProps().index
-                                        const actionHandler = model.getActionHandler({ id: 'deleteMethodDocumentationParam' })
-                                        actionHandler({ atIndex: paramIndex })
+                                        flow.deleteMethodDocumentationParam({
+                                            atIndex: paramIndex,
+                                        })
                                     },
                                     viewAttributes: { stackSize: 'fixed' },
                                 })
@@ -114,34 +113,6 @@ class ParamDocumentation {
             })
 
         })
-    }
-
-    /// Commands
-
-    editMethodDocumentationParam() {
-        const model = this.getModel()
-
-        const param = this.getProps().param
-
-        const paramIndex = this.getProps().index
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = model.getChild({ id: 'selectedMethod' }).getValue()
-
-        const dialog = EditParamDialog.new({
-            className: className,
-            method: method,
-            param: param,
-            window: this.getProps().window,
-            onUpdateParam: ({ param: newParam }) => {
-                const actionHandler = model.getActionHandler({ id: 'updateMethodDocumentationParam' })
-                actionHandler({ atIndex: paramIndex, newParam: newParam })
-            },
-            acceptButtonLabel: `Update param`,
-        })
-
-        dialog.open()
     }
 }
 

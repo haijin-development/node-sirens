@@ -15,7 +15,7 @@ class ClassComponent {
     /// Rendering
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
 
@@ -23,7 +23,7 @@ class ClassComponent {
 
                 this.listChoice( function() {
 
-                    this.model( model.getChild({ id: 'classMethods' }) )
+                    this.model( flow.getFlowPoint({ id: 'classMethods' }) )
 
                     this.styles({
                         showHeaders: false,
@@ -51,7 +51,7 @@ class ClassComponent {
                 })
 
                 this.text({
-                    model: model.getChild({ id: 'editedContents' }),
+                    model: flow.getFlowPoint({ id: 'editedContents' }),
                     viewAttributes: { splitProportion: 1.0 / 2 },
                 })
 

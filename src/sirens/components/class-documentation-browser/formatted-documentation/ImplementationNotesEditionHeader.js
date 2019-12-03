@@ -13,9 +13,6 @@ class ImplementationNotesEditionHeader {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-
     /// Building
 
     renderWith(componentsRenderer) {

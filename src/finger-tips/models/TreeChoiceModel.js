@@ -151,6 +151,12 @@ class TreeChoiceModel {
 
     /// Events
 
+    onRootsChanged({ with: object, do: closure }) {
+        this.treeModel.onRootsChanged({ with: object, do: closure })
+
+        return this
+    }
+
     onSelectionChanged({ with: object, do: closure }) {
         this.selectionModel.onValueChanged({
             with: object,

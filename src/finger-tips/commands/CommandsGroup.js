@@ -1,6 +1,6 @@
 const Classification = require('../../O').Classification
-const Command = require('./Command')
-const FlowPoint = require('../FlowPoint')
+const StatefulCommand = require('./StatefulCommand')
+const Flow = require('../flows/Flow')
 
 class CommandsGroup {
 
@@ -8,27 +8,7 @@ class CommandsGroup {
 
     static definition() {
         this.instanceVariables = ['commands']
-        this.assumes = [FlowPoint]
-    }
-
-    /// Initializing
-
-    initialize() {
-        this.commands = []
-    }
-
-    /// Adding
-
-    add({ command: command }) {
-        this.commands.push( command )
-    }
-
-    /// Searching
-
-    findChild({ id: childId }) {
-        return this.commands.find( (command) => {
-            return command.getId() === childId
-        })
+        this.assumes = [Flow]
     }
 
     /// Iterating
@@ -40,7 +20,7 @@ class CommandsGroup {
     }
 
     commandsDo(closure) {
-        this.commands.forEach( closure )
+        this.getChildFlowPoints().forEach( closure )
     }
 }
 

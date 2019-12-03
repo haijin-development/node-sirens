@@ -1,12 +1,13 @@
 const Classification = require('../../../O').Classification
-const FlowModel = require('../../../Skins').FlowModel
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesFlow {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['selectionChangedClosure']
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     /// Initializing
@@ -24,22 +25,62 @@ class ObjectPropertiesFlow {
     buildWith(flow) {
         const selectionChangedClosure = this.selectionChangedClosure
 
-        flow.main( function(objectProperties) {
+        flow.main({ id: 'objectProperties' },  function(thisFlow) {
+
+            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                const rootProperties = objectProperties.getRootProperties()
-                objectProperties.getChild({ id: 'properties' }).setRoots({ items: rootProperties })
+                const rootProperties = thisFlow.getRootProperties()
+
+                thisFlow.getChildFlow({ id: 'properties' }).setRoots({ items: rootProperties })
             })
 
             this.treeChoice({
                 id: 'properties',
-                roots: objectProperties.getRootProperties(),
+                roots: thisFlow.getRootProperties(),
                 getChildrenClosure: function (objectProperty) {
                     return objectProperty.getChildProperties()
                 },
                 whenSelectionChanges: function({ newValue: selectedObjectProperties }) {
                     const selection = selectedObjectProperties[ selectedObjectProperties.length - 1 ]
                     selectionChangedClosure({ selection: selection })
+                },
+            })
+
+        })
+    }
+
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
+            const methods = [
+                'getMainObject',
+                'getRootProperties',
+                'getSelectedPropertyValue',
+            ]
+
+            this.defineCommandMethods({ methodNames: methods })
+        })
+    }
+
+    flowCommands(thisFlow) {
+        this.category( 'flow commands', () => {
+
+            this.command({
+                id: 'inspectSelectedObject',
+                whenActioned: function() {
+                    const selectedValue = thisFlow.getSelectedPropertyValue()
+
+                    Sirens.browseObject(selectedValue)
+                },
+            })
+
+            this.command({
+                id: 'browseSelectedObjectPrototypes',
+                whenActioned: function() {
+                    const selectedValue = thisFlow.getSelectedPropertyValue()
+
+                    Sirens.browsePrototypes(selectedValue)
                 },
             })
 
@@ -59,7 +100,7 @@ class ObjectPropertiesFlow {
     }
 
     getSelectedPropertyValue() {
-        const objectProperty = this.getChild({ id: 'properties' }).getSelectionValue()
+        const objectProperty = this.getChildFlow({ id: 'properties' }).getSelectionValue()
 
         return objectProperty.getValue()
     }

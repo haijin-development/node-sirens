@@ -1,7 +1,7 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
-const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
-const FlowModel = require('../../../Skins').FlowModel
+const ApplicationCommandsController = require('../ApplicationCommandsController')
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ClassSourceFile = require('../../objects/ClassSourceFile')
 const FileClassesEditionFlow = require('./FileClassesEditionFlow')
 const Sirens = require('../../../Sirens')
@@ -11,29 +11,31 @@ class ClassEditorFlow {
 
     static definition() {
         this.instanceVariables = ['lastOpenedFolder']
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     /// Building
 
     buildWith(flow) {
-        const commandsRouter = ApplicationCommandsRouter.new({ application: this })
+        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main( function(application) {
+        flow.main({ id: 'classEditor' }, function(application) {
 
-            this.setCommandsRouter( commandsRouter )
+            this.setCommandsController( commandsController )
 
-            this.evaluate({ closure: application.defineApplicationCommands, params: [application] })
+            this.defineFlowCommandsIn({ method: application.flowCommands })
+            this.defineFlowCommandsIn({ method: application.flowMethods })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                application.getChild({ id: 'windowTitle' }).setObject( sourceFile )
-                application.getChild({ id: 'sourceFileEdition' }).setObject( sourceFile )
+                this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
+                this.getChildFlow({ id: 'sourceFileEdition' }).setValue( sourceFile )
             })
 
-            this.objectAttributeValue({
+            this.bufferedValue({
                 id: 'windowTitle',
-                attributeReader: (sourceFile) => { 
-                    return sourceFile ? `Class editor - ${sourceFile.getFilePath()}` :
+                convertToValueWith: ({ object: sourceFile }) => {
+                    return sourceFile ?
+                        `Class editor - ${sourceFile.getFilePath()}` :
                         'Class editor - No source file selected.'
                 },
             })
@@ -43,39 +45,33 @@ class ClassEditorFlow {
                 definedWith: FileClassesEditionFlow.new(),
             })
 
-            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
+            application.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 
-    defineApplicationCommands(application) {
-        this.commands({ id: 'applicationCommands' }, function() {
-
+    flowCommands(thisFlow) {
+        this.category( 'application commands', () => {
             this.command({
                 id: 'openFile',
-                enabledIf: function() { return true },
                 whenActioned: function({ filename: filename }) {
-                    if( ! filename ) { return }
-
-                    application.openFile({ filename: filename })
+                    thisFlow.openFile({ filename: filename })
                 }
             })
 
             this.command({
                 id: 'openFileInNewWindow',
-                enabledIf: function() { return true },
                 whenActioned: function({ filename: filename }) {
-                    if( ! filename ) { return }
                     Sirens.openClassEditor({ filename: filename })
                 }
             })
 
             this.command({
                 id: 'openClassEditor',
-                enabledIf: function(application) {
-                    return application.hasAClassSelected()
+                enabledIf: function() {
+                    return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const sourceFileEdition = application.getChild({ id: 'sourceFileEdition' })
+                    const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
                     const filename = sourceFileEdition.getSourceFile().getFilePath()
                     Sirens.openClassEditor({ filename: filename })
                 }
@@ -83,7 +79,6 @@ class ClassEditorFlow {
 
             this.command({
                 id: 'openPlayground',
-                enabledIf: function() { return true },
                 whenActioned: function() {
                     Sirens.openPlayground()
                 }
@@ -92,20 +87,58 @@ class ClassEditorFlow {
             this.command({
                 id: 'openDocumentationBrowser',
                 enabledIf: function() {
-                    return application.hasAClassSelected()
+                    return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const sourceFileEdition = application.getChild({ id: 'sourceFileEdition' })
+                    const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
                     const fileSection = sourceFileEdition.getSelectedClassDefinition()
                     const methodName = sourceFileEdition.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ classDefinition: fileSection, methodName: methodName })
                 }
             })
 
+            this.command({
+                id: 'pickAndOpenFile',
+                whenActioned: function({ parentWindow: parentWindow }) {
+                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+                    if( filename === null ) { return }
+
+                    thisFlow.openFile({ filename: filename })
+                },
+            })
+
+            this.command({
+                id: 'pickAndOpenFileInNewWindow',
+                whenActioned: function({ parentWindow: parentWindow }) {
+                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+                    if( filename === null ) { return }
+
+                    thisFlow.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
+                },
+            })
         })
     }
 
-    /// Actions
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
+            const methods = [
+                'pickFile',
+                'getLastOpenedFolder',
+            ]
+
+            this.defineCommandMethods({ methodNames: methods })
+        })
+    }
+
+    //////////////////
+    /// Flow methods
+    //////////////////
+
+    pickFile() {
+        throw new Error('The implementation of this method is responsibility of the application')
+    }
 
     openFile({ filename: filename }) {
         let sourceFile = ClassSourceFile.new({ filepath: filename })
@@ -128,16 +161,17 @@ class ClassEditorFlow {
     }
 
     getSourceFile() {
-        return this.getObject()
+        return this.getValue()
     }
 
     setSourceFile({ sourceFile: sourceFile }) {
-        return this.setObject( sourceFile )
+        return this.setValue( sourceFile )
     }
 
     hasAClassSelected() {
-        const sourceFileEdition = this.getChild({ id: 'sourceFileEdition' })
-        const section = sourceFileEdition.getChild({ id: 'selectedSectionContents' }).getObject()
+        const sourceFileEdition = this.getChildFlow({ id: 'sourceFileEdition' })
+        const section = sourceFileEdition.getChildFlow({ id: 'selectedSectionContents' }).getValue()
+
         return section ? sourceFileEdition.isClassDefinition({ fileSection: section }) : false
     }
 }

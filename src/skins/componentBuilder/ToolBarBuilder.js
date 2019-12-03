@@ -282,6 +282,8 @@ class ToolBarBuilder {
         if( label === undefined ) { label = '' }
         if( tooltip === undefined ) { tooltip = '' }
         if( enabled === undefined ) { enabled = true }
+        if( imageProps === undefined ) { throw new Error(`button({imageProps: }) must be defined.`) }
+        if( action === undefined ) { throw new Error(`button({handleAction: }) must be defined.`) }
 
         const menuItem = ToolButton.new({
             label: label,

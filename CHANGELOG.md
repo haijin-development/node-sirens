@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.13.0 (next release)
+## v0.13.0
 
 ### Sirens
 

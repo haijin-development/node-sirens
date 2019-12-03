@@ -20,7 +20,7 @@ class DocumentationBrowserBody {
     reRenderWhen() {
         const model = this.getModel()
 
-        this.reRenderOnValueChangeOf( model.getChild({ id: 'classDefinition' }) )
+        this.reRenderOnValueChangeOf( model.getFlowPoint({ id: 'classDefinition' }) )
     }
 
     reRender() {
@@ -36,9 +36,9 @@ class DocumentationBrowserBody {
     }
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        const showsUnformattedComments = model.showsUnformattedComments()
+        const showsUnformattedComments = flow.showsUnformattedComments()
 
         componentsRenderer.render( function(component) {
 
@@ -52,7 +52,7 @@ class DocumentationBrowserBody {
 
                     this.component(
                         ClassMethodsDocumentation.new({
-                            model: model
+                            model: flow
                         })
                     )
 
@@ -64,7 +64,7 @@ class DocumentationBrowserBody {
 
                         this.component(
                             ClassUnformattedComment.new({
-                                model: model,
+                                model: flow,
                                 window: this.getProps().window,
                             })
                         )
@@ -73,7 +73,7 @@ class DocumentationBrowserBody {
 
                         this.component(
                             ClassFormattedComment.new({
-                                model: model,
+                                model: flow,
                                 window: this.getProps().window,
                             })
                         )

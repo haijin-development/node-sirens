@@ -35,13 +35,21 @@ class MultipleSelectionCheckBox {
     }
 
     getSelectionFromModel() {
-        const allItems = this.getModel().getValue()
+        const model = this.getModel()
+
+        if( ! model ) { return false }
+
+        const allItems = model.getValue()
 
         return allItems.includes( this.getItem() )
     }
 
     setValueFromViewToModel({ newValue: viewValue }) {
-        const allItems = this.getModel().getValue()
+        const model = this.getModel()
+
+        if( model === null ) { return }
+
+        const allItems = model.getValue()
 
         const thisItem = this.getItem()
 

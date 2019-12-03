@@ -31,13 +31,13 @@ class ClassEditorMenuBar {
                     this.item({
                         label: 'Open file...',
                         action: component.getProps().openFile,
-                        enabled: model.getChild({ id: 'openFile' }),
+                        enabled: model.getCommand({ id: 'openFile' }),
                     })
 
                     this.item({
                         label: 'Open file in a new class browser...',
                         action: component.getProps().openFileInNewWindow,
-                        enabled: model.getChild({ id: 'openFileInNewWindow' }),
+                        enabled: model.getCommand({ id: 'openFileInNewWindow' }),
                     })
                 })
 
@@ -45,13 +45,13 @@ class ClassEditorMenuBar {
                     this.item({
                         label: 'Open another class editor...',
                         action: component.getProps().openClassEditor,
-                        enabled: model.getChild({ id: 'openClassEditor' }),
+                        enabled: model.getCommand({ id: 'openClassEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
                         action: component.getProps().openPlayground,
-                        enabled: model.getChild({ id: 'openPlayground' }),
+                        enabled: model.getCommand({ id: 'openPlayground' }),
                     })
 
                 })
@@ -60,7 +60,7 @@ class ClassEditorMenuBar {
                     this.item({
                         label: 'Open a documentation browser...',
                         action: component.getProps().openDocumentationBrowser,
-                        enabled: model.getChild({ id: 'openDocumentationBrowser' }),
+                        enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
                     })
 
                 })

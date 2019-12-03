@@ -18,9 +18,9 @@ class ImplementationNoteDocumentation {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        const isInEditionMode = model.isInEditionMode()
+        const isInEditionMode = flow.isInEditionMode()
 
         const index = this.getProps().index + 1
         const implementationNote = this.getProps().implementationNote

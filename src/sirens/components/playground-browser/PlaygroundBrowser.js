@@ -26,26 +26,26 @@ class PlaygroundBrowser {
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        const model = PlaygroundBrowserFlow.new()
+        const flow = PlaygroundBrowserFlow.new().asFlowPoint()
 
         if( this.getProps().filename !== undefined ) {
             const filename = this.getProps().filename
-            model.openFile({ filename: filename })
+            flow.openFile({ filename: filename })
         }
 
-        return model
+        return flow
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
-            this.window( function() {
+            this.window( function() { 
                 this.styles({
                     id: 'window',
-                    title: model.getChild({ id: 'windowTitle' }),
+                    title: flow.getFlowPoint({ id: 'windowTitle' }),
                     width: 900,
                     height: 600,
                 })
@@ -54,52 +54,24 @@ class PlaygroundBrowser {
 
                     this.component(
                         PlaygroundBrowserMenu.new({
-                            model: model,
-                            openFile: component.openFile.bind(component),
-                            openFileInNewWindow: component.openFileInNewWindow.bind(component),
-                            saveFile: model.getActionHandler({ id: 'saveFile' }),
-                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
-                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
+                            model: flow,
+                            openFile: () => { flow.pickAndOpenFile({ parentWindowd: component }) },
+                            openFileInNewWindow: () => { flow.pickAndOpenFileInNewWindow({ parentWindowd: component }) },
+                            saveFile: () => { flow.saveFile() },
+                            openClassEditor: () => { flow.openClassEditor() },
+                            openPlayground: () => { flow.openPlayground() },
                         })
                     )
 
                     this.component(
                         PlaygroundComponent.new({
-                            model: model.getChild({ id: 'fileContents' }),
+                            model: flow.getFlowPoint({ id: 'fileContents' }),
                         })
                     )
 
                 })
             })
         })
-    }
-
-    /// Actions
-
-    pickFile() {
-        const filename = FileChooser.openFile({
-            title: 'Choose a file',
-            window: this,
-            initialFolder: this.getModel().getLastOpenedFolder(),
-        })
-
-        return filename        
-    }
-
-    openFile() {
-        const filename = this.pickFile()
-
-        if( filename === null ) { return }
-
-        this.getModel().getActionHandler({ id: 'openFile' })({ filename: filename })
-    }
-
-    openFileInNewWindow() {
-        const filename = this.pickFile()
-
-        if( filename === null ) { return }
-
-        this.getModel().getActionHandler({ id: 'openFileInNewWindow' })({ filename: filename })
     }
 }
 

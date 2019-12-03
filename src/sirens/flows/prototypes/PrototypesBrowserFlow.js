@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
-const ApplicationCommandsRouter = require('../ApplicationCommandsRouter')
-const FlowModel = require('../../../Skins').FlowModel
+const ApplicationCommandsController = require('../ApplicationCommandsController')
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesFlow = require('./ClassPropertiesFlow')
 const Sirens = require('../../../Sirens')
@@ -10,78 +10,93 @@ class PrototypesBrowserFlow {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     buildWith(flow) {
-        const commandsRouter = ApplicationCommandsRouter.new({ application: this })
+        const commandsController = ApplicationCommandsController.new({ application: this })
 
-        flow.main( function(application) {
+        flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
-            this.setCommandsRouter( commandsRouter )
+            this.setCommandsController( commandsController )
 
-            this.evaluate({ closure: application.defineApplicationCommands, params: [application] })
+            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                const classes = application.getChild({ id: 'classes' })
-                classes.setChoices( application._getClassesChainOfObject() )
-                classes.setSelectionValue( object )
+                const classes = thisFlow.getChildFlow({ id: 'classes' })
+                classes.setChoices( thisFlow._getClassesChainOfObject() )
+                classes.setSelection( object )
             })
 
             this.choice({
                 id: 'classes',
-                choices: application._getClassesChainOfObject(),
+                choices: thisFlow._getClassesChainOfObject(),
                 whenSelectionChanges: ({ newValue: aClass }) => {
-                    const selectedClass = application.getChild({ id: 'selectedClass' })
+                    const selectedClass = thisFlow.getChildFlow({ id: 'playground' })
                     selectedClass.setBrowsedObject( aClass )
                 },
             })
 
             this.object({
-                id: 'selectedClass',
+                id: 'playground',
                 definedWith: ClassPropertiesFlow.new(),
             })
 
-            this.notifyCommandsRouterOfEvent({ flowPointId: 'application', event: 'main-flow-built' })
+            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
 
     }
 
-    defineApplicationCommands(application) {
-        this.commands({ id: 'applicationCommands' }, function() {
+    flowMethods(thisFlow) {
+        this.category( 'flow methods', () => {
 
+            this.command({
+                id: 'setBrowsedObject',
+                whenActioned: thisFlow.setBrowsedObject.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getSelectedClass',
+                whenActioned: thisFlow.getSelectedClass.bind(thisFlow),
+            })
+
+        })
+    }
+
+    flowCommands(thisFlow) {
+        this.category( 'flow commands', () => {
             this.command({
                 id: 'browseSelectedPrototype',
                 enabledIf: function() {
-                    return application.getSelectedClass() ? true : false
+                    return thisFlow.getSelectedClass() ? true : false
                 },
                 whenActioned: function() {
-                    const selectedClass = application.getSelectedClass()
+                    const selectedClass = thisFlow.getSelectedClass()
                     Sirens.browsePrototypes(selectedClass)
                 }
             })
-
         })
     }
 
     /// Actions
 
     setBrowsedObject(object) {
-        this.setObject( object )
+        this.setValue( object )
     }
 
     /// Querying
 
     getSelectedClass() {
-        const classes = this.getChild({ id: 'classes' })
+        const classes = this.getChildFlow({ id: 'classes' })
 
-        return classes.getSelectionValue()
+        return classes.getSelection()
     }
 
     _getClassesChainOfObject(object) {
         const prototypes = []
 
-        let currentPrototype = this.getObject()
+        let currentPrototype = this.getValue()
 
         while(currentPrototype !== null && currentPrototype !== undefined) {
             prototypes.push(currentPrototype)

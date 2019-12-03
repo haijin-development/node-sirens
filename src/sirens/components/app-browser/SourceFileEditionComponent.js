@@ -16,13 +16,13 @@ class SourceFileEditionComponent {
     /// Building
 
     reRenderWhen() {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        this.reRenderOnValueChangeOf( model )
+        this.reRenderOnValueChangeOf( flow )
     }
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
 
@@ -30,7 +30,7 @@ class SourceFileEditionComponent {
 
                 this.component(
                     ClassEditorBody.new({
-                        model: model,
+                        model: flow,
                         openDocumentationBrowser: component.getProps().openClassDocumentation,
                     })
                 )

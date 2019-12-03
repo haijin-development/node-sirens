@@ -15,20 +15,20 @@ class ClassEditorBody {
     /// Rendering
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        if( model.getSourceFile() === null ) { 
+        if( flow.getSourceFile() === null ) { 
             return
         }
 
-        const classDefinitions = model.getSectionsDefinedInOpenedFile()
+        const classDefinitions = flow.getSectionsDefinedInOpenedFile()
 
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
 
                 this.listChoice( function() {
-                    this.model( model.getChild({ id: 'fileSections' }) )
+                    this.model( flow.getFlowPoint({ id: 'fileSections' }) )
 
                     this.styles({
                         showHeaders: false,
@@ -47,7 +47,7 @@ class ClassEditorBody {
 
                 this.component(
                     FileSectionEditionComponent.new({
-                        model: model.getChild({ id: 'selectedSectionContents' }),
+                        model: flow.getFlowPoint({ id: 'selectedSectionContents' }),
                         openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })
                 )

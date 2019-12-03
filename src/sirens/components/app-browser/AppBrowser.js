@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
-const FolderChooser = require('../../../Skins').FolderChooser
 const AppBrowserMenu = require('./AppBrowserMenu')
 const AppBrowserBody = require('./AppBrowserBody')
 const AppBrowserFlow = require('../../flows/app-browser/AppBrowserFlow')
@@ -26,26 +25,26 @@ class AppBrowser {
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        const model = AppBrowserFlow.new()
+        const flow = AppBrowserFlow.new().asFlowPoint()
 
         const appFolderPath = this.getProps().appFolder
 
         if( appFolderPath ) {
-            model.openFolder({ path: appFolderPath })
+            flow.openFolder({ folderPath: appFolderPath })
         }
 
-        return model
+        return flow
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
-                    title: model.getChild({ id: 'windowTitle' }),
+                    title: flow.getFlowPoint({ id: 'windowTitle' }),
                     width: 900,
                     height: 600,
                 })
@@ -54,19 +53,19 @@ class AppBrowser {
 
                     this.component(
                         AppBrowserMenu.new({
-                            model: model,
-                            openFolder: component.openFolder.bind(component),
-                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
-                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
-                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
+                            model: flow,
+                            openFolder: () => { flow.pickAndOpenFolder({ parentWindow: component }) },
+                            openClassEditor: () => { flow.openClassEditor({ parentWindow: component }) },
+                            openClassDocumentation: () => { flow.openClassDocumentation({ parentWindow: component }) },
+                            openPlayground: () => { flow.openPlayground({ parentWindow: component }) },
                         })
                     )
 
                     this.component(
                         AppBrowserBody.new({
-                            model: model,
-                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
-                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
+                            model: flow,
+                            openClassEditor: () => { flow.openClassEditor({ parentWindow: component }) },
+                            openClassDocumentation: () => { flow.openClassDocumentation({ parentWindow: component }) },
                         })
                     )
 
@@ -74,28 +73,6 @@ class AppBrowser {
 
             })
         })
-    }
-
-    /// Actions
-
-    pickFolder() {
-        const chosenFolder = FolderChooser.chooseFolder({
-            title: 'Choose a folder',
-            window: this,
-            initialFolder: this.getModel().getLastOpenedFolder(),
-        })
-
-        return chosenFolder        
-    }
-
-    openFolder() {
-        const appFolderPath = this.pickFolder()
-
-        if( appFolderPath === null ) { return }
-
-        const handler = this.getModel().getActionHandler({ id: 'openApplicationFolder' })
-
-        handler({ folderPath: appFolderPath })
     }
 }
 

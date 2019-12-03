@@ -28,6 +28,7 @@ class EditImplementationNoteDialog {
                     title: `Implementation note edition`,
                     width: 900,
                     height: 600,
+                    window: component.getProps().window,
                 })
 
                 this.verticalStack( function() {

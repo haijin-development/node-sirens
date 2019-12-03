@@ -39,7 +39,9 @@ class Text {
 
     synchronizeViewFromModel() {
         this.duringClassificationDo( UpdatingView, () => {
-            const text = this.getModel().getValue()
+            const model = this.getModel()
+
+            const text = model ? model.getValue() : ''
 
             this.getView().setText( text )
         })

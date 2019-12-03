@@ -4,7 +4,6 @@ const ComponentProtocol_Implementation = require('../../../../Skins').ComponentP
 
 const Resource = require('../../../objects/Resource')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
-const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
 const MethodCommentHeader = require('../MethodCommentHeader')
 
 class MethodUnformattedComment {
@@ -21,26 +20,19 @@ class MethodUnformattedComment {
     reRenderWhen() {
         const model = this.getModel()
 
-        const selectedMethodModel = model.getChild({ id: 'selectedMethod' })
+        const selectedMethodModel = model.getFlowPoint({ id: 'selectedMethod' })
 
         this.reRenderOnValueChangeOf( selectedMethodModel )
     }
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodUnformmatedComment',
-            enabledIf: () => { return true },
-            whenActioned: this.editMethodUnformmatedComment.bind(this),
-        })
+        const flow = this.getModel()
 
         const method = this.getCurrentMethod()
 
         if( ! method ) { return }
 
-        const isInEditionMode = model.isInEditionMode()
+        const isInEditionMode = flow.isInEditionMode()
 
         let methodUnformattedComment = method.getComment().getSourceCode()
 
@@ -63,9 +55,13 @@ class MethodUnformattedComment {
                 if( method !== null && isInEditionMode ) {
                     this.component(
                         EditMethodDescriptionHeader.new({
-                            model: model,
+                            model: flow,
                             method: method,
-                            editionClosure: model.getActionHandler({ id: 'editMethodUnformmatedComment' }),
+                            editionClosure: () => {
+                                flow.editMethodUnformmatedComment({
+                                    parentWindow: component.getProps().window,
+                                })
+                            },
                         })
                     )
 
@@ -83,29 +79,8 @@ class MethodUnformattedComment {
         })
     }
 
-
-    /// Actions
-
-    editMethodUnformmatedComment() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditMethodCommentDialog.new({
-            className: className,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodUnformmatedComment' }),
-            unformatted: true,
-        })
-
-        dialog.open()
-    }
-
     getCurrentMethod() {
-        return this.getModel().getChild({ id: 'selectedMethod' }).getValue()
+        return this.getModel().getFlowPoint({ id: 'selectedMethod' }).getValue()
     }
 }
 

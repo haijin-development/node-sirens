@@ -15,17 +15,17 @@ class FileSectionEditionComponent {
     }
 
     reRenderWhen() {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        this.reRenderOnValueChangeOf( model )
+        this.reRenderOnValueChangeOf( flow )
     }
 
     /// Rendering
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        const section = model.getObject()
+        const section = flow.getValue()
 
         if( section === undefined || section === null ) { return }
 
@@ -36,7 +36,7 @@ class FileSectionEditionComponent {
                 if( section.respondsTo('isHeader') && section.isHeader() ) {
                     this.component(
                         ClassHeaderComponent.new({
-                            model: model,
+                            model: flow,
                         })
                     )
                 }
@@ -44,7 +44,7 @@ class FileSectionEditionComponent {
                 if( section.respondsTo('isClassDefinition') && section.isClassDefinition() ) {
                     this.component(
                         ClassComponent.new({
-                            model: model,
+                            model: flow,
                             openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                         })
                     )
@@ -53,10 +53,11 @@ class FileSectionEditionComponent {
                 if( section.respondsTo('isFooter') && section.isFooter() ) {
                     this.component(
                         FileFooterComponent.new({
-                            model: model,
+                            model: flow,
                         })
                     )
                 }
+
             })
 
         })

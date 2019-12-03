@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const FlowModel = require('../../../Skins').FlowModel
+const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
 const Sirens = require('../../../Sirens')
 
@@ -8,13 +8,13 @@ class ClassPropertiesFlow {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FlowModel]
+        this.assumes = [ValueFlow]
     }
 
     buildWith(flow) {
-        flow.main( function(classProperties) {
+        flow.main({ id: 'playground' }, function(classProperties) {
 
-            this.evaluate({ closure: classProperties.defineApplicationCommands, params: [classProperties] })
+            this.defineFlowCommandsIn({ method: classProperties.flowCommands })
 
             this.whenObjectChanges( ({ newValue: aClass }) => {
                 classProperties.updatePropertyChoices()
@@ -41,7 +41,7 @@ class ClassPropertiesFlow {
                 choices: [],
                 whenSelectionChanges: ({ newValue: objectProperty }) => {
                     const text = classProperties.displayStringOf( objectProperty )
-                    classProperties.getChild({ id: 'selectedProp' }).setValue(text)
+                    classProperties.getChildFlow({ id: 'selectedProp' }).setValue(text)
                 },
             })
 
@@ -51,9 +51,8 @@ class ClassPropertiesFlow {
 
     }
 
-    defineApplicationCommands(classProperties) {
-        this.commands({ id: 'classPropertiesCommands' }, function() {
-
+    flowCommands(classProperties) {
+        this.category( 'flow commands', () => {
             this.command({
                 id: 'browseSelectedProperty',
                 enabledIf: function() {
@@ -64,20 +63,19 @@ class ClassPropertiesFlow {
                     Sirens.browseObject( selectedPropertyValue )
                 }
             })
-
         })
     }
 
     /// Actions
 
     setBrowsedObject(object) {
-        this.setObject( object )
+        this.setValue( object )
     }
 
     updatePropertyChoices() {
-        const properties = this.getChild({ id: 'properties' })
+        const properties = this.getChildFlow({ id: 'properties' })
 
-        const selectedClass = this.getObject()
+        const selectedClass = this.getValue()
 
         const selectedClassProperties = this._getPropsOf( selectedClass )
 
@@ -87,7 +85,7 @@ class ClassPropertiesFlow {
     /// Querying
 
     getSelectedPropertyValue() {
-        const objectProperty = this.getChild({ id: 'properties' }).getSelectionValue()
+        const objectProperty = this.getChildFlow({ id: 'properties' }).getSelection()
 
         if( ! objectProperty ) { return null }
 
@@ -95,9 +93,9 @@ class ClassPropertiesFlow {
     }
 
     _getPropsOf(object) {
-        const showInheritedModel = this.getChild({ id: 'showInheritedProps' }).getValue()
-        const showFunctionsModel = this.getChild({ id: 'showFunctionProps' }).getValue()
-        const showPropsModel = this.getChild({ id: 'showNonFunctionProps' }).getValue()
+        const showInheritedModel = this.getChildFlow({ id: 'showInheritedProps' }).getValue()
+        const showFunctionsModel = this.getChildFlow({ id: 'showFunctionProps' }).getValue()
+        const showPropsModel = this.getChildFlow({ id: 'showNonFunctionProps' }).getValue()
 
         let props = []
 

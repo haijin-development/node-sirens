@@ -29,13 +29,13 @@ class ClassDocumentationBrowser {
 
         const methodName = this.getProps().methodName
 
-        const model = ClassDocumentationBrowserFlow.new()
+        const flow = ClassDocumentationBrowserFlow.new().asFlowPoint()
 
-        model.setBrowsedClass({ classDefinition: classDefinition })
+        flow.setBrowsedClass({ classDefinition: classDefinition })
 
-        model.setBrowsedMethod({ methodName: methodName })
+        flow.setBrowsedMethod({ methodName: methodName })
 
-        return model
+        return flow
     }
 
     /// Querying
@@ -49,7 +49,7 @@ class ClassDocumentationBrowser {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.window( function() {
@@ -64,27 +64,27 @@ class ClassDocumentationBrowser {
 
                     this.component(
                         ClassDocumentationMenuBar.new({
-                            model: model,
-                            reloadClassDefinition: model.getActionHandler({ id: 'reloadClassDefinition' }),
-                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
-                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
-                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
+                            model: flow,
+                            reloadClassDefinition: () => { flow.reloadClassDefinition() },
+                            openClassDocumentation: () => { flow.openClassDocumentation() },
+                            openClassEditor: () => { flow.openClassEditor() },
+                            openPlayground: () => { flow.openPlayground() },
                         })
                     )
 
                     this.component(
                         ClassDocumentationToolBar.new({
-                            model: model,
-                            reloadClassDefinition: model.getActionHandler({ id: 'reloadClassDefinition' }),
-                            openClassDocumentation: model.getActionHandler({ id: 'openClassDocumentation' }),
-                            openClassEditor: model.getActionHandler({ id: 'openClassEditor' }),
-                            openPlayground: model.getActionHandler({ id: 'openPlayground' }),
+                            model: flow,
+                            reloadClassDefinition: () => { flow.reloadClassDefinition() },
+                            openClassDocumentation: () => { flow.openClassDocumentation() },
+                            openClassEditor: () => { flow.openClassEditor() },
+                            openPlayground: () => { flow.openPlayground() },
                         })
                     )
 
                     this.component(
                         DocumentationBrowserBody.new({
-                            model: model,
+                            model: flow,
                             window: this,
                         })
                     )

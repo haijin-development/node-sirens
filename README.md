@@ -16,8 +16,6 @@ Next release:
 
 [![Next Release Build Status](https://travis-ci.org/haijin-development/node-sirens.svg?branch=development)](https://travis-ci.org/haijin-development/node-sirens)
 
-**Note: the release of v0.13 will include a complete rewrite of the current implementation of components models, events and commands. The existing browsers will remain the same.**
-
 ### Installation
 
 **Note: please keep in mind that this project is not meant for production but only as an utility to be used during development.**
@@ -39,6 +37,13 @@ npm install sirens -g
 Require the `sirens` module and open a browser on any object with
 
 ```javascript
+require('sirens').browseObject(object)
+```
+
+or
+
+```javascript
+
 const Sirens = require('sirens')
 
 Sirens.browseObject(object)
@@ -47,13 +52,18 @@ Sirens.browseObject(object)
 Open a browser on any object properties and methods along its prototypes chain with
 
 ```javascript
+require('sirens').browsePrototypes(object)
+```
+
+or
+
+```javascript
 const Sirens = require('sirens')
 
 Sirens.browsePrototypes(object)
 ```
 
-A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code
-using the Sirens ObjectBrowser with the same access to the npm modules that your application has.
+A Playground is a text editor where you can select, evaluate and inspect snippets of javascript code using the Sirens ObjectBrowser with the same access to the npm modules that your application has.
 
 Think of it as a javascript console in 3 dimensions.
 
@@ -139,7 +149,7 @@ and a javascript AppBrowser from the project folder with
 
 ### Pre-requisites
 
-The current version does not work with node > v11.
+The current version works only with node <= v11.
 
 ```
 nvm install v10
@@ -185,8 +195,8 @@ node examples/browsers/objectBrowser.js
 
 ## References
 
-These utilities are heavily based in the Smalltalk browsers, in particular in the [Object Arts](https://www.object-arts.com/)
+These utilities are based in the Smalltalk language browsers, in particular in the [Object Arts](https://www.object-arts.com/)
 implementation named [Dolphin Smalltalk](https://github.com/dolphinsmalltalk/Dolphin) which I fancy for its
 outstanding beauty, and it's an independent port of [Sirens for the Ruby language](https://github.com/haijin-development/ruby-sirens).
 
-The graphics code is encapsulated in the `views` layer and it should be possible to switch to any other graphics library, be it GTK+ or QT, implementing that layer alone.
+The graphics code is encapsulated in the Skins `views` layer and it should be possible to switch to any other graphics library, be it GTK+ or QT, implementing that layer alone.

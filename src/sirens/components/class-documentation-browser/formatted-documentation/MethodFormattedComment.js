@@ -7,7 +7,6 @@ const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 const MethodCommentHeader = require ('../MethodCommentHeader')
 const EditMethodDescriptionHeader = require('../EditMethodDescriptionHeader')
-const EditMethodCommentDialog = require('../edition/EditMethodCommentDialog')
 
 const TagsDocumentation = require ('./TagsDocumentation')
 
@@ -19,11 +18,9 @@ const ReturnsDocumentation = require('./ReturnsDocumentation')
 
 const ImplementationNotesEditionHeader = require ('./ImplementationNotesEditionHeader')
 const ImplementationNoteDocumentation = require('./ImplementationNoteDocumentation')
-const EditImplementationNoteDialog = require('../edition/EditImplementationNoteDialog')
 
 const ExampleDocumentation = require('./ExampleDocumentation')
 const ExamplesEditionHeader = require('./ExamplesEditionHeader')
-const EditExampleDialog = require('../edition/EditExampleDialog')
 
 const MethodSourceCodeDocumentation = require('./MethodSourceCodeDocumentation')
 
@@ -36,77 +33,24 @@ class MethodFormattedComment {
         this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Actions
-
-    updateMethodDocumentation({ documentation: documentation }) {
-        const methodCommentContents = documentation.generateCommentContents({
-                methodDocumentation: documentation,
-            })
-
-        const model = this.getModel()
-
-        const method = this.getCurrentMethod()
-
-        const methodComment = method.getComment()
-
-        methodComment.writeFormattedContents({ commentContents: methodCommentContents })
-
-        model.reloadClassDefinition()
-    }
-
     /// Building
 
     reRenderWhen() {
         const model = this.getModel()
 
-        const selectedMethodModel = model.getChild({ id: 'selectedMethod' })
+        const selectedMethodModel = model.getFlowPoint({ id: 'selectedMethod' })
 
         this.reRenderOnValueChangeOf( selectedMethodModel )
     }
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodDocumentationComment',
-            enabledIf: function() {
-                return model.isInEditionMode() && model.getBrowsedClass()
-            },
-            whenActioned: this.editMethodDocumentationComment.bind(this),
-        })
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'createMethodDocumentationImplementationNote',
-            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
-            whenActioned: this.createMethodDocumentationImplementationNote.bind(this),
-        })
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodDocumentationImplementationNote',
-            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
-            whenActioned: this.editMethodDocumentationImplementationNote.bind(this),
-        })
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'createMethodDocumentationExample',
-            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
-            whenActioned: this.createMethodDocumentationExample.bind(this),
-        })
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editMethodDocumentationExample',
-            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
-            whenActioned: this.editMethodDocumentationExample.bind(this),
-        })
+        if( ! flow ) { return }
 
         const method = this.getCurrentMethod()
 
-        const isInEditionMode = method != null && model.isInEditionMode()
+        const isInEditionMode = method != null && flow.isInEditionMode()
 
         const documentation = this.getCurrentMethodDocumentation()
 
@@ -148,7 +92,7 @@ class MethodFormattedComment {
 
                     this.component(
                         TagsDocumentation.new({
-                            model: model,
+                            model: flow,
                             method: method,
                         })
                     )
@@ -158,9 +102,13 @@ class MethodFormattedComment {
                     if( isInEditionMode ) {
                         this.component(
                             EditMethodDescriptionHeader.new({
-                                model: model,
+                                model: flow,
                                 method: method,
-                                editionClosure: model.getActionHandler({ id: 'editMethodDocumentationComment' }),
+                                editionClosure: () => {
+                                    flow.editMethodDocumentationComment({
+                                        parentWindow: component
+                                    })
+                                },
                             })
                         )
 
@@ -187,7 +135,7 @@ class MethodFormattedComment {
                     if( isInEditionMode ) {
                         this.component(
                             ParamsEditionHeader.new({
-                                model: model,
+                                model: flow,
                                 method: method,
                             })
                         )
@@ -200,7 +148,7 @@ class MethodFormattedComment {
 
                         this.component(
                             ParamDocumentation.new({
-                                model: model,
+                                model: flow,
                                 index: index,
                                 param: param,
                             })
@@ -210,7 +158,7 @@ class MethodFormattedComment {
                     if( isInEditionMode ) {
                         this.component(
                             ReturnsHeader.new({
-                                model: model,
+                                model: flow,
                             })
                         )
 
@@ -230,8 +178,12 @@ class MethodFormattedComment {
                     if( isInEditionMode ) {
                         this.component(
                             ImplementationNotesEditionHeader.new({
-                                model: model,
-                                createClosure: model.getActionHandler({ id: 'createMethodDocumentationImplementationNote' }),
+                                model: flow,
+                                createClosure: () => {
+                                    flow.createMethodDocumentationImplementationNote({
+                                        parentWindow: component.getProps().window,
+                                    })
+                                },
                             })
                         )
 
@@ -244,16 +196,19 @@ class MethodFormattedComment {
 
                         this.component(
                             ImplementationNoteDocumentation.new({
-                                model: model,
+                                model: flow,
                                 index: index,
                                 implementationNote: implementationNote,
                                 editClosure: () => {
-                                    const handler = model.getActionHandler({ id: 'editMethodDocumentationImplementationNote' })
-                                    handler({ atIndex: index, implementationNoteText: implementationNote })
+                                    flow.editMethodDocumentationImplementationNote({
+                                        atIndex: index,
+                                        implementationNoteText: implementationNote
+                                    })
                                 },
                                 deleteClosure: () => {
-                                    const handler = model.getActionHandler({ id: 'deleteMethodDocumentationImplementationNote' })
-                                    handler({ atIndex: index })
+                                    flow.deleteMethodDocumentationImplementationNote({
+                                        atIndex: index,
+                                    })
                                 },
                             })
                         )
@@ -263,8 +218,12 @@ class MethodFormattedComment {
                     if( isInEditionMode ) {
                         this.component(
                             ExamplesEditionHeader.new({
-                                model: model,
-                                addClosure: model.getActionHandler({ id: 'createMethodDocumentationExample' }),
+                                model: flow,
+                                addClosure: () => {
+                                    flow.createMethodDocumentationExample({
+                                        parentWindow: component.getProps().window,
+                                    })
+                                },
                             })
                         )
 
@@ -277,15 +236,17 @@ class MethodFormattedComment {
 
                         this.component(
                             ExampleDocumentation.new({
-                                model: model,
+                                model: flow,
                                 example: example,
                                 editClosure: () => {
-                                    const handler = model.getActionHandler({ id: 'editMethodDocumentationExample' })
-                                    handler({ atIndex: index, example: example })
+                                    flow.editMethodDocumentationExample({
+                                        parentWindow: component.getProps().window,
+                                        atIndex: index,
+                                        example: example,
+                                    })
                                 },
                                 deleteClosure: () => {
-                                    const handler = model.getActionHandler({ id: 'deleteMethodDocumentationExample' })
-                                    handler({ atIndex: index })
+                                    flow.deleteMethodDocumentationExample({ atIndex: index })
                                 },
                             })
                         )
@@ -306,121 +267,12 @@ class MethodFormattedComment {
         })
     }
 
-    editMethodDocumentationComment() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = model.getChild({ id: 'selectedMethod' }).getValue()
-
-        const dialog = EditMethodCommentDialog.new({
-            className: className,
-            method: method,
-            window: this.getProps().window,
-            onUpdateMethodComment: model.getActionHandler({ id: 'updateMethodDocumentationComment' }),
-            unformatted: false,
-        })
-
-        dialog.open()
-    }
-
-    createMethodDocumentationImplementationNote() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditImplementationNoteDialog.new({
-            className: className,
-            implementationNoteText: 'Add the new implementation note here ...',
-            window: this.getProps().window,
-            onUpdateImplementationNote: model.getActionHandler({ id: 'addMethodDocumentationImplementationNote' }),
-            acceptButtonLabel: `Add implementation note`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    editMethodDocumentationImplementationNote({ atIndex: index, implementationNoteText: implementationNoteText }) {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditImplementationNoteDialog.new({
-            className: className,
-            implementationNoteText: implementationNoteText,
-            window: this.getProps().window,
-            onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
-                const handler = model.getActionHandler({ id: 'updateMethodDocumentationImplementationNote' })
-                handler({ atIndex: index, implementationNoteText: implementationNoteText })
-            },
-            acceptButtonLabel: `Update implementation note`,
-            title:  `${className} implementation note.`,
-            subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    createMethodDocumentationExample() {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const newExample = {
-            Description: 'Add the example description here ...',
-            Code: 'Add the example code here ...',
-        }
-
-        const dialog = EditExampleDialog.new({
-            className: className,
-            example: newExample,
-            window: this.getProps().window,
-            onUpdateExample: model.getActionHandler({ id: 'addMethodDocumentationExample' }),
-            acceptButtonLabel: `Add example`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
-    editMethodDocumentationExample({ atIndex: index, example: example }) {
-        const model = this.getModel()
-
-        const className = model.getBrowsedClass().getClassName()
-
-        const method = this.getCurrentMethod()
-
-        const dialog = EditExampleDialog.new({
-            className: className,
-            example: example,
-            window: this.getProps().window,
-            onUpdateExample: ({ example: example }) => {
-                const handler = model.getActionHandler({ id: 'updateMethodDocumentationExample' })
-                handler({ atIndex: index, example: example })
-            },
-            acceptButtonLabel: `Update example`,
-            title: `${className}.${method.getFunctionSignatureString()}`,
-            subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
-        })
-
-        dialog.open()
-    }
-
     getCurrentMethod() {
-        return this.getModel().getChild({ id: 'selectedMethod' }).getValue()
+        return this.getModel().getFlowPoint({ id: 'selectedMethod' }).getValue()
     }
 
     getCurrentMethodDocumentation() {
-        return this.getModel().getChild({ id: 'selectedMethodDocumentation' }).getValue()
+        return this.getModel().getFlowPoint({ id: 'selectedMethodDocumentation' }).getValue()
     }
 }
 

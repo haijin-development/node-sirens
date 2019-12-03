@@ -97,7 +97,9 @@ class ChoicesList {
 
     onItemsListChanged() {
         this.duringClassificationDo( UpdatingView, () => {
-            const items = this.getModel().getChoices()
+            const model = this.getModel()
+
+            const items = model ? model.getChoices() : []
 
             this.getView().clearItems()
             this.getView().addItems(items)

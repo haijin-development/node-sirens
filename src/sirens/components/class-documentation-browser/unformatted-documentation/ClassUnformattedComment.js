@@ -4,7 +4,6 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 
 const ClassCommentHeader = require ('../ClassCommentHeader')
-const EditClassCommentDialog = require('../edition/EditClassCommentDialog')
 const EditClassDescriptionHeader = require('../EditClassDescriptionHeader')
 
 class ClassUnformattedComment {
@@ -19,20 +18,13 @@ class ClassUnformattedComment {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'editClassUnformattedComment',
-            enabledIf: () => { return true },
-            whenActioned: this.editClassUnformattedComment.bind(this),
-        })
-
-        const classDefinition = model.getBrowsedClass()
+        const classDefinition = flow.getBrowsedClass()
 
         if( classDefinition === null ) { return }
 
-        const isInEditionMode = model.isInEditionMode()
+        const isInEditionMode = flow.isInEditionMode()
 
         let unformattedComment = classDefinition.getComment().getSourceCode()
 
@@ -47,8 +39,12 @@ class ClassUnformattedComment {
                 if( isInEditionMode ) {
                     this.component(
                         EditClassDescriptionHeader.new({
-                            model: model,
-                            editionClosure: model.getActionHandler({ id: 'editClassUnformattedComment' }),
+                            model: flow,
+                            editionClosure: () => {
+                                flow.editClassUnformattedComment({
+                                    parentWindow: component.getProps().window
+                                })
+                            },
                         })
                     )
 
@@ -71,27 +67,6 @@ class ClassUnformattedComment {
             })
 
         })
-    }
-
-    /// Commands
-
-    editClassUnformattedComment() {
-        const model = this.getModel()
-
-        const classDefinition = model.getBrowsedClass()
-
-        const className = classDefinition.getClassName()
-
-        const classComment = classDefinition.getComment().getSourceCode()
-
-        const dialog = EditClassCommentDialog.new({
-            className: className,
-            classComment: classComment,
-            window: this.getProps().window,
-            onUpdateClassComment: model.getActionHandler({ id: 'updateClassUnformattedComment' }),
-        })
-
-        dialog.open()
     }
 }
 

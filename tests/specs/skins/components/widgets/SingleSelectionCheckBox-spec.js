@@ -27,7 +27,7 @@ describe('When using a SingleSelectionCheckBox', () => {
             })
 
             widget.getView().setValue(true)
-            widget.onClicked()
+            widget.handleClicked()
 
             expect(widget.getModel().getValue()) .to .eql(true)
         })

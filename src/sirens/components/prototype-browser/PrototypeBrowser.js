@@ -23,11 +23,11 @@ class PrototypeBrowser {
     defaultModel() {
         const object = this.getProps().prototype
 
-        const model = PrototypesBrowserFlow.new()
+        const flow = PrototypesBrowserFlow.new().asFlowPoint()
 
-        model.setBrowsedObject( object )
+        flow.setBrowsedObject( object )
 
-        return model
+        return flow
     }
 
     /// Icons
@@ -39,7 +39,7 @@ class PrototypeBrowser {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
             this.window( function() {
@@ -57,14 +57,14 @@ class PrototypeBrowser {
                         })
 
                         this.listChoice( function() {
-                            this.model( model.getChild({ id: 'classes' }) )
+                            this.model( flow.getFlowPoint({ id: 'classes' }) )
 
                             this.styles({
                                 viewAttributes: { splitProportion: 1.0/4.0 },
                             })
 
                             this.handlers({
-                                onAction: model.getActionHandler({ id: 'browseSelectedPrototype' }),
+                                onAction: () => { flow.browseSelectedPrototype() },
                             })
 
                             this.column({
@@ -82,8 +82,8 @@ class PrototypeBrowser {
                             this.popupMenu( function() {
                                 this.item({
                                     label: 'Browse it',
-                                    enabled: model.getChild({ id: 'browseSelectedPrototype' }),
-                                    action: model.getActionHandler({ id: 'browseSelectedPrototype' }),
+                                    enabled: flow.getCommand({ id: 'browseSelectedPrototype' }),
+                                    action: () => { flow.browseSelectedPrototype() },
                                 })
                             })
 
@@ -91,7 +91,7 @@ class PrototypeBrowser {
 
                         this.component(
                             ClassPropertiesComponent.new({
-                                model: model.getChild({ id: 'selectedClass' }),
+                                model: flow.getFlowPoint({ id: 'playground' }),
                                 viewAttributes: { splitProportion: 3.0/4.0 },
                             })
                         )
@@ -99,7 +99,7 @@ class PrototypeBrowser {
                     })
 
                     this.text({
-                        model: model.getChild({ id: 'selectedProp' }),
+                        model: flow.getFlowPoint({ id: 'selectedProp' }),
                         viewAttributes: { splitProportion: 1.0/3.0 },
                     })
                 })

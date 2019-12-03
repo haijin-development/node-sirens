@@ -30,6 +30,7 @@ class EditClassCommentDialog {
                     title: `Class ${className} description edition`,
                     width: 900,
                     height: 600,
+                    window: component.getProps().window,
                 })
 
                 this.verticalStack( function() {

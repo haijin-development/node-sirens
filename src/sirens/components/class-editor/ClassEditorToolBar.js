@@ -37,7 +37,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a file to edit its class.',
                     action: component.getProps().openFile,
-                    enabled: model.getChild({ id: 'openFile' }),
+                    enabled: model.getCommand({ id: 'openFile' }),
                 })
 
                 this.button({
@@ -48,7 +48,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a file in a new window to edit its class.',
                     action: component.getProps().openFileInNewWindow,
-                    enabled: model.getChild({ id: 'openFileInNewWindow' }),
+                    enabled: model.getCommand({ id: 'openFileInNewWindow' }),
                 })
 
                 this.separator()
@@ -61,7 +61,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a class documentation browser on the selected class.',
                     action: component.getProps().openDocumentationBrowser,
-                    enabled: model.getChild({ id: 'openDocumentationBrowser' }),
+                    enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
                 })
 
                 this.separator()
@@ -75,7 +75,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens another class editor.',
                     action: component.getProps().openClassEditor,
-                    enabled: model.getChild({ id: 'openClassEditor' }),
+                    enabled: model.getCommand({ id: 'openClassEditor' }),
                 })
 
                 this.button({
@@ -87,7 +87,7 @@ class ClassEditorMenuBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getChild({ id: 'openPlayground' }),
+                    enabled: model.getCommand({ id: 'openPlayground' }),
                 })
 
             })

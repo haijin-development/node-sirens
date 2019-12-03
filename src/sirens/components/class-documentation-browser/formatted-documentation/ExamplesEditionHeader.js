@@ -17,15 +17,6 @@ class ExamplesEditionHeader {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
-
-        // Since the application uses a custom dialog override this command.
-        model.defineCommand({
-            id: 'createClassDocumentationExample',
-            enabledIf: () => { model.isInEditionMode() && model.getBrowsedClass() },
-            whenActioned: this.createClassDocumentationExample.bind(this),
-        })
-
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {

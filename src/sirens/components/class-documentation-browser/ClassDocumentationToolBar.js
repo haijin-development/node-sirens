@@ -17,7 +17,7 @@ class ClassDocumentationToolBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -37,13 +37,13 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Realoads the original documentation.',
                     action: component.getProps().reloadClassDefinition,
-                    enabled: model.getChild({ id: 'reloadClassDefinition' }),
+                    enabled: flow.getCommand({ id: 'reloadClassDefinition' }),
                 })
 
                 this.separator()
 
                 this.toggleButton({
-                    model: model.getChild({ id: 'showsUnformattedComments' }),
+                    model: flow.getFlowPoint({ id: 'browsingMode.showsUnformattedComments' }),
                     label: 'Show unformatted comment.',
                     image: {
                         iconName: GtkIcons.revertToSave,
@@ -53,7 +53,7 @@ class ClassDocumentationToolBar {
                 })
 
                 this.toggleButton({
-                    model: model.getChild({ id: 'isEditingDocumentation' }),
+                    model: flow.getFlowPoint({ id: 'browsingMode.isEditingDocumentation' }),
                     label: 'Edition mode.',
                     image: {
                         iconName: GtkIcons.edit,
@@ -72,7 +72,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a new class documentation browser.',
                     action: component.getProps().openClassDocumentation,
-                    enabled: model.getChild({ id: 'openClassDocumentation' }),
+                    enabled: flow.getCommand({ id: 'openClassDocumentation' }),
                 })
 
                 this.button({
@@ -84,7 +84,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a class editor.',
                     action: component.getProps().openClassEditor,
-                    enabled: model.getChild({ id: 'openClassEditor' }),
+                    enabled: flow.getCommand({ id: 'openClassEditor' }),
                 })
 
                 this.button({
@@ -96,7 +96,7 @@ class ClassDocumentationToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getChild({ id: 'openPlayground' }),
+                    enabled: flow.getCommand({ id: 'openPlayground' }),
                 })
 
             })

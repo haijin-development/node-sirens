@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ObjectPropertiesFlow = require('../../flows/object-browser/ObjectPropertiesFlow')
-const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesComponent {
     /// Definition
@@ -16,18 +15,19 @@ class ObjectPropertiesComponent {
     /// Initializing
 
     defaultModel() {
-        return ObjectPropertiesFlow.new()
+        return ObjectPropertiesFlow.new().asFlowPoint()
     }
 
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
-
             this.treeChoice( function(tree) {
-                this.model( model.getChild({ id: 'properties' }) )
+                const treeModel = flow.getFlowPoint({ id: 'properties' })
+
+                this.model( treeModel )
 
                 this.styles({
                     showHeaders: false,
@@ -35,7 +35,7 @@ class ObjectPropertiesComponent {
                 })
 
                 this.handlers({
-                    onAction: component.inspectSelectedObject.bind(component),
+                    onAction: () => { flow.inspectSelectedObject() },
                 })
 
                 this.column({
@@ -51,12 +51,12 @@ class ObjectPropertiesComponent {
                 })
 
                 this.popupMenu( function() {
-                    const selectedValue = component.getModel().getSelectedPropertyValue()
+                    const selectedValue = flow.getSelectedPropertyValue()
 
                     this.item({
                         label: 'Browse it',
                         enabled: selectedValue !== undefined,
-                        action: component.inspectSelectedObject.bind(component),
+                        action: () => { flow.inspectSelectedObject() },
                     })
 
                     this.separator()
@@ -64,25 +64,11 @@ class ObjectPropertiesComponent {
                     this.item({
                         label: 'Browse its prototype',
                         enabled: selectedValue !== undefined,
-                        action: component.browseSelectedObjectPrototypes.bind(component),
+                        action: () => { flow.browseSelectedObjectPrototypes() },
                     })
                 })
             })
         })
-    }
-
-    /// Actions
-
-    inspectSelectedObject() {
-        const selectedValue = this.getModel().getSelectedPropertyValue()
-
-        Sirens.browseObject(selectedValue)
-    }
-
-    browseSelectedObjectPrototypes() {
-        const selectedValue = this.getModel().getSelectedPropertyValue()
-
-        Sirens.browsePrototypes(selectedValue)
     }
 }
 

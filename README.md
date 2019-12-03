@@ -8,7 +8,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-**The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
+**Note: The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
 
 ![App browser](./docs/browsing-app.gif)
 

@@ -20,7 +20,6 @@ class ClassHeaderComponent {
 
             this.text({
                 model: flow.getFlowPoint({ id: 'editedContents' }),
-                viewAttributes: { splitProportion: 1.0 / 2 },
             })
 
         })

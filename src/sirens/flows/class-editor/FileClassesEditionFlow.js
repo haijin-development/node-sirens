@@ -18,7 +18,7 @@ class FileClassesEditionFlow {
 
             this.defineFlowCommandsIn({ method: fileContents.flowMethods })
 
-            this.whenObjectChanges( ({ newValue: sourceFile }) => {
+            this.whenObjectChanges( ({ newValue: sourceFile, oldValue: oldValue }) => {
                 this.getChildFlow({ id: 'fileSections' }).setChoices( fileContents.getSectionsDefinedInOpenedFile() )
                 this.getChildFlow({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
             })

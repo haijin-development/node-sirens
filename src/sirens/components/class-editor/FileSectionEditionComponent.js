@@ -1,9 +1,8 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ClassHeaderComponent = require('./ClassHeaderComponent')
+const PlainTextComponent = require('./PlainTextComponent')
 const ClassComponent = require('./ClassComponent')
-const FileFooterComponent = require('./FileFooterComponent')
 
 class FileSectionEditionComponent {
     /// Definition
@@ -35,7 +34,7 @@ class FileSectionEditionComponent {
 
                 if( section.respondsTo('isHeader') && section.isHeader() ) {
                     this.component(
-                        ClassHeaderComponent.new({
+                        PlainTextComponent.new({
                             model: flow,
                         })
                     )
@@ -52,7 +51,7 @@ class FileSectionEditionComponent {
 
                 if( section.respondsTo('isFooter') && section.isFooter() ) {
                     this.component(
-                        FileFooterComponent.new({
+                        PlainTextComponent.new({
                             model: flow,
                         })
                     )

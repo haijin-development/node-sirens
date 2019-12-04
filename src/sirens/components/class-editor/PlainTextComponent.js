@@ -2,16 +2,16 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-class ClassHeaderComponent {
+class PlainTextComponent {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
         this.assumes = [Component]
-        this.implements = [ ComponentProtocol_Implementation ]
+        this.implements = [ComponentProtocol_Implementation]
     }
 
-    /// Rendering
+    /// Building
 
     renderWith(componentsRenderer) {
         const flow = this.getModel()
@@ -26,4 +26,4 @@ class ClassHeaderComponent {
     }
 }
 
-module.exports = Classification.define(ClassHeaderComponent)
+module.exports = Classification.define(PlainTextComponent)

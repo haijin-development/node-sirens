@@ -10,6 +10,8 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
 
+**Update: checkout FingerTips design documentation in [this article](./docs/FingerTips.pdf).**
+
 ![App browser](./docs/browsing-app.gif)
 
 Next release:

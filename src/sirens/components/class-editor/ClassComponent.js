@@ -32,13 +32,13 @@ class ClassComponent {
 
                     this.column({
                         label: '',
-                        getImageClosure: function(functionDefinition) { return Resource.image.method },
+                        getImageClosure: function(jsMethod) { return Resource.image.method },
                         imageWidth: 24,
                         imageHeight: 24,
                     })
 
                     this.column({
-                        getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                        getTextClosure: function(jsMethod) { return jsMethod.getFunctionSignatureString() },
                     })
 
                     this.popupMenu( function() {

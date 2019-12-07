@@ -2,7 +2,7 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-class PlainTextComponent {
+class TextualContentComponent {
     /// Definition
 
     static definition() {
@@ -26,4 +26,4 @@ class PlainTextComponent {
     }
 }
 
-module.exports = Classification.define(PlainTextComponent)
+module.exports = Classification.define(TextualContentComponent)

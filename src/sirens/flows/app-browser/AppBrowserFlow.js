@@ -3,7 +3,7 @@ const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const Folder = require('../../objects/paths/Folder')
 const FileClassesEditionFlow = require('../class-editor/FileClassesEditionFlow')
-const ClassSourceFile = require('../../objects/ClassSourceFile')
+const SourceFile = require('../../objects/SourceFile')
 const Sirens = require('../../../Sirens')
 const FolderChooser = require('../../../Skins').FolderChooser
 
@@ -52,7 +52,7 @@ class AppBrowserFlow {
                     let sourceFile = null
 
                     if( selectedFilePath ) {
-                        sourceFile = ClassSourceFile.new({ filepath: selectedFilePath.getPath() })
+                        sourceFile = SourceFile.new({ filepath: selectedFilePath.getPath() })
                         if( ! sourceFile.isJavascriptFile() ) { sourceFile = null }
                     }
 
@@ -101,14 +101,13 @@ class AppBrowserFlow {
             this.command({
                 id: 'openClassDocumentation',
                 enabledIf: function() {
-                    const classesDefinitions = thisFlow.getClassesDefinitionsInSelectedFile()
-                    return classesDefinitions.length > 0
+                    return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
                     const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
-                    const fileSection = sourceFileEdition.getSelectedClassDefinition()
+                    const jsClass = sourceFileEdition.getSelectedClassDefinition()
                     const methodName = sourceFileEdition.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ classDefinition: fileSection, methodName: methodName })
+                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
                 }
             })
 
@@ -121,10 +120,13 @@ class AppBrowserFlow {
             const methods = [
                 'pickFolder',
                 'openFolder',
+                'getSelectedFilePath',
+                'hasAClassSelected',
             ]
 
             this.defineCommandMethods({ methodNames: methods })
         })
+
     }
 
     //////////////////////
@@ -163,12 +165,12 @@ class AppBrowserFlow {
         return currentSourceFile.getFilePath()
     }
 
-    getClassesDefinitionsInSelectedFile() {
-        const currentSourceFile = this.getChildFlow({ id: 'sourceFileEdition' }).getSourceFile()
+    hasAClassSelected() {
+        const sourceFileEdition = this.getChildFlow({ id: 'sourceFileEdition' })
 
-        if( ! currentSourceFile ) { return [] }
+        const jsClass = sourceFileEdition.getSelectedClassDefinition()
 
-        return currentSourceFile.getClasses()
+        return jsClass != null && jsClass != undefined
     }
 }
 

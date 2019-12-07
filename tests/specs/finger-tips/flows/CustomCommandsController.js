@@ -7,7 +7,11 @@ class CustomCommandsController {
         this.assumes = [CommandsController]
     } 
 
-    initialize() {
+    initialize({ mainFlow: mainFlow }) {
+        this.previousClassificationDo( () => {
+            this.initialize({ mainFlow: mainFlow })
+        })
+
         this.events = []
         this.commands = []
     }
@@ -21,11 +25,11 @@ class CustomCommandsController {
     }
 
     doExecuteEventHandler({
-        flowPointId: flowPointId, event: eventName, params: params, eventHandler: eventHandler,
+        flowId: flowId, event: eventName, params: params, eventHandler: eventHandler,
     }) {
         this.previousClassificationDo( () => {
             this.doExecuteEventHandler({
-                flowPointId: flowPointId,
+                flowId: flowId,
                 event: eventName,
                 params: params,
                 eventHandler: eventHandler,
@@ -33,7 +37,7 @@ class CustomCommandsController {
         })
 
         this.events.push({
-            flowPointId: flowPointId,
+            flowId: flowId,
             event: eventName,
             params: params
         })

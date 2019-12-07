@@ -14,20 +14,28 @@ class FileClassesEditionFlow {
     /// Building
 
     buildWith(flow) {
-        flow.main({ id: 'sourceFileEdition' }, function(fileContents) {
+        flow.main({ id: 'sourceFileEdition' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: fileContents.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: sourceFile, oldValue: oldValue }) => {
-                this.getChildFlow({ id: 'fileSections' }).setChoices( fileContents.getSectionsDefinedInOpenedFile() )
-                this.getChildFlow({ id: 'fileSections' }).setSelectionIndex({ index: 0 })
+                const jsFile = sourceFile.getFileStructure()
+
+                const roots = [jsFile]
+                const selection = [jsFile]
+
+                this.getChildFlow({ id: 'fileSections' }).setRoots({ items: roots })
+                this.getChildFlow({ id: 'fileSections' }).setSelection( selection )
             })
 
-            this.choice({
+            this.treeChoice({
                 id: 'fileSections',
-                choices: [],
-                whenSelectionChanges: ({ newValue: fileSection }) => {
-                    fileContents.getChildFlow({ id: 'selectedSectionContents' }).setValue( fileSection )
+                roots: [],
+                getChildrenClosure: function (fileSection) { return fileSection.getChildSections() },
+                whenSelectionChanges: function({ newValue: pathToFileSection }) {
+                    const fileSection = pathToFileSection[ pathToFileSection.length - 1 ]
+
+                    thisFlow.getChildFlow({ id: 'selectedSectionContents' }).setValue( fileSection )
                 },
             })
 
@@ -37,16 +45,12 @@ class FileClassesEditionFlow {
                     let methods
                     let editedContents
 
-                    if( fileContents.isHeader({ fileSection: fileSection }) ) {
-                        editedContents = fileSection.getSourceCode()
-                    }
-
-                    if( fileContents.isClassDefinition({ fileSection: fileSection }) ) {
+                    if( thisFlow.isJsClass({ fileSection: fileSection }) ) {
                         methods = fileSection.getMethods()
                     }
 
-                    if( fileContents.isFooter({ fileSection: fileSection }) ) {
-                        editedContents = fileSection.getSourceCode()
+                    if( thisFlow.isTextualContent({ fileSection: fileSection }) ) {
+                        editedContents = fileSection.getContents()
                     }
 
                     if( methods === undefined ) { methods = [] }
@@ -66,7 +70,7 @@ class FileClassesEditionFlow {
                         if( methodDefinition === null ) {
                             editedContents.setValue('')
                         } else {
-                            editedContents.setValue( methodDefinition.getFunctionFormattedSourceCode() )
+                            editedContents.setValue( methodDefinition.getFormattedSourceCode() )
                         }
                     },
                 })
@@ -81,7 +85,6 @@ class FileClassesEditionFlow {
         this.category( 'flow methods', () => {
             const methods = [
                 'getSourceFile',
-                'getSectionsDefinedInOpenedFile',
             ]
 
             this.defineCommandMethods({ methodNames: methods })
@@ -98,63 +101,20 @@ class FileClassesEditionFlow {
         return this.setValue( sourceFile )
     }
 
-    getSectionsDefinedInOpenedFile() {
-        const sourceFile = this.getSourceFile()
-
-        if( ! sourceFile ) { return [] }
-
-        const sections = []
-
-        sourceFile.getClasses().forEach( (classDefinition) => {
-
-            const header = classDefinition.getHeader()
-
-            header.behaveAs( PlugabbleDisplayable )
-            header.setDisplayText({ text: classDefinition.getClassName() + ' Header' })
-
-            sections.push( header )
-
-            classDefinition.behaveAs( PlugabbleDisplayable )
-            classDefinition.setDisplayText({ text: classDefinition.getClassName()  })
-
-            sections.push( classDefinition )
-        })
-
-        const footer = sourceFile.getFooter()
-        footer.behaveAs( PlugabbleDisplayable )
-        footer.setDisplayText({ text: 'File Footer' })
-
-        sections.push( footer )
-
-        return sections
+    isJsClass({ fileSection: fileSection }) {
+        return fileSection && fileSection.respondsTo('isJsClass')
     }
 
-    isHeader({ fileSection: fileSection }) {
-        return fileSection && fileSection.respondsTo('isHeader') && fileSection.isHeader()
-    }
-
-    isClassDefinition({ fileSection: fileSection }) {
-        return fileSection && fileSection.respondsTo('isClassDefinition') && fileSection.isClassDefinition()
-    }
-
-    isFooter({ fileSection: fileSection }) {
-        return fileSection && fileSection.respondsTo('isFooter') && fileSection.isFooter()
+    isTextualContent({ fileSection: fileSection }) {
+        return fileSection && fileSection.respondsTo('isTextualContent')        
     }
 
     getSelectedClassDefinition() {
         const fileSection = this.getChildFlow({ id: 'selectedSectionContents' }).getValue()
 
-        if( ! fileSection ) { return null }
+        if( ! this.isJsClass({ fileSection: fileSection }) ) { return null }
 
-        if( this.isFooter({ fileSection: fileSection }) ) {
-            return this.getChildFlow({ id: 'fileSections' }).getChoices()[1]            
-        }
-
-        const sections = this.getChildFlow({ id: 'fileSections' }).getChoices()
-
-        const index = sections.indexOf( fileSection )
-
-        return sections[ Math.floor( index / 2 ) * 2 + 1 ]
+        return fileSection
     }
 
     getSelectedMethodName() {
@@ -162,7 +122,7 @@ class FileClassesEditionFlow {
 
         if( ! selectedMethod ) { return null }
 
-        return selectedMethod.getName()
+        return selectedMethod.getMethodName()
     }
 }
 

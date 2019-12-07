@@ -40,7 +40,7 @@ class EditParamDialog {
                         EditDialogHeader.new({
                             mainIcon: Resource.image.param,
                             title:  `${className}.${method.getFunctionSignatureString()}`,
-                            subtitle: `You are editing a parameter of the method ${className}.${method.getName()}.`,
+                            subtitle: `You are editing a parameter of the method ${className}.${method.getMethodName()}.`,
                         })
                     )
 

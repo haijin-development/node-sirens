@@ -97,15 +97,17 @@ class VirtualTreeModel {
         let objects = this.roots
         const pathIndices = []
 
-        objectsHierarchy.forEach((each_object) => {
+        for( const each_object of objectsHierarchy) {
             const index = objects.findIndex((node) => {
                 return node.getValue() == each_object
             })
 
+            if(  objects[index] === undefined ) break
+
             pathIndices.push(index)
 
             objects = objects[index].getChildren()
-        })
+        }
 
         return pathIndices
     }

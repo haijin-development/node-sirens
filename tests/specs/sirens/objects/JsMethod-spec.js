@@ -5,27 +5,27 @@ const filename = 'tests/samples/functions-sample.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
 
-const functionDefinitions = sourceFile.getFunctionDefinitions()
+const methods = sourceFile.getFunctionDefinitions()
 
 describe('When using a Function', () => {
-    it('gets the function name', () => {
-        expect( functionDefinitions[0].getName() ) .to .equal('getName')
+    it('gets the methods name', () => {
+        expect( methods[0].getMethodName() ) .to .equal('getName')
     })
 
     describe('when gettings its parameters', () => {
 
         it('gets empty parameters', () => {
-            expect( functionDefinitions[0].getParams() ) .to .eql( [] )
+            expect( methods[0].getMethodParams() ) .to .eql( [] )
         })
 
         it('gets one positional parameter', () => {
-            expect( functionDefinitions[1].getParams() ) .to .eql([
+            expect( methods[1].getMethodParams() ) .to .eql([
                 'name'
             ])
         })
 
         it('gets one named parameter', () => {
-            expect( functionDefinitions[2].getParams() ) .to .eql([
+            expect( methods[2].getMethodParams() ) .to .eql([
                 [
                     {
                         'key': 'name',
@@ -40,7 +40,7 @@ describe('When using a Function', () => {
         })
 
         it('gets a mixed of positional and named parameter', () => {
-            expect( functionDefinitions[3].getParams() ) .to .eql([
+            expect( methods[3].getMethodParams() ) .to .eql([
                 [
                     {
                         'key': 'name',
@@ -56,7 +56,7 @@ describe('When using a Function', () => {
         })
 
         it('gets an elipsis params list', () => {
-            expect( functionDefinitions[4].getParams() ) .to .eql([
+            expect( methods[4].getMethodParams() ) .to .eql([
                 'name',
                 '...params',
             ])
@@ -66,17 +66,17 @@ describe('When using a Function', () => {
 
     it('gets the source code as it is writen in the source file', () => {
         const expectedSourceCode = 
-`getName() {
+`function getName() {
         return this.name
     }`
-        expect( functionDefinitions[0].getFunctionSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
+        expect( methods[0].getContents() ) .to .equal(expectedSourceCode)
     })
 
     it('gets the formatted source code', () => {
         const expectedSourceCode = 
-`getName() {
+`function getName() {
     return this.name
 }`
-        expect( functionDefinitions[0].getFunctionFormattedSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
+        expect( methods[0].getFormattedSourceCode({ cr: "\n" }) ) .to .equal(expectedSourceCode)
     })
 })

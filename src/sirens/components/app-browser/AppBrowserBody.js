@@ -65,7 +65,7 @@ class AppBrowserBody {
                     this.popupMenu( function() {
                         const selectedFilePath = flow.getSelectedFilePath()
 
-                        const classesDefinitions = flow.getClassesDefinitionsInSelectedFile()
+                        const enableOpenDocumentation = flow.hasAClassSelected()
 
                         this.item({
                             label: 'Browse it on a new window',
@@ -77,7 +77,7 @@ class AppBrowserBody {
 
                         this.item({
                             label: 'Browse its class documentation',
-                            enabled: classesDefinitions.length === 1,
+                            enabled: enableOpenDocumentation,
                             action: component.getProps().openClassDocumentation,
                         })
                     })

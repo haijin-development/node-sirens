@@ -4,11 +4,21 @@
 
 ### Sirens
 
+- Changed file sections selector from a list to a tree.
+- Fixed error in AppBrowserFlow.
+- Cleaned up ClassDefinition sections and the references to the source file.
+- Refactored FileFooterComponent and ClassHeaderComponent into PlainTextComponent.
+- Removed unused attributes from components.
+
 ### FingerTips
 
 - Added documentation.
+- Fixed errors related with Commands enabled/disabled state.
+- Splitted the CommandController inner updates of the flow from the FlowPoints updates into two different and clear iterations.
 
 ### Skins
+
+- Cleanup tests.
 
 ### O language
 

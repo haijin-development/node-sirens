@@ -22,7 +22,8 @@ class TreeChoiceFlow {
     }
 
     initialize({
-        roots: roots, getChildrenClosure: getChildrenClosure, id: id, idPath: idPath,
+        id: id, idPath: idPath,
+        roots: roots, getChildrenClosure: getChildrenClosure,
     }) {
         this.previousClassificationDo( () => {
             this.initialize({ id: id, idPath: idPath })
@@ -48,6 +49,8 @@ class TreeChoiceFlow {
     }
 
     setRoots({ items: items }) {
+        if( items === undefined ) { throw new Error(`Missing parameter {items: }.`) }
+
         this.evaluateEventHandler({
             event: 'setRoots',
             params: [items],
@@ -92,7 +95,9 @@ class TreeChoiceFlow {
     }
 
     updateRoots({ items: items }) {
-        const oldRoots = items
+        const oldRoots = this.getRoots()
+
+        if( oldRoots === items ) { return }
 
         this.roots = items
 
@@ -105,11 +110,16 @@ class TreeChoiceFlow {
 
         }
 
-        this.emit('roots-changed', { newRoots: items, oldRoots: oldRoots })
+        this.addPendingEvent({
+            event: 'roots-changed',
+            params:  { newRoots: items, oldRoots: oldRoots },
+        })        
     }
 
     updateSelection(itemPath) {
         const oldSelection = this.selection
+
+        if( oldSelection === itemPath ) { return }
 
         this.selection = itemPath
 
@@ -122,7 +132,10 @@ class TreeChoiceFlow {
 
         }
 
-        this.emit('selection-changed', { newValue: itemPath, oldValue: oldSelection })
+        this.addPendingEvent({
+            event: 'selection-changed',
+            params:  { newValue: itemPath, oldValue: oldSelection },
+        })        
     }
 
     // Events

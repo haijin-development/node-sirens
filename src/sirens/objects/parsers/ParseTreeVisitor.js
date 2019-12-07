@@ -1,3 +1,4 @@
+const esprima = require('esprima')
 const Classification = require('../../../O').Classification
 
 /*
@@ -10,7 +11,27 @@ class ParseTreeVisitor {
         this.instanceVariables = []
     }
 
+    /// Parsing
+
+    parseString({ string: string, parsingOptions: parsingOptions  }) {
+        if( parsingOptions === undefined ) {
+            parsingOptions = {
+                loc: true,
+                comment: true,
+                tokens: false,
+                tolerant: true,
+                jsx: true,
+            }
+        }
+
+        return esprima.parse( string, parsingOptions )
+    }
+
     /// Visiting
+
+    visitTree(treeNode) {
+        this.visit(treeNode)
+    }
 
     /*
      * Dynamically call a function named 'visit[treeNode.type]'.
@@ -433,6 +454,10 @@ class ParseTreeVisitor {
         result.body = this.visit( withStatement.body )
 
         return result
+    }
+
+    visitScript(treeNode) {
+        return this.visit( treeNode.body )
     }
 
     visitProgram(treeNode) {

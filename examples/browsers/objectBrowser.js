@@ -7,7 +7,7 @@ Classification.behaveAs( ExtendedClassification )
 
 Classification.setExtendedBehaviours([
     Debuggable,
-    ParamsChecker,
+//    ParamsChecker,
 ])
 
 const Sirens = require('../../src/Sirens')

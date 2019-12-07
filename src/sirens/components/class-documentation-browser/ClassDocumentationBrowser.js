@@ -25,13 +25,13 @@ class ClassDocumentationBrowser {
      * Returns a new ClassDocumentationBrowserFlow.
      */
     defaultModel() {
-        const classDefinition = this.getProps().classDefinition
+        const jsClass = this.getProps().jsClass
 
         const methodName = this.getProps().methodName
 
         const flow = ClassDocumentationBrowserFlow.new().asFlowPoint()
 
-        flow.setBrowsedClass({ classDefinition: classDefinition })
+        flow.setBrowsedClass({ jsClass: jsClass })
 
         flow.setBrowsedMethod({ methodName: methodName })
 

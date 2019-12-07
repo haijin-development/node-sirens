@@ -2,21 +2,21 @@ const Classification = require('../../O').Classification
 const Command = require('./Command')
 const ValueModel = require('../models/ValueModel')
 const StatefulCommandPoint = require('./StatefulCommandPoint')
+const Announcer = require('../announcements/Announcer')
 
 class StatefulCommand {
 
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['enabled', 'calculateEnabledClosure', 'flowPointsModel' ]
-        this.assumes = [Command]
+        this.instanceVariables = ['enabled', 'calculateEnabledClosure' ]
+        this.assumes = [Command, Announcer]
     }
 
     /// Initializing
 
     afterInstantiation() {
         this.enabled = true
-        this.flowPointsModel = ValueModel.new({ value: this.enabled })
     }
 
     initialize({
@@ -42,11 +42,15 @@ class StatefulCommand {
     }
 
     updateEnabledState() {
+        const oldEnabledState = this.enabled
+
         const enabledState = this.calculateEnabledState()
 
-        this.enabled = enabledState
+        if( oldEnabledState !== enabledState ) {
+            this.enabled = enabledState
 
-        this.updateCommandPointsModel()
+            this.updateCommandPointState({ newValue: enabledState, oldValue: oldEnabledState })
+        }
 
         return enabledState
     }
@@ -61,8 +65,15 @@ class StatefulCommand {
         return this.calculateEnabledClosure()
     }
 
-    updateCommandPointsModel() {
-        this.flowPointsModel.setValue( this.enabled )
+    processPendingEvents() {
+        this.updateEnabledState()
+    }
+
+    updateCommandPointState({ newValue: enabledState, oldValue: oldEnabledState }) {
+        this.emit(
+            'value-changed',
+            { newValue: enabledState, oldValue: oldEnabledState }
+        )
     }
 
     /// Flow
@@ -70,10 +81,10 @@ class StatefulCommand {
     asFlowPoint() {
         const commandPoint = StatefulCommandPoint.new({ command: this })
 
-        this.flowPointsModel.onValueChanged({
-            with: this,
-            do: commandPoint.onCommandEnabledStatusChanged.bind(commandPoint),
-        })
+        this.on(
+            'value-changed',
+            commandPoint.onCommandEnabledStatusChanged.bind(commandPoint)
+        )
 
         return commandPoint
     }

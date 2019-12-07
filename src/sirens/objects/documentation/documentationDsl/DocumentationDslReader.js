@@ -1,4 +1,3 @@
-const esprima = require('esprima')
 const Classification = require('../../../../O').Classification
 const ParseTreeVisitor = require('../../parsers/ParseTreeVisitor')
 const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
@@ -18,23 +17,11 @@ class DocumentationDslReader {
     readFromString({ string: documentationString, into: documentation }) {
         this.documentation = documentation
 
-        const parseTree = this.parseString( documentationString )
+        const parseTree = this.parseString({ string: documentationString, parsingOptions: {} })
 
-        this.visit( parseTree )
+        this.visitTree( parseTree )
 
         return this.documentation
-    }
-
-    parseString(string) {
-        const parsingOptions = {
-            loc: false,
-            comment: false,
-            tokens: false,
-            tolerant: false,
-            jsx: false,
-        }
-
-        return esprima.parse( string, parsingOptions )
     }
 
     visitCallExpression(callExpression) {

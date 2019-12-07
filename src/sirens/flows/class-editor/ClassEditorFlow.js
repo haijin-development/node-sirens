@@ -2,7 +2,7 @@ const path = require('path')
 const Classification = require('../../../O').Classification
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const ClassSourceFile = require('../../objects/ClassSourceFile')
+const SourceFile = require('../../objects/SourceFile')
 const FileClassesEditionFlow = require('./FileClassesEditionFlow')
 const Sirens = require('../../../Sirens')
 
@@ -91,9 +91,9 @@ class ClassEditorFlow {
                 },
                 whenActioned: function() {
                     const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
-                    const fileSection = sourceFileEdition.getSelectedClassDefinition()
+                    const jsClass = sourceFileEdition.getSelectedClassDefinition()
                     const methodName = sourceFileEdition.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ classDefinition: fileSection, methodName: methodName })
+                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
                 }
             })
 
@@ -141,7 +141,7 @@ class ClassEditorFlow {
     }
 
     openFile({ filename: filename }) {
-        let sourceFile = ClassSourceFile.new({ filepath: filename })
+        let sourceFile = SourceFile.new({ filepath: filename })
 
         if( filename !== null ) {
             this.lastOpenedFolder = path.dirname( filename )
@@ -172,7 +172,7 @@ class ClassEditorFlow {
         const sourceFileEdition = this.getChildFlow({ id: 'sourceFileEdition' })
         const section = sourceFileEdition.getChildFlow({ id: 'selectedSectionContents' }).getValue()
 
-        return section ? sourceFileEdition.isClassDefinition({ fileSection: section }) : false
+        return section ? sourceFileEdition.isJsClass({ fileSection: section }) : false
     }
 }
 

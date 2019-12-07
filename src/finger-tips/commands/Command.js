@@ -75,10 +75,6 @@ class Command {
 
         const commandsController = this.getCommandsController()
 
-        if( commandsController === undefined ) {
-            return this.executeActionHandlerClosure({ params: params })
-        }
-
         const result = commandsController.doExecuteCommand({
             command: this,
             params: params
@@ -95,14 +91,6 @@ class Command {
         const actionHandler = this.actionHandlerClosure
 
         return actionHandler( ... params)
-    }
-
-    getActionHandler() {
-        const actionHandler = (...params) => {
-            return this.execute({ params: params })
-        }
-
-        return actionHandler
     }
 }
 

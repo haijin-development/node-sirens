@@ -10,8 +10,8 @@ function classDefinitionCommands(thisFlow) {
             },
             whenActioned: function({ newClassDescription: newClassDescription }) {
                 const classDefinition = thisFlow.getBrowsedClass()
-                const classComment = classDefinition.getComment()
-                classComment.writeRawSourceCode({ rawSourceCode: newClassDescription })
+                const classComment = classDefinition.getClassComment()
+                classComment.writeContents({ contents: newClassDescription })
                 thisFlow.reloadClassDefinition()
             }
         })

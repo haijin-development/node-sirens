@@ -22,8 +22,8 @@ function applicationCommands(thisFlow) {
         this.command({
             id: 'openClassDocumentation',
             whenActioned: function() {
-                const classDefinition = thisFlow.getChildFlow({ id: 'classDefinition' }).getValue()
-                Sirens.browseClassDocumentation({ classDefinition: classDefinition })
+                const jsClass = thisFlow.getChildFlow({ id: 'classDefinition' }).getValue()
+                Sirens.browseClassDocumentation({ jsClass: jsClass })
             }
         })
 

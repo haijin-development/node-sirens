@@ -56,14 +56,14 @@ class ClassMethodsDocumentation {
                         this.model( flow.getFlowPoint({ id: 'classMethods' }) )
 
                         this.column({
-                            getImageClosure: function(functionDefinition) { return Resource.image.method },
+                            getImageClosure: function(jsMethod) { return Resource.image.method },
                             imageWidth: 24,
                             imageHeight: 24,
                         })
 
                         this.column({
                             label: 'Methods',
-                            getTextClosure: function(functionDefinition) { return functionDefinition.getFunctionSignatureString() },
+                            getTextClosure: function(jsMethod) { return jsMethod.getFunctionSignatureString() },
                         })
                     })
 

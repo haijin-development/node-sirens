@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const PlainTextComponent = require('./PlainTextComponent')
+const TextualContentComponent = require('./TextualContentComponent')
 const ClassComponent = require('./ClassComponent')
 
 class FileSectionEditionComponent {
@@ -29,18 +29,9 @@ class FileSectionEditionComponent {
         if( section === undefined || section === null ) { return }
 
         componentsRenderer.render( function(component) {
+            this.container({ id: 'selectedSectionContents', hasScrollBars: false }, function() {
 
-            this.container({ id: 'selectedSectionContents', hasScrollBars: false, }, function() {
-
-                if( section.respondsTo('isHeader') && section.isHeader() ) {
-                    this.component(
-                        PlainTextComponent.new({
-                            model: flow,
-                        })
-                    )
-                }
-
-                if( section.respondsTo('isClassDefinition') && section.isClassDefinition() ) {
+                if( section.respondsTo('isJsClass') ) {
                     this.component(
                         ClassComponent.new({
                             model: flow,
@@ -49,9 +40,9 @@ class FileSectionEditionComponent {
                     )
                 }
 
-                if( section.respondsTo('isFooter') && section.isFooter() ) {
+                if( section.respondsTo('isTextualContent') ) {
                     this.component(
-                        PlainTextComponent.new({
+                        TextualContentComponent.new({
                             model: flow,
                         })
                     )

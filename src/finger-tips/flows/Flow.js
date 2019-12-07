@@ -44,18 +44,19 @@ class Flow {
     }
 
     addChildFlow({ id: childFlowId, flow: childFlow }) {
-        if( childFlow.getId() && childFlow.getId() !== childFlowId ) {
-            throw new Error(`Child flow already has an id: '${childFlow.getId()}'.`)
-        }
-
         if( this.childFlows[childFlowId] !== undefined ) {
             throw new Error(`This flow already has a child flow with id: '${childFlowId}'.`)
         }
 
-        childFlow.setId({ id: childFlowId, idPath: this.id })
+        childFlow.setId({ id: childFlowId, idPath: this.idPath })
         childFlow.setCommandsController( this.commandsController )
 
         this.childFlows[childFlowId] = childFlow
+
+        childFlow.allChildFlowsDo( (eachChildFlow) => {
+            const newIdPath = this.idPath + '.' + eachChildFlow.getIdPath()
+            eachChildFlow.setIdPath( newIdPath )
+        })
     }
 
     addCommand({ id: commandId, command: command }) {
@@ -99,6 +100,10 @@ class Flow {
 
     getIdPath() {
         return this.idPath
+    }
+
+    setIdPath(idPath) {
+        this.idPath = idPath
     }
 
     /// Searching

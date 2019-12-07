@@ -34,6 +34,10 @@ class Command {
         return this.idPath
     }
 
+    setIdPath(idPath) {
+        this.idPath = idPath
+    }
+
     setActionHandlerClosure(actionHandlerClosure) {
         this.actionHandlerClosure = actionHandlerClosure
     }

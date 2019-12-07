@@ -21,7 +21,7 @@ class AppBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'appBrowser' }, function(thisFlow) {
+        flow.main({ id: 'main' }, function(thisFlow) {
 
             this.setCommandsController( commandsController )
 
@@ -29,7 +29,7 @@ class AppBrowserFlow {
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
-                thisFlow.getChildFlow({ id: 'windowTitle' }).setValue( appFolder )
+                thisFlow.getChildFlow({ id: 'windowTitle' }).setObject( appFolder )
                 thisFlow.getChildFlow({ id: 'filesTree' }).setRoots({ items: [ appFolder ] })
             })
 

@@ -23,7 +23,6 @@ describe('When using an AppBrowserFlow', () => {
             'main.pickAndOpenFolder',
             'main.openClassEditor',
             'main.openPlayground',
-            'main.openClassDocumentation',
             'main.pickFolder',
             'main.openFolder',
             'main.getSelectedFilePath',
@@ -33,10 +32,14 @@ describe('When using an AppBrowserFlow', () => {
 
             'main.selectedFile.fileSections',
             'main.selectedFile.selectedSectionContents',
+
+            'main.selectedFile.getSourceFile',
+
             'main.selectedFile.selectedSectionContents.classMethods',
             'main.selectedFile.selectedSectionContents.selectedMethod',
 
-            'main.selectedFile.getSourceFile',
+            'main.selectedFile.selectedSectionContents.openClassDocumentation'
+
         ])
     })
 

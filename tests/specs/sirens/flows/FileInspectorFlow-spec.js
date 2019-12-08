@@ -16,6 +16,7 @@ describe('When using an FileInspectorFlow', () => {
             'main.selectedSectionContents.selectedMethod',
 
             'main.getSourceFile',
+            'main.selectedSectionContents.openClassDocumentation',
         ])
     })
 

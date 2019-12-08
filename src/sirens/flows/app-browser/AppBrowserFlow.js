@@ -100,19 +100,6 @@ class AppBrowserFlow {
                 }
             })
 
-            this.command({
-                id: 'openClassDocumentation',
-                enabledIf: function() {
-                    return thisFlow.hasAClassSelected()
-                },
-                whenActioned: function() {
-                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
-                    const jsClass = selectedFile.getSelectedClassDefinition()
-                    const methodName = selectedFile.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
-                }
-            })
-
         })
 
     }
@@ -168,11 +155,9 @@ class AppBrowserFlow {
     }
 
     hasAClassSelected() {
-        const selectedFile = this.getChildFlow({ id: 'selectedFile' })
+        const section = this.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
 
-        const jsClass = selectedFile.getSelectedClassDefinition()
-
-        return jsClass != null && jsClass != undefined
+        return section.hasAClassSelected()
     }
 }
 

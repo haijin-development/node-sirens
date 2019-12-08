@@ -1,7 +1,6 @@
-const path = require('path')
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const PlugabbleDisplayable = require('../../objects/PlugabbleDisplayable')
+const JsClassInspectorFlow = require('./JsClassInspectorFlow')
 
 class FileInspectorFlow {
     /// Definition
@@ -49,49 +48,9 @@ class FileInspectorFlow {
                 },
             })
 
-            this.value({ id: 'selectedSectionContents' }, function(selectedSectionContents) {
-
-                this.whenObjectChanges( ({ newValue: fileSection }) => {
-                    if( ! fileSection ) {
-                        selectedSectionContents.getChildFlow({ id: 'classMethods' }).setChoices( [] )
-                        selectedSectionContents.getChildFlow({ id: 'selectedMethod' }).setValue( '' )
-                        return
-                    }
-
-                    let methods
-                    let selectedMethodContents
-
-                    if( thisFlow.isJsClass({ fileSection: fileSection }) ) {
-                        methods = fileSection.getMethods()
-                    }
-
-                    if( thisFlow.isTextualContent({ fileSection: fileSection }) ) {
-                        selectedMethodContents = fileSection.getContents()
-                    }
-
-                    if( ! methods ) { methods = [] }
-                    if( ! selectedMethodContents ) { selectedMethodContents = '' }
-
-                    selectedSectionContents.getChildFlow({ id: 'classMethods' }).setChoices( methods )
-
-                    selectedSectionContents.getChildFlow({ id: 'selectedMethod' }).setValue( selectedMethodContents )
-                 })
-
-                this.choice({
-                    id: 'classMethods',
-                    choices: [],
-                    whenSelectionChanges: ({ newValue: methodDefinition }) => {
-                        const selectedMethod = selectedSectionContents.getChildFlow({ id: 'selectedMethod' })
-
-                        if( ! methodDefinition ) {
-                            selectedMethod.setValue('')
-                        } else {
-                            selectedMethod.setValue( methodDefinition.getFormattedSourceCode() )
-                        }
-                    },
-                })
-
-                this.value({ id: 'selectedMethod' })
+            this.object({
+                id: 'selectedSectionContents',
+                definedWith: JsClassInspectorFlow.new(),
             })
 
         })
@@ -115,30 +74,6 @@ class FileInspectorFlow {
 
     setSourceFile({ sourceFile: sourceFile }) {
         return this.setValue( sourceFile )
-    }
-
-    isJsClass({ fileSection: fileSection }) {
-        return fileSection && fileSection.respondsTo('isJsClass')
-    }
-
-    isTextualContent({ fileSection: fileSection }) {
-        return fileSection && fileSection.respondsTo('isTextualContent')        
-    }
-
-    getSelectedClassDefinition() {
-        const fileSection = this.getChildFlow({ id: 'selectedSectionContents' }).getValue()
-
-        if( ! this.isJsClass({ fileSection: fileSection }) ) { return null }
-
-        return fileSection
-    }
-
-    getSelectedMethodName() {
-        const selectedMethod = this.getChildFlow({ id: 'classMethods' }).getSelection()
-
-        if( ! selectedMethod ) { return null }
-
-        return selectedMethod.getMethodName()
     }
 }
 

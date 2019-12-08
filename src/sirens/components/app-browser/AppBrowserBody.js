@@ -73,13 +73,6 @@ class AppBrowserBody {
                             action: component.getProps().openClassEditor,
                         })
 
-                        this.separator()
-
-                        this.item({
-                            label: 'Browse its class documentation',
-                            enabled: enableOpenDocumentation,
-                            action: component.getProps().openClassDocumentation,
-                        })
                     })
                 })
 

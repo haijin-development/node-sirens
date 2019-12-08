@@ -41,6 +41,8 @@ class AppBrowser {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        const selectedClassFlow = flow.getFlowPoint({ id: 'selectedFile.selectedSectionContents' })
+
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
@@ -56,7 +58,7 @@ class AppBrowser {
                             model: flow,
                             openFolder: () => { flow.pickAndOpenFolder({ parentWindow: component }) },
                             openClassEditor: () => { flow.openClassEditor({ parentWindow: component }) },
-                            openClassDocumentation: () => { flow.openClassDocumentation({ parentWindow: component }) },
+                            openClassDocumentation: () => { selectedClassFlow.openClassDocumentation({ parentWindow: component }) },
                             openPlayground: () => { flow.openPlayground({ parentWindow: component }) },
                         })
                     )
@@ -65,7 +67,7 @@ class AppBrowser {
                         AppBrowserBody.new({
                             model: flow,
                             openClassEditor: () => { flow.openClassEditor({ parentWindow: component }) },
-                            openClassDocumentation: () => { flow.openClassDocumentation({ parentWindow: component }) },
+                            openClassDocumentation: () => { selectedClassFlow.openClassDocumentation({ parentWindow: component }) },
                         })
                     )
 

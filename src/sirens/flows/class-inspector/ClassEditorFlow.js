@@ -90,9 +90,9 @@ class ClassEditorFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
-                    const jsClass = selectedFile.getSelectedClassDefinition()
-                    const methodName = selectedFile.getSelectedMethodName()
+                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
+                    const jsClass = selectedSection.getValue()
+                    const methodName = selectedSection.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
                 }
             })
@@ -169,10 +169,9 @@ class ClassEditorFlow {
     }
 
     hasAClassSelected() {
-        const selectedFile = this.getChildFlow({ id: 'selectedFile' })
-        const section = selectedFile.getChildFlow({ id: 'selectedSectionContents' }).getValue()
+        const section = this.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
 
-        return section ? selectedFile.isJsClass({ fileSection: section }) : false
+        return section.hasAClassSelected()
     }
 }
 

@@ -133,7 +133,9 @@ class ChoicesTree {
         this.duringClassificationDo( UpdatingModel, () => {
             const selectedPath = this.getView().getSelectionIndices()
 
-            this.getModel().setSelectionFromIndices({ indices: selectedPath[0] })
+            const indices = selectedPath.length === 0 ? [] : selectedPath[0]
+
+            this.getModel().setSelectionFromIndices({ indices: indices })
         })
     }
 

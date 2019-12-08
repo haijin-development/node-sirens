@@ -63,9 +63,8 @@ class MenuView {
     /// Adding
 
     item({label: label, enabled: enabled, action: action}) {
-        if( enabled === undefined ) {
-            enabled = true
-        }
+        if( enabled === undefined ) { enabled = true }
+        if( enabled === null ) { enabled = false }
 
         if( OInstance.isOInstance(enabled) && enabled.respondsTo('getValue') ) {
             enabled = enabled.getValue() === true

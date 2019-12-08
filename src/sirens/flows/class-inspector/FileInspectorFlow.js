@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const PlugabbleDisplayable = require('../../objects/PlugabbleDisplayable')
 
-class FileClassesEditionFlow {
+class FileInspectorFlow {
     /// Definition
 
     static definition() {
@@ -14,18 +14,26 @@ class FileClassesEditionFlow {
     /// Building
 
     buildWith(flow) {
-        flow.main({ id: 'sourceFileEdition' }, function(thisFlow) {
+        flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: sourceFile, oldValue: oldValue }) => {
+                const fileSections = this.getChildFlow({ id: 'fileSections' })
+
+                if( ! sourceFile ) {
+                    fileSections.setRoots({ items: [] })
+                    fileSections.setSelection( null )
+                    return
+                }
+
                 const jsFile = sourceFile.getFileStructure()
 
                 const roots = [jsFile]
                 const selection = [jsFile]
 
-                this.getChildFlow({ id: 'fileSections' }).setRoots({ items: roots })
-                this.getChildFlow({ id: 'fileSections' }).setSelection( selection )
+                fileSections.setRoots({ items: roots })
+                fileSections.setSelection( selection )
             })
 
             this.treeChoice({
@@ -35,47 +43,55 @@ class FileClassesEditionFlow {
                 whenSelectionChanges: function({ newValue: pathToFileSection }) {
                     const fileSection = pathToFileSection[ pathToFileSection.length - 1 ]
 
-                    thisFlow.getChildFlow({ id: 'selectedSectionContents' }).setValue( fileSection )
+                    const newValue = fileSection ? fileSection : null
+
+                    thisFlow.getChildFlow({ id: 'selectedSectionContents' }).setValue( newValue )
                 },
             })
 
             this.value({ id: 'selectedSectionContents' }, function(selectedSectionContents) {
 
                 this.whenObjectChanges( ({ newValue: fileSection }) => {
+                    if( ! fileSection ) {
+                        selectedSectionContents.getChildFlow({ id: 'classMethods' }).setChoices( [] )
+                        selectedSectionContents.getChildFlow({ id: 'selectedMethod' }).setValue( '' )
+                        return
+                    }
+
                     let methods
-                    let editedContents
+                    let selectedMethodContents
 
                     if( thisFlow.isJsClass({ fileSection: fileSection }) ) {
                         methods = fileSection.getMethods()
                     }
 
                     if( thisFlow.isTextualContent({ fileSection: fileSection }) ) {
-                        editedContents = fileSection.getContents()
+                        selectedMethodContents = fileSection.getContents()
                     }
 
-                    if( methods === undefined ) { methods = [] }
-                    if( editedContents === undefined ) { editedContents = '' }
+                    if( ! methods ) { methods = [] }
+                    if( ! selectedMethodContents ) { selectedMethodContents = '' }
 
                     selectedSectionContents.getChildFlow({ id: 'classMethods' }).setChoices( methods )
 
-                    selectedSectionContents.getChildFlow({ id: 'editedContents' }).setValue( editedContents )
+                    selectedSectionContents.getChildFlow({ id: 'selectedMethod' }).setValue( selectedMethodContents )
                  })
 
                 this.choice({
                     id: 'classMethods',
                     choices: [],
                     whenSelectionChanges: ({ newValue: methodDefinition }) => {
-                        const editedContents = selectedSectionContents.getChildFlow({ id: 'editedContents' })
+                        const selectedMethod = selectedSectionContents.getChildFlow({ id: 'selectedMethod' })
 
-                        if( methodDefinition === null ) {
-                            editedContents.setValue('')
+                        if( ! methodDefinition ) {
+                            selectedMethod.setValue('')
                         } else {
-                            editedContents.setValue( methodDefinition.getFormattedSourceCode() )
+                            selectedMethod.setValue( methodDefinition.getFormattedSourceCode() )
                         }
                     },
                 })
 
-                this.value({ id: 'editedContents' })
+                this.value({ id: 'selectedMethod' })
             })
 
         })
@@ -126,4 +142,4 @@ class FileClassesEditionFlow {
     }
 }
 
-module.exports = Classification.define(FileClassesEditionFlow)
+module.exports = Classification.define(FileInspectorFlow)

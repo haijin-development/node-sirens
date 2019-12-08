@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const SourceFile = require('../../objects/SourceFile')
-const FileClassesEditionFlow = require('./FileClassesEditionFlow')
+const FileInspectorFlow = require('./FileInspectorFlow')
 const Sirens = require('../../../Sirens')
 
 class ClassEditorFlow {
@@ -28,7 +28,7 @@ class ClassEditorFlow {
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
-                this.getChildFlow({ id: 'sourceFileEdition' }).setValue( sourceFile )
+                this.getChildFlow({ id: 'selectedFile' }).setValue( sourceFile )
             })
 
             this.bufferedValue({
@@ -41,8 +41,8 @@ class ClassEditorFlow {
             })
 
             this.object({
-                id: 'sourceFileEdition',
-                definedWith: FileClassesEditionFlow.new(),
+                id: 'selectedFile',
+                definedWith: FileInspectorFlow.new(),
             })
 
             application.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
@@ -71,8 +71,8 @@ class ClassEditorFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
-                    const filename = sourceFileEdition.getSourceFile().getFilePath()
+                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
+                    const filename = selectedFile.getSourceFile().getFilePath()
                     Sirens.openClassEditor({ filename: filename })
                 }
             })
@@ -90,9 +90,9 @@ class ClassEditorFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
-                    const jsClass = sourceFileEdition.getSelectedClassDefinition()
-                    const methodName = sourceFileEdition.getSelectedMethodName()
+                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
+                    const jsClass = selectedFile.getSelectedClassDefinition()
+                    const methodName = selectedFile.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
                 }
             })
@@ -169,10 +169,10 @@ class ClassEditorFlow {
     }
 
     hasAClassSelected() {
-        const sourceFileEdition = this.getChildFlow({ id: 'sourceFileEdition' })
-        const section = sourceFileEdition.getChildFlow({ id: 'selectedSectionContents' }).getValue()
+        const selectedFile = this.getChildFlow({ id: 'selectedFile' })
+        const section = selectedFile.getChildFlow({ id: 'selectedSectionContents' }).getValue()
 
-        return section ? sourceFileEdition.isJsClass({ fileSection: section }) : false
+        return section ? selectedFile.isJsClass({ fileSection: section }) : false
     }
 }
 

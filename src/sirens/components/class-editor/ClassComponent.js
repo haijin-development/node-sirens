@@ -51,7 +51,7 @@ class ClassComponent {
                 })
 
                 this.text({
-                    model: flow.getFlowPoint({ id: 'editedContents' }),
+                    model: flow.getFlowPoint({ id: 'selectedMethod' }),
                     viewAttributes: { splitProportion: 1.0 / 2 },
                 })
 

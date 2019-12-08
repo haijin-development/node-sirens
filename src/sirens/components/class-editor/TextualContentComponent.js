@@ -19,7 +19,7 @@ class TextualContentComponent {
         componentsRenderer.render( function(component) {
 
             this.text({
-                model: flow.getFlowPoint({ id: 'editedContents' }),
+                model: flow.getFlowPoint({ id: 'selectedMethod' }),
             })
 
         })

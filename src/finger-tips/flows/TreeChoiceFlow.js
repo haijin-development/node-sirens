@@ -67,6 +67,8 @@ class TreeChoiceFlow {
     }
 
     setSelection(itemPath) {
+        if( ! itemPath ) { itemPath = [] }
+
         this.evaluateEventHandler({
             event: 'setSelection',
             params: [itemPath],

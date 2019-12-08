@@ -2,7 +2,7 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const Folder = require('../../objects/paths/Folder')
-const FileClassesEditionFlow = require('../class-editor/FileClassesEditionFlow')
+const FileInspectorFlow = require('../class-inspector/FileInspectorFlow')
 const SourceFile = require('../../objects/SourceFile')
 const Sirens = require('../../../Sirens')
 const FolderChooser = require('../../../Skins').FolderChooser
@@ -29,8 +29,10 @@ class AppBrowserFlow {
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
+                const filesTreeRoots = appFolder ? [ appFolder ] : []
+
                 thisFlow.getChildFlow({ id: 'windowTitle' }).setObject( appFolder )
-                thisFlow.getChildFlow({ id: 'filesTree' }).setRoots({ items: [ appFolder ] })
+                thisFlow.getChildFlow({ id: 'filesTree' }).setRoots({ items: filesTreeRoots })
             })
 
             this.bufferedValue({
@@ -56,13 +58,13 @@ class AppBrowserFlow {
                         if( ! sourceFile.isJavascriptFile() ) { sourceFile = null }
                     }
 
-                    thisFlow.getChildFlow({ id: 'sourceFileEdition' }).setValue( sourceFile )
+                    thisFlow.getChildFlow({ id: 'selectedFile' }).setValue( sourceFile )
                 },
             })
 
             this.object({
-                id: 'sourceFileEdition',
-                definedWith: FileClassesEditionFlow.new(),
+                id: 'selectedFile',
+                definedWith: FileInspectorFlow.new(),
             })
 
             thisFlow.evaluateEventHandler({ event: 'appBrowser-flow-built', eventHandler: () => {} })
@@ -104,9 +106,9 @@ class AppBrowserFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    const sourceFileEdition = thisFlow.getChildFlow({ id: 'sourceFileEdition' })
-                    const jsClass = sourceFileEdition.getSelectedClassDefinition()
-                    const methodName = sourceFileEdition.getSelectedMethodName()
+                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
+                    const jsClass = selectedFile.getSelectedClassDefinition()
+                    const methodName = selectedFile.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
                 }
             })
@@ -144,7 +146,7 @@ class AppBrowserFlow {
     }
 
     openFolder({ folderPath: folderPath }) {
-        const appFolder = Folder.new({ path: folderPath })
+        const appFolder = folderPath ? Folder.new({ path: folderPath }) : null
 
         if( folderPath !== null ) {
             this.lastOpenedFolder = folderPath
@@ -158,7 +160,7 @@ class AppBrowserFlow {
     }
 
     getSelectedFilePath() {
-        const currentSourceFile = this.getChildFlow({ id: 'sourceFileEdition' }).getSourceFile()
+        const currentSourceFile = this.getChildFlow({ id: 'selectedFile' }).getSourceFile()
 
         if( ! currentSourceFile ) { return null }
 
@@ -166,9 +168,9 @@ class AppBrowserFlow {
     }
 
     hasAClassSelected() {
-        const sourceFileEdition = this.getChildFlow({ id: 'sourceFileEdition' })
+        const selectedFile = this.getChildFlow({ id: 'selectedFile' })
 
-        const jsClass = sourceFileEdition.getSelectedClassDefinition()
+        const jsClass = selectedFile.getSelectedClassDefinition()
 
         return jsClass != null && jsClass != undefined
     }

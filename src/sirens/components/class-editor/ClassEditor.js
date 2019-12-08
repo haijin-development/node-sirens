@@ -3,7 +3,7 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
-const ClassEditorFlow = require('../../flows/class-editor/ClassEditorFlow')
+const ClassEditorFlow = require('../../flows/class-inspector/ClassEditorFlow')
 const ClassEditorMenu = require('./ClassEditorMenu')
 const ClassEditorBody = require('./ClassEditorBody')
 const Sirens = require('../../../Sirens')
@@ -66,7 +66,7 @@ class ClassEditor {
 
                     this.component(
                         ClassEditorBody.new({
-                            model: flow.getFlowPoint({ id: 'sourceFileEdition' }),
+                            model: flow.getFlowPoint({ id: 'selectedFile' }),
                             openDocumentationBrowser: () => { flow.openDocumentationBrowser() },
                         })
                     )

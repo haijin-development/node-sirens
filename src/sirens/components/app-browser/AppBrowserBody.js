@@ -30,7 +30,7 @@ class AppBrowserBody {
 
                     this.component(
                         SourceFileEditionComponent.new({
-                            model: flow.getFlowPoint({ id: 'sourceFileEdition' }),
+                            model: flow.getFlowPoint({ id: 'selectedFile' }),
                             openClassDocumentation: component.getProps().openClassDocumentation,
                         })
                     )

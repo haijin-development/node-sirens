@@ -54,7 +54,8 @@ class Flow {
         this.childFlows[childFlowId] = childFlow
 
         childFlow.allChildFlowsDo( (eachChildFlow) => {
-            const newIdPath = this.idPath + '.' + eachChildFlow.getIdPath()
+            const currentIdPath = eachChildFlow.getIdPath().split('.').slice(1).join('.')
+            const newIdPath = childFlow.getIdPath() + '.' + currentIdPath
             eachChildFlow.setIdPath( newIdPath )
         })
     }

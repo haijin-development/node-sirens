@@ -56,12 +56,28 @@ Assertion.addMethod('haveChildFlows', function (expectedChildFlowIds) {
 })
 
 
+Assertion.addMethod('toHaveValue', function (expectedValue) {
+    var flow = this._obj;
+
+    const value = flow.getValue()
+
+    new Assertion( value ) .to .equal( expectedValue )
+})
+
 Assertion.addMethod('toHaveAValueSuchThat', function (valueExpectationClosure) {
     var flow = this._obj;
 
     const value = flow.getValue()
 
     valueExpectationClosure( value )
+})
+
+Assertion.addMethod('toHaveObject', function (expectedObject) {
+    var flow = this._obj;
+
+    const object = flow.getObject()
+
+    new Assertion( object ) .to .equal( expectedObject )
 })
 
 Assertion.addMethod('toHaveAnObjectSuchThat', function (valueExpectationClosure) {
@@ -73,12 +89,44 @@ Assertion.addMethod('toHaveAnObjectSuchThat', function (valueExpectationClosure)
 })
 
 
-Assertion.addMethod('toHaveRootsSuchThat', function (rootsExpectationClosure) {
+Assertion.addMethod('toHaveChoices', function (expectedChoices) {
+    var flow = this._obj;
+
+    const choices = flow.getChoices()
+
+    new Assertion( choices ) .to .eql( expectedChoices )
+})
+
+Assertion.addMethod('toHaveRoots', function (expectedRoots) {
+    var flow = this._obj;
+
+    const roots = flow.getRoots()
+
+    new Assertion( roots ) .to .eql( expectedRoots )
+})
+
+Assertion.addMethod('toHaveRootsSuchThat', function (eachRootExpectationClosure) {
     var flow = this._obj;
 
     const roots = flow.getRoots()
 
     for( const root of roots ) {
-        rootsExpectationClosure( root )
+        eachRootExpectationClosure( root )
     }
+})
+
+Assertion.addMethod('toHaveSelection', function (expectedSelection) {
+    var flow = this._obj;
+
+    const selection = flow.getSelection()
+
+    new Assertion( selection ) .to .eql( expectedSelection )
+})
+
+Assertion.addMethod('toHaveASelectionSuchThat', function (selectionExpectationClosure) {
+    var flow = this._obj;
+
+    const selection = flow.getSelection()
+
+    selectionExpectationClosure( selection )
 })

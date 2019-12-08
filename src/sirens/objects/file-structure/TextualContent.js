@@ -1,22 +1,22 @@
 const Classification = require('../../../O').Classification
-const FileSection = require('./FileSection')
+const FileObject = require('./FileObject')
 
-class TextualContents {
+class TextualContent {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FileSection]
+        this.assumes = [FileObject]
     }
 
     isTextualContent() {
         return true
     }
 
-    getSectionDescription() {
+    getFileObjectDescription() {
         return 'Plain text'
     }
 
 }
 
-module.exports = Classification.define(TextualContents)
+module.exports = Classification.define(TextualContent)

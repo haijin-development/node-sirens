@@ -10,7 +10,7 @@ describe('When using an FileInspectorFlow', () => {
         const flow = FileInspectorFlow.new()
 
         expect( flow ) .to .haveChildFlows([
-            'main.fileSections',
+            'main.fileObjects',
             'main.selectedSectionContents',
             'main.selectedSectionContents.classMethods',
             'main.selectedSectionContents.selectedMethod',
@@ -35,26 +35,26 @@ describe('When using an FileInspectorFlow', () => {
             })
         })
 
-        it('sets the SourceFile sections to the fileSections flow', () => {
-            const fileSection = sourceFile.getFileStructure()
+        it('sets the SourceFile sections to the fileObjects flow', () => {
+            const fileObject = sourceFile.getFileStructure()
 
-            expect(flow) .withId( 'main.fileSections' ) .toHaveRoots( [fileSection] )
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveRoots( [fileObject] )
         })
 
-        it('sets the SourceFile sections selection to the first fileSection', () => {
-            const fileSection = sourceFile.getFileStructure()
+        it('sets the SourceFile sections selection to the first fileObject', () => {
+            const fileObject = sourceFile.getFileStructure()
 
-            expect(flow) .withId( 'main.fileSections' ) .toHaveSelection( [fileSection] )
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection( [fileObject] )
         })
 
-        it('sets the selectedSectionContents to the first fileSection', () => {
-            const fileSection = sourceFile.getFileStructure()
+        it('sets the selectedSectionContents to the first fileObject', () => {
+            const fileObject = sourceFile.getFileStructure()
 
-            expect(flow) .withId( 'main.selectedSectionContents' ) .toHaveValue( fileSection )
+            expect(flow) .withId( 'main.selectedSectionContents' ) .toHaveValue( fileObject )
         })
 
         it('sets the methods list', () => {
-            const fileSection = sourceFile.getFileStructure()
+            const fileObject = sourceFile.getFileStructure()
 
             expect(flow) .withId( 'main.selectedSectionContents.classMethods' )
                 .toHaveChoices( [] )
@@ -81,15 +81,15 @@ describe('When using an FileInspectorFlow', () => {
             expect(flow) .withId( 'main' ) .toHaveValue( null )
         })
 
-        it('sets the SourceFile sections to the fileSections flow', () => {
-            expect(flow) .withId( 'main.fileSections' ) .toHaveRoots( [] )
+        it('sets the SourceFile sections to the fileObjects flow', () => {
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveRoots( [] )
         })
 
-        it('sets the SourceFile sections selection to the first fileSection', () => {
-            expect(flow) .withId( 'main.fileSections' ) .toHaveSelection( [] )
+        it('sets the SourceFile sections selection to the first fileObject', () => {
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection( [] )
         })
 
-        it('sets the selectedSectionContents to the first fileSection', () => {
+        it('sets the selectedSectionContents to the first fileObject', () => {
             expect(flow) .withId( 'main.selectedSectionContents' ) .toHaveValue( null )
         })
 
@@ -114,33 +114,33 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
-            flow.getChildFlow({ id: 'fileSections' }).setSelection([ fileSection, classSection ])
+            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ fileObject, classSection ])
         })
 
-        it('sets the SourceFile sections selection to the first fileSection', () => {
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+        it('sets the SourceFile sections selection to the first fileObject', () => {
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
-            expect(flow) .withId( 'main.fileSections' ) .toHaveSelection([
-                fileSection, classSection
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection([
+                fileObject, classSection
             ])
         })
 
-        it('sets the selectedSectionContents to the first fileSection', () => {
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+        it('sets the selectedSectionContents to the first fileObject', () => {
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
             expect(flow) .withId( 'main.selectedSectionContents' ) .toHaveValue( classSection )
         })
 
         it('sets the methods list', () => {
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
-            const methods = classSection.getChildSections()
+            const methods = classSection.getChildObjects()
 
             expect(flow) .withId( 'main.selectedSectionContents.classMethods' )
                 .toHaveChoices( methods )
@@ -161,15 +161,15 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
-            flow.getChildFlow({ id: 'fileSections' }).setSelection([ fileSection, classSection ])
-            flow.getChildFlow({ id: 'fileSections' }).setSelection(null)
+            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ fileObject, classSection ])
+            flow.getChildFlow({ id: 'fileObjects' }).setSelection(null)
         })
 
-        it('sets the SourceFile sections selection to the first fileSection', () => {
-            expect(flow) .withId( 'main.fileSections' ) .toHaveSelection( [] )
+        it('sets the SourceFile sections selection to the first fileObject', () => {
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection( [] )
         })
 
         it('sets the selectedSectionContents to null', () => {
@@ -196,13 +196,13 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[1]
 
-            const methods = classSection.getChildSections()
+            const methods = classSection.getChildObjects()
 
             flow.getChildFlow({ id: 'selectedSectionContents.classMethods' })
-                .setSelection( methods[0] )
+                .setSelection( methods[1] )
         })
 
         it('sets the selected method contents in the inspector', () => {
@@ -224,10 +224,10 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileSection = sourceFile.getFileStructure()
-            const classSection = fileSection.getChildSections()[0]
+            const fileObject = sourceFile.getFileStructure()
+            const classSection = fileObject.getChildObjects()[0]
 
-            const methods = classSection.getChildSections()
+            const methods = classSection.getChildObjects()
 
             flow.getChildFlow({ id: 'selectedSectionContents.classMethods' })
                 .setSelection( methods[0] )

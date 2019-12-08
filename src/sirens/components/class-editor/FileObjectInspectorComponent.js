@@ -1,10 +1,9 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const TextualContentComponent = require('./TextualContentComponent')
 const ClassComponent = require('./ClassComponent')
 
-class FileSectionEditionComponent {
+class FileObjectInspectorComponent {
     /// Definition
 
     static definition() {
@@ -40,18 +39,10 @@ class FileSectionEditionComponent {
                     )
                 }
 
-                if( section.respondsTo('isTextualContent') ) {
-                    this.component(
-                        TextualContentComponent.new({
-                            model: flow,
-                        })
-                    )
-                }
-
             })
 
         })
     }
 }
 
-module.exports = Classification.define(FileSectionEditionComponent)
+module.exports = Classification.define(FileObjectInspectorComponent)

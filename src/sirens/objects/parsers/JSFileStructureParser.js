@@ -1,15 +1,16 @@
 const Classification = require('../../../O').Classification
 const JsFileParser = require('./JsFileParser')
 const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
-const JsFile = require('../file-structure/JsFile')
+const JsFileStructure = require('../file-structure/JsFileStructure')
 const JsComment = require('../file-structure/JsComment')
 const JsClass = require('../file-structure/JsClass')
 const JsMethod = require('../file-structure/JsMethod')
+const TextualContent = require('../file-structure/TextualContent')
 
 class JSFileStructureParser {
 
     static definition() {
-        this.instanceVariables = ['sections', 'textStatementsCount']
+        this.instanceVariables = ['fileObjects']
         this.assumes = [JsFileParser]
         this.implements = [FullParseTreeVisitorProtocol_Implementation]
     }
@@ -17,28 +18,29 @@ class JSFileStructureParser {
     /// Visiting
 
     visitTree(treeNode) {
-        this.sections = []
-        this.textStatementsCount = []
+        this.fileObjects = []
 
-        const jsFile = JsFile.new()
+        const jsFileStructure = JsFileStructure.new()
 
-        jsFile.setSourceFile( this.getSourceFile() )
+        jsFileStructure.setSourceFile( this.getSourceFile() )
 
-        jsFile.setStartPos({
-            line: 0,
-            column: 0,
+        jsFileStructure.setStartPos({
+            line: treeNode.loc.start.line,
+            column: treeNode.loc.start.column,
         })
         
-        jsFile.setEndPos({
+        jsFileStructure.setEndPos({
             line: treeNode.loc.end.line,
             column: treeNode.loc.end.column,
         })
 
-        this.sections.push( jsFile )
+        this.fileObjects.push( jsFileStructure )
 
         this.visit(treeNode)
 
-        return jsFile
+        this.appendEndingText()
+
+        return jsFileStructure
     }
 
     visitClassDeclaration(classDeclaration) {
@@ -64,11 +66,14 @@ class JSFileStructureParser {
 
         jsClass.setClassComment( classComment )
 
-        this.appendChildToCurrentSection({ child: jsClass })
+        this.appendChildTocurrentFileObject({ child: jsClass })
 
-        this.duringSection({ section: jsClass, do: () => {
-            this.visit( classDeclaration.body )
-        }})
+        this.duringFileObject({
+            fileObject: jsClass,
+            do: () => {
+                this.visit( classDeclaration.body )
+            },
+        })
     }
 
     visitMethodDefinition(methodDefinition) {
@@ -117,7 +122,7 @@ class JSFileStructureParser {
 
         method.setMethodParams( methodParams )
 
-        this.appendChildToCurrentSection({ child: method }) 
+        this.appendChildTocurrentFileObject({ child: method }) 
     }
 
     visitRestElement(restElement) {
@@ -128,18 +133,39 @@ class JSFileStructureParser {
 
     /// Helper methods
 
-    appendChildToCurrentSection({ child: childSection }) {
-        const previousSections = this.currentSection().getChildSections()
+    appendChildTocurrentFileObject({ child: childFileObject }) {
+        const currentFileObject = this.currentFileObject()
 
-        if( previousSections.length > 0 ) {
-            const lastSection = previousSections[ previousSections.length - 1 ]
-            const textualContentBetweenSections = lastSection.textualContentBetween( childSection )
-            if( textualContentBetweenSections.hasText() ) {
-                this.currentSection().addChildSection( textualContentBetweenSections )
+        const previousFileObjects = currentFileObject.getChildObjects()
+
+        if( previousFileObjects.length === 0 ) {
+            const textualContent = this.newTextualContent({
+                startLine: currentFileObject.getStartPos().getLine(),
+                startColumn: currentFileObject.getStartPos().getColumn(),
+                endLine: childFileObject.getStartPos().getLine(),
+                endColumn: childFileObject.getStartPos().getColumn()
+            })
+
+            if( textualContent.hasText() ) {
+                this.currentFileObject().addChildObject( textualContent )
+            }
+        } else {
+
+            const lastFileObject = previousFileObjects[ previousFileObjects.length - 1 ]
+
+            const textualContent = this.newTextualContent({
+                startLine: lastFileObject.getEndPos().getLine(),
+                startColumn: lastFileObject.getEndPos().getColumn(),
+                endLine: childFileObject.getStartPos().getLine(),
+                endColumn: childFileObject.getStartPos().getColumn()
+            })
+
+            if( textualContent.hasText() ) {
+                currentFileObject.addChildObject( textualContent )
             }
         }
 
-        this.currentSection().addChildSection( childSection )
+        this.currentFileObject().addChildObject( childFileObject )
     }
 
     getCommentOn({ parseNode: parseNode }) {
@@ -174,27 +200,73 @@ class JSFileStructureParser {
         return comment
     }
 
-    duringSection({ section: section, do: closure }) {
+    duringFileObject({ fileObject: fileObject, do: closure }) {
         try {
-            this.sections.push( section )
-            this.textStatementsCount.push( 0 )
+            this.fileObjects.push( fileObject )
 
             closure()
+
+            this.appendEndingText()
+
         } finally {
-            this.sections.pop()
+            this.fileObjects.pop()
         }
     }
 
-    currentSection() {
-        return this.sections[ this.sections.length - 1 ]
+    currentFileObject() {
+        return this.fileObjects[ this.fileObjects.length - 1 ]
     }
 
-    textStatementsCount() {
-        return this.textStatementsCount[ this.textStatementsCount.length - 1 ]
+    appendEndingText() {
+        const currentObject = this.currentFileObject()
+
+        const objects = currentObject.getChildObjects()
+
+        if( objects.length === 0 ) {
+            const textualContent = this.newTextualContent({
+                startLine: currentObject.getStartPos().getLine(),
+                startColumn: currentObject.getStartPos().getColumn(),
+                endLine: currentObject.getEndPos().getLine(),
+                endColumn: currentObject.getEndPos().getColumn()
+            })
+
+            if( textualContent.hasText() ) {
+                currentObject.addChildObject( textualContent )
+            }
+        } else {
+            const lastObject = objects[ objects.length - 1 ]
+
+            const textualContent = this.newTextualContent({
+                startLine: lastObject.getEndPos().getLine(),
+                startColumn: lastObject.getEndPos().getColumn(),
+                endLine: currentObject.getEndPos().getLine(),
+                endColumn: currentObject.getEndPos().getColumn()
+            })
+
+            if( textualContent.hasText() ) {
+                currentObject.addChildObject( textualContent )
+            }
+        }
     }
 
-    incrementTextStatementsCount() {
-        return this.textStatementsCount[ this.textStatementsCount.length - 1 ] += 1
+    newTextualContent({
+        startLine: startLine, startColumn: startColumn, endLine: endLine, endColumn: endColumn
+    }) {
+        const textualContent = TextualContent.new()
+
+        textualContent.setSourceFile( this.getSourceFile() )
+
+        textualContent.setStartPos({
+            line: startLine,
+            column: startColumn,
+        })
+
+        textualContent.setEndPos({
+            line: endLine,
+            column: endColumn,
+        })
+
+        return textualContent
     }
 }
 

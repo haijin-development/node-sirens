@@ -30,7 +30,7 @@ describe('When using an AppBrowserFlow', () => {
 
             'main.selectedFile',
 
-            'main.selectedFile.fileSections',
+            'main.selectedFile.fileObjects',
             'main.selectedFile.selectedSectionContents',
 
             'main.selectedFile.getSourceFile',

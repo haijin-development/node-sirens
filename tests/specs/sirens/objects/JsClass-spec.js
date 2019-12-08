@@ -5,15 +5,15 @@ const filename = 'tests/samples/class-definition.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
 
-const classDefinition = sourceFile.getFileSections()[0]
+const jsClass = sourceFile.getFileObjects()[1]
 
-describe('When using a ClassDefinition', () => {
+describe('When using a JsClass', () => {
     it('gets the class name', () => {
-        expect( classDefinition.getClassName() ) .to .equal('Sample')
+        expect( jsClass.getClassName() ) .to .equal('Sample')
     })
 
     it('gets the class comment', () => {
-        const comment = classDefinition.getClassComment()
+        const comment = jsClass.getClassComment()
 
         const expectedComment =
 `
@@ -24,8 +24,8 @@ describe('When using a ClassDefinition', () => {
         expect( comment.getBodyContents() ) .to .equal( expectedComment )
     })
 
-    it('gets the functions definitions', () => {
-        const methods = classDefinition.getMethods()
+    it('gets the methods', () => {
+        const methods = jsClass.getMethods()
 
         expect( methods.length ) .to .equal(1)
         expect( methods[0].getMethodName() ) .to .equal('getName')

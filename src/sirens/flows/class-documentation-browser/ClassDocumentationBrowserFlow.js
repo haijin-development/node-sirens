@@ -64,7 +64,7 @@ class ClassDocumentationBrowserFlow {
                         thisFlow.getClassDocumentationFrom({ jsClass: jsClass })
                     )
                     classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(
-                        jsClass.getChildSections()
+                        jsClass.getChildObjects()
                     )
                     classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue( [] )
                 })

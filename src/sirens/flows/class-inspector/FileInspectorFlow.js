@@ -18,31 +18,31 @@ class FileInspectorFlow {
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: sourceFile, oldValue: oldValue }) => {
-                const fileSections = this.getChildFlow({ id: 'fileSections' })
+                const fileObjects = this.getChildFlow({ id: 'fileObjects' })
 
                 if( ! sourceFile ) {
-                    fileSections.setRoots({ items: [] })
-                    fileSections.setSelection( null )
+                    fileObjects.setRoots({ items: [] })
+                    fileObjects.setSelection( null )
                     return
                 }
 
-                const jsFile = sourceFile.getFileStructure()
+                const jsFileStructure = sourceFile.getFileStructure()
 
-                const roots = [jsFile]
-                const selection = [jsFile]
+                const roots = [jsFileStructure]
+                const selection = [jsFileStructure]
 
-                fileSections.setRoots({ items: roots })
-                fileSections.setSelection( selection )
+                fileObjects.setRoots({ items: roots })
+                fileObjects.setSelection( selection )
             })
 
             this.treeChoice({
-                id: 'fileSections',
+                id: 'fileObjects',
                 roots: [],
-                getChildrenClosure: function (fileSection) { return fileSection.getChildSections() },
-                whenSelectionChanges: function({ newValue: pathToFileSection }) {
-                    const fileSection = pathToFileSection[ pathToFileSection.length - 1 ]
+                getChildrenClosure: function (fileObject) { return fileObject.getChildObjects() },
+                whenSelectionChanges: function({ newValue: pathToFileObject }) {
+                    const fileObject = pathToFileObject[ pathToFileObject.length - 1 ]
 
-                    const newValue = fileSection ? fileSection : null
+                    const newValue = fileObject ? fileObject : null
 
                     thisFlow.getChildFlow({ id: 'selectedSectionContents' }).setValue( newValue )
                 },

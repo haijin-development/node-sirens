@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const FileSectionEditionComponent = require('./FileSectionEditionComponent')
+const FileObjectInspectorComponent = require('./FileObjectInspectorComponent')
 const Resource = require('../../objects/Resource')
 
 class ClassEditorBody {
@@ -16,16 +16,16 @@ class ClassEditorBody {
 
     /// Displaying
 
-    getIconFor({ fileSection: fileSection }) {
-        if( fileSection.respondsTo('isJsFile') ) {
+    getIconFor({ fileObject: fileObject }) {
+        if( fileObject.respondsTo('isJsFileStructure') ) {
             return Resource.image.file
         }
 
-        if( fileSection.respondsTo('isJsClass') ) {
+        if( fileObject.respondsTo('isJsClass') ) {
             return Resource.image.class
         }
 
-        if( fileSection.respondsTo('isJsMethod') ) {
+        if( fileObject.respondsTo('isJsMethod') ) {
             return Resource.image.method
         }
 
@@ -41,7 +41,7 @@ class ClassEditorBody {
             return
         }
 
-        const treeFlow = flow.getFlowPoint({ id: 'fileSections' })
+        const treeFlow = flow.getFlowPoint({ id: 'fileObjects' })
 
         componentsRenderer.render( function(component) {
 
@@ -58,19 +58,19 @@ class ClassEditorBody {
 
                     this.column({
                         label: '',
-                        getImageClosure: function(fileSection) { return component.getIconFor({ fileSection: fileSection }) },
+                        getImageClosure: function(fileObject) { return component.getIconFor({ fileObject: fileObject }) },
                         imageWidth: 16,
                         imageHeight: 16,
                     })
 
                     this.column({
-                        getTextClosure: function(fileSection) { return fileSection.getSectionDescription() },
+                        getTextClosure: function(fileObject) { return fileObject.getFileObjectDescription() },
                     })
 
                 })
 
                 this.component(
-                    FileSectionEditionComponent.new({
+                    FileObjectInspectorComponent.new({
                         model: flow.getFlowPoint({ id: 'selectedSectionContents' }),
                         openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })

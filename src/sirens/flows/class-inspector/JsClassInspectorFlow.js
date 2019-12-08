@@ -17,8 +17,8 @@ class FileInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue: fileSection }) => {
-                if( ! fileSection ) {
+            this.whenObjectChanges( ({ newValue: fileObject }) => {
+                if( ! fileObject ) {
                     thisFlow.getChildFlow({ id: 'classMethods' }).setChoices( [] )
                     thisFlow.getChildFlow({ id: 'selectedMethod' }).setValue( '' )
                     return
@@ -28,7 +28,7 @@ class FileInspectorFlow {
                 let selectedMethodContents
 
                 if( thisFlow.hasAClassSelected() ) {
-                    methods = fileSection.getMethods()
+                    methods = fileObject.getMethods()
                 }
 
                 if( ! methods ) { methods = [] }
@@ -86,9 +86,9 @@ class FileInspectorFlow {
     getSelectedClassDefinition() {
         if( ! this.hasAClassSelected() ) { return null }
 
-        const fileSection = this.getValue()
+        const fileObject = this.getValue()
 
-        return fileSection
+        return fileObject
     }
 
     getSelectedMethodName() {

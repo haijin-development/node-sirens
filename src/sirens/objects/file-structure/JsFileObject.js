@@ -1,23 +1,23 @@
 const Classification = require('../../../O').Classification
-const FileSection = require('./FileSection')
+const FileObject = require('./FileObject')
 const SourceCodeText = require('../SourceCodeText')
 
-class JsFileSection {
+class JsFileObject {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FileSection]
+        this.assumes = [FileObject]
     }
 
     getClasses() {
-        return this.getChildSections().filter( (section) => {
+        return this.getChildObjects().filter( (section) => {
             return section.respondsTo( 'isJsClass' )
         })
     }
 
     getMethods() {
-        return this.getChildSections().filter( (section) => {
+        return this.getChildObjects().filter( (section) => {
             return section.respondsTo( 'isJsMethod' )
         })
     }
@@ -31,4 +31,4 @@ class JsFileSection {
     }
 }
 
-module.exports = Classification.define(JsFileSection)
+module.exports = Classification.define(JsFileObject)

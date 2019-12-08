@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const JsFileSection = require('./JsFileSection')
+const JsFileObject = require('./JsFileObject')
 const DocumentationReader = require('../documentation/DocumentationReader')
 
 class JsMethod {
@@ -7,7 +7,7 @@ class JsMethod {
 
     static definition() {
         this.instanceVariables = ['methodComment', 'methodName', 'methodParams']
-        this.assumes = [JsFileSection]
+        this.assumes = [JsFileObject]
     }
 
     isJsMethod() {
@@ -40,8 +40,8 @@ class JsMethod {
 
     // Source code
 
-    getSectionDescription() {
-        return `function ${this.methodName}(...)`
+    getFileObjectDescription() {
+        return `${this.methodName}(...)`
     }
 
     getDocumentation() {

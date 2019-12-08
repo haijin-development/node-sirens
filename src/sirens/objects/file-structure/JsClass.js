@@ -1,12 +1,12 @@
 const Classification = require('../../../O').Classification
-const JsFileSection = require('./JsFileSection')
+const JsFileObject = require('./JsFileObject')
 
 class JsClass {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['classComment', 'className']
-        this.assumes = [JsFileSection]
+        this.assumes = [JsFileObject]
     }
 
     // Asking
@@ -35,8 +35,8 @@ class JsClass {
 
     // Displaying
 
-    getSectionDescription() {
-        return `Class ${this.className}`
+    getFileObjectDescription() {
+        return `${this.className} class`
     }
 }
 

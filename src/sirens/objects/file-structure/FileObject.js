@@ -3,15 +3,15 @@ const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
 
-class FileSection {
+class FileObject {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['sourceFile', 'startPos', 'endPos', 'childSections']
+        this.instanceVariables = ['sourceFile', 'startPos', 'endPos', 'childObjects']
     }
 
     afterInstantiation() {
-        this.childSections = []
+        this.childObjects = []
     }
 
     setSourceFile(sourceFile) {
@@ -38,12 +38,12 @@ class FileSection {
         return this.endPos
     }
 
-    addChildSection(fileSection) {
-        this.childSections.push(fileSection)
+    addChildObject(fileObject) {
+        this.childObjects.push(fileObject)
     }
 
-    getChildSections() {
-        return this.childSections.slice()
+    getChildObjects() {
+        return this.childObjects.slice()
     }
 
     getContents() {
@@ -59,53 +59,6 @@ class FileSection {
 
     hasText() {
         return this.getContents().trim() !== ''
-    }
-
-    textualContentBetween(anotherFileSection) {
-        const TextualContent = require('./TextualContent')
-
-        const textualContent = TextualContent.new()
-
-        textualContent.setSourceFile( this.getSourceFile() )
-
-        if( this.beginsBefore( anotherFileSection ) ) {
-            textualContent.setStartPos({
-                line: this.getEndPos().getLine(),
-                column: this.getEndPos().getColumn(),
-            })
-
-            textualContent.setEndPos({
-                line: anotherFileSection.getStartPos().getLine(),
-                column: anotherFileSection.getStartPos().getColumn(),
-            })
-        } else {
-            textualContent.setStartPos({
-                line: anotherFileSection.getEndPos().getLine() ,
-                column: anotherFileSection.getEndPos().getColumn(),
-            })
-
-            textualContent.setEndPos({
-                line: this.getStartPos().getLine(),
-                column: this.getStartPos().getColumn(),
-            })
-        }
-
-        return textualContent
-    }
-
-    beginsBefore(anotherFileSection) {
-        const startPos = this.getStartPos()
-        const anotherStartPos = anotherFileSection.getStartPos()
-
-        return
-            startPos.getLine() < anotherStartPos.getLine()
-            ||
-            (
-                startPos.getLine() === anotherStartPos.getLine()
-                &&
-                startPos.getColumn() < anotherStartPos.getColumn()
-            )
-
     }
 
     writeContents({ contents: contents }) {
@@ -155,4 +108,4 @@ class FileSection {
     }
 }
 
-module.exports = Classification.define(FileSection)
+module.exports = Classification.define(FileObject)

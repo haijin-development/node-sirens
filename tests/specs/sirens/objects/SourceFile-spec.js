@@ -44,13 +44,15 @@ describe('When using a SourceFile', () => {
     })
 
     it('gets the top level sections defined in the module', () => {
-        const sections = sourceFile.getFileSections()
+        const sections = sourceFile.getFileObjects()
 
-        expect(sections.length) .to .equal(3)
+        expect(sections.length) .to .equal(5)
 
-        expect(sections[0].getSectionDescription()) .to .equal('Class Sample')
-        expect(sections[1].getSectionDescription()) .to .equal('function modFunction(...)')
-        expect(sections[2].getSectionDescription()) .to .equal('Class AnotherSample')
+        expect(sections[0].getFileObjectDescription()) .to .equal('Plain text')
+        expect(sections[1].getFileObjectDescription()) .to .equal('Sample class')
+        expect(sections[2].getFileObjectDescription()) .to .equal('modFunction(...)')
+        expect(sections[3].getFileObjectDescription()) .to .equal('AnotherSample class')
+        expect(sections[4].getFileObjectDescription()) .to .equal('Plain text')
     })
 
     it('answers if the file exists', () => {

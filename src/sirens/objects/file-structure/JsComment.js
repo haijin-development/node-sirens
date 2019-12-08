@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const FileSection = require('./FileSection')
+const FileObject = require('./FileObject')
 const SourceCodeText = require('../SourceCodeText')
 
 class JsComment {
@@ -7,7 +7,7 @@ class JsComment {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [FileSection]
+        this.assumes = [FileObject]
     }
 
     getBodyContents() {
@@ -18,7 +18,7 @@ class JsComment {
         return sourceCodeText.getFormattedText()        
     }
 
-    getSectionDescription() {
+    getFileObjectDescription() {
         return `Comment`
     }
 

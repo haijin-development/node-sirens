@@ -1,19 +1,19 @@
 const Classification = require('../../../O').Classification
-const JsFileSection = require('./JsFileSection')
+const JsFileObject = require('./JsFileObject')
 
-class JsFile {
+class JsFileStructure {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [JsFileSection]
+        this.assumes = [JsFileObject]
     }
 
-    isJsFile() {
+    isJsFileStructure() {
         return true
     }
 
-    getSectionDescription() {
+    getFileObjectDescription() {
         return `File ${ this.getFileName() }`
     }
 
@@ -22,4 +22,4 @@ class JsFile {
     }
 }
 
-module.exports = Classification.define(JsFile)
+module.exports = Classification.define(JsFileStructure)

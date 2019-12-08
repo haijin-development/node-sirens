@@ -57,7 +57,7 @@ class SourceFile {
     /// Asking
 
     isJavascriptFile() {
-        return this.fileStructure && this.fileStructure.respondsTo( 'isJsFile' )
+        return this.fileStructure && this.fileStructure.respondsTo( 'isJsFileStructure' )
     }
 
     /// Querying
@@ -70,8 +70,8 @@ class SourceFile {
         return this.fileStructure.getClasses()
     }
 
-    getFileSections() {
-        return this.fileStructure.getChildSections()
+    getFileObjects() {
+        return this.fileStructure.getChildObjects()
     }
 
     getFunctionDefinitions() {

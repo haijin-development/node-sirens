@@ -41,13 +41,6 @@ class JsClassComponent {
                         getTextClosure: function(jsMethod) { return jsMethod.getFunctionSignatureString() },
                     })
 
-                    this.popupMenu( function() {
-                        this.item({
-                            label: 'Browse method documentation',
-                            action: component.getProps().openDocumentationBrowser
-                        })
-                    })
-
                 })
 
                 this.text({

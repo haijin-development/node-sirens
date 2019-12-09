@@ -90,6 +90,7 @@ class FileEditorFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
+                    console.log(123132132)
                     const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
                     const jsClass = selectedSection.getValue()
                     const methodName = selectedSection.getSelectedMethodName()

@@ -31,7 +31,7 @@ class SourceFileEditionComponent {
                 this.component(
                     ClassEditorBody.new({
                         model: flow,
-                        openDocumentationBrowser: component.getProps().openClassDocumentation,
+                        openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })
                 )
 

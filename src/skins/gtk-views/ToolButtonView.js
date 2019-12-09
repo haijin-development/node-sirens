@@ -63,6 +63,8 @@ class ToolButtonView {
     /// Properties
 
     setEnabled(boolean) {
+        if( boolean === null || boolean === undefined ) { boolean = false }
+
         this.toolButton.setSensitive( boolean )
     }
 

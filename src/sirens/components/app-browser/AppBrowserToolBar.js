@@ -61,8 +61,8 @@ class AppBrowserToolBar {
                         height: 24,
                     },
                     tooltip: 'Opens a class editor.',
-                    action: component.getProps().openClassEditor,
-                    enabled: model.getCommand({ id: 'openClassEditor' }),
+                    action: component.getProps().openFileEditor,
+                    enabled: model.getCommand({ id: 'openFileEditor' }),
                 })
 
                 this.separator()

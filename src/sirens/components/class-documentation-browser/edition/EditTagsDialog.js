@@ -42,7 +42,7 @@ class EditTagsDialog {
                         EditDialogHeader.new({
                             mainIcon: Resource.image.tag,
                             title:  `${className}.${method.getFunctionSignatureString()}`,
-                            subtitle: `You are editing the tags of the method ${className}.${method.getName()}.`,
+                            subtitle: `You are editing the tags of the method ${className}.${method.getMethodName()}.`,
                         })
                     )
 

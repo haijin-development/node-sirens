@@ -4,51 +4,62 @@ class CommandsController {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['mainFlow']
+        this.instanceVariables = ['mainFlow', 'isUpdatingFlowPoints']
     }
 
     /// Initializing
 
     initialize({ mainFlow: flow }) {
+        if( flow === undefined ) { throw new Error(`Invalid main flow.`) }
+
         this.mainFlow = flow
+        this.isUpdatingFlowPoints = false
     }
 
-    /// Events
+    /// Entry points to flows accessors
 
     doExecuteEventHandler({
-        flowPointId: flowPointId, event: eventName, params: params, eventHandler: eventHandler,
+        flowId: flowId, event: eventName, params: params, eventHandler: eventHandler,
     }) {
+        if( flowId === undefined ) { throw new Error(`Invalid flow id.`) }
+        if( eventName === undefined ) { throw new Error(`Invalid event.`) }
+        if( eventHandler === undefined ) { throw new Error(`Invalid eventHandler.`) }
+
         const result = eventHandler( ...params )
 
-        this.updateCommandsEnabledState()
+        this.runUpdateFlowPointsIteration()
 
         return result
-    }
-
-    /// Commands
-
-    executeCommand({ id: commandId, with: param, withAll: params }) {
-        return this.mainFlow.executeCommand({ id: commandId, with: param, withAll: params })
     }
 
     doExecuteCommand({ command: command, params: params }) {
         const result = command.executeActionHandlerClosure({ params: params })
 
-        this.updateCommandsEnabledState()
+        this.runUpdateFlowPointsIteration()
 
         return result
     }
 
-    updateCommandsEnabledState() {
-        this.allCommandsDo( (command) => {
-            command.updateEnabledState()
-        })
+    // Events
+
+    runUpdateFlowPointsIteration() {
+        if( this.isUpdatingFlowPoints === true ) { return }
+
+        this.isUpdatingFlowPoints = true
+
+        try {
+            this.runProcessPendingEvents()
+        } finally {
+            this.isUpdatingFlowPoints = false            
+        }
     }
 
-    allCommandsDo(closure) {
-        if( ! this.mainFlow ) { return }
+    runProcessPendingEvents() {
+        this.mainFlow.processPendingEvents()
 
-        this.mainFlow.allCommandsDo(closure)
+        this.mainFlow.allChildFlowsDo( (childFlow) => {
+            childFlow.processPendingEvents()
+        })
     }
 }
 

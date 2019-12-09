@@ -46,7 +46,7 @@ class EditReturnsDialog {
                         EditDialogHeader.new({
                             mainIcon: Resource.image.returns,
                             title:  `${className}.${method.getFunctionSignatureString()}`,
-                            subtitle: `You are editing the return value of the method ${className}.${method.getName()}.`,
+                            subtitle: `You are editing the return value of the method ${className}.${method.getMethodName()}.`,
                         })
                     )
 

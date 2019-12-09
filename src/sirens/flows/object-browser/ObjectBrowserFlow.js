@@ -26,7 +26,7 @@ class ObjectBrowserFlow {
                 id: 'objectProperties',
                 definedWith: ObjectPropertiesFlow.new({
                     whenSelectionChanges: function({ selection: objectProperty }) {
-                        const value = objectProperty.getValue()
+                        const value = objectProperty ? objectProperty.getValue() : null
                         thisFlow.getChildFlow({ id: 'playground' }).setObject( value )
                     }
                 }),

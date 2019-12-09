@@ -7,7 +7,7 @@ function globalFunction_1(param) {
 
 /*
    Class(`
-      A regular js class to use in the classEditor example.
+      A regular js class to use in the FileEditor example.
 
       This class is a regular javascript class to show a use case of of the ClassDocumentationBrowser.
    `)

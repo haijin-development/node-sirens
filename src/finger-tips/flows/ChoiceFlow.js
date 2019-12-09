@@ -96,6 +96,8 @@ class ChoiceFlow {
     updateChoices(choices) {
         const oldChoices = this.choices
 
+        if( oldChoices == choices ) { return }
+
         this.choices = choices
 
         if( this.hasWhenChoicesChangesClosure() ) {
@@ -105,11 +107,16 @@ class ChoiceFlow {
             })
         }
 
-        this.emit('choices-changed', { newList: choices, oldList: oldChoices })
+        this.addPendingEvent({
+            event: 'choices-changed',
+            params:  { newList: choices, oldList: oldChoices },
+        })        
     }
 
     updateSelection(item) {
         const oldSelection = this.selection
+
+        if( oldSelection == item ) { return }
 
         this.selection = item
 
@@ -122,7 +129,10 @@ class ChoiceFlow {
 
         }
 
-        this.emit('selection-changed', { newValue: item, oldValue: oldSelection })
+        this.addPendingEvent({
+            event: 'selection-changed',
+            params:  { newValue: item, oldValue: oldSelection },
+        })        
     }
 
     // Events

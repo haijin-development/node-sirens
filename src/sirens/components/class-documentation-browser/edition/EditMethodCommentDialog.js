@@ -21,7 +21,7 @@ class EditMethodCommentDialog {
 
         if( this.getProps().unformatted === true ) {
 
-            return method.getComment().getSourceCode()
+            return method.getMethodComment().getContents()
 
         } else {
 
@@ -42,7 +42,7 @@ class EditMethodCommentDialog {
 
         const className = this.getProps().className
 
-        const methodName = method.getName()
+        const methodName = method.getMethodName()
 
         const methodDeclaration = method.getFunctionSignatureString()
 

@@ -46,6 +46,8 @@ class MenuItemView {
     /// Properties
 
     setEnabled(boolean) {
+        if( boolean === null || boolean === undefined ) { boolean = false }
+
         this.menuItem.setSensitive( boolean )
     }
 

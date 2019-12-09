@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.14.0
+
+### Sirens
+
+- Changed file sections selector from a list to a tree.
+- Fixed error in AppBrowserFlow.
+- Cleaned up ClassDefinition sections and the references to the source file.
+- Refactored FileFooterComponent and ClassHeaderComponent into PlainTextComponent.
+- Removed unused attributes from components.
+- Implemented first flow tests.
+- Cleaned up SourceFile flows.
+- Implemented file TextualContent.
+- Implemented ObjectFiles and pluggable inspectors on them.
+- Bug fixing.
+
+### FingerTips
+
+- Added documentation.
+- Fixed errors related with Commands enabled/disabled state.
+- Splitted the CommandController inner updates of the flow from the FlowPoints updates into two different and clear iterations.
+
+### Skins
+
+- Cleanup tests.
+
+### O language
+
+- Improved the method not found error message.
+
 ## v0.13.0
 
 ### Sirens

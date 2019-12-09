@@ -26,7 +26,7 @@ class ClassUnformattedComment {
 
         const isInEditionMode = flow.isInEditionMode()
 
-        let unformattedComment = classDefinition.getComment().getSourceCode()
+        let unformattedComment = classDefinition.getClassComment().getContents()
 
         if( unformattedComment.trim() === '' ) {
             unformattedComment = 'This class has no documentation yet.'

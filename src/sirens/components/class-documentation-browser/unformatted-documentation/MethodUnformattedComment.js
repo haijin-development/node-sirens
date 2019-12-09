@@ -34,7 +34,7 @@ class MethodUnformattedComment {
 
         const isInEditionMode = flow.isInEditionMode()
 
-        let methodUnformattedComment = method.getComment().getSourceCode()
+        let methodUnformattedComment = method.getMethodComment().getContents()
 
         if( methodUnformattedComment.trim() === '' ) {
             methodUnformattedComment = 'This method has no documentation yet.'

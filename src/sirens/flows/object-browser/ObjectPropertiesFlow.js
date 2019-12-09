@@ -102,7 +102,7 @@ class ObjectPropertiesFlow {
     getSelectedPropertyValue() {
         const objectProperty = this.getChildFlow({ id: 'properties' }).getSelectionValue()
 
-        return objectProperty.getValue()
+        return objectProperty ? objectProperty.getValue() : null
     }
 }
 

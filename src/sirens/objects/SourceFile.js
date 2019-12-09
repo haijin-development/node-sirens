@@ -1,13 +1,11 @@
 const Classification = require('../../O').Classification
 const path = require('path')
 const fs = require('fs')
-const esprima = require('esprima')
 const splitLines = require('split-lines')
-const ClassDefinitionsCollector = require('./parsers/ClassDefinitionsCollector')
-const FunctionDefinitionsCollector = require('./parsers/FunctionDefinitionsCollector')
-const ParseTreeFlattener = require('./parsers/ParseTreeFlattener')
-const AbsentFunction = require('./source-code/AbsentFunction')
 const StringStream = require('../../O').StringStream
+const SourceFileStructureParser = require('./SourceFileStructureParser')
+const UknownFileStructure = require('./file-structure/UknownFileStructure')
+const FolderObject = require('./file-structure/FolderObject')
 
 /*
  * A source file to query javascript definitions.
@@ -16,7 +14,7 @@ class SourceFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['filepath', 'parseTree']
+        this.instanceVariables = ['filepath', 'fileStructure']
     }
 
     /// Initializing
@@ -27,22 +25,33 @@ class SourceFile {
         })
 
         this.filepath = path.resolve(filepath)
-        this.parseTree = undefined
 
         this.doParseContents()
     }
 
     doParseContents() {
-        this.getParsedContents()
-    }
+        if( this.isFolder() ) {
+            this.fileStructure = FolderObject.new()
+            return
+        }
 
-    reload() {
-        this.parseTree = undefined
+        try {
+            const fileStructureParser = SourceFileStructureParser.new()
+            this.fileStructure = fileStructureParser.parseStructureIn({ sourceFile: this })
+        } catch(error) {
+            this.fileStructure = null
+        }
 
-        this.doParseContents()
+        if( this.fileStructure === null ) {
+            this.fileStructure = UknownFileStructure.new()
+        }
     }
 
     /// Accessing
+
+    getFileStructure() {
+        return this.fileStructure 
+    }
 
     getFilePath() {
         return this.filepath
@@ -60,188 +69,30 @@ class SourceFile {
         }
     }
 
-    getParsedContents() {
-        if( this.parseTree === undefined ) {
-            this.parseTree = this.parseFileContents()
-        
-            this.integrateCommentsToExpressions()
-        }
-
-        return this.parseTree
-    }
-
-    integrateCommentsToExpressions() {
-        if( this.parseTree === null ) { return }
-
-        const expressionsFlattener = ParseTreeFlattener.new()
-
-        const expressions = expressionsFlattener.flattenExpressionsIn({
-            treeNode: this.parseTree
-        })
-
-        const expressionsWithComments = expressions.concat( this.parseTree.comments )
-
-        expressionsWithComments.sort( (exp1, exp2) => {
-            if( exp1.loc.start.line < exp2.loc.start.line ) { return -1 }
-
-            if( exp1.loc.start.line > exp2.loc.start.line ) { return 1 }
-
-            if( exp1.loc.start.line === exp2.loc.start.line ) {
-                if( exp1.loc.start.column === exp2.loc.start.column ) {
-                    return 0
-                }
-                
-                if( exp1.loc.start.column < exp2.loc.start.column ) { return -1 }
-                if( exp1.loc.start.column > exp2.loc.start.column ) { return 1 }
-            }
-        });
-
-        for(let i = 1; i < expressionsWithComments.length; i++ ) {
-
-            const currentExpression = expressionsWithComments[ i ]
-
-            if(
-                currentExpression.type === 'ClassDeclaration'
-                ||
-                currentExpression.type === 'MethodDefinition'
-              )
-              {
-                const previousExpression = expressionsWithComments[ i - 1 ]
-                const previousPreviousExpression = expressionsWithComments[ i - 2 ]
-
-                if( previousExpression.type === 'Block' ) {
-                    currentExpression.comment = previousExpression
-                }
-
-                // Sometimes esprima generates an additional Indentifier node before the Declaration:
-                //      Identifier {
-                //          type: 'Identifier',
-                //          name: 'constructor',
-                if(
-                    previousPreviousExpression && previousPreviousExpression.type === 'Block'
-                    &&
-                    previousExpression.type === 'Identifier'
-                  ) {
-                    currentExpression.comment = previousPreviousExpression
-                }
-            }
-        }
-    }
-
-    /*
-     * Returns all the class definitions in the file.
-     */
-    getClassDefinitions() {
-        const collector = ClassDefinitionsCollector.new()
-
-        return collector.collectClassDefinitionsIn({
-            treeNode: this.getParsedContents(),
-            sourceFile: this,
-        })
-    }
-
-
-    /*
-     * Returns all the functions defined in the file.
-     * The functions may be defined in any scope, not just the top most module scope.
-     */
-    getFunctionDefinitions() {
-        const collector = FunctionDefinitionsCollector.new()
-
-        return collector.collectFunctionDefinitionsIn({
-            treeNode: this.getParsedContents(),
-            sourceFile: this,
-        })
-    }
-
-    getAllTopMostStatements() {
-        const parsedContents = this.getParsedContents()
-
-        if( parsedContents === null ) {
-            return []
-        }
-
-        return parsedContents.body
-    }
-
-    getAllStatementsBefore({parseNode: parseNode}) {
-        const topMostStatements = this.getAllTopMostStatements()
-
-        const index = topMostStatements.indexOf( parseNode )
-
-        return topMostStatements.slice(0, index)
-    }
-
-    getAllStatementsAfter({parseNode: parseNode}) {
-        const topMostStatements = this.getAllTopMostStatements()
-
-        const index = topMostStatements.indexOf( parseNode )
-
-        return topMostStatements.slice(index + 1)
+    getFileType() {
+        return path.extname( this.filepath )
     }
 
     /// Querying
+
+    isFolder() {
+        return fs.existsSync( this.filepath ) && fs.statSync( this.filepath ).isDirectory()
+    }
 
     existsFile() {
         return fs.existsSync( this.filepath )
     }
 
-    isJavascriptFile() {
-        return this.parseTree !== null
+    getClassDefinitions() {
+        return this.fileStructure.getClasses()
     }
 
-    newAbsentFunctionDefinitionAt(line, column) {
-        return AbsentFunction.new({
-                sourceFile: this,
-                line: line,
-                column: column
-            })
+    getFileObjects() {
+        return this.fileStructure.getChildObjects()
     }
 
-    getFunctionAt({ line: line, column: column }) {
-        if( !this.existsFile() ) {
-            return this.newAbsentFunctionDefinitionAt(line, column)
-        }
-
-        const allFunctions = this.getFunctionDefinitions()
-
-        const functionDefinition = allFunctions.find( (functionDefinition, i) => {
-            const startLine = functionDefinition.getStartingLine()
-            const startColumn = functionDefinition.getStartingColumn()
-
-            const endLine = functionDefinition.getEndingLine()
-            const endColumn = functionDefinition.getEndingColumn()
-
-            if( line < startLine || line > endLine ) {
-                return false
-            }
-
-            if( line == startLine && line == endLine ) {
-                if( column < startColumn || column >= endColumn ) {
-                    return false
-                }
-            }
-
-            if( line == startLine ) {
-                if( column < startColumn ) {
-                    return false
-                }                
-            }
-
-            if( line == endLine ) {
-                if( column >= endColumn ) {
-                    return false
-                }
-            }
-
-            return true
-        })
-
-        if( functionDefinition !== undefined ) {
-            return functionDefinition
-        }
-
-        return this.newAbsentFunctionDefinitionAt(line, column)
+    getFunctionDefinitions() {
+        return this.fileStructure.getMethods()
     }
 
     getOriginalSourceCode({
@@ -285,31 +136,11 @@ class SourceFile {
         return sourceCode.getString()
     }
 
-    /// Parsing
+    /// Actions
 
-    parseFileContents() {
-        const fileContents = this.getFileContents()
-
-        return this.parseString(fileContents)
+    reload() {
+        this.doParseContents()
     }
-
-    parseString(string) {
-        const parsingOptions = {
-            loc: true,
-            comment: true,
-            tokens: false,
-            tolerant: true,
-            jsx: true,
-        }
-
-        try {
-            return esprima.parseModule(string, parsingOptions)
-        } catch(error) {
-            return null
-        }
-    }
-
-    /// Writing
 
     saveFileContents(newFileContents) {
         fs.writeFileSync( this.filepath, newFileContents )

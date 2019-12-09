@@ -8,9 +8,17 @@ class ApplicationCommandsController {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['mainFlow']
         this.assumes = [CommandsController]
         this.implements = [CommandsControllerProtocol]
+    }
+
+    initialize({ mainFlow: mainFlow }) {
+        this.previousClassificationDo( () => {
+            this.initialize({ mainFlow: mainFlow })
+        })
+
+        this.mainFlow = mainFlow
     }
 
     doExecuteCommand({ command: command, params: params }) {
@@ -27,7 +35,7 @@ class ApplicationCommandsController {
         const filename = FileChooser.openFile({
             title: 'Choose a file',
             window: parentWindow,
-            initialFolder: this.executeCommand({ id: 'getLastOpenedFolder' }),
+            initialFolder: this.mainFlow.executeCommand({ id: 'getLastOpenedFolder' }),
         })
 
         return filename

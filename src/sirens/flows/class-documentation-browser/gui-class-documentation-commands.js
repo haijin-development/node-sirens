@@ -151,7 +151,7 @@ function guiClassDocumentationCommands(thisFlow) {
 
                 const className = classDefinition.getClassName()
 
-                const classComment = classDefinition.getComment().getSourceCode()
+                const classComment = classDefinition.getClassComment().getContents()
 
                 const dialog = EditClassCommentDialog.new({
                     className: className,

@@ -11,3 +11,6 @@ Classification.setExtendedBehaviours([
     Debuggable,
     ParamsChecker,
 ])
+
+require('./specs/o-language/o-language-expectations.js')
+require('./specs/finger-tips/finger-tips-expectations.js')

@@ -43,78 +43,21 @@ describe('When using a SourceFile', () => {
         expect(sourceFile.getFileContents()) .to .equal(fileContents)
     })
 
-    it('gets the classes defined in the module', () => {
-        const classes = sourceFile.getClassDefinitions()
+    it('gets the top level sections defined in the module', () => {
+        const sections = sourceFile.getFileObjects()
 
-        expect(classes.length) .to .equal(2)
+        expect(sections.length) .to .equal(5)
 
-        expect(classes[0].getClassName()) .to .equal('Sample')
-        expect(classes[1].getClassName()) .to .equal('AnotherSample')
-    })
-
-    it('gets all the functions defined in the module', () => {
-        const functions = sourceFile.getFunctionDefinitions()
-
-        expect(functions.length) .to .equal(3)
-
-        expect(functions[0].getName()) .to .equal('getName')
-        expect(functions[1].getName()) .to .equal('modFunction')
-        expect(functions[2].getName()) .to .equal('constructor')
+        expect(sections[0].getFileObjectDescription()) .to .equal('Plain text')
+        expect(sections[1].getFileObjectDescription()) .to .equal('Sample class')
+        expect(sections[2].getFileObjectDescription()) .to .equal('modFunction(...)')
+        expect(sections[3].getFileObjectDescription()) .to .equal('AnotherSample class')
+        expect(sections[4].getFileObjectDescription()) .to .equal('Plain text')
     })
 
     it('answers if the file exists', () => {
         expect(sourceFile.existsFile()) .to .be .true
         expect(absentSourceFile.existsFile()) .to .be .false
-    })
-
-    describe('when searching for a function definition at a file position', () => {
-        it('finds the function definition starting at a line and column number', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 4})
-
-            expect(functionDefinition.getName()) .to .equal('constructor')
-        })
-
-        it('finds the function definition starting at a line and beyond the column number', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 5})
-
-            expect(functionDefinition.getName()) .to .equal('constructor')
-        })
-
-        it('finds the function definition starting before the line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 15, column: 3})
-
-            expect(functionDefinition.getName()) .to .equal('constructor')
-        })
-
-        it('finds the function definition ending in the line and before the ending column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 4})
-
-            expect(functionDefinition.getName()) .to .equal('constructor')
-        })
-
-        it('does not find the function definition in a line before the starting line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 13, column: 1})
-
-            expect(functionDefinition.getName()) .to .equal('Function not found')
-        })
-
-        it('does not find the function definition in the staring line but before the starting column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 14, column: 3})
-
-            expect(functionDefinition.getName()) .to .equal('Function not found')
-        })
-
-        it('does not find the function definition ending in the line but after the ending column', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 16, column: 5})
-
-            expect(functionDefinition.getName()) .to .equal('Function not found')
-        })
-
-        it('does not find the function definition ending after the line', () => {
-            const functionDefinition = sourceFile.getFunctionAt({line: 17, column: 1})
-
-            expect(functionDefinition.getName()) .to .equal('Function not found')
-        })
     })
 })
 
@@ -123,47 +66,40 @@ describe('When using a Function', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getStartingLine()) .to .equal(4)
-        expect(functions[1].getStartingLine()) .to .equal(9)
-        expect(functions[2].getStartingLine()) .to .equal(14)
+        expect(functions[0].getStartPos().getLine()) .to .equal(9)
     })
 
     it('gets the starting column number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getStartingColumn()) .to .equal(4)
-        expect(functions[1].getStartingColumn()) .to .equal(0)
-        expect(functions[2].getStartingColumn()) .to .equal(4)
+        expect(functions[0].getStartPos().getColumn()) .to .equal(0)
     })
 
     it('gets the ending line number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getEndingLine()) .to .equal(6)
-        expect(functions[1].getEndingLine()) .to .equal(11)
-        expect(functions[2].getEndingLine()) .to .equal(16)
+        expect(functions[0].getEndPos().getLine()) .to .equal(11)
     })
 
     it('gets the ending column number of the function definition', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        expect(functions[0].getEndingColumn()) .to .equal(5)
-        expect(functions[1].getEndingColumn()) .to .equal(1)
-        expect(functions[2].getEndingColumn()) .to .equal(5)
+        expect(functions[0].getEndPos().getColumn()) .to .equal(1)
     })
 
     it('gets the original source code', () => {
 
         const functions = sourceFile.getFunctionDefinitions()
 
-        let sourceCode = functions[0].getFunctionSourceCode({cr: "\n"})
+        let sourceCode = functions[0].getContents()
 
-        const exepctedSourceCode = `getName() {
-        return this.name
-    }`
+        const exepctedSourceCode =
+`function modFunction() {
+    return 'A standalone function'
+}`
 
         expect(sourceCode) .to .equal(exepctedSourceCode)
     })

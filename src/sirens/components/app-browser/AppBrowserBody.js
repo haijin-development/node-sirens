@@ -30,7 +30,7 @@ class AppBrowserBody {
 
                     this.component(
                         SourceFileEditionComponent.new({
-                            model: flow.getFlowPoint({ id: 'sourceFileEdition' }),
+                            model: flow.getFlowPoint({ id: 'selectedFile' }),
                             openClassDocumentation: component.getProps().openClassDocumentation,
                         })
                     )
@@ -47,7 +47,7 @@ class AppBrowserBody {
                     })
 
                     this.handlers({
-                        onAction: component.getProps().openClassEditor,
+                        onAction: component.getProps().openFileEditor,
                     })
 
                     this.column({
@@ -65,21 +65,14 @@ class AppBrowserBody {
                     this.popupMenu( function() {
                         const selectedFilePath = flow.getSelectedFilePath()
 
-                        const classesDefinitions = flow.getClassesDefinitionsInSelectedFile()
+                        const enableOpenDocumentation = flow.hasAClassSelected()
 
                         this.item({
                             label: 'Browse it on a new window',
                             enabled: selectedFilePath !== null,
-                            action: component.getProps().openClassEditor,
+                            action: component.getProps().openFileEditor,
                         })
 
-                        this.separator()
-
-                        this.item({
-                            label: 'Browse its class documentation',
-                            enabled: classesDefinitions.length === 1,
-                            action: component.getProps().openClassDocumentation,
-                        })
                     })
                 })
 

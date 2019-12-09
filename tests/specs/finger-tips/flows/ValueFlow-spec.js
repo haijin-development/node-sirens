@@ -146,9 +146,9 @@ describe('When using a ValueFlow', () => {
         const CustomCommandsController = require('./CustomCommandsController')
 
         it('propagates the commandsController set before adding a child flow', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = ValueFlow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -162,9 +162,9 @@ describe('When using a ValueFlow', () => {
         })
 
         it('propagates the commandsController set before after a child flow', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = ValueFlow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -178,9 +178,9 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives an root flow event notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = ValueFlow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -192,7 +192,7 @@ describe('When using a ValueFlow', () => {
 
             expect( commandsController.getEvents() ).to .eql([
                 {
-                    flowPointId: 'main',
+                    flowId: 'main',
                     event: 'setValue',
                     params: [1],
                 }
@@ -201,9 +201,9 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives a child root event notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = ValueFlow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -217,7 +217,7 @@ describe('When using a ValueFlow', () => {
 
             expect( commandsController.getEvents() ).to .eql([
                 {
-                    flowPointId: 'flow-1',
+                    flowId: 'main.flow-1',
                     event: 'setValue',
                     params: [1],
                 }
@@ -226,9 +226,9 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives a command execution notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = ValueFlow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 

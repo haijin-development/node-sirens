@@ -57,7 +57,7 @@ function guiMethodDocumentationCommands(thisFlow) {
                     },
                     acceptButtonLabel: `Add implementation note`,
                     title: `${className}.${method.getFunctionSignatureString()}`,
-                    subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
+                    subtitle: `You are editing an implementation note of the method ${className}.${method.getMethodName()}.`,
                 })
 
                 dialog.open()
@@ -84,7 +84,7 @@ function guiMethodDocumentationCommands(thisFlow) {
                     },
                     acceptButtonLabel: `Update implementation note`,
                     title:  `${className} implementation note.`,
-                    subtitle: `You are editing an implementation note of the method ${className}.${method.getName()}.`,
+                    subtitle: `You are editing an implementation note of the method ${className}.${method.getMethodName()}.`,
                 })
 
                 dialog.open()                
@@ -116,7 +116,7 @@ function guiMethodDocumentationCommands(thisFlow) {
                     },
                     acceptButtonLabel: `Add example`,
                     title: `${className}.${method.getFunctionSignatureString()}`,
-                    subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
+                    subtitle: `You are editing an example of the method ${className}.${method.getMethodName()}.`,
                 })
 
                 dialog.open()
@@ -143,7 +143,7 @@ function guiMethodDocumentationCommands(thisFlow) {
                     },
                     acceptButtonLabel: `Update example`,
                     title: `${className}.${method.getFunctionSignatureString()}`,
-                    subtitle: `You are editing an example of the method ${className}.${method.getName()}.`,
+                    subtitle: `You are editing an example of the method ${className}.${method.getMethodName()}.`,
                 })
 
                 dialog.open()

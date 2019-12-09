@@ -150,34 +150,4 @@ if( true ) {
             expect( sourceCode.unformatBackText(formattedText) ) .to .equal( sourceCodeText )
         })
     })
-
-    describe('with an invalid first line', () => {
-
-        it('raises an error if the source code begins with space', () => {
-            const sourceCodeText = ` const n = 0`
-
-            expect( () => {
-
-                SourceCodeText.new({ text: sourceCodeText })
-
-            }).to .throw(
-                Error,
-                'SourceCodeText can not begin with a space or a tab char.'
-            )
-        })
-
-        it('raises an error if the source code begins with tab', () => {
-            const sourceCodeText = `\tconst n = 0`
-
-            expect( () => {
-
-                SourceCodeText.new({ text: sourceCodeText })
-
-            }).to .throw(
-                Error,
-                'SourceCodeText can not begin with a space or a tab char.'
-            )
-        })
-
-    })
 })

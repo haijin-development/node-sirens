@@ -1,5 +1,6 @@
 const Classification = require('../../O').Classification
 const FlowPointFinder = require('./FlowPointFinder')
+const CommandsController = require('../commands/CommandsController')
 const StatefulCommand = require('../commands/StatefulCommand')
 const StatelessCommand = require('../commands/StatelessCommand')
 
@@ -7,13 +8,15 @@ class Flow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['id', 'idPath', 'childFlows', 'commandsController', ]
+        this.instanceVariables = ['id', 'idPath', 'childFlows', 'commandsController', 'pendingEvents']
     }
 
     /// Initializing
 
     afterInstantiation() {
         this.childFlows = {}
+        this.commandsController = CommandsController.new({ mainFlow: this })
+        this.pendingEvents = new Map()
     }
 
     initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
@@ -21,6 +24,8 @@ class Flow {
         this.idPath = idPath ? `${idPath}.${id}` : id
 
         if( this.respondsTo('buildWith') ) {
+            this.commandsController = CommandsController.new({ mainFlow: this })
+
             const flow = this
 
             this.build( function() {
@@ -39,18 +44,20 @@ class Flow {
     }
 
     addChildFlow({ id: childFlowId, flow: childFlow }) {
-        if( childFlow.getId() && childFlow.getId() !== childFlowId ) {
-            throw new Error(`Child flow already has an id: '${childFlow.getId()}'.`)
-        }
-
         if( this.childFlows[childFlowId] !== undefined ) {
             throw new Error(`This flow already has a child flow with id: '${childFlowId}'.`)
         }
 
-        childFlow.setId({ id: childFlowId, idPath: this.id })
+        childFlow.setId({ id: childFlowId, idPath: this.idPath })
         childFlow.setCommandsController( this.commandsController )
 
         this.childFlows[childFlowId] = childFlow
+
+        childFlow.allChildFlowsDo( (eachChildFlow) => {
+            const currentIdPath = eachChildFlow.getIdPath().split('.').slice(1).join('.')
+            const newIdPath = childFlow.getIdPath() + '.' + currentIdPath
+            eachChildFlow.setIdPath( newIdPath )
+        })
     }
 
     addCommand({ id: commandId, command: command }) {
@@ -94,6 +101,10 @@ class Flow {
 
     getIdPath() {
         return this.idPath
+    }
+
+    setIdPath(idPath) {
+        this.idPath = idPath
     }
 
     /// Searching
@@ -157,12 +168,8 @@ class Flow {
 
         const commandsController = this.getCommandsController()
 
-        if( ! commandsController ) {
-            return eventHandler(...params)
-        }
-
         return commandsController.doExecuteEventHandler({
-            flowPointId: this.id,
+            flowId: this.getIdPath(),
             event: event,
             params: params,
             eventHandler: eventHandler,
@@ -188,10 +195,6 @@ class Flow {
         }
 
         return command.asFlowPoint()
-    }
-
-    getActionHandler({ id: commandId }) {
-        return this.getCommand({ id: commandId }).getActionHandler()
     }
 
     allCommandsDo(closure) {
@@ -222,7 +225,9 @@ class Flow {
         flowCommands.forEach( (command) => {
             const commandId = command.getId()
 
-            classificationDefinition.prototype[commandId] = command.getActionHandler()
+            classificationDefinition.prototype[commandId] = function(...params) {
+                return command.execute({ params: params })
+            }
         })
 
         const classification = Classification.define(classificationDefinition)
@@ -230,6 +235,34 @@ class Flow {
         flowPoint.behaveAs( classification )
 
         return flowPoint
+    }
+
+    // Events
+
+    addPendingEvent({ event: eventName, params: params }) {
+        this.pendingEvents.set(
+            eventName,
+            {
+                event: eventName,
+                params: params
+            }
+        )
+    }
+
+    clearPendingEvents() {
+        this.pendingEvents.clear()
+    }
+
+    processPendingEvents() {
+        this.pendingEvents.forEach( (pendingEvent, eventName) => {
+            this.processPendingEvent(pendingEvent)
+        })
+
+        this.clearPendingEvents()
+    }
+
+    processPendingEvent({ event: eventName, params: params }) {
+        this.emit(eventName, params)
     }
 }
 

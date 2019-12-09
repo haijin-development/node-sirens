@@ -10,14 +10,14 @@ describe('When reading a ClassDocumentation', () => {
             const classComment =
     `
     Class(\`
-        A regular js class to use in the classEditor example.
+        A regular js class to use in the FileEditor example.
     \`)
     `
 
             const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the classEditor example.'
+                'A regular js class to use in the FileEditor example.'
             )
         })
 
@@ -25,13 +25,13 @@ describe('When reading a ClassDocumentation', () => {
 
             const classComment =
     `Class(
-        "A regular js class to use in the classEditor example."
+        "A regular js class to use in the FileEditor example."
     )`
 
             const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the classEditor example.'
+                'A regular js class to use in the FileEditor example.'
             )
         })
 

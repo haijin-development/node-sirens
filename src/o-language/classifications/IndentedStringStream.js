@@ -54,7 +54,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
                  const stringStream = IndentedStringStream.new()
 
-                 stringStream.setIndentationCount( 3 )
+                 stringStream.setIndentationLevel( 3 )
 
                  stringStream.appendLine({ string: 'One line with indentation.' })
 
@@ -122,7 +122,7 @@ const StringStreamProcotol = require('../protocols/StringStreamProcotol')
 
                  // Decorate it with the IndentedStringStream behaviour
                  stringStream.behaveAs( IndentedStringStream )
-                 stringStream.setIndentationCount( 3 )
+                 stringStream.setIndentationLevel( 3 )
 
                  // Add an indented line
                  stringStream.appendLine({ string: 'One line with indentation.' })
@@ -212,11 +212,11 @@ Method(`
 
    The indentation string will be
 
-   	stream.getIndentationChar().repeast( stream.getIndentationCount() )
+   	stream.getIndentationChar().repeast( stream.getIndentationLevel() )
 
    that is
 
-   	 stream.getIndentationCount() times stream.getIndentationChar()
+   	 stream.getIndentationLevel() times stream.getIndentationChar()
 `)
 Returns({
    Description: `
@@ -234,7 +234,7 @@ Example({
 
       const stream = IndentedStringStream.new()
 
-      stream.getIndentationCount()
+      stream.getIndentationLevel()
    `,
 })
 
@@ -242,7 +242,7 @@ Tags([
    'getters', 'querying', 'public'
 ])
 */
-    getIndentationCount() {
+    getIndentationLevel() {
         return this.indentationCount
     }
 
@@ -279,7 +279,7 @@ Tags([
 
            const stream = IndentedStringStream.new()
 
-           stream.setIndentationCount(3)
+           stream.setIndentationLevel(3)
 
            stream.appendLine({ string: 'New line' })
 
@@ -291,7 +291,7 @@ Tags([
         'indentation', 'setters', 'public'
      ])
     */
-    setIndentationCount(n) {
+    setIndentationLevel(n) {
         this.indentationCount = n
 
         this.indentation = this.indentationChar.repeat( this.indentationCount )
@@ -368,7 +368,7 @@ Tags([
 
            stream
            	.setIndentationChar( '&nbsp;' )
-           	.setIndentationCount( 2 )
+           	.setIndentationLevel( 2 )
 
            stream.appendLine({ string: 'A line' })
 
@@ -438,7 +438,7 @@ Tags([
 ])
 */
     incrementIndentation({ by: n } = { by: 1 }) {
-        this.setIndentationCount( this.indentationCount + n )
+        this.setIndentationLevel( this.indentationCount + n )
 
         return this
     }
@@ -479,7 +479,7 @@ Tags([
            const stream = IndentedStringStream.new()
 
            stream
-           	.setIndentationCount( 2 )
+           	.setIndentationLevel( 2 )
            	.decrementIndentation({ by: 1 } )
            	.appendLine({ string: 'A line' })
 
@@ -566,7 +566,7 @@ Tags([
         try {
             return closure()
         } finally {
-            this.setIndentationCount( currentIndentation )
+            this.setIndentationLevel( currentIndentation )
         }
     }
 
@@ -761,7 +761,7 @@ Tags([
            const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
-           stream.setIndentationCount( 3 )
+           stream.setIndentationLevel( 3 )
            stream.cr()
 
            stream.getString()
@@ -777,7 +777,7 @@ Tags([
 
            const stream = IndentedStringStream.new()
 
-           stream.setIndentationCount( 3 )
+           stream.setIndentationLevel( 3 )
            stream.cr({ indent: true })
 
            stream.getString()
@@ -824,7 +824,7 @@ Tags([
            const IndentedStringStream = require('sirens/src/O').IndentedStringStream
 
            const stream = IndentedStringStream.new()
-           stream.setIndentationCount( 3 )
+           stream.setIndentationLevel( 3 )
            stream.appendIndentation()
 
            stream.getString()

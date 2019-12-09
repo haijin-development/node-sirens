@@ -8,7 +8,7 @@ class SourceCodeText {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['text', 'removeIdentation', 'indentationChar', 'indentationCount']
+        this.instanceVariables = ['text', 'removeIdentation', 'indentationChar', 'indentationLevel']
         this.assumes = []
     }
 
@@ -17,14 +17,12 @@ class SourceCodeText {
     initialize({ text: text, removeIdentation: removeIdentation }) {
         if( removeIdentation === undefined ) { removeIdentation = true }
 
-        this.validateFirstLine({ text: text })
-
         this.text = text
 
         this.removeIdentation = removeIdentation
 
         this.indentationChar = this.detectIndentationChar()
-        this.indentationCount = this.detectIndentationCount()
+        this.indentationLevel = this.detectIndentationLevel()
     }
 
     detectIndentationChar() {
@@ -35,7 +33,7 @@ class SourceCodeText {
             if( this.isBlankLine( line ) ) { continue }
 
             // Ignore non indented lines
-            const lineIndentation = this.getLineIndentationCount( line )
+            const lineIndentation = this.getLineIndentationLevel({ line: line })
             if( lineIndentation === 0 ) { continue }
 
             const firstChar = matches[0][0]
@@ -46,23 +44,23 @@ class SourceCodeText {
         return defaultIndentationChar
     }
 
-    detectIndentationCount() {
-        let indentationCount = undefined
+    detectIndentationLevel() {
+        let indentationLevel = undefined
 
-        this.getAllLinesButFirst().forEach( (line) => {
+        for( const line of this.getAllLinesButFirst() ) {
             // Ignore blank lines
-            if( this.isBlankLine( line ) ) { return }
+            if( this.isBlankLine( line ) ) { continue }
 
-            const lineIndentation = this.getLineIndentationCount( line )
+            const lineIndentation = this.getLineIndentationLevel({ line: line })
 
-            if( indentationCount === undefined ) {
-                indentationCount = lineIndentation
+            if( indentationLevel === undefined ) {
+                indentationLevel = lineIndentation
             } else {
-                indentationCount = Math.min( indentationCount, lineIndentation )
+                indentationLevel = Math.min( indentationLevel, lineIndentation )
             }
-        })
+        }
 
-        return indentationCount === undefined ? 0 : indentationCount
+        return indentationLevel === undefined ? 0 : indentationLevel
     }
 
     /// Accessing
@@ -85,12 +83,12 @@ class SourceCodeText {
         return this.formatText( this.text )
     }
 
-    getIndentationCount() {
-        return this.indentationCount
+    getIndentationLevel() {
+        return this.indentationLevel
     }
 
-    setIndentationCount(indentationCount) {
-        this.indentationCount = indentationCount
+    setIndentationLevel(indentationLevel) {
+        this.indentationLevel = indentationLevel
     }
 
     getIndentationChar() {
@@ -128,7 +126,7 @@ class SourceCodeText {
         stream.append({ string: firstLine })
 
         allLinesButFirst.forEach( (line) => {
-            line = line.slice( this.indentationCount )
+            line = line.slice( this.indentationLevel )
 
             stream.appendLine({ string: line })
         })
@@ -143,7 +141,7 @@ class SourceCodeText {
         const allLinesButFirst = lines.slice(1)
 
         const stream = IndentedStringStream.new()
-        stream.setIndentationCount( this.indentationCount )
+        stream.setIndentationLevel( this.indentationLevel )
         stream.setIndentationChar( this.indentationChar )
 
         stream.append({ string: firstLine })
@@ -159,26 +157,13 @@ class SourceCodeText {
         return stream.getString()
     }
 
-    /// Validating
-
-    validateFirstLine({ text: text }) {
-        if(
-            text.length > 0
-            &&
-            ( text[0] === ' ' || text[0] === "\t" )
-          )
-        {
-            throw new Error(`'SourceCodeText can not begin with a space or a tab char.'`)
-        }
-    }
-
     /// Utility methods
 
     isBlankLine(line) {
         return line.match( /^\s*$/ ) !== null
     }
 
-    getLineIndentationCount(line) {
+    getLineIndentationLevel({ line: line }) {
         const indentation = this.indentationChar
 
         const regex = new RegExp(`^${indentation}*`)

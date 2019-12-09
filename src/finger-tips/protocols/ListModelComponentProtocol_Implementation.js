@@ -17,20 +17,20 @@ class ListModelComponentProtocol_Implementation {
     onItemsUpdated({list: list, items: items, indices: indices}) {
         this.param(list) .isArray()
         this.param(items) .isArray()
-        this.param(indices) .isArray()
-
-        indices.forEach( (index) => {
-            this.param(index) .isInteger()
+        this.param(indices) .isArray({
+            forEachItem: (index) => {
+                this.param(index) .isInteger()
+            }
         })
     }
 
     onItemsRemoved({list: list, items: items, indices: indices}) {
         this.param(list) .isArray()
         this.param(items) .isArray()
-        this.param(indices) .isArray()
-
-        indices.forEach( (index) => {
-            this.param(index) .isInteger()
+        this.param(indices) .isArray({
+            forEachItem: (index) => {
+                this.param(index) .isInteger()
+            }
         })
     }
 }

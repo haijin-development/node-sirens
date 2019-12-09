@@ -82,7 +82,7 @@ class PrototypeBrowser {
                             this.popupMenu( function() {
                                 this.item({
                                     label: 'Browse it',
-                                    enabled: flow.getCommand({ id: 'browseSelectedPrototype' }),
+                                    enabled: flow.hasAClassSelected(),
                                     action: () => { flow.browseSelectedPrototype() },
                                 })
                             })

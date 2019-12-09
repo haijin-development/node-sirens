@@ -10,7 +10,9 @@ function methodDefinitionCommands(thisFlow) {
             },
             whenActioned: function({ methodNewDescription: methodNewDescription }) {
                 const method = thisFlow.getChildFlow({ id: 'selectedMethod' }).getValue()
-                method.getComment().writeRawSourceCode({ rawSourceCode: methodNewDescription })
+                method.getMethodComment().writeContents({
+                    contents: methodNewDescription
+                })
                 thisFlow.reloadClassDefinition()
             }
         })

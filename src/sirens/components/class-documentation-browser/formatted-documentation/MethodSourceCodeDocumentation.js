@@ -21,7 +21,7 @@ class MethodSourceCodeDocumentation {
 
         const method = this.getProps().method
 
-        const methodSourceCode = method === null ? '' : method.getFunctionFormattedSourceCode()
+        const methodSourceCode = method === null ? '' : method.getFormattedSourceCode()
 
         componentsRenderer.render( function(component) {
 

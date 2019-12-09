@@ -14,7 +14,7 @@ class PrototypesBrowserFlow {
     }
 
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ application: this })
+        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
         flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
@@ -61,6 +61,11 @@ class PrototypesBrowserFlow {
                 whenActioned: thisFlow.getSelectedClass.bind(thisFlow),
             })
 
+            this.command({
+                id: 'hasAClassSelected',
+                whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
+            })
+
         })
     }
 
@@ -69,7 +74,7 @@ class PrototypesBrowserFlow {
             this.command({
                 id: 'browseSelectedPrototype',
                 enabledIf: function() {
-                    return thisFlow.getSelectedClass() ? true : false
+                    return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
                     const selectedClass = thisFlow.getSelectedClass()
@@ -80,6 +85,10 @@ class PrototypesBrowserFlow {
     }
 
     /// Actions
+
+    hasAClassSelected() {
+        return this.getSelectedClass() ? true : false
+    }
 
     setBrowsedObject(object) {
         this.setValue( object )

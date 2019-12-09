@@ -44,9 +44,9 @@ class ClassDocumentationMenuBar {
                     })
 
                     this.item({
-                        label: 'Open a class editor...',
-                        action: component.getProps().openClassEditor,
-                        enabled: model.getCommand({ id: 'openClassEditor' }),
+                        label: 'Open a file editor...',
+                        action: component.getProps().openFileEditor,
+                        enabled: model.getCommand({ id: 'openFileEditor' }),
                     })
 
                     this.item({

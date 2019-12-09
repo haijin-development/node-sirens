@@ -8,7 +8,9 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: this project is usable but it is still at an early stage of development.**
 
-**The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
+**Note: The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
+
+**Update: checkout FingerTips design documentation in [this article](./docs/FingerTips.pdf).**
 
 ![App browser](./docs/browsing-app.gif)
 
@@ -75,14 +77,14 @@ const Sirens = require('sirens')
 Sirens.openPlayground()
 ```
 
-A Class Editor lets you inspect the classes defined in a file and its documentation.
+A FileEditor lets you inspect the contents of a file and its documentation.
 
-Open a class editor with
+Open a file editor with
 
 ```javascript
 const Sirens = require('sirens')
 
-Sirens.openClassEditor()
+Sirens.openFileEditor()
 ```
 
 An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.

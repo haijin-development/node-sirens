@@ -87,6 +87,8 @@ class FlowBuilder {
     }
 
     object({ id: childFlowId, definedWith: anotherFlow }, closure) {
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
         this.rootFlow.addChildFlow({
             id: childFlowId,
             flow: anotherFlow,
@@ -98,7 +100,9 @@ class FlowBuilder {
     }
 
     value({ id: childFlowId, whenValueChanges: whenValueChangesClosure }, closure) {
-        const childFlow = ValueFlow.new()
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
+        const childFlow = ValueFlow.new({ id: childFlowId })
 
         childFlow.setWhenFlowValueChangedClosure( whenValueChangesClosure )
 
@@ -113,9 +117,11 @@ class FlowBuilder {
     }
 
     toggle({ id: childFlowId, value: value, whenValueChanges: whenValueChangesClosure }, closure) {
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
         if( value === undefined ) { value = false }
 
-        const childFlow = ValueFlow.new()
+        const childFlow = ValueFlow.new({ id: childFlowId })
 
         childFlow.setValue( value )
         childFlow.setWhenFlowValueChangedClosure( whenValueChangesClosure )
@@ -133,7 +139,9 @@ class FlowBuilder {
     bufferedValue({
         id: childFlowId, whenValueChanges: whenValueChangesClosure, convertToValueWith: convertToValueClosure
     },  closure) {
-        const childFlow = BufferedValueFlow.new()
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
+        const childFlow = BufferedValueFlow.new({ id: childFlowId })
 
         childFlow.setWhenFlowValueChangedClosure( whenValueChangesClosure )
         childFlow.setConvertToValueClosure( convertToValueClosure )
@@ -154,7 +162,10 @@ class FlowBuilder {
         getChildrenClosure: getChildrenClosure,
         whenSelectionChanges: whenSelectionChangesClosure,
     }, closure) {
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
         const childFlow = TreeChoiceFlow.new({
+            id: childFlowId,
             roots: treeRoots,
             getChildrenClosure: getChildrenClosure,
         })
@@ -176,7 +187,10 @@ class FlowBuilder {
         choices: choices,
         whenSelectionChanges: whenSelectionChangesClosure,
     }, closure) {
+        if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
         const childFlow = ChoiceFlow.new({
+            id: childFlowId,
             choices: choices,
         })
 
@@ -193,7 +207,9 @@ class FlowBuilder {
     }
 
     commands({ id: commandsGroupId }, closure) {
-        const commandsGroup = ValueFlow.new()
+        if( commandsGroupId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
+        const commandsGroup = ValueFlow.new({ id: commandsGroupId })
 
         this.rootFlow.addChildFlow({
             id: commandsGroupId,
@@ -206,6 +222,8 @@ class FlowBuilder {
     }
 
     command({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
+        if( commandId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
+
         this.rootFlow.defineCommand({
             id: commandId,
             enabledIf: calculateEnabledClosure,

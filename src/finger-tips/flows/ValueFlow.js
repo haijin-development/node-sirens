@@ -48,13 +48,18 @@ class ValueFlow {
     updateValue(newValue) {
         const oldValue = this.value
 
+        if( oldValue == newValue ) { return }
+
         this.value = newValue
 
         if( this.hasWhenFlowValueChangedClosure() ) {
             this.evaluateWhenFlowValueChangedClosure({ newValue: newValue, oldValue: oldValue })
         }
 
-        this.updateFlowPointsModel({ newValue: newValue, oldValue: oldValue })
+        this.addPendingEvent({
+            event: 'value-changed',
+            params: { newValue: newValue, oldValue: oldValue },
+        })
     }
 
     // Events
@@ -65,10 +70,6 @@ class ValueFlow {
 
     evaluateWhenFlowValueChangedClosure({ newValue: newValue, oldValue: oldValue }) {
         this.whenFlowValueChangedClosure({ newValue: newValue, oldValue: oldValue })
-    }
-
-    updateFlowPointsModel({ oldValue: oldValue, newValue: newValue }) {
-        this.emit('value-changed', { newValue: newValue, oldValue: oldValue })
     }
 
     hasWhenFlowValueChangedClosure() {

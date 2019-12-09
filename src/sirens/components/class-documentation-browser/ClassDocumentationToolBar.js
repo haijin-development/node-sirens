@@ -83,8 +83,8 @@ class ClassDocumentationToolBar {
                         height: 24,
                     },
                     tooltip: 'Opens a class editor.',
-                    action: component.getProps().openClassEditor,
-                    enabled: flow.getCommand({ id: 'openClassEditor' }),
+                    action: component.getProps().openFileEditor,
+                    enabled: flow.getCommand({ id: 'openFileEditor' }),
                 })
 
                 this.button({

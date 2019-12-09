@@ -55,7 +55,7 @@ class ObjectPropertiesComponent {
 
                     this.item({
                         label: 'Browse it',
-                        enabled: selectedValue !== undefined,
+                        enabled: selectedValue !== null,
                         action: () => { flow.inspectSelectedObject() },
                     })
 
@@ -63,7 +63,7 @@ class ObjectPropertiesComponent {
 
                     this.item({
                         label: 'Browse its prototype',
-                        enabled: selectedValue !== undefined,
+                        enabled: selectedValue !== null,
                         action: () => { flow.browseSelectedObjectPrototypes() },
                     })
                 })

@@ -154,9 +154,9 @@ describe('When using a TreeChoiceFlow', () => {
         const CustomCommandsController = require('./CustomCommandsController')
 
         it('propagates the commandsController set before adding a child flow', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -173,9 +173,9 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('propagates the commandsController set before after a child flow', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -192,9 +192,9 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('receives a set roots event notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -211,7 +211,7 @@ describe('When using a TreeChoiceFlow', () => {
 
             expect( commandsController.getEvents() ).to .eql([
                 {
-                    flowPointId: 'flow-1',
+                    flowId: 'main.flow-1',
                     event: 'setRoots',
                     params: [ [1, 2, 3] ],
                 }
@@ -220,9 +220,9 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('receives a set selection event notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -240,7 +240,7 @@ describe('When using a TreeChoiceFlow', () => {
 
             expect( commandsController.getEvents() ).to .eql([
                 {
-                    flowPointId: 'flow-1',
+                    flowId: 'main.flow-1',
                     event: 'setSelection',
                     params: [ [2] ],
                 }

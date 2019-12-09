@@ -194,9 +194,9 @@ describe('When using a StatefulCommand', () => {
         const CustomCommandsController = require('./CustomCommandsController')
 
         it('propagates the commandsController set before adding a command', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 
@@ -212,9 +212,9 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('propagates the commandsController set before after a child flow', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -230,9 +230,9 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('receives a command execution notification', () => {
-            const commandsController = CustomCommandsController.new()
-
             const flow = Flow.new({ id: 'main' })
+
+            const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
             flow.setCommandsController( commandsController )
 

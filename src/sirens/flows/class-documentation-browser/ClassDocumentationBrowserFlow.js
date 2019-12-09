@@ -50,8 +50,8 @@ class ClassDocumentationBrowserFlow {
 
             this.value({ id: 'classDefinition' }, function(classDefinitionModel) {
 
-                this.whenObjectChanges( ({ newValue: classDefinition }) => {
-                    if( classDefinition === null ) {
+                this.whenObjectChanges( ({ newValue: jsClass }) => {
+                    if( jsClass === null ) {
                         classDefinitionModel.getChildFlow({ id: 'classDocumentation' }).setValue(null)
                         classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices([])
                         classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue([])
@@ -61,10 +61,10 @@ class ClassDocumentationBrowserFlow {
                     }
 
                     classDefinitionModel.getChildFlow({ id: 'classDocumentation' }).setValue(
-                        thisFlow.getClassDocumentationFrom({ classDefinition: classDefinition })
+                        thisFlow.getClassDocumentationFrom({ jsClass: jsClass })
                     )
                     classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(
-                        classDefinition.getMethods()
+                        jsClass.getMethods()
                     )
                     classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue( [] )
                 })
@@ -73,21 +73,21 @@ class ClassDocumentationBrowserFlow {
                     id: 'classDocumentation'
                 })
 
-                this.choice({
-                    id: 'classMethods',
-                    choices: [],
-                    whenSelectionChanges: ({ newValue: method }) => {
-                        const selectedMethod = classDefinitionModel.getChildFlow({ id: 'selectedMethod' })
-                        selectedMethod.setValue( method )
-                    },
-                })
-
                 this.value({
                     id: 'selectedTags',
                     value: [],
                     whenValueChanges: ({ newValue: tags }) => {
-                        const filterdMethods = thisFlow.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
-                        classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(filterdMethods)
+                        const filteredMethods = thisFlow.getMethodDefinitionsFilteredByTags({ tagsFilter: tags })
+                        classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(filteredMethods)
+                    },
+                })
+
+                this.choice({
+                    id: 'classMethods',
+                    choices: [],
+                    whenSelectionChanges: ({ newValue: method, oldValue: oldMethod }) => {
+                        const selectedMethod = classDefinitionModel.getChildFlow({ id: 'selectedMethod' })
+                        selectedMethod.setValue( method )
                     },
                 })
 
@@ -123,8 +123,8 @@ class ClassDocumentationBrowserFlow {
 
             this.command({
                 id: 'setBrowsedClass',
-                whenActioned: function({ classDefinition: classDefinition }) {
-                    thisFlow.setBrowsedClass({ classDefinition: classDefinition })
+                whenActioned: function({ jsClass: jsClass }) {
+                    thisFlow.setBrowsedClass({ jsClass: jsClass })
                 }
             })
 
@@ -162,30 +162,34 @@ class ClassDocumentationBrowserFlow {
     /// Actions
 
     reloadClassDefinition() {
-        const classDefinition = this.getBrowsedClass()
-
+        const selectedClass = this.getBrowsedClass()
         const selectedMethod = this.getChildFlow({ id: 'selectedMethod' }).getValue()
+        const sourceFile = selectedClass.getSourceFile()
 
-        this.setBrowsedClass({ classDefinition: null })
+        this.setBrowsedClass({ jsClass: null })
 
-        classDefinition.reload()
+        sourceFile.reload()
 
-        this.setBrowsedClass({ classDefinition: classDefinition })
+        const newSelectedClass = sourceFile.getClassDefinitions().find( (eachClassDefinition) => {
+            return eachClassDefinition.getClassName() === selectedClass.getClassName()
+        })
+
+        this.setBrowsedClass({ jsClass: newSelectedClass })
 
         if( selectedMethod ) {
-            this.setBrowsedMethod({ methodName: selectedMethod.getName() })
+            this.setBrowsedMethod({ methodName: selectedMethod.getMethodName() })
         }
     }
 
-    getClassDocumentationFrom({ classDefinition: classDefinition }) {
-        if( ! classDefinition ) { return null }
+    getClassDocumentationFrom({ jsClass: jsClass }) {
+        if( ! jsClass ) { return null }
 
-        const className = classDefinition.getClassName()
+        const className = jsClass.getClassName()
 
-        const unformattedComment = classDefinition.getComment().getContents()
+        const commentBodyContents = jsClass.getClassComment().getBodyContents()
 
         return DocumentationReader.readClassDocumentationFromString({
-            string: unformattedComment,
+            string: commentBodyContents,
             className: className,
         })
     }
@@ -196,15 +200,15 @@ class ClassDocumentationBrowserFlow {
         return this.getChildFlow({ id: 'classDefinition' }).getValue()
     }
 
-    setBrowsedClass({ classDefinition: classDefinition }) {
-        return this.getChildFlow({ id: 'classDefinition' }).setValue( classDefinition )
+    setBrowsedClass({ jsClass: jsClass }) {
+        return this.getChildFlow({ id: 'classDefinition' }).setValue( jsClass )
     }
 
     setBrowsedMethod({ methodName: methodName }) {
         if( methodName === null ) { return }
 
         this.getChildFlow({ id: 'classMethods' }).setSelectionSuchThat({
-            matches: (method) => { return method.getName() === methodName }
+            matches: (method) => { return method.getMethodName() === methodName }
         })
     }
 
@@ -279,9 +283,14 @@ class ClassDocumentationBrowserFlow {
 
         const classDefinition = this.getBrowsedClass()
 
-        const classComment = classDefinition.getComment()
+        const classComment = classDefinition.getClassComment()
 
-        classComment.writeFormattedContents({ commentContents: classCommentContents })
+        const classIndentation = classDefinition.getContentsIndentation()
+
+        classComment.writeFormattedContents({
+            commentContents: classCommentContents,
+            outerIndentation: classIndentation,
+        })
 
         this.reloadClassDefinition()
     }
@@ -293,9 +302,14 @@ class ClassDocumentationBrowserFlow {
 
         const method = this.getChildFlow({ id: 'selectedMethod' }).getValue()
 
-        const methodComment = method.getComment()
+        const methodComment = method.getMethodComment()
 
-        methodComment.writeFormattedContents({ commentContents: methodCommentContents })
+        const methodIndentation = method.getContentsIndentation()
+
+        methodComment.writeFormattedContents({
+            commentContents: methodCommentContents,
+            outerIndentation: methodIndentation,
+        })
 
         this.reloadClassDefinition()
     }

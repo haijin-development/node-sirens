@@ -187,7 +187,7 @@ class ParamValidator {
         'public', 'dsl'
      ])
     */
-    isArray() {
+    isArray({ forEachItem: closure } = {}) {
         this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             return {
                 isValid: Array.isArray(value),

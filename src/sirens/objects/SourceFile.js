@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const splitLines = require('split-lines')
 const StringStream = require('../../O').StringStream
+const SourceFileStructureParser = require('./SourceFileStructureParser')
 
 /*
  * A source file to query javascript definitions.
@@ -27,9 +28,14 @@ class SourceFile {
     }
 
     doParseContents() {
-        const JSFileStructureParser = require('./parsers/JSFileStructureParser')
+        const fileStructureParser = SourceFileStructureParser.new()
 
-        this.fileStructure = JSFileStructureParser.new().parse({ sourceFile: this })
+        try {
+            this.fileStructure = fileStructureParser.parseStructureIn({ sourceFile: this })
+        } catch(error) {
+            this.fileStructure = null
+        }
+
     }
 
     /// Accessing
@@ -52,6 +58,10 @@ class SourceFile {
         } catch(e) {
             return null
         }
+    }
+
+    getFileType() {
+        return path.extname( this.filepath )
     }
 
     /// Asking

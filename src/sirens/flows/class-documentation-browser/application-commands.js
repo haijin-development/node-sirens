@@ -12,10 +12,10 @@ function applicationCommands(thisFlow) {
         })
 
         this.command({
-            id: 'openClassEditor',
+            id: 'openFileEditor',
             whenActioned: function() {
                 const filename = thisFlow.getBrowsedClass().getSourceFile().getFilePath()
-                Sirens.openClassEditor({ filename: filename })
+                Sirens.openFileEditor({ filename: filename })
             }
         })
 

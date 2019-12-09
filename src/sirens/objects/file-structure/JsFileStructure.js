@@ -13,6 +13,10 @@ class JsFileStructure {
         return true
     }
 
+    getFileObjectType() {
+        return 'jsFile'
+    }
+
     getFileObjectDescription() {
         return `File ${ this.getFileName() }`
     }

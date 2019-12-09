@@ -10,6 +10,10 @@ class JsComment {
         this.assumes = [FileObject]
     }
 
+    getFileObjectType() {
+        return 'jsComment'
+    }
+
     getBodyContents() {
         let originalSourceCode = this.getUnformattedBodyContents()
 

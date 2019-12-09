@@ -80,12 +80,12 @@ const Gdk = nodeGtk.require('Gdk')
 
              nmp install
 
-       and opening its files with the ClassEditor.
+       and opening its files with the FileEditor.
     `,
     Code: `
        const Sirens = require('sirens')
 
-       Sirens.openClassEditor()
+       Sirens.openFileEditor()
     `,
  })
 */
@@ -184,7 +184,7 @@ class Sirens {
 
            const aFilename = './somefile.js'
 
-           Sirens.openClassEditor({ filename: aFilename })
+           Sirens.openFileEditor({ filename: aFilename })
      `)
 
      Param({
@@ -207,20 +207,20 @@ class Sirens {
         Code: `
            const Sirens = require('sirens')
 
-           Sirens.openClassEditor()
+           Sirens.openFileEditor()
         `,
      })
 
      Example({
         Description: `
-           Opens a class browser on the given filename.
+           Opens a file browser on the given filename.
         `,
         Code: `
            const Sirens = require('sirens')
 
            const aFilename = './somefile.js'
 
-           Sirens.openClassEditor({ filename: aFilename })
+           Sirens.openFileEditor({ filename: aFilename })
         `,
      })
 
@@ -228,11 +228,11 @@ class Sirens {
         'browsers', 'public'
      ])
     */
-    static openClassEditor({ filename: filename } = { filename: undefined }) {
+    static openFileEditor({ filename: filename } = { filename: undefined }) {
         this.do( () => {
-            const ClassEditor = require('../src/sirens/components/class-editor/ClassEditor')
+            const FileEditor = require('../src/sirens/components/file-editor/FileEditor')
 
-            ClassEditor.openOn({ filename: filename })
+            FileEditor.openOn({ filename: filename })
         })
     }
 

@@ -91,9 +91,9 @@ class PlaygroundBrowserFlow {
             })
 
             this.command({
-                id: 'openClassEditor',
+                id: 'openFileEditor',
                 whenActioned: function() {
-                    Sirens.openClassEditor()
+                    Sirens.openFileEditor()
                 }
             })
 

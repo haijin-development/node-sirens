@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
 
-class ClassEditorMenuBar {
+class FileEditorMenuBar {
     /// Definition
 
     static definition() {
@@ -44,8 +44,8 @@ class ClassEditorMenuBar {
                 this.menuGroup({ label: 'Browsers' }, function() {
                     this.item({
                         label: 'Open another class editor...',
-                        action: component.getProps().openClassEditor,
-                        enabled: model.getCommand({ id: 'openClassEditor' }),
+                        action: component.getProps().openFileEditor,
+                        enabled: model.getCommand({ id: 'openFileEditor' }),
                     })
 
                     this.item({
@@ -70,4 +70,4 @@ class ClassEditorMenuBar {
     }
 }
 
-module.exports = Classification.define(ClassEditorMenuBar)
+module.exports = Classification.define(FileEditorMenuBar)

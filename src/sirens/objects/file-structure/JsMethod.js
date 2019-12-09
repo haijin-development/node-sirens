@@ -14,6 +14,10 @@ class JsMethod {
         return true
     }
 
+    getFileObjectType() {
+        return 'jsMethod'
+    }
+
     setMethodComment(methodComment) {
         this.methodComment = methodComment
     }

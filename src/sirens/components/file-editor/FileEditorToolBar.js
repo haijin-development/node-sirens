@@ -5,7 +5,7 @@ const ComponentProtocol_Implementation = require('../../../Skins').ComponentProt
 const GtkIcons = require('../../../Skins').GtkIcons
 const Resource = require('../../objects/Resource')
 
-class ClassEditorMenuBar {
+class FileEditorToolBar {
     /// Definition
 
     static definition() {
@@ -74,8 +74,8 @@ class ClassEditorMenuBar {
                         height: 24,
                     },
                     tooltip: 'Opens another class editor.',
-                    action: component.getProps().openClassEditor,
-                    enabled: model.getCommand({ id: 'openClassEditor' }),
+                    action: component.getProps().openFileEditor,
+                    enabled: model.getCommand({ id: 'openFileEditor' }),
                 })
 
                 this.button({
@@ -96,4 +96,4 @@ class ClassEditorMenuBar {
     }
 }
 
-module.exports = Classification.define(ClassEditorMenuBar)
+module.exports = Classification.define(FileEditorToolBar)

@@ -2,10 +2,10 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 
-const ClassEditorMenuBar = require('./ClassEditorMenuBar')
-const ClassEditorToolBar = require('./ClassEditorToolBar')
+const FileEditorMenuBar = require('./FileEditorMenuBar')
+const FileEditorToolBar = require('./FileEditorToolBar')
 
-class ClassEditorMenu {
+class FileEditorMenu {
     /// Definition
 
     static definition() {
@@ -30,11 +30,11 @@ class ClassEditorMenu {
                 })
 
                 this.component(
-                    ClassEditorMenuBar.new( props )
+                    FileEditorMenuBar.new( props )
                 )
 
                 this.component(
-                    ClassEditorToolBar.new( props )
+                    FileEditorToolBar.new( props )
                 )
 
             })
@@ -43,4 +43,4 @@ class ClassEditorMenu {
     }
 }
 
-module.exports = Classification.define(ClassEditorMenu)
+module.exports = Classification.define(FileEditorMenu)

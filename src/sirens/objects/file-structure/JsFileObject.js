@@ -10,6 +10,10 @@ class JsFileObject {
         this.assumes = [FileObject]
     }
 
+    getFileObjectType() {
+        return 'JsFileObject'
+    }
+
     getClasses() {
         return this.getChildObjects().filter( (section) => {
             return section.respondsTo( 'isJsClass' )

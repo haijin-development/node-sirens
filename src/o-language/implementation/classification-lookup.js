@@ -297,7 +297,7 @@ class ClassificationLookup {
 
         if( mustCallMethod ) {
             if( method === null ) {
-                throw new Error(`Method not found .${methodName.toString()}()`)
+                throw new Error(`Method not found .${methodName.toString()}() in object ${object.toString()}`)
             }
 
             if( beforeMethodResult !== undefined && beforeMethodResult.callMethod !== methodName ) {

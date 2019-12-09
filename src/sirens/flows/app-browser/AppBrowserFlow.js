@@ -2,7 +2,7 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const Folder = require('../../objects/paths/Folder')
-const FileInspectorFlow = require('../class-inspector/FileInspectorFlow')
+const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')
 const SourceFile = require('../../objects/SourceFile')
 const Sirens = require('../../../Sirens')
 const FolderChooser = require('../../../Skins').FolderChooser
@@ -86,10 +86,10 @@ class AppBrowserFlow {
             })
 
             this.command({
-                id: 'openClassEditor',
+                id: 'openFileEditor',
                 whenActioned: function() {
                     const selectedPath = thisFlow.getSelectedFilePath()
-                    Sirens.openClassEditor({ filename: selectedPath })
+                    Sirens.openFileEditor({ filename: selectedPath })
                 }
             })
 

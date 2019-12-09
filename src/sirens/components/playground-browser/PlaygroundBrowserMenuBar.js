@@ -53,8 +53,8 @@ class PlaygroundBrowserMenuBar {
 
                     this.item({
                         label: 'Open a class editor...',
-                        enabled: flow.getCommand({ id: 'openClassEditor' }),
-                        action: component.getProps().openClassEditor,
+                        enabled: flow.getCommand({ id: 'openFileEditor' }),
+                        action: component.getProps().openFileEditor,
                     })
 
                     this.item({

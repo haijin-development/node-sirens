@@ -3,7 +3,7 @@ const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const Resource = require('../../objects/Resource')
 
-class ClassComponent {
+class JsClassComponent {
     /// Definition
 
     static definition() {
@@ -61,4 +61,4 @@ class ClassComponent {
     }
 }
 
-module.exports = Classification.define(ClassComponent)
+module.exports = Classification.define(JsClassComponent)

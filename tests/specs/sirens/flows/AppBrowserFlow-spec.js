@@ -21,7 +21,7 @@ describe('When using an AppBrowserFlow', () => {
             'main.filesTree',
 
             'main.pickAndOpenFolder',
-            'main.openClassEditor',
+            'main.openFileEditor',
             'main.openPlayground',
             'main.pickFolder',
             'main.openFolder',

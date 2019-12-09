@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ClassEditorBody = require('../class-editor/ClassEditorBody')
+const ClassEditorBody = require('../file-editor/ClassEditorBody')
 const DocumentationBrowserBody = require('../class-documentation-browser/DocumentationBrowserBody')
 
 class SourceFileEditionComponent {

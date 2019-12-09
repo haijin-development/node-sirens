@@ -67,7 +67,7 @@ class ClassDocumentationBrowser {
                             model: flow,
                             reloadClassDefinition: () => { flow.reloadClassDefinition() },
                             openClassDocumentation: () => { flow.openClassDocumentation() },
-                            openClassEditor: () => { flow.openClassEditor() },
+                            openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                         })
                     )
@@ -77,7 +77,7 @@ class ClassDocumentationBrowser {
                             model: flow,
                             reloadClassDefinition: () => { flow.reloadClassDefinition() },
                             openClassDocumentation: () => { flow.openClassDocumentation() },
-                            openClassEditor: () => { flow.openClassEditor() },
+                            openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                         })
                     )

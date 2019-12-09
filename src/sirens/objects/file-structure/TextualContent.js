@@ -13,6 +13,10 @@ class TextualContent {
         return true
     }
 
+    getFileObjectType() {
+        return 'textualContent'
+    }
+
     getFileObjectDescription() {
         return 'Plain text'
     }

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const FileInspectorFlow = require('../../../../src/sirens/flows/class-inspector/FileInspectorFlow')
+const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 
 const sourceFile = SourceFile.new({ filepath:  __dirname + '/../../../samples/class-definition.js' })

@@ -47,7 +47,7 @@ class AppBrowserBody {
                     })
 
                     this.handlers({
-                        onAction: component.getProps().openClassEditor,
+                        onAction: component.getProps().openFileEditor,
                     })
 
                     this.column({
@@ -70,7 +70,7 @@ class AppBrowserBody {
                         this.item({
                             label: 'Browse it on a new window',
                             enabled: selectedFilePath !== null,
-                            action: component.getProps().openClassEditor,
+                            action: component.getProps().openFileEditor,
                         })
 
                     })

@@ -77,14 +77,14 @@ const Sirens = require('sirens')
 Sirens.openPlayground()
 ```
 
-A Class Editor lets you inspect the classes defined in a file and its documentation.
+A FileEditor lets you inspect the contents of a file and its documentation.
 
-Open a class editor with
+Open a file editor with
 
 ```javascript
 const Sirens = require('sirens')
 
-Sirens.openClassEditor()
+Sirens.openFileEditor()
 ```
 
 An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.

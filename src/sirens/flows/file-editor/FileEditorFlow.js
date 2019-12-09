@@ -1,12 +1,12 @@
-const path = require('path')
+    const path = require('path')
 const Classification = require('../../../O').Classification
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const SourceFile = require('../../objects/SourceFile')
-const FileInspectorFlow = require('./FileInspectorFlow')
+const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')
 const Sirens = require('../../../Sirens')
 
-class ClassEditorFlow {
+class FileEditorFlow {
     /// Definition
 
     static definition() {
@@ -19,7 +19,7 @@ class ClassEditorFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'classEditor' }, function(application) {
+        flow.main({ id: 'main' }, function(application) {
 
             this.setCommandsController( commandsController )
 
@@ -61,19 +61,19 @@ class ClassEditorFlow {
             this.command({
                 id: 'openFileInNewWindow',
                 whenActioned: function({ filename: filename }) {
-                    Sirens.openClassEditor({ filename: filename })
+                    Sirens.openFileEditor({ filename: filename })
                 }
             })
 
             this.command({
-                id: 'openClassEditor',
+                id: 'openFileEditor',
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
                     const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
                     const filename = selectedFile.getSourceFile().getFilePath()
-                    Sirens.openClassEditor({ filename: filename })
+                    Sirens.openFileEditor({ filename: filename })
                 }
             })
 
@@ -147,10 +147,6 @@ class ClassEditorFlow {
             this.lastOpenedFolder = path.dirname( filename )
         }
 
-        if( ! sourceFile.isJavascriptFile() ) {
-            sourceFile = null
-        }
-
         this.setSourceFile({ sourceFile: sourceFile })
     }
 
@@ -175,4 +171,4 @@ class ClassEditorFlow {
     }
 }
 
-module.exports = Classification.define(ClassEditorFlow)
+module.exports = Classification.define(FileEditorFlow)

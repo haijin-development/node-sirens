@@ -3,12 +3,12 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
-const ClassEditorFlow = require('../../flows/class-inspector/ClassEditorFlow')
-const ClassEditorMenu = require('./ClassEditorMenu')
+const FileEditorFlow = require('../../flows/file-editor/FileEditorFlow')
+const FileEditorMenu = require('./FileEditorMenu')
 const ClassEditorBody = require('./ClassEditorBody')
 const Sirens = require('../../../Sirens')
 
-class ClassEditor {
+class FileEditor {
     /// Definition
 
     static definition() {
@@ -21,12 +21,12 @@ class ClassEditor {
     /// Initializing
 
     /**
-     * Returns a new ClassEditorFlow.
+     * Returns a new FileEditorFlow.
      * If the props include a props.object defined the that props.object is the browsed object,
      * otherwise the browsed object is undefined.
      */
     defaultModel() {
-        const flow = ClassEditorFlow.new().asFlowPoint()
+        const flow = FileEditorFlow.new().asFlowPoint()
 
         if( this.getProps().filename ) {
             const filename = this.getProps().filename
@@ -53,12 +53,12 @@ class ClassEditor {
                 this.verticalStack( function() {
 
                     this.component(
-                        ClassEditorMenu.new({
+                        FileEditorMenu.new({
                             model: flow,
                             openFile: () => { flow.pickAndOpenFile({ parentWindow: component }) },
                             openFileInNewWindow: () => { flow.pickAndOpenFileInNewWindow({ parentWindow: component }) },
                             saveFile: undefined,
-                            openClassEditor: () => { flow.openClassEditor() },
+                            openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                             openDocumentationBrowser: () => { flow.openDocumentationBrowser() },
                         })
@@ -77,4 +77,4 @@ class ClassEditor {
     }
 }
 
-module.exports = Classification.define(ClassEditor)
+module.exports = Classification.define(FileEditor)

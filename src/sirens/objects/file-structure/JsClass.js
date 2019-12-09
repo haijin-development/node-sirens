@@ -15,6 +15,10 @@ class JsClass {
         return true
     }
 
+    getFileObjectType() {
+        return 'jsClass'
+    }
+
     // Accessing
 
     setClassComment(jsComment) {

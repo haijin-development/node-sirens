@@ -40,6 +40,8 @@ class FileObjectInspectorComponent {
 
         const objectFile = flow.getValue()
 
+        if( ! objectFile ) { return null }
+
         const fileObjectType = objectFile.getFileObjectType()
 
         let componentClassification = Pluggables.fileInspectorComponents[fileObjectType]

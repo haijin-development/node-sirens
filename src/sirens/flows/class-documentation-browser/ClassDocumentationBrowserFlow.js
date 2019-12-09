@@ -64,7 +64,7 @@ class ClassDocumentationBrowserFlow {
                         thisFlow.getClassDocumentationFrom({ jsClass: jsClass })
                     )
                     classDefinitionModel.getChildFlow({ id: 'classMethods' }).setChoices(
-                        jsClass.getChildObjects()
+                        jsClass.getMethods()
                     )
                     classDefinitionModel.getChildFlow({ id: 'selectedTags' }).setValue( [] )
                 })
@@ -160,22 +160,6 @@ class ClassDocumentationBrowserFlow {
     }
 
     /// Actions
-
-    reloadClassDefinition() {
-        const browsedClass = this.getBrowsedClass()
-
-        const browsedClassName = browsedClass.getClassName()
-
-        const sourceFile = this.getSourceFile()
-
-        sourceFile.reload()
-
-        const classDefinitions = sourceFile.getClassDefinitions()
-
-        const newClassDefinition = classDefinitions.find( (eachClassDefinition) => {
-            return eachClassDefinition.getClassName() === className
-        })
-    }
 
     reloadClassDefinition() {
         const selectedClass = this.getBrowsedClass()

@@ -55,7 +55,6 @@ class AppBrowserFlow {
 
                     if( selectedFilePath ) {
                         sourceFile = SourceFile.new({ filepath: selectedFilePath.getPath() })
-                        if( ! sourceFile.isJavascriptFile() ) { sourceFile = null }
                     }
 
                     thisFlow.getChildFlow({ id: 'selectedFile' }).setValue( sourceFile )

@@ -4,6 +4,8 @@ const fs = require('fs')
 const splitLines = require('split-lines')
 const StringStream = require('../../O').StringStream
 const SourceFileStructureParser = require('./SourceFileStructureParser')
+const UknownFileStructure = require('./file-structure/UknownFileStructure')
+const FolderObject = require('./file-structure/FolderObject')
 
 /*
  * A source file to query javascript definitions.
@@ -28,14 +30,21 @@ class SourceFile {
     }
 
     doParseContents() {
-        const fileStructureParser = SourceFileStructureParser.new()
+        if( this.isFolder() ) {
+            this.fileStructure = FolderObject.new()
+            return
+        }
 
         try {
+            const fileStructureParser = SourceFileStructureParser.new()
             this.fileStructure = fileStructureParser.parseStructureIn({ sourceFile: this })
         } catch(error) {
             this.fileStructure = null
         }
 
+        if( this.fileStructure === null ) {
+            this.fileStructure = UknownFileStructure.new()
+        }
     }
 
     /// Accessing
@@ -64,13 +73,11 @@ class SourceFile {
         return path.extname( this.filepath )
     }
 
-    /// Asking
-
-    isJavascriptFile() {
-        return this.fileStructure && this.fileStructure.respondsTo( 'isJsFileStructure' )
-    }
-
     /// Querying
+
+    isFolder() {
+        return fs.existsSync( this.filepath ) && fs.statSync( this.filepath ).isDirectory()
+    }
 
     existsFile() {
         return fs.existsSync( this.filepath )

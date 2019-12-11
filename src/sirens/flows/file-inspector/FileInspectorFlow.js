@@ -1,6 +1,9 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const TextualContentInspectorFlow = require('../file-object-inspectors/TextualContentInspectorFlow')
+const SourceFileStructureParser = require('../../objects/SourceFileStructureParser')
+const UknownFileStructure = require('../../objects/file-structure/UknownFileStructure')
+const FolderObject = require('../../objects/file-structure/FolderObject')
 
 class FileInspectorFlow {
     /// Definition
@@ -26,7 +29,9 @@ class FileInspectorFlow {
                     return
                 }
 
-                const jsFileStructure = sourceFile.getFileStructure()
+                const jsFileStructure = thisFlow.parseSourceFileStructure({
+                    sourceFile: sourceFile,
+                })
 
                 const roots = [jsFileStructure]
                 const selection = [jsFileStructure]
@@ -87,6 +92,19 @@ class FileInspectorFlow {
         const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFileObject' })
 
         return selectedFileObjectFlow.getFlowComponent()
+    }
+
+    parseSourceFileStructure({ sourceFile: sourceFile }) {
+        if( sourceFile.isFolder() ) {
+            return FolderObject.new()
+        }
+
+        try {
+            return SourceFileStructureParser.new()
+                .parseStructureIn({ sourceFile: sourceFile })
+        } catch(error) {
+            return UknownFileStructure.new()
+        }
     }
 }
 

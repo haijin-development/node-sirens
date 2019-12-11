@@ -1,11 +1,13 @@
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const filename = 'tests/samples/functions-sample.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
-
-const methods = sourceFile.getFunctionDefinitions()
+const sourceFileParser = SourceFileStructureParser.new()
+const jsFile = sourceFileParser.parseStructureIn({ sourceFile: sourceFile })
+const methods = jsFile.getMethods()
 
 describe('When using a Function', () => {
     it('gets the methods name', () => {

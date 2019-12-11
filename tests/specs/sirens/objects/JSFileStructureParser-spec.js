@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const samplesFolder = 'tests/samples/js-objects/'
 
@@ -9,7 +10,11 @@ describe('When parsing a Js file', () => {
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents =
 `const path = require('path')
@@ -29,7 +34,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents1 =
 `function f1() {
@@ -55,7 +64,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents1 =
 `class C1 {
@@ -81,7 +94,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 
@@ -95,7 +112,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 
@@ -109,7 +130,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseStructureIn({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 

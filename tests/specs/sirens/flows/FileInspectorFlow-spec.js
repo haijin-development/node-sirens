@@ -1,8 +1,12 @@
 const expect = require('chai').expect
 const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const JsFileObject = require('../../../../src/sirens/objects/file-structure/JsFileObject')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const sourceFile = SourceFile.new({ filepath:  __dirname + '/../../../samples/class-definition.js' })
+const sourceFileParser = SourceFileStructureParser.new()
+const jsFile = sourceFileParser.parseStructureIn({ sourceFile: sourceFile })
 
 describe('When using an FileInspectorFlow', () => {
     it('has all these child flows defined', () => {
@@ -37,21 +41,22 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile sections to the fileObjects flow', () => {
-            const fileObject = sourceFile.getFileStructure()
-
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveRoots( [fileObject] )
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveRootsSuchThat( (root) => {
+                expect(root) .to .behaveAs( JsFileObject )
+            })
         })
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
-            const fileObject = sourceFile.getFileStructure()
-
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection( [fileObject] )
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) =>{
+                expect(selection.length) .to .equal( 1 )
+                expect(selection[0]) .to .behaveAs( JsFileObject )
+            })
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            const fileObject = sourceFile.getFileStructure()
-
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveValue( fileObject )
+            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+                expect(value) .to .behaveAs( JsFileObject )
+            })
         })
 
     })
@@ -93,33 +98,29 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
+            const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
-            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ fileObject, classSection ])
+            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ jsFile, jsClass ])
         })
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
+            const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection([
-                fileObject, classSection
-            ])
+            expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection(
+                [ jsFile, jsClass ]
+            )
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
+            const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveValue( classSection )
+            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveValue( jsClass )
         })
 
         xit('sets the methods list', () => {
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
+            const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
-            const methods = classSection.getChildObjects()
+            const methods = jsClass.getChildObjects()
 
             expect(flow) .withId( 'main.selectedFileObject.classMethods' )
                 .toHaveChoices( methods )
@@ -140,10 +141,9 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
+            const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
-            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ fileObject, classSection ])
+            flow.getChildFlow({ id: 'fileObjects' }).setSelection([ jsFile, jsClass ])
             flow.getChildFlow({ id: 'fileObjects' }).setSelection(null)
         })
 

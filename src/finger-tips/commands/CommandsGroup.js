@@ -11,6 +11,10 @@ class CommandsGroup {
         this.assumes = [Flow]
     }
 
+    isCommandGroup() {
+        return true
+    }
+
     /// Iterating
 
     evaluateCommandsEnabledClosure({ application: application }) {

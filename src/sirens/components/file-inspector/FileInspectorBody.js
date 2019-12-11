@@ -4,7 +4,7 @@ const ComponentProtocol_Implementation = require('../../../Skins').ComponentProt
 const FileObjectInspectorComponent = require('./FileObjectInspectorComponent')
 const Resource = require('../../objects/Resource')
 
-class ClassEditorBody {
+class FileInspectorBody {
     /// Definition
 
     static definition() {
@@ -37,9 +37,7 @@ class ClassEditorBody {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
-        if( flow.getSourceFile() === null ) { 
-            return
-        }
+        if( flow.getSourceFile() === null ) { return }
 
         const treeFlow = flow.getFlowPoint({ id: 'fileObjects' })
 
@@ -51,6 +49,7 @@ class ClassEditorBody {
                     this.model( treeFlow )
 
                     this.styles({
+                        id: 'fileObjectsTree',
                         showHeaders: false,
                         roots: treeFlow.getRoots(),
                         viewAttributes: { splitProportion: 1.0/4.0 },
@@ -71,15 +70,32 @@ class ClassEditorBody {
 
                 this.component(
                     FileObjectInspectorComponent.new({
-                        model: flow.getFlowPoint({ id: 'selectedSectionContents' }),
+                        model: flow,
                         openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })
                 )
-
             })
 
         })
+
+        this.expandTreeRoot()
+
+        treeFlow.onRootsChanged({
+            with: this,
+            do: this.expandTreeRoot,
+        })
+    }
+
+    expandTreeRoot() {
+        const treeComponent = this.getChildComponent({
+            id: 'fileObjectsTree',
+            ifNone: null,
+        })
+
+        if( treeComponent === null ) { return }
+
+        treeComponent.expandNodeAtIndex({ indexPath: [0] })
     }
 }
 
-module.exports = Classification.define(ClassEditorBody)
+module.exports = Classification.define(FileInspectorBody)

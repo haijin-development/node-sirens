@@ -14,8 +14,11 @@ class Command {
     /// Initializing
 
     initialize({ id: id, idPath: idPath, actionHandlerClosure: actionHandlerClosure }) {
+        if( id === undefined ) { throw new Error(`An id must be provided.`) }
+        if( idPath === undefined ) { throw new Error(`An idPath must be provided.`) }
+
         this.id = id
-        this.idPath = idPath ? `${idPath}.${id}` : id
+        this.idPath = idPath
         this.actionHandlerClosure = actionHandlerClosure
     }
 
@@ -27,7 +30,7 @@ class Command {
 
     setId({ id: id, idPath: idPath }) {
         this.id = id
-        this.idPath = idPath ? `${idPath}.${id}` : id
+        this.idPath = idPath
     }
 
     getIdPath() {

@@ -168,7 +168,7 @@ describe('When using a StatefulCommand', () => {
                 })
             })
 
-            const result = flow.getFlowPoint({ id: 'flow' }).command_1(1,2)
+            const result = flow.findFlowPoint({ id: 'flow' }).command_1(1,2)
 
             expect( result ) .to .eql( 3 )
         })

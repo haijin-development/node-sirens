@@ -1,8 +1,8 @@
 const OInstanceObjectProperty = require('./OInstanceObjectProperty')
 const DocumentationDsl = require('./documentation/documentationDsl/DocumentationDsl')
 const PropertyValueToPlaygroundText = require('./value-displayers/PropertyValueToPlaygroundText')
-const TextualContentComponent = require('../components/file-editor/TextualContentComponent')
-const JsClassComponent = require('../components/file-editor/JsClassComponent')
+const TextualContentInspectorFlow = require('../flows/file-object-inspectors/TextualContentInspectorFlow')
+const JsClassInspectorFlow = require('../flows/file-object-inspectors/JsClassInspectorFlow')
 
 const Pluggables = {}
 
@@ -20,9 +20,9 @@ Pluggables.documentationFormats = {
     ],
 }
 
-Pluggables.fileInspectorComponents = {
-    default: TextualContentComponent,
-    'jsClass': JsClassComponent,
+Pluggables.fileObjectInspectorFlows = {
+    default: TextualContentInspectorFlow,
+    'jsClass': JsClassInspectorFlow,
 }
 
 module.exports = Pluggables

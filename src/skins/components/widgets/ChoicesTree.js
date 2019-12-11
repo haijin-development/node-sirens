@@ -73,12 +73,17 @@ class ChoicesTree {
         return this        
     }
 
+    expandNodeAtIndex({ indexPath: indexPath }) {
+        this.getView().expandNodeAtIndex({ indexPath: indexPath })
+
+        return this        
+    }
+
     /// Synchronizing
 
     synchronizeViewFromModel() {
         this.duringClassificationDo( UpdatingView, () => {
             const selectionIndices = this.getModel().getSelectionIndices()
-            const indices = selectionIndices.length == 0 ? [] : [selectionIndices]
 
             this.getView().clearItems()
 
@@ -88,7 +93,7 @@ class ChoicesTree {
                 index: 0
             })
 
-            this.getView().setSelectionIndices(indices)
+            this.getView().setSingleSelection({ indexPath: selectionIndices })
         })
     }
 
@@ -120,10 +125,7 @@ class ChoicesTree {
         this.duringClassificationDo( UpdatingView, () => {
             let selectionIndices = this.getModel().getSelectionIndices()
 
-            selectionIndices = selectionIndices.length === 0 ?
-                [] : [selectionIndices]
-
-            this.getView().setSelectionIndices(selectionIndices)
+            this.getView().setSingleSelection({ indexPath: selectionIndices })
         })
     }
 

@@ -51,18 +51,14 @@ class PlaygroundBrowserFlow {
     }
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'pickFile',
-                'getLastOpenedFolder',
-            ]
-
-            this.defineCommandMethods({ methodNames: methods })
+        this.commandsGroup({ id: 'flow-methods' }, () => {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
         })
     }
 
     flowCommands(thisFlow) {
-        this.category( 'application commands methods', () => {
+        this.commandsGroup({ id: 'application-commands methods' }, () => {
             this.command({
                 id: 'openFile',
                 whenActioned: function({ filename: filename }) {

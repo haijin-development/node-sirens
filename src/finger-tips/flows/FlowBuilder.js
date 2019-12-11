@@ -3,6 +3,7 @@ const ValueFlow = require('./ValueFlow')
 const BufferedValueFlow = require('./BufferedValueFlow')
 const ChoiceFlow = require('./ChoiceFlow')
 const TreeChoiceFlow = require('./TreeChoiceFlow')
+const CommandsGroup = require('../commands/CommandsGroup')
 
 /*
  Class(`
@@ -72,14 +73,10 @@ class FlowBuilder {
         return this.rootFlow.getChildFlow({ id: childFlowId })
     }
 
-    category(description, closure) {
-        closure.call(this)
-    }
-
     main({ id: id }, closure) {
         if( id === undefined ) { throw new Error(`The main flow id must be defined.`) }
 
-        this.rootFlow.setId({ id: id })
+        this.rootFlow.setId({ id: id, idPath: id })
 
         if( closure != undefined ) {
             this.evaluate({ closure: closure, with: this.rootFlow })
@@ -206,10 +203,10 @@ class FlowBuilder {
         }
     }
 
-    commands({ id: commandsGroupId }, closure) {
+    commandsGroup({ id: commandsGroupId }, closure) {
         if( commandsGroupId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
 
-        const commandsGroup = ValueFlow.new({ id: commandsGroupId })
+        const commandsGroup = CommandsGroup.new({ id: commandsGroupId })
 
         this.rootFlow.addChildFlow({
             id: commandsGroupId,
@@ -235,26 +232,22 @@ class FlowBuilder {
         this.evaluate({ closure: method, with: this.rootFlow })
     }
 
-    defineCommandMethods({ methodNames: methodNames, flow: flow }) {
-        if( flow === undefined ) {
-            flow = this.rootFlow
+    defineMethodAsCommand({ methodName: methodName, methodClosure: methodClosure, flow: flow }) {
+        if( flow === undefined ) { flow = this.rootFlow }
+        if( methodClosure === undefined ) { methodClosure = flow[methodName].bind(flow) }
+
+        const method = flow[methodName]
+
+        if( method.isMethodNotFound === true ) {
+            const flowString = flow.toString()
+            throw new Error(`The flow ${flowString} was expected to define the method .${methodName}()`)
         }
 
-        methodNames.forEach( (methodName) => {
-            const method = flow[methodName]
-
-            if( method.isMethodNotFound === true ) {
-                const flowString = flow.toString()
-                throw new Error(`The flow ${flowString} was expected to define the method .${methodName}()`)
-            }
-
-            this.command({
-                id: methodName,
-                whenActioned: flow[methodName].bind(flow),
-            })
+        this.command({
+            id: methodName,
+            whenActioned: methodClosure,
         })
     }
-
 }
 
 FlowBuilder = Classification.define(FlowBuilder)

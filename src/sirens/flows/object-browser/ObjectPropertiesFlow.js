@@ -52,19 +52,15 @@ class ObjectPropertiesFlow {
     }
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'getMainObject',
-                'getRootProperties',
-                'getSelectedPropertyValue',
-            ]
-
-            this.defineCommandMethods({ methodNames: methods })
+        this.commandsGroup({ id: 'flow-methods' }, () => {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getMainObject' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getRootProperties' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedPropertyValue' })
         })
     }
 
     flowCommands(thisFlow) {
-        this.category( 'flow commands', () => {
+        this.commandsGroup({ id: 'flow-commands' }, () => {
 
             this.command({
                 id: 'inspectSelectedObject',

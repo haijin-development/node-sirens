@@ -112,7 +112,7 @@ class ClassDocumentationBrowserFlow {
     }
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
+        this.commandsGroup({ id: 'flow-methods' }, () => {
 
             this.command({
                 id: 'getBrowsedClass',

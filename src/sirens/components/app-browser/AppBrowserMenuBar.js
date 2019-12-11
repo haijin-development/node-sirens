@@ -39,8 +39,8 @@ class AppBrowserMenuBar {
 
                     this.item({
                         label: 'Open class documentation browser',
-                        action: component.getProps().openClassDocumentation,
-                        enabled: model.getCommand({ id: 'openClassDocumentation' }),
+                        action: component.getProps().openDocumentationBrowser,
+                        enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
                     })
 
                     this.item({

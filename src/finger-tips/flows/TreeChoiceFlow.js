@@ -33,6 +33,14 @@ class TreeChoiceFlow {
         this.getChildrenClosure = getChildrenClosure
     }
 
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
     asFlowPoint() {
         const flowPoint = TreeChoiceFlowPoint.new({ flow: this })
 

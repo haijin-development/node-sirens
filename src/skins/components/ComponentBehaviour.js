@@ -722,8 +722,8 @@ class ComponentBehaviour {
     // Releasing
 
     releaseComponent() {
-        this.unsubscribeFromPropModels()
         this.unsubscribeFromModel()
+        this.unsubscribeFromPropModels()
         this.releaseChildComponents()
         this.releaseView()
         this.releaseProps()

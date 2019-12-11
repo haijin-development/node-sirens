@@ -66,7 +66,7 @@ class ClassDocumentationBrowser {
                         ClassDocumentationMenuBar.new({
                             model: flow,
                             reloadClassDefinition: () => { flow.reloadClassDefinition() },
-                            openClassDocumentation: () => { flow.openClassDocumentation() },
+                            openDocumentationBrowser: () => { flow.openDocumentationBrowser() },
                             openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                         })
@@ -76,7 +76,7 @@ class ClassDocumentationBrowser {
                         ClassDocumentationToolBar.new({
                             model: flow,
                             reloadClassDefinition: () => { flow.reloadClassDefinition() },
-                            openClassDocumentation: () => { flow.openClassDocumentation() },
+                            openDocumentationBrowser: () => { flow.openDocumentationBrowser() },
                             openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                         })

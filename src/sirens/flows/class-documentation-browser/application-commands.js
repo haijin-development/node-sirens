@@ -2,7 +2,7 @@ const Sirens = require('../../../Sirens')
 
 function applicationCommands(thisFlow) {
 
-    this.category( 'application commands', () => {
+    this.commandsGroup({ id: 'application-commands' }, () => {
 
         this.command({
             id: 'reloadClassDefinition',
@@ -20,7 +20,7 @@ function applicationCommands(thisFlow) {
         })
 
         this.command({
-            id: 'openClassDocumentation',
+            id: 'openDocumentationBrowser',
             whenActioned: function() {
                 const jsClass = thisFlow.getChildFlow({ id: 'classDefinition' }).getValue()
                 Sirens.browseClassDocumentation({ jsClass: jsClass })

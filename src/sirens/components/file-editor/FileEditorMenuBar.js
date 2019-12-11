@@ -15,7 +15,7 @@ class FileEditorMenuBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -31,13 +31,13 @@ class FileEditorMenuBar {
                     this.item({
                         label: 'Open file...',
                         action: component.getProps().openFile,
-                        enabled: model.getCommand({ id: 'openFile' }),
+                        enabled: flow.getCommand({ id: 'openFile' }),
                     })
 
                     this.item({
                         label: 'Open file in a new class browser...',
                         action: component.getProps().openFileInNewWindow,
-                        enabled: model.getCommand({ id: 'openFileInNewWindow' }),
+                        enabled: flow.getCommand({ id: 'openFileInNewWindow' }),
                     })
                 })
 
@@ -45,13 +45,13 @@ class FileEditorMenuBar {
                     this.item({
                         label: 'Open another class editor...',
                         action: component.getProps().openFileEditor,
-                        enabled: model.getCommand({ id: 'openFileEditor' }),
+                        enabled: flow.getCommand({ id: 'openFileEditor' }),
                     })
 
                     this.item({
                         label: 'Open a playground...',
                         action: component.getProps().openPlayground,
-                        enabled: model.getCommand({ id: 'openPlayground' }),
+                        enabled: flow.getCommand({ id: 'openPlayground' }),
                     })
 
                 })
@@ -60,7 +60,7 @@ class FileEditorMenuBar {
                     this.item({
                         label: 'Open a documentation browser...',
                         action: component.getProps().openDocumentationBrowser,
-                        enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
+                        enabled: flow.getCommand({ id: 'openDocumentationBrowser' }),
                     })
 
                 })

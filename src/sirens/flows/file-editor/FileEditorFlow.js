@@ -50,7 +50,7 @@ class FileEditorFlow {
     }
 
     flowCommands(thisFlow) {
-        this.category( 'application commands', () => {
+        this.commandsGroup({ id: 'application-commands' }, () => {
             this.command({
                 id: 'openFile',
                 whenActioned: function({ filename: filename }) {
@@ -90,8 +90,7 @@ class FileEditorFlow {
                     return thisFlow.hasAClassSelected()
                 },
                 whenActioned: function() {
-                    console.log(123132132)
-                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
+                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedFileObject' })
                     const jsClass = selectedSection.getValue()
                     const methodName = selectedSection.getSelectedMethodName()
                     Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
@@ -123,13 +122,9 @@ class FileEditorFlow {
     }
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'pickFile',
-                'getLastOpenedFolder',
-            ]
-
-            this.defineCommandMethods({ methodNames: methods })
+        this.commandsGroup({ id: 'flow-methods' }, () => {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
         })
     }
 
@@ -166,9 +161,11 @@ class FileEditorFlow {
     }
 
     hasAClassSelected() {
-        const section = this.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
+        const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
 
-        return section.hasAClassSelected()
+        return  selectedFileObjectFlow.respondsTo('hasAClassSelected')
+                && 
+                selectedFileObjectFlow.hasAClassSelected()
     }
 }
 

@@ -1,8 +1,9 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const Sirens = require('../../../Sirens')
+const JsClassComponent = require('../../components/file-object-inspectors/JsClassComponent')
 
-class FileInspectorFlow {
+class JsClassInspectorFlow {
     /// Definition
 
     static definition() {
@@ -59,10 +60,10 @@ class FileInspectorFlow {
     }
 
     flowCommands(thisFlow) {
-        this.category( 'flow commands', () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
             this.command({
-                id: 'openClassDocumentation',
+                id: 'openDocumentationBrowser',
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
@@ -98,6 +99,12 @@ class FileInspectorFlow {
 
         return selectedMethod.getMethodName()
     }
+
+    getFlowComponent() {
+        return JsClassComponent.new({
+            model: this.asFlowPoint(),
+        })
+    }
 }
 
-module.exports = Classification.define(FileInspectorFlow)
+module.exports = Classification.define(JsClassInspectorFlow)

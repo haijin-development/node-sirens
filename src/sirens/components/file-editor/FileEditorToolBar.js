@@ -17,7 +17,7 @@ class FileEditorToolBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -37,7 +37,7 @@ class FileEditorToolBar {
                     },
                     tooltip: 'Opens a file to edit its class.',
                     action: component.getProps().openFile,
-                    enabled: model.getCommand({ id: 'openFile' }),
+                    enabled: flow.getCommand({ id: 'openFile' }),
                 })
 
                 this.button({
@@ -48,7 +48,7 @@ class FileEditorToolBar {
                     },
                     tooltip: 'Opens a file in a new window to edit its class.',
                     action: component.getProps().openFileInNewWindow,
-                    enabled: model.getCommand({ id: 'openFileInNewWindow' }),
+                    enabled: flow.getCommand({ id: 'openFileInNewWindow' }),
                 })
 
                 this.separator()
@@ -61,7 +61,7 @@ class FileEditorToolBar {
                     },
                     tooltip: 'Opens a class documentation browser on the selected class.',
                     action: component.getProps().openDocumentationBrowser,
-                    enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
+                    enabled: flow.getCommand({ id: 'openDocumentationBrowser' }),
                 })
 
                 this.separator()
@@ -75,7 +75,7 @@ class FileEditorToolBar {
                     },
                     tooltip: 'Opens another class editor.',
                     action: component.getProps().openFileEditor,
-                    enabled: model.getCommand({ id: 'openFileEditor' }),
+                    enabled: flow.getCommand({ id: 'openFileEditor' }),
                 })
 
                 this.button({
@@ -87,7 +87,7 @@ class FileEditorToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getCommand({ id: 'openPlayground' }),
+                    enabled: flow.getCommand({ id: 'openPlayground' }),
                 })
 
             })

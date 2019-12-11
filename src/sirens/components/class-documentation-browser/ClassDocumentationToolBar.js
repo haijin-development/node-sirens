@@ -71,8 +71,8 @@ class ClassDocumentationToolBar {
                         size: GtkIcons.size._24x24,
                     },
                     tooltip: 'Opens a new class documentation browser.',
-                    action: component.getProps().openClassDocumentation,
-                    enabled: flow.getCommand({ id: 'openClassDocumentation' }),
+                    action: component.getProps().openDocumentationBrowser,
+                    enabled: flow.getCommand({ id: 'openDocumentationBrowser' }),
                 })
 
                 this.button({

@@ -71,7 +71,7 @@ class AppBrowserFlow {
     }
 
     flowCommands(thisFlow) {
-        this.category( 'application commands', () => {
+        this.commandsGroup({ id: 'application-commands' }, function() {
 
             this.command({
                 id: 'pickAndOpenFolder',
@@ -99,22 +99,29 @@ class AppBrowserFlow {
                 }
             })
 
-        })
+            this.command({
+                id: 'openDocumentationBrowser',
+                enabledIf: function() {
+                    return thisFlow.hasAClassSelected()
+                },
+                whenActioned: function() {
+                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedFileObject' })
+                    const jsClass = selectedSection.getValue()
+                    const methodName = selectedSection.getSelectedMethodName()
+                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
+                }
+            })
 
+        })
     }
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'pickFolder',
-                'openFolder',
-                'getSelectedFilePath',
-                'hasAClassSelected',
-            ]
-
-            this.defineCommandMethods({ methodNames: methods })
+        this.commandsGroup({ id: 'flow-methods' }, function() {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFolder' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'openFolder' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedFilePath' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'hasAClassSelected' })
         })
-
     }
 
     //////////////////////
@@ -154,9 +161,11 @@ class AppBrowserFlow {
     }
 
     hasAClassSelected() {
-        const section = this.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
+        const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
 
-        return section.hasAClassSelected()
+        return  selectedFileObjectFlow.respondsTo('hasAClassSelected')
+                && 
+                selectedFileObjectFlow.hasAClassSelected()
     }
 }
 

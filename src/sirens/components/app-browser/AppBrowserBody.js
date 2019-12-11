@@ -18,6 +18,8 @@ class AppBrowserBody {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        const filesTreeFlow = flow.getFlowPoint({ id: 'filesTree' })
+
         componentsRenderer.render( function(component) {
             this.horizontalSplitter( function() {
 
@@ -31,16 +33,17 @@ class AppBrowserBody {
                     this.component(
                         SourceFileEditionComponent.new({
                             model: flow.getFlowPoint({ id: 'selectedFile' }),
-                            openClassDocumentation: component.getProps().openClassDocumentation,
+                            openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                         })
                     )
 
                 })
 
                 this.treeChoice( function() {
-                    this.model( flow.getFlowPoint({ id: 'filesTree' }) )
+                    this.model( filesTreeFlow )
 
                     this.styles({
+                        id: 'filesTree',
                         viewAttributes: { splitProportion: 1.0/3.0 },
                         showHeaders: false,
                         clickableHeaders: false,
@@ -78,6 +81,19 @@ class AppBrowserBody {
 
             })
         })
+
+        this.expandFilesTreeRoot()
+
+        filesTreeFlow.onRootsChanged({
+            with: this,
+            do: this.expandFilesTreeRoot,
+        })
+    }
+
+    expandFilesTreeRoot() {
+        const filesTreeComponent = this.getChildComponent({ id: 'filesTree' })
+
+        filesTreeComponent.expandNodeAtIndex({ indexPath: [0] })
     }
 }
 

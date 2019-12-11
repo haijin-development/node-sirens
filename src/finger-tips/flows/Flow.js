@@ -14,7 +14,7 @@ class Flow {
     /// Initializing
 
     afterInstantiation() {
-        this.childFlows = {}
+        this.childFlows = new Map()
         this.commandsController = CommandsController.new({ mainFlow: this })
         this.pendingEvents = new Map()
     }
@@ -43,15 +43,43 @@ class Flow {
         flowBuilder.evaluate({ closure: closure, with: this })
     }
 
+    releaseFlow() {
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+
+        this.pendingEvents = new Map()
+        this.childFlows = new Map()
+    }
+
+    replaceChildFlow({ id: id, withFlow: newFlow }) {
+        this.removeChildFlow({ id: id })
+
+        this.addChildFlow({
+            id: id,
+            flow: newFlow,
+        })
+    }
+
+    removeChildFlow({ id: childFlowId }) {
+        const childFlow = this.childFlows.get(childFlowId)
+
+        if( childFlow === undefined ) { return }
+
+        childFlow.releaseFlow()
+
+        delete this.childFlows.delete(childFlowId)
+    }
+
     addChildFlow({ id: childFlowId, flow: childFlow }) {
-        if( this.childFlows[childFlowId] !== undefined ) {
+        if( this.childFlows.has(childFlowId) ) {
             throw new Error(`This flow already has a child flow with id: '${childFlowId}'.`)
         }
 
-        childFlow.setId({ id: childFlowId, idPath: this.idPath })
+        childFlow.setId({ id: childFlowId, idPath: this.idPath + '.' + childFlowId })
         childFlow.setCommandsController( this.commandsController )
 
-        this.childFlows[childFlowId] = childFlow
+        this.childFlows.set(childFlowId, childFlow)
 
         childFlow.allChildFlowsDo( (eachChildFlow) => {
             const currentIdPath = eachChildFlow.getIdPath().split('.').slice(1).join('.')
@@ -75,12 +103,19 @@ class Flow {
             child = child.getChildFlow({ id: eachId })
         })
 
-        const command = typeof(calculateEnabledClosure) !== undefined ?
+        const command = typeof( calculateEnabledClosure ) !== undefined ?
             StatefulCommand.new({
-                calculateEnabledClosure: calculateEnabledClosure, actionHandlerClosure: actionHandlerClosure
+                id: lastId,
+                idPath: this.idPath + '.' + lastId,
+                calculateEnabledClosure: calculateEnabledClosure,
+                actionHandlerClosure: actionHandlerClosure
             })
             :
-            StatelessCommand.new({ actionHandlerClosure: actionHandlerClosure })
+            StatelessCommand.new({
+                id: lastId,
+                idPath: this.idPath + '.' + lastId,
+                actionHandlerClosure: actionHandlerClosure,
+            })
 
         child.addCommand({
             id: lastId,
@@ -96,7 +131,7 @@ class Flow {
 
     setId({ id: id, idPath: idPath }) {
         this.id = id
-        this.idPath = idPath ? `${idPath}.${id}` : id
+        this.idPath = idPath
     }
 
     getIdPath() {
@@ -110,13 +145,13 @@ class Flow {
     /// Searching
 
     getChildFlows() {
-        return Object.values( this.childFlows )
+        return [... this.childFlows.values() ]
     }
 
-    getFlowPoint({ id: flowPointId }) {
-        const childFlow = this.getChildFlow({ id: flowPointId })
+    findFlowPoint({ id: flowPointId }) {
+        const childFlow = this.findChildFlow({ id: flowPointId })
 
-        return childFlow.asFlowPoint()
+        return childFlow ? childFlow.asFlowPoint() : null
     }
 
     getChildFlow({ id: flowPointId }) {
@@ -136,7 +171,7 @@ class Flow {
     }
 
     findDirectChildFlow({ id: flowPointId }) {
-        return this.childFlows[ flowPointId ]
+        return this.childFlows.get( flowPointId )
     }
 
     allChildFlowsDo(closure) {
@@ -187,14 +222,24 @@ class Flow {
         return command.execute({ params: params })
     }
 
-    getCommand({ id: commandId }) {
-        const command = this.getChildFlow({ id: commandId })
+    findCommand({ id: commandId }) {
+        const command = this.findChildFlow({ id: commandId })
 
-        if( ! command.respondsTo('isCommand') ) {
+        if( command && ! command.respondsTo('isCommand') ) {
             throw new Error(`The flow child with id {id: '${commandId}'} exists but it is not a Command.`)
         }
 
-        return command.asFlowPoint()
+        return command ? command.asFlowPoint() : undefined
+    }
+
+    getCommand({ id: commandId }) {
+        const command = this.findCommand({ id: commandId })
+
+        if( ! command ) {
+            throw new Error(`The command with {id: '${commandId}'} was not found.`)
+        }
+
+        return command
     }
 
     allCommandsDo(closure) {
@@ -209,20 +254,31 @@ class Flow {
         commands.forEach( closure )
     }
 
-    getDirectCommands() {
-        return this.getChildFlows().filter( (childFlow) => {
-            return childFlow.respondsTo('isCommand')
+    getFlowPointsCommands() {
+        let flowPointCommands = []
+
+        this.getChildFlows().filter( (childFlow) => {
+            if( childFlow.respondsTo('isCommand') ){
+                flowPointCommands.push( childFlow )
+            }
+
+            if( childFlow.respondsTo('isCommandGroup') ){
+                flowPointCommands = flowPointCommands.concat( childFlow.getFlowPointsCommands() )
+            }
         })
+
+        return flowPointCommands
     }
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
-        const flowCommands = this.getDirectCommands()
+        const flowCommands = this.getFlowPointsCommands()
 
         if( flowCommands.length === 0 ) { return }
 
         const classificationDefinition = class DynamicClassification {}
 
         flowCommands.forEach( (command) => {
+
             const commandId = command.getId()
 
             classificationDefinition.prototype[commandId] = function(...params) {

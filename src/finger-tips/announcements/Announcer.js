@@ -57,6 +57,10 @@ class Announcer extends EventEmitter {
 
         subscriptions.delete(listener)
     }
+
+    dropAllAnnouncementsForAllListeners() {
+        this.subscriptions = new WeakMap()
+    }
 }
 
 module.exports = Classification.define(Announcer)

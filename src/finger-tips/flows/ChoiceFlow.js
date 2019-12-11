@@ -32,6 +32,14 @@ class ChoiceFlow {
         this.choices = choices
     }
 
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
     asFlowPoint() {
         const flowPoint = ChoiceFlowPoint.new({ flow: this })
 

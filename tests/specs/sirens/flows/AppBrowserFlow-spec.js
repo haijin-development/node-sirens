@@ -20,26 +20,26 @@ describe('When using an AppBrowserFlow', () => {
             'main.windowTitle',
             'main.filesTree',
 
-            'main.pickAndOpenFolder',
-            'main.openFileEditor',
-            'main.openPlayground',
-            'main.pickFolder',
-            'main.openFolder',
-            'main.getSelectedFilePath',
-            'main.hasAClassSelected',
+            'main.application-commands',
+            'main.application-commands.pickAndOpenFolder',
+            'main.application-commands.openFileEditor',
+            'main.application-commands.openPlayground',
+            'main.application-commands.openDocumentationBrowser',
+
+            'main.flow-methods',
+            'main.flow-methods.pickFolder',
+            'main.flow-methods.openFolder',
+            'main.flow-methods.getSelectedFilePath',
+            'main.flow-methods.hasAClassSelected',
 
             'main.selectedFile',
-
             'main.selectedFile.fileObjects',
-            'main.selectedFile.selectedSectionContents',
 
-            'main.selectedFile.getSourceFile',
+            'main.selectedFile.flow-methods',
+            'main.selectedFile.flow-methods.getFileObjectComponent',
+            'main.selectedFile.flow-methods.getSourceFile',
 
-            'main.selectedFile.selectedSectionContents.classMethods',
-            'main.selectedFile.selectedSectionContents.selectedMethod',
-
-            'main.selectedFile.selectedSectionContents.openClassDocumentation'
-
+            'main.selectedFile.selectedFileObject',
         ])
     })
 
@@ -49,7 +49,7 @@ describe('When using an AppBrowserFlow', () => {
         beforeEach( () => {
             flow = AppBrowserFlow.new()
 
-            flow.openFolder({ folderPath: folder })            
+            flow.openFolder({ folderPath: folder })
         })
 
         it('sets the folder to the main flow', () => {

@@ -4,7 +4,15 @@
 
 ### Sirens
 
+- Added a row expansion of the roots to files and fileobjects trees.
+- Improved the ObjectFile types plugins using dynamic flows.
+
 ### FingerTips
+
+- Added findCommand method.
+- Reimplemented commands categories with commandsGroup.
+- Implemented adding and removing flows on the fly.
+
 
 ### Skins
 

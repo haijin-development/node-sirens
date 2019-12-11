@@ -1,7 +1,7 @@
 const Sirens = require('../../../Sirens')
 
 function classDefinitionCommands(thisFlow) {
-    this.category( 'class definition commands', () => {
+    this.commandsGroup({ id: 'class definition commands' }, () => {
 
         this.command({
             id: 'updateClassUnformattedComment',

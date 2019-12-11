@@ -49,13 +49,9 @@ class ObjectBrowserFlow {
     /// Flow methods
 
     flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'browseObject',
-                'propertySelectionValueStringFrom',
-            ]
-
-            this.defineCommandMethods({ methodNames: methods })
+        this.commandsGroup({ id: 'flow-methods' }, () => {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'browseObject' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'propertySelectionValueStringFrom' })
         })
     }
 

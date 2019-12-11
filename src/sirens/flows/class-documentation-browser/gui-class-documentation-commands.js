@@ -5,7 +5,7 @@ const EditExampleDialog = require('../../components/class-documentation-browser/
 
 function guiClassDocumentationCommands(thisFlow) {
 
-    this.category( 'commands that make use of the GUI components.', () => {
+    this.commandsGroup({ id: 'class-documentation-commands' }, () => {
 
         this.command({
             id: 'editClassDocumentationComment',

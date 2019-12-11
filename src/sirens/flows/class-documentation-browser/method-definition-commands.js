@@ -1,7 +1,7 @@
 const Sirens = require('../../../Sirens')
 
 function methodDefinitionCommands(thisFlow) {
-    this.category( 'Method definition commands', function() {
+    this.commandsGroup({ id: 'Method definition commands' }, function() {
 
         this.command({
             id: 'updateMethodUnformmatedComment',

@@ -17,6 +17,22 @@ class ValueFlow {
         this.value = null
     }
 
+    initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
+        this.previousClassificationDo( () => {
+            this.initialize({ id: id, idPath: idPath })
+        })
+
+        this.doUpdateValue({ newValue: null, oldValue: undefined })
+    }
+
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
     /// Converting
 
     asFlowPoint() {
@@ -52,6 +68,10 @@ class ValueFlow {
 
         this.value = newValue
 
+        this.doUpdateValue({ newValue: newValue, oldValue: oldValue })
+    }
+
+    doUpdateValue({ newValue: newValue, oldValue: oldValue }) {
         if( this.hasWhenFlowValueChangedClosure() ) {
             this.evaluateWhenFlowValueChangedClosure({ newValue: newValue, oldValue: oldValue })
         }

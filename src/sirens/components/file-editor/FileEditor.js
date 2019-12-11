@@ -5,7 +5,7 @@ const ComponentProtocol_Implementation = require('../../../Skins').ComponentProt
 const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
 const FileEditorFlow = require('../../flows/file-editor/FileEditorFlow')
 const FileEditorMenu = require('./FileEditorMenu')
-const ClassEditorBody = require('./ClassEditorBody')
+const FileInspectorBody = require('../file-inspector/FileInspectorBody')
 const Sirens = require('../../../Sirens')
 
 class FileEditor {
@@ -65,7 +65,7 @@ class FileEditor {
                     )
 
                     this.component(
-                        ClassEditorBody.new({
+                        FileInspectorBody.new({
                             model: flow.getFlowPoint({ id: 'selectedFile' }),
                             openDocumentationBrowser: () => { flow.openDocumentationBrowser() },
                         })

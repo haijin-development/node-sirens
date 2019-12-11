@@ -18,7 +18,10 @@ class TextualContentComponent {
 
         const fileObject = flow.getValue()
 
-        const fileObjectText = fileObject.getContents()
+        const fileObjectText = fileObject ?
+            fileObject.getContents()
+            :
+            ''
 
         componentsRenderer.render( function(component) {
 

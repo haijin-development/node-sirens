@@ -4,7 +4,7 @@ const ComponentProtocol_Implementation = require('../../../../Skins').ComponentP
 
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const Preferences = require('../../../objects/Preferences')
+const Preferences = require('../../../Preferences')
 
 class TagsDocumentation {
     /// Definition

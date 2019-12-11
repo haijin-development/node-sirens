@@ -22,6 +22,12 @@ class Command {
         this.actionHandlerClosure = actionHandlerClosure
     }
 
+    releaseFlow() {
+        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
+            this[instVar] = null
+        })
+    }
+
     /// Id
 
     getId() {

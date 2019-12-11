@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
-const JsFileParser = require('./JsFileParser')
 const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
+const JsFileParser = require('../js-parser/JsFileParser')
 const JsFileStructure = require('../file-structure/JsFileStructure')
 const JsComment = require('../file-structure/JsComment')
 const JsClass = require('../file-structure/JsClass')

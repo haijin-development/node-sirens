@@ -1,7 +1,6 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const TextualContentInspectorFlow = require('../file-object-inspectors/TextualContentInspectorFlow')
-const Pluggables = require('../../objects/Pluggables')
 
 class FileInspectorFlow {
     /// Definition
@@ -45,8 +44,9 @@ class FileInspectorFlow {
 
                     const newValue = fileObject ? fileObject : null
 
-                    const fileTypeFlow = thisFlow.getFileObjectInspectorFlow({
-                        fileObject: fileObject
+                    const fileTypeFlow = thisFlow.executeCommand({
+                        id: 'getFileObjectInspectorFlow',
+                        with: { fileObject: fileObject },
                     })
 
                     thisFlow.replaceChildFlow({
@@ -64,6 +64,7 @@ class FileInspectorFlow {
     flowMethods(thisFlow) {
         this.commandsGroup({ id: 'flow-methods' }, function() {
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSourceFile' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getFileObjectInspectorFlow' })
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getFileObjectComponent' })
         })
     }
@@ -79,16 +80,7 @@ class FileInspectorFlow {
     }
 
     getFileObjectInspectorFlow({ fileObject: fileObject }) {
-        if( ! fileObject ) { return TextualContentInspectorFlow.new() }
-
-        const fileObjectType = fileObject.getFileObjectType()
-
-        const fileObjectInspectorFlow = Pluggables.fileObjectInspectorFlows[fileObjectType] ?
-            Pluggables.fileObjectInspectorFlows[fileObjectType]
-            :
-            Pluggables.fileObjectInspectorFlows.default            
-
-        return fileObjectInspectorFlow.new()
+        return TextualContentInspectorFlow.new()
     }
 
     getFileObjectComponent() {

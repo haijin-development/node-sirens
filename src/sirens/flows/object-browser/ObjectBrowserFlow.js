@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
-const Pluggables = require('../../objects/Pluggables')
+const Pluggables = require('../../Pluggables')
 
 class ObjectBrowserFlow {
     /// Definition

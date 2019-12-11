@@ -14,9 +14,10 @@ class _ObjectProperty {
     /// Initializing
 
     afterInstantiation() {
-        const Pluggables = require('./Pluggables')
+        const Pluggables = require('../Pluggables')
 
-        const pluggableClassifications = Pluggables.objectPropertiesInspector.plugins
+        const pluggableClassifications =
+            Pluggables.objectPropertiesInspector.availablePropertiesInspectors
 
         this.behaveAsAll( pluggableClassifications )
     }

@@ -37,6 +37,7 @@ describe('When using an AppBrowserFlow', () => {
 
             'main.selectedFile.flow-methods',
             'main.selectedFile.flow-methods.getFileObjectComponent',
+            'main.selectedFile.flow-methods.getFileObjectInspectorFlow',
             'main.selectedFile.flow-methods.getSourceFile',
 
             'main.selectedFile.selectedFileObject',

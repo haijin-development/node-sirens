@@ -22,9 +22,9 @@ class ClassDocumentationBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'classDocumentationBrowser' }, function(thisFlow) {
+        this.setCommandsController( commandsController )
 
-            this.setCommandsController( commandsController )
+        flow.main({ id: 'classDocumentationBrowser' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: applicationCommands })
@@ -106,8 +106,6 @@ class ClassDocumentationBrowserFlow {
                 })
 
             })
-
-            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 

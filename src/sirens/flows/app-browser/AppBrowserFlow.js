@@ -21,9 +21,9 @@ class AppBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'main' }, function(thisFlow) {
+        this.setCommandsController( commandsController )
 
-            this.setCommandsController( commandsController )
+        flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
@@ -65,8 +65,6 @@ class AppBrowserFlow {
                 id: 'selectedFile',
                 definedWith: FileInspectorFlow.new(),
             })
-
-            thisFlow.evaluateEventHandler({ event: 'appBrowser-flow-built', eventHandler: () => {} })
         })
     }
 

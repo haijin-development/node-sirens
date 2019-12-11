@@ -32,6 +32,8 @@ class Flow {
                 const flowBuilder = this
                 flow.buildWith( flowBuilder )
             })
+
+            flow.evaluateEventHandler({ event: 'main-flow-built', eventHandler: () => {} })
         }
     }
 
@@ -44,6 +46,12 @@ class Flow {
     }
 
     releaseFlow() {
+        const childFlows = this.getChildFlows()
+
+        childFlows.forEach( (childFlow) => {
+            childFlow.releaseFlow()
+        })
+
         this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
             this[instVar] = null
         })
@@ -93,34 +101,52 @@ class Flow {
     }
 
     defineCommand({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
-        const ids = commandId.split('.')
-        const firstIds = ids.slice(0, -1)
-        const lastId = ids[ ids.length - 1 ]
-
-        let child = this
-
-        firstIds.forEach( (eachId) => {
-            child = child.getChildFlow({ id: eachId })
-        })
+        const commandFlow = this.searchCommandParentFlowFromId({ id: commandId })
 
         const command = typeof( calculateEnabledClosure ) !== undefined ?
             StatefulCommand.new({
-                id: lastId,
-                idPath: this.idPath + '.' + lastId,
+                id: commandFlow.commandId,
+                idPath: this.idPath + '.' + commandFlow.commandId,
                 calculateEnabledClosure: calculateEnabledClosure,
                 actionHandlerClosure: actionHandlerClosure
             })
             :
             StatelessCommand.new({
-                id: lastId,
-                idPath: this.idPath + '.' + lastId,
+                id: commandFlow.commandId,
+                idPath: this.idPath + '.' + commandFlow.commandId,
                 actionHandlerClosure: actionHandlerClosure,
             })
 
-        child.addCommand({
-            id: lastId,
+        commandFlow.parent.addCommand({
+            id: commandFlow.commandId,
             command: command,
         })
+    }
+
+    overrideCommand({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
+        const commandFlow = this.searchCommandParentFlowFromId({ id: commandId })
+
+        commandFlow.parent.removeChildFlow({ id: commandFlow.commandId })
+
+        this.defineCommand({
+            id: commandId,
+            enabledIf: calculateEnabledClosure,
+            whenActioned: actionHandlerClosure
+        })
+    }
+
+    searchCommandParentFlowFromId({ id: commandId }) {
+        const ids = commandId.split('.')
+        const firstIds = ids.slice(0, -1)
+        const lastId = ids[ ids.length - 1 ]
+
+        let parent = this
+
+        firstIds.forEach( (eachId) => {
+            parent = parent.getChildFlow({ id: eachId })
+        })
+
+        return { parent: parent, commandId: lastId }
     }
 
     /// Id

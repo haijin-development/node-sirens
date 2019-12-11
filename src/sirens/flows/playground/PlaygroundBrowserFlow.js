@@ -18,9 +18,9 @@ class PlaygroundBrowserFlow {
     buildWith(flowBuilder) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flowBuilder.main({ id: 'playground' }, function(application) {
+        this.setCommandsController( commandsController )
 
-            this.setCommandsController( commandsController )
+        flowBuilder.main({ id: 'playground' }, function(application) {
 
             this.defineFlowCommandsIn({ method: application.flowMethods })
             this.defineFlowCommandsIn({ method: application.flowCommands })
@@ -45,8 +45,6 @@ class PlaygroundBrowserFlow {
                     return sourceFile ? sourceFile.getFileContents() : ''
                 },
             })
-
-            application.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 

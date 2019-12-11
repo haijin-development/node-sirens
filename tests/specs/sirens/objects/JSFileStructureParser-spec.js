@@ -20,7 +20,7 @@ let n = 1
 n += 1`
 
         expect( fileObjects.length ) .to .equal( 1 )
-        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[0].getContents() ) .to .equal( expectedContents )
     })
 
@@ -85,7 +85,7 @@ n += 1`
 
         expect( fileObjects.length ) .to .equal( 3 )
 
-        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'C1 class' )
     })
@@ -101,7 +101,7 @@ n += 1`
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'C1 class' )
-        expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'plain text' )
     })
 
     it('with classes, functions and text in the middle', () => {
@@ -114,7 +114,7 @@ n += 1`
         expect( fileObjects.length ) .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
-        expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'C1 class' )
     })
 })

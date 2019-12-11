@@ -16,9 +16,9 @@ class PrototypesBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
+        this.setCommandsController( commandsController )
 
-            this.setCommandsController( commandsController )
+        flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
@@ -42,10 +42,7 @@ class PrototypesBrowserFlow {
                 id: 'playground',
                 definedWith: ClassPropertiesFlow.new(),
             })
-
-            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
-
     }
 
     flowMethods(thisFlow) {

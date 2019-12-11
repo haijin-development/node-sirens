@@ -19,9 +19,9 @@ class FileEditorFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
-        flow.main({ id: 'main' }, function(application) {
+        this.setCommandsController( commandsController )
 
-            this.setCommandsController( commandsController )
+        flow.main({ id: 'main' }, function(application) {
 
             this.defineFlowCommandsIn({ method: application.flowCommands })
             this.defineFlowCommandsIn({ method: application.flowMethods })
@@ -44,8 +44,6 @@ class FileEditorFlow {
                 id: 'selectedFile',
                 definedWith: FileInspectorFlow.new(),
             })
-
-            application.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 

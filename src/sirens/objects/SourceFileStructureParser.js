@@ -1,6 +1,5 @@
 const Classification = require('../../O').Classification
-const JSFileStructureParser = require('./parsers/JSFileStructureParser')
-const PlainTextStructureParser = require('./parsers/PlainTextStructureParser')
+const Pluggables = require('../Pluggables')
 
 class SourceFileStructureParser {
     /// Definition
@@ -54,15 +53,14 @@ class SourceFileStructureParser {
     // Parser selection
 
     getParserForFileType({ fileType: fileType }) {
-        if( this.fileTypesParsers.has( fileType ) ) {
-            const getParserClosure = this.fileTypesParsers.get( fileType )
+        const fileTypeParsers = Pluggables.fileInspector.fileTypeParsers
 
-            return getParserClosure()
-        }
+        const parser = fileTypeParsers[fileType] ?
+            fileTypeParsers[fileType]
+            :
+            fileTypeParsers.default
 
-        const getParserClosure = this.fileTypesParsers.get( 'default' )
-
-        return getParserClosure()
+        return parser.new()
     }
 }
 

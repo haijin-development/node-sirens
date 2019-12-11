@@ -18,7 +18,7 @@ class TextualContent {
     }
 
     getFileObjectDescription() {
-        return 'Plain text'
+        return 'plain text'
     }
 
 }

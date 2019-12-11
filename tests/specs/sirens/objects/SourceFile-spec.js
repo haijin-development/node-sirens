@@ -48,11 +48,11 @@ describe('When using a SourceFile', () => {
 
         expect(sections.length) .to .equal(5)
 
-        expect(sections[0].getFileObjectDescription()) .to .equal('Plain text')
+        expect(sections[0].getFileObjectDescription()) .to .equal('plain text')
         expect(sections[1].getFileObjectDescription()) .to .equal('Sample class')
         expect(sections[2].getFileObjectDescription()) .to .equal('modFunction(...)')
         expect(sections[3].getFileObjectDescription()) .to .equal('AnotherSample class')
-        expect(sections[4].getFileObjectDescription()) .to .equal('Plain text')
+        expect(sections[4].getFileObjectDescription()) .to .equal('plain text')
     })
 
     it('answers if the file exists', () => {

@@ -1,5 +1,6 @@
 const splitLines = require('split-lines')
 const Classification = require('../../../O').Classification
+const FileObject = require('../file-structure/FileObject')
 const JsonContent = require('../file-structure/JsonContent')
 
 class JsonStructureParser {
@@ -35,7 +36,24 @@ class JsonStructureParser {
 
         jsonContent.setJsonObject({ jsonObject: jsonObject })
 
-        return jsonContent
+
+        const file = FileObject.new()
+
+        file.setSourceFile( sourceFile )
+
+        file.setStartPos({
+            line: 1,
+            column: 0,
+        })
+
+        file.setEndPos({
+            line: allLines.length,
+            file: lastLine.length,
+        })
+
+        file.addChildObject(jsonContent)
+
+        return file
     }
 }
 

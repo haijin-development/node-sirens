@@ -17,19 +17,21 @@ class FileInspectorBody {
     /// Displaying
 
     getIconFor({ fileObject: fileObject }) {
-        if( fileObject.respondsTo('isJsFileStructure') ) {
-            return Resource.image.file
+        const icons = {
+            fileObject: Resource.image.file,
+            jsFileStructure: Resource.image.file,
+            jsClass: Resource.image.class,
+            jsMethod: Resource.image.method,
+            jsonContent: Resource.image.object,
+            default: Resource.image.haiku,
         }
 
-        if( fileObject.respondsTo('isJsClass') ) {
-            return Resource.image.class
-        }
+        const icon = icons[ fileObject.getFileObjectType() ]
 
-        if( fileObject.respondsTo('isJsMethod') ) {
-            return Resource.image.method
-        }
-
-        return Resource.image.haiku
+        return icon ?
+            icon
+            :
+            icons.default
     }
 
     /// Rendering

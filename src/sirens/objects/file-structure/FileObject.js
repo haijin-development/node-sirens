@@ -46,6 +46,10 @@ class FileObject {
         return this.childObjects.slice()
     }
 
+    getChildObjectAt({ index: index }) {
+        return this.childObjects[index]
+    }
+
     getContents() {
         return this.sourceFile.getOriginalSourceCode({
             fromLine: this.startPos.getLine(),
@@ -56,6 +60,14 @@ class FileObject {
     }
 
     // Querying
+
+    getFileObjectType() {
+        return 'fileObject'
+    }
+
+    getFileObjectDescription() {
+        return 'file'
+    }
 
     hasText() {
         return this.getContents().trim() !== ''

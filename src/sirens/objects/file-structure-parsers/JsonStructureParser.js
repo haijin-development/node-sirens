@@ -18,24 +18,21 @@ class JsonStructureParser {
 
         const lastLine = allLines[ allLines.length -1 ]
 
-        const jsonContent = JsonContent.new()
+        const startLine = 1
+        const startColumn = 0
+        const endLine = allLines.length
+        const endColumn = lastLine.length
 
-        jsonContent.setFileLocation({
+        const jsonContent = this.createJsonContent({
             sourceFile: sourceFile,
             startLine: 1,
             startColumn: 0,
             endLine: allLines.length,
             endColumn: lastLine.length,
+            fileContents: fileContents,
         }) 
 
-        const jsonObject = JSON.parse(fileContents)
-
-        jsonContent.setJsonObject({ jsonObject: jsonObject })
-
-
-        const file = FileObject.new()
-
-        file.setFileLocation({
+        const file = this.createFileObject({
             sourceFile: sourceFile,
             startLine: 1,
             startColumn: 0,
@@ -44,6 +41,52 @@ class JsonStructureParser {
         }) 
 
         file.addChildObject(jsonContent)
+
+        return file
+    }
+
+    createJsonContent({
+        sourceFile: sourceFile,
+        startLine: startLine,
+        startColumn: startColumn,
+        endLine: endLine,
+        endColumn: endColumn,
+        fileContents: fileContents,
+    }) {
+        const jsonContent = JsonContent.new()
+
+        jsonContent.setFileLocation({
+            sourceFile: sourceFile,
+            startLine: startLine,
+            startColumn: startColumn,
+            endLine: endLine,
+            endColumn: endColumn,
+        })
+
+        const jsonObject = JSON.parse(fileContents)
+
+        jsonContent.setJsonObject({ jsonObject: jsonObject })
+
+        return jsonContent
+    }
+
+
+    createFileObject({
+        sourceFile: sourceFile,
+        startLine: startLine,
+        startColumn: startColumn,
+        endLine: endLine,
+        endColumn: endColumn,
+    }) {
+        const file = FileObject.new()
+
+        file.setFileLocation({
+            sourceFile: sourceFile,
+            startLine: startLine,
+            startColumn: startColumn,
+            endLine: endLine,
+            endColumn: endColumn,
+        })
 
         return file
     }

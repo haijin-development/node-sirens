@@ -7,7 +7,7 @@ class CommandsGroup {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['commands']
+        this.instanceVariables = []
         this.assumes = [Flow]
     }
 

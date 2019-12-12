@@ -78,6 +78,21 @@ class JsClassInspectorFlow {
 
     }
 
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-commands.openDocumentationBrowser',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
+    // Methods
+
     hasAClassSelected() {
         const jsSection = this.getValue()
 

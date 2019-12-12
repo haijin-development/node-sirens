@@ -5,37 +5,12 @@ class SourceFileStructureParser {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['fileTypesParsers']
-    }
-
-    // Initializing
-
-    afterInstantiation() {
-        this.fileTypesParsers = new Map()
-
-        this.setParser({
-            fileType: '.js',
-            getParserClosure: function() { return JSFileStructureParser.new() },
-        })
-
-        this.setParser({
-            fileType: 'default',
-            getParserClosure: function() { return PlainTextStructureParser.new() },
-        })
-    }
-
-    setParser({ fileType: fileType, getParserClosure: getParserClosure }) {
-        this.fileTypesParsers.set(
-            fileType,
-            getParserClosure,
-        )
-
-        return this
+        this.instanceVariables = []
     }
 
     // Parsing
 
-    parseStructureIn({ sourceFile: sourceFile }) {
+    parseSourceFile({ sourceFile: sourceFile }) {
         const fileType = sourceFile.getFileType()
 
         return this.parseFile({

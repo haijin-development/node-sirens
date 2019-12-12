@@ -86,7 +86,7 @@ describe('When using an AppBrowserFlow', () => {
         beforeEach( () => {
             flow = AppBrowserFlow.new()
 
-            flow.openFolder({ folderPath: folder })            
+            flow.openFolder({ folderPath: folder })
             flow.openFolder({ folderPath: null })
         })
 
@@ -121,7 +121,7 @@ describe('When using an AppBrowserFlow', () => {
         beforeEach( () => {
             flow = AppBrowserFlow.new()
 
-            flow.openFolder({ folderPath: folder })            
+            flow.openFolder({ folderPath: folder })
         })
 
         it('sets the selectedFile', () => {
@@ -146,7 +146,7 @@ describe('When using an AppBrowserFlow', () => {
         beforeEach( () => {
             flow = AppBrowserFlow.new()
 
-            flow.openFolder({ folderPath: folder })            
+            flow.openFolder({ folderPath: folder })
 
             const filesTree = flow.getChildFlow({ id: 'filesTree' })
 

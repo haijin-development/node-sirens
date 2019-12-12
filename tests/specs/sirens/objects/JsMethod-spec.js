@@ -6,7 +6,7 @@ const filename = 'tests/samples/functions-sample.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
 const sourceFileParser = SourceFileStructureParser.new()
-const jsFile = sourceFileParser.parseStructureIn({ sourceFile: sourceFile })
+const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 const methods = jsFile.getMethods()
 
 describe('When using a Function', () => {

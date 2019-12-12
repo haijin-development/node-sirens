@@ -25,7 +25,7 @@ class ObjectPropertiesFlow {
     buildWith(flow) {
         const selectionChangedClosure = this.selectionChangedClosure
 
-        flow.main({ id: 'objectProperties' },  function(thisFlow) {
+        flow.main({ id: 'main' },  function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
@@ -51,16 +51,8 @@ class ObjectPropertiesFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, () => {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getMainObject' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getRootProperties' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedPropertyValue' })
-        })
-    }
-
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
             this.command({
                 id: 'inspectSelectedObject',
@@ -80,6 +72,32 @@ class ObjectPropertiesFlow {
                 },
             })
 
+        })
+    }
+
+    flowMethods(thisFlow) {
+        this.commandsGroup({ id: 'flow-methods' }, function() {
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getMainObject' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getRootProperties' })
+            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedPropertyValue' })
+        })
+    }
+
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-commands.inspectSelectedObject',
+            'flow-commands.browseSelectedObjectPrototypes',
+
+            'flow-methods.getMainObject',
+            'flow-methods.getRootProperties',
+            'flow-methods.getSelectedPropertyValue',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
         })
     }
 

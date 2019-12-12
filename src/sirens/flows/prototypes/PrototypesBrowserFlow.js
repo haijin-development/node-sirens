@@ -46,7 +46,7 @@ class PrototypesBrowserFlow {
     }
 
     flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, () => {
+        this.commandsGroup({ id: 'flow-methods' }, function() {
 
             this.command({
                 id: 'setBrowsedObject',
@@ -67,7 +67,7 @@ class PrototypesBrowserFlow {
     }
 
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'browseSelectedPrototype',
                 enabledIf: function() {

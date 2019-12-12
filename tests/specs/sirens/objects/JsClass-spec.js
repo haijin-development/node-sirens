@@ -6,7 +6,7 @@ const filename = 'tests/samples/class-definition.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
 const sourceFileParser = SourceFileStructureParser.new()
-const jsFile = sourceFileParser.parseStructureIn({ sourceFile: sourceFile })
+const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 const jsClass = jsFile.getChildObjectAt({ index: 1 })
 
 describe('When using a JsClass', () => {

@@ -14,7 +14,7 @@ class ObjectBrowserFlow {
     /// Building
 
     buildWith(flow) {
-        flow.main({ id: 'objectBrowser' }, function(thisFlow) {
+        flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
@@ -46,14 +46,28 @@ class ObjectBrowserFlow {
         })
     }
 
-    /// Flow methods
-
     flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, () => {
+        this.commandsGroup({ id: 'flow-methods' }, function() {
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'browseObject' })
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'propertySelectionValueStringFrom' })
         })
     }
+
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-methods.browseObject',
+            'flow-methods.propertySelectionValueStringFrom',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
+    /// Flow methods
 
     browseObject(object) {
         this.setValue( object )

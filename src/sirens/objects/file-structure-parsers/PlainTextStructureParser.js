@@ -19,17 +19,13 @@ class PlainTextStructureParser {
 
         const textualContent = TextualContent.new()
 
-        textualContent.setSourceFile( sourceFile )
-
-        textualContent.setStartPos({
-            line: 1,
-            column: 0,
-        })
-
-        textualContent.setEndPos({
-            line: allLines.length,
-            column: lastLine.length,
-        })
+        textualContent.setFileLocation({
+            sourceFile: sourceFile,
+            startLine: 1,
+            startColumn: 0,
+            endLine: allLines.length,
+            endColumn: lastLine.length,
+        }) 
 
         return textualContent
     }

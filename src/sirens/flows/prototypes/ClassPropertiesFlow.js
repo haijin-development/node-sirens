@@ -52,7 +52,7 @@ class ClassPropertiesFlow {
     }
 
     flowCommands(classProperties) {
-        this.commandsGroup({ id: 'flow-commands' }, () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'browseSelectedProperty',
                 enabledIf: function() {

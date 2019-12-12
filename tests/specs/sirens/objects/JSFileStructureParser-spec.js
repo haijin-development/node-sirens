@@ -13,7 +13,7 @@ describe('When parsing a Js file', () => {
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         const expectedContents =
@@ -37,7 +37,7 @@ n += 1`
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         const expectedContents1 =
@@ -67,7 +67,7 @@ n += 1`
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         const expectedContents1 =
@@ -97,7 +97,7 @@ n += 1`
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
@@ -115,7 +115,7 @@ n += 1`
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
@@ -133,7 +133,7 @@ n += 1`
         const sourceFileParser = SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
-            .parseStructureIn({ sourceFile: sourceFile })
+            .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )

@@ -96,30 +96,26 @@ class Flow {
         })
     }
 
-    addCommand({ id: commandId, command: command }) {
-        this.addChildFlow({ id: commandId, flow: command })
-    }
-
     defineCommand({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
         const commandFlow = this.searchCommandParentFlowFromId({ id: commandId })
 
         const command = typeof( calculateEnabledClosure ) !== undefined ?
             StatefulCommand.new({
                 id: commandFlow.commandId,
-                idPath: this.idPath + '.' + commandFlow.commandId,
+                idPath: commandFlow.parent.idPath + '.' + commandFlow.commandId,
                 calculateEnabledClosure: calculateEnabledClosure,
                 actionHandlerClosure: actionHandlerClosure
             })
             :
             StatelessCommand.new({
                 id: commandFlow.commandId,
-                idPath: this.idPath + '.' + commandFlow.commandId,
+                idPath: commandFlow.parent.idPath + '.' + commandFlow.commandId,
                 actionHandlerClosure: actionHandlerClosure,
             })
 
-        commandFlow.parent.addCommand({
+        commandFlow.parent.addChildFlow({
             id: commandFlow.commandId,
-            command: command,
+            flow: command,
         })
     }
 
@@ -128,8 +124,8 @@ class Flow {
 
         commandFlow.parent.removeChildFlow({ id: commandFlow.commandId })
 
-        this.defineCommand({
-            id: commandId,
+        commandFlow.parent.defineCommand({
+            id: commandFlow.commandId,
             enabledIf: calculateEnabledClosure,
             whenActioned: actionHandlerClosure
         })
@@ -280,24 +276,50 @@ class Flow {
         commands.forEach( closure )
     }
 
-    getFlowPointsCommands() {
-        let flowPointCommands = []
+    /*
+        Hook method for other classifications to override.
+        Picks which commands to export to the given flowPoint.
+    */
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        this.exportCommandsToFlowPoint({
+            commandsIds: 'all',
+            flowPoint: flowPoint
+        })
+    }
 
-        this.getChildFlows().filter( (childFlow) => {
-            if( childFlow.respondsTo('isCommand') ){
-                flowPointCommands.push( childFlow )
-            }
+    selectCommands({ commandIds: commandIds }) {
+        const thisFlowIdPath = this.getIdPath()
 
-            if( childFlow.respondsTo('isCommandGroup') ){
-                flowPointCommands = flowPointCommands.concat( childFlow.getFlowPointsCommands() )
+        if( commandIds !== 'all' ) {
+            commandIds = commandIds.map( (commandId) => {
+                return thisFlowIdPath + '.' + commandId
+            })
+        }
+
+        const selectedCommands = []
+        const remainingCommandIds = new Set(commandIds)
+
+        this.allChildFlowsDo( (command) => {
+            if( ! command.respondsTo('isCommand') ) { return }
+
+            const commandIdPath = command.getIdPath()
+
+            if( commandIds === 'all' || commandIds.includes( commandIdPath ) ) {
+                selectedCommands.push( command )
+                remainingCommandIds.delete( commandIdPath )
             }
         })
 
-        return flowPointCommands
+        if( commandIds !== 'all' && remainingCommandIds.size > 0 ) {
+            const missingCommands = Array.from(remainingCommandIds).join(', ')
+            throw new Error(`Commands [${ missingCommands }] were not found in the flow ${this}`)
+        }
+
+        return selectedCommands
     }
 
-    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
-        const flowCommands = this.getFlowPointsCommands()
+    exportCommandsToFlowPoint({ commandsIds: commandsIds, flowPoint: flowPoint }) {
+        const flowCommands = this.selectCommands({ commandIds: commandsIds })
 
         if( flowCommands.length === 0 ) { return }
 

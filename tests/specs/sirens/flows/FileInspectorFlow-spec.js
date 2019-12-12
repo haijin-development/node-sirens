@@ -9,7 +9,7 @@ const SourceFileStructureParser = require('../../../../src/sirens/objects/Source
 
 const sourceFile = SourceFile.new({ filepath:  __dirname + '/../../../samples/class-definition.js' })
 const sourceFileParser = SourceFileStructureParser.new()
-const jsFile = sourceFileParser.parseStructureIn({ sourceFile: sourceFile })
+const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
 describe('When using an FileInspectorFlow', () => {
     it('has all these child flows defined', () => {
@@ -103,7 +103,7 @@ describe('When using an FileInspectorFlow', () => {
             flow = FileInspectorFlow.new()
             flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
-            flow.setSourceFile({ sourceFile: sourceFile })            
+            flow.setSourceFile({ sourceFile: sourceFile })
 
             const jsClass = jsFile.getClasses()[0]
 
@@ -132,7 +132,7 @@ describe('When using an FileInspectorFlow', () => {
             flow = FileInspectorFlow.new()
             flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
-            flow.setSourceFile({ sourceFile: sourceFile })            
+            flow.setSourceFile({ sourceFile: sourceFile })
 
             const jsClass = jsFile.getChildObjectAt({ index: 0 })
 
@@ -157,7 +157,7 @@ describe('When using an FileInspectorFlow', () => {
             flow = FileInspectorFlow.new()
             flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
-            flow.setSourceFile({ sourceFile: sourceFile })            
+            flow.setSourceFile({ sourceFile: sourceFile })
 
             const fileObject = sourceFile.getFileStructure()
             const classSection = fileObject.getChildObjects()[1]

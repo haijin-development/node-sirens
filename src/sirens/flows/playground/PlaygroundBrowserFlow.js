@@ -49,14 +49,14 @@ class PlaygroundBrowserFlow {
     }
 
     flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, () => {
+        this.commandsGroup({ id: 'flow-methods' }, function() {
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
         })
     }
 
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'application-commands methods' }, () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'openFile',
                 whenActioned: function({ filename: filename }) {
@@ -119,6 +119,28 @@ class PlaygroundBrowserFlow {
                     thisFlow.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
                 },
             })
+        })
+    }
+
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-methods.pickFile',
+            'flow-methods.getLastOpenedFolder',
+
+            'flow-commands.openFile',
+            'flow-commands.openFileInNewWindow',
+            'flow-commands.saveFile',
+            'flow-commands.openFileEditor',
+            'flow-commands.openPlayground',
+            'flow-commands.pickAndOpenFile',
+            'flow-commands.pickAndOpenFileInNewWindow',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
         })
     }
 

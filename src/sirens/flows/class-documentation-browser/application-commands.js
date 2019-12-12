@@ -2,7 +2,7 @@ const Sirens = require('../../../Sirens')
 
 function applicationCommands(thisFlow) {
 
-    this.commandsGroup({ id: 'application-commands' }, () => {
+    this.commandsGroup({ id: 'application-commands' }, function() {
 
         this.command({
             id: 'reloadClassDefinition',

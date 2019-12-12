@@ -48,7 +48,7 @@ class FileEditorFlow {
     }
 
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'application-commands' }, () => {
+        this.commandsGroup({ id: 'application-commands' }, function() {
             this.command({
                 id: 'openFile',
                 whenActioned: function({ filename: filename }) {
@@ -120,9 +120,31 @@ class FileEditorFlow {
     }
 
     flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, () => {
+        this.commandsGroup({ id: 'flow-methods' }, function() {
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
             this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
+        })
+    }
+
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'application-commands.openFile',
+            'application-commands.openFileInNewWindow',
+            'application-commands.openFileEditor',
+            'application-commands.openPlayground',
+            'application-commands.openDocumentationBrowser',
+            'application-commands.pickAndOpenFile',
+            'application-commands.pickAndOpenFileInNewWindow',
+
+            'flow-methods.pickFile',
+            'flow-methods.getLastOpenedFolder',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
         })
     }
 

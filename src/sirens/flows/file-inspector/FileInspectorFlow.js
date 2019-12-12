@@ -74,6 +74,21 @@ class FileInspectorFlow {
         })
     }
 
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-methods.getSourceFile',
+            'flow-methods.getFileObjectInspectorFlow',
+            'flow-methods.getFileObjectComponent',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
     /// Querying
 
     getSourceFile() {
@@ -101,7 +116,7 @@ class FileInspectorFlow {
 
         try {
             return SourceFileStructureParser.new()
-                .parseStructureIn({ sourceFile: sourceFile })
+                .parseSourceFile({ sourceFile: sourceFile })
         } catch(error) {
             return UknownFileStructure.new()
         }

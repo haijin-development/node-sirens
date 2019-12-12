@@ -122,6 +122,26 @@ class AppBrowserFlow {
         })
     }
 
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'application-commands.pickAndOpenFolder',
+            'application-commands.openFileEditor',
+            'application-commands.openPlayground',
+            'application-commands.openDocumentationBrowser',
+
+            'flow-methods.openFolder',
+            'flow-methods.getSelectedFilePath',
+            'flow-methods.hasAClassSelected',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
     //////////////////////
     /// Flow methods
     //////////////////////

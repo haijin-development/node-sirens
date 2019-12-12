@@ -232,8 +232,7 @@ class FlowBuilder {
         this.evaluate({ closure: method, with: this.rootFlow })
     }
 
-    defineMethodAsCommand({ methodName: methodName, methodClosure: methodClosure, flow: flow }) {
-        if( flow === undefined ) { flow = this.rootFlow }
+    defineMethodAsCommand({ flow: flow, methodName: methodName, methodClosure: methodClosure }) {
         if( methodClosure === undefined ) { methodClosure = flow[methodName].bind(flow) }
 
         const method = flow[methodName]

@@ -146,7 +146,7 @@ class TextView {
     handlePopulateMenuPopup(menuHandle) {
         const menu = MenuView.newFromGtkWidget(menuHandle)
 
-        this.populatePopupMenu({ menu: menu })        
+        this.populatePopupMenu({ menu: menu })  
     }
 
     /// Styles

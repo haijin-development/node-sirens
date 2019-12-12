@@ -91,7 +91,7 @@ describe('When using an ObjectWithProps', () => {
             })
 
             expect( object.hasProp({ key: 'a' }) ) .to .be .true
-        })        
+        })  
 
         it('answers false if it does not have the prop defined', () => {
             const object = ObjectWithProps.new()
@@ -118,7 +118,7 @@ describe('When using an ObjectWithProps', () => {
             })
 
             expect( result ) .to .eql( 1 )
-        })        
+        })  
 
         it('returns undefined if the prop is undefined', () => {
             const object = ObjectWithProps.new()
@@ -126,7 +126,7 @@ describe('When using an ObjectWithProps', () => {
             const result = object.getProp({ key: 'a' })
 
             expect( result ) .to .be .undefined
-        })        
+        })  
 
         it('evaluates an absent closure if it does not have the prop defined', () => {
             const object = ObjectWithProps.new()
@@ -137,7 +137,7 @@ describe('When using an ObjectWithProps', () => {
             })
 
             expect( result ) .to .eql('Prop a is undefined.')
-        })        
+        })  
 
         it('returns a default value if given', () => {
             const object = ObjectWithProps.new()
@@ -148,7 +148,7 @@ describe('When using an ObjectWithProps', () => {
             })
 
             expect( result ) .to .eql('Prop a is undefined.')
-        })        
+        })  
     })
 
     describe('when iterating props', () => {

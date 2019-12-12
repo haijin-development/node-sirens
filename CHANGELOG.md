@@ -8,6 +8,10 @@
 - Improved the ObjectFile types plugins using dynamic flows.
 - Moved the FileParser to Pluggables.
 - Implemented a json files parser and inspector.
+- Added a FileObject icon.
+- Moved the SourceFileStructureParser out from SourceFile into FileInspectorFlow.
+- Improved how to choose which commands to attach to a FlowPoint.
+- Implemented a FileLocation object and moved the FilePosition and SourceFile object there.
 
 ### FingerTips
 
@@ -15,10 +19,13 @@
 - Reimplemented commands categories with commandsGroup.
 - Implemented adding and removing flows on the fly.
 - Main Flows trigger a 'main-flow-built' after they are built.
+- Several error fixes related with commands id paths.
 
 ### Skins
 
 ### O language
+
+- Implemented Classification.defineMethod() method.
 
 ## v0.14.0
 

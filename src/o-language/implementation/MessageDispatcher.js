@@ -299,6 +299,16 @@ class MessageDispatcher {
         })
     }
 
+    classificationDefineMethod({
+        classificationDefinition: classificationDefinition, methodName: methodName, methodClosure: methodClosure,
+    }) {
+        return ClassificationDefinition.defineMethod({
+            classificationDefinition: classificationDefinition,
+            methodName: methodName,
+            methodClosure: methodClosure,
+        })
+    }
+
     classificationGetDefinedInstanceVariables({ classificationDefinition: classificationDefinition }) {
         return ClassificationDefinition.getDefinedInstanceVariables({
             classificationDefinition: classificationDefinition

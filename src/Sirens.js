@@ -365,7 +365,7 @@ class Sirens {
             const PlaygroundBrowser = require('../src/sirens/components/playground-browser/PlaygroundBrowser')
 
             PlaygroundBrowser.openOn({ filename: filename })
-        })      
+        })
     }
 
     /*

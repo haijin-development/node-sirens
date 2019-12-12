@@ -22,7 +22,7 @@ class SourceFileStructureParser {
     parseFile({ sourceFile: sourceFile, fileType: fileType }) {
         const parser = this.getParserForFileType({ fileType: fileType })
 
-        return parser.parse({ sourceFile: sourceFile })        
+        return parser.parse({ sourceFile: sourceFile })  
     }
 
     // Parser selection

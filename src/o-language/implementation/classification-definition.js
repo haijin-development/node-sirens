@@ -88,6 +88,12 @@ class ClassificationDefinition {
         return method !== undefined
     }
 
+    static defineMethod({
+        classificationDefinition: classificationDefinition, methodName: methodName, methodClosure: methodClosure,
+    }) {
+        classificationDefinition.prototype[methodName] = methodClosure
+    }
+
     static getMethod({ classificationDefinition: classificationDefinition, methodName: methodName }) {
         return classificationDefinition.prototype[methodName]
     }

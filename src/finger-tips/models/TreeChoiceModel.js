@@ -168,7 +168,7 @@ class TreeChoiceModel {
 
     dropAllAnnouncementsFor({ listener: listener }) {
         this.treeModel.dropAllAnnouncementsFor({ listener: listener })
-        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })        
+        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })  
     }
 }
 

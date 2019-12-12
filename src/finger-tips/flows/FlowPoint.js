@@ -45,7 +45,7 @@ class FlowPoint {
     }
 
     getCommand({ id: commandId }) {
-        return this._getCommand({ id: commandId })        
+        return this._getCommand({ id: commandId })  
     }
 }
 

@@ -230,7 +230,7 @@ class Flow {
             event: event,
             params: params,
             eventHandler: eventHandler,
-        })        
+        })  
     }
 
     executeCommand({ id: commandId, with: param, withAll: params }) {
@@ -323,18 +323,20 @@ class Flow {
 
         if( flowCommands.length === 0 ) { return }
 
-        const classificationDefinition = class DynamicClassification {}
+        const classification = Classification.define( class ExportedCommands {} )
 
         flowCommands.forEach( (command) => {
 
             const commandId = command.getId()
 
-            classificationDefinition.prototype[commandId] = function(...params) {
-                return command.execute({ params: params })
-            }
+            classification.defineMethod({
+                methodName: commandId,
+                methodClosure: function(...params) {
+                    return command.execute({ params: params })
+                },
+            })
         })
 
-        const classification = Classification.define(classificationDefinition)
 
         flowPoint.behaveAs( classification )
 

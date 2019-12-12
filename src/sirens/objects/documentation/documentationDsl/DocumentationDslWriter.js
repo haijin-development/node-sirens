@@ -363,7 +363,7 @@ class DocumentationDslWriter {
 
         })
 
-        stringStream.appendLine({ string: '])' })        
+        stringStream.appendLine({ string: '])' })  
     }
 }
 

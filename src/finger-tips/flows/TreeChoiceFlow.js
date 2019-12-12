@@ -123,7 +123,7 @@ class TreeChoiceFlow {
         this.addPendingEvent({
             event: 'roots-changed',
             params:  { newRoots: items, oldRoots: oldRoots },
-        })        
+        })  
     }
 
     updateSelection(itemPath) {
@@ -145,7 +145,7 @@ class TreeChoiceFlow {
         this.addPendingEvent({
             event: 'selection-changed',
             params:  { newValue: itemPath, oldValue: oldSelection },
-        })        
+        })  
     }
 
     // Events

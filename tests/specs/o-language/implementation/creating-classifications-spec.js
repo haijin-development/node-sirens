@@ -193,6 +193,7 @@ describe('The Classification classification', () => {
             'setClassificationDefinition',
             'getDefinedMethodNames',
             'definesMethod',
+            'defineMethod',
             'getDefinedInstanceVariables',
             'setDefinedInstanceVariables',
             'definesInstanceVariable',

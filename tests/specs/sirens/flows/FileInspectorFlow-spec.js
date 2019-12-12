@@ -1,7 +1,10 @@
 const expect = require('chai').expect
 const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
+const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const JsFileObject = require('../../../../src/sirens/objects/file-structure/JsFileObject')
+const JsClass = require('../../../../src/sirens/objects/file-structure/JsClass')
+const JsMethod = require('../../../../src/sirens/objects/file-structure/JsMethod')
 const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const sourceFile = SourceFile.new({ filepath:  __dirname + '/../../../samples/class-definition.js' })
@@ -12,6 +15,7 @@ describe('When using an FileInspectorFlow', () => {
     it('has all these child flows defined', () => {
 
         const flow = FileInspectorFlow.new()
+        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
         expect( flow ) .to .haveChildFlows([
             'main.fileObjects',
@@ -30,6 +34,7 @@ describe('When using an FileInspectorFlow', () => {
 
         beforeEach( () => {
             flow = FileInspectorFlow.new()
+            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
             flow.setSourceFile({ sourceFile: sourceFile })
         })
@@ -66,6 +71,7 @@ describe('When using an FileInspectorFlow', () => {
 
         beforeEach( () => {
             flow = FileInspectorFlow.new()
+            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
             flow.setSourceFile({ sourceFile: sourceFile })
             flow.setSourceFile({ sourceFile: null })
@@ -90,47 +96,33 @@ describe('When using an FileInspectorFlow', () => {
     })
 
 
-    describe('when selecting a JsClassSection', () => {
+    describe('when selecting a JsClass file object', () => {
         let flow
 
         beforeEach( () => {
             flow = FileInspectorFlow.new()
+            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
-            const jsClass = jsFile.getChildObjectAt({ index: 0 })
+            const jsClass = jsFile.getClasses()[0]
 
             flow.getChildFlow({ id: 'fileObjects' }).setSelection([ jsFile, jsClass ])
         })
 
-        it('sets the SourceFile sections selection to the first fileObject', () => {
-            const jsClass = jsFile.getChildObjectAt({ index: 0 })
+        it('sets the selected jsClass to the fileObjects selection', () => {
+            const jsClass = jsFile.getClasses()[0]
 
             expect(flow) .withId( 'main.fileObjects' ) .toHaveSelection(
                 [ jsFile, jsClass ]
             )
         })
 
-        it('sets the selectedFileObject to the first fileObject', () => {
-            const jsClass = jsFile.getChildObjectAt({ index: 0 })
+        it('sets the jsClass to the selectedFileObject', () => {
+            const jsClass = jsFile.getClasses()[0]
 
             expect(flow) .withId( 'main.selectedFileObject' ) .toHaveValue( jsClass )
         })
-
-        xit('sets the methods list', () => {
-            const jsClass = jsFile.getChildObjectAt({ index: 0 })
-
-            const methods = jsClass.getChildObjects()
-
-            expect(flow) .withId( 'main.selectedFileObject.classMethods' )
-                .toHaveChoices( methods )
-        })
-
-        xit('clears the selected method inspector', () => {
-            expect(flow) .withId( 'main.selectedFileObject.selectedMethod' )
-                .toHaveValue( '' )
-        })
-
     })
 
     describe('when selecting a null JsClassSection', () => {
@@ -138,6 +130,7 @@ describe('When using an FileInspectorFlow', () => {
 
         beforeEach( () => {
             flow = FileInspectorFlow.new()
+            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
@@ -162,6 +155,7 @@ describe('When using an FileInspectorFlow', () => {
 
         beforeEach( () => {
             flow = FileInspectorFlow.new()
+            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
 
             flow.setSourceFile({ sourceFile: sourceFile })            
 
@@ -172,42 +166,6 @@ describe('When using an FileInspectorFlow', () => {
 
             flow.getChildFlow({ id: 'selectedFileObject.classMethods' })
                 .setSelection( methods[1] )
-        })
-
-        xit('sets the selected method contents in the inspector', () => {
-            expect(flow) .withId( 'main.selectedFileObject.selectedMethod' )
-                .toHaveValue(
-`getName() {
-    return this.name
-}`
-                )
-        })
-
-    })
-
-    describe('when selecting a null JsMethod', () => {
-        let flow
-
-        beforeEach( () => {
-            flow = FileInspectorFlow.new()
-
-            flow.setSourceFile({ sourceFile: sourceFile })            
-
-            const fileObject = sourceFile.getFileStructure()
-            const classSection = fileObject.getChildObjects()[0]
-
-            const methods = classSection.getChildObjects()
-
-            flow.getChildFlow({ id: 'selectedFileObject.classMethods' })
-                .setSelection( methods[0] )
-
-            flow.getChildFlow({ id: 'selectedFileObject.classMethods' })
-                .setSelection( null )
-        })
-
-        xit('clears the selected method inspector', () => {
-            expect(flow) .withId( 'main.selectedFileObject.selectedMethod' )
-                .toHaveValue('')
         })
 
     })

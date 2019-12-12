@@ -22,17 +22,13 @@ class JSFileStructureParser {
 
         const jsFileStructure = JsFileStructure.new()
 
-        jsFileStructure.setSourceFile( this.getSourceFile() )
-
-        jsFileStructure.setStartPos({
-            line: treeNode.loc.start.line,
-            column: treeNode.loc.start.column,
-        })
-        
-        jsFileStructure.setEndPos({
-            line: treeNode.loc.end.line,
-            column: treeNode.loc.end.column,
-        })
+        jsFileStructure.setFileLocation({
+            sourceFile: this.getSourceFile(),
+            startLine: treeNode.loc.start.line,
+            startColumn: treeNode.loc.start.column,
+            endLine: treeNode.loc.end.line,
+            endColumn: treeNode.loc.end.column,
+        }) 
 
         this.fileObjects.push( jsFileStructure )
 
@@ -50,17 +46,13 @@ class JSFileStructureParser {
 
         const jsClass = JsClass.new()
 
-        jsClass.setSourceFile( this.getSourceFile() )
-
-        jsClass.setStartPos({
-            line: classDeclaration.loc.start.line,
-            column: classDeclaration.loc.start.column,
-        })
-        
-        jsClass.setEndPos({
-            line: classDeclaration.loc.end.line,
-            column: classDeclaration.loc.end.column,
-        })
+        jsClass.setFileLocation({
+            sourceFile: this.getSourceFile(),
+            startLine: classDeclaration.loc.start.line,
+            startColumn: classDeclaration.loc.start.column,
+            endLine: classDeclaration.loc.end.line,
+            endColumn: classDeclaration.loc.end.column,
+        }) 
 
         jsClass.setClassName( className )
 
@@ -104,17 +96,13 @@ class JSFileStructureParser {
 
         const method = JsMethod.new()
 
-        method.setSourceFile( this.getSourceFile() )
-
-        method.setStartPos({
-            line: functionNode.loc.start.line,
-            column: functionNode.loc.start.column,
-        })
-        
-        method.setEndPos({
-            line: functionNode.loc.end.line,
-            column: functionNode.loc.end.column,
-        })
+        method.setFileLocation({
+            sourceFile: this.getSourceFile(),
+            startLine: functionNode.loc.start.line,
+            startColumn: functionNode.loc.start.column,
+            endLine: functionNode.loc.end.line,
+            endColumn: functionNode.loc.end.column,
+        }) 
 
         method.setMethodComment( methodComment )
 
@@ -140,10 +128,10 @@ class JSFileStructureParser {
 
         if( previousFileObjects.length === 0 ) {
             const textualContent = this.newTextualContent({
-                startLine: currentFileObject.getStartPos().getLine(),
-                startColumn: currentFileObject.getStartPos().getColumn(),
-                endLine: childFileObject.getStartPos().getLine(),
-                endColumn: childFileObject.getStartPos().getColumn()
+                startLine: currentFileObject.getFileLocation().getStartPos().getLine(),
+                startColumn: currentFileObject.getFileLocation().getStartPos().getColumn(),
+                endLine: childFileObject.getFileLocation().getStartPos().getLine(),
+                endColumn: childFileObject.getFileLocation().getStartPos().getColumn()
             })
 
             if( textualContent.hasText() ) {
@@ -154,10 +142,10 @@ class JSFileStructureParser {
             const lastFileObject = previousFileObjects[ previousFileObjects.length - 1 ]
 
             const textualContent = this.newTextualContent({
-                startLine: lastFileObject.getEndPos().getLine(),
-                startColumn: lastFileObject.getEndPos().getColumn(),
-                endLine: childFileObject.getStartPos().getLine(),
-                endColumn: childFileObject.getStartPos().getColumn()
+                startLine: lastFileObject.getFileLocation().getEndPos().getLine(),
+                startColumn: lastFileObject.getFileLocation().getEndPos().getColumn(),
+                endLine: childFileObject.getFileLocation().getStartPos().getLine(),
+                endColumn: childFileObject.getFileLocation().getStartPos().getColumn()
             })
 
             if( textualContent.hasText() ) {
@@ -171,30 +159,25 @@ class JSFileStructureParser {
     getCommentOn({ parseNode: parseNode }) {
         const comment = JsComment.new()
 
-        comment.setSourceFile( this.getSourceFile() )
-
         if( parseNode.comment !== undefined ) {
             let commentNode = parseNode.comment
 
-            comment.setStartPos({
-                line: commentNode.loc.start.line,
-                column: commentNode.loc.start.column,
-            })
-            
-            comment.setEndPos({
-                line: commentNode.loc.end.line,
-                column: commentNode.loc.end.column,
-            })
+            comment.setFileLocation({
+                sourceFile: this.getSourceFile(),
+                startLine: commentNode.loc.start.line,
+                startColumn: commentNode.loc.start.column,
+                endLine: commentNode.loc.end.line,
+                endColumn: commentNode.loc.end.column,
+            }) 
+
         } else {
-            comment.setStartPos({
-                line: parseNode.loc.start.line,
-                column: parseNode.loc.start.column,
-            })
-            
-            comment.setEndPos({
-                line: parseNode.loc.start.line,
-                column: parseNode.loc.start.column,
-            })            
+            comment.setFileLocation({
+                sourceFile: this.getSourceFile(),
+                startLine: parseNode.loc.start.line,
+                startColumn: parseNode.loc.start.column,
+                endLine: parseNode.loc.start.line,
+                endColumn: parseNode.loc.start.column,
+            }) 
         }
 
         return comment
@@ -224,10 +207,10 @@ class JSFileStructureParser {
 
         if( objects.length === 0 ) {
             const textualContent = this.newTextualContent({
-                startLine: currentObject.getStartPos().getLine(),
-                startColumn: currentObject.getStartPos().getColumn(),
-                endLine: currentObject.getEndPos().getLine(),
-                endColumn: currentObject.getEndPos().getColumn()
+                startLine: currentObject.getFileLocation().getStartPos().getLine(),
+                startColumn: currentObject.getFileLocation().getStartPos().getColumn(),
+                endLine: currentObject.getFileLocation().getEndPos().getLine(),
+                endColumn: currentObject.getFileLocation().getEndPos().getColumn()
             })
 
             if( textualContent.hasText() ) {
@@ -237,10 +220,10 @@ class JSFileStructureParser {
             const lastObject = objects[ objects.length - 1 ]
 
             const textualContent = this.newTextualContent({
-                startLine: lastObject.getEndPos().getLine(),
-                startColumn: lastObject.getEndPos().getColumn(),
-                endLine: currentObject.getEndPos().getLine(),
-                endColumn: currentObject.getEndPos().getColumn()
+                startLine: lastObject.getFileLocation().getEndPos().getLine(),
+                startColumn: lastObject.getFileLocation().getEndPos().getColumn(),
+                endLine: currentObject.getFileLocation().getEndPos().getLine(),
+                endColumn: currentObject.getFileLocation().getEndPos().getColumn()
             })
 
             if( textualContent.hasText() ) {
@@ -254,17 +237,13 @@ class JSFileStructureParser {
     }) {
         const textualContent = TextualContent.new()
 
-        textualContent.setSourceFile( this.getSourceFile() )
-
-        textualContent.setStartPos({
-            line: startLine,
-            column: startColumn,
-        })
-
-        textualContent.setEndPos({
-            line: endLine,
-            column: endColumn,
-        })
+        textualContent.setFileLocation({
+            sourceFile: this.getSourceFile(),
+            startLine: startLine,
+            startColumn: startColumn,
+            endLine: endLine,
+            endColumn: endColumn,
+        }) 
 
         return textualContent
     }

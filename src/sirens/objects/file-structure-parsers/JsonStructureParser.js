@@ -20,17 +20,13 @@ class JsonStructureParser {
 
         const jsonContent = JsonContent.new()
 
-        jsonContent.setSourceFile( sourceFile )
-
-        jsonContent.setStartPos({
-            line: 1,
-            column: 0,
-        })
-
-        jsonContent.setEndPos({
-            line: allLines.length,
-            column: lastLine.length,
-        })
+        jsonContent.setFileLocation({
+            sourceFile: sourceFile,
+            startLine: 1,
+            startColumn: 0,
+            endLine: allLines.length,
+            endColumn: lastLine.length,
+        }) 
 
         const jsonObject = JSON.parse(fileContents)
 
@@ -39,17 +35,13 @@ class JsonStructureParser {
 
         const file = FileObject.new()
 
-        file.setSourceFile( sourceFile )
-
-        file.setStartPos({
-            line: 1,
-            column: 0,
-        })
-
-        file.setEndPos({
-            line: allLines.length,
-            file: lastLine.length,
-        })
+        file.setFileLocation({
+            sourceFile: sourceFile,
+            startLine: 1,
+            startColumn: 0,
+            endLine: allLines.length,
+            endColumn: lastLine.length,
+        }) 
 
         file.addChildObject(jsonContent)
 

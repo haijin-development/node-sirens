@@ -2,40 +2,39 @@ const Classification = require('../../../O').Classification
 const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
+const FileObjectLocation = require('./FileObjectLocation')
 
 class FileObject {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['sourceFile', 'startPos', 'endPos', 'childObjects']
+        this.instanceVariables = ['childObjects', 'fileLocation']
     }
 
     afterInstantiation() {
         this.childObjects = []
     }
 
-    setSourceFile(sourceFile) {
-        this.sourceFile = sourceFile
-    }
-
     getSourceFile() {
-        return this.sourceFile
+        return this.fileLocation.getSourceFile()
     }
 
-    setStartPos({ line: line, column: column }) {
-        this.startPos = PositionInFile.new({ line: line, column: column })
+    getFileLocation() {
+        return this.fileLocation
     }
 
-    getStartPos() {
-        return this.startPos
-    }
-
-    setEndPos({ line: line, column: column }) {
-        this.endPos = PositionInFile.new({ line: line, column: column })
-    }
-
-    getEndPos() {
-        return this.endPos
+    setFileLocation({
+        sourceFile: sourceFile,
+        startLine: startLine, startColumn: startColumn,
+        endLine: endLine, endColumn: endColumn,
+    }) {
+        this.fileLocation = FileObjectLocation.new({
+            sourceFile: sourceFile,
+            startLine: startLine,
+            startColumn: startColumn,
+            endLine: endLine,
+            endColumn: endColumn,
+        })
     }
 
     addChildObject(fileObject) {
@@ -51,11 +50,11 @@ class FileObject {
     }
 
     getContents() {
-        return this.sourceFile.getOriginalSourceCode({
-            fromLine: this.startPos.getLine(),
-            fromColumn: this.startPos.getColumn(),
-            toLine: this.endPos.getLine(),
-            toColumn: this.endPos.getColumn(),
+        return this.fileLocation.getSourceFile().getOriginalSourceCode({
+            fromLine: this.fileLocation.getStartPos().getLine(),
+            fromColumn: this.fileLocation.getStartPos().getColumn(),
+            toLine: this.fileLocation.getEndPos().getLine(),
+            toColumn: this.fileLocation.getEndPos().getColumn(),
         }) 
     }
 

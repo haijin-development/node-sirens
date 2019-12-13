@@ -21,10 +21,9 @@ class FileEditorFlow {
 
         this.setCommandsController( commandsController )
 
-        flow.main({ id: 'main' }, function(application) {
+        flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: application.flowCommands })
-            this.defineFlowCommandsIn({ method: application.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
@@ -48,19 +47,15 @@ class FileEditorFlow {
     }
 
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'application-commands' }, function() {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'openFile',
-                whenActioned: function({ filename: filename }) {
-                    thisFlow.openFile({ filename: filename })
-                }
+                whenActioned: thisFlow.openFile.bind(thisFlow),
             })
 
             this.command({
                 id: 'openFileInNewWindow',
-                whenActioned: function({ filename: filename }) {
-                    Sirens.openFileEditor({ filename: filename })
-                }
+                whenActioned: thisFlow.openFileInNewWindow.bind(thisFlow),
             })
 
             this.command({
@@ -68,18 +63,12 @@ class FileEditorFlow {
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
-                whenActioned: function() {
-                    const selectedFile = thisFlow.getChildFlow({ id: 'selectedFile' })
-                    const filename = selectedFile.getSourceFile().getFilePath()
-                    Sirens.openFileEditor({ filename: filename })
-                }
+                whenActioned: thisFlow.openFileEditor.bind(thisFlow),
             })
 
             this.command({
                 id: 'openPlayground',
-                whenActioned: function() {
-                    Sirens.openPlayground()
-                }
+                whenActioned: thisFlow.openPlayground.bind(thisFlow),
             })
 
             this.command({
@@ -87,42 +76,28 @@ class FileEditorFlow {
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
-                whenActioned: function() {
-                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedFileObject' })
-                    const jsClass = selectedSection.getValue()
-                    const methodName = selectedSection.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
-                }
+                whenActioned: thisFlow.openDocumentationBrowser.bind(thisFlow),
             })
 
             this.command({
                 id: 'pickAndOpenFile',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
-
-                    if( filename === null ) { return }
-
-                    thisFlow.openFile({ filename: filename })
-                },
+                whenActioned: thisFlow.pickAndOpenFile.bind(thisFlow),
             })
 
             this.command({
                 id: 'pickAndOpenFileInNewWindow',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
-
-                    if( filename === null ) { return }
-
-                    thisFlow.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
-                },
+                whenActioned: thisFlow.pickAndOpenFileInNewWindow.bind(thisFlow),
             })
-        })
-    }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
+            this.command({
+                id: 'pickFile',
+                whenActioned: thisFlow.pickFile.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getLastOpenedFolder',
+                whenActioned: thisFlow.getLastOpenedFolder.bind(thisFlow),
+            })
         })
     }
 
@@ -130,16 +105,15 @@ class FileEditorFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'application-commands.openFile',
-            'application-commands.openFileInNewWindow',
-            'application-commands.openFileEditor',
-            'application-commands.openPlayground',
-            'application-commands.openDocumentationBrowser',
-            'application-commands.pickAndOpenFile',
-            'application-commands.pickAndOpenFileInNewWindow',
-
-            'flow-methods.pickFile',
-            'flow-methods.getLastOpenedFolder',
+            'flow-commands.openFile',
+            'flow-commands.openFileInNewWindow',
+            'flow-commands.openFileEditor',
+            'flow-commands.openPlayground',
+            'flow-commands.openDocumentationBrowser',
+            'flow-commands.pickAndOpenFile',
+            'flow-commands.pickAndOpenFileInNewWindow',
+            'flow-commands.pickFile',
+            'flow-commands.getLastOpenedFolder',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -151,6 +125,54 @@ class FileEditorFlow {
     //////////////////
     /// Flow methods
     //////////////////
+
+    openFile({ filename: filename }) {
+        this.openFile({ filename: filename })
+    }
+
+    openFileInNewWindow({ filename: filename })  {
+        Sirens.openFileEditor({ filename: filename })
+    }
+
+    openFileEditor() {
+        const selectedFile = this.getChildFlow({ id: 'selectedFile' })
+
+        const filename = selectedFile.getSourceFile().getFilePath()
+
+        Sirens.openFileEditor({ filename: filename })
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
+
+    openDocumentationBrowser() {
+        const selectedSection = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
+
+        const jsClass = selectedSection.getValue()
+
+        const methodName = selectedSection.getSelectedMethodName()
+
+        Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
+    }
+
+
+    pickAndOpenFile({ parentWindow: parentWindow }) {
+        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+        if( filename === null ) { return }
+
+        this.openFile({ filename: filename })
+    }
+
+
+    pickAndOpenFileInNewWindow({ parentWindow: parentWindow }) {
+        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+        if( filename === null ) { return }
+
+        this.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
+    }
 
     pickFile() {
         throw new Error('The implementation of this method is responsibility of the application')

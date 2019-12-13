@@ -26,7 +26,6 @@ class AppBrowserFlow {
         flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
                 const filesTreeRoots = appFolder ? [ appFolder ] : []
@@ -69,32 +68,21 @@ class AppBrowserFlow {
     }
 
     flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'application-commands' }, function() {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
             this.command({
                 id: 'pickAndOpenFolder',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const appFolderPath = thisFlow.pickFolder({ parentWindow: parentWindow })
-
-                    if( appFolderPath === null ) { return }
-
-                    const handler = thisFlow.openFolder({ folderPath: appFolderPath })
-                }
+                whenActioned: thisFlow.pickAndOpenFolder.bind(thisFlow),
             })
 
             this.command({
                 id: 'openFileEditor',
-                whenActioned: function() {
-                    const selectedPath = thisFlow.getSelectedFilePath()
-                    Sirens.openFileEditor({ filename: selectedPath })
-                }
+                whenActioned: thisFlow.openFileEditor.bind(thisFlow),
             })
 
             this.command({
                 id: 'openPlayground',
-                whenActioned: function() {
-                    Sirens.openPlayground()
-                }
+                whenActioned: thisFlow.openPlayground.bind(thisFlow),
             })
 
             this.command({
@@ -102,23 +90,28 @@ class AppBrowserFlow {
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
-                whenActioned: function() {
-                    const selectedSection = thisFlow.getChildFlow({ id: 'selectedFile.selectedFileObject' })
-                    const jsClass = selectedSection.getValue()
-                    const methodName = selectedSection.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
-                }
+                whenActioned: thisFlow.openDocumentationBrowser.bind(thisFlow),
             })
 
-        })
-    }
+            this.command({
+                id: 'pickFolder',
+                whenActioned: thisFlow.pickFolder.bind(thisFlow),
+            })
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFolder' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'openFolder' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedFilePath' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'hasAClassSelected' })
+            this.command({
+                id: 'openFolder',
+                whenActioned: thisFlow.openFolder.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getSelectedFilePath',
+                whenActioned: thisFlow.getSelectedFilePath.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'hasAClassSelected',
+                whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
+            })
         })
     }
 
@@ -126,14 +119,13 @@ class AppBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'application-commands.pickAndOpenFolder',
-            'application-commands.openFileEditor',
-            'application-commands.openPlayground',
-            'application-commands.openDocumentationBrowser',
-
-            'flow-methods.openFolder',
-            'flow-methods.getSelectedFilePath',
-            'flow-methods.hasAClassSelected',
+            'flow-commands.pickAndOpenFolder',
+            'flow-commands.openFileEditor',
+            'flow-commands.openPlayground',
+            'flow-commands.openDocumentationBrowser',
+            'flow-commands.openFolder',
+            'flow-commands.getSelectedFilePath',
+            'flow-commands.hasAClassSelected',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -145,6 +137,34 @@ class AppBrowserFlow {
     //////////////////////
     /// Flow methods
     //////////////////////
+
+    pickAndOpenFolder({ parentWindow: parentWindow }) {
+        const appFolderPath = this.pickFolder({ parentWindow: parentWindow })
+
+        if( appFolderPath === null ) { return }
+
+        const handler = this.openFolder({ folderPath: appFolderPath })
+    }
+
+    openFileEditor() {
+        const selectedPath = this.getSelectedFilePath()
+
+        Sirens.openFileEditor({ filename: selectedPath })
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
+
+    openDocumentationBrowser() {
+        const selectedSection = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
+
+        const jsClass = selectedSection.getValue()
+
+        const methodName = selectedSection.getSelectedMethodName()
+
+        Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
+    }
 
     pickFolder({ parentWindow: parentWindow }) {
         const chosenFolder = FolderChooser.chooseFolder({

@@ -20,25 +20,24 @@ describe('When using an AppBrowserFlow', () => {
             'main.windowTitle',
             'main.filesTree',
 
-            'main.application-commands',
-            'main.application-commands.pickAndOpenFolder',
-            'main.application-commands.openFileEditor',
-            'main.application-commands.openPlayground',
-            'main.application-commands.openDocumentationBrowser',
+            'main.flow-commands.pickAndOpenFolder',
+            'main.flow-commands.openFileEditor',
+            'main.flow-commands.openPlayground',
+            'main.flow-commands.openDocumentationBrowser',
 
-            'main.flow-methods',
-            'main.flow-methods.pickFolder',
-            'main.flow-methods.openFolder',
-            'main.flow-methods.getSelectedFilePath',
-            'main.flow-methods.hasAClassSelected',
+            'main.flow-commands',
+            'main.flow-commands.pickFolder',
+            'main.flow-commands.openFolder',
+            'main.flow-commands.getSelectedFilePath',
+            'main.flow-commands.hasAClassSelected',
 
             'main.selectedFile',
             'main.selectedFile.fileObjects',
 
-            'main.selectedFile.flow-methods',
-            'main.selectedFile.flow-methods.getFileObjectComponent',
-            'main.selectedFile.flow-methods.getFileObjectInspectorFlow',
-            'main.selectedFile.flow-methods.getSourceFile',
+            'main.selectedFile.flow-commands',
+            'main.selectedFile.flow-commands.getFileObjectComponent',
+            'main.selectedFile.flow-commands.getFileObjectInspectorFlow',
+            'main.selectedFile.flow-commands.getSourceFile',
 
             'main.selectedFile.selectedFileObject',
         ])

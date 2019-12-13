@@ -3,11 +3,13 @@ const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const DocumentationReader = require('../../objects/documentation/DocumentationReader')
 const Sirens = require('../../../Sirens')
-const {applicationCommands} = require('./application-commands')
-const {classDefinitionCommands} = require('./class-definition-commands')
-const {methodDefinitionCommands} = require('./method-definition-commands')
-const {guiClassDocumentationCommands} = require('./gui-class-documentation-commands')
-const {guiMethodDocumentationCommands} = require('./gui-method-documentation-commands')
+const SourceFileStructureParser = require('../../objects/SourceFileStructureParser')
+
+const MainCommands = require('./MainCommands')
+const ClassDefinitionCommands = require('./ClassDefinitionCommands')
+const MethodDefinitionCommands = require('./MethodDefinitionCommands')
+const GuiClassDocumentationCommands = require('./GuiClassDocumentationCommands')
+const GuiMethodDocumentationCommands = require('./GuiMethodDocumentationCommands')
 
 class ClassDocumentationBrowserFlow {
     /// Definition
@@ -15,6 +17,14 @@ class ClassDocumentationBrowserFlow {
     static definition() {
         this.instanceVariables = []
         this.assumes = [ValueFlow]
+    }
+
+    afterInstantiation() {
+        this.behaveAs( MainCommands )
+        this.behaveAs( ClassDefinitionCommands )
+        this.behaveAs( MethodDefinitionCommands )
+        this.behaveAs( GuiClassDocumentationCommands )
+        this.behaveAs( GuiMethodDocumentationCommands )
     }
 
     /// Building
@@ -26,13 +36,7 @@ class ClassDocumentationBrowserFlow {
 
         flow.main({ id: 'classDocumentationBrowser' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
-            this.defineFlowCommandsIn({ method: applicationCommands })
-            this.defineFlowCommandsIn({ method: classDefinitionCommands })
-            this.defineFlowCommandsIn({ method: methodDefinitionCommands })
-
-            this.defineFlowCommandsIn({ method: guiClassDocumentationCommands })
-            this.defineFlowCommandsIn({ method: guiMethodDocumentationCommands })
+            thisFlow.flowCommands({ flowBuilder: this, thisFlow: thisFlow })
             
             this.value({ id: 'browsingMode'}, function() {
 
@@ -109,8 +113,8 @@ class ClassDocumentationBrowserFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
+    flowCommands({ flowBuilder: flowBuilder, thisFlow: thisFlow }) {
+        flowBuilder.commandsGroup({ id: 'flow-methods' }, function() {
 
             this.command({
                 id: 'getBrowsedClass',
@@ -157,22 +161,98 @@ class ClassDocumentationBrowserFlow {
         })
     }
 
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'application-commands.reloadClassDefinition',
+            'application-commands.openFileEditor',
+            'application-commands.openDocumentationBrowser',
+            'application-commands.openPlayground',
+
+            'class-definition-commands.updateClassUnformattedComment',
+            'class-definition-commands.updateClassDocumentationComment',
+            'class-definition-commands.addClassDocumentationImplementationNote',
+            'class-definition-commands.updateClassDocumentationImplementationNote',
+            'class-definition-commands.deleteClassDocumentationImplementationNote',
+            'class-definition-commands.addClassDocumentationExample',
+            'class-definition-commands.updateClassDocumentationExample',
+            'class-definition-commands.deleteClassDocumentationExample',
+
+            'method-definition-commands.updateMethodUnformmatedComment',
+            'method-definition-commands.updateMethodDocumentationComment',
+            'method-definition-commands.editMethodDocumentationTags',
+            'method-definition-commands.updateMethodDocumentationTags',
+            'method-definition-commands.addMethodDocumentationImplementationNote',
+            'method-definition-commands.updateMethodDocumentationImplementationNote',
+            'method-definition-commands.deleteMethodDocumentationImplementationNote',
+            'method-definition-commands.addMethodDocumentationParam',
+            'method-definition-commands.updateMethodDocumentationParam',
+            'method-definition-commands.deleteMethodDocumentationParam',
+            'method-definition-commands.updateMethodDocumentationReturn',
+            'method-definition-commands.addMethodDocumentationExample',
+            'method-definition-commands.updateMethodDocumentationExample',
+            'method-definition-commands.deleteMethodDocumentationExample',
+
+            'gui-class-documentation-commands.editClassDocumentationComment',
+            'gui-class-documentation-commands.createClassDocumentationImplementationNote',
+            'gui-class-documentation-commands.editClassDocumentationImplementationNote',
+            'gui-class-documentation-commands.createClassDocumentationExample',
+            'gui-class-documentation-commands.editClassDocumentationExample',
+            'gui-class-documentation-commands.editClassUnformattedComment',
+
+
+            'gui-method-documentation-commands.editMethodDocumentationComment',
+            'gui-method-documentation-commands.createMethodDocumentationImplementationNote',
+            'gui-method-documentation-commands.editMethodDocumentationImplementationNote',
+            'gui-method-documentation-commands.createMethodDocumentationExample',
+            'gui-method-documentation-commands.editMethodDocumentationExample',
+            'gui-method-documentation-commands.editMethodDocumentationParam',
+            'gui-method-documentation-commands.createMethodDocumentationParam',
+            'gui-method-documentation-commands.editMethodDocumentationReturn',
+            'gui-method-documentation-commands.editMethodTags',
+            'gui-method-documentation-commands.editMethodUnformmatedComment',
+
+            'flow-methods.getBrowsedClass',
+            'flow-methods.setBrowsedClass',
+            'flow-methods.setBrowsedMethod',
+            'flow-methods.showsUnformattedComments',
+            'flow-methods.getAllMethodsTags',
+            'flow-methods.isInEditionMode',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
     /// Actions
 
     reloadClassDefinition() {
         const selectedClass = this.getBrowsedClass()
-        const selectedMethod = this.getChildFlow({ id: 'selectedMethod' }).getValue()
+
         const sourceFile = selectedClass.getSourceFile()
+
+        const selectedClassName = selectedClass.getClassName()
+        const selectedMethod = this.getChildFlow({ id: 'selectedMethod' }).getValue()
 
         this.setBrowsedClass({ jsClass: null })
 
-        sourceFile.reload()
+        let jsFile         
+        try {
+            jsFile = SourceFileStructureParser.new()
+                .parseSourceFile({ sourceFile: sourceFile })
+        } catch(error) {
+            jsFile = UknownFileStructure.new()
+        }
 
-        const newSelectedClass = sourceFile.getClassDefinitions().find( (eachClassDefinition) => {
-            return eachClassDefinition.getClassName() === selectedClass.getClassName()
+
+        const newJsClass = jsFile.getClasses().find( (eachJsFile) => {
+            return eachJsFile.getClassName() === selectedClass.getClassName( selectedClassName )
         })
 
-        this.setBrowsedClass({ jsClass: newSelectedClass })
+        this.setBrowsedClass({ jsClass: newJsClass })
 
         if( selectedMethod ) {
             this.setBrowsedMethod({ methodName: selectedMethod.getMethodName() })
@@ -318,6 +398,10 @@ class ClassDocumentationBrowserFlow {
 
     getCurrentMethodDocumentation() {
         return this.getChildFlow({ id: 'selectedMethodDocumentation' }).getValue()
+    }
+
+    getClassDocumentation() {
+        return this.getChildFlow({ id: 'classDocumentation' }).getValue()
     }
 }
 

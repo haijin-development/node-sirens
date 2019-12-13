@@ -22,7 +22,6 @@ class PlaygroundBrowserFlow {
 
         flowBuilder.main({ id: 'playground' }, function(application) {
 
-            this.defineFlowCommandsIn({ method: application.flowMethods })
             this.defineFlowCommandsIn({ method: application.flowCommands })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
@@ -48,30 +47,17 @@ class PlaygroundBrowserFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'pickFile' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getLastOpenedFolder' })
-        })
-    }
-
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
+
             this.command({
                 id: 'openFile',
-                whenActioned: function({ filename: filename }) {
-                    if( ! filename ) { return }
-
-                    thisFlow.openFile({ filename: filename })
-                }
+                whenActioned: thisFlow.openFile.bind(thisFlow),
             })
 
             this.command({
                 id: 'openFileInNewWindow',
-                whenActioned: function({ filename: filename }) {
-                    if( ! filename ) { return }
-                    Sirens.openPlayground({ filename: filename })
-                }
+                whenActioned: thisFlow.openFileInNewWindow.bind(thisFlow),
             })
 
             this.command({
@@ -79,45 +65,37 @@ class PlaygroundBrowserFlow {
                 enabledIf: function() {
                     return thisFlow.hasSourceFile()
                 },
-                whenActioned: function() {
-                    thisFlow.saveOpenedFile()
-                }
+                whenActioned: thisFlow.saveFile.bind(thisFlow),
             })
 
             this.command({
                 id: 'openFileEditor',
-                whenActioned: function() {
-                    Sirens.openFileEditor()
-                }
+                whenActioned: thisFlow.openFileEditor.bind(thisFlow),
             })
 
             this.command({
                 id: 'openPlayground',
-                whenActioned: function() {
-                    Sirens.openPlayground()
-                }
+                whenActioned: thisFlow.openPlayground.bind(thisFlow),
             })
 
             this.command({
                 id: 'pickAndOpenFile',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
-
-                    if( filename === null ) { return }
-
-                    thisFlow.openFile({ filename: filename })
-                },
+                whenActioned: thisFlow.pickAndOpenFile.bind(thisFlow),
             })
 
             this.command({
                 id: 'pickAndOpenFileInNewWindow',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const filename = thisFlow.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+                whenActioned: thisFlow.pickAndOpenFileInNewWindow.bind(thisFlow),
+            })
 
-                    if( filename === null ) { return }
+            this.command({
+                id: 'pickFile',
+                whenActioned: thisFlow.pickFile.bind(thisFlow),
+            })
 
-                    thisFlow.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
-                },
+            this.command({
+                id: 'getLastOpenedFolder',
+                whenActioned: thisFlow.getLastOpenedFolder.bind(thisFlow),
             })
         })
     }
@@ -126,9 +104,6 @@ class PlaygroundBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-methods.pickFile',
-            'flow-methods.getLastOpenedFolder',
-
             'flow-commands.openFile',
             'flow-commands.openFileInNewWindow',
             'flow-commands.saveFile',
@@ -136,6 +111,8 @@ class PlaygroundBrowserFlow {
             'flow-commands.openPlayground',
             'flow-commands.pickAndOpenFile',
             'flow-commands.pickAndOpenFileInNewWindow',
+            'flow-commands.pickFile',
+            'flow-commands.getLastOpenedFolder',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -146,11 +123,9 @@ class PlaygroundBrowserFlow {
 
     /// Actions
 
-    pickFile() {
-        throw new Error(`This methods is expected to be implemented by the application.`)
-    }
-
     openFile({ filename: filename }) {
+        if( ! filename ) { return }
+
         const sourceFile = SourceFile.new({ filepath: filename })
 
         if( filename !== null ) {
@@ -160,7 +135,13 @@ class PlaygroundBrowserFlow {
         this.setSourceFile({ sourceFile: sourceFile })
     }
 
-    saveOpenedFile() {
+    openFileInNewWindow({ filename: filename }) {
+        if( ! filename ) { return }
+
+        Sirens.openPlayground({ filename: filename })
+    }
+
+    saveFile() {
         const sourceFile = this.getSourceFile()
 
         if( sourceFile === undefined ) { return }
@@ -168,6 +149,34 @@ class PlaygroundBrowserFlow {
         const fileNewContents = this.getChildFlow({ id: 'fileContents' }).getValue()
 
         sourceFile.saveFileContents( fileNewContents )
+    }
+
+    openFileEditor() {
+        Sirens.openFileEditor()
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
+
+    pickAndOpenFile({ parentWindow: parentWindow }) {
+        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+        if( filename === null ) { return }
+
+        this.openFile({ filename: filename })
+    }
+
+    pickAndOpenFileInNewWindow({ parentWindow: parentWindow }) {
+        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+
+        if( filename === null ) { return }
+
+        this.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
+    }
+
+    pickFile() {
+        throw new Error(`This Command is expected to be implemented by the application.`)
     }
 
     /// Querying

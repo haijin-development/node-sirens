@@ -231,22 +231,6 @@ class FlowBuilder {
     defineFlowCommandsIn({ method: method }) {
         this.evaluate({ closure: method, with: this.rootFlow })
     }
-
-    defineMethodAsCommand({ flow: flow, methodName: methodName, methodClosure: methodClosure }) {
-        if( methodClosure === undefined ) { methodClosure = flow[methodName].bind(flow) }
-
-        const method = flow[methodName]
-
-        if( method.isMethodNotFound === true ) {
-            const flowString = flow.toString()
-            throw new Error(`The flow ${flowString} was expected to define the method .${methodName}()`)
-        }
-
-        this.command({
-            id: methodName,
-            whenActioned: methodClosure,
-        })
-    }
 }
 
 FlowBuilder = Classification.define(FlowBuilder)

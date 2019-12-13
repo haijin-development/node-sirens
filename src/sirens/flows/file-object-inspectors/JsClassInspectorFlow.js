@@ -67,11 +67,7 @@ class JsClassInspectorFlow {
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
-                whenActioned: function() {
-                    const jsClass = thisFlow.getValue()
-                    const methodName = thisFlow.getSelectedMethodName()
-                    Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
-                }
+                whenActioned: thisFlow.openDocumentationBrowser.bind(thisFlow),
             })
 
         })
@@ -92,6 +88,14 @@ class JsClassInspectorFlow {
     }
 
     // Methods
+
+    openDocumentationBrowser() {
+        const jsClass = thisFlow.getValue()
+
+        const methodName = thisFlow.getSelectedMethodName()
+
+        Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
+    }
 
     hasAClassSelected() {
         const jsSection = this.getValue()

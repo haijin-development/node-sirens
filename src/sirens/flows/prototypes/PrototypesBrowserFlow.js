@@ -20,7 +20,6 @@ class PrototypesBrowserFlow {
 
         flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
@@ -45,8 +44,15 @@ class PrototypesBrowserFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
+            this.command({
+                id: 'browseSelectedPrototype',
+                enabledIf: function() {
+                    return thisFlow.hasAClassSelected()
+                },
+                whenActioned: thisFlow.browseSelectedPrototype.bind(thisFlow)
+            })
 
             this.command({
                 id: 'setBrowsedObject',
@@ -62,26 +68,16 @@ class PrototypesBrowserFlow {
                 id: 'hasAClassSelected',
                 whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
             })
-
-        })
-    }
-
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-            this.command({
-                id: 'browseSelectedPrototype',
-                enabledIf: function() {
-                    return thisFlow.hasAClassSelected()
-                },
-                whenActioned: function() {
-                    const selectedClass = thisFlow.getSelectedClass()
-                    Sirens.browsePrototypes(selectedClass)
-                }
-            })
         })
     }
 
     /// Actions
+
+    browseSelectedPrototype() {
+        const selectedClass = this.getSelectedClass()
+
+        Sirens.browsePrototypes(selectedClass)
+    }
 
     hasAClassSelected() {
         return this.getSelectedClass() ? true : false

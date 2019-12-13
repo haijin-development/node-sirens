@@ -18,7 +18,7 @@ class FileInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: sourceFile, oldValue: oldValue }) => {
                 const fileObjects = this.getChildFlow({ id: 'fileObjects' })
@@ -49,10 +49,7 @@ class FileInspectorFlow {
 
                     const newValue = fileObject ? fileObject : null
 
-                    const fileTypeFlow = thisFlow.executeCommand({
-                        id: 'getFileObjectInspectorFlow',
-                        with: { fileObject: fileObject },
-                    })
+                    const fileTypeFlow = thisFlow.getFileObjectInspectorFlow({ fileObject: fileObject })
 
                     thisFlow.replaceChildFlow({
                         id: 'selectedFileObject',
@@ -66,11 +63,24 @@ class FileInspectorFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSourceFile' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getFileObjectInspectorFlow' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getFileObjectComponent' })
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
+            this.command({
+                id: 'getSourceFile',
+                whenActioned: thisFlow.getSourceFile.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getFileObjectInspectorFlow',
+                whenActioned: function({ fileObject: fileObject }) {
+                    return TextualContentInspectorFlow.new()
+                }
+            })
+
+            this.command({
+                id: 'getFileObjectComponent',
+                whenActioned: thisFlow.getFileObjectComponent.bind(thisFlow),
+            })
         })
     }
 
@@ -78,9 +88,9 @@ class FileInspectorFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-methods.getSourceFile',
-            'flow-methods.getFileObjectInspectorFlow',
-            'flow-methods.getFileObjectComponent',
+            'flow-commands.getSourceFile',
+            'flow-commands.getFileObjectInspectorFlow',
+            'flow-commands.getFileObjectComponent',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -100,7 +110,10 @@ class FileInspectorFlow {
     }
 
     getFileObjectInspectorFlow({ fileObject: fileObject }) {
-        return TextualContentInspectorFlow.new()
+        return this.executeCommand({
+            id: 'getFileObjectInspectorFlow',
+            with: { fileObject: fileObject },
+        })
     }
 
     getFileObjectComponent() {

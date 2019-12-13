@@ -16,7 +16,7 @@ class ObjectBrowserFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 thisFlow.getChildFlow({ id: 'objectProperties' }).setValue( object )
@@ -35,10 +35,7 @@ class ObjectBrowserFlow {
             this.bufferedValue({
                 id: 'playground',
                 convertToValueWith: ({ object: selectedValue }) => {
-                    return thisFlow.executeCommand({
-                        id: 'propertySelectionValueStringFrom',
-                        with: { value: selectedValue },
-                    })
+                    return thisFlow.propertySelectionValueStringFrom({ value: selectedValue })
                 },
             })
 
@@ -46,10 +43,17 @@ class ObjectBrowserFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'browseObject' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'propertySelectionValueStringFrom' })
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
+            this.command({
+                id: 'browseObject',
+                whenActioned: thisFlow.browseObject.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'propertySelectionValueStringFrom',
+                whenActioned: thisFlow.propertySelectionValueStringFrom.bind(thisFlow),
+            })
         })
     }
 
@@ -57,8 +61,8 @@ class ObjectBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-methods.browseObject',
-            'flow-methods.propertySelectionValueStringFrom',
+            'flow-commands.browseObject',
+            'flow-commands.propertySelectionValueStringFrom',
         ]
 
         this.exportCommandsToFlowPoint({

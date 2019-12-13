@@ -8,7 +8,12 @@ class Flow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['id', 'idPath', 'childFlows', 'commandsController', 'pendingEvents']
+        this.instanceVariables = [
+            'id', 'idPath',
+            'childFlows',
+            'commandsController',
+            'pendingEvents',
+        ]
     }
 
     /// Initializing

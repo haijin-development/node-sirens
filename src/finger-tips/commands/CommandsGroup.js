@@ -11,7 +11,7 @@ class CommandsGroup {
         this.assumes = [Flow]
     }
 
-    isCommandGroup() {
+    isCommandsGroup() {
         return true
     }
 

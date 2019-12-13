@@ -46,6 +46,10 @@ function globalFunction_1(param) {
 */
 class Address {
     /*
+       Method(`
+          This method has no documentation yet.
+       `)
+
        Example({
           Description: `
              Creates an Address with a given street name and number.

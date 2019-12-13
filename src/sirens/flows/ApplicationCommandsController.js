@@ -28,9 +28,9 @@ class ApplicationCommandsController {
 
     overrideCommands() {
         // An example of overriding a command and implementing a Depedency Injection pattern.
-        if( this.mainFlow.findChildFlow({ id: 'selectedFile.flow-methods.getFileObjectInspectorFlow' }) ) {
+        if( this.mainFlow.findChildFlow({ id: 'selectedFile.flow-commands.getFileObjectInspectorFlow' }) ) {
             this.mainFlow.overrideCommand({
-                id: 'selectedFile.flow-methods.getFileObjectInspectorFlow',
+                id: 'selectedFile.flow-commands.getFileObjectInspectorFlow',
                 enabledIf: true,
                 whenActioned: this.getFileObjectInspectorFlow.bind(this),
             })
@@ -73,7 +73,7 @@ class ApplicationCommandsController {
         const filename = FileChooser.openFile({
             title: 'Choose a file',
             window: parentWindow,
-            initialFolder: this.mainFlow.executeCommand({ id: 'getLastOpenedFolder' }),
+            initialFolder: this.mainFlow.getLastOpenedFolder(),
         })
 
         return filename

@@ -22,10 +22,10 @@ describe('When using an FileInspectorFlow', () => {
 
             'main.selectedFileObject',
 
-            'main.flow-methods',
-            'main.flow-methods.getFileObjectComponent',
-            'main.flow-methods.getFileObjectInspectorFlow',
-            'main.flow-methods.getSourceFile',
+            'main.flow-commands',
+            'main.flow-commands.getFileObjectComponent',
+            'main.flow-commands.getFileObjectInspectorFlow',
+            'main.flow-commands.getSourceFile',
         ])
     })
 

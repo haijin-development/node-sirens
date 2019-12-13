@@ -27,7 +27,6 @@ class ObjectPropertiesFlow {
 
         flow.main({ id: 'main' },  function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
@@ -56,30 +55,28 @@ class ObjectPropertiesFlow {
 
             this.command({
                 id: 'inspectSelectedObject',
-                whenActioned: function() {
-                    const selectedValue = thisFlow.getSelectedPropertyValue()
-
-                    Sirens.browseObject(selectedValue)
-                },
+                whenActioned: thisFlow.inspectSelectedObject.bind(thisFlow),
             })
 
             this.command({
                 id: 'browseSelectedObjectPrototypes',
-                whenActioned: function() {
-                    const selectedValue = thisFlow.getSelectedPropertyValue()
-
-                    Sirens.browsePrototypes(selectedValue)
-                },
+                whenActioned: thisFlow.browseSelectedObjectPrototypes.bind(thisFlow),
             })
 
-        })
-    }
+            this.command({
+                id: 'getMainObject',
+                whenActioned: thisFlow.getMainObject.bind(thisFlow),
+            })
 
-    flowMethods(thisFlow) {
-        this.commandsGroup({ id: 'flow-methods' }, function() {
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getMainObject' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getRootProperties' })
-            this.defineMethodAsCommand({ flow: thisFlow, methodName: 'getSelectedPropertyValue' })
+            this.command({
+                id: 'getRootProperties',
+                whenActioned: thisFlow.getRootProperties.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getSelectedPropertyValue',
+                whenActioned: thisFlow.getSelectedPropertyValue.bind(thisFlow),
+            })
         })
     }
 
@@ -89,10 +86,9 @@ class ObjectPropertiesFlow {
         const exportedCommands = [
             'flow-commands.inspectSelectedObject',
             'flow-commands.browseSelectedObjectPrototypes',
-
-            'flow-methods.getMainObject',
-            'flow-methods.getRootProperties',
-            'flow-methods.getSelectedPropertyValue',
+            'flow-commands.getMainObject',
+            'flow-commands.getRootProperties',
+            'flow-commands.getSelectedPropertyValue',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -102,6 +98,18 @@ class ObjectPropertiesFlow {
     }
 
     /// Querying
+
+    inspectSelectedObject() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browseObject(selectedValue)
+    }
+
+    browseSelectedObjectPrototypes() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browsePrototypes(selectedValue)
+    }
 
     getMainObject() {
         return this.getValue()

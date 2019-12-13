@@ -73,13 +73,13 @@ class FileObject {
     }
 
     writeContents({ contents: contents }) {
-        const firstStatementStartLine = this.getStartPos().getLine()
-        const firstStatementStartColumn = this.getStartPos().getColumn()
+        const firstStatementStartLine = this.fileLocation.getStartPos().getLine()
+        const firstStatementStartColumn = this.fileLocation.getStartPos().getColumn()
 
-        const lastStatementEndLine = this.getEndPos().getLine()
-        const lastStatementEndColumn = this.getEndPos().getColumn()
+        const lastStatementEndLine = this.fileLocation.getEndPos().getLine()
+        const lastStatementEndColumn = this.fileLocation.getEndPos().getColumn()
 
-        const sourceFile = this.getSourceFile()
+        const sourceFile = this.fileLocation.getSourceFile()
 
         const fileContentsBefore = sourceFile.getOriginalSourceCode({
             fromLine: 1,

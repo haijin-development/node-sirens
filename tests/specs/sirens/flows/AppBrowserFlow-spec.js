@@ -1,15 +1,28 @@
 const expect = require('chai').expect
+const FilesRepository = require('../FilesRepository')
 const AppBrowserFlow = require('../../../../src/sirens/flows/app-browser/AppBrowserFlow')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
-
-const folder = __dirname + '/../../../samples'
 
 describe('When using an AppBrowserFlow', () => {
+    const sampleFolder = __dirname + '/../../../samples'
+
+    let folder
+
+    beforeEach( () => {
+        FilesRepository.cleanUp()
+        FilesRepository.manageFolder({ folder: sampleFolder })
+
+        folder = FilesRepository.pathTo( sampleFolder )
+    })
+
+    after( () => {
+        FilesRepository.cleanUp()
+    })
+
     it('has an ApplicationCommandsController', () => {
 
         const flow = AppBrowserFlow.new()
 
-        expect( flow ) .to .haveAsCommandsControllerAn(ApplicationCommandsController)
+        expect( flow ) .to .haveAsCommandsControllerAn('ApplicationCommandsController')
     })
 
     it('has all these child flows defined', () => {
@@ -23,7 +36,6 @@ describe('When using an AppBrowserFlow', () => {
             'main.flow-commands.pickAndOpenFolder',
             'main.flow-commands.openFileEditor',
             'main.flow-commands.openPlayground',
-            'main.flow-commands.openDocumentationBrowser',
 
             'main.flow-commands',
             'main.flow-commands.pickFolder',
@@ -31,16 +43,38 @@ describe('When using an AppBrowserFlow', () => {
             'main.flow-commands.getSelectedFilePath',
             'main.flow-commands.hasAClassSelected',
 
+            'main.browsingMode',
+            'main.browsingMode.showsUnformattedComments',
+            'main.browsingMode.isEditingDocumentation',
+
             'main.selectedFile',
             'main.selectedFile.fileObjects',
 
             'main.selectedFile.flow-commands',
             'main.selectedFile.flow-commands.getFileObjectComponent',
+            'main.selectedFile.flow-commands.getSelectedFileObject',
             'main.selectedFile.flow-commands.getFileObjectInspectorFlow',
             'main.selectedFile.flow-commands.getSourceFile',
 
             'main.selectedFile.selectedFileObject',
+            'main.selectedFile.selectedFileObject.text',
+            'main.selectedFile.selectedFileObject.flow-commands',
+            'main.selectedFile.selectedFileObject.flow-commands.getText',
         ])
+    })
+
+    describe('browing mode', () => {
+        const flow = AppBrowserFlow.new()
+
+        it('showsUnformattedComments is set to false', () => {
+            expect(flow) .withId( 'main.browsingMode.showsUnformattedComments' )
+                .toHaveValue(false)
+        })
+
+        it('isEditingDocumentation is set to false', () => {
+            expect(flow) .withId( 'main.browsingMode.isEditingDocumentation' )
+                .toHaveValue(false)
+        })
     })
 
     describe('when setting a folder', () => {
@@ -54,25 +88,25 @@ describe('When using an AppBrowserFlow', () => {
 
         it('sets the folder to the main flow', () => {
             expect(flow) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
-                expect( value.getPath() ) .to .match(/^.*tests[/]samples$/)
+                expect( value.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
         })
 
         it('sets the window title', () => {
             expect(flow) .withId( 'main.windowTitle' ) .toHaveAnObjectSuchThat( (object) => {
-                expect( object.getPath() ) .to .match(/^.*tests[/]samples$/)
+                expect( object.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
             expect(flow) .withId( 'main.windowTitle' ) .toHaveAValueSuchThat( (title) => {
-                expect( title ) .to .match(/^App Browser -.*tests[/]samples$/)
+                expect( title ) .to .match(/^App Browser -.*tmp-files-repository$/)
             })
         })
 
         it('sets the filesTree root', () => {
             const path = flow.getValue()
 
-            expect(flow) .withId( 'main.filesTree' ) .toHaveRootsSuchThat( (eachRoot) => {
-                expect( eachRoot.getPath() ) .to .match(/^.*tests[/]samples$/)
+            expect(flow) .withId( 'main.filesTree' ) .withEachRootSuchThat( (eachRoot) => {
+                expect( eachRoot.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
         })
@@ -134,7 +168,8 @@ describe('When using an AppBrowserFlow', () => {
             filesTree.setSelection([ rootFolder, file ])
 
             expect(flow) .withId( 'main.selectedFile' ) .toHaveAValueSuchThat( (value) => {
-                expect( value.getFilePath() ) .to .match(/^.*tests[/]samples[/]class-definition.js$/)
+                expect( value.sourceFile.getFilePath() ) .to
+                    .match(/^.*tmp-files-repository[/]class-definition.js$/)
             })
         })
     })
@@ -163,7 +198,49 @@ describe('When using an AppBrowserFlow', () => {
             filesTree.setSelection(null)
 
             expect(flow) .withId( 'main.selectedFile' ) .toHaveAValueSuchThat( (value) => {
-                expect( value ) .to .be .null
+                expect( value.sourceFile ) .to .be .null
+            })
+        })
+    })
+
+    describe('when switching the documentation mode to :showsUnformattedComments', () => {
+        let flow
+
+        beforeEach( () => {
+            flow = AppBrowserFlow.new()
+
+            flow.openFolder({ folderPath: folder })
+        })
+
+        it('sets the :showsUnformattedComments mode to the selectedFile flow', () => {
+            flow.showsUnformattedComments({ value: false })
+
+            flow.getChildFlow({ id: 'showsUnformattedComments' })
+                .setValue( ! flow.showsUnformattedComments() )
+
+            expect(flow) .withId( 'main.selectedFile' ) .toBeSuchThat( (childFlow) => {
+                expect( childFlow.showsUnformattedComments() ) .to .be .true
+            })
+        })
+    })
+
+    describe('when switching the documentation edition mode to :isEditingDocumentation', () => {
+        let flow
+
+        beforeEach( () => {
+            flow = AppBrowserFlow.new()
+
+            flow.openFolder({ folderPath: folder })
+        })
+
+        it('sets the :isEditingDocumentation mode to the selectedFile flow', () => {
+            flow.isEditingDocumentation({ value: false })
+
+            flow.getChildFlow({ id: 'isEditingDocumentation' })
+                .setValue( ! flow.isEditingDocumentation() )
+
+            expect(flow) .withId( 'main.selectedFile' ) .toBeSuchThat( (childFlow) => {
+                expect( childFlow.isEditingDocumentation() ) .to .be .true
             })
         })
     })

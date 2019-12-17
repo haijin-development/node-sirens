@@ -47,7 +47,7 @@ class AppBrowser {
             this.window( function() {
                 this.styles({
                     title: flow.getFlowPoint({ id: 'windowTitle' }),
-                    width: 900,
+                    width: 1200,
                     height: 600,
                 })
 
@@ -58,7 +58,6 @@ class AppBrowser {
                             model: flow,
                             openFolder: () => { flow.pickAndOpenFolder({ parentWindow: component }) },
                             openFileEditor: () => { flow.openFileEditor({ parentWindow: component }) },
-                            openDocumentationBrowser: () => { flow.openDocumentationBrowser({ parentWindow: component }) },
                             openPlayground: () => { flow.openPlayground({ parentWindow: component }) },
                         })
                     )
@@ -67,7 +66,6 @@ class AppBrowser {
                         AppBrowserBody.new({
                             model: flow,
                             openFileEditor: () => { flow.openFileEditor({ parentWindow: component }) },
-                            openDocumentationBrowser: () => { flow.openDocumentationBrowser({ parentWindow: component }) },
                         })
                     )
 

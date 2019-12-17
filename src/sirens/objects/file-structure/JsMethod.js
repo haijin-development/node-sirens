@@ -57,7 +57,7 @@ class JsMethod {
         })
     }
 
-    getFunctionSignatureString() {
+    getSignatureString() {
         const methodName = this.getMethodName()
         const methodParams = this.getMethodParams()
 

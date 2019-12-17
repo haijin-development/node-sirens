@@ -33,7 +33,7 @@ class FlowPoint {
     getFlowPoint({ id: flowPointId }) {
         const childFlowPoint = this.findFlowPoint({ id: flowPointId })
 
-        if( childFlowPoint === undefined ) {
+        if( ! childFlowPoint ) {
             throw new Error(`Child flow point with {id: '${flowPointId}'} not found.`)
         }
 

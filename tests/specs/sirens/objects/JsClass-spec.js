@@ -19,8 +19,10 @@ describe('When using a JsClass', () => {
 
         const expectedComment =
 `
-* A class comment
-* for Sample.
+Method(\`
+    A class comment
+    for Sample.
+\`)
 `
 
         expect( comment.getBodyContents() ) .to .equal( expectedComment )

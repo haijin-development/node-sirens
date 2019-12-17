@@ -297,7 +297,7 @@ class Sirens {
     */
     static browseClassDocumentation({ jsClass: jsClass, methodName: methodName }) {
         this.do( () => {
-            const ClassDocumentationBrowser = require('../src/sirens/components/class-documentation-browser/ClassDocumentationBrowser')
+            const ClassDocumentationBrowser = require('../src/sirens/components/documentation-browser/ClassDocumentationBrowser')
 
             ClassDocumentationBrowser.openOn({
               jsClass: jsClass,
@@ -366,6 +366,14 @@ class Sirens {
 
             PlaygroundBrowser.openOn({ filename: filename })
         })
+    }
+
+    static openDocumentationBrowserOn({ object: selectedFileObject }) {
+        this.do( () => {
+            const DocumentationBrowser = require('../src/sirens/components/documentation-browser/DocumentationBrowser')
+
+            DocumentationBrowser.openOn({ object: selectedFileObject })
+        })      
     }
 
     /*

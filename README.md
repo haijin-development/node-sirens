@@ -77,17 +77,12 @@ const Sirens = require('sirens')
 Sirens.openPlayground()
 ```
 
-A FileEditor lets you inspect the contents of a file and its documentation.
+An AppBrowser lets you browse the files in a selected folder.
 
-Open a file editor with
+In all cases it shows the contents of the file and for some type of files it also opens a specific browser.
 
-```javascript
-const Sirens = require('sirens')
-
-Sirens.openFileEditor()
-```
-
-An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.
+For instance, with .js classes and methods it will open a browser on its documentation.
+With .json files it opens a browser on its structure.
 
 Open an AppBrowser with
 

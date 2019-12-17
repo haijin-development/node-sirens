@@ -12,6 +12,10 @@
 - Moved the SourceFileStructureParser out from SourceFile into FileInspectorFlow.
 - Improved how to choose which commands to attach to a FlowPoint.
 - Implemented a FileLocation object and moved the FilePosition and SourceFile object there.
+- Rewrote the documentation components and flows and integrated the documentation browsers into the AppBrowser.
+- Removed the ClassDocumentationBrowser.
+- Removed the FileEditor windows.
+- Implemented tests for Sirens flows.
 
 ### FingerTips
 
@@ -20,6 +24,7 @@
 - Implemented adding and removing flows on the fly.
 - Main Flows trigger a 'main-flow-built' after they are built.
 - Several error fixes related with commands id paths.
+- Implemented mocha expectations for FingerTips flows.
 
 ### Skins
 

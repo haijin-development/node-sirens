@@ -26,14 +26,13 @@ class AppBrowserBody {
                 this.container( function() {
 
                     this.styles({
-                        viewAttributes: { splitProportion: 2.0/3.0 },
+                        viewAttributes: { splitProportion: 3.0/4.0 },
                         hasScrollBars: false,
                     })
 
                     this.component(
                         SourceFileEditionComponent.new({
                             model: flow.getFlowPoint({ id: 'selectedFile' }),
-                            openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                         })
                     )
 
@@ -44,7 +43,7 @@ class AppBrowserBody {
 
                     this.styles({
                         id: 'filesTree',
-                        viewAttributes: { splitProportion: 1.0/3.0 },
+                        viewAttributes: { splitProportion: 1.0/4.0 },
                         showHeaders: false,
                         clickableHeaders: false,
                     })

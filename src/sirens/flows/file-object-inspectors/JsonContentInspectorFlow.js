@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const Sirens = require('../../../Sirens')
+const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsonContentComponent = require('../../components/file-object-inspectors/JsonContentComponent')
 const ObjectProperty = require('../../objects/ObjectProperty')
 
@@ -9,14 +8,22 @@ class JsonContentInspectorFlow {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ValueFlow]
+        this.assumes = [ObjectInspectorFlow]
     }
 
     /// Building
 
     buildWith(flow) {
+
         flow.main({ id: 'main' }, function(thisFlow) {
-            this.whenObjectChanges( ({ newValue: jsonContent }) => {
+
+            this.whenObjectChanges( ({ newValue: {
+                object: jsonContent,
+                showsUnformattedComments: showsUnformattedComments,
+                isEditingDocumentation: isEditingDocumentation,
+                reloadSourceFile: reloadSourceFile,
+            }}) => {
+
                 if( ! jsonContent ) {
                     this.getChildFlow({ id: 'jsonProperties' }).setRoots({ items: [] })
                     return

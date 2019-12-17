@@ -1,14 +1,17 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const Sirens = require('../../../Sirens')
-const JsClassComponent = require('../../components/file-object-inspectors/JsClassComponent')
+const ObjectInspectorFlow = require('./ObjectInspectorFlow')
+const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
+const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
+const EditClassCommentDialog = require('../../components/documentation-browser/edition/EditClassCommentDialog')
+const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
+const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
 class JsClassInspectorFlow {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ValueFlow]
+        this.assumes = [ObjectInspectorFlow]
     }
 
     /// Building
@@ -18,26 +21,34 @@ class JsClassInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue: fileObject }) => {
-                if( ! fileObject ) {
+            this.whenObjectChanges( ({ newValue: {
+                object: jsClass,
+                showsUnformattedComments: showsUnformattedComments,
+                isEditingDocumentation: isEditingDocumentation,
+                reloadSourceFile: reloadSourceFile,
+            }}) => {
+
+                if( ! jsClass ) {
+                    thisFlow.getChildFlow({ id: 'classDocumentation' }).setValue( null )
                     thisFlow.getChildFlow({ id: 'classMethods' }).setChoices( [] )
-                    thisFlow.getChildFlow({ id: 'selectedMethod' }).setValue( '' )
+                    thisFlow.getChildFlow({ id: 'selectedMethod' }).setValue( null )
                     return
                 }
 
-                let methods
-                let selectedMethodContents
+                const classDocumentation = jsClass.getDocumentation()
+                const methods = jsClass.getMethods()
 
-                if( thisFlow.hasAClassSelected() ) {
-                    methods = fileObject.getMethods()
-                }
+                thisFlow.getChildFlow({ id: 'classDocumentation' })
+                    .setValue({
+                        classDocumentation: classDocumentation,
+                        isEditingDocumentation: isEditingDocumentation,
+                    })
 
-                if( ! methods ) { methods = [] }
-                if( ! selectedMethodContents ) { selectedMethodContents = '' }
+                thisFlow.getChildFlow({ id: 'classMethods' })
+                    .setChoices( methods )
 
-                this.getChildFlow({ id: 'classMethods' }).setChoices( methods )
-
-                thisFlow.getChildFlow({ id: 'selectedMethod' }).setValue( selectedMethodContents )
+                thisFlow.getChildFlow({ id: 'classMethods.selectedMethod' })
+                    .setValue( null )
              })
 
             this.choice({
@@ -52,9 +63,18 @@ class JsClassInspectorFlow {
                         selectedMethod.setValue( methodDefinition.getFormattedSourceCode() )
                     }
                 },
+            }, function() {
+
+                this.value({ id: 'selectedMethod' })
+
             })
 
-            this.value({ id: 'selectedMethod' })
+            this.object({
+                id: 'classDocumentation',
+                definedWith: JsClassDocumentationFlow.new({
+                    updateClassDocumentationClosure: thisFlow.updateClassDocumentation.bind(thisFlow),
+                })
+            })
         })
 
     }
@@ -63,11 +83,28 @@ class JsClassInspectorFlow {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
             this.command({
-                id: 'openDocumentationBrowser',
-                enabledIf: function() {
-                    return thisFlow.hasAClassSelected()
-                },
-                whenActioned: thisFlow.openDocumentationBrowser.bind(thisFlow),
+                id: 'getClass',
+                whenActioned: thisFlow.getClass.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'getMethodUnformattedComment',
+                whenActioned: thisFlow.getMethodUnformattedComment.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'isInEditionMode',
+                whenActioned: thisFlow.isInEditionMode.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'showsUnformattedComments',
+                whenActioned: thisFlow.showsUnformattedComments.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'editClassUnformattedComment',
+                whenActioned: thisFlow.editClassUnformattedComment.bind(thisFlow),
             })
 
         })
@@ -78,7 +115,11 @@ class JsClassInspectorFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.openDocumentationBrowser',
+            'flow-commands.getClass',
+            'flow-commands.getMethodUnformattedComment',
+            'flow-commands.isInEditionMode',
+            'flow-commands.showsUnformattedComments',
+            'flow-commands.editClassUnformattedComment',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -89,40 +130,66 @@ class JsClassInspectorFlow {
 
     // Methods
 
-    openDocumentationBrowser() {
-        const jsClass = thisFlow.getValue()
-
-        const methodName = thisFlow.getSelectedMethodName()
-
-        Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
-    }
-
-    hasAClassSelected() {
-        const jsSection = this.getValue()
-
-        return jsSection && jsSection.respondsTo('isJsClass')
-    }
-
-    getSelectedClassDefinition() {
-        if( ! this.hasAClassSelected() ) { return null }
-
-        const fileObject = this.getValue()
-
-        return fileObject
-    }
-
-    getSelectedMethodName() {
-        const selectedMethod = this.getChildFlow({ id: 'classMethods' }).getSelection()
-
-        if( ! selectedMethod ) { return null }
-
-        return selectedMethod.getMethodName()
-    }
-
     getFlowComponent() {
-        return JsClassComponent.new({
+        return JsClassInspectorComponent.new({
             model: this.asFlowPoint(),
         })
+    }
+
+    getClass() {
+        return this.getValue().object
+    }
+
+    getMethodUnformattedComment() {
+        return this.getClass().getClassComment().getContents()
+    }
+
+    editClassUnformattedComment({ parentWindow: parentWindow }) {
+        const jsClass = this.getClass()
+
+        const className = jsClass.getClassName()
+
+        const classComment = jsClass.getClassComment().getContents()
+
+        const dialog = EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: parentWindow,
+            onUpdateClassComment: ({ classNewComment: classNewComment }) => {
+                this.updateClassUnformattedComment({
+                    classNewComment: classNewComment
+                })   
+            },
+        })
+
+        dialog.open()
+    }
+
+    updateClassUnformattedComment({ classNewComment: classComment }) {
+        const jsClass = this.getClass()
+
+        jsClass.getClassComment().writeContents({
+            contents: classComment
+        })
+
+        this.reloadSourceFile()
+    }
+
+    updateClassDocumentation({ classDocumentation: classDocumentation }) {
+        const classCommentContents = classDocumentation.generateCommentContents()
+
+        const jsClass = this.getClass()
+
+        const classComment = jsClass.getClassComment()
+
+        const classIndentation = jsClass.getContentsIndentation()
+
+        classComment.writeFormattedContents({
+            commentContents: classCommentContents,
+            outerIndentation: classIndentation,
+        })
+
+        this.reloadSourceFile()
     }
 }
 

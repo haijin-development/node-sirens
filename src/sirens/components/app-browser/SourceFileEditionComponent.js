@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
 const FileInspectorBody = require('../file-inspector/FileInspectorBody')
-const DocumentationBrowserBody = require('../class-documentation-browser/DocumentationBrowserBody')
 
 class SourceFileEditionComponent {
     /// Definition
@@ -31,7 +30,6 @@ class SourceFileEditionComponent {
                 this.component(
                     FileInspectorBody.new({
                         model: flow,
-                        openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })
                 )
 

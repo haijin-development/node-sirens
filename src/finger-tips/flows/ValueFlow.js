@@ -13,16 +13,14 @@ class ValueFlow {
 
     /// Initializing
 
-    afterInstantiation() {
-        this.value = null
-    }
-
     initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
         this.previousClassificationDo( () => {
             this.initialize({ id: id, idPath: idPath })
         })
 
-        this.doUpdateValue({ newValue: null, oldValue: undefined })
+        this.value = this.defaultValue()
+
+        this.doUpdateValue({ newValue: this.value, oldValue: undefined })
     }
 
     releaseFlow() {
@@ -31,6 +29,10 @@ class ValueFlow {
         this.previousClassificationDo( () => {
             this.releaseFlow()
         })
+    }
+
+    defaultValue() {
+        return null
     }
 
     /// Converting

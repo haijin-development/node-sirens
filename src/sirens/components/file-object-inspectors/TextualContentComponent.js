@@ -16,17 +16,12 @@ class TextualContentComponent {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
-        const fileObject = flow.getValue()
-
-        const fileObjectText = fileObject ?
-            fileObject.getContents()
-            :
-            ''
+        const text = flow.getText()
 
         componentsRenderer.render( function(component) {
 
             this.text({
-                text: fileObjectText,
+                text: text,
             })
 
         })

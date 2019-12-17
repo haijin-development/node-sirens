@@ -38,12 +38,6 @@ class AppBrowserMenuBar {
                 this.menuGroup({ label: 'Browsers' }, function() {
 
                     this.item({
-                        label: 'Open class documentation browser',
-                        action: component.getProps().openDocumentationBrowser,
-                        enabled: model.getCommand({ id: 'openDocumentationBrowser' }),
-                    })
-
-                    this.item({
                         label: 'Open a class editor...',
                         action: component.getProps().openFileEditor,
                         enabled: model.getCommand({ id: 'openFileEditor' }),

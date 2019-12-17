@@ -140,6 +140,16 @@ class MethodDocumentation {
         }
     }
 
+    getSignatureString() {
+        if( ! this.methodParams ) { return this.methodName }
+
+        const paramsTexts = this.methodParams.map( (param) => {
+            return this.paramSignatureString({ param: param })
+        })
+
+        return `${ this.methodName }(${ paramsTexts.join( ', ' ) })`
+    }
+
     /// Generating method comment
 
     generateComment() {

@@ -75,6 +75,8 @@ class JsFileParser {
                 currentExpression.type === 'ClassDeclaration'
                 ||
                 currentExpression.type === 'MethodDefinition'
+                ||
+                currentExpression.type === 'FunctionDeclaration'
               )
               {
                 const previousExpression = expressionsWithComments[ i - 1 ]

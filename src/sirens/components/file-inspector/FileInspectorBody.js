@@ -67,13 +67,11 @@ class FileInspectorBody {
                     this.column({
                         getTextClosure: function(fileObject) { return fileObject.getFileObjectDescription() },
                     })
-
                 })
 
                 this.component(
                     FileObjectInspectorComponent.new({
                         model: flow,
-                        openDocumentationBrowser: component.getProps().openDocumentationBrowser,
                     })
                 )
             })

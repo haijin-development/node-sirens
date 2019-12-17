@@ -32,6 +32,16 @@ class JsComment {
         return originalSourceCode.slice(2, -2)
     }
 
+    writeContents({ contents: comment }) {
+        if( ! this.hasText() ) {
+            comment = comment + "\n"
+        }
+
+        this.previousClassificationDo( () => {
+            this.writeContents({ contents: comment })
+        })
+    }
+
     writeFormattedContents({ commentContents: commentContents, outerIndentation: outerIndentation }) {
         const innerIndentation = this.getInnerIndentation()
 

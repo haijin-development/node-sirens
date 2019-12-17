@@ -30,8 +30,30 @@ class AppBrowserFlow {
             this.whenObjectChanges( ({ newValue: appFolder }) => {
                 const filesTreeRoots = appFolder ? [ appFolder ] : []
 
-                thisFlow.getChildFlow({ id: 'windowTitle' }).setObject( appFolder )
-                thisFlow.getChildFlow({ id: 'filesTree' }).setRoots({ items: filesTreeRoots })
+                thisFlow.getChildFlow({ id: 'windowTitle' })
+                    .setObject( appFolder )
+                thisFlow.getChildFlow({ id: 'filesTree' })
+                    .setRoots({ items: filesTreeRoots })
+            })
+
+            this.value({ id: 'browsingMode' }, function() {
+
+                this.toggle({
+                    id: 'showsUnformattedComments',
+                    whenValueChanges: ({ newValue: boolean }) => {
+                        thisFlow.getChildFlow({ id: 'selectedFile' })
+                            .setshowUnformattedComments({ value: boolean })
+                    },
+                })
+
+                this.toggle({
+                    id: 'isEditingDocumentation',
+                    whenValueChanges: ({ newValue: boolean }) => {
+                        thisFlow.getChildFlow({ id: 'selectedFile' })
+                            .setIsEditingDocumentation({ value: boolean })
+                    },
+                })
+
             })
 
             this.bufferedValue({
@@ -56,7 +78,12 @@ class AppBrowserFlow {
                         sourceFile = SourceFile.new({ filepath: selectedFilePath.getPath() })
                     }
 
-                    thisFlow.getChildFlow({ id: 'selectedFile' }).setValue( sourceFile )
+                    thisFlow.getChildFlow({ id: 'selectedFile' })
+                        .setSourceFile({
+                            sourceFile: sourceFile,
+                            isEditingDocumentation: thisFlow.isEditingDocumentation(),
+                            showsUnformattedComments: thisFlow.showsUnformattedComments(),
+                        })
                 },
             })
 
@@ -83,14 +110,6 @@ class AppBrowserFlow {
             this.command({
                 id: 'openPlayground',
                 whenActioned: thisFlow.openPlayground.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'openDocumentationBrowser',
-                enabledIf: function() {
-                    return thisFlow.hasAClassSelected()
-                },
-                whenActioned: thisFlow.openDocumentationBrowser.bind(thisFlow),
             })
 
             this.command({
@@ -122,7 +141,6 @@ class AppBrowserFlow {
             'flow-commands.pickAndOpenFolder',
             'flow-commands.openFileEditor',
             'flow-commands.openPlayground',
-            'flow-commands.openDocumentationBrowser',
             'flow-commands.openFolder',
             'flow-commands.getSelectedFilePath',
             'flow-commands.hasAClassSelected',
@@ -154,16 +172,6 @@ class AppBrowserFlow {
 
     openPlayground() {
         Sirens.openPlayground()
-    }
-
-    openDocumentationBrowser() {
-        const selectedSection = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
-
-        const jsClass = selectedSection.getValue()
-
-        const methodName = selectedSection.getSelectedMethodName()
-
-        Sirens.browseClassDocumentation({ jsClass: jsClass, methodName: methodName })
     }
 
     pickFolder({ parentWindow: parentWindow }) {
@@ -204,6 +212,16 @@ class AppBrowserFlow {
         return  selectedFileObjectFlow.respondsTo('hasAClassSelected')
                 && 
                 selectedFileObjectFlow.hasAClassSelected()
+    }
+
+    showsUnformattedComments() {
+        return this.getChildFlow({ id: 'browsingMode.showsUnformattedComments' })
+            .getValue()
+    }
+
+    isEditingDocumentation() {
+        return this.getChildFlow({ id: 'browsingMode.isEditingDocumentation' })
+            .getValue()        
     }
 }
 

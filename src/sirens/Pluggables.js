@@ -9,6 +9,7 @@ const PropertyValueToPlaygroundText = require('./objects/value-displayers/Proper
 
 const TextualContentInspectorFlow = require('./flows/file-object-inspectors/TextualContentInspectorFlow')
 const JsClassInspectorFlow = require('./flows/file-object-inspectors/JsClassInspectorFlow')
+const JsMethodInspectorFlow = require('./flows/file-object-inspectors/JsMethodInspectorFlow')
 const JsonContentInspectorFlow = require('./flows/file-object-inspectors/JsonContentInspectorFlow')
 
 const Pluggables = {
@@ -39,6 +40,7 @@ const Pluggables = {
         fileObjectInspectorFlows: {
             default: TextualContentInspectorFlow,
             jsClass: JsClassInspectorFlow,
+            jsMethod: JsMethodInspectorFlow,
             jsonContent: JsonContentInspectorFlow,
         }
     },

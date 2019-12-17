@@ -1,6 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 
+/*
+Tags([
+   ''
+])
+*/
 function globalFunction_1(param) {
     return param + 1
 }
@@ -84,34 +89,33 @@ class Address {
 
     /*
         Method(`
-            Returns the street name of this address.
+           Returns the street name of this address.
         `)
-
         Returns({
-            Protocols: [ String ],
-            Description: `The name of the street. Does not include the street number.`,
+           Description: `
+              The name of the street. Does not include the street number.
+           `,
         })
 
         Implementation(`
-            Returns this.streetName.
+           Returns this.streetName.
         `)
 
         Example({
-            Description: `
-                Create an Address and get its street name.
-            `,
-            Code: `
-                const Address = require('../../../examples/samples/Address')
+           Description: `
+              Create an Address and get its street name.
+           `,
+           Code: `
+              const Address = require('../../../examples/samples/Address')
 
-                const address = new Address({ streetName: 'Evergreen', number: 742 })
+              const address = new Address({ streetName: 'Evergreen', number: 742 })
 
-                address.getStreetName()
-            `,
+              address.getStreetName()
+           `,
         })
 
         Tags([
-            'accessors',
-            'getters',
+           'accessors', 'getters'
         ])
     */
     getStreetName() {

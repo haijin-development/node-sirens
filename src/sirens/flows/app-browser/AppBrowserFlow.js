@@ -54,6 +54,8 @@ class AppBrowserFlow {
                     },
                 })
 
+                this.toggle({ id: 'browsingDocumentation' })
+
             })
 
             this.bufferedValue({
@@ -89,7 +91,10 @@ class AppBrowserFlow {
 
             this.object({
                 id: 'selectedFile',
-                definedWith: FileInspectorFlow.new(),
+                definedWith: FileInspectorFlow.new({
+                    setIsBrowsingDocumentationClosure: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
+                    getIsBrowsingDocumentationClosure: thisFlow.getIsBrowsingDocumentation.bind(thisFlow),
+                }),
             })
         })
     }
@@ -221,6 +226,18 @@ class AppBrowserFlow {
 
     isEditingDocumentation() {
         return this.getChildFlow({ id: 'browsingMode.isEditingDocumentation' })
+            .getValue()        
+    }
+
+    // Set to remember that the flow is browsing documentation.
+    // This flow uses this flag for the child flows it creates.
+    setIsBrowsingDocumentation({ value: boolean }) {
+        this.getChildFlow({ id: 'browsingDocumentation' })
+            .setValue( boolean )
+    }
+
+    isBrowsingDocumentation() {
+        return this.getChildFlow({ id: 'browsingDocumentation' })
             .getValue()        
     }
 }

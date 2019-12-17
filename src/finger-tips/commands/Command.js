@@ -88,6 +88,8 @@ class Command {
 
         const commandsController = this.getCommandsController()
 
+        if( ! commandsController ) { return }
+
         const result = commandsController.doExecuteCommand({
             command: this,
             params: params

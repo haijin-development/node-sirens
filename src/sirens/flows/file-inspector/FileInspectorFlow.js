@@ -14,7 +14,7 @@ class FileInspectorFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['setIsBrowsingDocumentationClosure', 'getIsBrowsingDocumentationClosure']
         this.assumes = [ValueFlow]
     }
 
@@ -24,6 +24,18 @@ class FileInspectorFlow {
             isEditingDocumentation: false,
             showsUnformattedComments: false,
         }
+    }
+
+    initialize({
+        setIsBrowsingDocumentationClosure: setIsBrowsingDocumentationClosure,
+        getIsBrowsingDocumentationClosure: getIsBrowsingDocumentationClosure,
+    }) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.setIsBrowsingDocumentationClosure = setIsBrowsingDocumentationClosure
+        this.getIsBrowsingDocumentationClosure = getIsBrowsingDocumentationClosure
     }
 
     /// Building
@@ -106,11 +118,17 @@ class FileInspectorFlow {
                 id: 'getFileObjectInspectorFlow',
                 whenActioned: function({ fileObject: fileObject }) {
                     if( fileObject && fileObject.respondsTo('isJsClass') ) {
-                        return JsClassInspectorFlow.new()
+                        return JsClassInspectorFlow.new({
+                            setIsBrowsingDocumentationClosure: thisFlow.setIsBrowsingDocumentationClosure,
+                            getIsBrowsingDocumentationClosure: thisFlow.getIsBrowsingDocumentationClosure,
+                        })
                     }
 
                     if( fileObject && fileObject.respondsTo('isJsMethod') ) {
-                        return JsMethodInspectorFlow.new()
+                        return JsMethodInspectorFlow.new({
+                            setIsBrowsingDocumentationClosure: thisFlow.setIsBrowsingDocumentationClosure,
+                            getIsBrowsingDocumentationClosure: thisFlow.getIsBrowsingDocumentationClosure,
+                        })
                     }
 
                     return TextualContentInspectorFlow.new()

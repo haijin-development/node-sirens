@@ -45,6 +45,8 @@ describe('When using an JsClassInspectorFlow', () => {
             'main.flow-commands.showsUnformattedComments',
             'main.flow-commands.isInEditionMode',
             'main.flow-commands.editClassUnformattedComment',
+            'main.flow-commands.isBrowsingDocumentation',
+            'main.flow-commands.setIsBrowsingDocumentation',
 
             'main.classDocumentation',
             'main.classDocumentation.flow-commands',

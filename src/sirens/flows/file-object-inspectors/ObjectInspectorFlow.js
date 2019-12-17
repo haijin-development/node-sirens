@@ -5,8 +5,23 @@ class ObjectInspectorFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = [
+            'setIsBrowsingDocumentationClosure',
+            'getIsBrowsingDocumentationClosure'
+        ]
         this.assumes = [ValueFlow]
+    }
+
+    initialize({
+        setIsBrowsingDocumentationClosure: setIsBrowsingDocumentationClosure,
+        getIsBrowsingDocumentationClosure: getIsBrowsingDocumentationClosure,
+    } = {}) {
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+
+        this.setIsBrowsingDocumentationClosure = setIsBrowsingDocumentationClosure
+        this.getIsBrowsingDocumentationClosure = getIsBrowsingDocumentationClosure
     }
 
     defaultValue() {
@@ -70,6 +85,14 @@ class ObjectInspectorFlow {
         const value = this.getValue()
 
         value.reloadSourceFile()
+    }
+
+    setIsBrowsingDocumentation({ value: boolean }) {
+        this.setIsBrowsingDocumentationClosure({ value: boolean })
+    }
+
+    isBrowsingDocumentation() {
+        return this.getIsBrowsingDocumentationClosure()
     }
 }
 

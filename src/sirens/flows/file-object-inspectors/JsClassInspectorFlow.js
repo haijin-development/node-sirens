@@ -107,6 +107,16 @@ class JsClassInspectorFlow {
                 whenActioned: thisFlow.editClassUnformattedComment.bind(thisFlow),
             })
 
+            this.command({
+                id: 'setIsBrowsingDocumentation',
+                whenActioned: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'isBrowsingDocumentation',
+                whenActioned: thisFlow.isBrowsingDocumentation.bind(thisFlow),
+            })
+
         })
 
     }
@@ -120,6 +130,8 @@ class JsClassInspectorFlow {
             'flow-commands.isInEditionMode',
             'flow-commands.showsUnformattedComments',
             'flow-commands.editClassUnformattedComment',
+            'flow-commands.setIsBrowsingDocumentation',
+            'flow-commands.isBrowsingDocumentation',
         ]
 
         this.exportCommandsToFlowPoint({

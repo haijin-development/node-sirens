@@ -86,6 +86,16 @@ class JsMethodInspectorFlow {
                 whenActioned: thisFlow.editMethodUnformmatedComment.bind(thisFlow),
             })
 
+            this.command({
+                id: 'setIsBrowsingDocumentation',
+                whenActioned: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
+            })
+
+            this.command({
+                id: 'isBrowsingDocumentation',
+                whenActioned: thisFlow.isBrowsingDocumentation.bind(thisFlow),
+            })
+
         })
 
     }
@@ -99,6 +109,8 @@ class JsMethodInspectorFlow {
             'flow-commands.showsUnformattedComments',
             'flow-commands.getMethodUnformattedComment',
             'flow-commands.editMethodUnformmatedComment',
+            'flow-commands.setIsBrowsingDocumentation',
+            'flow-commands.isBrowsingDocumentation',
         ]
 
         this.exportCommandsToFlowPoint({

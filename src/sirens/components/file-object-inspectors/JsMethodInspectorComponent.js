@@ -8,7 +8,7 @@ class JsMethodInspectorComponent {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['ignoreTabEvents']
         this.assumes = [Component]
         this.implements = [ ComponentProtocol_Implementation ]
     }
@@ -24,9 +24,19 @@ class JsMethodInspectorComponent {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        // this needs to be fixed at the tabs component level
+        this.ignoreTabEvents = true
+
         componentsRenderer.render( function(component) {
 
-            this.tabs({ aligment: 'top' }, function() {
+            this.tabs({ id: 'tabs', aligment: 'top' }, function() {
+
+                this.handlers({
+                    onTabPageChanged: function({ tabPageIndex: newTabPageIndex }) {
+                        component.setIsBrowsingDocumentation({ value: newTabPageIndex === 1 })
+                    }
+                })
+
                 this.tabPage({ label: 'Source code' }, function() {
                     this.text({
                         model: flow.getFlowPoint({ id: 'methodSourceCode' }),
@@ -45,6 +55,13 @@ class JsMethodInspectorComponent {
             })
 
         })
+
+        if( flow.isBrowsingDocumentation() ) {
+            this.getChildComponent({ id: 'tabs' })
+                .showTabPageAt({ index: 1 })
+        }
+
+        this.ignoreTabEvents = false
     }
 
     createDocumentationComponent() {
@@ -64,6 +81,14 @@ class JsMethodInspectorComponent {
                 model: methodDocumentationFlow,
             })
         }
+    }
+
+    setIsBrowsingDocumentation({ value: boolean }) {
+        if( this.ignoreTabEvents === true ) { return }
+
+        const flow = this.getModel()
+
+        flow.setIsBrowsingDocumentation({ value: boolean })
     }
 }
 

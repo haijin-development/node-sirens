@@ -80,17 +80,23 @@ class ApplicationCommandsController {
     }
 
     getFileObjectInspectorFlow({ fileObject: fileObject }) {
+        const mainFlow = this.mainFlow
+
         const fileObjectType = fileObject ?
             fileObject.getFileObjectType()
             :
             'null'
 
-        const fileObjectInspectorFlow = Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType] ?
-            Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType]
-            :
-            Pluggables.fileInspector.fileObjectInspectorFlows.default            
+        const fileObjectInspectorFlowClassification =
+            Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType] ?
+                Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType]
+                :
+                Pluggables.fileInspector.fileObjectInspectorFlows.default            
 
-        return fileObjectInspectorFlow.new()
+        return fileObjectInspectorFlowClassification.new({
+            setIsBrowsingDocumentationClosure: mainFlow.setIsBrowsingDocumentation.bind(mainFlow),
+            getIsBrowsingDocumentationClosure: mainFlow.isBrowsingDocumentation.bind(mainFlow),
+        })
     }
 }
 

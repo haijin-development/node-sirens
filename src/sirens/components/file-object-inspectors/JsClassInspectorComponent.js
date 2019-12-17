@@ -9,7 +9,7 @@ class JsClassInspectorComponent {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['tabSelectionIndex']
+        this.instanceVariables = ['ignoreTabEvents']
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
     }
@@ -25,7 +25,8 @@ class JsClassInspectorComponent {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
-        const tabsSelectionIndex = this.tabSelectionIndex
+        // this needs to be fixed at the tabs component level
+        this.ignoreTabEvents = true
 
         componentsRenderer.render( function(component) {
 
@@ -33,7 +34,7 @@ class JsClassInspectorComponent {
 
                 this.handlers({
                     onTabPageChanged: function({ tabPageIndex: newTabPageIndex }) {
-                        component.rememberTabSelectionIndex({ tabPageIndex: newTabPageIndex })
+                        component.setIsBrowsingDocumentation({ value: newTabPageIndex === 1 })
                     }
                 })
 
@@ -85,10 +86,12 @@ class JsClassInspectorComponent {
 
         })
 
-        if( tabsSelectionIndex !== undefined ) {
+        if( flow.isBrowsingDocumentation() ) {
             this.getChildComponent({ id: 'tabs' })
-                .showTabPageAt({ index: tabsSelectionIndex })
+                .showTabPageAt({ index: 1 })
         }
+
+        this.ignoreTabEvents = false
     }
 
     createDocumentationComponent() {
@@ -110,8 +113,12 @@ class JsClassInspectorComponent {
         }
     }
 
-    rememberTabSelectionIndex({ tabPageIndex: newTabPageIndex }) {
-        this.tabSelectionIndex = newTabPageIndex
+    setIsBrowsingDocumentation({ value: boolean }) {
+        if( this.ignoreTabEvents === true ) { return }
+
+        const flow = this.getModel()
+
+        flow.setIsBrowsingDocumentation({ value: boolean })
     }
 }
 

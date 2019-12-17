@@ -46,6 +46,7 @@ describe('When using an AppBrowserFlow', () => {
             'main.browsingMode',
             'main.browsingMode.showsUnformattedComments',
             'main.browsingMode.isEditingDocumentation',
+            'main.browsingMode.browsingDocumentation',
 
             'main.selectedFile',
             'main.selectedFile.fileObjects',

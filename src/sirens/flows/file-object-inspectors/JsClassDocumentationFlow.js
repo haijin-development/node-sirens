@@ -12,7 +12,9 @@ class JsClassDocumentationFlow {
         this.assumes = [ValueFlow]
     }
 
-    initialize({ updateClassDocumentationClosure: updateClassDocumentationClosure }) {
+    initialize({
+        updateClassDocumentationClosure: updateClassDocumentationClosure,
+    }) {
         this.previousClassificationDo( () => {
             this.initialize()
         })

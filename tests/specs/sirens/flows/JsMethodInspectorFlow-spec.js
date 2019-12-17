@@ -43,6 +43,8 @@ describe('When using an JsMethodInspectorFlow', () => {
             'main.flow-commands.getMethodUnformattedComment',
             'main.flow-commands.isInEditionMode',
             'main.flow-commands.editMethodUnformmatedComment',
+            'main.flow-commands.isBrowsingDocumentation',
+            'main.flow-commands.setIsBrowsingDocumentation',
 
             'main.methodDocumentation',
             'main.methodDocumentation.flow-commands',

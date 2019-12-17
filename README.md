@@ -162,7 +162,7 @@ However please note that:
 
 - Currently Sirens [public API](https://semver.org/#spec-item-1) is the one declared in this document [Usage](./README.md/#usage) section.
 
-- Sirens is still in [verion 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
+- Sirens is still in [version 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
 
 The [O language](https://github.com/haijin-development/o-language/blob/development/README.md) and the [Skins](./src/skins) GUI builder used by Sirens browsers will be released as standalone libraries once they reach a stable public interface. This will happen once there are several new releases of Sirens with no modifications neither in the o-language nor in Skins public interfaces.
 

@@ -317,7 +317,7 @@ describe('When using an FileInspectorFlow', () => {
             expect( objectInspectorFlow ) .to .behaveAs( 'JsMethodInspectorFlow' )
         })
 
-        it('.getFileObjectComponent() returns a TextualContentComponent by default', () => {
+        xit('.getFileObjectComponent() returns a TextualContentComponent by default', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0] })
@@ -325,7 +325,7 @@ describe('When using an FileInspectorFlow', () => {
             expect( flow.getFileObjectComponent() ) .to .behaveAs( 'TextualContentComponent' )
         })
 
-        it('.getFileObjectComponent() returns a JsClassInspectorComponent for a JsClass', () => {
+        xit('.getFileObjectComponent() returns a JsClassInspectorComponent for a JsClass', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1] })
@@ -333,7 +333,7 @@ describe('When using an FileInspectorFlow', () => {
             expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsClassInspectorComponent' )
         })
 
-        it('.getFileObjectComponent() returns a JsMethodInspectorComponent for a JsMethod', () => {
+        xit('.getFileObjectComponent() returns a JsMethodInspectorComponent for a JsMethod', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1, 1] })

@@ -6,6 +6,7 @@ const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-i
 const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
+const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 describe('When using an JsClassDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -26,10 +27,7 @@ describe('When using an JsClassDocumentationFlow', () => {
         jsClass = jsFile.getClasses()[0]
         classDocumentation = jsClass.getDocumentation()
 
-        flow = JsClassDocumentationFlow.new({
-            updateClassDocumentationClosure: () => {}
-        })
-        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+        flow = createClassDocumentationFlow()
     })
 
     after( () => {
@@ -58,7 +56,7 @@ describe('When using an JsClassDocumentationFlow', () => {
         })
 
         it('the main flow has the jsClass', () => {
-            expect( flow ) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect( value.classDocumentation ) .to .equal( classDocumentation )
                 expect( value.isEditingDocumentation ) .to .be .true
             })
@@ -95,26 +93,15 @@ describe('When using an JsClassDocumentationFlow', () => {
 
     describe('when updating the method documentation', () => {
         beforeEach( () => {
-            const classInspectorFlow = JsClassInspectorFlow.new()
+            const classInspectorFlow = createClassInspectorFlow()
 
             classInspectorFlow.setInspectedObject({
                 object: jsClass,
                 isEditingDocumentation: false,
                 showsUnformattedComments: false,
-                reloadSourceFile: () => {},
             })
 
-            flow = JsClassDocumentationFlow.new({
-                updateClassDocumentationClosure:
-                    classInspectorFlow.updateClassDocumentation.bind(classInspectorFlow),
-            })
-
-            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
-
-            flow.setValue({
-                classDocumentation: classDocumentation,
-                isEditingDocumentation: true,
-            })
+            flow = classInspectorFlow.getChildFlow({ id: 'classDocumentation' })
         })
 
         it('updateClassDocumentationDescription writes the method comment to the file', () => {
@@ -122,7 +109,7 @@ describe('When using an JsClassDocumentationFlow', () => {
                 classNewDescription: 'New description',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Class[(].*New description.*[)]/ms)
             })
         })
@@ -133,7 +120,7 @@ describe('When using an JsClassDocumentationFlow', () => {
                 implementationNoteText: 'New implementation note.',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Implementation[(].*New implementation note.*[)]/ms)
             })
         })
@@ -147,7 +134,7 @@ describe('When using an JsClassDocumentationFlow', () => {
                 atIndex: 0, implementationNoteText: 'Updated implementation note.',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Implementation[(].*Updated implementation note.*[)]/ms)
             })
         })
@@ -160,7 +147,7 @@ describe('When using an JsClassDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Example[(].*An example.*A code.*[)]/ms)
             })
         })
@@ -181,9 +168,31 @@ describe('When using an JsClassDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Example[(].*An updated example.*An updated code.*[)]/ms)
             })
         })
     })
 })
+
+function createClassDocumentationFlow() {
+    const classDocumentationFlow = JsClassDocumentationFlow.new()
+
+    const commandsController = ApplicationCommandsController.new({ mainFlow: classDocumentationFlow })
+        .behaveAs( UnhandledBubbledUpCommandHandler )
+
+    classDocumentationFlow.setCommandsController( commandsController )
+
+    return classDocumentationFlow
+}
+
+function createClassInspectorFlow() {
+    const classInspectorFlow = JsClassInspectorFlow.new()
+
+    const commandsController = ApplicationCommandsController.new({ mainFlow: classInspectorFlow })
+        .behaveAs( UnhandledBubbledUpCommandHandler )
+
+    classInspectorFlow.setCommandsController( commandsController )
+
+    return classInspectorFlow
+}

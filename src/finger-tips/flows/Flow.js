@@ -23,7 +23,7 @@ class Flow {
         this.childFlows = new Map()
         this.commandsController = CommandsController.new({ mainFlow: this })
         this.pendingEvents = new Map()
-        this.bubbledUpCommands = new Map()
+        this.bubbledUpCommands = new Set()
     }
 
     initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
@@ -65,7 +65,7 @@ class Flow {
 
         this.pendingEvents = new Map()
         this.childFlows = new Map()
-        this.bubbledUpCommands = new Map()
+        this.bubbledUpCommands = new Set()
     }
 
     replaceChildFlow({ id: id, withFlow: newFlow }) {
@@ -357,11 +357,13 @@ class Flow {
 
         const commandsController = this.getCommandsController()
 
-        commandsController.bubbleUp({
+        const result = commandsController.bubbleUp({
             commandName: commandName,
             params: params,
             startingAt: this,
         })
+
+        return result
     }
 
     handleBubbledUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
@@ -369,9 +371,7 @@ class Flow {
             return { wasHandled: false }
         }
 
-        const handlerMethodName = this.bubbledUpCommands.get( commandName )
-
-        const handlerMethod = this[handlerMethodName].bind(this)
+        const handlerMethod = this[commandName].bind(this)
 
         const result = handlerMethod(...params)
 
@@ -381,14 +381,14 @@ class Flow {
         }
     }
 
-    respondToBubbledUpCommands({ methods: methods }) {
-        for( const eachMethod of methods ) {
-            this.respondToBubbledUpCommand({ method: eachMethod })
+    acceptAllBubbledUps( methodNames ) {
+        for( const eachMethodName of methodNames ) {
+            this.acceptBubbledUp( eachMethodName )
         }
     }
 
-    respondToBubbledUpCommand({ method: method }) {
-        this.bubbledUpCommands.set( method, method )
+    acceptBubbledUp( methodName ) {
+        this.bubbledUpCommands.add( methodName )
     }
 
     // Events

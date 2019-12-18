@@ -51,27 +51,27 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile to the main flow', () => {
-            expect(flow) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect( value.sourceFile.getFilePath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })
 
         it('sets the SourceFile sections to the fileObjects flow', () => {
-            expect(flow) .withId( 'main.fileObjects' ) .withEachRootSuchThat( (root) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withRoots .eachSuchThat( (root) => {
                 expect(root) .to .behaveAs( 'JsFileObject' )
             })
         })
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) =>{
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) =>{
                 expect(selection.length) .to .equal( 1 )
                 expect(selection[0]) .to .behaveAs( 'JsFileObject' )
             })
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .to .behaveAs( 'JsFileObject' )
                 expect( value.isEditingDocumentation ) .to .be .false
             })
@@ -86,27 +86,26 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile to the main flow', () => {
-            expect(flow) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect(value.sourceFile) .to .be .null
             })
         })
 
         it('sets the SourceFile sections to the fileObjects flow', () => {
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveRoots( [] )
+            expect(flow) .withId( 'main.fileObjects' ) .to .haveRoots( [] )
         })
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) => {
                 expect(selection) .to .eql( [] )
             })
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .to .equal( null )
                 expect( value.showsUnformattedComments ) .to .be .false
                 expect( value.isEditingDocumentation ) .to .be .false
-                expect( value.reloadSourceFile ) .to .be .a( 'function' )
             })
         })
 
@@ -127,7 +126,7 @@ describe('When using an FileInspectorFlow', () => {
             const jsFile = getChildFromRoots({ indexPath: [0] })
             const jsClass = getChildFromRoots({ indexPath: [0, 1] })
 
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) => {
                 expect(selection) .to .eql( [ jsFile, jsClass ] )
             })
         })
@@ -135,11 +134,10 @@ describe('When using an FileInspectorFlow', () => {
         it('sets the jsClass to the :selectedFileObject', () => {
             const jsClass = getChildFromRoots({ indexPath: [0, 1] })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .to .equal( jsClass )
                 expect( value.showsUnformattedComments ) .to .be .false
                 expect( value.isEditingDocumentation ) .to .be .false
-                expect( value.reloadSourceFile ) .to .be .a( 'function' )
             })
         })
 
@@ -167,7 +165,7 @@ describe('When using an FileInspectorFlow', () => {
             const jsClass = getChildFromRoots({ indexPath: [0, 1] })
             const jsMethod = getChildFromRoots({ indexPath: [0, 1, 1] })
 
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) => {
                 expect(selection) .to .eql([ jsFile, jsClass, jsMethod ]) 
             })
         })
@@ -175,11 +173,10 @@ describe('When using an FileInspectorFlow', () => {
         it('sets the jsMethod to the :selectedFileObject', () => {
             const jsMethod = getChildFromRoots({ indexPath: [0, 1, 1] })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .to .equal( jsMethod )
                 expect( value.showsUnformattedComments ) .to .be .false
                 expect( value.isEditingDocumentation ) .to .be .false
-                expect( value.reloadSourceFile ) .to .be .a( 'function' )
             })
         })
 
@@ -200,17 +197,16 @@ describe('When using an FileInspectorFlow', () => {
             const newJsClass = getChildFromRoots({ indexPath: [0, 1] })
             const newJsMethod = getChildFromRoots({ indexPath: [0, 1, 1] })
 
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) => {
                 expect(selection) .to .eql([ newJsFile, newJsClass, newJsMethod ]) 
             })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .not .to .eql( jsMethod )
 
                 expect( value.object ) .to .equal( newJsMethod )
                 expect( value.showsUnformattedComments ) .to .be .false
                 expect( value.isEditingDocumentation ) .to .be .false
-                expect( value.reloadSourceFile ) .to .be .a( 'function' )
             })
         })
     })
@@ -224,17 +220,16 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
-            expect(flow) .withId( 'main.fileObjects' ) .toHaveASelectionSuchThat( (selection) => {
+            expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) => {
                 expect(selection) .to .eql( [] )
             })
         })
 
         it('sets the selectedFileObject to null', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
                 expect( value.object ) .to .equal( null )
                 expect( value.showsUnformattedComments ) .to .be .false
                 expect( value.isEditingDocumentation ) .to .be .false
-                expect( value.reloadSourceFile ) .to .be .a( 'function' )
             })
         })
 

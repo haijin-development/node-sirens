@@ -27,10 +27,33 @@ Assertion.addMethod('behaveAs', function (expectedClassification, failedExpectat
 })
 
 
-Assertion.addMethod('haveFileContentsSuchThat', function (contentsClosure) {
+// Files
+
+Assertion.addProperty('withFileContents', function () {
     var filePath = this._obj;
 
     const fileContents = fs.readFileSync(filePath).toString()
 
-    contentsClosure(fileContents)
+    return new Assertion( fileContents )
 })
+
+// Generic
+
+Assertion.addProperty('haveReceived', function () {
+    return this
+})
+
+Assertion.addMethod('suchThat', function (expectationClosure) {
+    var targetObject = this._obj;
+
+    expectationClosure(targetObject)
+})
+
+Assertion.addMethod('eachSuchThat', function (eachItemExpectationClosure) {
+    var items = this._obj;
+
+    for( const eachItem of items ) {
+        eachItemExpectationClosure( eachItem )
+    }
+})
+

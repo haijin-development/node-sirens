@@ -15,14 +15,6 @@ class JsMethodDocumentationFlow {
         this.assumes = [ValueFlow]
     }
 
-    initialize({ updateMethodDocumentationClosure: updateMethodDocumentationClosure }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
-        this.updateMethodDocumentationClosure = updateMethodDocumentationClosure
-    }
-
     defaultValue() {
         return {
             methodDocumentation: null,
@@ -158,7 +150,7 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.setTags( newTags )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
         })
     }
@@ -183,7 +175,7 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.setDescription( methodNewDescription )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
         })
     }
@@ -213,9 +205,9 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.addParam( param )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
-        })        
+        })
     }
 
     editMethodDocumentationParam({ parentWindow: parentWindow, param: param, paramIndex: paramIndex }) {
@@ -242,9 +234,9 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.updateParamAt({ index: paramIndex, param: newParam })
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
-        })        
+        })
     }
 
     editMethodDocumentationReturn({ parentWindow: parentWindow }) {
@@ -268,9 +260,9 @@ class JsMethodDocumentationFlow {
 
         documentation.setReturns( returns )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
-        })        
+        })
     }
 
     createMethodDocumentationImplementationNote({ parentWindow: parentWindow }) {
@@ -296,7 +288,7 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.addImplementationNote( implementationNoteText )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
         })
     }
@@ -332,7 +324,7 @@ class JsMethodDocumentationFlow {
             implementationNoteText: implementationNoteText,
         })
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
         })
     }
@@ -365,7 +357,7 @@ class JsMethodDocumentationFlow {
 
         methodDocumentation.addExample( example )
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
         })
     }
@@ -398,8 +390,15 @@ class JsMethodDocumentationFlow {
             example: example,
         })
 
-        this.updateMethodDocumentationClosure({
+        this.updateMethodDocumentation({
             methodDocumentation: methodDocumentation
+        })
+    }
+
+    updateMethodDocumentation({ methodDocumentation: methodDocumentation }) {
+        this.bubbleUp({
+            command: 'updateMethodDocumentation',
+            param: { methodDocumentation: methodDocumentation },
         })
     }
 }

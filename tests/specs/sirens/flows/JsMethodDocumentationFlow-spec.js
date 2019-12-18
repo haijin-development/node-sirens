@@ -6,6 +6,7 @@ const JsMethodInspectorFlow = require('../../../../src/sirens/flows/file-object-
 const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
+const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 describe('When using an JsMethodDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -26,10 +27,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
         jsMethod = jsFile.getMethods()[0]
         methodDocumentation = jsMethod.getDocumentation()
 
-        flow = JsMethodDocumentationFlow.new({
-            updateMethodDocumentationClosure: () => {}
-        })
-        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+        flow = createMethodDocumentationFlow()
     })
 
     after( () => {
@@ -62,7 +60,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
         })
 
         it('the main flow has the jsMethod', () => {
-            expect( flow ) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect(value.methodDocumentation) .to .equal( methodDocumentation )
                 expect(value.isEditingDocumentation) .to .be .true
             })
@@ -98,27 +96,18 @@ describe('When using an JsMethodDocumentationFlow', () => {
     })
 
     describe('when updating the method documentation', () => {
+        let methodInspectorFlow
+
         beforeEach( () => {
-            const methodInspectorFlow = JsMethodInspectorFlow.new()
+            methodInspectorFlow = createMethodInspectorFlow()
 
             methodInspectorFlow.setInspectedObject({
                 object: jsMethod,
                 isEditingDocumentation: false,
                 showsUnformattedComments: false,
-                reloadSourceFile: () => {},
             })
 
-            flow = JsMethodDocumentationFlow.new({
-                updateMethodDocumentationClosure:
-                    methodInspectorFlow.updateMethodDocumentation.bind(methodInspectorFlow),
-            })
-
-            flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
-
-            flow.setValue({
-                methodDocumentation: methodDocumentation,
-                isEditingDocumentation: true,
-            })
+            flow = methodInspectorFlow.getChildFlow({ id: 'methodDocumentation' })
         })
 
         it('updateMethodDocumentationTags writes the method comment to the file', () => {
@@ -126,7 +115,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 newTags: [ 'tag1', 'tag2' ],
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Tags[(].*'tag1', 'tag2'.*[)]/ms)
             })
         })
@@ -136,7 +125,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 methodNewDescription: 'New description',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Method[(].*New description.*[)]/ms)
             })
         })
@@ -149,7 +138,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Param[(].*A parameter.*Description.*[)]/ms)
             })
         })
@@ -170,7 +159,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Param[(].*An updated parameter.*Updated description.*[)]/ms)
             })
         })
@@ -180,7 +169,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 implementationNoteText: 'New implementation note.',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Implementation[(].*New implementation note.*[)]/ms)
             })
         })
@@ -194,7 +183,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 atIndex: 0, implementationNoteText: 'Updated implementation note.',
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Implementation[(].*Updated implementation note.*[)]/ms)
             })
         })
@@ -207,7 +196,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Example[(].*An example.*A code.*[)]/ms)
             })
         })
@@ -228,9 +217,31 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 },
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/Example[(].*An updated example.*An updated code.*[)]/ms)
             })
         })
     })
 })
+
+function createMethodDocumentationFlow() {
+    const documentationFlow = JsMethodDocumentationFlow.new()
+
+    const commandsController = ApplicationCommandsController.new({ mainFlow: documentationFlow })
+        .behaveAs( UnhandledBubbledUpCommandHandler )
+
+    documentationFlow.setCommandsController( commandsController )
+
+    return documentationFlow
+}
+
+function createMethodInspectorFlow() {
+    const methodInspectorFlow = JsMethodInspectorFlow.new()
+
+    const commandsController = ApplicationCommandsController.new({ mainFlow: methodInspectorFlow })
+        .behaveAs( UnhandledBubbledUpCommandHandler )
+
+    methodInspectorFlow.setCommandsController( commandsController )
+
+    return methodInspectorFlow
+}

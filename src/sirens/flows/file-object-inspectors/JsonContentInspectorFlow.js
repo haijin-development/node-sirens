@@ -21,7 +21,6 @@ class JsonContentInspectorFlow {
                 object: jsonContent,
                 showsUnformattedComments: showsUnformattedComments,
                 isEditingDocumentation: isEditingDocumentation,
-                reloadSourceFile: reloadSourceFile,
             }}) => {
 
                 if( ! jsonContent ) {

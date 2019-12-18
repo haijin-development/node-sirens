@@ -22,7 +22,7 @@ describe('When using an AppBrowserFlow', () => {
 
         const flow = AppBrowserFlow.new()
 
-        expect( flow ) .to .haveAsCommandsControllerAn('ApplicationCommandsController')
+        expect( flow ) .commandsController .to .behaveAs('ApplicationCommandsController')
     })
 
     it('has all these child flows defined', () => {
@@ -69,12 +69,12 @@ describe('When using an AppBrowserFlow', () => {
 
         it('showsUnformattedComments is set to false', () => {
             expect(flow) .withId( 'main.browsingMode.showsUnformattedComments' )
-                .toHaveValue(false)
+                .to .haveValue(false)
         })
 
         it('isEditingDocumentation is set to false', () => {
             expect(flow) .withId( 'main.browsingMode.isEditingDocumentation' )
-                .toHaveValue(false)
+                .to .haveValue(false)
         })
     })
 
@@ -88,17 +88,17 @@ describe('When using an AppBrowserFlow', () => {
         })
 
         it('sets the folder to the main flow', () => {
-            expect(flow) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect( value.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
         })
 
         it('sets the window title', () => {
-            expect(flow) .withId( 'main.windowTitle' ) .toHaveAnObjectSuchThat( (object) => {
+            expect(flow) .withId( 'main.windowTitle' ) .withObject .suchThat( (object) => {
                 expect( object.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
-            expect(flow) .withId( 'main.windowTitle' ) .toHaveAValueSuchThat( (title) => {
+            expect(flow) .withId( 'main.windowTitle' ) .withValue .suchThat( (title) => {
                 expect( title ) .to .match(/^App Browser -.*tmp-files-repository$/)
             })
         })
@@ -106,7 +106,7 @@ describe('When using an AppBrowserFlow', () => {
         it('sets the filesTree root', () => {
             const path = flow.getValue()
 
-            expect(flow) .withId( 'main.filesTree' ) .withEachRootSuchThat( (eachRoot) => {
+            expect(flow) .withId( 'main.filesTree' ) .withRoots .eachSuchThat( (eachRoot) => {
                 expect( eachRoot.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
@@ -125,17 +125,17 @@ describe('When using an AppBrowserFlow', () => {
         })
 
         it('sets the folder to the main flow', () => {
-            expect(flow) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect( value ) .to .be .null
             })
         })
 
         it('sets the window title', () => {
-            expect(flow) .withId( 'main.windowTitle' ) .toHaveAnObjectSuchThat( (object) => {
+            expect(flow) .withId( 'main.windowTitle' ) .withObject .suchThat( (object) => {
                 expect( object ) .to .be .null
             })
 
-            expect(flow) .withId( 'main.windowTitle' ) .toHaveAValueSuchThat( (title) => {
+            expect(flow) .withId( 'main.windowTitle' ) .withValue .suchThat( (title) => {
                 expect( title ) .to .equal('App Browser - No folder selected.')
             })
         })
@@ -143,7 +143,7 @@ describe('When using an AppBrowserFlow', () => {
         it('sets the filesTree root', () => {
             const path = flow.getValue()
 
-            expect(flow) .withId( 'main.filesTree' ) .toHaveRoots( [] )
+            expect(flow) .withId( 'main.filesTree' ) .to .haveRoots( [] )
 
         })
 
@@ -168,7 +168,7 @@ describe('When using an AppBrowserFlow', () => {
 
             filesTree.setSelection([ rootFolder, file ])
 
-            expect(flow) .withId( 'main.selectedFile' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (value) => {
                 expect( value.sourceFile.getFilePath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition.js$/)
             })
@@ -198,7 +198,7 @@ describe('When using an AppBrowserFlow', () => {
 
             filesTree.setSelection(null)
 
-            expect(flow) .withId( 'main.selectedFile' ) .toHaveAValueSuchThat( (value) => {
+            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (value) => {
                 expect( value.sourceFile ) .to .be .null
             })
         })
@@ -219,7 +219,7 @@ describe('When using an AppBrowserFlow', () => {
             flow.getChildFlow({ id: 'showsUnformattedComments' })
                 .setValue( ! flow.showsUnformattedComments() )
 
-            expect(flow) .withId( 'main.selectedFile' ) .toBeSuchThat( (childFlow) => {
+            expect(flow) .withId( 'main.selectedFile' ) .suchThat( (childFlow) => {
                 expect( childFlow.showsUnformattedComments() ) .to .be .true
             })
         })
@@ -240,7 +240,7 @@ describe('When using an AppBrowserFlow', () => {
             flow.getChildFlow({ id: 'isEditingDocumentation' })
                 .setValue( ! flow.isEditingDocumentation() )
 
-            expect(flow) .withId( 'main.selectedFile' ) .toBeSuchThat( (childFlow) => {
+            expect(flow) .withId( 'main.selectedFile' ) .suchThat( (childFlow) => {
                 expect( childFlow.isEditingDocumentation() ) .to .be .true
             })
         })

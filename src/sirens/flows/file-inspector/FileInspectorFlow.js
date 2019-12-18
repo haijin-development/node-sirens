@@ -81,10 +81,13 @@ class FileInspectorFlow {
                         object: newObject,
                         isEditingDocumentation: thisFlow.isEditingDocumentation(),
                         showsUnformattedComments: thisFlow.showsUnformattedComments(),
-                        reloadSourceFile: thisFlow.reloadSourceFile.bind(thisFlow),
                     })
                 },
             })
+
+            this.acceptedBubbledUps([
+                'reloadSourceFile'
+            ])
 
         })
     }

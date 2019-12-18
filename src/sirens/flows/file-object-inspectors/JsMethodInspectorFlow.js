@@ -23,7 +23,6 @@ class JsMethodInspectorFlow {
                 object: jsMethod,
                 showsUnformattedComments: showsUnformattedComments,
                 isEditingDocumentation: isEditingDocumentation,
-                reloadSourceFile: reloadSourceFile,
             }}) => {
 
                 if( ! jsMethod ) {
@@ -51,10 +50,13 @@ class JsMethodInspectorFlow {
 
             this.object({
                 id: 'methodDocumentation',
-                definedWith: JsMethodDocumentationFlow.new({
-                    updateMethodDocumentationClosure: thisFlow.updateMethodDocumentation.bind(thisFlow),
-                })
+                definedWith: JsMethodDocumentationFlow.new()
             })
+
+            this.acceptedBubbledUps([
+                'updateMethodDocumentation'
+            ])
+
         })
     }
 
@@ -97,7 +99,6 @@ class JsMethodInspectorFlow {
             })
 
         })
-
     }
 
     /// Exported commands

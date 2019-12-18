@@ -16,43 +16,43 @@ Assertion.addMethod('withId', function (flowId) {
 // haveAsCommandsControllerA
 /////////////////////////////
 
-Assertion.addMethod('haveAsCommandsControllerA', function (
-    expectedClassification, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addProperty('withCommandsController', function () {
     var flow = this._obj;
 
     const commandsController = flow.getCommandsController()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = "expected the flow #{this} to have a controller #{exp}, got #{act}"
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = "expected the flow #{this} not to have a controller #{exp}, got #{act}"
-    }
-
-    new Assertion( commandsController ) .to
-        .behaveAs( expectedClassification, failedExpectationMessage, negFailedExpectationMessage )
-
+    return new Assertion( commandsController )
 })
 
-Assertion.addMethod('haveAsCommandsControllerAn', function (
-    expectedClassification, failedExpectationMessage, negFailedExpectationMessage
-) {
-    new Assertion( this._obj ).to
-        .haveAsCommandsControllerA(expectedClassification, failedExpectationMessage, negFailedExpectationMessage)
+Assertion.addProperty('commandsController', function () {
+    return this.withCommandsController
 })
 
+Assertion.addMethod('aBubbledCommandsCountOf', function (expectedCount) {
+    var commandsController = this._obj;
+
+    const receivedCommandsCount = commandsController.receivedCommandsCount()
+
+    this.assert(
+        receivedCommandsCount === expectedCount,
+        'Expected the commandsController to have received #{exp} commands bubbled, but received #{act}',
+        'Expected the commandsController to not have received #{exp} commands bubbled, but received #{act}',
+    )
+})
+
+Assertion.addMethod('aBubbledCommandAt', function (commandIndex) {
+    var commandsController = this._obj;
+
+    const index = commandIndex.index
+
+    const receivedCommand = commandsController.receivedCommandAt({ index: index })
+
+    return new Assertion( receivedCommand )
+})
 
 /////////////////////////////
 // haveFlowChildren
 /////////////////////////////
-
-Assertion.addMethod('toBeSuchThat', function (flowExpectationClosure) {
-    var flow = this._obj;
-
-    flowExpectationClosure( flow )
-})
 
 Assertion.addMethod('haveChildFlows', function (
     expectedChildFlowIds, failedExpectationMessage, negFailedExpectationMessage
@@ -80,174 +80,63 @@ Assertion.addMethod('haveChildFlows', function (
         .eql(expectedChildFlowIds)
 })
 
-
-Assertion.addMethod('toHaveValue', function (
-    expectedValue, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addProperty('withValue', function (expectedValue) {
     var flow = this._obj;
 
     const value = flow.getValue()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = 'expected flow #{this} to have the value #{exp}, got #{act}'
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = 'expected flow #{this} to not have the value #{exp}, got #{act}'
-    }
-
-    this.assert(
-        value === expectedValue,
-        failedExpectationMessage,
-        negFailedExpectationMessage,
-    )
+    return new Assertion( value )
 })
 
-Assertion.addMethod('toHaveAValueSuchThat', function (valueExpectationClosure) {
-    var flow = this._obj;
-
-    const value = flow.getValue()
-
-    valueExpectationClosure( value )
+Assertion.addMethod('haveValue', function (expectedValue) {
+    this.withValue .to .equal( expectedValue )
 })
 
-Assertion.addMethod('toHaveObject', function (
-    expectedObject, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addProperty('withObject', function (expectedValue) {
     var flow = this._obj;
 
     const object = flow.getObject()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = 'expected flow #{this} to have the object #{exp}, got #{act}'
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = 'expected flow #{this} to not have the object #{exp}, got #{act}'
-    }
-
-    this.assert(
-        object === expectedObject,
-        failedExpectationMessage,
-        negFailedExpectationMessage,
-    )
-})
-
-Assertion.addMethod('toHaveAnObjectSuchThat', function (valueExpectationClosure) {
-    var flow = this._obj;
-
-    const object = flow.getObject()
-
-    valueExpectationClosure( object )
+    return new Assertion( object )
 })
 
 
-Assertion.addMethod('toHaveChoices', function (
-    expectedChoices, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addMethod('haveObject', function (expectedObject) {
+    this.withObject .to .equal( expectedObject )
+})
+
+Assertion.addProperty('withChoices', function () {
     var flow = this._obj;
 
     const choices = flow.getChoices()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = 'expected flow #{this} to have the choices #{exp}, got #{act}'
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = 'expected flow #{this} to not have the choices #{exp}, got #{act}'
-    }
-
-    new Assertion( choices ) .to .eql(
-        expectedChoices,
-        failedExpectationMessage,
-        negFailedExpectationMessage
-    )
+    return new Assertion( choices )
 })
 
-Assertion.addMethod('toHaveChoicesSuchThat', function (choicesExpectationClosure) {
-    var flow = this._obj;
-
-    const choices = flow.getChoices()
-
-    choicesExpectationClosure( choices )
+Assertion.addMethod('haveChoices', function (expectedChoices) {
+    this.withChoices .to .eql( expectedChoices )
 })
 
-Assertion.addMethod('withEachChoiceSuchThat', function (eachChoiceExpectationClosure) {
-    var flow = this._obj;
-
-    const choices = flow.getChoices()
-
-    for( const eachChoice of choices ) {
-        eachRootExpectationClosure( eachChoice )
-    }
-})
-
-Assertion.addMethod('toHaveRoots', function (
-    expectedRoots, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addProperty('withRoots', function () {
     var flow = this._obj;
 
     const roots = flow.getRoots()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = 'expected flow #{this} to have the roots #{exp}, got #{act}'
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = 'expected flow #{this} to not have the roots #{exp}, got #{act}'
-    }
-
-    new Assertion( roots ) .to .eql(
-        expectedRoots,
-        failedExpectationMessage,
-        negFailedExpectationMessage
-    )
+    return new Assertion( roots )
 })
 
-Assertion.addMethod('toHaveRootsSuchThat', function (rootsExpectationClosure) {
-    var flow = this._obj;
-
-    const roots = flow.getRoots()
-
-    rootsExpectationClosure( roots )
+Assertion.addMethod('haveRoots', function (expectedRoots) {
+    this.withRoots .to .eql( expectedRoots )
 })
 
-Assertion.addMethod('withEachRootSuchThat', function (eachRootExpectationClosure) {
-    var flow = this._obj;
-
-    const roots = flow.getRoots()
-
-    for( const root of roots ) {
-        eachRootExpectationClosure( root )
-    }
-})
-
-Assertion.addMethod('toHaveSelection', function (
-    expectedSelection, failedExpectationMessage, negFailedExpectationMessage
-) {
+Assertion.addProperty('withSelection', function () {
     var flow = this._obj;
 
     const selection = flow.getSelection()
 
-    if( failedExpectationMessage === undefined ) {
-        failedExpectationMessage = 'expected flow #{this} to have the selection #{exp}, got #{act}'
-    }
-
-    if( negFailedExpectationMessage === undefined ) {
-        negFailedExpectationMessage = 'expected flow #{this} to not have the selection #{exp}, got #{act}'
-    }
-
-    this.assert(
-        selection === expectedSelection,
-        failedExpectationMessage,
-        negFailedExpectationMessage,
-    )
+    return new Assertion( selection )
 })
 
-Assertion.addMethod('toHaveASelectionSuchThat', function (selectionExpectationClosure) {
-    var flow = this._obj;
-
-    const selection = flow.getSelection()
-
-    selectionExpectationClosure( selection )
+Assertion.addMethod('haveSelection', function (expectedSelection) {
+    this.withSelection .to .eql( expectedSelection )
 })

@@ -69,7 +69,17 @@ class CommandsController {
             }
         }
 
-        throw new Error(`The command '${commandName}' bubble up from flow '${bottomFlowId}' was not handled.`)
+        this.onUnhandledBubbleUpCommand({
+            commandName: commandName,
+            params: params,
+            startingAt: flow
+        })
+    }
+
+    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
+        const id = flow.getIdPath()
+
+        throw new Error(`The command '${commandName}' bubbled up from flow '${id}' was not handled.`)
     }
 
     // Events

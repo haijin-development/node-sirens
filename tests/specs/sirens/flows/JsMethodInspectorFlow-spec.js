@@ -5,6 +5,7 @@ const JsMethodInspectorFlow = require('../../../../src/sirens/flows/file-object-
 const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
+const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 describe('When using an JsMethodInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -27,7 +28,12 @@ describe('When using an JsMethodInspectorFlow', () => {
         jsMethod = jsFile.getMethods()[0]
 
         flow = JsMethodInspectorFlow.new()
-        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+
+        const commandsController =
+            ApplicationCommandsController.new({ mainFlow: flow })
+                .behaveAs( UnhandledBubbledUpCommandHandler )
+
+        flow.setCommandsController( commandsController )
     })
 
     after( () => {
@@ -68,12 +74,11 @@ describe('When using an JsMethodInspectorFlow', () => {
                 object: jsMethod,
                 showsUnformattedComments: false,
                 isEditingDocumentation: false,
-                reloadSourceFile: () => {},
             })
         })
 
         it('the main flow has the jsMethod', () => {
-            expect( flow ) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect(value.object) .to .equal( jsMethod )
                 expect(value.showsUnformattedComments) .to .equal( false )
                 expect(value.isEditingDocumentation) .to .equal( false )
@@ -86,11 +91,11 @@ describe('When using an JsMethodInspectorFlow', () => {
     return 'A standalone function'
 }`
 
-            expect( flow ) .withId( 'main.methodSourceCode' ) .toHaveValue( expectedSourceCode )
+            expect( flow ) .withId( 'main.methodSourceCode' ) .to .haveValue( expectedSourceCode )
         })
 
         it('sets the method documentation', () => {
-            expect( flow ) .withId( 'main.methodDocumentation' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main.methodDocumentation' ) .withValue .suchThat( (value) => {
                 expect( value.methodDocumentation ) .to .behaveAs( 'MethodDocumentation' )                
             })
         })
@@ -102,19 +107,17 @@ describe('When using an JsMethodInspectorFlow', () => {
                 object: jsMethod,
                 showsUnformattedComments: false,
                 isEditingDocumentation: false,
-                reloadSourceFile: () => {},
             })
 
             flow.setInspectedObject({
                 object: null,
                 showsUnformattedComments: false,
                 isEditingDocumentation: false,
-                reloadSourceFile: () => {},
             })
         })
 
         it('the main flow has null', () => {
-            expect( flow ) .withId( 'main' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect(value.object) .to .equal( null )
                 expect(value.isEditingDocumentation) .to .equal( false )
             })
@@ -123,11 +126,11 @@ describe('When using an JsMethodInspectorFlow', () => {
         it('sets an empty formatted source code', () => {
             const expectedSourceCode = ''
 
-            expect( flow ) .withId( 'main.methodSourceCode' ) .toHaveValue( expectedSourceCode )
+            expect( flow ) .withId( 'main.methodSourceCode' ) .to .haveValue( expectedSourceCode )
         })
 
         it('sets a null method documentation', () => {
-            expect( flow ) .withId( 'main.methodDocumentation' ) .toHaveAValueSuchThat( (value) => {
+            expect( flow ) .withId( 'main.methodDocumentation' ) .withValue .suchThat( (value) => {
                 expect( value.methodDocumentation ) .to .be .null                
             })
         })
@@ -135,16 +138,11 @@ describe('When using an JsMethodInspectorFlow', () => {
     })
 
     describe('when updating the documentation', () => {
-        let reloadWasCalled
-
         beforeEach( () => {
-            reloadWasCalled = false
-
             flow.setInspectedObject({
                 object: jsMethod,
                 showsUnformattedComments: false,
                 isEditingDocumentation: false,
-                reloadSourceFile: () => { reloadWasCalled = true },
             })
         })
 
@@ -155,11 +153,11 @@ describe('When using an JsMethodInspectorFlow', () => {
                 methodNewComment: methodComment
             })
 
-            expect(filePath) .not .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .not .to .match(/A method comment/)
             })
 
-            expect(filePath) .to .haveFileContentsSuchThat( (fileContents) => {
+            expect(filePath) .withFileContents .suchThat( (fileContents) => {
                 expect(fileContents) .to .match(/[/][*] An updated comment [*][/]/)
             })
         })
@@ -171,7 +169,15 @@ describe('When using an JsMethodInspectorFlow', () => {
                 methodNewComment: methodComment
             })
 
-            expect(reloadWasCalled) .to .be .true
+            expect( flow ) .commandsController .to .haveReceived
+                .aBubbledCommandsCountOf(1)
+
+            expect( flow.getCommandsController() ) .to
+                .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
+                    expect(command.commandName) .to .eql('reloadSourceFile')
+                    expect(command.params) .to .eql([])
+                    expect(command.startingAt.getIdPath()) .to .eql('main')
+                })
         })
     })
 })

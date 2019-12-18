@@ -8,18 +8,8 @@ class JsClassDocumentationFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['updateClassDocumentationClosure']
+        this.instanceVariables = []
         this.assumes = [ValueFlow]
-    }
-
-    initialize({
-        updateClassDocumentationClosure: updateClassDocumentationClosure,
-    }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
-        this.updateClassDocumentationClosure = updateClassDocumentationClosure
     }
 
     defaultValue() {
@@ -129,7 +119,7 @@ class JsClassDocumentationFlow {
 
         classDocumentation.setDescription( classNewDescription )
 
-        this.updateClassDocumentationClosure({
+        this.updateClassDocumentation({
             classDocumentation: classDocumentation,
         })
     }
@@ -159,7 +149,7 @@ class JsClassDocumentationFlow {
 
         classDocumentation.addImplementationNote( implementationNoteText )
 
-        this.updateClassDocumentationClosure({
+        this.updateClassDocumentation({
             classDocumentation: classDocumentation,
         })
     }
@@ -190,7 +180,7 @@ class JsClassDocumentationFlow {
 
         classDocumentation.updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText})
 
-        this.updateClassDocumentationClosure({
+        this.updateClassDocumentation({
             classDocumentation: classDocumentation,
         })
     }
@@ -223,7 +213,7 @@ class JsClassDocumentationFlow {
 
         classDocumentation.addExample( example )
 
-        this.updateClassDocumentationClosure({
+        this.updateClassDocumentation({
             classDocumentation: classDocumentation,
         })
     }
@@ -257,8 +247,15 @@ class JsClassDocumentationFlow {
             example: example
         })
 
-        this.updateClassDocumentationClosure({
+        this.updateClassDocumentation({
             classDocumentation: classDocumentation,
+        })
+    }
+
+    updateClassDocumentation({ classDocumentation: classDocumentation }) {
+        this.bubbleUp({
+            command: 'updateClassDocumentation',
+            param: { classDocumentation: classDocumentation },
         })
     }
 }

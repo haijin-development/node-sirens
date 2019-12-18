@@ -25,7 +25,6 @@ class JsClassInspectorFlow {
                 object: jsClass,
                 showsUnformattedComments: showsUnformattedComments,
                 isEditingDocumentation: isEditingDocumentation,
-                reloadSourceFile: reloadSourceFile,
             }}) => {
 
                 if( ! jsClass ) {
@@ -71,12 +70,14 @@ class JsClassInspectorFlow {
 
             this.object({
                 id: 'classDocumentation',
-                definedWith: JsClassDocumentationFlow.new({
-                    updateClassDocumentationClosure: thisFlow.updateClassDocumentation.bind(thisFlow),
-                })
+                definedWith: JsClassDocumentationFlow.new()
             })
-        })
 
+            this.acceptedBubbledUps([
+                'updateClassDocumentation'
+            ])
+
+        })
     }
 
     flowCommands(thisFlow) {

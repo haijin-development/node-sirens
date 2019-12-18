@@ -93,13 +93,11 @@ class AppBrowserFlow {
                 id: 'selectedFile',
                 definedWith: FileInspectorFlow.new(),
             })
-        })
 
-        this.respondToBubbledUpCommands({
-            methods: [
+            this.acceptedBubbledUps([
                 'setIsBrowsingDocumentation',
                 'isBrowsingDocumentation',
-            ],
+            ])
         })
     }
 

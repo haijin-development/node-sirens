@@ -231,6 +231,10 @@ class FlowBuilder {
     defineFlowCommandsIn({ method: method }) {
         this.evaluate({ closure: method, with: this.rootFlow })
     }
+
+    acceptedBubbledUps( methodNames ) {
+        this.rootFlow.acceptAllBubbledUps( methodNames )
+    }
 }
 
 FlowBuilder = Classification.define(FlowBuilder)

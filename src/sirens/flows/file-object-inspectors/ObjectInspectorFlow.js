@@ -14,7 +14,6 @@ class ObjectInspectorFlow {
             object: null,
             isEditingDocumentation: false,
             showsUnformattedComments: false,
-            reloadSourceFile: null,
         }
     }
 
@@ -49,7 +48,6 @@ class ObjectInspectorFlow {
             object: value.object,
             showsUnformattedComments: value.showsUnformattedComments,
             isEditingDocumentation: value.isEditingDocumentation,
-            reloadSourceFile: value.reloadSourceFile,
         })
     }
 
@@ -62,14 +60,13 @@ class ObjectInspectorFlow {
             object: value.object,
             showsUnformattedComments: value.showsUnformattedComments,
             isEditingDocumentation: value.isEditingDocumentation,
-            reloadSourceFile: value.reloadSourceFile,
         })
     }
 
     reloadSourceFile() {
-        const value = this.getValue()
-
-        value.reloadSourceFile()
+        this.bubbleUp({
+            command: 'reloadSourceFile'
+        })
     }
 
     setIsBrowsingDocumentation({ value: boolean }) {
@@ -80,9 +77,11 @@ class ObjectInspectorFlow {
     }
 
     isBrowsingDocumentation() {
-        return this.bubbleUp({
+        const result = this.bubbleUp({
             command: 'isBrowsingDocumentation',
         })
+
+        return result
     }
 }
 

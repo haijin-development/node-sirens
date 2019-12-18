@@ -13,6 +13,7 @@ class Flow {
             'childFlows',
             'commandsController',
             'pendingEvents',
+            'bubbledUpCommands',
         ]
     }
 
@@ -22,6 +23,7 @@ class Flow {
         this.childFlows = new Map()
         this.commandsController = CommandsController.new({ mainFlow: this })
         this.pendingEvents = new Map()
+        this.bubbledUpCommands = new Map()
     }
 
     initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
@@ -63,6 +65,7 @@ class Flow {
 
         this.pendingEvents = new Map()
         this.childFlows = new Map()
+        this.bubbledUpCommands = new Map()
     }
 
     replaceChildFlow({ id: id, withFlow: newFlow }) {
@@ -346,6 +349,46 @@ class Flow {
         flowPoint.behaveAs( classification )
 
         return flowPoint
+    }
+
+    bubbleUp({ command: commandName, params: params, param: param }) {
+        if( param !== undefined ) { params = [param] }
+        if( params === undefined ) { params = [] }
+
+        const commandsController = this.getCommandsController()
+
+        commandsController.bubbleUp({
+            commandName: commandName,
+            params: params,
+            startingAt: this,
+        })
+    }
+
+    handleBubbledUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
+        if( ! this.bubbledUpCommands.has( commandName ) ) {
+            return { wasHandled: false }
+        }
+
+        const handlerMethodName = this.bubbledUpCommands.get( commandName )
+
+        const handlerMethod = this[handlerMethodName].bind(this)
+
+        const result = handlerMethod(...params)
+
+        return {
+            wasHandled: true,
+            result: result,
+        }
+    }
+
+    respondToBubbledUpCommands({ methods: methods }) {
+        for( const eachMethod of methods ) {
+            this.respondToBubbledUpCommand({ method: eachMethod })
+        }
+    }
+
+    respondToBubbledUpCommand({ method: method }) {
+        this.bubbledUpCommands.set( method, method )
     }
 
     // Events

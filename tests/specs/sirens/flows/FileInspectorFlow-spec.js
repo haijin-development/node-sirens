@@ -19,10 +19,7 @@ describe('When using an FileInspectorFlow', () => {
         filePath = FilesRepository.pathTo( fileSample )
         sourceFile = SourceFile.new({ filepath: filePath  })
 
-        flow = FileInspectorFlow.new({
-            setIsBrowsingDocumentationClosure: function() {},
-            getIsBrowsingDocumentationClosure: function() {},
-        })
+        flow = FileInspectorFlow.new()
         flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
     })
 

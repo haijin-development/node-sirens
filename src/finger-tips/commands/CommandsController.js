@@ -40,6 +40,38 @@ class CommandsController {
         return result
     }
 
+    // Blubbling up
+
+    bubbleUp({ commandName: commandName, params: params, startingAt: flow }) {
+        const bottomFlowId = flow.getIdPath()
+
+        const ids = bottomFlowId.split( '.' )
+
+        const flows = [ this.mainFlow ]
+
+        let currentFlow = this.mainFlow
+
+        for( const eachId of ids.slice(1) ) {
+            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
+
+            flows.push( currentFlow )
+        }
+
+        for( const eachFlow of flows.reverse() ) {
+            const commandResult = eachFlow.handleBubbledUpCommand({
+                commandName: commandName,
+                params: params,
+                startingAt: flow
+            })
+
+            if( commandResult.wasHandled === true ) {
+                return commandResult.result
+            }
+        }
+
+        throw new Error(`The command '${commandName}' bubble up from flow '${bottomFlowId}' was not handled.`)
+    }
+
     // Events
 
     runUpdateFlowPointsIteration() {

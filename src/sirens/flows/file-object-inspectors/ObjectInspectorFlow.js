@@ -5,23 +5,8 @@ class ObjectInspectorFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [
-            'setIsBrowsingDocumentationClosure',
-            'getIsBrowsingDocumentationClosure'
-        ]
+        this.instanceVariables = []
         this.assumes = [ValueFlow]
-    }
-
-    initialize({
-        setIsBrowsingDocumentationClosure: setIsBrowsingDocumentationClosure,
-        getIsBrowsingDocumentationClosure: getIsBrowsingDocumentationClosure,
-    } = {}) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
-        this.setIsBrowsingDocumentationClosure = setIsBrowsingDocumentationClosure
-        this.getIsBrowsingDocumentationClosure = getIsBrowsingDocumentationClosure
     }
 
     defaultValue() {
@@ -88,11 +73,16 @@ class ObjectInspectorFlow {
     }
 
     setIsBrowsingDocumentation({ value: boolean }) {
-        this.setIsBrowsingDocumentationClosure({ value: boolean })
+        return this.bubbleUp({
+            command: 'setIsBrowsingDocumentation',
+            param: { value: boolean },
+        })
     }
 
     isBrowsingDocumentation() {
-        return this.getIsBrowsingDocumentationClosure()
+        return this.bubbleUp({
+            command: 'isBrowsingDocumentation',
+        })
     }
 }
 

@@ -91,11 +91,15 @@ class AppBrowserFlow {
 
             this.object({
                 id: 'selectedFile',
-                definedWith: FileInspectorFlow.new({
-                    setIsBrowsingDocumentationClosure: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
-                    getIsBrowsingDocumentationClosure: thisFlow.getIsBrowsingDocumentation.bind(thisFlow),
-                }),
+                definedWith: FileInspectorFlow.new(),
             })
+        })
+
+        this.respondToBubbledUpCommands({
+            methods: [
+                'setIsBrowsingDocumentation',
+                'isBrowsingDocumentation',
+            ],
         })
     }
 

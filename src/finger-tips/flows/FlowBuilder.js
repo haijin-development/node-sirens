@@ -203,6 +203,8 @@ class FlowBuilder {
         }
     }
 
+    /// Commands
+
     commandsGroup({ id: commandsGroupId }, closure) {
         if( commandsGroupId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
 
@@ -228,12 +230,52 @@ class FlowBuilder {
         })
     }
 
+    /*
+        Method(`
+            Calls the given method in this FlowBuilder to define further commands.
+            It is just a declarative intention of defining commands in a different method.
+        `)
+    */
     defineFlowCommandsIn({ method: method }) {
         this.evaluate({ closure: method, with: this.rootFlow })
     }
 
-    acceptedBubbledUps( methodNames ) {
-        this.rootFlow.acceptAllBubbledUps( methodNames )
+    /*
+        Method(`
+            Allows each method in the given methodNames collection to be invoked from a
+            child flow throuwg the bubbling up mechanism.
+
+            A method can not be invoked from a bubbled up command unless it is explicetely
+            declared with this method.
+        `)
+    */
+    acceptedBubbledUps(flowMethodNames) {
+        this.rootFlow.acceptAllBubbledUps( flowMethodNames )
+    }
+
+    /*
+        Method(`
+            Shortcut to define stateless commands implemented in a method of the given flow.
+
+            It is the same a doing
+
+                this.command({
+                    id: eachMethodName,
+                    whenActioned: flow.eachMethodName.bind(flow),
+                })
+
+            for each one of the methods in the given methodNames collection.
+        `)
+    */
+    statelessCommands({ definedInFlow: flow, withMethods: methodNames }) {
+        for( const eachMethodName of methodNames ) {
+            const method = flow[eachMethodName].bind(flow)
+
+            this.command({
+                id: eachMethodName,
+                whenActioned: method,
+            })
+        }
     }
 }
 

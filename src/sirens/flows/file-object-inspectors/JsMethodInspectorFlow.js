@@ -53,52 +53,30 @@ class JsMethodInspectorFlow {
                 definedWith: JsMethodDocumentationFlow.new()
             })
 
-            this.acceptedBubbledUps([
-                'updateMethodDocumentation'
-            ])
-
         })
     }
 
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'getMethod',
-                whenActioned: thisFlow.getMethod.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isInEditionMode',
-                whenActioned: thisFlow.isInEditionMode.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'showsUnformattedComments',
-                whenActioned: thisFlow.showsUnformattedComments.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getMethodUnformattedComment',
-                whenActioned: thisFlow.getMethodUnformattedComment.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodUnformmatedComment',
-                whenActioned: thisFlow.editMethodUnformmatedComment.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'setIsBrowsingDocumentation',
-                whenActioned: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isBrowsingDocumentation',
-                whenActioned: thisFlow.isBrowsingDocumentation.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getMethod',
+                    'isInEditionMode',
+                    'showsUnformattedComments',
+                    'getMethodUnformattedComment',
+                    'editMethodUnformmatedComment',
+                    'setIsBrowsingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
             })
 
         })
+
+        this.acceptedBubbledUps([
+            'updateMethodDocumentation'
+        ])
     }
 
     /// Exported commands

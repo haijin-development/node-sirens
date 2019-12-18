@@ -32,39 +32,17 @@ class JsClassDocumentationFlow {
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'getClassDocumentation',
-                whenActioned: thisFlow.getClassDocumentation.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isInEditionMode',
-                whenActioned: thisFlow.isInEditionMode.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editClassDocumentationDescription',
-                whenActioned: thisFlow.editClassDocumentationDescription.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'createClassDocumentationImplementationNote',
-                whenActioned: thisFlow.createClassDocumentationImplementationNote.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editClassDocumentationImplementationNote',
-                whenActioned: thisFlow.editClassDocumentationImplementationNote.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'createClassDocumentationExample',
-                whenActioned: thisFlow.createClassDocumentationExample.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editClassDocumentationExample',
-                whenActioned: thisFlow.editClassDocumentationExample.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getClassDocumentation',
+                    'isInEditionMode',
+                    'editClassDocumentationDescription',
+                    'createClassDocumentationImplementationNote',
+                    'editClassDocumentationImplementationNote',
+                    'createClassDocumentationExample',
+                    'editClassDocumentationExample',
+                ],
             })
 
         })
@@ -218,7 +196,7 @@ class JsClassDocumentationFlow {
         })
     }
 
-    editClassDocumentationExample({ parentWindow: parentWindow }) {
+    editClassDocumentationExample({ parentWindow: parentWindow, example: example }) {
         const className = this.getClassDocumentation().getClassName()
 
         const dialog = EditExampleDialog.new({

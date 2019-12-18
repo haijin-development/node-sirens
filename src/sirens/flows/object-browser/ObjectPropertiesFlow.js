@@ -53,30 +53,17 @@ class ObjectPropertiesFlow {
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'inspectSelectedObject',
-                whenActioned: thisFlow.inspectSelectedObject.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'inspectSelectedObject',
+                    'browseSelectedObjectPrototypes',
+                    'getMainObject',
+                    'getRootProperties',
+                    'getSelectedPropertyValue',
+                ],
             })
 
-            this.command({
-                id: 'browseSelectedObjectPrototypes',
-                whenActioned: thisFlow.browseSelectedObjectPrototypes.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getMainObject',
-                whenActioned: thisFlow.getMainObject.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getRootProperties',
-                whenActioned: thisFlow.getRootProperties.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getSelectedPropertyValue',
-                whenActioned: thisFlow.getSelectedPropertyValue.bind(thisFlow),
-            })
         })
     }
 

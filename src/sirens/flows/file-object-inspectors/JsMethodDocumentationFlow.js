@@ -35,59 +35,21 @@ class JsMethodDocumentationFlow {
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'getMethodDocumentation',
-                whenActioned: thisFlow.getMethodDocumentation.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isInEditionMode',
-                whenActioned: thisFlow.isInEditionMode.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodTags',
-                whenActioned: thisFlow.editMethodTags.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodDocumentationComment',
-                whenActioned: thisFlow.editMethodDocumentationComment.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'createMethodDocumentationImplementationNote',
-                whenActioned: thisFlow.createMethodDocumentationImplementationNote.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodDocumentationImplementationNote',
-                whenActioned: thisFlow.editMethodDocumentationImplementationNote.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'createMethodDocumentationExample',
-                whenActioned: thisFlow.createMethodDocumentationExample.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodDocumentationExample',
-                whenActioned: thisFlow.editMethodDocumentationExample.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'createMethodDocumentationParam',
-                whenActioned: thisFlow.createMethodDocumentationParam.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodDocumentationParam',
-                whenActioned: thisFlow.editMethodDocumentationParam.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editMethodDocumentationReturn',
-                whenActioned: thisFlow.editMethodDocumentationReturn.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getMethodDocumentation',
+                    'isInEditionMode',
+                    'editMethodTags',
+                    'editMethodDocumentationComment',
+                    'createMethodDocumentationImplementationNote',
+                    'editMethodDocumentationImplementationNote',
+                    'createMethodDocumentationExample',
+                    'editMethodDocumentationExample',
+                    'createMethodDocumentationParam',
+                    'editMethodDocumentationParam',
+                    'editMethodDocumentationReturn',
+                ],
             })
 
         })

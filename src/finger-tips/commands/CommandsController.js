@@ -42,44 +42,44 @@ class CommandsController {
 
     // Blubbling up
 
-    bubbleUp({ commandName: commandName, params: params, startingAt: flow }) {
+    bubbleUp({
+        commandName: commandName, params: params, startingAtFlow: flow, ifUnhandled: unhandledClosure
+    }) {
         const bottomFlowId = flow.getIdPath()
 
         const ids = bottomFlowId.split( '.' )
 
-        const flows = [ this.mainFlow ]
-
         let currentFlow = this.mainFlow
 
         for( const eachId of ids.slice(1) ) {
-            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
-
-            flows.push( currentFlow )
-        }
-
-        for( const eachFlow of flows.reverse() ) {
-            const commandResult = eachFlow.handleBubbledUpCommand({
+            const commandResult = currentFlow.handleBubbledUpCommand({
                 commandName: commandName,
                 params: params,
-                startingAt: flow
+                startingAtFlow: flow
             })
 
             if( commandResult.wasHandled === true ) {
                 return commandResult.result
             }
+
+            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
         }
 
-        this.onUnhandledBubbleUpCommand({
+        if( unhandledClosure === undefined ) {
+            unhandledClosure = this.onUnhandledBubbleUpCommand.bind(this)
+        }
+
+        return unhandledClosure({
             commandName: commandName,
             params: params,
-            startingAt: flow
+            startingAtFlow: flow
         })
     }
 
-    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
+    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
         const id = flow.getIdPath()
 
-        throw new Error(`The command '${commandName}' bubbled up from flow '${id}' was not handled.`)
+        throw new Error(`Unhandled command '${commandName}' bubbled up from flow '${id}'.`)
     }
 
     // Events

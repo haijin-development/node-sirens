@@ -50,14 +50,18 @@ class PlaygroundBrowserFlow {
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'openFile',
-                whenActioned: thisFlow.openFile.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'openFileInNewWindow',
-                whenActioned: thisFlow.openFileInNewWindow.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'openFile',
+                    'openFileInNewWindow',
+                    'openFileEditor',
+                    'openPlayground',
+                    'pickAndOpenFile',
+                    'pickAndOpenFileInNewWindow',
+                    'pickFile',
+                    'getLastOpenedFolder',
+                ],
             })
 
             this.command({
@@ -68,35 +72,6 @@ class PlaygroundBrowserFlow {
                 whenActioned: thisFlow.saveFile.bind(thisFlow),
             })
 
-            this.command({
-                id: 'openFileEditor',
-                whenActioned: thisFlow.openFileEditor.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'openPlayground',
-                whenActioned: thisFlow.openPlayground.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'pickAndOpenFile',
-                whenActioned: thisFlow.pickAndOpenFile.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'pickAndOpenFileInNewWindow',
-                whenActioned: thisFlow.pickAndOpenFileInNewWindow.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'pickFile',
-                whenActioned: thisFlow.pickFile.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getLastOpenedFolder',
-                whenActioned: thisFlow.getLastOpenedFolder.bind(thisFlow),
-            })
         })
     }
 

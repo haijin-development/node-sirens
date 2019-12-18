@@ -360,13 +360,13 @@ class Flow {
         const result = commandsController.bubbleUp({
             commandName: commandName,
             params: params,
-            startingAt: this,
+            startingAtFlow: this,
         })
 
         return result
     }
 
-    handleBubbledUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
+    handleBubbledUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
         if( ! this.bubbledUpCommands.has( commandName ) ) {
             return { wasHandled: false }
         }
@@ -381,13 +381,13 @@ class Flow {
         }
     }
 
-    acceptAllBubbledUps( methodNames ) {
+    acceptAllBubbledUps(methodNames) {
         for( const eachMethodName of methodNames ) {
             this.acceptBubbledUp( eachMethodName )
         }
     }
 
-    acceptBubbledUp( methodName ) {
+    acceptBubbledUp(methodName) {
         this.bubbledUpCommands.add( methodName )
     }
 

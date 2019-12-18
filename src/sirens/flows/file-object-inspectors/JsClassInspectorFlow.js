@@ -73,53 +73,30 @@ class JsClassInspectorFlow {
                 definedWith: JsClassDocumentationFlow.new()
             })
 
-            this.acceptedBubbledUps([
-                'updateClassDocumentation'
-            ])
-
         })
     }
 
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'getClass',
-                whenActioned: thisFlow.getClass.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getMethodUnformattedComment',
-                whenActioned: thisFlow.getMethodUnformattedComment.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isInEditionMode',
-                whenActioned: thisFlow.isInEditionMode.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'showsUnformattedComments',
-                whenActioned: thisFlow.showsUnformattedComments.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'editClassUnformattedComment',
-                whenActioned: thisFlow.editClassUnformattedComment.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'setIsBrowsingDocumentation',
-                whenActioned: thisFlow.setIsBrowsingDocumentation.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'isBrowsingDocumentation',
-                whenActioned: thisFlow.isBrowsingDocumentation.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getClass',
+                    'getMethodUnformattedComment',
+                    'isInEditionMode',
+                    'showsUnformattedComments',
+                    'editClassUnformattedComment',
+                    'setIsBrowsingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
             })
 
         })
 
+        this.acceptedBubbledUps([
+            'updateClassDocumentation'
+        ])
     }
 
     /// Exported commands

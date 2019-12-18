@@ -178,7 +178,7 @@ describe('When using an JsClassInspectorFlow', () => {
                 .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
                     expect(command.commandName) .to .eql('reloadSourceFile')
                     expect(command.params) .to .eql([])
-                    expect(command.startingAt.getIdPath()) .to .eql('main')
+                    expect(command.startingAtFlow.getIdPath()) .to .eql('main')
                 })
         })
     })

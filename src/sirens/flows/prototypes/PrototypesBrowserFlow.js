@@ -54,20 +54,15 @@ class PrototypesBrowserFlow {
                 whenActioned: thisFlow.browseSelectedPrototype.bind(thisFlow)
             })
 
-            this.command({
-                id: 'setBrowsedObject',
-                whenActioned: thisFlow.setBrowsedObject.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'setBrowsedObject',
+                    'getSelectedClass',
+                    'hasAClassSelected',
+                ],
             })
 
-            this.command({
-                id: 'getSelectedClass',
-                whenActioned: thisFlow.getSelectedClass.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'hasAClassSelected',
-                whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
-            })
         })
     }
 

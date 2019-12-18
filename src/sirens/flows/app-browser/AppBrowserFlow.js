@@ -94,51 +94,31 @@ class AppBrowserFlow {
                 definedWith: FileInspectorFlow.new(),
             })
 
-            this.acceptedBubbledUps([
-                'setIsBrowsingDocumentation',
-                'isBrowsingDocumentation',
-            ])
         })
     }
 
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'pickAndOpenFolder',
-                whenActioned: thisFlow.pickAndOpenFolder.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'pickAndOpenFolder',
+                    'openFileEditor',
+                    'openPlayground',
+                    'pickFolder',
+                    'openFolder',
+                    'getSelectedFilePath',
+                    'hasAClassSelected',
+                ],
             })
 
-            this.command({
-                id: 'openFileEditor',
-                whenActioned: thisFlow.openFileEditor.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'openPlayground',
-                whenActioned: thisFlow.openPlayground.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'pickFolder',
-                whenActioned: thisFlow.pickFolder.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'openFolder',
-                whenActioned: thisFlow.openFolder.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getSelectedFilePath',
-                whenActioned: thisFlow.getSelectedFilePath.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'hasAClassSelected',
-                whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
-            })
         })
+
+        this.acceptedBubbledUps([
+            'setIsBrowsingDocumentation',
+            'isBrowsingDocumentation',
+        ])
     }
 
     /// Exported commands

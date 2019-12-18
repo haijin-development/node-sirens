@@ -43,9 +43,11 @@ class TextualContentInspectorFlow {
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'getText',
-                whenActioned: thisFlow.getText.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getText',
+                ],
             })
 
         })

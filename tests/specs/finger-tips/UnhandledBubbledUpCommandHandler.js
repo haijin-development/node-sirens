@@ -25,11 +25,11 @@ class UnhandledBubbledUpCommandHandler {
         return this.bubbledCommandsReceived[index]
     }
 
-    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAt: flow }) {
+    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
         this.bubbledCommandsReceived.push({
             commandName: commandName,
             params: params,
-            startingAt: flow,
+            startingAtFlow: flow,
         })
     }
 

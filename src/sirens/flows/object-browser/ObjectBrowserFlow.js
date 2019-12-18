@@ -45,15 +45,15 @@ class ObjectBrowserFlow {
 
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
-            this.command({
-                id: 'browseObject',
-                whenActioned: thisFlow.browseObject.bind(thisFlow),
+
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'browseObject',
+                    'propertySelectionValueStringFrom',
+                ],
             })
 
-            this.command({
-                id: 'propertySelectionValueStringFrom',
-                whenActioned: thisFlow.propertySelectionValueStringFrom.bind(thisFlow),
-            })
         })
     }
 

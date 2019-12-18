@@ -85,23 +85,19 @@ class FileInspectorFlow {
                 },
             })
 
-            this.acceptedBubbledUps([
-                'reloadSourceFile'
-            ])
-
         })
     }
 
     flowCommands(thisFlow) {
         this.commandsGroup({ id: 'flow-commands' }, function() {
-            this.command({
-                id: 'getSourceFile',
-                whenActioned: thisFlow.getSourceFile.bind(thisFlow),
-            })
 
-            this.command({
-                id: 'getSelectedFileObject',
-                whenActioned: thisFlow.getSelectedFileObject.bind(thisFlow),
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'getSourceFile',
+                    'getSelectedFileObject',
+                    'getFileObjectComponent',
+                ],
             })
 
             // This is a Command to allow the main application to override it.
@@ -120,11 +116,11 @@ class FileInspectorFlow {
                 }
             })
 
-            this.command({
-                id: 'getFileObjectComponent',
-                whenActioned: thisFlow.getFileObjectComponent.bind(thisFlow),
-            })
         })
+
+        this.acceptedBubbledUps([
+            'reloadSourceFile'
+        ])
     }
 
     /// Exported commands

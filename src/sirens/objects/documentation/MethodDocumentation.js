@@ -157,6 +157,12 @@ class MethodDocumentation {
         this.setTags( tags )
     }
 
+    getTagLabels() {
+        return this.getTags().map( (eachTag) => {
+            return eachTag.getLabel()
+        })
+    }
+
     getExamples() {
         return this.examples
     }

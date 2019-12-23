@@ -96,10 +96,14 @@ class FlowBuilder {
         }
     }
 
-    value({ id: childFlowId, whenValueChanges: whenValueChangesClosure }, closure) {
+    value({ id: childFlowId, value: initialValue, whenValueChanges: whenValueChangesClosure }, closure) {
         if( childFlowId === undefined ) { throw new Error(`The childFlowId must be defined.`) }
 
         const childFlow = ValueFlow.new({ id: childFlowId })
+
+        if( initialValue != undefined ) {
+            childFlow.setValue( initialValue )
+        }
 
         childFlow.setWhenFlowValueChangedClosure( whenValueChangesClosure )
 

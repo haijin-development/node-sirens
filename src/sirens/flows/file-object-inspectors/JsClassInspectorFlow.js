@@ -61,6 +61,18 @@ class JsClassInspectorFlow {
 
             })
 
+            this.value({
+                id: 'selectedTags',
+                value: [],
+                whenValueChanges: ({ newValue: tags }) => {
+                    const filteredMethods =
+                        thisFlow.getMethodsFilteredByTags({ tagsFilter: tags })
+
+                    thisFlow.getChildFlow({ id: 'classMethods' })
+                        .setChoices(filteredMethods)
+                },
+            })
+
             this.object({
                 id: 'classDocumentation',
                 definedWith: JsClassDocumentationFlow.new()
@@ -77,6 +89,7 @@ class JsClassInspectorFlow {
                 withMethods: [
                     'getClass',
                     'getMethodUnformattedComment',
+                    'getAllMethodsTagLabels',
                     'isInEditionMode',
                     'showsUnformattedComments',
                     'editClassUnformattedComment',
@@ -98,6 +111,7 @@ class JsClassInspectorFlow {
         const exportedCommands = [
             'flow-commands.getClass',
             'flow-commands.getMethodUnformattedComment',
+            'flow-commands.getAllMethodsTagLabels',
             'flow-commands.isInEditionMode',
             'flow-commands.showsUnformattedComments',
             'flow-commands.editClassUnformattedComment',
@@ -173,6 +187,53 @@ class JsClassInspectorFlow {
         })
 
         this.reloadSourceFile()
+    }
+
+    getAllMethodsTagLabels() {
+        const jsClass = this.getClass()
+
+        const allLabelsSet = new Set()
+
+        const allMethodsDefinition = jsClass.getMethods()
+
+        allMethodsDefinition.forEach( (methodDefinition) => {
+            const methodTags = methodDefinition.getDocumentation().getTags()
+
+            methodTags.forEach( (documentationTag) => {
+                const tagLabel = documentationTag.getLabel()
+
+                allLabelsSet.add( tagLabel )
+            })
+        })
+
+        const allMethodsTagLabels = allLabelsSet.values()
+
+        return Array.from( allMethodsTagLabels )
+    }
+
+    getMethodsFilteredByTags({ tagsFilter: tagsFilter }) {
+        const jsClass = this.getClass()
+
+        const methods = jsClass.getMethods()
+
+        if( tagsFilter.length === 0 ) { return methods }
+
+        const methodsWithSelectedTags = []
+
+        methods.forEach( (methodDefinition) => {
+            const methodTags = methodDefinition.getDocumentation()
+                .getTagLabels()
+
+            const includeMethod = tagsFilter.every( (eachTagFilter) => {
+                return methodTags.includes( eachTagFilter )
+            })
+
+            if( includeMethod === true ) {
+                methodsWithSelectedTags.push( methodDefinition )
+            }
+        })
+
+        return methodsWithSelectedTags
     }
 }
 

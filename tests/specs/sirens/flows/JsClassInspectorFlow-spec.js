@@ -44,10 +44,12 @@ describe('When using an JsClassInspectorFlow', () => {
         expect( flow ) .to .haveChildFlows([
             'main.classMethods',
             'main.classMethods.selectedMethod',
+            'main.selectedTags',
 
             'main.flow-commands',
             'main.flow-commands.getClass',
             'main.flow-commands.getMethodUnformattedComment',
+            'main.flow-commands.getAllMethodsTagLabels',
             'main.flow-commands.showsUnformattedComments',
             'main.flow-commands.isInEditionMode',
             'main.flow-commands.editClassUnformattedComment',

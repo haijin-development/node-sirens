@@ -55,7 +55,8 @@ class CommandsController {
             const commandResult = currentFlow.handleBubbledUpCommand({
                 commandName: commandName,
                 params: params,
-                startingAtFlow: flow
+                startingAtFlow: flow,
+                ifUnhandled: unhandledClosure,
             })
 
             if( commandResult.wasHandled === true ) {

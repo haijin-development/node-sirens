@@ -195,7 +195,7 @@ class JsClassDocumentationFlow {
 
     isInEditionMode() {
         return this.bubbleUp({
-            command: 'isEditingDocumentation'
+            command: 'isEditingDocumentation',
         })
     }
 

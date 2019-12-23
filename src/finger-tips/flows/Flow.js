@@ -351,7 +351,7 @@ class Flow {
         return flowPoint
     }
 
-    bubbleUp({ command: commandName, params: params, param: param }) {
+    bubbleUp({ command: commandName, params: params, param: param, ifUnhandled: unhandledClosure }) {
         if( param !== undefined ) { params = [param] }
         if( params === undefined ) { params = [] }
 
@@ -361,14 +361,22 @@ class Flow {
             commandName: commandName,
             params: params,
             startingAtFlow: this,
+            ifUnhandled: unhandledClosure,
         })
 
         return result
     }
 
-    handleBubbledUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
+    handleBubbledUpCommand({
+        commandName: commandName, params: params, startingAtFlow: flow, unhandledClosure: unhandledClosure
+    }) {
         if( ! this.bubbledUpCommands.has( commandName ) ) {
-            return { wasHandled: false }
+            return this.handleBubbledUpCommandWithDefaultHandler({
+                commandName: commandName,
+                params: params,
+                startingAtFlow: flow,
+                unhandledClosure: unhandledClosure,
+            })
         }
 
         const handlerMethod = this[commandName].bind(this)
@@ -379,6 +387,42 @@ class Flow {
             wasHandled: true,
             result: result,
         }
+    }
+
+    hasBubbledUpCommandDefaultHandler() {
+        return this.bubbledUpCommands.has( '*' )        
+    }
+
+    handleBubbledUpCommandWithDefaultHandler({
+        commandName: commandName, params: params, startingAtFlow: flow, ifUnhandled: unhandledClosure
+    }) {
+        if( ! this.hasBubbledUpCommandDefaultHandler() ) {
+            return { wasHandled: false }
+        }
+
+        const result = unhandledClosure === undefined ?
+            this.onUnhandledBubbleUpCommand({
+                commandName: commandName,
+                params: params,
+                startingAtFlow: flow
+            })
+            :
+            unhandledClosure({
+                commandName: commandName,
+                params: params,
+                startingAtFlow: flow
+            })
+
+        return {
+            wasHandled: true,
+            result: result,
+        }
+    }
+
+    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
+        const id = flow.getIdPath()
+
+        throw new Error(`Unhandled command '${commandName}' bubbled up from flow '${id}'.`)
     }
 
     acceptAllBubbledUps(methodNames) {

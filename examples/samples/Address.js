@@ -1,45 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 
-/*
-Method(`
-   This class has no documentation yet.
-
-   123
-`)
-
-Param({
-   Name: `
-      123
-   `,
-   Description: `
-      321
-   `,
-})
-
-Returns({
-   Description: `
-      123
-   `,
-})
-
-Implementation(`
-   321
-`)
-
-Example({
-   Description: `
-      123
-   `,
-   Code: `
-      321
-   `,
-})
-
-Tags([
-   '321', '123'
-])
-*/
 function globalFunction_1(param) {
     return param + 1
 }

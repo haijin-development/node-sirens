@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const Protocol = require('../../../../src/O').Protocol
-const MethodCallContraints = require('../../../../src/O').MethodCallContraints
+const MethodCallConstraints = require('../../../../src/O').MethodCallConstraints
 
 describe('When validating parameters', () => {
     describe('with isNull()', () => {
@@ -26,7 +26,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a null value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( null )
@@ -36,7 +36,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non null value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( undefined )
@@ -66,7 +66,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a not null value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -76,7 +76,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a null value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( null )
@@ -106,7 +106,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an undefined value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( undefined )
@@ -116,7 +116,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non undefined value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( null )
@@ -146,7 +146,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a non undefined value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -156,7 +156,7 @@ describe('When validating parameters', () => {
         it('the validation fails with an undefined value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( undefined )
@@ -186,7 +186,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a true value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( true )
@@ -196,7 +196,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a false value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( false )
@@ -206,7 +206,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non boolean value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( undefined )
@@ -236,7 +236,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an integer value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 0 )
@@ -246,7 +246,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a float value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 0.1 )
@@ -256,7 +256,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non number value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( '1' )
@@ -286,7 +286,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an integer value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 0 )
@@ -296,7 +296,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non integer value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1.1 )
@@ -326,7 +326,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a string value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( '1' )
@@ -336,7 +336,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non string value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -366,7 +366,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an array value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( [] )
@@ -376,7 +376,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non array value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -406,7 +406,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an object value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( {} )
@@ -416,7 +416,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non object value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -446,7 +446,7 @@ describe('When validating parameters', () => {
         it('the validation passes with a function value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( function(){} )
@@ -456,7 +456,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non object value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -486,7 +486,7 @@ describe('When validating parameters', () => {
         it('the validation passes with an included value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -496,7 +496,7 @@ describe('When validating parameters', () => {
         it('the validation fails with a non included value', () => {
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 2 )
@@ -531,7 +531,7 @@ describe('When validating parameters', () => {
             const param = classififcationToBehaveAs.new()
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( param )
@@ -542,7 +542,7 @@ describe('When validating parameters', () => {
             const param = 1
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 2 )
@@ -585,7 +585,7 @@ describe('When validating parameters', () => {
             const param = ParamClassification.new()
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( param )
@@ -596,7 +596,7 @@ describe('When validating parameters', () => {
             const param = 1
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 2 )
@@ -630,7 +630,7 @@ describe('When validating parameters', () => {
 
         it('the validation passes with a param that evaluates the given block to true', () => {
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
@@ -641,7 +641,7 @@ describe('When validating parameters', () => {
             const param = 1
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 0 )
@@ -670,7 +670,7 @@ describe('When validating parameters', () => {
 
         it('the validation passes with a null', () => {
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( null )
@@ -679,7 +679,7 @@ describe('When validating parameters', () => {
 
         it('the validation passes with a String', () => {
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( '' )
@@ -690,7 +690,7 @@ describe('When validating parameters', () => {
             const param = 1
 
             const object = AClassification.new()
-                .behaveAs( MethodCallContraints )
+                .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( undefined )

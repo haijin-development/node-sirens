@@ -1,6 +1,6 @@
 const Protocol = require('../classifications/Protocol')
 
-class MethodCallContraintsValidatorProtocol {
+class MethodCallConstraintsValidatorProtocol {
 
 	/*
 		Method(`
@@ -50,4 +50,4 @@ class MethodCallContraintsValidatorProtocol {
 	evaluateParametersValidations() {}
 }
 
-module.exports = Protocol.define(MethodCallContraintsValidatorProtocol)
+module.exports = Protocol.define(MethodCallConstraintsValidatorProtocol)

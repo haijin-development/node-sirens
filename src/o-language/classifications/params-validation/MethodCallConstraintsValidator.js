@@ -1,5 +1,5 @@
 const Classification = require('../Classification')
-const MethodCallContraintsValidatorProtocol = require('../../protocols/MethodCallContraintsValidatorProtocol')
+const MethodCallConstraintsValidatorProtocol = require('../../protocols/MethodCallConstraintsValidatorProtocol')
 const ParamValidator = require('./ParamValidator')
 const ObjectValidator = require('./ObjectValidator')
 
@@ -21,7 +21,7 @@ const ObjectValidator = require('./ObjectValidator')
         'definition', 'implementation'
     ])
 */
-class MethodCallContraintsValidator {
+class MethodCallConstraintsValidator {
     /// Definition
 
     /*
@@ -35,7 +35,7 @@ class MethodCallContraintsValidator {
             'paramsValidators', 'preConditionsClosure', 'postConditionsClosure',
         ]
         this.assumes = []
-        this.implements = [MethodCallContraintsValidatorProtocol]
+        this.implements = [MethodCallConstraintsValidatorProtocol]
     }
 
     /// Initializing
@@ -214,4 +214,4 @@ class MethodCallContraintsValidator {
     }
 }
 
-module.exports = Classification.define(MethodCallContraintsValidator)
+module.exports = Classification.define(MethodCallConstraintsValidator)

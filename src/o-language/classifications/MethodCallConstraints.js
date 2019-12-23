@@ -1,12 +1,12 @@
 const Classification = require('./Classification')
-const MethodCallContraintsValidator = require('./params-validation/MethodCallContraintsValidator')
+const MethodCallConstraintsValidator = require('./params-validation/MethodCallConstraintsValidator')
 
 /*
  Class(`
     This classification implements a behavioural proxy to validate the parameters on each method call of its instances, according
     to the Protocols the instaces implements.
 
-    MethodCallContraints implements just one method,
+    MethodCallConstraints implements just one method,
 
     	beforeMethod(...)
 
@@ -31,7 +31,7 @@ const MethodCallContraintsValidator = require('./params-validation/MethodCallCon
     Code: `
        const Classification = require('sirens/src/O').Classification
        const Protocol = require('sirens/src/O').Protocol
-       const MethodCallContraints = require('sirens/src/O').MethodCallContraints
+       const MethodCallConstraints = require('sirens/src/O').MethodCallConstraints
 
        // Define the CircleProtocol
        class CircleProtocol {
@@ -67,7 +67,7 @@ const MethodCallContraintsValidator = require('./params-validation/MethodCallCon
        const circle = Circle.new()
        // Make this instance to validate the params of the method calls it receives
 
-       circle.behaveAs(MethodCallContraints)
+       circle.behaveAs(MethodCallConstraints)
 
        // Set a valid radius
        circle.setRadius( 10 )
@@ -84,7 +84,7 @@ const MethodCallContraintsValidator = require('./params-validation/MethodCallCon
 
        const Classification = require('sirens/src/O').Classification
        const Protocol = require('sirens/src/O').Protocol
-       const MethodCallContraints = require('sirens/src/O').MethodCallContraints
+       const MethodCallConstraints = require('sirens/src/O').MethodCallConstraints
 
        // Define the CircleProtocol
        class CircleProtocol {
@@ -121,7 +121,7 @@ const MethodCallContraintsValidator = require('./params-validation/MethodCallCon
 
        // Make this instance to validate the params of the method calls it receives.
        // Also try commenting the line below to avoid doing any validation on the circle.
-       circle.behaveAs(MethodCallContraints)
+       circle.behaveAs(MethodCallConstraints)
 
        // Set an valid radius.
        // Also try setting a string, null, a function or any object other than a numeric value.
@@ -132,7 +132,7 @@ const MethodCallContraintsValidator = require('./params-validation/MethodCallCon
     `,
  })
 */
-class MethodCallContraints {
+class MethodCallConstraints {
     /// Definition
 
     /*
@@ -153,7 +153,7 @@ class MethodCallContraints {
      Method(`
         Proxy method that is called before the actual method activation.
 
-        In this proxy method the MethodCallContraints classification does the following:
+        In this proxy method the MethodCallConstraints classification does the following:
 
         	- Asks for all the protocols implemented by this instance
         	- For each of those protocols
@@ -242,10 +242,10 @@ class MethodCallContraints {
             // A protocol declaration should not assume any other classification to not polute
             // the protocol it defines.
             // The protocol may also be used for documentation purposes, to perform other validations
-            // different than the ones this MethodCallContraints does or to do static type inference.
-            // Instead of making the protocol to assume the MethodCallContraintsValidator behaviour
+            // different than the ones this MethodCallConstraints does or to do static type inference.
+            // Instead of making the protocol to assume the MethodCallConstraintsValidator behaviour
             // add it dynamically to this created instance only.
-            protocolInstance.behaveAs( MethodCallContraintsValidator )
+            protocolInstance.behaveAs( MethodCallConstraintsValidator )
 
             protocolInstance.setMethodInfo({
                 protocolName: protocol.getName(),
@@ -270,4 +270,4 @@ class MethodCallContraints {
     }
 }
 
-module.exports = Classification.define(MethodCallContraints)
+module.exports = Classification.define(MethodCallConstraints)

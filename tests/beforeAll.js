@@ -2,14 +2,14 @@ const O = require('../src/O')
 
 const Classification = O.Classification
 const ExtendedClassification = O.ExtendedClassification
-const MethodCallContraints = O.MethodCallContraints
+const MethodCallConstraints = O.MethodCallConstraints
 const Debuggable = O.Debuggable
 
 Classification.behaveAs( ExtendedClassification )
 
 Classification.setExtendedBehaviours([
     Debuggable,
-    MethodCallContraints,
+    MethodCallConstraints,
 ])
 
 require('./specs/o-language/o-language-expectations.js')

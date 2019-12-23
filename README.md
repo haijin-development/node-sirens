@@ -12,7 +12,7 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Update: checkout FingerTips design documentation in [this article](./docs/FingerTips.pdf) (updated in v0.15.0).**
 
-![App browser](./docs/browsing-app.gif)
+![App browser](./docs/browsing-class-documentation.png)
 
 Next release:
 
@@ -134,15 +134,31 @@ and a javascript AppBrowser from the project folder with
 
 **Browsing an object**
 
-![Gtk browser](./docs/browsing-object.gif)
+![Object browser](./docs/browsing-object.png)
 
-**Playground**
+**Browsing prototypes**
 
-![Playground](./docs/playground.gif)
+![Prototype browser](./docs/browsing-prototypes.png)
 
-**Browsing application**
+**Browsing text files**
 
-![App browser](./docs/browsing-app.gif)
+![Text files](./docs/browsing-text-files.png)
+
+**Browsing json files**
+
+![Json browser](./docs/browsing-json-files.png)
+
+**Browsing class methods**
+
+![Class browser](./docs/browsing-methods.png)
+
+**Browsing class documentation**
+
+![Class documentation browser](./docs/browsing-methods.png)
+
+**Browsing method documentation**
+
+![Method documentation browser](./docs/browsing-method-documentation.png)
 
 ### Pre-requisites
 

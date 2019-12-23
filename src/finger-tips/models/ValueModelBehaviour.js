@@ -51,7 +51,7 @@ class ValueModelBehaviour {
             event: 'value-changed',
             to: object,
             doing: eventHandler,
-        })        
+        })  
 
         return this
     }

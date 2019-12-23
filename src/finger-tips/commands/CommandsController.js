@@ -40,6 +40,49 @@ class CommandsController {
         return result
     }
 
+    // Blubbling up
+
+    bubbleUp({
+        commandName: commandName, params: params, startingAtFlow: flow, ifUnhandled: unhandledClosure
+    }) {
+        const bottomFlowId = flow.getIdPath()
+
+        const ids = bottomFlowId.split( '.' )
+
+        let currentFlow = this.mainFlow
+
+        for( const eachId of ids.slice(1) ) {
+            const commandResult = currentFlow.handleBubbledUpCommand({
+                commandName: commandName,
+                params: params,
+                startingAtFlow: flow,
+                ifUnhandled: unhandledClosure,
+            })
+
+            if( commandResult.wasHandled === true ) {
+                return commandResult.result
+            }
+
+            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
+        }
+
+        if( unhandledClosure === undefined ) {
+            unhandledClosure = this.onUnhandledBubbleUpCommand.bind(this)
+        }
+
+        return unhandledClosure({
+            commandName: commandName,
+            params: params,
+            startingAtFlow: flow
+        })
+    }
+
+    onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
+        const id = flow.getIdPath()
+
+        throw new Error(`Unhandled command '${commandName}' bubbled up from flow '${id}'.`)
+    }
+
     // Events
 
     runUpdateFlowPointsIteration() {

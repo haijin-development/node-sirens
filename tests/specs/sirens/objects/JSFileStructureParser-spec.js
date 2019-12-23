@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const samplesFolder = 'tests/samples/js-objects/'
 
@@ -9,7 +10,11 @@ describe('When parsing a Js file', () => {
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents =
 `const path = require('path')
@@ -20,7 +25,7 @@ let n = 1
 n += 1`
 
         expect( fileObjects.length ) .to .equal( 1 )
-        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[0].getContents() ) .to .equal( expectedContents )
     })
 
@@ -29,7 +34,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents1 =
 `function f1() {
@@ -55,7 +64,11 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         const expectedContents1 =
 `class C1 {
@@ -81,11 +94,15 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 
-        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'C1 class' )
     })
@@ -95,13 +112,17 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'C1 class' )
-        expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'plain text' )
     })
 
     it('with classes, functions and text in the middle', () => {
@@ -109,12 +130,16 @@ n += 1`
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        const fileObjects = sourceFile.getFileStructure().getChildObjects()
+        const sourceFileParser = SourceFileStructureParser.new()
+
+        const fileObjects = sourceFileParser
+            .parseSourceFile({ sourceFile: sourceFile })
+            .getChildObjects()
 
         expect( fileObjects.length ) .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
-        expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'Plain text' )
+        expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[2].getFileObjectDescription() ) .to .equal( 'C1 class' )
     })
 })

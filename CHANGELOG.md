@@ -1,5 +1,43 @@
 # Changelog
 
+## v0.15.0
+
+### Sirens
+
+- Rewrote the documentation components and flows and integrated the documentation browsers into the AppBrowser.
+- Added a background color in Playground components to identify in which text fields it is possible to select code and evaluate it on the fly.
+- Added a row expansion of the roots to files and fileobjects trees.
+- Improved the ObjectFile types plugins using dynamic flows.
+- Moved the FileParser to Pluggables.
+- Implemented a json files parser and inspector.
+- Added a FileObject icon.
+- Moved the SourceFileStructureParser out from SourceFile into FileInspectorFlow.
+- Implemented a FileLocation object and moved the FilePosition and SourceFile object there.
+- Removed the ClassDocumentationBrowser and its components.
+- Removed the FileEditor windows.
+- Wrote some tests for Sirens flows.
+
+### FingerTips
+
+- Added the findCommand() method.
+- Reimplemented commands categories with commandsGroup.
+- Implemented adding and removing child flows on the fly.
+- Main Flows trigger a 'main-flow-built' after they are built.
+- Several error fixes related with commands id paths.
+- Implemented mocha expectations for FingerTips flows.
+- Improved how to choose which commands to attach to a FlowPoint.
+- Implemented a bubbleUp commands mechanism from a child flow to its ancestors without breaking the encapsulation of the child flow. This mechanism avoids having to push down application global callbacks and properties through intermediate flows, making refactorings and changes in the flow shape more simple.
+
+### Skins
+
+- Some fixes and improvements on the Views layer. These layer needs a rewrite to ease the layout of contained components.
+
+### O language
+
+- Implemented Classification.defineMethod() method.
+- Renamed ParamsChecker to MethodCallConstraints. These validations need a rewrite from scratch.
+- Implemented mocha custom expectations to test classifications.
+
 ## v0.14.0
 
 ### Sirens

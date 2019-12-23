@@ -13,8 +13,26 @@ class ValueFlow {
 
     /// Initializing
 
-    afterInstantiation() {
-        this.value = null
+    initialize({ id: id, idPath: idPath } = { id: undefined, idPath: undefined }) {
+        this.previousClassificationDo( () => {
+            this.initialize({ id: id, idPath: idPath })
+        })
+
+        this.value = this.defaultValue()
+
+        this.doUpdateValue({ newValue: this.value, oldValue: undefined })
+    }
+
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
+    defaultValue() {
+        return null
     }
 
     /// Converting
@@ -33,25 +51,29 @@ class ValueFlow {
         return this.value
     }
 
-    setValue(newValue) {
+    setValue(newValue, forceUpdate = false) {
         this.evaluateEventHandler({
             event: 'setValue',
-            params: [newValue],
+            params: [newValue, forceUpdate],
             eventHandler: () => {
-                this.updateValue( newValue )
+                this.updateValue( newValue, forceUpdate )
             }            
         })
 
         return this
     }
 
-    updateValue(newValue) {
+    updateValue(newValue, forceUpdate) {
         const oldValue = this.value
 
-        if( oldValue == newValue ) { return }
+        if( forceUpdate !== true && oldValue == newValue ) { return }
 
         this.value = newValue
 
+        this.doUpdateValue({ newValue: newValue, oldValue: oldValue })
+    }
+
+    doUpdateValue({ newValue: newValue, oldValue: oldValue }) {
         if( this.hasWhenFlowValueChangedClosure() ) {
             this.evaluateWhenFlowValueChangedClosure({ newValue: newValue, oldValue: oldValue })
         }

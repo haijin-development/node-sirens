@@ -1,11 +1,13 @@
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const filename = 'tests/samples/functions-sample.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
-
-const methods = sourceFile.getFunctionDefinitions()
+const sourceFileParser = SourceFileStructureParser.new()
+const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
+const methods = jsFile.getMethods()
 
 describe('When using a Function', () => {
     it('gets the methods name', () => {
@@ -26,31 +28,13 @@ describe('When using a Function', () => {
 
         it('gets one named parameter', () => {
             expect( methods[2].getMethodParams() ) .to .eql([
-                [
-                    {
-                        'key': 'name',
-                        'value': 'name',
-                    },
-                    {
-                        'key': 'lastName',
-                        'value': 'lastName',
-                    },
-                ],
+                '{ name: name, lastName: lastName }'
             ])
         })
 
         it('gets a mixed of positional and named parameter', () => {
             expect( methods[3].getMethodParams() ) .to .eql([
-                [
-                    {
-                        'key': 'name',
-                        'value': 'name',
-                    },
-                    {
-                        'key': 'lastName',
-                        'value': 'lastName',
-                    },
-                ],
+                '{ name: name, lastName: lastName }',
                 'closure',
             ])
         })

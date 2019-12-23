@@ -1,7 +1,6 @@
 const Classification = require('../../../O').Classification
 const ClassDocumentation = require('./ClassDocumentation')
 const MethodDocumentation = require('./MethodDocumentation')
-const Pluggables = require('../Pluggables')
 
 class DocumentationReader {
 
@@ -11,6 +10,8 @@ class DocumentationReader {
     }
 
     readClassDocumentationFromString({ string: documentationString, className: className }) {
+        const Pluggables = require('../../Pluggables')
+
         const classDocumentation = ClassDocumentation.new()
 
         classDocumentation.setClassName( className )
@@ -36,7 +37,7 @@ class DocumentationReader {
             } catch( e ) {}
         }
 
-        classDocumentation.setDescription( documentationString )
+        classDocumentation.setDescriptionFrom({ text: documentationString })
 
         return classDocumentation
     }
@@ -45,6 +46,8 @@ class DocumentationReader {
         string: documentationString, methodName: methodName, params: params
     })
     {
+        const Pluggables = require('../../Pluggables')
+
         const methodDocumentation = MethodDocumentation.new()
 
         methodDocumentation.setMethodName( methodName )
@@ -71,7 +74,7 @@ class DocumentationReader {
             } catch( e ) {}
         }
 
-        methodDocumentation.setDescription( documentationString )
+        methodDocumentation.setDescriptionFrom({ text: documentationString })
 
         return methodDocumentation
     }

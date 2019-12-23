@@ -18,36 +18,34 @@ class AppBrowserBody {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        const filesTreeFlow = flow.getFlowPoint({ id: 'filesTree' })
+
         componentsRenderer.render( function(component) {
             this.horizontalSplitter( function() {
 
                 this.container( function() {
 
                     this.styles({
-                        viewAttributes: { splitProportion: 2.0/3.0 },
+                        viewAttributes: { splitProportion: 3.0/4.0 },
                         hasScrollBars: false,
                     })
 
                     this.component(
                         SourceFileEditionComponent.new({
                             model: flow.getFlowPoint({ id: 'selectedFile' }),
-                            openClassDocumentation: component.getProps().openClassDocumentation,
                         })
                     )
 
                 })
 
                 this.treeChoice( function() {
-                    this.model( flow.getFlowPoint({ id: 'filesTree' }) )
+                    this.model( filesTreeFlow )
 
                     this.styles({
-                        viewAttributes: { splitProportion: 1.0/3.0 },
+                        id: 'filesTree',
+                        viewAttributes: { splitProportion: 1.0/4.0 },
                         showHeaders: false,
                         clickableHeaders: false,
-                    })
-
-                    this.handlers({
-                        onAction: component.getProps().openFileEditor,
                     })
 
                     this.column({
@@ -62,22 +60,23 @@ class AppBrowserBody {
                         getTextClosure: function(pathObject) { return pathObject.getBaseName() },
                     })
 
-                    this.popupMenu( function() {
-                        const selectedFilePath = flow.getSelectedFilePath()
-
-                        const enableOpenDocumentation = flow.hasAClassSelected()
-
-                        this.item({
-                            label: 'Browse it on a new window',
-                            enabled: selectedFilePath !== null,
-                            action: component.getProps().openFileEditor,
-                        })
-
-                    })
                 })
 
             })
         })
+
+        this.expandFilesTreeRoot()
+
+        filesTreeFlow.onRootsChanged({
+            with: this,
+            do: this.expandFilesTreeRoot,
+        })
+    }
+
+    expandFilesTreeRoot() {
+        const filesTreeComponent = this.getChildComponent({ id: 'filesTree' })
+
+        filesTreeComponent.expandNodeAtIndex({ indexPath: [0] })
     }
 }
 

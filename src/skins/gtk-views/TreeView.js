@@ -186,16 +186,20 @@ class TreeView {
         return selectionPaths
     }
 
-    setSelectionIndices(indices) {
-        if( indices.length === 0 ) {
+    setSingleSelection({ indexPath: singleIndexPath }) {
+        const multipleIindicesPaths = singleIndexPath.length === 0 ? [] : [singleIndexPath]
+
+        this.setMultipleSelection({ indexPaths: multipleIindicesPaths })
+    }
+
+    setMultipleSelection({ indexPaths: indexPaths }) {
+        if( indexPaths.length === 0 ) {
             this.treeView.getSelection().unselectAll()
             return
         }
 
-        const iterPaths = indices.map( (path) => {
-            const pathString = path.join(':')
-
-            return new Gtk.TreePath.newFromString(pathString)
+        const iterPaths = indexPaths.map( (indexPath) => {
+            return this.treePathFromIndicesArray({ indexPath: indexPath })
         })
 
         iterPaths.forEach( (iterPath, i) => {
@@ -205,6 +209,12 @@ class TreeView {
         })
 
         this.treeView.scrollToCell(iterPaths[0], null, false, 0.0, 0.0)
+    }
+
+    treePathFromIndicesArray({ indexPath: indexPath }) {
+        const pathString = indexPath.join(':')
+
+        return new Gtk.TreePath.newFromString(pathString)
     }
 
     /// Actions
@@ -320,6 +330,12 @@ class TreeView {
         value.setObject(pixbuf)
 
         this.treeStore.setValue(iter, columnIndex, value)
+    }
+
+    expandNodeAtIndex({ indexPath: indexPath }) {
+        const treePath = this.treePathFromIndicesArray({ indexPath: indexPath })
+
+        this.treeView.expandToPath( treePath )
     }
 
     /// Events

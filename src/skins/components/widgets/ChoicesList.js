@@ -54,11 +54,10 @@ class ChoicesList {
     synchronizeViewFromModel() {
         this.duringClassificationDo( UpdatingView, () => {
             const currentSelectionIndex = this.getModel().getSelectionIndex()
-            const currentIndices = currentSelectionIndex == -1 ? [] : [currentSelectionIndex]
 
             this.onItemsListChanged()
 
-            this.getView().setSelectionIndices(currentIndices)
+            this.getView().setSingleSelection({ index: currentSelectionIndex })
         })
     }
 
@@ -128,7 +127,7 @@ class ChoicesList {
         this.duringClassificationDo( UpdatingView, () => {
             const selectionIndex = this.getModel().getSelectionIndex()
 
-            this.getView().setSelectionIndices([selectionIndex])
+            this.getView().setSingleSelection({ index: selectionIndex })
         })
     }
 

@@ -52,12 +52,6 @@ class PlaygroundBrowserMenuBar {
                 this.menuGroup({ label: 'Browsers' }, function() {
 
                     this.item({
-                        label: 'Open a class editor...',
-                        enabled: flow.getCommand({ id: 'openFileEditor' }),
-                        action: component.getProps().openFileEditor,
-                    })
-
-                    this.item({
                         label: 'Open another playground...',
                         enabled: flow.getCommand({ id: 'openPlayground' }),
                         action: component.getProps().openPlayground,

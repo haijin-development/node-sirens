@@ -134,7 +134,7 @@ const CustomizedShape = Classification.define( class {
     firstLevelMethod() {
         return this.previousClassificationDo( () => {
             return this.firstLevelMethod()  
-        })        
+        })  
     }
 })
 

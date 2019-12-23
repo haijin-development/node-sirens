@@ -17,7 +17,7 @@ class AppBrowserToolBar {
     /// Building
 
     renderWith(componentsRenderer) {
-        const model = this.getModel()
+        const flow = this.getModel()
 
         componentsRenderer.render(function (component) {
 
@@ -37,32 +37,7 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens an app folder.',
                     action: component.getProps().openFolder,
-                    enabled: model.getCommand({ id: 'pickAndOpenFolder' }),
-                })
-
-                this.separator()
-
-                this.button({
-                    label: 'Open class documentation browser',
-                    image: {
-                        iconName: GtkIcons.info,
-                        size: GtkIcons.size._24x24,
-                    },
-                    tooltip: 'Opens a class documentation browser.',
-                    action: component.getProps().openClassDocumentation,
-                    enabled: model.getCommand({ id: 'openClassDocumentation' }),
-                })
-
-                this.button({
-                    label: 'Open class editor',
-                    image: {
-                        filename: Resource.image.class,
-                        width: 24,
-                        height: 24,
-                    },
-                    tooltip: 'Opens a class editor.',
-                    action: component.getProps().openFileEditor,
-                    enabled: model.getCommand({ id: 'openFileEditor' }),
+                    enabled: flow.getCommand({ id: 'pickAndOpenFolder' }),
                 })
 
                 this.separator()
@@ -76,7 +51,29 @@ class AppBrowserToolBar {
                     },
                     tooltip: 'Opens a playground.',
                     action: component.getProps().openPlayground,
-                    enabled: model.getCommand({ id: 'openPlayground' }),
+                    enabled: flow.getCommand({ id: 'openPlayground' }),
+                })
+
+                this.separator()
+
+                this.toggleButton({
+                    model: flow.getFlowPoint({ id: 'browsingMode.showsUnformattedComments' }),
+                    label: 'Show unformatted comment.',
+                    image: {
+                        iconName: GtkIcons.revertToSave,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Shows the unformatted comment as it appears in the file.',
+                })
+
+                this.toggleButton({
+                    model: flow.getFlowPoint({ id: 'browsingMode.isEditingDocumentation' }),
+                    label: 'Edition mode.',
+                    image: {
+                        iconName: GtkIcons.edit,
+                        size: GtkIcons.size._24x24,
+                    },
+                    tooltip: 'Turn it on to edit the documentation.',
                 })
 
             })

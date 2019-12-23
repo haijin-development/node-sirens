@@ -3,9 +3,6 @@ const path = require('path')
 const fs = require('fs')
 const splitLines = require('split-lines')
 const StringStream = require('../../O').StringStream
-const SourceFileStructureParser = require('./SourceFileStructureParser')
-const UknownFileStructure = require('./file-structure/UknownFileStructure')
-const FolderObject = require('./file-structure/FolderObject')
 
 /*
  * A source file to query javascript definitions.
@@ -14,7 +11,7 @@ class SourceFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['filepath', 'fileStructure']
+        this.instanceVariables = ['filepath']
     }
 
     /// Initializing
@@ -25,33 +22,9 @@ class SourceFile {
         })
 
         this.filepath = path.resolve(filepath)
-
-        this.doParseContents()
-    }
-
-    doParseContents() {
-        if( this.isFolder() ) {
-            this.fileStructure = FolderObject.new()
-            return
-        }
-
-        try {
-            const fileStructureParser = SourceFileStructureParser.new()
-            this.fileStructure = fileStructureParser.parseStructureIn({ sourceFile: this })
-        } catch(error) {
-            this.fileStructure = null
-        }
-
-        if( this.fileStructure === null ) {
-            this.fileStructure = UknownFileStructure.new()
-        }
     }
 
     /// Accessing
-
-    getFileStructure() {
-        return this.fileStructure 
-    }
 
     getFilePath() {
         return this.filepath
@@ -81,18 +54,6 @@ class SourceFile {
 
     existsFile() {
         return fs.existsSync( this.filepath )
-    }
-
-    getClassDefinitions() {
-        return this.fileStructure.getClasses()
-    }
-
-    getFileObjects() {
-        return this.fileStructure.getChildObjects()
-    }
-
-    getFunctionDefinitions() {
-        return this.fileStructure.getMethods()
     }
 
     getOriginalSourceCode({
@@ -137,10 +98,6 @@ class SourceFile {
     }
 
     /// Actions
-
-    reload() {
-        this.doParseContents()
-    }
 
     saveFileContents(newFileContents) {
         fs.writeFileSync( this.filepath, newFileContents )

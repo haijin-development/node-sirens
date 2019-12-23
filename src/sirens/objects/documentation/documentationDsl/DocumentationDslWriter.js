@@ -73,7 +73,7 @@ class DocumentationDslWriter {
     }
 
     appendClassDocumentationDslTo({ classDocumentation: classDocumentation, stringStream: stringStream }) {
-        const hasDescription = classDocumentation.getDescription().trim() !== ''
+        const hasDescription = classDocumentation.hasDescription()
         const hasImplementationNotes = classDocumentation.getImplementationNotes().length > 0
         const hasExamples = classDocumentation.getExamples().length > 0
         const hasTags = classDocumentation.getTags().length > 0
@@ -86,9 +86,7 @@ class DocumentationDslWriter {
         }
 
         if( hasImplementationNotes ) {
-            if( hasDescription ) {
-                stringStream.cr()
-            }
+            if( hasDescription ) { stringStream.cr() }
 
             stringStream.forEach({
                 in: classDocumentation.getImplementationNotes(),
@@ -136,9 +134,9 @@ class DocumentationDslWriter {
     }
 
     appendMethodDocumentationDslTo({ methodDocumentation: methodDocumentation, stringStream: stringStream }) {
-        const hasDescription = methodDocumentation.getDescription().trim() !== ''
+        const hasDescription = methodDocumentation.hasDescription()
         const hasParams = methodDocumentation.getParams().length > 0
-        const hasReturns = methodDocumentation.getReturns() !== undefined
+        const hasReturns = methodDocumentation.getReturnValue() !== undefined
         const hasImplementationNotes = methodDocumentation.getImplementationNotes().length > 0
         const hasExamples = methodDocumentation.getExamples().length > 0
         const hasTags = methodDocumentation.getTags().length > 0
@@ -174,16 +172,14 @@ class DocumentationDslWriter {
                 stringStream.cr()
             }
 
-            this.appendReturnsTo({
-                returns: methodDocumentation.getReturns(),
+            this.appendReturnValueTo({
+                returnValue: methodDocumentation.getReturnValue(),
                 stringStream: stringStream,
             })
         }
 
         if( hasImplementationNotes ) {
-            if( hasDescription || hasParams ) {
-                stringStream.cr()
-            }
+            if( hasDescription || hasParams ) { stringStream.cr() }
 
             stringStream.forEach({
                 in: methodDocumentation.getImplementationNotes(),
@@ -231,11 +227,13 @@ class DocumentationDslWriter {
     }
 
     appendClassDescriptionTo({ description: description, stringStream: stringStream }) {
+        const descriptionText = description.getText()
+
         stringStream.appendLine({ string: 'Class(`' })
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            stringStream.appendLinesIn({ string: description })
+            stringStream.appendLinesIn({ string: descriptionText })
 
         })
 
@@ -243,11 +241,13 @@ class DocumentationDslWriter {
     }
 
     appendMethodDescriptionTo({ description: description, stringStream: stringStream }) {
+        const descriptionText = description.getText()
+
         stringStream.appendLine({ string: 'Method(`' })
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            stringStream.appendLinesIn({ string: description })
+            stringStream.appendLinesIn({ string: descriptionText })
 
         })
 
@@ -263,7 +263,7 @@ class DocumentationDslWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                stringStream.appendLinesIn({ string: param.Name })
+                stringStream.appendLinesIn({ string: param.getName() })
 
             })
 
@@ -273,7 +273,7 @@ class DocumentationDslWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                stringStream.appendLinesIn({ string: param.Description })
+                stringStream.appendLinesIn({ string: param.getDescription() })
 
             })
 
@@ -283,7 +283,7 @@ class DocumentationDslWriter {
         stringStream.appendLine({ string: '})' })
     }
 
-    appendReturnsTo({ returns: returns, stringStream: stringStream }) {
+    appendReturnValueTo({ returnValue: returnValue, stringStream: stringStream }) {
         stringStream.appendLine({ string: 'Returns({' })
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
@@ -292,7 +292,7 @@ class DocumentationDslWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                stringStream.appendLinesIn({ string: returns.Description })
+                stringStream.appendLinesIn({ string: returnValue.getDescription() })
 
             })
 
@@ -303,11 +303,13 @@ class DocumentationDslWriter {
     }
 
     appendImplementationNoteTo({ implementationNote: implementationNote, stringStream: stringStream }) {
+        const implementationNoteText = implementationNote.getText()
+
         stringStream.appendLine({ string: 'Implementation(`' })
 
         stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-            stringStream.appendLinesIn({ string: implementationNote })
+            stringStream.appendLinesIn({ string: implementationNoteText })
 
         })
 
@@ -323,7 +325,7 @@ class DocumentationDslWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                stringStream.appendLinesIn({ string: example.Description })
+                stringStream.appendLinesIn({ string: example.getDescription() })
 
             })
 
@@ -333,7 +335,7 @@ class DocumentationDslWriter {
 
             stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
 
-                stringStream.appendLinesIn({ string: example.Code })
+                stringStream.appendLinesIn({ string: example.getCode() })
 
             })
 
@@ -354,7 +356,9 @@ class DocumentationDslWriter {
             stringStream.forEach({
                 in: tags,
                 do: (tag) => {
-                    stringStream.append({ string: `'${tag}'` })
+                    const tagLabel = tag.getLabel()
+
+                    stringStream.append({ string: `'${tagLabel}'` })
                 },
                 inBetweenDo: () => {
                     stringStream.append({ string: ', ' })
@@ -363,7 +367,7 @@ class DocumentationDslWriter {
 
         })
 
-        stringStream.appendLine({ string: '])' })        
+        stringStream.appendLine({ string: '])' })  
     }
 }
 

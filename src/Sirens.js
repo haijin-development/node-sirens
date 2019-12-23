@@ -2,6 +2,7 @@ const path = require('path')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const Gdk = nodeGtk.require('Gdk')
+const Preferences = require('./sirens/Preferences')
 
 /*
  Class(`
@@ -12,6 +13,10 @@ const Gdk = nodeGtk.require('Gdk')
 
     The browsers can evaluate code on the fly allowing developers not only to read static documentation
     but also to experiment with different uses of a given object, sending messages to it and inspecting the results.
+
+    Try it: with the mouse select the text below, open a context menu and choose 'Inspect selected code':
+
+          [ 1, 2, 3 ].map( function(i) { return i * 10 })
 
     This Sirens object  has the public methods of the library API.
 
@@ -27,11 +32,7 @@ const Gdk = nodeGtk.require('Gdk')
 
           Sirens.browseObject( anyObject )
 
-    Please see the examples below for more details on how to open the different browsers.
-
-    By the way, if you are reading this documentation from within the Sirens documentation browser 
-    then you can actually evaluate any code in the documentation and examples to see it running,
-    and also to modify it and experiment with it while you are doing it.
+    Please see the examples below for more details about the different browsers available.
  `)
 
  Example({
@@ -64,28 +65,15 @@ const Gdk = nodeGtk.require('Gdk')
 
  Example({
     Description: `
-       Opens a class browser.
+       Opens an application browser.
 
-       A class browser allows to browse all the classes defined in a file.
-
-       The difference with the PrototypesBrowser is that the ClassBrowser parses the javascript source code
-       while the PrototypeBrowser uses the Javascript API to dynamically get an object properties, functions and source code.
-
-       Because the ClassBrowsers has access to the full source code it can, and does, parse and read the documentation
-       of classes and method writen in its comments, and in the future it will also be able to cross references between classes
-       in the same project as long as they are documented.
-
-       Note that if a nmp package makes use of classes then with the ClassBrowser you can browse all of its source code and documentation
-       offline and while you are developing your application or experimenting with that package just by dowloading the package with
-
-             nmp install
-
-       and opening its files with the FileEditor.
+       A application browser allows to browse the files in a folder and for a selected file it shows
+       its source code and for some specific types of files it uses a custom visualization component.
     `,
     Code: `
        const Sirens = require('sirens')
 
-       Sirens.openFileEditor()
+       Sirens.openAppBrowser()
     `,
  })
 */
@@ -174,68 +162,6 @@ class Sirens {
         })
     }
 
-    /*
-     Method(`
-        Opens a class browser.
-
-        It can receive an optional parameter with a filename to open on.
-
-           const Sirens = require('sirens')
-
-           const aFilename = './somefile.js'
-
-           Sirens.openFileEditor({ filename: aFilename })
-     `)
-
-     Param({
-        Name: `
-           filename
-        `,
-        Description: `
-           Optional string.
-
-           The path to a file.
-
-           The class browser will open on given filename.
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a class browser with no file selected.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.openFileEditor()
-        `,
-     })
-
-     Example({
-        Description: `
-           Opens a file browser on the given filename.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           const aFilename = './somefile.js'
-
-           Sirens.openFileEditor({ filename: aFilename })
-        `,
-     })
-
-     Tags([
-        'browsers', 'public'
-     ])
-    */
-    static openFileEditor({ filename: filename } = { filename: undefined }) {
-        this.do( () => {
-            const FileEditor = require('../src/sirens/components/file-editor/FileEditor')
-
-            FileEditor.openOn({ filename: filename })
-        })
-    }
-
 
     /*
      Method(`
@@ -297,7 +223,7 @@ class Sirens {
     */
     static browseClassDocumentation({ jsClass: jsClass, methodName: methodName }) {
         this.do( () => {
-            const ClassDocumentationBrowser = require('../src/sirens/components/class-documentation-browser/ClassDocumentationBrowser')
+            const ClassDocumentationBrowser = require('../src/sirens/components/documentation-browser/ClassDocumentationBrowser')
 
             ClassDocumentationBrowser.openOn({
               jsClass: jsClass,
@@ -365,6 +291,14 @@ class Sirens {
             const PlaygroundBrowser = require('../src/sirens/components/playground-browser/PlaygroundBrowser')
 
             PlaygroundBrowser.openOn({ filename: filename })
+        })
+    }
+
+    static openDocumentationBrowserOn({ object: selectedFileObject }) {
+        this.do( () => {
+            const DocumentationBrowser = require('../src/sirens/components/documentation-browser/DocumentationBrowser')
+
+            DocumentationBrowser.openOn({ object: selectedFileObject })
         })      
     }
 
@@ -512,11 +446,13 @@ class Sirens {
     }
 
     static setGlobalStyles() {
+      if( ! Preferences.cssFile ) { return }
+
       const screen = Gdk.Screen.getDefault()
 
       const cssProvider = new Gtk.CssProvider()
 
-      const cssFilePath = path.resolve( __dirname + '/../resources/css/sirens.css' )
+      const cssFilePath = path.resolve( Preferences.cssFile )
 
       cssProvider.loadFromPath( cssFilePath )
 

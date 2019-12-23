@@ -21,18 +21,41 @@ class AppBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
+        this.setCommandsController( commandsController )
+
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.setCommandsController( commandsController )
-
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
 
             this.whenObjectChanges( ({ newValue: appFolder }) => {
                 const filesTreeRoots = appFolder ? [ appFolder ] : []
 
-                thisFlow.getChildFlow({ id: 'windowTitle' }).setObject( appFolder )
-                thisFlow.getChildFlow({ id: 'filesTree' }).setRoots({ items: filesTreeRoots })
+                thisFlow.getChildFlow({ id: 'windowTitle' })
+                    .setObject( appFolder )
+                thisFlow.getChildFlow({ id: 'filesTree' })
+                    .setRoots({ items: filesTreeRoots })
+            })
+
+            this.value({ id: 'browsingMode' }, function() {
+
+                this.toggle({
+                    id: 'showsUnformattedComments',
+                    whenValueChanges: ({ newValue: boolean }) => {
+                        thisFlow.getChildFlow({ id: 'selectedFile' })
+                            .setShowUnformattedComments({ value: boolean })
+                    },
+                })
+
+                this.toggle({
+                    id: 'isEditingDocumentation',
+                    whenValueChanges: ({ newValue: boolean }) => {
+                        thisFlow.getChildFlow({ id: 'selectedFile' })
+                            .setIsEditingDocumentation({ value: boolean })
+                    },
+                })
+
+                this.toggle({ id: 'browsingDocumentation' })
+
             })
 
             this.bufferedValue({
@@ -57,7 +80,12 @@ class AppBrowserFlow {
                         sourceFile = SourceFile.new({ filepath: selectedFilePath.getPath() })
                     }
 
-                    thisFlow.getChildFlow({ id: 'selectedFile' }).setValue( sourceFile )
+                    thisFlow.getChildFlow({ id: 'selectedFile' })
+                        .setSourceFile({
+                            sourceFile: sourceFile,
+                            isEditingDocumentation: thisFlow.isEditingDocumentation(),
+                            showsUnformattedComments: thisFlow.showsUnformattedComments(),
+                        })
                 },
             })
 
@@ -66,60 +94,68 @@ class AppBrowserFlow {
                 definedWith: FileInspectorFlow.new(),
             })
 
-            thisFlow.evaluateEventHandler({ event: 'appBrowser-flow-built', eventHandler: () => {} })
         })
     }
 
     flowCommands(thisFlow) {
-        this.category( 'application commands', () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.command({
-                id: 'pickAndOpenFolder',
-                whenActioned: function({ parentWindow: parentWindow }) {
-                    const appFolderPath = thisFlow.pickFolder({ parentWindow: parentWindow })
-
-                    if( appFolderPath === null ) { return }
-
-                    const handler = thisFlow.openFolder({ folderPath: appFolderPath })
-                }
-            })
-
-            this.command({
-                id: 'openFileEditor',
-                whenActioned: function() {
-                    const selectedPath = thisFlow.getSelectedFilePath()
-                    Sirens.openFileEditor({ filename: selectedPath })
-                }
-            })
-
-            this.command({
-                id: 'openPlayground',
-                whenActioned: function() {
-                    Sirens.openPlayground()
-                }
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'pickAndOpenFolder',
+                    'openPlayground',
+                    'pickFolder',
+                    'openFolder',
+                    'getSelectedFilePath',
+                    'hasAClassSelected',
+                ],
             })
 
         })
 
+        this.acceptedBubbledUps({
+            commands: [
+                'setIsBrowsingDocumentation',
+                'showsUnformattedComments',
+                'isEditingDocumentation',
+                'isBrowsingDocumentation',
+            ],
+        })
     }
 
-    flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'pickFolder',
-                'openFolder',
-                'getSelectedFilePath',
-                'hasAClassSelected',
-            ]
+    /// Exported commands
 
-            this.defineCommandMethods({ methodNames: methods })
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-commands.pickAndOpenFolder',
+            'flow-commands.openPlayground',
+            'flow-commands.openFolder',
+            'flow-commands.getSelectedFilePath',
+            'flow-commands.hasAClassSelected',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
         })
-
     }
 
     //////////////////////
     /// Flow methods
     //////////////////////
+
+    pickAndOpenFolder({ parentWindow: parentWindow }) {
+        const appFolderPath = this.pickFolder({ parentWindow: parentWindow })
+
+        if( appFolderPath === null ) { return }
+
+        const handler = this.openFolder({ folderPath: appFolderPath })
+    }
+
+    openPlayground() {
+        Sirens.openPlayground()
+    }
 
     pickFolder({ parentWindow: parentWindow }) {
         const chosenFolder = FolderChooser.chooseFolder({
@@ -154,9 +190,33 @@ class AppBrowserFlow {
     }
 
     hasAClassSelected() {
-        const section = this.getChildFlow({ id: 'selectedFile.selectedSectionContents' })
+        const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFile.selectedFileObject' })
 
-        return section.hasAClassSelected()
+        return  selectedFileObjectFlow.respondsTo('hasAClassSelected')
+                && 
+                selectedFileObjectFlow.hasAClassSelected()
+    }
+
+    showsUnformattedComments() {
+        return this.getChildFlow({ id: 'browsingMode.showsUnformattedComments' })
+            .getValue()
+    }
+
+    isEditingDocumentation() {
+        return this.getChildFlow({ id: 'browsingMode.isEditingDocumentation' })
+            .getValue()        
+    }
+
+    // Set to remember that the flow is browsing documentation.
+    // This flow uses this flag for the child flows it creates.
+    setIsBrowsingDocumentation({ value: boolean }) {
+        this.getChildFlow({ id: 'browsingDocumentation' })
+            .setValue( boolean )
+    }
+
+    isBrowsingDocumentation() {
+        return this.getChildFlow({ id: 'browsingDocumentation' })
+            .getValue()        
     }
 }
 

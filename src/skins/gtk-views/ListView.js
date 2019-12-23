@@ -181,7 +181,14 @@ class ListView {
         this.listStore.clear()
     }
 
-    setSelectionIndices(indices) {
+    setSingleSelection({ index: index }) {
+        const setMultipleSelection = index === null || index === undefined || index < 0 ?
+            [] : [index]
+
+        this.setMultipleSelection({ indices: setMultipleSelection })
+    }
+
+    setMultipleSelection({ indices: indices }) {
         if(indices.length === 0) {
             this.treeView.getSelection().unselectAll()
             return

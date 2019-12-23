@@ -32,6 +32,14 @@ class ChoiceFlow {
         this.choices = choices
     }
 
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
     asFlowPoint() {
         const flowPoint = ChoiceFlowPoint.new({ flow: this })
 
@@ -110,7 +118,7 @@ class ChoiceFlow {
         this.addPendingEvent({
             event: 'choices-changed',
             params:  { newList: choices, oldList: oldChoices },
-        })        
+        })  
     }
 
     updateSelection(item) {
@@ -132,7 +140,7 @@ class ChoiceFlow {
         this.addPendingEvent({
             event: 'selection-changed',
             params:  { newValue: item, oldValue: oldSelection },
-        })        
+        })  
     }
 
     // Events

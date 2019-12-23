@@ -4,7 +4,7 @@ class FlowPoint {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['id', 'idPath', '_getFlowPoint', '_getCommand']
+        this.instanceVariables = ['id', 'idPath', '_findFlowPoint', '_getCommand']
     }
 
     /// Initializing
@@ -12,7 +12,7 @@ class FlowPoint {
     initialize({ flow: flow }) {
         this.id = flow.getId()
         this.idPath = flow.getIdPath()
-        this._getFlowPoint = flow.getFlowPoint.bind(flow)
+        this._findFlowPoint = flow.findFlowPoint.bind(flow)
         this._getCommand = flow.getCommand.bind(flow)
 
         flow.attachCommandsToFlowPoint({ flowPoint: this })
@@ -31,11 +31,21 @@ class FlowPoint {
     /// Children
 
     getFlowPoint({ id: flowPointId }) {
-        return this._getFlowPoint({ id: flowPointId })
+        const childFlowPoint = this.findFlowPoint({ id: flowPointId })
+
+        if( ! childFlowPoint ) {
+            throw new Error(`Child flow point with {id: '${flowPointId}'} not found.`)
+        }
+
+        return childFlowPoint
+    }
+
+    findFlowPoint({ id: flowPointId }) {
+        return this._findFlowPoint({ id: flowPointId })
     }
 
     getCommand({ id: commandId }) {
-        return this._getCommand({ id: commandId })        
+        return this._getCommand({ id: commandId })  
     }
 }
 

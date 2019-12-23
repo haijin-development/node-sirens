@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
 const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
-const Pluggables = require('../../objects/Pluggables')
+const Pluggables = require('../../Pluggables')
 
 class ObjectBrowserFlow {
     /// Definition
@@ -14,9 +14,9 @@ class ObjectBrowserFlow {
     /// Building
 
     buildWith(flow) {
-        flow.main({ id: 'objectBrowser' }, function(thisFlow) {
+        flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
+            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 thisFlow.getChildFlow({ id: 'objectProperties' }).setValue( object )
@@ -35,10 +35,7 @@ class ObjectBrowserFlow {
             this.bufferedValue({
                 id: 'playground',
                 convertToValueWith: ({ object: selectedValue }) => {
-                    return thisFlow.executeCommand({
-                        id: 'propertySelectionValueStringFrom',
-                        with: { value: selectedValue },
-                    })
+                    return thisFlow.propertySelectionValueStringFrom({ value: selectedValue })
                 },
             })
 
@@ -46,18 +43,35 @@ class ObjectBrowserFlow {
         })
     }
 
-    /// Flow methods
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
-    flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'browseObject',
-                'propertySelectionValueStringFrom',
-            ]
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'browseObject',
+                    'propertySelectionValueStringFrom',
+                ],
+            })
 
-            this.defineCommandMethods({ methodNames: methods })
         })
     }
+
+    /// Exported commands
+
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-commands.browseObject',
+            'flow-commands.propertySelectionValueStringFrom',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
+    /// Flow methods
 
     browseObject(object) {
         this.setValue( object )

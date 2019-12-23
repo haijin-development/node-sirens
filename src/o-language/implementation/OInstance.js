@@ -788,6 +788,24 @@ class OInstance {
         return this
     }
 
+    getClassificationNamed({ name: classificationName }) {
+      return this.classifications().find( (eachClassification) => {
+        return eachClassification.getName() === classificationName
+      })
+    }
+
+    getClassificationInstanceVariableValue({
+      classification: classification, instanceVariableName: instanceVariableName,
+    }) {
+        const value = MessageDispatcherInstance.classificationGetInstanceVariableValue({
+            object: this,
+            classificationObject: classification,
+            instanceVariableName: instanceVariableName,
+        })
+
+        return value
+    }
+
     /*
      Method(`
         Evaluates the given closure starting the method lookup on the given classification.

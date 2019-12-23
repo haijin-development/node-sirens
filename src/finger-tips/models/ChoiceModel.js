@@ -121,7 +121,7 @@ class ChoiceModel {
 
     dropAllAnnouncementsFor({ listener: listener }) {
         this.listModel.dropAllAnnouncementsFor({ listener: listener })
-        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })        
+        this.selectionModel.dropAllAnnouncementsFor({ listener: listener })  
     }
 }
 

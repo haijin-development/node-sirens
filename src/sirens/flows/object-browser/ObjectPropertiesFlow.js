@@ -25,9 +25,8 @@ class ObjectPropertiesFlow {
     buildWith(flow) {
         const selectionChangedClosure = this.selectionChangedClosure
 
-        flow.main({ id: 'objectProperties' },  function(thisFlow) {
+        flow.main({ id: 'main' },  function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
@@ -51,43 +50,53 @@ class ObjectPropertiesFlow {
         })
     }
 
-    flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-            const methods = [
-                'getMainObject',
-                'getRootProperties',
-                'getSelectedPropertyValue',
-            ]
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
 
-            this.defineCommandMethods({ methodNames: methods })
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'inspectSelectedObject',
+                    'browseSelectedObjectPrototypes',
+                    'getMainObject',
+                    'getRootProperties',
+                    'getSelectedPropertyValue',
+                ],
+            })
+
         })
     }
 
-    flowCommands(thisFlow) {
-        this.category( 'flow commands', () => {
+    /// Exported commands
 
-            this.command({
-                id: 'inspectSelectedObject',
-                whenActioned: function() {
-                    const selectedValue = thisFlow.getSelectedPropertyValue()
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'flow-commands.inspectSelectedObject',
+            'flow-commands.browseSelectedObjectPrototypes',
+            'flow-commands.getMainObject',
+            'flow-commands.getRootProperties',
+            'flow-commands.getSelectedPropertyValue',
+        ]
 
-                    Sirens.browseObject(selectedValue)
-                },
-            })
-
-            this.command({
-                id: 'browseSelectedObjectPrototypes',
-                whenActioned: function() {
-                    const selectedValue = thisFlow.getSelectedPropertyValue()
-
-                    Sirens.browsePrototypes(selectedValue)
-                },
-            })
-
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
         })
     }
 
     /// Querying
+
+    inspectSelectedObject() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browseObject(selectedValue)
+    }
+
+    browseSelectedObjectPrototypes() {
+        const selectedValue = this.getSelectedPropertyValue()
+
+        Sirens.browsePrototypes(selectedValue)
+    }
 
     getMainObject() {
         return this.getValue()

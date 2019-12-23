@@ -43,7 +43,7 @@ describe('When using a StatefulCommand', () => {
             const command = flow.getChildFlow({ id: 'command-1' })
 
             expect( command.getIdPath() ) .to .eql('main.command-1')
-        })        
+        })  
 
         it('raises an error if the command does not exist', () => {
             const flow = Flow.new({ id: 'main' })

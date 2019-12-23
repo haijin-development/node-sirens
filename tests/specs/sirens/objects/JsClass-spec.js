@@ -1,11 +1,13 @@
 const expect = require('chai').expect
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
 
 const filename = 'tests/samples/class-definition.js'
 
 const sourceFile = SourceFile.new({ filepath: filename })
-
-const jsClass = sourceFile.getFileObjects()[1]
+const sourceFileParser = SourceFileStructureParser.new()
+const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
+const jsClass = jsFile.getChildObjectAt({ index: 1 })
 
 describe('When using a JsClass', () => {
     it('gets the class name', () => {
@@ -17,8 +19,10 @@ describe('When using a JsClass', () => {
 
         const expectedComment =
 `
-* A class comment
-* for Sample.
+Method(\`
+    A class comment
+    for Sample.
+\`)
 `
 
         expect( comment.getBodyContents() ) .to .equal( expectedComment )

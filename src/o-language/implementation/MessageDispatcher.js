@@ -252,6 +252,21 @@ class MessageDispatcher {
             })
     }
 
+    classificationGetInstanceVariableValue({
+        object: object, classificationObject: classificationObject, instanceVariableName: instanceVariableName,
+    }) {
+        const classificationInstantiation = this.objectGetClassificationInstantiationOn({
+            object: object,
+            classificationObject: classificationObject,
+        })
+
+        const value = ClassificationInstantiation.getInstanceVariableValue({
+            classificationInstantiation: classificationInstantiation,
+            instanceVariableName: instanceVariableName,
+        })
+
+        return value
+    }
 
     /*
      * Returns the previous classification to the active at the method where this.previousClassification() is called.
@@ -296,6 +311,16 @@ class MessageDispatcher {
         return ClassificationDefinition.hasMethodDefined({
             classificationDefinition: classificationDefinition,
             methodName: methodName,
+        })
+    }
+
+    classificationDefineMethod({
+        classificationDefinition: classificationDefinition, methodName: methodName, methodClosure: methodClosure,
+    }) {
+        return ClassificationDefinition.defineMethod({
+            classificationDefinition: classificationDefinition,
+            methodName: methodName,
+            methodClosure: methodClosure,
         })
     }
 

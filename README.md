@@ -10,9 +10,9 @@ These utilities are written in Node and use GTK3 through [node-gtk](https://www.
 
 **Note: The current version opens with node v12 but it is not stable. See the [pre-requisites](./README.md#pre-requisites) section.**
 
-**Update: checkout FingerTips design documentation in [this article](./docs/FingerTips.pdf).**
+**Update: checkout FingerTips design documentation in [this article](./docs/FingerTips.pdf) (updated in v0.15.0).**
 
-![App browser](./docs/browsing-app.gif)
+![App browser](./docs/browsing-class-documentation.png)
 
 Next release:
 
@@ -77,17 +77,12 @@ const Sirens = require('sirens')
 Sirens.openPlayground()
 ```
 
-A FileEditor lets you inspect the contents of a file and its documentation.
+An AppBrowser lets you browse the files in a selected folder.
 
-Open a file editor with
+In all cases it shows the contents of the file and for some type of files it also opens a specific browser.
 
-```javascript
-const Sirens = require('sirens')
-
-Sirens.openFileEditor()
-```
-
-An AppBrowser lets you browse the files in a selected folder, its classes and their documentation.
+For instance, with .js classes and methods it will open a browser on its documentation.
+With .json files it opens a browser on its structure.
 
 Open an AppBrowser with
 
@@ -139,15 +134,31 @@ and a javascript AppBrowser from the project folder with
 
 **Browsing an object**
 
-![Gtk browser](./docs/browsing-object.gif)
+![Object browser](./docs/browsing-object.png)
 
-**Playground**
+**Browsing prototypes**
 
-![Playground](./docs/playground.gif)
+![Prototype browser](./docs/browsing-prototypes.png)
 
-**Browsing application**
+**Browsing text files**
 
-![App browser](./docs/browsing-app.gif)
+![Text files](./docs/browsing-text-files.png)
+
+**Browsing json files**
+
+![Json browser](./docs/browsing-json-files.png)
+
+**Browsing class methods**
+
+![Class browser](./docs/browsing-methods.png)
+
+**Browsing class documentation**
+
+![Class documentation browser](./docs/browsing-methods.png)
+
+**Browsing method documentation**
+
+![Method documentation browser](./docs/browsing-method-documentation.png)
 
 ### Pre-requisites
 
@@ -167,7 +178,7 @@ However please note that:
 
 - Currently Sirens [public API](https://semver.org/#spec-item-1) is the one declared in this document [Usage](./README.md/#usage) section.
 
-- Sirens is still in [verion 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
+- Sirens is still in [version 0.y.z](https://semver.org/#spec-item-4), meaning that all of its interfaces and protocols, including the public ones, are likely to keep changing quite often.
 
 The [O language](https://github.com/haijin-development/o-language/blob/development/README.md) and the [Skins](./src/skins) GUI builder used by Sirens browsers will be released as standalone libraries once they reach a stable public interface. This will happen once there are several new releases of Sirens with no modifications neither in the o-language nor in Skins public interfaces.
 

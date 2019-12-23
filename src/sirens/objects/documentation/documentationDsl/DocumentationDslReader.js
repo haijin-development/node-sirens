@@ -1,5 +1,5 @@
 const Classification = require('../../../../O').Classification
-const ParseTreeVisitor = require('../../parsers/ParseTreeVisitor')
+const ParseTreeVisitor = require('../../js-parser/ParseTreeVisitor')
 const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
 const SourceCodeText = require('../../SourceCodeText')
 
@@ -32,87 +32,71 @@ class DocumentationDslReader {
         const firstArgument = args[0]
 
         switch( calledFunction ) {
-            case 'Class':
-                this.documentation.setDescription( firstArgument )
+            case 'Class': {
+                this.documentation.setDescriptionFrom({ text: firstArgument })
                 break
-
-            case 'Method':
-                this.documentation.setDescription( firstArgument )
+            }
+            case 'Method': {
+                this.documentation.setDescriptionFrom({ text: firstArgument })
                 break
-
-            case 'Param':
-                const param = {
-                    Name: '',
-                    Protocols: [],
-                    Description: '',
-                }
+            }
+            case 'Param': {
+                let name = ''
+                let description = ''
 
                 firstArgument.forEach( (property) => {
                     if( property.key === 'Name' ) {
-                        param.Name = property.value
-                    }
-
-                    if( property.key === 'Protocols' ) {
-                        param.Protocols = property.value
+                        name = property.value
                     }
 
                     if( property.key === 'Description' ) {
-                        param.Description = property.value
+                        description = property.value
                     }
                 })
 
-                this.documentation.addParam( param )
+                this.documentation.addParamFrom({ name: name, description: description })
                 break
-
-            case 'Returns':
-                const returns = {
-                    Protocols: [],
-                    Description: '',
-                }
+            }
+            case 'Returns': {
+                let returnsDescription = ''
 
                 firstArgument.forEach( (property) => {
-                    if( property.key === 'Protocols' ) {
-                        returns.Protocols = property.value
-                    }
-
                     if( property.key === 'Description' ) {
-                        returns.Description = property.value
+                        returnsDescription = property.value
                     }
                 })
 
-                this.documentation.setReturns( returns )
+                this.documentation.setReturnValueFrom({ description: returnsDescription })
                 break
-
+            }
             case 'Implementation':
-                this.documentation.addImplementationNote( firstArgument )
+                this.documentation.addImplementationNoteFrom({ text: firstArgument })
 
                 break
 
             case 'Tags':
-                this.documentation.setTags( firstArgument )
+                this.documentation.setTagsFrom({ tagsStrings: firstArgument })
 
                 break
 
-            case 'Example':
-                const example = {
-                    Description: '',
-                    Code: '',
-                }
+            case 'Example': {
+                let description = ''
+                let code = ''
 
                 firstArgument.forEach( (property) => {
                     if( property.key === 'Description' ) {
-                        example.Description = property.value
+                        description = property.value
                     }
 
                     if( property.key === 'Code' ) {
-                        example.Code = property.value
+                        code = property.value
                     }
                 })
 
-                this.documentation.addExample( example )
+                this.documentation.addExampleFrom({ description: description, code: code })
 
                 break
-
+            }
             default:
                 throw new Error(`Unsupported documentation of: '${calledFunction}'.`)
                 break

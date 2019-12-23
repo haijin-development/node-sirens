@@ -10,7 +10,9 @@ class TextView {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['scrolledWindow', 'onTextChanged', 'textView']
+        this.instanceVariables = [
+            'scrolledWindow', 'onTextChanged', 'textView', 'hasScrollBars',
+        ]
         this.assumes = [GtkWidget]
         this.implements = [GtkWidgetProtocol_Implementation]
     }
@@ -22,6 +24,7 @@ class TextView {
             return this.acceptedStyles().concat([
                 'wrapMode',
                 'hScroll', 'vScroll',
+                'editable'
             ])
         })
     }
@@ -56,10 +59,15 @@ class TextView {
         })
     }
 
+    setEditable(boolean) {
+        this.textView.setEditable( boolean )
+    }
+
     /// Initializing
 
-    initialize({ onTextChanged: onTextChangedBlock }) {
+    initialize({ onTextChanged: onTextChangedBlock, hasScrollBars: hasScrollBars }) {
         this.onTextChanged = onTextChangedBlock
+        this.hasScrollBars = hasScrollBars === false ? false : true
 
         this.previousClassificationDo( () => {
             this.initialize()
@@ -67,22 +75,26 @@ class TextView {
     }
 
     initializeHandles() {
-        this.scrolledWindow = new Gtk.ScrolledWindow()
+        if( this.hasScrollBars === false ) {
+            this.textView = new Gtk.TextView()            
+        } else {
+            this.scrolledWindow = new Gtk.ScrolledWindow()
 
-        this.scrolledWindow.setPolicy(
-            GtkScroll.auto,
-            GtkScroll.auto
-        )
+            this.scrolledWindow.setPolicy(
+                GtkScroll.auto,
+                GtkScroll.auto
+            )
 
-        this.textView = new Gtk.TextView()
+            this.textView = new Gtk.TextView()
 
-        this.scrolledWindow.add( this.textView )
+            this.scrolledWindow.add( this.textView )
+        }
     }
 
     /// Accessing
 
     getMainHandle() {
-        return this.scrolledWindow
+        return this.scrolledWindow ? this.scrolledWindow : this.textView
     }
 
     clearText() {
@@ -146,7 +158,7 @@ class TextView {
     handlePopulateMenuPopup(menuHandle) {
         const menu = MenuView.newFromGtkWidget(menuHandle)
 
-        this.populatePopupMenu({ menu: menu })        
+        this.populatePopupMenu({ menu: menu })  
     }
 
     /// Styles

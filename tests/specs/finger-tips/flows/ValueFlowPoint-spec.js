@@ -14,7 +14,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const flowPoint = flow.getFlowPoint({ id: 'flow-1'})
+            const flowPoint = flow.findFlowPoint({ id: 'flow-1'})
 
             expect( flowPoint.getId() ) .to .eql('flow-1')
         })
@@ -26,7 +26,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const flowPoint = flow.getFlowPoint({ id: 'flow-1'})
+            const flowPoint = flow.findFlowPoint({ id: 'flow-1'})
 
             expect( flowPoint.getIdPath() ) .to .eql('main.flow-1')
         })
@@ -42,33 +42,17 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             expect( childFlowPoint.getId() ) .to .eql('flow-1')
         })
 
-        it('raises an error if the child does not exist', () => {
+        it('returns null if the child does not exist', () => {
             const flow = Flow.new({ id: 'main' })
 
-            expect( () => {
+            const childFlow = flow.findFlowPoint({ id: 'flow-1' })
 
-                flow.getFlowPoint({ id: 'flow-1' })
-
-            }).to .throw("Child flow with {id: 'flow-1'} not found.")
-        })
-
-        it('raises an error when trying to get a child flow', () => {
-            const flow = Flow.new({ id: 'main' })
-
-            flow.build( function({ rootFlow: flow }) {
-                this.value({ id: 'flow-1' })
-            })
-
-            expect( () => {
-
-                flow.asFlowPoint().getChildFlow({ id: 'flow-1' })
-
-            }) .to .throw('Method not found .asFlowPoint()')
+            expect( childFlow ) .to .be .null
         })
     })
 
@@ -81,7 +65,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             expect( childFlowPoint.getValue() ) .to .be .null
         })
@@ -93,7 +77,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             childFlowPoint.setValue( 1 )
 
@@ -112,7 +96,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             let valueChange = false
 
@@ -135,7 +119,7 @@ describe('When using a ValueFlowPoint', () => {
                 this.value({ id: 'flow-1' })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             let valueChange = false
 

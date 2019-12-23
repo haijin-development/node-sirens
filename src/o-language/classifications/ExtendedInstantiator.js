@@ -13,7 +13,7 @@ const Classification = require('./Classification')
     ExtendedInstantiator is a regular classification that can be added to any Classification object to make all objects instantiated by
     that classification to adquire the specified extended behaviour.
 
-    With the use of this ExtendedInstantiator it is possible and simple to add behaviours like Debuggable or ParamsChecker to
+    With the use of this ExtendedInstantiator it is possible and simple to add behaviours like Debuggable or MethodCallConstraints to
     all the objects instantiated by a particular classification, and its entirely up to the top level application to configure which behaviours 
     should be added.
 
@@ -29,7 +29,7 @@ const Classification = require('./Classification')
 
        const Classification = require('sirens/src/O').Classification
        const ExtendedInstantiator = require('sirens/src/O').ExtendedInstantiator
-       const ParamsChecker = require('sirens/src/O').ParamsChecker
+       const MethodCallConstraints = require('sirens/src/O').MethodCallConstraints
        const Debuggable = require('sirens/src/O').Debuggable
 
        class Circle {
@@ -57,7 +57,7 @@ const Classification = require('./Classification')
 
        Circle.setExtendedBehaviours([
        	Debuggable,
-       	ParamsChecker,
+       	MethodCallConstraints,
        ])
 
        const circle = Circle.new({ radius: 10 })

@@ -33,6 +33,14 @@ class TreeChoiceFlow {
         this.getChildrenClosure = getChildrenClosure
     }
 
+    releaseFlow() {
+        this.dropAllAnnouncementsForAllListeners()
+
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+    }
+
     asFlowPoint() {
         const flowPoint = TreeChoiceFlowPoint.new({ flow: this })
 
@@ -87,13 +95,41 @@ class TreeChoiceFlow {
     getSelectionValue() {
         const selectionPath = this.getSelection()
 
-        if( selectionPath === null || selectionPath.length === 0 ) {
+        if( ! selectionPath || selectionPath.length === 0 ) {
             return null
         }
 
         const lastItemInSelectionPath = selectionPath[ selectionPath.length - 1 ]
 
         return lastItemInSelectionPath
+    }
+
+    getSelectionIndexPath() {
+        let nodes = this.roots
+
+        const indexPath = this.getSelection().map( (node) => {
+            const index = nodes.indexOf( node )
+
+            nodes = this.getChildrenClosure( node )
+
+            return index
+        })
+
+        return indexPath
+    }
+
+    setSelectionIndexPath({ indexPath: indexPath }) {
+        let nodes = this.roots
+
+        const selectionPath = indexPath.map( (index) => {
+            const node = nodes[ index ]
+
+            nodes = this.getChildrenClosure( node )
+
+            return node
+        })
+
+        return this.setSelection( selectionPath )
     }
 
     updateRoots({ items: items }) {
@@ -115,7 +151,7 @@ class TreeChoiceFlow {
         this.addPendingEvent({
             event: 'roots-changed',
             params:  { newRoots: items, oldRoots: oldRoots },
-        })        
+        })  
     }
 
     updateSelection(itemPath) {
@@ -137,7 +173,7 @@ class TreeChoiceFlow {
         this.addPendingEvent({
             event: 'selection-changed',
             params:  { newValue: itemPath, oldValue: oldSelection },
-        })        
+        })  
     }
 
     // Events

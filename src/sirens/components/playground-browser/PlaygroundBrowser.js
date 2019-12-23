@@ -58,7 +58,6 @@ class PlaygroundBrowser {
                             openFile: () => { flow.pickAndOpenFile({ parentWindowd: component }) },
                             openFileInNewWindow: () => { flow.pickAndOpenFileInNewWindow({ parentWindowd: component }) },
                             saveFile: () => { flow.saveFile() },
-                            openFileEditor: () => { flow.openFileEditor() },
                             openPlayground: () => { flow.openPlayground() },
                         })
                     )

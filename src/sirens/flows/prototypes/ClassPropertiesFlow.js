@@ -51,22 +51,25 @@ class ClassPropertiesFlow {
 
     }
 
-    flowCommands(classProperties) {
-        this.category( 'flow commands', () => {
+    flowCommands(thisFlow) {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'browseSelectedProperty',
                 enabledIf: function() {
-                    return classProperties.getSelectedPropertyValue() != undefined
+                    return thisFlow.getSelectedPropertyValue() != undefined
                 },
-                whenActioned: function() {
-                    const selectedPropertyValue = classProperties.getSelectedPropertyValue()
-                    Sirens.browseObject( selectedPropertyValue )
-                }
+                whenActioned: thisFlow.browseSelectedProperty.bind(thisFlow),
             })
         })
     }
 
     /// Actions
+
+    browseSelectedProperty() {
+        const selectedPropertyValue = this.getSelectedPropertyValue()
+
+        Sirens.browseObject( selectedPropertyValue )        
+    }
 
     setBrowsedObject(object) {
         this.setValue( object )

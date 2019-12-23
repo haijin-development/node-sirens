@@ -16,30 +16,47 @@ Assertion.addMethod('withId', function (flowId) {
 // haveAsCommandsControllerA
 /////////////////////////////
 
-Assertion.addMethod('haveAsCommandsControllerA', function (expectedClassification) {
+Assertion.addProperty('withCommandsController', function () {
     var flow = this._obj;
 
     const commandsController = flow.getCommandsController()
 
+    return new Assertion( commandsController )
+})
+
+Assertion.addProperty('commandsController', function () {
+    return this.withCommandsController
+})
+
+Assertion.addMethod('aBubbledCommandsCountOf', function (expectedCount) {
+    var commandsController = this._obj;
+
+    const receivedCommandsCount = commandsController.receivedCommandsCount()
+
     this.assert(
-        commandsController.isBehavingAs( expectedClassification ),
-        "expected #{this} to behave as #{exp}",
-        "expected #{this} to not behave as #{exp}",
-        expectedClassification,
-        commandsController
+        receivedCommandsCount === expectedCount,
+        'Expected the commandsController to have received #{exp} commands bubbled, but received #{act}',
+        'Expected the commandsController to not have received #{exp} commands bubbled, but received #{act}',
     )
 })
 
-Assertion.addMethod('haveAsCommandsControllerAn', function (expectedClassification) {
-    new Assertion( this._obj ).to .haveAsCommandsControllerA(expectedClassification)
-})
+Assertion.addMethod('aBubbledCommandAt', function (commandIndex) {
+    var commandsController = this._obj;
 
+    const index = commandIndex.index
+
+    const receivedCommand = commandsController.receivedCommandAt({ index: index })
+
+    return new Assertion( receivedCommand )
+})
 
 /////////////////////////////
 // haveFlowChildren
 /////////////////////////////
 
-Assertion.addMethod('haveChildFlows', function (expectedChildFlowIds) {
+Assertion.addMethod('haveChildFlows', function (
+    expectedChildFlowIds, failedExpectationMessage, negFailedExpectationMessage
+) {
     var flow = this._obj;
 
     const ids = []
@@ -51,82 +68,75 @@ Assertion.addMethod('haveChildFlows', function (expectedChildFlowIds) {
      expectedChildFlowIds.sort()
      ids.sort()
 
-    new Assertion( ids, 'expected flow #{this} to have children with ids #{exp}' ).to
-        .have .members(expectedChildFlowIds)
+    if( failedExpectationMessage === undefined ) {
+        failedExpectationMessage = 'expected flow #{this} to have children with ids #{exp}, got #{act}'
+    }
+
+    if( negFailedExpectationMessage === undefined ) {
+        negFailedExpectationMessage = 'expected flow #{this} to not have children with ids #{exp}, got #{act}'
+    }
+
+    new Assertion( ids, failedExpectationMessage, negFailedExpectationMessage ).to
+        .eql(expectedChildFlowIds)
 })
 
-
-Assertion.addMethod('toHaveValue', function (expectedValue) {
+Assertion.addProperty('withValue', function (expectedValue) {
     var flow = this._obj;
 
     const value = flow.getValue()
 
-    new Assertion( value ) .to .equal( expectedValue )
+    return new Assertion( value )
 })
 
-Assertion.addMethod('toHaveAValueSuchThat', function (valueExpectationClosure) {
-    var flow = this._obj;
-
-    const value = flow.getValue()
-
-    valueExpectationClosure( value )
+Assertion.addMethod('haveValue', function (expectedValue) {
+    this.withValue .to .equal( expectedValue )
 })
 
-Assertion.addMethod('toHaveObject', function (expectedObject) {
+Assertion.addProperty('withObject', function (expectedValue) {
     var flow = this._obj;
 
     const object = flow.getObject()
 
-    new Assertion( object ) .to .equal( expectedObject )
-})
-
-Assertion.addMethod('toHaveAnObjectSuchThat', function (valueExpectationClosure) {
-    var flow = this._obj;
-
-    const object = flow.getObject()
-
-    valueExpectationClosure( object )
+    return new Assertion( object )
 })
 
 
-Assertion.addMethod('toHaveChoices', function (expectedChoices) {
+Assertion.addMethod('haveObject', function (expectedObject) {
+    this.withObject .to .equal( expectedObject )
+})
+
+Assertion.addProperty('withChoices', function () {
     var flow = this._obj;
 
     const choices = flow.getChoices()
 
-    new Assertion( choices ) .to .eql( expectedChoices )
+    return new Assertion( choices )
 })
 
-Assertion.addMethod('toHaveRoots', function (expectedRoots) {
+Assertion.addMethod('haveChoices', function (expectedChoices) {
+    this.withChoices .to .eql( expectedChoices )
+})
+
+Assertion.addProperty('withRoots', function () {
     var flow = this._obj;
 
     const roots = flow.getRoots()
 
-    new Assertion( roots ) .to .eql( expectedRoots )
+    return new Assertion( roots )
 })
 
-Assertion.addMethod('toHaveRootsSuchThat', function (eachRootExpectationClosure) {
-    var flow = this._obj;
-
-    const roots = flow.getRoots()
-
-    for( const root of roots ) {
-        eachRootExpectationClosure( root )
-    }
+Assertion.addMethod('haveRoots', function (expectedRoots) {
+    this.withRoots .to .eql( expectedRoots )
 })
 
-Assertion.addMethod('toHaveSelection', function (expectedSelection) {
+Assertion.addProperty('withSelection', function () {
     var flow = this._obj;
 
     const selection = flow.getSelection()
 
-    new Assertion( selection ) .to .eql( expectedSelection )
+    return new Assertion( selection )
 })
 
-Assertion.addMethod('toHaveASelectionSuchThat', function (selectionExpectationClosure) {
-    var flow = this._obj;
-
-    const selection = flow.getSelection()
-
-    selectionExpectationClosure( selection )
+Assertion.addMethod('haveSelection', function (expectedSelection) {
+    this.withSelection .to .eql( expectedSelection )
 })

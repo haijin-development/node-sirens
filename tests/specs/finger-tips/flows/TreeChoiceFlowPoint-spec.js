@@ -18,7 +18,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
                 })
             })
 
-            const flowPoint = flow.getFlowPoint({ id: 'flow-1'})
+            const flowPoint = flow.findFlowPoint({ id: 'flow-1'})
 
             expect( flowPoint.getId() ) .to .eql('flow-1')
         })
@@ -33,7 +33,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
                 })
             })
 
-            const flowPoint = flow.getFlowPoint({ id: 'flow-1'})
+            const flowPoint = flow.findFlowPoint({ id: 'flow-1'})
 
             expect( flowPoint.getIdPath() ) .to .eql('main.flow-1')
         })
@@ -52,19 +52,18 @@ describe('When using a TreeChoiceFlowPoint', () => {
                 })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             expect( childFlowPoint.getId() ) .to .eql('flow-1')
         })
 
-        it('raises an error if the child does not exist', () => {
+        it('returns null if the child does not exist', () => {
             const flow = Flow.new({ id: 'main' })
 
-            expect( () => {
 
-                flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
-            }).to .throw("Child flow with {id: 'flow-1'} not found.")
+            expect( childFlowPoint ) .to .be .null
         })
 
         it('raises an error when trying to get a child flow', () => {
@@ -97,7 +96,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
                 })
             })
 
-            const childFlowPoint = flow.getFlowPoint({ id: 'flow-1' })
+            const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             expect( childFlowPoint.isBehavingAs(TreeChoiceModel) ) .to .be .true
         })

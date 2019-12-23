@@ -33,7 +33,7 @@ class CustomCommandsController {
                 event: eventName,
                 params: params,
                 eventHandler: eventHandler,
-            })                    
+            })  
         })
 
         this.events.push({
@@ -48,7 +48,7 @@ class CustomCommandsController {
             return this.doExecuteCommand({
                 command: command,
                 params: params,
-            })                    
+            })  
         })
 
         this.commands.push({

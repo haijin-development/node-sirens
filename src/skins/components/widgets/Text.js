@@ -26,6 +26,7 @@ class Text {
     createView() {
         return TextView.new({
             onTextChanged: (text) => { this.onTextChanged(text) },
+            hasScrollBars: this.getProps().hasScrollBars,
         })
     }
 

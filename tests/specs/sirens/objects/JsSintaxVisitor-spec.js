@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const parser = require('esprima')
-const JsSintaxVisitor = require('../../../../src/sirens/objects/parsers/JsSintaxVisitor')
+const JsSintaxVisitor = require('../../../../src/sirens/objects/js-parser/JsSintaxVisitor')
 const jsSintax = require('../../../samples/JsSintax')
 
 describe('When visiting js parse tree it visits the expression', () => {

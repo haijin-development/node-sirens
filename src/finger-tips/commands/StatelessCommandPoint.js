@@ -30,7 +30,7 @@ class StatelessCommandPoint {
 
     /// Executing
 
-    execute({ with: param, withAll: params }) {
+    execute({ with: param, withAll: params } = {}) {
         if( param !== undefined ) { params: [ param ] }
 
         const result = this._commandExecute({ params: params })

@@ -1,0 +1,21 @@
+.title-1 {
+	font-size: large;
+	font-weight: bold;
+}
+
+.title-2 {
+	font-size: medium;
+	font-weight: bold;
+}
+
+.documentation-index {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	min-height: 8em;
+}
+
+.documentation-section {
+	min-height: 10em;
+}
+
+@import url('./tag-labels.css');

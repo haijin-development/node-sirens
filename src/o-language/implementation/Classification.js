@@ -940,6 +940,16 @@ class Classification {
         })
     }
 
+    defineMethod({ methodName: methodName, methodClosure: methodClosure }) {
+        const classificationDefinition = this.classificationDefinition
+
+        return MessageDispatcherInstance.classificationDefineMethod({
+            classificationDefinition: classificationDefinition,
+            methodName: methodName,
+            methodClosure: methodClosure,
+        })
+    }
+
     /*
  Method(`
     Returns the names of the instances variables in this classification.

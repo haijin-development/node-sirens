@@ -1,4 +1,11 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
+const DocumentationDescription = require('./sections/DocumentationDescription')
+const DocumentationImplementationNote = require('./sections/DocumentationImplementationNote')
+const DocumentationExample = require('./sections/DocumentationExample')
+const DocumentationParam = require('./sections/DocumentationParam')
+const DocumentationReturnValue = require('./sections/DocumentationReturnValue')
+const DocumentationTag = require('./sections/DocumentationTag')
 
 class MethodDocumentation {
     /// Definition
@@ -9,12 +16,12 @@ class MethodDocumentation {
             'methodParams',
             'description',
             'params',
-            'returns',
+            'returnValue',
             'implementationNotes',
             'tags',
             'examples'
         ]
-        this.assumes = []
+        this.implements = [MethodDocumentationProtocol]
     }
 
     /// Initializing
@@ -22,12 +29,18 @@ class MethodDocumentation {
     initialize() {
         this.methodName = ''
         this.methodParams = []
-        this.description = ''
+        this.description = DocumentationDescription.new()
         this.params = []
-        this.returns = undefined
+        this.returnValue = DocumentationReturnValue.new()
         this.implementationNotes = []
         this.tags = []
         this.examples = []
+    }
+
+    /// Asking
+
+    hasDescription() {
+        return this.description.isNotBlank()
     }
 
     /// Accessing
@@ -48,7 +61,6 @@ class MethodDocumentation {
         this.methodParams = methodParams
     }
 
-
     getDescription() {
         return this.description
     }
@@ -57,51 +69,76 @@ class MethodDocumentation {
         this.description = description
     }
 
+    setDescriptionFrom({ text: text }) {
+        this.setDescription( DocumentationDescription.new({ text: text }) )
+    }
 
     getParams() {
         return this.params
-    }
-
-    setParams(params) {
-        this.params = params
     }
 
     addParam(param) {
         this.params.push( param )
     }
 
-    updateParamAt({ index: index, param: param }) {
-        this.params[index] = param
+    addParamFrom({ name: name, description: description }) {
+        const param = DocumentationParam.new({
+            name: name,
+            description: description,
+        })
+
+        this.addParam( param )
     }
 
-    deleteParamAt({ index: index }) {
-        this.params.splice( index, 1 )
+    updateParamFrom({ param: param, name: name, description: description }) {
+        param.setName( name )
+        param.setDescription( description )
     }
 
-
-    getReturns() {
-        return this.returns
+    deleteParam({ param: param }) {
+        this.params = this.params.filter( (each) => {
+            return each !== param
+        })
     }
 
-    setReturns(returns) {
-        this.returns = returns
+    getReturnValue() {
+        return this.returnValue
     }
 
+    setReturnValue(returnValue) {
+        this.returnValue = returnValue
+    }
+
+    setReturnValueFrom({ description: description }) {
+        const returnValue = DocumentationReturnValue.new({ description: description })
+
+        this.setReturnValue( returnValue )
+    }
 
     getImplementationNotes() {
         return this.implementationNotes
+    }
+
+    addImplementationNoteFrom({ text: implementationNoteText }) {
+        const implementationNote = DocumentationImplementationNote.new({
+                text: implementationNoteText
+            })
+
+        this.addImplementationNote( implementationNote )
     }
 
     addImplementationNote(implementationNote) {
         this.implementationNotes.push( implementationNote )
     }
 
-    updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText }) {
-        this.implementationNotes[index] = implementationNoteText
+    updateImplementationNote({ implementationNote: implementationNote, implementationNoteText: implementationNoteText }) {
+        implementationNote.setText( implementationNoteText )
     }
 
-    deleteImplementationNoteAt({ index: index }) {
-        this.implementationNotes.splice( index, 1 )
+    deleteImplementationNote({ implementationNote: implementationNote }) {
+        this.implementationNotes = this.implementationNotes.filter( (each) => {
+            return each !== implementationNote
+        })
     }
 
     getTags() {
@@ -110,6 +147,20 @@ class MethodDocumentation {
 
     setTags(tags) {
         this.tags = tags
+    }
+
+    setTagsFrom({ tagsStrings: tagsStrings }) {
+        const tags = tagsStrings.map( (eachString) => {
+            return DocumentationTag.new({ label: eachString })
+        })
+
+        this.setTags( tags )
+    }
+
+    getTagLabels() {
+        return this.getTags().map( (eachTag) => {
+            return eachTag.getLabel()
+        })
     }
 
     getExamples() {
@@ -122,22 +173,27 @@ class MethodDocumentation {
         this.examples.push( example )
     }
 
-    updateExampleAt({ index: index, example: example }) {
-        this.examples[index] = example
+    addExampleFrom({ description: description, code: code }) {
+        const newExample = DocumentationExample.new({
+            description: description,
+            code: code,
+        })
+
+        this.addExample( newExample )
     }
 
-    deleteExampleAt({ index: index }) {
+    updateExample({ example: example, description: description, code: code }) {
+        example.setDescription( description )
+        example.setCode( code )
+    }
+
+    deleteExample({ index: index }) {
         this.examples.splice( index, 1 )
     }
 
-    getTagsSortedAlphabetically({ reversed: reversed } = { reversed: false }) {
-        const tags = this.getTags().slice()
-
-        if( reversed === true ) {
-            return tags.sort( (item1, item2) => { return item1 < item2 })
-        } else {
-            return tags.sort()
-        }
+    getSignatureString() {
+        const paramsSignature = this.methodParams.join( ', ' )
+        return `${ this.methodName }(${paramsSignature})`
     }
 
     /// Generating method comment
@@ -155,8 +211,82 @@ class MethodDocumentation {
     }
 }
 
-MethodDocumentation = Classification.define(MethodDocumentation)
+class MethodDocumentationProtocol {
+    setDescription(description) {
+        this.param(description) .behavesAs(DocumentationDescription)
+    }
+
+    setDescriptionFrom({ text: text }) {
+        this.param(text) .isString()
+    }
+
+    setTags( tags ) {
+        tags.forEach( (tag) => {
+            this.param(tag) .behavesAs(DocumentationTag)
+        })
+    }
+
+    setTagsFrom({ tagsStrings: tagsStrings }) {
+        this.param(tagsStrings) .isArray()
+
+        tagsStrings.forEach( (tag) => {
+            this.param(tag) .isString()
+        })
+    }
+
+    addImplementationNote(implementationNote) {
+        this.param(implementationNote) .behavesAs(DocumentationImplementationNote)
+    }
+
+    addImplementationNoteFrom({ text: implementationNoteText }) {
+        this.param(implementationNoteText) .isString()
+    }
+
+    updateImplementationNote({ implementationNote: implementationNote, implementationNoteText: implementationNoteText }) {
+        this.param(implementationNote) .behavesAs(DocumentationImplementationNote)
+        this.param(implementationNoteText) .isString()
+    }
+
+    addExample(example) {
+        this.param(example) .behavesAs(DocumentationExample)
+    }
+
+    addExampleFrom({ description: description, code: code }) {
+        this.param(description) .isString()
+        this.param(code) .isString()
+    }
+
+    updateExample({ example: example, description: description, code: code }) {
+        this.param(example) .behavesAs(DocumentationExample)
+        this.param(description) .isString()
+        this.param(code) .isString()
+    }
+
+    addParam(param) {
+        this.param(param) .behavesAs(DocumentationParam)
+    }
+
+    addParamFrom({ name: name, description: description }) {
+        this.param(name) .isString()
+        this.param(description) .isString()
+    }
+
+    updateParamFrom({ param: param, name: name, description: description }) {
+        this.param(param) .behavesAs(DocumentationParam)
+        this.param(name) .isString()
+        this.param(description) .isString()
+    }
+
+    setReturnValue(returnValue) {
+        this.param(returnValue) .behavesAs(DocumentationReturnValue)
+    }
+
+    setReturnValueFrom({ description: description }) {
+        this.param(description) .isString()
+    }
+}
+
+MethodDocumentationProtocol = Protocol.define(MethodDocumentationProtocol)
 
 
-
-module.exports = MethodDocumentation
+module.exports = Classification.define(MethodDocumentation)

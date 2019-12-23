@@ -143,7 +143,7 @@ class VirtualTreeModel {
             event: 'roots-changed',
             to: object,
             doing: closure,
-        })        
+        })  
 
         return this
     }

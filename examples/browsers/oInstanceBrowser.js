@@ -1,13 +1,13 @@
 const Classification = require('../../src/O').Classification
 const ExtendedClassification = require('../../src/O').ExtendedClassification
-const ParamsChecker = require('../../src/O').ParamsChecker
+const MethodCallConstraints = require('../../src/O').MethodCallConstraints
 const Debuggable = require('../../src/O').Debuggable
 
 Classification.behaveAs( ExtendedClassification )
 
 Classification.setExtendedBehaviours([
     Debuggable,
-    ParamsChecker,
+    MethodCallConstraints,
 ])
 
 const Sirens = require('../../src/Sirens')

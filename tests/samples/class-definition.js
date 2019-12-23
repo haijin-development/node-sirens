@@ -5,16 +5,22 @@ const path = require('path')
 */
 
 /*
- * A class comment
- * for Sample.
+    Method(`
+        A class comment
+        for Sample.
+    `)
  */
 class Sample {
-    /* 13 123 123 */
     getName() {
         return this.name
     }
 }
 
+/*
+    Method(`
+        A method description.
+    `)
+*/
 function modFunction() {
     return 'A standalone function'
 }

@@ -169,7 +169,7 @@ class ListModel {
             event: 'list-changed',
             to: object,
             doing: closure,
-        })        
+        })  
 
         return this
     }
@@ -179,7 +179,7 @@ class ListModel {
             event: 'items-added',
             to: object,
             doing: closure,
-        })        
+        })  
 
         return this
     }
@@ -189,7 +189,7 @@ class ListModel {
             event: 'items-updated',
             to: object,
             doing: closure,
-        })        
+        })  
 
         return this
     }
@@ -199,7 +199,7 @@ class ListModel {
             event: 'items-removed',
             to: object,
             doing: closure,
-        })        
+        })  
 
         return this
     }

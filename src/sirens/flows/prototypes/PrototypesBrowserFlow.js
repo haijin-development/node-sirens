@@ -16,11 +16,10 @@ class PrototypesBrowserFlow {
     buildWith(flow) {
         const commandsController = ApplicationCommandsController.new({ mainFlow: this })
 
+        this.setCommandsController( commandsController )
+
         flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
-            this.setCommandsController( commandsController )
-
-            this.defineFlowCommandsIn({ method: thisFlow.flowMethods })
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
             this.whenObjectChanges( ({ newValue: object }) => {
@@ -42,49 +41,38 @@ class PrototypesBrowserFlow {
                 id: 'playground',
                 definedWith: ClassPropertiesFlow.new(),
             })
-
-            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
-        })
-
-    }
-
-    flowMethods(thisFlow) {
-        this.category( 'flow methods', () => {
-
-            this.command({
-                id: 'setBrowsedObject',
-                whenActioned: thisFlow.setBrowsedObject.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'getSelectedClass',
-                whenActioned: thisFlow.getSelectedClass.bind(thisFlow),
-            })
-
-            this.command({
-                id: 'hasAClassSelected',
-                whenActioned: thisFlow.hasAClassSelected.bind(thisFlow),
-            })
-
         })
     }
 
     flowCommands(thisFlow) {
-        this.category( 'flow commands', () => {
+        this.commandsGroup({ id: 'flow-commands' }, function() {
             this.command({
                 id: 'browseSelectedPrototype',
                 enabledIf: function() {
                     return thisFlow.hasAClassSelected()
                 },
-                whenActioned: function() {
-                    const selectedClass = thisFlow.getSelectedClass()
-                    Sirens.browsePrototypes(selectedClass)
-                }
+                whenActioned: thisFlow.browseSelectedPrototype.bind(thisFlow)
             })
+
+            this.statelessCommands({
+                definedInFlow: thisFlow,
+                withMethods: [
+                    'setBrowsedObject',
+                    'getSelectedClass',
+                    'hasAClassSelected',
+                ],
+            })
+
         })
     }
 
     /// Actions
+
+    browseSelectedPrototype() {
+        const selectedClass = this.getSelectedClass()
+
+        Sirens.browsePrototypes(selectedClass)
+    }
 
     hasAClassSelected() {
         return this.getSelectedClass() ? true : false

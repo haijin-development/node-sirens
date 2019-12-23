@@ -3,7 +3,7 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditTagsDialog {
     /// Definition
@@ -19,7 +19,9 @@ class EditTagsDialog {
     renderWith(componentsRenderer) {
         const methodDocumentation = this.getProps().methodDocumentation
 
-        const tags = this.getProps().tags
+        const tags = this.getProps().tags.map( (tag) => {
+            return tag.getLabel()
+        })
 
         let tagsString = tags.join( ', ' )
 
@@ -37,7 +39,7 @@ class EditTagsDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.tag,
                             title:  `${methodDocumentation.getSignatureString()}`,
                             subtitle: `You are editing the tags of the method ${methodDocumentation.getMethodName()}.`,

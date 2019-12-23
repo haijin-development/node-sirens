@@ -36,30 +36,35 @@ describe('When using an JsClassDocumentationFlow', () => {
 
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
+            'main.documentationIndex',
+            'main.documentationIndex.selectedDocumentationItem',
+
             'main.flow-commands',
             'main.flow-commands.getClassDocumentation',
+            'main.flow-commands.getClassName',
+            'main.flow-commands.getClassDescription',
+            'main.flow-commands.getClassImplementationNotes',
+            'main.flow-commands.getClassExamples',
+            'main.flow-commands.getSelectedDocumentationItemFlowPoint',
+            'main.flow-commands.getSelectedDocumentationItemComponent',
             'main.flow-commands.isInEditionMode',
             'main.flow-commands.editClassDocumentationDescription',
             'main.flow-commands.createClassDocumentationImplementationNote',
             'main.flow-commands.editClassDocumentationImplementationNote',
+            'main.flow-commands.deleteClassDocumentationImplementationNote',
             'main.flow-commands.createClassDocumentationExample',
             'main.flow-commands.editClassDocumentationExample',
+            'main.flow-commands.deleteClassDocumentationExample',
         ])
     })
 
     describe('when setting a classDocumentation', () => {
         beforeEach( () => {
-            flow.setValue({
-                classDocumentation: classDocumentation,
-                isEditingDocumentation: true,
-            })
+            flow.setValue(classDocumentation)
         })
 
         it('the main flow has the jsClass', () => {
-            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect( value.classDocumentation ) .to .equal( classDocumentation )
-                expect( value.isEditingDocumentation ) .to .be .true
-            })
+            expect( flow ) .withId( 'main' ) .to .haveValue( classDocumentation )
         })
     })
 
@@ -69,25 +74,25 @@ describe('When using an JsClassDocumentationFlow', () => {
         beforeEach( () => {
             flowPoint = flow.asFlowPoint()
 
-            flow.setValue({
-                classDocumentation: classDocumentation,
-                isEditingDocumentation: false,
-            })
+            flow.setValue( classDocumentation )
         })
 
         it('.getClassDocumentation() returns the current method documentation', () => {
             expect( flowPoint.getClassDocumentation() ) .to .equal( classDocumentation )
         })
 
-        it('.isInEditionMode() returns if the flow is in edition mode', () => {
-            expect( flowPoint.isInEditionMode() ) .to .equal( false )
+        it('.isInEditionMode() bubbles the command up', () => {
+            flowPoint.isInEditionMode()
 
-            flow.setValue({
-                classDocumentation: classDocumentation,
-                isEditingDocumentation: true,
-            })
+            expect( flow ) .commandsController .to .haveReceived
+                .aBubbledCommandsCountOf(1)
 
-            expect( flowPoint.isInEditionMode() ) .to .equal( true )
+            expect( flow.getCommandsController() ) .to
+                .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
+                    expect(command.commandName) .to .eql('isEditingDocumentation')
+                    expect(command.params) .to .eql([])
+                    expect(command.startingAtFlow.getIdPath()) .to .eql('main')
+                })
         })
     })
 
@@ -95,11 +100,7 @@ describe('When using an JsClassDocumentationFlow', () => {
         beforeEach( () => {
             const classInspectorFlow = createClassInspectorFlow()
 
-            classInspectorFlow.setInspectedObject({
-                object: jsClass,
-                isEditingDocumentation: false,
-                showsUnformattedComments: false,
-            })
+            classInspectorFlow.setInspectedObject( jsClass )
 
             flow = classInspectorFlow.getChildFlow({ id: 'classDocumentation' })
         })
@@ -130,8 +131,11 @@ describe('When using an JsClassDocumentationFlow', () => {
                 implementationNoteText: 'New implementation note.',
             })
 
+            const implementationNote = flow.getClassImplementationNotes()[0]
+
             flow.updateClassDocumentationImplementationNote({
-                atIndex: 0, implementationNoteText: 'Updated implementation note.',
+                implementationNote: implementationNote,
+                implementationNoteText: 'Updated implementation note.',
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -141,10 +145,8 @@ describe('When using an JsClassDocumentationFlow', () => {
 
         it('addclassDocumentationExample writes the method comment to the file', () => {
             flow.addClassDocumentationExample({
-                example: {
-                    Description: 'An example',
-                    Code: '// A code'
-                },
+                description: 'An example',
+                code: '// A code'
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -154,18 +156,16 @@ describe('When using an JsClassDocumentationFlow', () => {
 
         it('updateclassDocumentationExample writes the method comment to the file', () => {
             flow.addClassDocumentationExample({
-                example: {
-                    Description: 'An example',
-                    Code: '// A code'
-                },
+                description: 'An example',
+                code: '// A code'
             })
 
+            const example = flow.getClassExamples()[0]
+
             flow.updateClassDocumentationExample({
-                atIndex: 0,
-                example: {
-                    Description: 'An updated example',
-                    Code: '// An updated code'
-                },
+                example: example,
+                description: 'An updated example',
+                code: '// An updated code'
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {

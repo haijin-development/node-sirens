@@ -55,7 +55,6 @@ class PlaygroundBrowserFlow {
                 withMethods: [
                     'openFile',
                     'openFileInNewWindow',
-                    'openFileEditor',
                     'openPlayground',
                     'pickAndOpenFile',
                     'pickAndOpenFileInNewWindow',
@@ -82,7 +81,6 @@ class PlaygroundBrowserFlow {
             'flow-commands.openFile',
             'flow-commands.openFileInNewWindow',
             'flow-commands.saveFile',
-            'flow-commands.openFileEditor',
             'flow-commands.openPlayground',
             'flow-commands.pickAndOpenFile',
             'flow-commands.pickAndOpenFileInNewWindow',
@@ -124,10 +122,6 @@ class PlaygroundBrowserFlow {
         const fileNewContents = this.getChildFlow({ id: 'fileContents' }).getValue()
 
         sourceFile.saveFileContents( fileNewContents )
-    }
-
-    openFileEditor() {
-        Sirens.openFileEditor()
     }
 
     openPlayground() {

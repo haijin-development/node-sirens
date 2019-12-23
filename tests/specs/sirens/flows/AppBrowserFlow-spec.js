@@ -34,7 +34,6 @@ describe('When using an AppBrowserFlow', () => {
             'main.filesTree',
 
             'main.flow-commands.pickAndOpenFolder',
-            'main.flow-commands.openFileEditor',
             'main.flow-commands.openPlayground',
 
             'main.flow-commands',
@@ -168,8 +167,8 @@ describe('When using an AppBrowserFlow', () => {
 
             filesTree.setSelection([ rootFolder, file ])
 
-            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (value) => {
-                expect( value.sourceFile.getFilePath() ) .to
+            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
+                expect( sourceFile.getFilePath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition.js$/)
             })
         })
@@ -198,8 +197,8 @@ describe('When using an AppBrowserFlow', () => {
 
             filesTree.setSelection(null)
 
-            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (value) => {
-                expect( value.sourceFile ) .to .be .null
+            expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
+                expect( sourceFile ) .to .be .null
             })
         })
     })
@@ -215,34 +214,6 @@ describe('When using an AppBrowserFlow', () => {
 
         it('sets the :showsUnformattedComments mode to the selectedFile flow', () => {
             flow.showsUnformattedComments({ value: false })
-
-            flow.getChildFlow({ id: 'showsUnformattedComments' })
-                .setValue( ! flow.showsUnformattedComments() )
-
-            expect(flow) .withId( 'main.selectedFile' ) .suchThat( (childFlow) => {
-                expect( childFlow.showsUnformattedComments() ) .to .be .true
-            })
-        })
-    })
-
-    describe('when switching the documentation edition mode to :isEditingDocumentation', () => {
-        let flow
-
-        beforeEach( () => {
-            flow = AppBrowserFlow.new()
-
-            flow.openFolder({ folderPath: folder })
-        })
-
-        it('sets the :isEditingDocumentation mode to the selectedFile flow', () => {
-            flow.isEditingDocumentation({ value: false })
-
-            flow.getChildFlow({ id: 'isEditingDocumentation' })
-                .setValue( ! flow.isEditingDocumentation() )
-
-            expect(flow) .withId( 'main.selectedFile' ) .suchThat( (childFlow) => {
-                expect( childFlow.isEditingDocumentation() ) .to .be .true
-            })
         })
     })
 

@@ -4,7 +4,7 @@ const ComponentProtocol_Implementation = require('../../../../Skins').ComponentP
 
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditClassCommentDialog {
     /// Definition
@@ -36,7 +36,7 @@ class EditClassCommentDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.class,
                             title:  `${className}`,
                             subtitle: `You are editing the comment of the class ${className}.`,

@@ -21,11 +21,7 @@ class JsClassInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue: {
-                object: jsClass,
-                showsUnformattedComments: showsUnformattedComments,
-                isEditingDocumentation: isEditingDocumentation,
-            }}) => {
+            this.whenObjectChanges( ({ newValue: jsClass }) => {
 
                 if( ! jsClass ) {
                     thisFlow.getChildFlow({ id: 'classDocumentation' }).setValue( null )
@@ -38,10 +34,7 @@ class JsClassInspectorFlow {
                 const methods = jsClass.getMethods()
 
                 thisFlow.getChildFlow({ id: 'classDocumentation' })
-                    .setValue({
-                        classDocumentation: classDocumentation,
-                        isEditingDocumentation: isEditingDocumentation,
-                    })
+                    .setValue( classDocumentation )
 
                 thisFlow.getChildFlow({ id: 'classMethods' })
                     .setChoices( methods )
@@ -127,7 +120,7 @@ class JsClassInspectorFlow {
     }
 
     getClass() {
-        return this.getValue().object
+        return this.getValue()
     }
 
     getMethodUnformattedComment() {

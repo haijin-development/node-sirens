@@ -4,7 +4,7 @@ const ComponentProtocol_Implementation = require('../../../../Skins').ComponentP
 
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditClassDescriptionDialog {
     /// Definition
@@ -22,11 +22,12 @@ class EditClassDescriptionDialog {
 
         const className = classDocumentation.getClassName()
 
-        let description = classDocumentation.getDescription()
+        const description = classDocumentation.getDescription()
 
-        if( description.trim() === '' ) {
-            description = 'This class has no documentation yet.'
-        }
+        const descriptionText = description.isNotBlank() ?
+            description.getText()
+            :
+            'This class has no documentation yet.'
 
         componentsRenderer.render( function(component) {
 
@@ -42,7 +43,7 @@ class EditClassDescriptionDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.class,
                             title:  `${className}`,
                             subtitle: `You are editing the description of the class ${className}.`,
@@ -53,7 +54,7 @@ class EditClassDescriptionDialog {
 
                     this.text({
                         id: 'classDescription',
-                        text: description,
+                        text: descriptionText,
                         viewAttributes: {
                             stackSize: 'filled',
                         },

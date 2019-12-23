@@ -37,7 +37,7 @@ class DocumentationReader {
             } catch( e ) {}
         }
 
-        classDocumentation.setDescription( documentationString )
+        classDocumentation.setDescriptionFrom({ text: documentationString })
 
         return classDocumentation
     }
@@ -74,7 +74,7 @@ class DocumentationReader {
             } catch( e ) {}
         }
 
-        methodDocumentation.setDescription( documentationString )
+        methodDocumentation.setDescriptionFrom({ text: documentationString })
 
         return methodDocumentation
     }

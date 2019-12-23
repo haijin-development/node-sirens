@@ -1,8 +1,8 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ClassDocumentation = require('../documentation-browser/formatted-documentation/ClassDocumentation')
-const ClassUnformattedComment = require('../documentation-browser/unformatted-documentation/ClassUnformattedComment')
+const ClassDocumentationComponent = require('../documentation-browser/classes/ClassDocumentationComponent')
+const ClassUnformattedCommentComponent = require('../documentation-browser/classes/ClassUnformattedCommentComponent')
 const Resource = require('../../objects/Resource')
 
 class JsClassInspectorComponent {
@@ -75,11 +75,9 @@ class JsClassInspectorComponent {
                     const documentationComponent = 
                         component.createDocumentationComponent()
 
-                    this.container( function() {
-                        this.component(
-                            documentationComponent
-                        )
-                    })
+                    this.component(
+                        documentationComponent
+                    )
                 })
 
             })
@@ -100,15 +98,16 @@ class JsClassInspectorComponent {
         const showsUnformattedComments = flow.showsUnformattedComments()
 
         if( showsUnformattedComments ) {
-            return ClassUnformattedComment.new({
+            return ClassUnformattedCommentComponent.new({
                 model: flow,
             })
         } else {
             const classDocumentationFlow =
                 flow.getFlowPoint({ id: 'classDocumentation' })
 
-            return ClassDocumentation.new({
+            return ClassDocumentationComponent.new({
                 model: classDocumentationFlow,
+                window: this.getProps().window,
             })
         }
     }

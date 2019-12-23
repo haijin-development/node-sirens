@@ -194,7 +194,7 @@ describe('When using a ValueFlow', () => {
                 {
                     flowId: 'main',
                     event: 'setValue',
-                    params: [1],
+                    params: [1, false],
                 }
             ])
             expect( flow.getValue() ).to .eql(1)
@@ -219,7 +219,7 @@ describe('When using a ValueFlow', () => {
                 {
                     flowId: 'main.flow-1',
                     event: 'setValue',
-                    params: [1],
+                    params: [1, false],
                 }
             ])
             expect( childFlowPoint.getValue() ).to .eql(1)

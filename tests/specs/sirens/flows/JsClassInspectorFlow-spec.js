@@ -55,32 +55,35 @@ describe('When using an JsClassInspectorFlow', () => {
             'main.flow-commands.setIsBrowsingDocumentation',
 
             'main.classDocumentation',
+            'main.classDocumentation.documentationIndex',
+            'main.classDocumentation.documentationIndex.selectedDocumentationItem',
+
             'main.classDocumentation.flow-commands',
             'main.classDocumentation.flow-commands.getClassDocumentation',
+            'main.classDocumentation.flow-commands.getClassName',
+            'main.classDocumentation.flow-commands.getClassDescription',
+            'main.classDocumentation.flow-commands.getClassImplementationNotes',
+            'main.classDocumentation.flow-commands.getClassExamples',
+            'main.classDocumentation.flow-commands.getSelectedDocumentationItemFlowPoint',
+            'main.classDocumentation.flow-commands.getSelectedDocumentationItemComponent',
             'main.classDocumentation.flow-commands.isInEditionMode',
             'main.classDocumentation.flow-commands.createClassDocumentationExample',
             'main.classDocumentation.flow-commands.createClassDocumentationImplementationNote',
             'main.classDocumentation.flow-commands.editClassDocumentationDescription',
             'main.classDocumentation.flow-commands.editClassDocumentationExample',
             'main.classDocumentation.flow-commands.editClassDocumentationImplementationNote',
+            'main.classDocumentation.flow-commands.deleteClassDocumentationImplementationNote',
+            'main.classDocumentation.flow-commands.deleteClassDocumentationExample',
         ])
     })
 
     describe('when setting a jsClass', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsClass,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsClass )
         })
 
         it('the main flow has the jsClass', () => {
-            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect(value.object) .to .equal( jsClass )
-                expect(value.showsUnformattedComments) .to .equal( false )
-                expect(value.isEditingDocumentation) .to .equal( false )
-            })
+            expect( flow ) .withId( 'main' ) .to .haveValue( jsClass )
         })
 
         it('sets the class methods', () => {
@@ -98,25 +101,17 @@ describe('When using an JsClassInspectorFlow', () => {
         })
 
         it('sets the class documentation', () => {
-            expect( flow ) .withId( 'main.classDocumentation' ) .withValue .suchThat( (value) => {
-                expect( value.classDocumentation ) .to .behaveAs( 'ClassDocumentation' )                
+            expect( flow ) .withId( 'main.classDocumentation' ) .withValue .suchThat( (classDocumentation) => {
+                expect( classDocumentation ) .to .behaveAs( 'ClassDocumentation' )                
             })
         })
     })
 
     describe('when setting a null jsClass', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsClass,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsClass )
 
-            flow.setInspectedObject({
-                object: null,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( null )
         })
 
         it('sets the class methods to []', () => {
@@ -141,11 +136,7 @@ describe('When using an JsClassInspectorFlow', () => {
 
     describe('when updating the documentation', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsClass,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsClass )
         })
 
         it('writes the updated comment to the file', () => {

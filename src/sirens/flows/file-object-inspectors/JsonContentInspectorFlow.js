@@ -17,11 +17,7 @@ class JsonContentInspectorFlow {
 
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.whenObjectChanges( ({ newValue: {
-                object: jsonContent,
-                showsUnformattedComments: showsUnformattedComments,
-                isEditingDocumentation: isEditingDocumentation,
-            }}) => {
+            this.whenObjectChanges( ({ newValue: jsonContent }) => {
 
                 if( ! jsonContent ) {
                     this.getChildFlow({ id: 'jsonProperties' }).setRoots({ items: [] })

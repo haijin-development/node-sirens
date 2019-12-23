@@ -3,7 +3,7 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 
 class EditExampleDialog {
@@ -36,7 +36,7 @@ class EditExampleDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.haiku,
                             title:  component.getProps().title,
                             subtitle: component.getProps().subtitle,
@@ -49,14 +49,14 @@ class EditExampleDialog {
 
                         this.text({
                             id: 'exampleDescription',
-                            text: example.Description,
+                            text: example.getDescription(),
                             viewAttributes: { splitProportion: 1.0/4.0 },
                         })
 
                         this.component(
                             PlaygroundComponent.new({
                                 id: 'playground',
-                                text: "\n" + example.Code + "\n",
+                                text: "\n" + example.getCode() + "\n",
                                 hScroll: 'never',
                                 vScroll: 'auto',
                                 viewAttributes: {
@@ -114,14 +114,10 @@ class EditExampleDialog {
             id: 'playground'
         })
 
-        const example = {
-            Description: exampleDescriptionComponent.getModel().getValue(),
-            Code: exampleCodeComponent.getText(),
-        }
+        const description = exampleDescriptionComponent.getModel().getValue()
+        const code = exampleCodeComponent.getText()
 
-        this.getProps().onUpdateExample({
-            example: example,
-        })
+        this.getProps().onUpdateExample({ description: description, code: code })
     }
 }
 

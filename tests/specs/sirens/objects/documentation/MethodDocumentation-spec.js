@@ -16,8 +16,10 @@ describe('When using a MethodDocumentation', () => {
 
             const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the FileEditor example.'
+            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+                expect( description.getText() ) .to .equal(
+                    'A regular js class to use in the FileEditor example.'
+                )
             )
         })
 
@@ -30,8 +32,10 @@ describe('When using a MethodDocumentation', () => {
 
             const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the FileEditor example.'
+            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+                expect( description.getText() ) .to .equal(
+                    'A regular js class to use in the FileEditor example.'
+                )
             )
         })
 
@@ -57,10 +61,9 @@ describe('When using a MethodDocumentation', () => {
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .eql({
-                index: 0,
-                Description: 'An example',
-                Code: "const o = 'abc'\n\no.toUpperCase()",
+            expect( examples[0] ) .to .beSuchThat( (example) => {
+                expect( example.getDescription() ) .to .equal( 'An example' )
+                expect( example.getCode() ) .to .equal( "const o = 'abc'\n\no.toUpperCase()" )
             })
         })
 
@@ -76,10 +79,9 @@ describe('When using a MethodDocumentation', () => {
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .eql({
-                index: 0,
-                Description: 'An example',
-                Code: "const o = 'abc'",
+            expect( examples[0] ) .to .beSuchThat( (example) => {
+                expect( example.getDescription() ) .to .equal( 'An example' )
+                expect( example.getCode() ) .to .equal( "const o = 'abc'" )
             })
         })
 
@@ -93,7 +95,6 @@ describe('When using a MethodDocumentation', () => {
     `
     Param({
         Name: "streetName",
-        Protocols: [ String ],
         Description: "The name of the street. Does not include the street number.",
     })
     `
@@ -101,10 +102,9 @@ describe('When using a MethodDocumentation', () => {
 
             const params = methodDocumentation.getParams()
 
-            expect( params[0] ) .to .eql({
-                Name: 'streetName',
-                Protocols: [ 'String' ],
-                Description: 'The name of the street. Does not include the street number.',
+            expect( params[0] ) .to .beSuchThat( (param) => {
+                expect( param.getName() ) .to .eql( 'streetName' )
+                expect( param.getDescription() ) .to .eql( 'The name of the street. Does not include the street number.' )
             })
         })
 
@@ -123,12 +123,11 @@ describe('When using a MethodDocumentation', () => {
     `
             const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
 
-            const returns = methodDocumentation.getReturns()
+            const returns = methodDocumentation.getReturnValue()
 
-            expect( returns ) .to .eql({
-                Protocols: [ 'String' ],
-                Description: 'The name of the street. Does not include the street number.',
-            })
+            expect( returns.getDescription() ) .to .eql(
+                'The name of the street. Does not include the street number.',
+            )
         })
 
     })
@@ -147,9 +146,10 @@ describe('When using a MethodDocumentation', () => {
 
             const implementationNotes = methodDocumentation.getImplementationNotes()
 
-            expect( implementationNotes ) .to .eql([
-                'Assumes that the street is not empty.',
-            ])
+            expect( implementationNotes ) .eachSuchThat( (implementationNote) => {
+                expect( implementationNote.getText() ) .to
+                    .eql( 'Assumes that the street is not empty.' )
+            })
         })
 
     })
@@ -170,20 +170,13 @@ describe('When using a MethodDocumentation', () => {
 
             const tags = methodDocumentation.getTags()
 
-            expect( tags ) .to .eql([
-                'getters', 'accessors'
-            ])
-        })
+            expect( tags[0] ) .suchThat( (tag) => {
+                expect( tag.getLabel() ) .to .eql( 'getters' )
+            })
 
-        it('gets the method tags sorted alphabetically in reversed order', () => {
-
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
-
-            const tags = methodDocumentation.getTagsSortedAlphabetically({ reversed: true })
-
-            expect( tags ) .to .eql([
-                'getters', 'accessors'
-            ])
+            expect( tags[1] ) .suchThat( (tag) => {
+                expect( tag.getLabel() ) .to .eql( 'accessors' )
+            })
         })
 
     })

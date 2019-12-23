@@ -9,58 +9,36 @@ class ObjectInspectorFlow {
         this.assumes = [ValueFlow]
     }
 
-    defaultValue() {
-        return {
-            object: null,
-            isEditingDocumentation: false,
-            showsUnformattedComments: false,
-        }
-    }
-
     /// Building
 
-    setInspectedObject(...params) {
-        this.setValue(...params)
-    }
-
-    setshowUnformattedComments({ value: boolean }) {
-        this.getValue().showsUnformattedComments = boolean
-    }
-
-    setIsEditingDocumentation({ value: boolean }) {
-        this.getValue().isEditingDocumentation = boolean
+    setInspectedObject(object, forceUpdate) {
+        this.setValue( object, forceUpdate )
     }
 
     isInEditionMode() {
-        return this.getValue().isEditingDocumentation
+        return this.bubbleUp({
+            command: 'isEditingDocumentation'
+        })
     }
 
     showsUnformattedComments() {
-        return this.getValue().showsUnformattedComments
+        return this.bubbleUp({
+            command: 'showsUnformattedComments'
+        })
     }
 
-    setshowUnformattedComments({ value: boolean }) {
-        const value = this.getValue()
+    reloadObject() {
+        const object = this.getValue()
 
-        value.showsUnformattedComments = boolean
+        this.setInspectedObject( object, true )
+    }
 
-        this.setInspectedObject({
-            object: value.object,
-            showsUnformattedComments: value.showsUnformattedComments,
-            isEditingDocumentation: value.isEditingDocumentation,
-        })
+    setShowUnformattedComments({ value: boolean }) {
+        this.reloadObject()
     }
 
     setIsEditingDocumentation({ value: boolean }) {
-        const value = this.getValue()
-
-        value.isEditingDocumentation = boolean
-
-        this.setInspectedObject({
-            object: value.object,
-            showsUnformattedComments: value.showsUnformattedComments,
-            isEditingDocumentation: value.isEditingDocumentation,
-        })
+        this.reloadObject()
     }
 
     reloadSourceFile() {

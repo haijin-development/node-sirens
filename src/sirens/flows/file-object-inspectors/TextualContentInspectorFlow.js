@@ -11,13 +11,6 @@ class TextualContentInspectorFlow {
         this.assumes = [ValueFlow]
     }
 
-    defaultValue() {
-        return {
-            object: null,
-            isEditingDocumentation: false,
-        }
-    }
-
     /// Building
 
     buildWith(flow) {
@@ -25,9 +18,7 @@ class TextualContentInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue: {
-                object: textualContent, isEditingDocumentation: isEditingDocumentation
-            }}) => {
+            this.whenObjectChanges( ({ newValue: textualContent }) => {
 
                 const text = textualContent ? textualContent : ''
 
@@ -80,21 +71,15 @@ class TextualContentInspectorFlow {
     }
 
     getText() {
-        const textualContent = this.getValue().object
+        const textualContent = this.getValue()
 
         return textualContent ? textualContent.getContents() : ''
     }
 
-    setshowUnformattedComments({ value: boolean }) {
-        this.getValue().showsUnformattedComments = boolean
+    setShowUnformattedComments({ value: boolean }) {
     }
 
     setIsEditingDocumentation({ value: boolean }) {
-        this.getValue().isEditingDocumentation = boolean
-    }
-
-    setIsEditingDocumentation({ value: boolean }) {
-        this.getValue().isEditingDocumentation = boolean
     }
 }
 

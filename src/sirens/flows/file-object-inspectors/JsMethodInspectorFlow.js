@@ -19,17 +19,13 @@ class JsMethodInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue: {
-                object: jsMethod,
-                showsUnformattedComments: showsUnformattedComments,
-                isEditingDocumentation: isEditingDocumentation,
-            }}) => {
+            this.whenObjectChanges( ({ newValue: jsMethod }) => {
 
                 if( ! jsMethod ) {
                     this.getChildFlow({ id: 'methodSourceCode' }).setValue( '' )
 
                     this.getChildFlow({ id: 'methodDocumentation' })
-                        .setValue({ methodDocumentation: null, isEditingDocumentation: isEditingDocumentation })
+                        .setValue( null )
 
                     return
                 }
@@ -40,10 +36,7 @@ class JsMethodInspectorFlow {
                 this.getChildFlow({ id: 'methodSourceCode' }).setValue( formattedSourceCode )
 
                 this.getChildFlow({ id: 'methodDocumentation' })
-                    .setValue({
-                        methodDocumentation: methodDocumentation,
-                        isEditingDocumentation: isEditingDocumentation,
-                    })
+                    .setValue( methodDocumentation )
              })
 
             this.value({ id: 'methodSourceCode' })
@@ -63,10 +56,11 @@ class JsMethodInspectorFlow {
                 definedInFlow: thisFlow,
                 withMethods: [
                     'getMethod',
+                    'getMethodSignature',
                     'isInEditionMode',
                     'showsUnformattedComments',
                     'getMethodUnformattedComment',
-                    'editMethodUnformmatedComment',
+                    'editMethodUnformattedComment',
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
                 ],
@@ -84,10 +78,11 @@ class JsMethodInspectorFlow {
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
             'flow-commands.getMethod',
+            'flow-commands.getMethodSignature',
             'flow-commands.isInEditionMode',
             'flow-commands.showsUnformattedComments',
             'flow-commands.getMethodUnformattedComment',
-            'flow-commands.editMethodUnformmatedComment',
+            'flow-commands.editMethodUnformattedComment',
             'flow-commands.setIsBrowsingDocumentation',
             'flow-commands.isBrowsingDocumentation',
         ]
@@ -107,14 +102,18 @@ class JsMethodInspectorFlow {
     }
 
     getMethod() {
-        return this.getValue().object
+        return this.getValue()
+    }
+
+    getMethodSignature() {
+        return this.getMethod().getSignatureString()
     }
 
     getMethodUnformattedComment() {
         return this.getMethod().getMethodComment().getContents()
     }
 
-    editMethodUnformmatedComment({ parentWindow: parentWindow }) {
+    editMethodUnformattedComment({ parentWindow: parentWindow }) {
         const method = this.getMethod()
 
         const dialog = EditMethodCommentDialog.new({

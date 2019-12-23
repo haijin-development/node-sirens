@@ -48,10 +48,6 @@ class AppBrowserBody {
                         clickableHeaders: false,
                     })
 
-                    this.handlers({
-                        onAction: component.getProps().openFileEditor,
-                    })
-
                     this.column({
                         label: '',
                         getImageClosure: function(pathObject) { return pathObject.getIcon() },
@@ -64,18 +60,6 @@ class AppBrowserBody {
                         getTextClosure: function(pathObject) { return pathObject.getBaseName() },
                     })
 
-                    this.popupMenu( function() {
-                        const selectedFilePath = flow.getSelectedFilePath()
-
-                        const enableOpenDocumentation = flow.hasAClassSelected()
-
-                        this.item({
-                            label: 'Browse it on a new window',
-                            enabled: selectedFilePath !== null,
-                            action: component.getProps().openFileEditor,
-                        })
-
-                    })
                 })
 
             })

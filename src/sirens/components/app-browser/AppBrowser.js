@@ -57,7 +57,6 @@ class AppBrowser {
                         AppBrowserMenu.new({
                             model: flow,
                             openFolder: () => { flow.pickAndOpenFolder({ parentWindow: component }) },
-                            openFileEditor: () => { flow.openFileEditor({ parentWindow: component }) },
                             openPlayground: () => { flow.openPlayground({ parentWindow: component }) },
                         })
                     )
@@ -65,7 +64,6 @@ class AppBrowser {
                     this.component(
                         AppBrowserBody.new({
                             model: flow,
-                            openFileEditor: () => { flow.openFileEditor({ parentWindow: component }) },
                         })
                     )
 

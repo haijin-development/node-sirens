@@ -51,8 +51,8 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile to the main flow', () => {
-            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect( value.sourceFile.getFilePath() ) .to
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
+                expect( sourceFile.getFilePath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })
@@ -71,9 +71,8 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .to .behaveAs( 'JsFileObject' )
-                expect( value.isEditingDocumentation ) .to .be .false
+            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (jsFile) => {
+                expect( jsFile ) .to .behaveAs( 'JsFileObject' )
             })
         })
 
@@ -86,8 +85,8 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the SourceFile to the main flow', () => {
-            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect(value.sourceFile) .to .be .null
+            expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
+                expect(sourceFile) .to .be .null
             })
         })
 
@@ -102,11 +101,7 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the selectedFileObject to the first fileObject', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .to .equal( null )
-                expect( value.showsUnformattedComments ) .to .be .false
-                expect( value.isEditingDocumentation ) .to .be .false
-            })
+            expect(flow) .withId( 'main.selectedFileObject' ) .to .haveValue( null )
         })
 
     })
@@ -134,11 +129,7 @@ describe('When using an FileInspectorFlow', () => {
         it('sets the jsClass to the :selectedFileObject', () => {
             const jsClass = getChildFromRoots({ indexPath: [0, 1] })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .to .equal( jsClass )
-                expect( value.showsUnformattedComments ) .to .be .false
-                expect( value.isEditingDocumentation ) .to .be .false
-            })
+            expect(flow) .withId( 'main.selectedFileObject' ) .to .haveValue( jsClass )
         })
 
         it('sets :selectedFileObject flow to a JsClassInspectorFlow', () => {
@@ -173,11 +164,7 @@ describe('When using an FileInspectorFlow', () => {
         it('sets the jsMethod to the :selectedFileObject', () => {
             const jsMethod = getChildFromRoots({ indexPath: [0, 1, 1] })
 
-            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .to .equal( jsMethod )
-                expect( value.showsUnformattedComments ) .to .be .false
-                expect( value.isEditingDocumentation ) .to .be .false
-            })
+            expect(flow) .withId( 'main.selectedFileObject' ) .to .haveValue( jsMethod )
         })
 
         it('sets :selectedFileObject flow to a JsClassInspectorFlow', () => {
@@ -202,11 +189,8 @@ describe('When using an FileInspectorFlow', () => {
             })
 
             expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .not .to .eql( jsMethod )
-
-                expect( value.object ) .to .equal( newJsMethod )
-                expect( value.showsUnformattedComments ) .to .be .false
-                expect( value.isEditingDocumentation ) .to .be .false
+                expect( value ) .not .to .eql( jsMethod )
+                expect( value ) .to .equal( newJsMethod )
             })
         })
     })
@@ -226,11 +210,7 @@ describe('When using an FileInspectorFlow', () => {
         })
 
         it('sets the selectedFileObject to null', () => {
-            expect(flow) .withId( 'main.selectedFileObject' ) .withValue .suchThat( (value) => {
-                expect( value.object ) .to .equal( null )
-                expect( value.showsUnformattedComments ) .to .be .false
-                expect( value.isEditingDocumentation ) .to .be .false
-            })
+            expect(flow) .withId( 'main.selectedFileObject' ) .to .haveValue( null )
         })
 
     })
@@ -336,40 +316,12 @@ describe('When using an FileInspectorFlow', () => {
             expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsMethodInspectorComponent' )
         })
 
-        it('.showsUnformattedComments() returns the edition mode', () => {
-            flow.showsUnformattedComments({ value: false })
-
-            expect( flow.showsUnformattedComments() ) .to .be .false
-        })
-
-        it('.setshowUnformattedComments() set the edition mode', () => {
-            flow.setshowUnformattedComments({ value: true })
-
-            expect( flow.showsUnformattedComments() ) .to .be .true
-        })
-
-        it('.setshowUnformattedComments() set the edition mode', () => {
-            flow.setshowUnformattedComments({ value: true })
-
-            expect( flow.showsUnformattedComments() ) .to .be .true
-        })
-
-        it('.isEditingDocumentation() returns the edition mode', () => {
-            flow.isEditingDocumentation({ value: false })
-
-            expect( flow.isEditingDocumentation() ) .to .be .false
+        it('.setShowUnformattedComments() set the edition mode', () => {
+            flow.setShowUnformattedComments({ value: true })
         })
 
         it('.setIsEditingDocumentation() set the edition mode', () => {
             flow.setIsEditingDocumentation({ value: true })
-
-            expect( flow.isEditingDocumentation() ) .to .be .true
-        })
-
-        it('.setIsEditingDocumentation() set the edition mode', () => {
-            flow.setIsEditingDocumentation({ value: true })
-
-            expect( flow.isEditingDocumentation() ) .to .be .true
         })
 
     })

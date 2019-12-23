@@ -3,7 +3,7 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditMethodDescriptionDialog {
     /// Definition
@@ -16,22 +16,15 @@ class EditMethodDescriptionDialog {
 
     /// Building
 
-    getMethodDescription() {
-        const methodDocumentation = this.getProps().methodDocumentation
-
-        let description = methodDocumentation.getDescription()
-
-        if( description.trim() === '' ) {
-            description = 'This method has no documentation yet.'
-        }
-
-        return description
-    }
-
     renderWith(componentsRenderer) {
         const methodDocumentation = this.getProps().methodDocumentation
 
-        const description = this.getMethodDescription()
+        const description = methodDocumentation.getDescription()
+
+        const descriptionText = description.isNotBlank() ?
+            description.getText()
+            :
+            'This class has no documentation yet.'
 
         componentsRenderer.render( function(component) {
 
@@ -47,7 +40,7 @@ class EditMethodDescriptionDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.method,
                             title:  `${methodDocumentation.getSignatureString()}`,
                             subtitle: `You are editing the description of the method ${methodDocumentation.getMethodName()}.`,
@@ -58,7 +51,7 @@ class EditMethodDescriptionDialog {
 
                     this.text({
                         id: 'methodDescription',
-                        text: description,
+                        text: descriptionText,
                         viewAttributes: {
                             stackSize: 'filled',
                         },

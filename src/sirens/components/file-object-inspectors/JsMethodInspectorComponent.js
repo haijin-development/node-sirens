@@ -1,8 +1,8 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const MethodDocumentation = require('../documentation-browser/formatted-documentation/MethodDocumentation')
-const MethodUnformattedComment = require('../documentation-browser/unformatted-documentation/MethodUnformattedComment')
+const MethodDocumentationComponent = require('../documentation-browser/methods/MethodDocumentationComponent')
+const MethodUnformattedCommentComponent = require('../documentation-browser/methods/MethodUnformattedCommentComponent')
 
 class JsMethodInspectorComponent {
     /// Definition
@@ -70,14 +70,14 @@ class JsMethodInspectorComponent {
         const showsUnformattedComments = flow.showsUnformattedComments()
 
         if( showsUnformattedComments ) {
-            return MethodUnformattedComment.new({
+            return MethodUnformattedCommentComponent.new({
                 model: flow,
             })
         } else {
             const methodDocumentationFlow =
                 flow.getFlowPoint({ id: 'methodDocumentation' })
 
-            return MethodDocumentation.new({
+            return MethodDocumentationComponent.new({
                 model: methodDocumentationFlow,
             })
         }

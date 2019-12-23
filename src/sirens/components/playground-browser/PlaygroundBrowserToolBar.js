@@ -67,18 +67,6 @@ class PlaygroundBrowserToolBar {
                 this.separator()
 
                 this.button({
-                    label: 'Open class editor',
-                    image: {
-                        filename: Resource.image.class,
-                        width: 24,
-                        height: 24,
-                    },
-                    tooltip: 'Opens a class editor.',
-                    action: component.getProps().openFileEditor,
-                    enabled: flow.getCommand({ id: 'openFileEditor' }),
-                })
-
-                this.button({
                     label: 'Open playground',
                     image: {
                         filename: Resource.image.haiku,

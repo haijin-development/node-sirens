@@ -252,6 +252,33 @@ class ParamValidator {
         'public', 'dsl'
      ])
     */
+    behavesAs(classification) {
+        this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
+            const isOInstance = OInstance.isOInstance( value )
+            const isBehavingAs = isOInstance && value.isBehavingAs(classification)
+
+            return {
+                isValid: isBehavingAs,
+                errorMessage: () => {
+                    if( isOInstance ) {
+                        const classificationNames = value.getClassificationNames()
+
+                        return `Expected value to be behaving as a ${classification}, got [${classificationNames}].`
+                    } else {
+                        return `Expected value to be behaving as a ${classification}, got ${value}.`
+                    }
+                }
+            }
+        })
+
+        return this
+    }
+
+    /*
+     Tags([
+        'public', 'dsl'
+     ])
+    */
     compliesWith(protocol) {
         this.isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
             const isOInstance = OInstance.isOInstance( value )

@@ -3,7 +3,7 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditMethodCommentDialog {
     /// Definition
@@ -40,7 +40,7 @@ class EditMethodCommentDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.method,
                             title:  `${methodDeclaration}`,
                             subtitle: `You are editing the description of the method ${methodName}.`,

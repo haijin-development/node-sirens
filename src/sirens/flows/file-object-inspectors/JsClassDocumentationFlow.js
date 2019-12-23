@@ -4,6 +4,14 @@ const EditClassDescriptionDialog = require('../../components/documentation-brows
 const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
 const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
+const DocumentationExampleComponent = require('../../components/documentation-browser/examples/DocumentationExampleComponent')
+const DocumentationExample = require('../../objects/documentation/sections/DocumentationExample')
+
+const DocumentationImplementationNoteComponent = require('../../components/documentation-browser/implementation-notes/DocumentationImplementationNoteComponent')
+const DocumentationImplementationNote = require('../../objects/documentation/sections/DocumentationImplementationNote')
+
+const DocumentationIndexSection = require('./DocumentationIndexSection')
+
 class JsClassDocumentationFlow {
     /// Definition
 
@@ -12,19 +20,50 @@ class JsClassDocumentationFlow {
         this.assumes = [ValueFlow]
     }
 
-    defaultValue() {
-        return {
-            classDocumentation: null,
-            isEditingDocumentation: false,
-        }
-    }
-
     /// Building
 
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+
+            this.whenObjectChanges( function({ newValue: classDocumentation }) {
+                const documentationIndex = this.getChildFlow({ id: 'documentationIndex' })
+
+                const roots = classDocumentation ?
+                    thisFlow.getDocumentIndexSections()
+                    :
+                    []
+
+                documentationIndex.setRoots({ items: roots })
+            })
+
+            this.treeChoice({
+                id: 'documentationIndex',
+                roots: [],
+                getChildrenClosure: function (indexSection) {
+                    return indexSection.respondsTo( 'getItems' ) ?
+                        indexSection.getItems()
+                        :
+                        []
+                },
+                whenSelectionChanges: function({ newValue: pathToIndexSection }) {
+                    const documentationItem = pathToIndexSection.length > 0 ?
+                        pathToIndexSection[ pathToIndexSection.length - 1 ]
+                        :
+                        null
+
+                    const selectedItemFlow = thisFlow.getChildFlow({
+                        id: 'selectedDocumentationItem'
+                    })
+
+                    selectedItemFlow.setValue( documentationItem )
+                },
+            }, function() {
+
+                this.value({ id: 'selectedDocumentationItem' })
+
+            })
 
         })
     }
@@ -36,12 +75,20 @@ class JsClassDocumentationFlow {
                 definedInFlow: thisFlow,
                 withMethods: [
                     'getClassDocumentation',
+                    'getClassName',
+                    'getClassDescription',
+                    'getClassImplementationNotes',
+                    'getClassExamples',
+                    'getSelectedDocumentationItemFlowPoint',
+                    'getSelectedDocumentationItemComponent',
                     'isInEditionMode',
                     'editClassDocumentationDescription',
                     'createClassDocumentationImplementationNote',
                     'editClassDocumentationImplementationNote',
+                    'deleteClassDocumentationImplementationNote',
                     'createClassDocumentationExample',
                     'editClassDocumentationExample',
+                    'deleteClassDocumentationExample',
                 ],
             })
 
@@ -54,12 +101,20 @@ class JsClassDocumentationFlow {
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
             'flow-commands.getClassDocumentation',
+            'flow-commands.getClassName',
+            'flow-commands.getClassDescription',
+            'flow-commands.getClassImplementationNotes',
+            'flow-commands.getClassExamples',
+            'flow-commands.getSelectedDocumentationItemFlowPoint',
+            'flow-commands.getSelectedDocumentationItemComponent',
             'flow-commands.isInEditionMode',
             'flow-commands.editClassDocumentationDescription',
             'flow-commands.createClassDocumentationImplementationNote',
             'flow-commands.editClassDocumentationImplementationNote',
+            'flow-commands.deleteClassDocumentationImplementationNote',
             'flow-commands.createClassDocumentationExample',
             'flow-commands.editClassDocumentationExample',
+            'flow-commands.deleteClassDocumentationExample',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -68,14 +123,80 @@ class JsClassDocumentationFlow {
         })
     }
 
+    getDocumentIndexSections() {
+        return [
+            DocumentationIndexSection.new({
+                label: 'Implementation notes',
+                items: this.getClassImplementationNotes(),
+            }),
+            DocumentationIndexSection.new({
+                label: 'Examples',
+                items: this.getClassExamples(),
+            }),
+        ]
+    }
+
     // Commands
 
     getClassDocumentation() {
-        return this.getValue().classDocumentation
+        return this.getValue()
+    }
+
+    getClassName() {
+        return this.getClassDocumentation().getClassName()
+    }
+
+    getClassDescription() {
+        return this.getClassDocumentation().getDescription()
+    }
+
+    getClassImplementationNotes() {
+        return this.getClassDocumentation().getImplementationNotes()
+    }
+
+    getClassExamples() {
+        return this.getClassDocumentation().getExamples()
+    }
+
+    getSelectedDocumentationItemFlowPoint() {
+        const flowPoint = this.getChildFlow({ id: 'selectedDocumentationItem' }).asFlowPoint()
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: [ 'flow-commands.isInEditionMode' ],
+            flowPoint: flowPoint
+        })
+
+        return flowPoint
+    }
+
+    getSelectedDocumentationItemComponent() {
+        const selectedItemFlow = this.getSelectedDocumentationItemFlowPoint()
+
+        const selectedItem = selectedItemFlow.getValue()
+
+        if( ! selectedItem ) { return null }
+
+        if( selectedItem.isBehavingAs(DocumentationExample) ) {
+            return DocumentationExampleComponent.new({
+                model: this.getSelectedDocumentationItemFlowPoint()
+            })
+
+        }
+
+        if( selectedItem.isBehavingAs(DocumentationImplementationNote) ) {
+            return DocumentationImplementationNoteComponent.new({
+                model: this.getSelectedDocumentationItemFlowPoint()
+            })
+
+        }
+
+        return null
     }
 
     isInEditionMode() {
-        return this.getValue().isEditingDocumentation
+        return this.bubbleUp({
+            command: 'isEditingDocumentation'
+        })
     }
 
     editClassDocumentationDescription({ parentWindow: parentWindow }) {
@@ -84,18 +205,18 @@ class JsClassDocumentationFlow {
         const dialog = EditClassDescriptionDialog.new({
             classDocumentation: classDocumentation,
             window: parentWindow,
-            onUpdateClassDescription: ({ classNewDescription: classNewDescription }) => {
-                this.updateClassDocumentationDescription({ classNewDescription: classNewDescription })
+            onUpdateClassDescription: ({ classNewDescription: descriptionText }) => {
+                this.updateClassDocumentationDescription({ classNewDescription: descriptionText })
             },
         })
 
         dialog.open()
     }
 
-    updateClassDocumentationDescription({ classNewDescription: classNewDescription }) {
+    updateClassDocumentationDescription({ classNewDescription: descriptionText }) {
         const classDocumentation = this.getClassDocumentation()
 
-        classDocumentation.setDescription( classNewDescription )
+        classDocumentation.setDescriptionFrom({ text: descriptionText })
 
         this.updateClassDocumentation({
             classDocumentation: classDocumentation,
@@ -125,14 +246,16 @@ class JsClassDocumentationFlow {
     addClassDocumentationImplementationNote({ implementationNoteText: implementationNoteText }) {
         const classDocumentation = this.getClassDocumentation()
 
-        classDocumentation.addImplementationNote( implementationNoteText )
+        classDocumentation.addImplementationNoteFrom({ text: implementationNoteText })
 
         this.updateClassDocumentation({
             classDocumentation: classDocumentation,
         })
     }
 
-    editClassDocumentationImplementationNote({ parentWindow: parentWindow, atIndex: index, implementationNoteText: implementationNoteText }) {
+    editClassDocumentationImplementationNote({ parentWindow: parentWindow, implementationNote: implementationNote }) {
+        const implementationNoteText = implementationNote.getText()
+
         const className = this.getClassDocumentation().getClassName()
 
         const dialog = EditImplementationNoteDialog.new({
@@ -141,7 +264,7 @@ class JsClassDocumentationFlow {
             window: parentWindow,
             onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
                 this.updateClassDocumentationImplementationNote({ 
-                    atIndex: index,
+                    implementationNote: implementationNote,
                     implementationNoteText: implementationNoteText,
                 })
             },
@@ -153,10 +276,25 @@ class JsClassDocumentationFlow {
         dialog.open()
     }
 
-    updateClassDocumentationImplementationNote({ atIndex: index, implementationNoteText: implementationNoteText }) {
+    updateClassDocumentationImplementationNote({ implementationNote: implementationNote, implementationNoteText: implementationNoteNewText }) {
         const classDocumentation = this.getClassDocumentation()
 
-        classDocumentation.updateImplementationNoteAt({ index: index, implementationNoteText: implementationNoteText})
+        classDocumentation.updateImplementationNote({
+            implementationNote: implementationNote,
+            implementationNoteText: implementationNoteNewText
+        })
+
+        this.updateClassDocumentation({
+            classDocumentation: classDocumentation,
+        })
+    }
+
+    deleteClassDocumentationImplementationNote({ implementationNote: implementationNote }) {
+        const classDocumentation = this.getClassDocumentation()
+
+        classDocumentation.deleteImplementationNote({
+            implementationNote: implementationNote,
+        })
 
         this.updateClassDocumentation({
             classDocumentation: classDocumentation,
@@ -166,17 +304,17 @@ class JsClassDocumentationFlow {
     createClassDocumentationExample({ parentWindow: parentWindow }) {
         const className = this.getClassDocumentation().getClassName()
 
-        const newExample = {
-            Description: 'Add the example description here ...',
-            Code: 'Add the example code here ...',
-        }
+        const newExample = DocumentationExample.new({
+            description: 'Add the example description here ...',
+            code: 'Add the example code here ...',
+        })
 
         const dialog = EditExampleDialog.new({
             className: className,
             example: newExample,
             window: parentWindow,
-            onUpdateExample: ({ example: example }) => {
-                this.addClassDocumentationExample({ example: example })
+            onUpdateExample: ({ description: description, code: code }) => {
+                this.addClassDocumentationExample({ description: description, code: code })
             },
             acceptButtonLabel: `Add example`,
             title: `${className} example.`,
@@ -186,10 +324,10 @@ class JsClassDocumentationFlow {
         dialog.open()
     }
 
-    addClassDocumentationExample({ example: example }) {
+    addClassDocumentationExample({ description: description, code: code }) {
         const classDocumentation = this.getClassDocumentation()
 
-        classDocumentation.addExample( example )
+        classDocumentation.addExampleFrom({ description: description, code: code })
 
         this.updateClassDocumentation({
             classDocumentation: classDocumentation,
@@ -203,10 +341,11 @@ class JsClassDocumentationFlow {
             className: className,
             example: example,
             window: parentWindow,
-            onUpdateExample: ({ example: example }) => {
+            onUpdateExample: ({ description: description, code: code }) => {
                 this.updateClassDocumentationExample({
-                    atIndex: index,
                     example: example,
+                    description: description,
+                    code: code,
                 })
             },
             acceptButtonLabel: `Update example note`,
@@ -217,12 +356,25 @@ class JsClassDocumentationFlow {
         dialog.open()
     }
 
-    updateClassDocumentationExample({ atIndex: index, example: example }) {
+    updateClassDocumentationExample({ example: example, description: description, code: code }) {
         const classDocumentation = this.getClassDocumentation()
 
-        classDocumentation.updateExampleAt({
-            index: index,
-            example: example
+        classDocumentation.updateExample({
+            example: example,
+            description: description,
+            code: code,
+        })
+
+        this.updateClassDocumentation({
+            classDocumentation: classDocumentation,
+        })
+    }
+
+    deleteClassDocumentationExample({ example: example }) {
+        const classDocumentation = this.getClassDocumentation()
+
+        classDocumentation.deleteExample({
+            example: example,
         })
 
         this.updateClassDocumentation({

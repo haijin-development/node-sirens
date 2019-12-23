@@ -39,7 +39,9 @@ class JsMethod {
     }
 
     setMethodParams(methodParams) {
-        this.methodParams = methodParams
+        this.methodParams = methodParams.map( (param) => {
+            return this.paramSignatureString({ param: param })
+        })
     }
 
     // Source code
@@ -54,6 +56,7 @@ class JsMethod {
         return DocumentationReader.readMethodDocumentationFromString({
             string: commentBodyContents,
             methodName: this.methodName,
+            params: this.methodParams,
         })
     }
 

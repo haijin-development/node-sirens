@@ -18,14 +18,6 @@ class FileInspectorFlow {
         this.assumes = [ValueFlow]
     }
 
-    defaultValue() {
-        return {
-            sourceFile: null,
-            isEditingDocumentation: false,
-            showsUnformattedComments: false,
-        }
-    }
-
     /// Building
 
     buildWith(flow) {
@@ -33,13 +25,7 @@ class FileInspectorFlow {
 
             this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
 
-            this.whenObjectChanges( ({ newValue:
-                { 
-                    sourceFile: sourceFile,
-                    showsUnformattedComments: showsUnformattedComments,
-                    isEditingDocumentation: isEditingDocumentation
-                }
-            }) => {
+            this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 const fileObjects = this.getChildFlow({ id: 'fileObjects' })
 
                 if( ! sourceFile ) {
@@ -77,11 +63,7 @@ class FileInspectorFlow {
                         withFlow: fileTypeFlow, 
                     })
 
-                    fileTypeFlow.setInspectedObject({
-                        object: newObject,
-                        isEditingDocumentation: thisFlow.isEditingDocumentation(),
-                        showsUnformattedComments: thisFlow.showsUnformattedComments(),
-                    })
+                    fileTypeFlow.setInspectedObject( newObject )
                 },
             })
 
@@ -142,22 +124,14 @@ class FileInspectorFlow {
     /// Querying
 
     getSourceFile() {
-        return this.getValue().sourceFile
+        return this.getValue()
     }
 
     setSourceFile({
         sourceFile: sourceFile,
-        showsUnformattedComments: showsUnformattedComments,
-        isEditingDocumentation: isEditingDocumentation,
+        forceUpdate: forceUpdate,
     }) {
-        if( showsUnformattedComments === undefined ) { showsUnformattedComments = this.showsUnformattedComments() }
-        if( isEditingDocumentation === undefined ) { isEditingDocumentation = this.isEditingDocumentation() }
-
-        return this.setValue({
-            sourceFile: sourceFile,
-            showsUnformattedComments: showsUnformattedComments,
-            isEditingDocumentation: isEditingDocumentation,
-        })
+        return this.setValue( sourceFile, forceUpdate )
     }
 
     getRootFileObject() {
@@ -201,26 +175,14 @@ class FileInspectorFlow {
         }
     }
 
-    setshowUnformattedComments({ value: boolean }) {
-        this.getValue().showsUnformattedComments = boolean
-
+    setShowUnformattedComments({ value: boolean }) {
         this.getChildFlow({ id: 'selectedFileObject' })
-            .setshowUnformattedComments({ value: boolean })
-    }
-
-    showsUnformattedComments() {
-        return this.getValue().showsUnformattedComments
+            .setShowUnformattedComments({ value: boolean })
     }
 
     setIsEditingDocumentation({ value: boolean }) {
-        this.getValue().isEditingDocumentation = boolean
-
         this.getChildFlow({ id: 'selectedFileObject' })
             .setIsEditingDocumentation({ value: boolean })        
-    }
-
-    isEditingDocumentation() {
-        return this.getValue().isEditingDocumentation
     }
 
     reloadSourceFile() {
@@ -230,8 +192,7 @@ class FileInspectorFlow {
 
         this.setSourceFile({
             sourceFile: this.getSourceFile(),
-            showsUnformattedComments: this.showsUnformattedComments(),
-            isEditingDocumentation: this.isEditingDocumentation(),
+            forceUpdate: true,
         })
 
         fileObjectsTree.setSelectionIndexPath({ indexPath: currentSelectionIndexPath })

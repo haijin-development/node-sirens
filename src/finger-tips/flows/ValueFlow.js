@@ -51,22 +51,22 @@ class ValueFlow {
         return this.value
     }
 
-    setValue(newValue) {
+    setValue(newValue, forceUpdate = false) {
         this.evaluateEventHandler({
             event: 'setValue',
-            params: [newValue],
+            params: [newValue, forceUpdate],
             eventHandler: () => {
-                this.updateValue( newValue )
+                this.updateValue( newValue, forceUpdate )
             }            
         })
 
         return this
     }
 
-    updateValue(newValue) {
+    updateValue(newValue, forceUpdate) {
         const oldValue = this.value
 
-        if( oldValue == newValue ) { return }
+        if( forceUpdate !== true && oldValue == newValue ) { return }
 
         this.value = newValue
 

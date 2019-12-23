@@ -28,31 +28,13 @@ describe('When using a Function', () => {
 
         it('gets one named parameter', () => {
             expect( methods[2].getMethodParams() ) .to .eql([
-                [
-                    {
-                        'key': 'name',
-                        'value': 'name',
-                    },
-                    {
-                        'key': 'lastName',
-                        'value': 'lastName',
-                    },
-                ],
+                '{ name: name, lastName: lastName }'
             ])
         })
 
         it('gets a mixed of positional and named parameter', () => {
             expect( methods[3].getMethodParams() ) .to .eql([
-                [
-                    {
-                        'key': 'name',
-                        'value': 'name',
-                    },
-                    {
-                        'key': 'lastName',
-                        'value': 'lastName',
-                    },
-                ],
+                '{ name: name, lastName: lastName }',
                 'closure',
             ])
         })

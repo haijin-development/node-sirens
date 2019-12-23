@@ -42,7 +42,7 @@ class AppBrowserFlow {
                     id: 'showsUnformattedComments',
                     whenValueChanges: ({ newValue: boolean }) => {
                         thisFlow.getChildFlow({ id: 'selectedFile' })
-                            .setshowUnformattedComments({ value: boolean })
+                            .setShowUnformattedComments({ value: boolean })
                     },
                 })
 
@@ -104,7 +104,6 @@ class AppBrowserFlow {
                 definedInFlow: thisFlow,
                 withMethods: [
                     'pickAndOpenFolder',
-                    'openFileEditor',
                     'openPlayground',
                     'pickFolder',
                     'openFolder',
@@ -117,6 +116,8 @@ class AppBrowserFlow {
 
         this.acceptedBubbledUps([
             'setIsBrowsingDocumentation',
+            'showsUnformattedComments',
+            'isEditingDocumentation',
             'isBrowsingDocumentation',
         ])
     }
@@ -126,7 +127,6 @@ class AppBrowserFlow {
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
             'flow-commands.pickAndOpenFolder',
-            'flow-commands.openFileEditor',
             'flow-commands.openPlayground',
             'flow-commands.openFolder',
             'flow-commands.getSelectedFilePath',
@@ -149,12 +149,6 @@ class AppBrowserFlow {
         if( appFolderPath === null ) { return }
 
         const handler = this.openFolder({ folderPath: appFolderPath })
-    }
-
-    openFileEditor() {
-        const selectedPath = this.getSelectedFilePath()
-
-        Sirens.openFileEditor({ filename: selectedPath })
     }
 
     openPlayground() {

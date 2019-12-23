@@ -3,7 +3,7 @@ const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
 const Resource = require('../../../objects/Resource')
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditParamDialog {
     /// Definition
@@ -35,7 +35,7 @@ class EditParamDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.param,
                             title:  `${methodDocumentation.getSignatureString()}`,
                             subtitle: `You are editing a parameter of the method ${methodDocumentation.getMethodName()}.`,
@@ -46,22 +46,20 @@ class EditParamDialog {
 
                     this.verticalSplitter( function() {
 
-                        this.container( function() {
+                        this.container({ viewAttributes: { splitProportion: 1.0/4.0 }}, function() {
 
                             this.text({
                                 id: 'paramName',
-                                text: param.Name,
-                                viewAttributes: { splitProportion: 1.0/4.0 },
+                                text: param.getName(),
                             })
 
                         })
 
-                        this.container( function() {
+                        this.container({ viewAttributes: { splitProportion: 3.0/4.0 }}, function() {
 
                             this.text({
                                 id: 'paramDescription',
-                                text: param.Description,
-                                viewAttributes: { splitProportion: 3.0/4.0 },
+                                text: param.getDescription(),
                             })
 
                         })
@@ -115,14 +113,10 @@ class EditParamDialog {
             id: 'paramDescription'
         })
 
-        const param = {
-            Name: paramNameComponent.getModel().getValue(),
-            Description: paramDescriptionComponent.getModel().getValue(),
-        }
+        const name = paramNameComponent.getModel().getValue()
+        const description = paramDescriptionComponent.getModel().getValue()
 
-        this.getProps().onUpdateParam({
-            param: param,
-        })
+        this.getProps().onUpdateParam({ name: name, description: description })
     }
 }
 

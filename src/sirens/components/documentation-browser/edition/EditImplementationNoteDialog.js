@@ -2,7 +2,7 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
 const GtkIcons = require('../../../../Skins').GtkIcons
-const EditDialogHeader = require('./EditDialogHeader')
+const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditImplementationNoteDialog {
     /// Definition
@@ -34,7 +34,7 @@ class EditImplementationNoteDialog {
                 this.verticalStack( function() {
 
                     this.component(
-                        EditDialogHeader.new({
+                        EditDialogHeaderComponent.new({
                             mainIcon: GtkIcons.dialogWarning,
                             title:  component.getProps().title,
                             subtitle: component.getProps().subtitle,

@@ -14,11 +14,14 @@ describe('When reading a ClassDocumentation', () => {
     \`)
     `
 
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
+            const classDocumentation =
+                DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
-            expect( classDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the FileEditor example.'
-            )
+            expect( classDocumentation.getDescription() ) .to .beSuchThat( (description) => {
+                expect( description.getText() ) .to .equal(
+                    'A regular js class to use in the FileEditor example.'
+                )
+            })
         })
 
         it('builds a Class description from a string literal', () => {
@@ -30,9 +33,11 @@ describe('When reading a ClassDocumentation', () => {
 
             const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
-            expect( classDocumentation.getDescription() ) .to .equal(
-                'A regular js class to use in the FileEditor example.'
-            )
+            expect( classDocumentation.getDescription() ) .to .beSuchThat( (description) => {
+                expect( description.getText() ) .to .equal(
+                    'A regular js class to use in the FileEditor example.'
+                )
+            })
         })
 
     })
@@ -51,9 +56,10 @@ describe('When reading a ClassDocumentation', () => {
 
             const implementationNotes = classDocumentation.getImplementationNotes()
 
-            expect( implementationNotes ) .to .eql([
-                'Assumes that the street is not empty.',
-            ])
+            expect( implementationNotes ) .eachSuchThat( (implementationNote) => {
+                expect( implementationNote.getText() ) .to
+                    .eql( 'Assumes that the street is not empty.' )
+            })
         })
 
     })
@@ -79,10 +85,9 @@ describe('When reading a ClassDocumentation', () => {
 
             const examples = classDocumentation.getExamples()
 
-            expect( examples[0] ) .to .eql({
-                index: 0,
-                Description: 'An example',
-                Code: "const o = 'abc'\n\no.toUpperCase()",
+            expect( examples[0] ) .to .beSuchThat( (example) => {
+                expect( example.getDescription() ) .to .equal( 'An example' )
+                expect( example.getCode() ) .to .equal( "const o = 'abc'\n\no.toUpperCase()" )
             })
         })
 
@@ -94,15 +99,16 @@ describe('When reading a ClassDocumentation', () => {
         Code: "const o = 'abc'",
     })`
 
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
+            const classDocumentation =
+                DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
 
             const examples = classDocumentation.getExamples()
 
-            expect( examples[0] ) .to .eql({
-                index: 0,
-                Description: 'An example',
-                Code: "const o = 'abc'",
+            expect( examples[0] ) .to .beSuchThat( (example) => {
+                expect( example.getDescription() ) .to .equal( 'An example' )
+                expect( example.getCode() ) .to .equal( "const o = 'abc'" )
             })
+
         })
 
     })
@@ -121,9 +127,13 @@ describe('When reading a ClassDocumentation', () => {
 
             const tags = classDocumentation.getTags()
 
-            expect( tags ) .to .eql([
-                'getters', 'accessors'
-            ])
+            expect( tags[0] ) .suchThat( (tag) => {
+                expect( tag.getLabel() ) .to .eql( 'getters' )
+            })
+
+            expect( tags[1] ) .suchThat( (tag) => {
+                expect( tag.getLabel() ) .to .eql( 'accessors' )
+            })
         })
 
     })
@@ -136,7 +146,7 @@ describe('When writing a ClassDocumentation', () => {
 
         const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
-        classDocumentation.setDescription( 'A class description.' )
+        classDocumentation.setDescriptionFrom({ text: 'A class description.' })
 
         const generatedClassComment = classDocumentation.generateComment()
 
@@ -153,10 +163,11 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
+        const classDocumentation = 
+            DocumentationReader.readClassDocumentationFromString({ string: '' })
 
-        classDocumentation.addImplementationNote( 'Implementation note 1.' )
-        classDocumentation.addImplementationNote( 'Implementation note 2.' )
+        classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 1.' })
+        classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 2.' })
 
         const generatedClassComment = classDocumentation.generateComment()
 
@@ -179,17 +190,17 @@ describe('When writing a ClassDocumentation', () => {
 
         const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
-        classDocumentation.addExample({
-            Description: 'Example 1.',
-            Code: 
+        classDocumentation.addExampleFrom({
+            description: 'Example 1.',
+            code: 
 `const o = 'abc'
 
 o.toUpperCase()`,
         })
 
-        classDocumentation.addExample({
-            Description: 'Example 2.',
-            Code: 
+        classDocumentation.addExampleFrom({
+            description: 'Example 2.',
+            code: 
 `const o = 'cba'
 
 o.toUpperCase()`,
@@ -230,7 +241,7 @@ o.toUpperCase()`,
 
         const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
 
-        classDocumentation.setTags([ 'tag1', 'tag2' ])
+        classDocumentation.setTagsFrom({ tagsStrings: [ 'tag1', 'tag2' ] })
 
         const generatedClassComment = classDocumentation.generateComment()
 

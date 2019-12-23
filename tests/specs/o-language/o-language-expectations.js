@@ -43,10 +43,14 @@ Assertion.addProperty('haveReceived', function () {
     return this
 })
 
-Assertion.addMethod('suchThat', function (expectationClosure) {
+Assertion.addMethod('beSuchThat', function (expectationClosure) {
     var targetObject = this._obj;
 
     expectationClosure(targetObject)
+})
+
+Assertion.addMethod('suchThat', function (expectationClosure) {
+    return this.beSuchThat( expectationClosure )
 })
 
 Assertion.addMethod('eachSuchThat', function (eachItemExpectationClosure) {

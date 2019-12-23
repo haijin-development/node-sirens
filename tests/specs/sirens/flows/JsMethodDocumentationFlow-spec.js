@@ -36,34 +36,43 @@ describe('When using an JsMethodDocumentationFlow', () => {
 
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
+            'main.documentationIndex',
+            'main.documentationIndex.selectedDocumentationItem',
+
             'main.flow-commands',
+            'main.flow-commands.getSelectedDocumentationItemFlowPoint',
+            'main.flow-commands.getSelectedDocumentationItemComponent',
             'main.flow-commands.getMethodDocumentation',
+            'main.flow-commands.getMethodExamples',
+            'main.flow-commands.getMethodImplementationNotes',
+            'main.flow-commands.getMethodParams',
+            'main.flow-commands.getMethodReturnValue',
+            'main.flow-commands.getMethodDescription',
+            'main.flow-commands.getMethodSignature',
+            'main.flow-commands.getTagsSortedByPriority',
             'main.flow-commands.isInEditionMode',
             'main.flow-commands.createMethodDocumentationExample',
             'main.flow-commands.createMethodDocumentationImplementationNote',
             'main.flow-commands.createMethodDocumentationParam',
-            'main.flow-commands.editMethodDocumentationComment',
+            'main.flow-commands.editMethodDocumentationDescription',
             'main.flow-commands.editMethodDocumentationExample',
             'main.flow-commands.editMethodDocumentationImplementationNote',
             'main.flow-commands.editMethodDocumentationParam',
-            'main.flow-commands.editMethodDocumentationReturn',
+            'main.flow-commands.editMethodDocumentationReturnValue',
             'main.flow-commands.editMethodTags',
+            'main.flow-commands.deleteMethodDocumentationImplementationNote',
+            'main.flow-commands.deleteMethodDocumentationParam',
+            'main.flow-commands.deleteMethodDocumentationExample',
         ])
     })
 
     describe('when setting a methodDocumentation', () => {
         beforeEach( () => {
-            flow.setValue({
-                methodDocumentation: methodDocumentation,
-                isEditingDocumentation: true,
-            })
+            flow.setValue( methodDocumentation )
         })
 
         it('the main flow has the jsMethod', () => {
-            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect(value.methodDocumentation) .to .equal( methodDocumentation )
-                expect(value.isEditingDocumentation) .to .be .true
-            })
+            expect( flow ) .withId( 'main' ) .to .haveValue( methodDocumentation )
         })
     })
 
@@ -73,25 +82,25 @@ describe('When using an JsMethodDocumentationFlow', () => {
         beforeEach( () => {
             flowPoint = flow.asFlowPoint()
 
-            flow.setValue({
-                methodDocumentation: methodDocumentation,
-                isEditingDocumentation: false,
-            })
+            flow.setValue( methodDocumentation )
         })
 
         it('.getMethodDocumentation() returns the current method documentation', () => {
             expect( flowPoint.getMethodDocumentation() ) .to .equal( methodDocumentation )
         })
 
-        it('.isInEditionMode() returns if the flow is in edition mode', () => {
-            expect( flowPoint.isInEditionMode() ) .to .equal( false )
+        it('.isInEditionMode() bubbles the command up', () => {
+            flowPoint.isInEditionMode()
 
-            flow.setValue({
-                methodDocumentation: methodDocumentation,
-                isEditingDocumentation: true,
-            })
+            expect( flow ) .commandsController .to .haveReceived
+                .aBubbledCommandsCountOf(1)
 
-            expect( flowPoint.isInEditionMode() ) .to .equal( true )
+            expect( flow.getCommandsController() ) .to
+                .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
+                    expect(command.commandName) .to .eql('isEditingDocumentation')
+                    expect(command.params) .to .eql([])
+                    expect(command.startingAtFlow.getIdPath()) .to .eql('main')
+                })
         })
     })
 
@@ -101,11 +110,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
         beforeEach( () => {
             methodInspectorFlow = createMethodInspectorFlow()
 
-            methodInspectorFlow.setInspectedObject({
-                object: jsMethod,
-                isEditingDocumentation: false,
-                showsUnformattedComments: false,
-            })
+            methodInspectorFlow.setInspectedObject( jsMethod )
 
             flow = methodInspectorFlow.getChildFlow({ id: 'methodDocumentation' })
         })
@@ -131,11 +136,9 @@ describe('When using an JsMethodDocumentationFlow', () => {
         })
 
         it('addMethodParam writes the method comment to the file', () => {
-            flow.addMethodDocumentationParam({
-                param: {
-                    Name: 'A parameter',
-                    Description: 'Description',
-                },
+            flow.addMethodDocumentationParamFrom({
+                name: 'A parameter',
+                description: 'Description',
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -144,19 +147,17 @@ describe('When using an JsMethodDocumentationFlow', () => {
         })
 
         it('updateMethodDocumentationParam writes the method comment to the file', () => {
-            flow.addMethodDocumentationParam({
-                param: {
-                    Name: 'A parameter',
-                    Description: 'Description',
-                },
+            flow.addMethodDocumentationParamFrom({
+                name: 'A parameter',
+                description: 'Description',
             })
 
+            const param = flow.getMethodParams()[0]
+
             flow.updateMethodDocumentationParam({
-                atIndex: 0,
-                newParam: {
-                    Name: 'An updated parameter',
-                    Description: 'Updated description',
-                },
+                param: param,
+                name: 'An updated parameter',
+                description: 'Updated description',
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -179,8 +180,10 @@ describe('When using an JsMethodDocumentationFlow', () => {
                 implementationNoteText: 'New implementation note.',
             })
 
+            const implementationNote = flow.getMethodImplementationNotes()[0]
+
             flow.updateMethodDocumentationImplementationNote({
-                atIndex: 0, implementationNoteText: 'Updated implementation note.',
+                implementationNote: implementationNote, implementationNoteText: 'Updated implementation note.',
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -190,10 +193,8 @@ describe('When using an JsMethodDocumentationFlow', () => {
 
         it('addMethodDocumentationExample writes the method comment to the file', () => {
             flow.addMethodDocumentationExample({
-                example: {
-                    Description: 'An example',
-                    Code: '// A code'
-                },
+                description: 'An example',
+                code: '// A code'
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {
@@ -203,18 +204,16 @@ describe('When using an JsMethodDocumentationFlow', () => {
 
         it('updateMethodDocumentationExample writes the method comment to the file', () => {
             flow.addMethodDocumentationExample({
-                example: {
-                    Description: 'An example',
-                    Code: '// A code'
-                },
+                description: 'An example',
+                code: '// A code',
             })
 
+            const example = flow.getMethodExamples()[0]
+
             flow.updateMethodDocumentationExample({
-                atIndex: 0,
-                example: {
-                    Description: 'An updated example',
-                    Code: '// An updated code'
-                },
+                example: example,
+                description: 'An updated example',
+                code: '// An updated code'
             })
 
             expect(filePath) .withFileContents .suchThat( (fileContents) => {

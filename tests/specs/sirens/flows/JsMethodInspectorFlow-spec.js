@@ -43,46 +43,55 @@ describe('When using an JsMethodInspectorFlow', () => {
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
             'main.methodSourceCode',
+
             'main.flow-commands',
             'main.flow-commands.showsUnformattedComments',
             'main.flow-commands.getMethod',
+            'main.flow-commands.getMethodSignature',
             'main.flow-commands.getMethodUnformattedComment',
             'main.flow-commands.isInEditionMode',
-            'main.flow-commands.editMethodUnformmatedComment',
+            'main.flow-commands.editMethodUnformattedComment',
             'main.flow-commands.isBrowsingDocumentation',
             'main.flow-commands.setIsBrowsingDocumentation',
 
             'main.methodDocumentation',
+            'main.methodDocumentation.documentationIndex',
+            'main.methodDocumentation.documentationIndex.selectedDocumentationItem',
+
             'main.methodDocumentation.flow-commands',
             'main.methodDocumentation.flow-commands.getMethodDocumentation',
+            'main.methodDocumentation.flow-commands.getMethodExamples',
+            'main.methodDocumentation.flow-commands.getMethodImplementationNotes',
+            'main.methodDocumentation.flow-commands.getMethodParams',
+            'main.methodDocumentation.flow-commands.getMethodReturnValue',
+            'main.methodDocumentation.flow-commands.getSelectedDocumentationItemFlowPoint',
+            'main.methodDocumentation.flow-commands.getSelectedDocumentationItemComponent',
+            'main.methodDocumentation.flow-commands.getMethodDescription',
+            'main.methodDocumentation.flow-commands.getMethodSignature',
+            'main.methodDocumentation.flow-commands.getTagsSortedByPriority',
             'main.methodDocumentation.flow-commands.isInEditionMode',
             'main.methodDocumentation.flow-commands.createMethodDocumentationExample',
             'main.methodDocumentation.flow-commands.createMethodDocumentationImplementationNote',
             'main.methodDocumentation.flow-commands.createMethodDocumentationParam',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationComment',
+            'main.methodDocumentation.flow-commands.editMethodDocumentationDescription',
             'main.methodDocumentation.flow-commands.editMethodDocumentationExample',
             'main.methodDocumentation.flow-commands.editMethodDocumentationImplementationNote',
             'main.methodDocumentation.flow-commands.editMethodDocumentationParam',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationReturn',
+            'main.methodDocumentation.flow-commands.editMethodDocumentationReturnValue',
             'main.methodDocumentation.flow-commands.editMethodTags',
+            'main.methodDocumentation.flow-commands.deleteMethodDocumentationImplementationNote',
+            'main.methodDocumentation.flow-commands.deleteMethodDocumentationParam',
+            'main.methodDocumentation.flow-commands.deleteMethodDocumentationExample',
         ])
     })
 
     describe('when setting a jsMethod', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsMethod,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsMethod )
         })
 
         it('the main flow has the jsMethod', () => {
-            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect(value.object) .to .equal( jsMethod )
-                expect(value.showsUnformattedComments) .to .equal( false )
-                expect(value.isEditingDocumentation) .to .equal( false )
-            })
+            expect( flow ) .withId( 'main' ) .to .haveValue( jsMethod )
         })
 
         it('sets the formatted source code', () => {
@@ -95,32 +104,21 @@ describe('When using an JsMethodInspectorFlow', () => {
         })
 
         it('sets the method documentation', () => {
-            expect( flow ) .withId( 'main.methodDocumentation' ) .withValue .suchThat( (value) => {
-                expect( value.methodDocumentation ) .to .behaveAs( 'MethodDocumentation' )                
+            expect( flow ) .withId( 'main.methodDocumentation' ) .withValue .suchThat( (methodDocumentation) => {
+                expect( methodDocumentation ) .to .behaveAs( 'MethodDocumentation' )                
             })
         })
     })
 
     describe('when setting a null jsMethod', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsMethod,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsMethod )
 
-            flow.setInspectedObject({
-                object: null,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( null )
         })
 
         it('the main flow has null', () => {
-            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect(value.object) .to .equal( null )
-                expect(value.isEditingDocumentation) .to .equal( false )
-            })
+            expect( flow ) .withId( 'main' ) .to .haveValue( null )
         })
 
         it('sets an empty formatted source code', () => {
@@ -130,20 +128,14 @@ describe('When using an JsMethodInspectorFlow', () => {
         })
 
         it('sets a null method documentation', () => {
-            expect( flow ) .withId( 'main.methodDocumentation' ) .withValue .suchThat( (value) => {
-                expect( value.methodDocumentation ) .to .be .null                
-            })
+            expect( flow ) .withId( 'main.methodDocumentation' ) .to .haveValue( null )
         })
 
     })
 
     describe('when updating the documentation', () => {
         beforeEach( () => {
-            flow.setInspectedObject({
-                object: jsMethod,
-                showsUnformattedComments: false,
-                isEditingDocumentation: false,
-            })
+            flow.setInspectedObject( jsMethod )
         })
 
         it('writes the updated comment to the file', () => {

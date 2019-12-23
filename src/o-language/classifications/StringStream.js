@@ -150,11 +150,11 @@ class StringStream {
 
     /*
      Method(`
-        Returns the default string to use as a carriage return when not cr character is given.
+        Returns the default string to use as a carriage return when no cr character is given.
      `)
      Returns({
         Description: `
-           The default string to use as a carriage return when not cr character is given.
+           The default string to use as a carriage return when no cr character is given.
         `,
      })
 

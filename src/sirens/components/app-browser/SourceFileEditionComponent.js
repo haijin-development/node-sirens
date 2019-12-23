@@ -1,7 +1,7 @@
 const Classification = require('../../../O').Classification
 const Component = require('../../../Skins').Component
 const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const FileInspectorBody = require('../file-inspector/FileInspectorBody')
+const FileInspectorBodyComponent = require('../file-inspector/FileInspectorBodyComponent')
 
 class SourceFileEditionComponent {
     /// Definition
@@ -28,7 +28,7 @@ class SourceFileEditionComponent {
             this.verticalStack( function() {
 
                 this.component(
-                    FileInspectorBody.new({
+                    FileInspectorBodyComponent.new({
                         model: flow,
                     })
                 )

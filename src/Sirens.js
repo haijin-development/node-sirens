@@ -2,6 +2,7 @@ const path = require('path')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const Gdk = nodeGtk.require('Gdk')
+const Preferences = require('./sirens/Preferences')
 
 /*
  Class(`
@@ -445,11 +446,13 @@ class Sirens {
     }
 
     static setGlobalStyles() {
+      if( ! Preferences.cssFile ) { return }
+
       const screen = Gdk.Screen.getDefault()
 
       const cssProvider = new Gtk.CssProvider()
 
-      const cssFilePath = path.resolve( __dirname + '/../resources/css/sirens.css' )
+      const cssFilePath = path.resolve( Preferences.cssFile )
 
       cssProvider.loadFromPath( cssFilePath )
 

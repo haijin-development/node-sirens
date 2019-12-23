@@ -100,9 +100,11 @@ class FileInspectorFlow {
 
         })
 
-        this.acceptedBubbledUps([
-            'reloadSourceFile'
-        ])
+        this.acceptedBubbledUps({
+            commands: [
+                'reloadSourceFile',
+            ]
+        })
     }
 
     /// Exported commands

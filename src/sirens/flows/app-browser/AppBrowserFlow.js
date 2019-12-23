@@ -114,12 +114,14 @@ class AppBrowserFlow {
 
         })
 
-        this.acceptedBubbledUps([
-            'setIsBrowsingDocumentation',
-            'showsUnformattedComments',
-            'isEditingDocumentation',
-            'isBrowsingDocumentation',
-        ])
+        this.acceptedBubbledUps({
+            commands: [
+                'setIsBrowsingDocumentation',
+                'showsUnformattedComments',
+                'isEditingDocumentation',
+                'isBrowsingDocumentation',
+            ],
+        })
     }
 
     /// Exported commands

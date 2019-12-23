@@ -100,9 +100,11 @@ class JsClassInspectorFlow {
 
         })
 
-        this.acceptedBubbledUps([
-            'updateClassDocumentation'
-        ])
+        this.acceptedBubbledUps({
+            commands: [
+                'updateClassDocumentation',
+            ]
+        })
     }
 
     /// Exported commands

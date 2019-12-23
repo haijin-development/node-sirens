@@ -250,11 +250,14 @@ class FlowBuilder {
             child flow throuwg the bubbling up mechanism.
 
             A method can not be invoked from a bubbled up command unless it is explicetely
-            declared with this method.
+            declared in this method call.
         `)
     */
-    acceptedBubbledUps(flowMethodNames) {
-        this.rootFlow.acceptAllBubbledUps( flowMethodNames )
+    acceptedBubbledUps({ commands: flowMethodNames, defaultHandler: defaultHandlerClosure }) {
+        this.rootFlow.acceptAllBubbledUps({
+            commands: flowMethodNames,
+            defaultHandler: defaultHandlerClosure
+        })
     }
 
     /*

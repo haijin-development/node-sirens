@@ -14,6 +14,7 @@ class Flow {
             'commandsController',
             'pendingEvents',
             'bubbledUpCommands',
+            'defaultBubbledUpHandlerClosure'
         ]
     }
 
@@ -390,7 +391,7 @@ class Flow {
     }
 
     hasBubbledUpCommandDefaultHandler() {
-        return this.bubbledUpCommands.has( '*' )        
+        return this.defaultBubbledUpHandlerClosure !== undefined     
     }
 
     handleBubbledUpCommandWithDefaultHandler({
@@ -400,23 +401,33 @@ class Flow {
             return { wasHandled: false }
         }
 
-        const result = unhandledClosure === undefined ?
-            this.onUnhandledBubbleUpCommand({
-                commandName: commandName,
-                params: params,
-                startingAtFlow: flow
-            })
-            :
-            unhandledClosure({
+        if( unhandledClosure !== undefined ) {
+            const result = unhandledClosure({
                 commandName: commandName,
                 params: params,
                 startingAtFlow: flow
             })
 
-        return {
-            wasHandled: true,
-            result: result,
+            return { wasHandled: true, result: result } 
         }
+
+        if( this.defaultBubbledUpHandlerClosure !== undefined ) {
+            const result = this.defaultBubbledUpHandlerClosure({
+                commandName: commandName,
+                params: params,
+                startingAtFlow: flow
+            })
+
+            return { wasHandled: true, result: result } 
+        }
+
+        const result = this.onUnhandledBubbleUpCommand({
+            commandName: commandName,
+            params: params,
+            startingAtFlow: flow
+        })
+
+        return { wasHandled: true, result: result } 
     }
 
     onUnhandledBubbleUpCommand({ commandName: commandName, params: params, startingAtFlow: flow }) {
@@ -425,10 +436,12 @@ class Flow {
         throw new Error(`Unhandled command '${commandName}' bubbled up from flow '${id}'.`)
     }
 
-    acceptAllBubbledUps(methodNames) {
+    acceptAllBubbledUps({ commands: methodNames, defaultHandler: defaultHandlerClosure }) {
         for( const eachMethodName of methodNames ) {
             this.acceptBubbledUp( eachMethodName )
         }
+
+        this.defaultBubbledUpHandlerClosure = defaultHandlerClosure
     }
 
     acceptBubbledUp(methodName) {

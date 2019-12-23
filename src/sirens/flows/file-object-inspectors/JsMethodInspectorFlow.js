@@ -68,9 +68,11 @@ class JsMethodInspectorFlow {
 
         })
 
-        this.acceptedBubbledUps([
-            'updateMethodDocumentation'
-        ])
+        this.acceptedBubbledUps({
+            commands: [
+                'updateMethodDocumentation'
+            ]
+        })
     }
 
     /// Exported commands

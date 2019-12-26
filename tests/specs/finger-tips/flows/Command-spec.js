@@ -249,7 +249,7 @@ describe('When using a StatefulCommand', () => {
 
             const commands = commandsController.getCommands()
 
-            expect( commands.length ).to .eql( 1 )
+            expect( commands ) .count .to .eql( 1 )
             expect( commands[0].command.getIdPath() ).to .eql( 'main.command-1' )
             expect( commands[0].params ).to .eql( [1,2] )
             expect( commands[0].result ).to .eql( 3 )

@@ -31,7 +31,7 @@ Method(\`
     it('gets the methods', () => {
         const methods = jsClass.getMethods()
 
-        expect( methods.length ) .to .equal(1)
+        expect( methods ) .count .to .equal(1)
         expect( methods[0].getMethodName() ) .to .equal('getName')
     })
 })

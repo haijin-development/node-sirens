@@ -19,7 +19,7 @@ describe('When using a MenuBar', () => {
             })
         })
 
-        expect( menuBar.getChildComponents().length) .to .eql(1)
+        expect( menuBar.getChildComponents() ) .count .to .eql(1)
         expect( menuBar.getChildComponents()[0].getView().isBehavingAs(MenuGroupView) ) .to .be .true
     })
 
@@ -32,7 +32,7 @@ describe('When using a MenuBar', () => {
             })
         })
 
-        expect( menuBar.getChildComponents().length) .to .eql(1)
+        expect( menuBar.getChildComponents() ) .count .to .eql(1)
         expect( menuBar.getChildComponents()[0].getView().isBehavingAs(MenuGroupView) ) .to .be .true
 
         expect( menuBar.getChildComponents()[0].getChildComponents()[0].getView().isBehavingAs(MenuItemView) ) .to .be .true

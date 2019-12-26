@@ -59,7 +59,7 @@ describe('The OInstance classification', () => {
 
         expect(object.isBehavingAs(OInstance)) .to .be .true
 
-        expect(object.classifications().length) .to .eql(1)
+        expect(object.classifications() ) .count .to .eql(1)
     })
 
     it('answers if it behaves as a classification', () => {

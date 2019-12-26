@@ -60,7 +60,7 @@ describe('When using a ComponentsList', () => {
                 model: ListModel.new({ list: [] })
             })
 
-            expect( component.getChildComponents().length ) .to .eql(1)
+            expect( component.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the stack has one child', () => {
@@ -70,7 +70,7 @@ describe('When using a ComponentsList', () => {
 
             const stack = component.getChildComponentAt({ index: 0 })
 
-            expect( stack.getChildComponents().length ) .to .eql(1)
+            expect( stack.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the CustomComponentList has no children', () => {
@@ -82,7 +82,7 @@ describe('When using a ComponentsList', () => {
 
             const componentsList = stack.getChildComponentAt({ index: 0 })
 
-            expect( componentsList.getChildComponents().length ) .to .eql(0)
+            expect( componentsList.getChildComponents() ) .count .to .eql(0)
         })
     })
 
@@ -92,7 +92,7 @@ describe('When using a ComponentsList', () => {
                 model: ListModel.new({ list: ['Label 1', 'Label 2', 'Label 3'] })
             })
 
-            expect( component.getChildComponents().length ) .to .eql(1)
+            expect( component.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the stack has one child', () => {
@@ -102,7 +102,7 @@ describe('When using a ComponentsList', () => {
 
             const stack = component.getChildComponentAt({ index: 0 })
 
-            expect( stack.getChildComponents().length ) .to .eql(1)
+            expect( stack.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the CustomComponentList has 3 children', () => {
@@ -114,7 +114,7 @@ describe('When using a ComponentsList', () => {
 
             const componentsList = stack.getChildComponentAt({ index: 0 })
 
-            expect( componentsList.getChildComponents().length ) .to .eql(3)
+            expect( componentsList.getChildComponents() ) .count .to .eql(3)
 
             const label1 = componentsList.getChildComponentAt({ index: 0 })
             expect( label1.getView().getText() ) .to .eql( 'Label 1' )
@@ -137,7 +137,7 @@ describe('When using a ComponentsList', () => {
 
             model.setList([ 'Label 1', 'Label 2', 'Label 3'] )
 
-            expect( component.getChildComponents().length ) .to .eql(1)
+            expect( component.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the stack has one child', () => {
@@ -151,7 +151,7 @@ describe('When using a ComponentsList', () => {
 
             const stack = component.getChildComponentAt({ index: 0 })
 
-            expect( stack.getChildComponents().length ) .to .eql(1)
+            expect( stack.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the CustomComponentList has 3 children', () => {
@@ -167,7 +167,7 @@ describe('When using a ComponentsList', () => {
 
             const componentsList = stack.getChildComponentAt({ index: 0 })
 
-            expect( componentsList.getChildComponents().length ) .to .eql(3)
+            expect( componentsList.getChildComponents() ) .count .to .eql(3)
 
             const label1 = componentsList.getChildComponentAt({ index: 0 })
             expect( label1.getView().getText() ) .to .eql( 'Label 1' )
@@ -192,7 +192,7 @@ describe('When using a ComponentsList', () => {
 
             const stackHandleChildren = stack.getView().getMainHandle().getChildren()
 
-            expect( stackHandleChildren.length ) .to .eql( 3 )
+            expect( stackHandleChildren ) .count .to .eql( 3 )
         })
     })
 
@@ -206,7 +206,7 @@ describe('When using a ComponentsList', () => {
 
             model.insertAll({ items: [ '1', '2', '3'], index: 1 })
 
-            expect( component.getChildComponents().length ) .to .eql(1)
+            expect( component.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the stack has one child', () => {
@@ -220,7 +220,7 @@ describe('When using a ComponentsList', () => {
 
             const stack = component.getChildComponentAt({ index: 0 })
 
-            expect( stack.getChildComponents().length ) .to .eql(1)
+            expect( stack.getChildComponents() ) .count .to .eql(1)
         })
 
         it('the CustomComponentList has 3 children', () => {
@@ -236,7 +236,7 @@ describe('When using a ComponentsList', () => {
 
             const componentsList = stack.getChildComponentAt({ index: 0 })
 
-            expect( componentsList.getChildComponents().length ) .to .eql(6)
+            expect( componentsList.getChildComponents() ) .count .to .eql(6)
 
             const label1 = componentsList.getChildComponentAt({ index: 0 })
             expect( label1.getView().getText() ) .to .eql( 'a' )
@@ -270,7 +270,7 @@ describe('When using a ComponentsList', () => {
 
             const stackHandleChildren = stack.getView().getMainHandle().getChildren()
 
-            expect( stackHandleChildren.length ) .to .eql( 6 )
+            expect( stackHandleChildren ) .count .to .eql( 6 )
         })
     })
 })

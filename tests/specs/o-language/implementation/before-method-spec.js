@@ -12,7 +12,7 @@ describe('When calling the beforeMethod hook', () => {
 
         const beforeMethodsCalled = object.getFirstProxyBeforeMethodCalls()
 
-        expect( beforeMethodsCalled.length ) .to .equal( 2 )
+        expect( beforeMethodsCalled ) .count .to .equal( 2 )
 
         expect( beforeMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
         expect( beforeMethodsCalled[0].methodName ) .to .eql( 'setPosition' )
@@ -41,7 +41,7 @@ describe('When calling the beforeMethod hook on a method that calls previousClas
             object.getSecondProxyBeforeMethodCalls(),
         )
 
-        expect( allBeforeMethodCalls.length ) .to .equal( 7 )
+        expect( allBeforeMethodCalls ) .count .to .equal( 7 )
 
         expect( allBeforeMethodCalls[0].proxy ) .to .eql( 'ShapeProxy' )
         expect( allBeforeMethodCalls[0].methodName ) .to .eql( 'behaveAs' )
@@ -121,7 +121,7 @@ describe('When skipping a method call from the beforeMethod hook', () => {
 
         const beforeMethodsCalled = object.getFirstProxyBeforeMethodCalls()
 
-        expect( beforeMethodsCalled.length ) .to .equal( 3 )
+        expect( beforeMethodsCalled ) .count .to .equal( 3 )
 
         expect( beforeMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
         expect( beforeMethodsCalled[0].methodName ) .to .eql( 'behaveAs' )

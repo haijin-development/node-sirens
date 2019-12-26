@@ -30,7 +30,7 @@ describe('When using a Component', () => {
             )
         })
 
-        expect( component.getChildComponents().length ) .to .eql(1)
+        expect( component.getChildComponents() ) .count .to .eql(1)
         expect( component.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
     })
 })

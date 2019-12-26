@@ -26,7 +26,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(1)
+            expect( splitter.getChildComponents()) .count .to .eql(1)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
@@ -48,7 +48,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(2)
+            expect( splitter.getChildComponents() ) .count .to .eql(2)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
@@ -75,7 +75,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(3)
+            expect( splitter.getChildComponents() ) .count .to .eql(3)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
@@ -107,7 +107,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(4)
+            expect( splitter.getChildComponents() ) .count .to .eql(4)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
@@ -138,7 +138,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(1)
+            expect( splitter.getChildComponents() ) .count .to .eql(1)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
         })
 
@@ -160,7 +160,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(2)
+            expect( splitter.getChildComponents() ) .count .to .eql(2)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
@@ -187,7 +187,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(3)
+            expect( splitter.getChildComponents()) .count .to .eql(3)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
@@ -219,7 +219,7 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(4)
+            expect( splitter.getChildComponents() ) .count .to .eql(4)
             expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true

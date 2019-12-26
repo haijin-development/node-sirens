@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const Protocol = require('../../../../src/O').Protocol
 const MethodCallConstraints = require('../../../../src/O').MethodCallConstraints
+const AssertionErrors = require('../../../../src/O').AssertionErrors
 
 describe('When validating parameters', () => {
     describe('with isNull()', () => {
@@ -40,7 +41,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Method AProtocol.method expected a null value, got a undefined.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a null value, got undefined.',
+            })
         })
     })
 
@@ -48,7 +52,7 @@ describe('When validating parameters', () => {
 
         const protocol = Protocol.define( class AProtocol {
             method(p1) {
-                this.param(p1) .notNull()
+                this.param(p1) .isNotNull()
             }
         })
 
@@ -80,7 +84,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( null )
-            }) .to .throw( Error, 'Method AProtocol.method expected a non null value, got null.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a non null value, got null.',
+            })
         })
     })
 
@@ -120,15 +127,18 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( null )
-            }) .to .throw( Error, 'Method AProtocol.method expected an undefined value, got a object.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected an undefined value, got null.',
+            })
         })
     })
 
-    describe('with notUndefined()', () => {
+    describe('with isNotUndefined()', () => {
 
         const protocol = Protocol.define( class AProtocol {
             method(p1) {
-                this.param(p1) .notUndefined()
+                this.param(p1) .isNotUndefined()
             }
         })
 
@@ -160,7 +170,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Method AProtocol.method expected a non undefined value, got undefined.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a non undefined value, got undefined.',
+            })
         })
     })
 
@@ -210,7 +223,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( undefined )
-            }) .to .throw( Error, 'Method AProtocol.method expected a Boolean, got a undefined.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a Boolean, got undefined.',
+            })
         })
     })
 
@@ -260,7 +276,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( '1' )
-            }) .to .throw( Error, 'Method AProtocol.method expected a Number, got a string.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a Number, got 1.',
+            })
         })
     })
 
@@ -300,7 +319,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1.1 )
-            }) .to .throw( Error, 'Method AProtocol.method expected an Integer, got a number.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected an Integer, got 1.1.',
+            })
         })
     })
 
@@ -339,8 +361,11 @@ describe('When validating parameters', () => {
                 .behaveAs( MethodCallConstraints )
 
             expect( () => {
-                object.method( 1 )
-            }) .to .throw( Error, 'Method AProtocol.method expected a String, got a number.' )
+                object.method( 1.1 )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a String, got 1.1.',
+            })
         })
     })
 
@@ -380,7 +405,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Method AProtocol.method expected an Array, got a number.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected an Array, got 1.',
+            })
         })
     })
 
@@ -420,7 +448,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Method AProtocol.method expected an Object, got a number.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected an Object, got 1.',
+            })
         })
     })
 
@@ -460,47 +491,10 @@ describe('When validating parameters', () => {
 
             expect( () => {
                 object.method( 1 )
-            }) .to .throw( Error, 'Method AProtocol.method expected a function, got a number.' )
-        })
-    })
-
-    describe('with isAnyOf()', () => {
-
-        const protocol = Protocol.define( class AProtocol {
-            method(p1) {
-                this.param(p1) .isAnyOf( [0, 1] )
-            }
-        })
-
-        const AClassification = Classification.define( class A {
-            static definition() {
-                this.instanceVariables = []
-                this.assumes = []
-                this.implements = [ protocol ]
-            }
-
-            method(p1) {
-            }
-        })
-
-        it('the validation passes with an included value', () => {
-
-            const object = AClassification.new()
-                .behaveAs( MethodCallConstraints )
-
-            expect( () => {
-                object.method( 1 )
-            }).not .to .throw( Error )
-        })
-
-        it('the validation fails with a non included value', () => {
-
-            const object = AClassification.new()
-                .behaveAs( MethodCallConstraints )
-
-            expect( () => {
-                object.method( 2 )
-            }) .to .throw( Error, 'Method AProtocol.method expected any of [0,1] values, got 2.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected a Function, got 1.',
+            })
         })
     })
 
@@ -539,14 +533,15 @@ describe('When validating parameters', () => {
         })
 
         it('the validation does not pass with a param that does behave as the classification', () => {
-            const param = 1
-
             const object = AClassification.new()
                 .behaveAs( MethodCallConstraints )
 
             expect( () => {
-                object.method( 2 )
-            }) .to .throw( Error, 'Expected value to be behaving as a OInstance( ExtendedInstantiator, Classification, OInstance ), got 2.' )
+                object.method( 1 )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected value to be behaving as a classififcationToBehaveAs, got 1.',
+            })
         })
     })
 
@@ -593,59 +588,15 @@ describe('When validating parameters', () => {
         })
 
         it('the validation does not pass with a param that does not comply with the protocol', () => {
-            const param = 1
-
-            const object = AClassification.new()
-                .behaveAs( MethodCallConstraints )
-
-            expect( () => {
-                object.method( 2 )
-            }) .to .throw( Error, 'Expected value to comply with ProtocolToComplyWith, got 2.' )
-        })
-    })
-
-    describe('with isExpectedTo()', () => {
-
-        const protocol = Protocol.define( class AProtocol {
-            method(p1) {
-                this.param(p1) .isExpectedTo( ({ value: value, methodInfo: methodInfo }) => {
-                    return {
-                        isValid: value > 0,
-                        errorMessage: () => { return `Expected value to be > 0.` }
-                    }
-                })
-            }
-        })
-
-        const AClassification = Classification.define( class A {
-            static definition() {
-                this.instanceVariables = []
-                this.assumes = []
-                this.implements = [ protocol ]
-            }
-
-            method(p1) {
-            }
-        })
-
-        it('the validation passes with a param that evaluates the given block to true', () => {
             const object = AClassification.new()
                 .behaveAs( MethodCallConstraints )
 
             expect( () => {
                 object.method( 1 )
-            }).not .to .throw( Error )
-        })
-
-        it('the validation fails with a param that does not evaluate the given block to true', () => {
-            const param = 1
-
-            const object = AClassification.new()
-                .behaveAs( MethodCallConstraints )
-
-            expect( () => {
-                object.method( 0 )
-            }) .to .throw( Error, 'Expected value to be > 0.' )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method expected value to comply with ProtocolToComplyWith, got 1.',
+            })
         })
     })
 
@@ -687,14 +638,15 @@ describe('When validating parameters', () => {
         })
 
         it('the validation fails with any other value', () => {
-            const param = 1
-
             const object = AClassification.new()
                 .behaveAs( MethodCallConstraints )
 
             expect( () => {
-                object.method( undefined )
-            }) .to .throw( Error, 'Method AProtocol.method validation failed for all the branches in the .or() expression.' )
+                object.method( 1 )
+            }) .to .raise({
+                error: AssertionErrors.FailedAssertionError,
+                withMessage: 'Method AProtocol.method validation failed for all the terms in the .or() expression.',
+            })
         })
     })
 

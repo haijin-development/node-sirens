@@ -17,7 +17,7 @@ describe('When reading a ClassDocumentation', () => {
             const classDocumentation =
                 DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
-            expect( classDocumentation.getDescription() ) .to .beSuchThat( (description) => {
+            expect( classDocumentation.getDescription() ) .to .be .suchThat( (description) => {
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -33,7 +33,7 @@ describe('When reading a ClassDocumentation', () => {
 
             const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
 
-            expect( classDocumentation.getDescription() ) .to .beSuchThat( (description) => {
+            expect( classDocumentation.getDescription() ) .to .be .suchThat( (description) => {
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -85,7 +85,7 @@ describe('When reading a ClassDocumentation', () => {
 
             const examples = classDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'\n\no.toUpperCase()" )
             })
@@ -104,7 +104,7 @@ describe('When reading a ClassDocumentation', () => {
 
             const examples = classDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'" )
             })

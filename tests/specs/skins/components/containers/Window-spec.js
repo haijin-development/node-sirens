@@ -18,7 +18,7 @@ describe('When using a Window', () => {
             })
         })
 
-        expect( window.getChildComponents().length ) .to .eql(1)
+        expect( window.getChildComponents() ) .count .to .eql(1)
         expect( window.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
     })
 })

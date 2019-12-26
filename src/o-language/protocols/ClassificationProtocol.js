@@ -974,11 +974,10 @@ getDefinedInstanceVariables() {}
      ])
     */
     setDefinedInstanceVariables(instanceVariables) {
-        this.param(instanceVariables) .isArray({
-            forEachItem: (index) => {
-                this.param(instanceVariable) .isInteger()
-            }
-        })
+        this.param(instanceVariables) .isArray()
+            .withEach( (each) => {
+                each .isInteger()
+            })
     }
 
     /*

@@ -47,7 +47,7 @@ describe('The Classification classification', () => {
         const object = Point.createObject()
 
         expect( object.isBehavingAs(OInstance) ) .to .be .true
-        expect( object.classifications().length ) .to .eql(1)
+        expect( object.classifications() ) .count .to .eql(1)
     })
 
     it('creates a classification object', () => {
@@ -56,7 +56,7 @@ describe('The Classification classification', () => {
         expect( object.isBehavingAs(OInstance) ) .to .be .true
         expect( object.isBehavingAs(Point) ) .to .be .true
 
-        expect( object.classifications().length ) .to .eql(2)
+        expect( object.classifications() ) .count .to .eql(2)
     })
 
     it('creates a classification object and calls its initialize methods with its parameters', () => {

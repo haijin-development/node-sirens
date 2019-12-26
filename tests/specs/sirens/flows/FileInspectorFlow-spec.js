@@ -65,7 +65,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
             expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) =>{
-                expect(selection.length) .to .equal( 1 )
+                expect(selection) .count .to .equal( 1 )
                 expect(selection[0]) .to .behaveAs( 'JsFileObject' )
             })
         })

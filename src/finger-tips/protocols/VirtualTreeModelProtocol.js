@@ -11,19 +11,17 @@ class VirtualTreeModelProtocol {
     }
 
     getItemAt({ indices: path }) {
-        this.param(path) .isArray({
-            forEachItem: (index) => {
-                this.param(index) .isInteger()
-            }
-        })
+        this.param(path) .isArray()
+            .withEach( (each) => {
+                each .isInteger()
+            })
     }
 
     getChildrenAt({ indices: path }) {
-        this.param(path) .isArray({
-            forEachItem: (index) => {
-                this.param(index) .isInteger()
-            }
-        })
+        this.param(path) .isArray()
+            .withEach( (each) => {
+                each .isInteger()
+            })
     }
 
     /**
@@ -38,11 +36,10 @@ class VirtualTreeModelProtocol {
      * in the path.
      */
     getObjectsHierarchyAt({ indices: path }) {
-        this.param(path) .isArray({
-            forEachItem: (index) => {
-                this.param(index) .isInteger()
-            }
-        })
+        this.param(path) .isArray()
+            .withEach( (each) => {
+                each .isInteger()
+            })
     }
 
     onRootsChanged({ with: object, do: closure }) {

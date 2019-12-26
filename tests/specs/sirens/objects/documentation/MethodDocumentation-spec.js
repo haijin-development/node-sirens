@@ -16,7 +16,7 @@ describe('When using a MethodDocumentation', () => {
 
             const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+            expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -32,7 +32,7 @@ describe('When using a MethodDocumentation', () => {
 
             const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+            expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -61,7 +61,7 @@ describe('When using a MethodDocumentation', () => {
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'\n\no.toUpperCase()" )
             })
@@ -79,7 +79,7 @@ describe('When using a MethodDocumentation', () => {
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'" )
             })
@@ -102,7 +102,7 @@ describe('When using a MethodDocumentation', () => {
 
             const params = methodDocumentation.getParams()
 
-            expect( params[0] ) .to .beSuchThat( (param) => {
+            expect( params[0] ) .to .be .suchThat( (param) => {
                 expect( param.getName() ) .to .eql( 'streetName' )
                 expect( param.getDescription() ) .to .eql( 'The name of the street. Does not include the street number.' )
             })

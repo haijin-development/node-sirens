@@ -21,7 +21,7 @@ describe('When using a Stack', () => {
                 })
             })
 
-            expect( stack.getChildComponents().length ) .to .eql(2)
+            expect( stack.getChildComponents() ) .count .to .eql(2)
             expect( stack.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( stack.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })
@@ -46,7 +46,7 @@ describe('When using a Stack', () => {
                 })
             })
 
-            expect( stack.getChildComponents().length ) .to .eql(2)
+            expect( stack.getChildComponents() ) .count .to .eql(2)
             expect( stack.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
             expect( stack.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
         })

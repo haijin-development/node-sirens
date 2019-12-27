@@ -2,6 +2,16 @@
 
 ## v0.16.0 (next release)
 
+### O language
+
+- Renamed .beSuchThat to .be .suchThat
+- Reimplemented assertion expressions on methods activation.
+- Improved error handling.
+
+### FingerTips
+
+- Cleaned up Flows and Commands classifications.
+
 ## v0.15.0
 
 ### Sirens

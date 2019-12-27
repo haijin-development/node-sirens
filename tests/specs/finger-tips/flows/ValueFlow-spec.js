@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const ValueFlow = require('../../../../src/finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../../src/finger-tips/stateful-flows/ValueFlow')
 
 describe('When using a ValueFlow', () => {
 

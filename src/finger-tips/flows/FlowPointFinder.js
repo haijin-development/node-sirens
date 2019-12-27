@@ -1,5 +1,12 @@
 const Classification = require('../../O').Classification
 
+/*
+    Class(`
+        A FLowPointFinder searches for a child FlowNode with a given id in a Flow tree.
+
+        Since the search logic is not immediate it is isolated in a different object.
+    `)
+*/
 class FlowPointFinder {
     /// Definition
 

@@ -1,6 +1,6 @@
 const Classification = require('../Classification')
 const AssertionCompiler = require('../assertions/AssertionCompiler')
-const {FailedAssertionError} = require('../assertions/AssertionErrors')
+const {FailedAssertionError} = require('../Errors')
 const ValidationFailureMessageFormatter = require('./ValidationFailureMessageFormatter')
 
 /*
@@ -81,34 +81,6 @@ class ObjectValidation {
 
 
             throw new FailedAssertionError(failedAssertionMessage)
-        }
-    }
-
-    /*
-        Method(`
-            Returns a formatted error message for the given failedValidation.
-        `)
-    */
-    _formatFailureMessageFor({ failedValidation: failedValidation }) {
-        const assertionId = failedValidation.getFailedValidationId()
-
-        const validatedValue = failedValidation.getValidatedValue()
-
-        const methodInfoString =
-            `${this.methodInfo.protocolName}.${this.methodInfo.methodName}`
-
-        switch( assertionId ) {
-            case 'isNull': {
-                return `Method ${methodInfoString} expected a null value, got a ${validatedValue}.`
-                break
-            }
-            case 'isNotNull': {
-                return `Method ${methodInfoString} expected a non null value, got null.`
-                break
-            }
-            default: {
-                throw new Error(`Unkown validation id '${assertionId}'`)
-            }
         }
     }
 }

@@ -1,13 +1,15 @@
 const Classification = require('../../O').Classification
-const ValueFlow = require('./ValueFlow')
-const BufferedValueFlow = require('./BufferedValueFlow')
-const ChoiceFlow = require('./ChoiceFlow')
-const TreeChoiceFlow = require('./TreeChoiceFlow')
+const ValueFlow = require('../stateful-flows/ValueFlow')
+const BufferedValueFlow = require('../stateful-flows/BufferedValueFlow')
+const ChoiceFlow = require('../stateful-flows/ChoiceFlow')
+const TreeChoiceFlow = require('../stateful-flows/TreeChoiceFlow')
 const CommandsGroup = require('../commands/CommandsGroup')
 
 /*
  Class(`
-    With this object a developer can define
+    A FlowBuilder defines a DSL to build a tree of FlowNodes.
+
+    With a FlowBuilder a developer can define
 
         - the logical components of an application.
         - the events handlers for the events triggered by the logical components of the application.
@@ -15,24 +17,60 @@ const CommandsGroup = require('../commands/CommandsGroup')
         - the commands that the application executes.
         - the conditions that each of those commands must meet to be executed.
 
-    Building an application flow using this DSL gives the developer a glance of the application flow in a similar way as
-    a flow chart diagram would but using a textual representation.
+    Building an application Flow using this DSL gives the developer a glance of the application
+    logic and behavior in a similar way as a flow chart diagram would but using a textual
+    and executable representation.
 
-    Commands can define a closure to evaluate if the command should be enabled based on the current state of the application and
-    another closure to execute the command.
+    Commands can be stateless or stateful.
+    Stateful commands define a closure to evaluate if the command should be enabled
+    or not based on the current state of the rest of the flow tree.
+    Both commands have a closure to execute the command.
 
-    To execute commands the FlowModel can use an optional CommandsController.
+    To execute commands the Flow uses an CommandsController.
 
-    If the main application defines a CommandsController it  is propagated to every other logical component defined during the flow.
+    The main FlowNode propagates its own CommandsController to every other FlowNode 
+    add to the tree.
 
-    Each command defined in a FlowModel goes through the CommandsController before its execution, giving the main application
-    a single point with full control over each command execution.
+    Each command defined in a Flow goes through the CommandsController before its
+    execution, giving the main Flow a single point with full control over each command 
+    execution.
 
+    A Flow can announce its own events when it changes.
 
-    Every logical component defined within a FlowModel announces its own events when it changes.
+    A visual component or external system can hook specific events of one or more Flows
+    in the tree to show an up to date visual representation of the Flow contents or to
+    perform some other action.
 
-    A visual component or external system can hook specific events of a particular logical component and show an up to date
-    visual representation of each component.
+    A FlowBuilder can be used as a standalone object but most commonly it is used
+    implicitly when a Flow defines a method call
+
+         build(closure)
+
+    For example:
+
+        class MainFlow {
+
+            /// Definition
+
+            static definition() {
+                this.instanceVariables = []
+                this.assumes = [Flow]
+            }
+
+            /// Building
+
+            buildWith(flow) {
+                flow.main({ id: 'main' }, function(thisFlow) {
+
+                    this.value({ id: 'selectedItem' })
+
+                    this.command({
+                        id: 'openFile',
+                        whenActioned: () => { ... }
+                    })
+                })
+            }
+        }
  `)
 */
 class FlowBuilder {

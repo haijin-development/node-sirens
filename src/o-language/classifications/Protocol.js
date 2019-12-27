@@ -1,4 +1,5 @@
 const Classification = require('./Classification')
+const {ProtocolError} = require('./Errors')
 
 /*
  Class(`
@@ -165,7 +166,7 @@ class Protocol {
     isImplementedBy({ classification: classification, ifNot: closure }) {
         if( closure === undefined ) {
             closure = (methodName) => {
-                throw new Error(`${classification.getName()} classification must implement the method ${this.getName()}.${methodName} to comply with the protocol implementation.`)                
+                throw new ProtocolError(`${classification.getName()} classification must implement the method ${this.getName()}.${methodName} to comply with the protocol implementation.`)                
             }
         }
 
@@ -295,7 +296,7 @@ class Protocol {
     isImplementedByAll({ classifications: classifications, ifNot: closure }) {
         if( closure === undefined ) {
             closure = (methodName) => {
-                throw new Error(`Must implement the method ${this.getName()}.${methodName} to comply with the protocol implementation.`)
+                throw new ProtocolError(`Must implement the method ${this.getName()}.${methodName} to comply with the protocol implementation.`)
             }
         }
 

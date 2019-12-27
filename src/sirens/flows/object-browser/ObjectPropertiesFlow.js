@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesFlow {

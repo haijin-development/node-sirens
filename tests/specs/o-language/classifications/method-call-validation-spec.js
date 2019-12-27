@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const Protocol = require('../../../../src/O').Protocol
 const MethodCallConstraints = require('../../../../src/O').MethodCallConstraints
-const AssertionErrors = require('../../../../src/O').AssertionErrors
+const Errors = require('../../../../src/O').Errors
 
 describe('When validating parameters', () => {
     describe('with isNull()', () => {
@@ -42,7 +42,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( undefined )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a null value, got undefined.',
             })
         })
@@ -85,7 +85,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( null )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a non null value, got null.',
             })
         })
@@ -128,7 +128,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( null )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected an undefined value, got null.',
             })
         })
@@ -171,7 +171,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( undefined )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a non undefined value, got undefined.',
             })
         })
@@ -224,7 +224,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( undefined )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a Boolean, got undefined.',
             })
         })
@@ -277,7 +277,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( '1' )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a Number, got 1.',
             })
         })
@@ -320,7 +320,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1.1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected an Integer, got 1.1.',
             })
         })
@@ -363,7 +363,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1.1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a String, got 1.1.',
             })
         })
@@ -406,7 +406,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected an Array, got 1.',
             })
         })
@@ -449,7 +449,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected an Object, got 1.',
             })
         })
@@ -492,7 +492,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected a Function, got 1.',
             })
         })
@@ -539,7 +539,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected value to be behaving as a classififcationToBehaveAs, got 1.',
             })
         })
@@ -594,7 +594,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method expected value to comply with ProtocolToComplyWith, got 1.',
             })
         })
@@ -644,7 +644,7 @@ describe('When validating parameters', () => {
             expect( () => {
                 object.method( 1 )
             }) .to .raise({
-                error: AssertionErrors.FailedAssertionError,
+                error: Errors.FailedAssertionError,
                 withMessage: 'Method AProtocol.method validation failed for all the terms in the .or() expression.',
             })
         })

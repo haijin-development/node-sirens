@@ -2,6 +2,7 @@ const ClassificationInstantiation = require('./classification-instantiation')
 const ActiveClassification = require('./active-classification')
 const ClassificationObject = require('./classification-object')
 const O_Object = require('./o-object')
+const {OLanguageError, MethodNotFoundError} = require('../classifications/Errors')
 
 class ClassificationLookup {
     /*
@@ -171,7 +172,7 @@ class ClassificationLookup {
             &&
             ! Array.isArray( beforeMethodResult.callParams )
           ) {
-            throw new Error(`Expecting an array in .params property.`)
+            throw new OLanguageError(`Expecting an array in .params property.`)
         }
 
         if( beforeMethodResult.callMethod !== undefined ) {
@@ -297,7 +298,7 @@ class ClassificationLookup {
 
         if( mustCallMethod ) {
             if( method === null ) {
-                throw new Error(`Method not found .${methodName.toString()}() in object ${object.toString()}`)
+                throw new MethodNotFoundError(`Method not found .${methodName.toString()}() in object ${object.toString()}`)
             }
 
             if( beforeMethodResult !== undefined && beforeMethodResult.callMethod !== methodName ) {

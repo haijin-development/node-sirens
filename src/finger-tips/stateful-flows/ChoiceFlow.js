@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const Flow = require('./Flow')
+const Flow = require('../flows/Flow')
 const ChoiceFlowPoint = require('./ChoiceFlowPoint')
 const Announcer = require('../announcements/Announcer')
 
@@ -45,6 +45,8 @@ class ChoiceFlow {
 
         this.on('selection-changed', flowPoint.onFlowSelectionChanged.bind(flowPoint) )
         this.on('choices-changed', flowPoint.onFlowChoicesChanged.bind(flowPoint) )
+
+        this.attachCommandsToFlowPoint({ flowPoint: flowPoint })
 
         return flowPoint
     }

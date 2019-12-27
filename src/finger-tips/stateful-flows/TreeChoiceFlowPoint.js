@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const FlowPoint = require('./FlowPoint')
+const FlowPoint = require('../flows/FlowPoint')
 const TreeChoiceModel = require('../models/TreeChoiceModel')
 
 class TreeChoiceFlowPoint {

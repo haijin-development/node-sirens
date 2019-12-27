@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const Flow = require('./Flow')
+const Flow = require('../flows/Flow')
 const TreeChoiceFlowPoint = require('./TreeChoiceFlowPoint')
 const Announcer = require('../announcements/Announcer')
 
@@ -46,6 +46,8 @@ class TreeChoiceFlow {
 
         this.on('selection-changed', flowPoint.onFlowSelectionChanged.bind(flowPoint) )
         this.on('roots-changed', flowPoint.onFlowRootsChanged.bind(flowPoint) )
+
+        this.attachCommandsToFlowPoint({ flowPoint: flowPoint })
 
         return flowPoint
     }

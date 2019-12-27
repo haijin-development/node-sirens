@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const FlowPoint = require('./FlowPoint')
+const FlowPoint = require('../flows/FlowPoint')
 const ValueModelBehaviour = require('../models/ValueModelBehaviour')
 const ValueModelProtocol = require('../protocols/ValueModelProtocol')
 

@@ -1,6 +1,6 @@
 const Classification = require('../../O').Classification
-const StatefulCommand = require('./StatefulCommand')
-const Flow = require('../flows/Flow')
+const FlowNode = require('../flows/FlowNode')
+const FlowWithChildren = require('../flows/FlowWithChildren')
 
 class CommandsGroup {
 
@@ -8,7 +8,7 @@ class CommandsGroup {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [Flow]
+        this.assumes = [FlowNode, FlowWithChildren]
     }
 
     isCommandsGroup() {

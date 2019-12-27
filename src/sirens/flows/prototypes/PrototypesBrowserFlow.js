@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
 const ApplicationCommandsController = require('../ApplicationCommandsController')
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesFlow = require('./ClassPropertiesFlow')
 const Sirens = require('../../../Sirens')

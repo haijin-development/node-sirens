@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const OInstance = require('../../../../src/O').OInstance
 const Protocol = require('../../../../src/O').Protocol
+const Errors = require('../../../../src/O').Errors
 
 let extendedBehaviours
 let pointDefinition
@@ -110,10 +111,10 @@ describe('The Classification classification', () => {
 
             Point.implements({ protocol: PointProtocol })
 
-        }).to .throw(
-            Error,
-            'Point classification must implement the method PointProcotol.getZ to comply with the protocol implementation.'
-        )
+        }).to .raise({
+            error: Errors.ProtocolError,
+            withMessage: 'Point classification must implement the method PointProcotol.getZ to comply with the protocol implementation.',
+        })
     })
 
     it('returns a copy of its instance variables', () => {

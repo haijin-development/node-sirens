@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const EditClassDescriptionDialog = require('../../components/documentation-browser/edition/EditClassDescriptionDialog')
 const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
 const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')

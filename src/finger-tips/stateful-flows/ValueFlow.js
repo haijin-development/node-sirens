@@ -1,5 +1,5 @@
 const Classification = require('../../O').Classification
-const Flow = require('./Flow')
+const Flow = require('../flows/Flow')
 const Announcer = require('../announcements/Announcer')
 const ValueFlowPoint = require('./ValueFlowPoint')
 
@@ -41,6 +41,8 @@ class ValueFlow {
         const flowPoint = ValueFlowPoint.new({ flow: this })
 
         this.on('value-changed', flowPoint.onFlowValueChanged.bind(flowPoint) )
+
+        this.attachCommandsToFlowPoint({ flowPoint: flowPoint })
 
         return flowPoint
     }

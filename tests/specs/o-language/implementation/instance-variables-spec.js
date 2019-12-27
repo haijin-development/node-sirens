@@ -43,6 +43,7 @@
 const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const OInstance = require('../../../../src/O').OInstance
+const Errors = require('../../../../src/O').Errors
 
 const Shape = Classification.define( class Shape {
     static definition() {
@@ -170,6 +171,9 @@ describe('When setting instance variables values to an O instance', () => {
 
         expect( () => {
             object.setMissingInstanceVariable()
-        }) .to .throw(Error, `'missingInstanceVariable' is not an instance variable of Shape Classification.`)
+        }) .to .raise({
+            error: Errors.InstanceVariableNotFoundError,
+            withMessage: `'missingInstanceVariable' is not an instance variable of Shape Classification.`
+        })
     })
 })

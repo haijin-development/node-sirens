@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const Folder = require('../../objects/paths/Folder')
 const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')

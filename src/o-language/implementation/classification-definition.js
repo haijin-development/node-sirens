@@ -1,3 +1,5 @@
+const {OLanguageError} = require('../classifications/Errors')
+
 /*
     These are the valid attributes of a class definition.
 */
@@ -47,7 +49,7 @@ class ClassificationDefinition {
 
         classificationDefinitionProps.forEach( (attribute) => {
             if( ! classDefinitionAttributes.includes( attribute ) ) {
-                throw new Error(`Uknown classification definition '${attribute}'.`)
+                throw new OLanguageError(`Uknown classification definition '${attribute}'.`)
             }  
         })
 

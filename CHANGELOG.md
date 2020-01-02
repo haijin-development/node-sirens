@@ -16,7 +16,9 @@
 ### FingerTips
 
 - Cleaned up Flows and Commands classifications.
-- Implemented NamespaceFlow and CreateObjectCommand. It needs more iterations.
+- Implemented namespaces using NamespaceFlow.
+- Cleaned up builders and flows dependencies.
+- Rewrote the definitions of Commands and Flow methods.
 
 ### Skins
 
@@ -27,6 +29,15 @@ use of the namespaces.
 ### Sirens
 
 - Rewrote all components using SkinNamespace. It needs more iterations.
+- Moved Sirens.js code to SirensFlow.
+- Cleaned up browser components models.
+- Cleaned up Sirens components require statements.
+- Cleaned up references to global namespace from components. Remains to clean up GtkIcons and Resources references.
+- Cleaned up Preferences and moved it to SirensFlow.
+- Rewrote the definitions of Commands and Flow methods.
+- Moved Sirens dialogs to a different namespace.
+- Fixed FileDialog and FolderDialog open warnings.
+- Removed file Skins.js since the SkinsNamepace made it obsolete.
 
 ## v0.15.0
 

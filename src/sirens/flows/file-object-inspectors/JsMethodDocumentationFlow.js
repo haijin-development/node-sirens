@@ -15,8 +15,6 @@ const DocumentationReturnValue = require('../../objects/documentation/sections/D
 
 const DocumentationIndexSection = require('./DocumentationIndexSection')
 
-const Preferences = require('../../Preferences')
-
 class JsMethodDocumentationFlow {
     /// Definition
 
@@ -242,7 +240,7 @@ class JsMethodDocumentationFlow {
         const prioritizedTags = []
 
         const unprioritizedTags = tagsSortedAlphabetically.filter( (tag) => {
-            const prioritizesTag = Preferences.prioritizesTag({ tag: tag })
+            const prioritizesTag = this.prioritizesTag({ tag: tag })
 
             if( prioritizesTag === true ) {
                 prioritizedTags.push( tag )
@@ -582,6 +580,18 @@ class JsMethodDocumentationFlow {
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',
+        })
+    }
+
+    prioritizesTag({ tag: tag }) {
+        const preferences = this.getPreferences()
+
+        return preferences.methodTags.prioritizedTags.includes( tag )
+    }
+
+    getPreferences() {
+        return this.bubbleUp({
+            command: 'getPreferences'
         })
     }
 }

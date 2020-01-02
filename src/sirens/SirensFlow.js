@@ -1,3 +1,4 @@
+const fs = require('fs')
 const Classification = require('../O').Classification
 const Flow = require('../finger-tips/flows/Flow')
 
@@ -5,9 +6,6 @@ const ApplicationCommandsController = require('./flows/ApplicationCommandsContro
 const SirensNamespace = require('./flows/SirensNamespace')
 
 const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
-const Preferences = require('./Preferences')
-
-SkinsGtk.setGlobalStyles({ cssFile: Preferences.cssFile })
 
 /*
     Class(`
@@ -46,10 +44,23 @@ class SirensFlow {
                     'browsePrototypes',
                     'openAppBrowser',
                     'openPlayground',
+                    'getPreferences',
                 ],
             })
 
+            this.value( {id: 'preferences' }, function(){
+
+                this.whenValueChanges( function({ newValue: preferences }) {
+                    preferences.freeze
+
+                    SkinsGtk.setGlobalStyles({ cssFile: preferences.cssFile })
+                })
+
+            })
+
         })
+
+        this.loadDefaultPreferences()
     }
 
     /// Exported commands
@@ -168,6 +179,30 @@ class SirensFlow {
 
             playground.open()
         })
+    }
+
+    loadDefaultPreferences() {
+        this.loadPreferencesFromFile({
+            filename: __dirname + '/../../resources/Preferences.json',
+        })
+    }
+
+    loadPreferencesFromFile({ filename: jsonFilename }) {
+        const jsonContents = fs.readFileSync( jsonFilename ).toString()
+
+        const preferences = JSON.parse( jsonContents )
+
+        this.setPreferences({ preferences: preferences })
+    }
+
+    setPreferences({ preferences: preferences }) {
+        this.getChildFlow({ id: 'preferences' })
+            .setValue( preferences )
+    }
+
+    getPreferences() {
+        return this.getChildFlow({ id: 'preferences' })
+            .getValue()
     }
 }
 

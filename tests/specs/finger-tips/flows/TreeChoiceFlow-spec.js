@@ -1,6 +1,5 @@
 const expect = require('chai').expect
 const Flow = require('../../../../src/finger-tips/flows/Flow')
-const TreeChoiceFlow = require('../../../../src/finger-tips/stateful-flows/TreeChoiceFlow')
 
 describe('When using a TreeChoiceFlow', () => {
 

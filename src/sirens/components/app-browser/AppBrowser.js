@@ -1,11 +1,8 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 const AppBrowserMenu = require('./AppBrowserMenu')
 const AppBrowserBody = require('./AppBrowserBody')
-const AppBrowserFlow = require('../../flows/app-browser/AppBrowserFlow')
-const Sirens = require('../../../Sirens')
 
 class AppBrowser {
     /// Definition
@@ -14,26 +11,6 @@ class AppBrowser {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
-    }
-
-    /// Initializing
-
-    /**
-     * Returns a new AppBrowserFlow.
-     * If the props include a props.object defined the that props.object is the browsed object,
-     * otherwise the browsed object is undefined.
-     */
-    defaultModel() {
-        const flow = AppBrowserFlow.new().asFlowPoint()
-
-        const appFolderPath = this.getProps().appFolder
-
-        if( appFolderPath ) {
-            flow.openFolder({ folderPath: appFolderPath })
-        }
-
-        return flow
     }
 
     /// Building
@@ -46,6 +23,7 @@ class AppBrowser {
         componentsRenderer.render( function(component) {
             this.window( function() {
                 this.styles({
+                    id: 'window',
                     title: flow.getFlowPoint({ id: 'windowTitle' }),
                     width: 1200,
                     height: 600,
@@ -56,8 +34,13 @@ class AppBrowser {
                     this.component(
                         AppBrowserMenu.new({
                             model: flow,
-                            openFolder: () => { flow.pickAndOpenFolder({ parentWindow: component }) },
-                            openPlayground: () => { flow.openPlayground({ parentWindow: component }) },
+                            openFolder: () => {
+                                const window = component.getChildComponent({ id: 'window' })
+                                flow.pickAndOpenFolder({ parentWindow: window })
+                            },
+                            openPlayground: () => {
+                                flow.openPlayground({ parentWindow: component })
+                            },
                         })
                     )
 

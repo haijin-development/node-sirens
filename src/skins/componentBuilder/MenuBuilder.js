@@ -1,7 +1,5 @@
 const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
-const MenuGroupBuilder = require('./MenuGroupBuilder')
-const MenuBar = require('../components/menus/MenuBar')
 
 /*
  Class(`
@@ -255,7 +253,9 @@ class MenuBuilder {
     createFromClosure(closure) {
         this.build(closure)
 
-        const menuBar = MenuBar.new( this.getProps() )
+        const menuBar = this.namespace().MenuBar.new( this.getProps() )
+
+        menuBar.assemble()
 
         menuBar.addAllChildrenComponents( this.menuGroups )
 
@@ -353,7 +353,7 @@ class MenuBuilder {
     menuGroup(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const menuGroup = MenuGroupBuilder.new( props ).createFromClosure(closure)
+        const menuGroup = this.namespace().MenuGroupBuilder.new( props ).createFromClosure(closure)
 
         this.menuGroups.push( menuGroup )
     }

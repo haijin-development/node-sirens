@@ -14,9 +14,9 @@ class GtkWidget {
 
     /// Initializing
 
-    initialize() {
+    assemble() {
         this.previousClassificationDo( () => {
-            this.initialize()
+            this.assemble()
         })
 
         this.initializeHandles()

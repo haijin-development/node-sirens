@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const TabsView = require('../../gtk-views/TabsView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Tabs {
@@ -19,9 +18,13 @@ class Tabs {
     }
 
     createView() {
-        return TabsView.new({
+        const view = this.namespace().Views.TabsView.new({
             onTabPageChanged: this.onTabPageChanged.bind(this)
         })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

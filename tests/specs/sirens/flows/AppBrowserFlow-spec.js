@@ -33,14 +33,13 @@ describe('When using an AppBrowserFlow', () => {
             'main.windowTitle',
             'main.filesTree',
 
-            'main.flow-commands.pickAndOpenFolder',
-            'main.flow-commands.openPlayground',
+            'main.pickAndOpenFolder',
+            'main.openPlayground',
 
-            'main.flow-commands',
-            'main.flow-commands.pickFolder',
-            'main.flow-commands.openFolder',
-            'main.flow-commands.getSelectedFilePath',
-            'main.flow-commands.hasAClassSelected',
+            'main.pickFolder',
+            'main.openFolder',
+            'main.getSelectedFilePath',
+            'main.hasAClassSelected',
 
             'main.browsingMode',
             'main.browsingMode.showsUnformattedComments',
@@ -50,16 +49,14 @@ describe('When using an AppBrowserFlow', () => {
             'main.selectedFile',
             'main.selectedFile.fileObjects',
 
-            'main.selectedFile.flow-commands',
-            'main.selectedFile.flow-commands.getFileObjectComponent',
-            'main.selectedFile.flow-commands.getSelectedFileObject',
-            'main.selectedFile.flow-commands.getFileObjectInspectorFlow',
-            'main.selectedFile.flow-commands.getSourceFile',
+            'main.selectedFile.getFileObjectComponent',
+            'main.selectedFile.getSelectedFileObject',
+            'main.selectedFile.getFileObjectInspectorFlow',
+            'main.selectedFile.getSourceFile',
 
             'main.selectedFile.selectedFileObject',
             'main.selectedFile.selectedFileObject.text',
-            'main.selectedFile.selectedFileObject.flow-commands',
-            'main.selectedFile.selectedFileObject.flow-commands.getText',
+            'main.selectedFile.selectedFileObject.getText',
         ])
     })
 
@@ -87,7 +84,7 @@ describe('When using an AppBrowserFlow', () => {
         })
 
         it('sets the folder to the main flow', () => {
-            expect(flow) .withId( 'main' ) .withValue .suchThat( (value) => {
+            expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
                 expect( value.getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
         })

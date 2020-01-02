@@ -44,7 +44,6 @@ class ClassificationLookup {
         if( classificationObject === null ) {
             return -1
         }
-
         return ClassificationInstantiation.findClassificationIndex({
             object: object,
             classificationObject: classificationObject,
@@ -110,7 +109,7 @@ class ClassificationLookup {
             return true
         }
 
-        // The .afterInstantiation is a special case because it always gets called from from the
+        // The .afterInstantiation is a special case because it always gets called from the
         // OInstance classification. If its the call to the proxy classification do not call beforeMethod
         if( methodName === 'afterInstantiation' ) {
             const classificationObjectOwningMethod = ClassificationInstantiation.getSourceClassification({

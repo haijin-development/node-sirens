@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
 const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
-const EditClassCommentDialog = require('../../components/documentation-browser/edition/EditClassCommentDialog')
 const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
 const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
@@ -19,7 +18,24 @@ class JsClassInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getClass',
+                    'getMethodUnformattedComment',
+                    'getAllMethodsTagLabels',
+                    'isInEditionMode',
+                    'showsUnformattedComments',
+                    'editClassUnformattedComment',
+                    'setIsBrowsingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
+            })
+
+            this.acceptedBubbledUps({
+                commands: [
+                    'updateClassDocumentation',
+                ]
+            })
 
             this.whenObjectChanges( ({ newValue: jsClass }) => {
 
@@ -81,44 +97,18 @@ class JsClassInspectorFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getClass',
-                    'getMethodUnformattedComment',
-                    'getAllMethodsTagLabels',
-                    'isInEditionMode',
-                    'showsUnformattedComments',
-                    'editClassUnformattedComment',
-                    'setIsBrowsingDocumentation',
-                    'isBrowsingDocumentation',
-                ],
-            })
-
-        })
-
-        this.acceptedBubbledUps({
-            commands: [
-                'updateClassDocumentation',
-            ]
-        })
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getClass',
-            'flow-commands.getMethodUnformattedComment',
-            'flow-commands.getAllMethodsTagLabels',
-            'flow-commands.isInEditionMode',
-            'flow-commands.showsUnformattedComments',
-            'flow-commands.editClassUnformattedComment',
-            'flow-commands.setIsBrowsingDocumentation',
-            'flow-commands.isBrowsingDocumentation',
+            'getClass',
+            'getMethodUnformattedComment',
+            'getAllMethodsTagLabels',
+            'isInEditionMode',
+            'showsUnformattedComments',
+            'editClassUnformattedComment',
+            'setIsBrowsingDocumentation',
+            'isBrowsingDocumentation',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -150,7 +140,7 @@ class JsClassInspectorFlow {
 
         const classComment = jsClass.getClassComment().getContents()
 
-        const dialog = EditClassCommentDialog.new({
+        const dialog = this.guiNamespace().EditClassCommentDialog.new({
             className: className,
             classComment: classComment,
             window: parentWindow,
@@ -236,6 +226,12 @@ class JsClassInspectorFlow {
         })
 
         return methodsWithSelectedTags
+    }
+
+    guiNamespace() {
+        return this.bubbleUp({
+            command: 'guiNamespace',
+        })
     }
 }
 

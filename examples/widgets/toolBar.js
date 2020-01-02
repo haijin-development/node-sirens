@@ -1,9 +1,11 @@
 const Classification = require('../../src/O').Classification
-const Component = require('../../src/Skins').Component
-const ComponentProtocol_Implementation = require('../../src/Skins').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../src/Skins').ComponentInstantiator
-const Sirens = require('../../src/Sirens')
-const GtkIcons = require('../../../Skins').GtkIcons
+const Component = require('../../src/skins/components/Component')
+const ComponentProtocol_Implementation = require('../../src/skins/protocols/ComponentProtocol_Implementation')
+const SkinsGtk = require('../../src/skins/gtk-views/SkinsGtk')
+const GtkIcons = require('../../src/skins/gtk-views/constants/GtkIcons')
+const SkinsNamespace = require('../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 class CustomComponent {
     /// Definition
@@ -12,7 +14,10 @@ class CustomComponent {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
+    }
+
+    afterInstantiation() {
+        this.setNamespace( namespace )
     }
 
     /// Actions
@@ -80,6 +85,6 @@ class CustomComponent {
 
 CustomComponent = Classification.define(CustomComponent)
 
-Sirens.do( () => {
+SkinsGtk.do( () => {
     CustomComponent.new().open()
 })

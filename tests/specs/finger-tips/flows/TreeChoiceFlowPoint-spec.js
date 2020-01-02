@@ -1,8 +1,6 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/O').Classification
 const Flow = require('../../../../src/finger-tips/flows/Flow')
 const TreeChoiceModel = require('../../../../src/finger-tips/models/TreeChoiceModel')
-const CommandsController = require('../../../../src/finger-tips/commands/CommandsController')
 
 describe('When using a TreeChoiceFlowPoint', () => {
 
@@ -64,23 +62,6 @@ describe('When using a TreeChoiceFlowPoint', () => {
             const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
             expect( childFlowPoint ) .to .be .null
-        })
-
-        it('raises an error when trying to get a child flow', () => {
-            const flow = Flow.new({ id: 'main' })
-
-            flow.build( function({ rootFlow: flow }) {
-                this.treeChoice({
-                    id: 'flow-1',
-                    getChildrenClosure: () => {},
-                })
-            })
-
-            expect( () => {
-
-                flow.asFlowPoint().getChildFlow({ id: 'flow-1' })
-
-            }) .to .throw('Method not found .asFlowPoint()')
         })
     })
 

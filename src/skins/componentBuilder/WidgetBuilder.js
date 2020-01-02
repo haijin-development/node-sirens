@@ -1,6 +1,7 @@
 const Classification = require('../../O').Classification
 const ObjectWithProps = require('../../O').ObjectWithProps
-const AntiComponent = require('./AntiComponent')
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
+
 
 /*
  Class(`
@@ -48,7 +49,7 @@ class WidgetBuilder {
     */
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ObjectWithProps]
+        this.assumes = [ObjectWithProps, ObjectWithNamespace]
     }
 
     /// Initializing
@@ -308,7 +309,7 @@ class WidgetBuilder {
      ])
     */
     skip() {
-        return AntiComponent.new()
+        return this.namespace().AntiComponent.new()
     }
 
     /*

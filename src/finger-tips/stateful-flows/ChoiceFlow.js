@@ -40,6 +40,8 @@ class ChoiceFlow {
         })
     }
 
+    /// Exporting
+
     asFlowPoint() {
         const flowPoint = ChoiceFlowPoint.new({ flow: this })
 

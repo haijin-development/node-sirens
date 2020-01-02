@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const Announcer = require('../announcements/Announcer')
 const VirtualTreeModelProtocol = require('../protocols/VirtualTreeModelProtocol')
 
@@ -7,7 +8,7 @@ class VirtualTreeModel {
 
     static definition() {
         this.instanceVariables = ['getChildrenClosure', 'roots']
-        this.assumes = [Announcer]
+        this.assumes = [Model, Announcer]
         this.implements = [VirtualTreeModelProtocol]
     }
 

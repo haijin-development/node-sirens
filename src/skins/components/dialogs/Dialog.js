@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const DialogView = require('../../gtk-views/DialogView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Dialog {
@@ -26,12 +25,16 @@ class Dialog {
 
         const windowView = window !== undefined ? window.getView() : undefined
 
-        return DialogView.new({
+        const view = this.namespace().Views.DialogView.new({
             title: props.title,
             buttons: props.buttons,
             //windowView: windowView,
             dialog: this,
         })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

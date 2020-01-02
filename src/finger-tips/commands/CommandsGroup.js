@@ -15,6 +15,17 @@ class CommandsGroup {
         return true
     }
 
+    /*
+        Method(`
+            Returns a CommandsBuilder to build this NamespaceFlow using a DSL.
+        `)
+    */
+    newFlowBuilder() {
+        // review
+        const CommandsBuilder = require('../flow-builders/CommandsBuilder')
+        return CommandsBuilder.new({ flow: this })
+    }
+    
     /// Iterating
 
     evaluateCommandsEnabledClosure({ application: application }) {

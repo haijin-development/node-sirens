@@ -20,10 +20,10 @@ class MenuViewBuilder {
     /*
      * Returns a new MenuView wrapping the given GtkWidget.
      */
-    newFromGtkWidget(gtkWidget) {
+    newFromGtkWidget({ gtkWidget: gtkWidget, namespace: namespace }) {
         gtkWidget = this.castGtkWidgetToGtkMenu(gtkWidget)
 
-        return this.new({ gtkWidget: gtkWidget })
+        return namespace.MenuView.new({ gtkWidget: gtkWidget })
     }
 }
 
@@ -42,7 +42,7 @@ class MenuView {
 
     /// Initializing
 
-    initialize({ gtkWidget: gtkWidget } = { gtkWidget: undefined }) {
+    initialize({ gtkWidget: gtkWidget } = {}) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -52,6 +52,9 @@ class MenuView {
         }
 
         this.menuHandle = gtkWidget
+    }
+
+    assemble() {
     }
 
     /// Querying

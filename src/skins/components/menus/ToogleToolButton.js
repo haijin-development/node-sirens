@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ToggleToolButtonView = require('../../gtk-views/ToggleToolButtonView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
-const ValueModel = require('../../../finger-tips/models/ValueModel')
 const UpdatingModel = require('../UpdatingModel')
 
 
@@ -21,18 +19,22 @@ class ToogleToolButton {
         const value = this.getProps().value !== undefined ? 
                         this.getProps().value : false
 
-        return ValueModel.new({ value: value })
+        return this.namespace().Models.ValueModel.new({ value: value })
     }
 
     createView() {
         const props = this.getProps()
 
-        return ToggleToolButtonView.new({
+        const view = this.namespace().Views.ToggleToolButtonView.new({
             imageProps: props.imageProps,
             label: props.label,
             tooltip: props.tooltip,
             action: (...params) => { this.handleClick(...params) },
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

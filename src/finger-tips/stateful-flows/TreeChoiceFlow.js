@@ -41,6 +41,8 @@ class TreeChoiceFlow {
         })
     }
 
+    /// Exporting
+
     asFlowPoint() {
         const flowPoint = TreeChoiceFlowPoint.new({ flow: this })
 

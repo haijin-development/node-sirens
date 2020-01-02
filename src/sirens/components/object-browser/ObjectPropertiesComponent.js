@@ -1,8 +1,15 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ObjectPropertiesFlow = require('../../flows/object-browser/ObjectPropertiesFlow')
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 
+/*
+    Class(`
+        Browses the properties of a javascript object with an expandable tree.
+
+        // review this comment in the next iteration!
+        Expects a ObjectPropertiesFlow flowPoint as its model.
+    `)
+*/
 class ObjectPropertiesComponent {
     /// Definition
 
@@ -10,12 +17,6 @@ class ObjectPropertiesComponent {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-    }
-
-    /// Initializing
-
-    defaultModel() {
-        return ObjectPropertiesFlow.new().asFlowPoint()
     }
 
     /// Building

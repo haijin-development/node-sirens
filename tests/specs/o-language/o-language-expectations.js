@@ -1,6 +1,7 @@
 const Assertion = require('chai').Assertion
 const assert = require('chai').assert
 const fs = require('fs')
+const OInstance = require('../../../src/O').OInstance
 
 // Classifications
 
@@ -29,6 +30,15 @@ Assertion.addMethod('behaveAs', function (expectedClassification, failedExpectat
     )
 })
 
+Assertion.addProperty('oInstance', function () {
+    var object = this._obj;
+
+    this.assert(
+        OInstance.isOInstance( object ),
+        'Expected the object #{act} to be an OInstance',
+        'Expected the object #{act} not to be an OInstance',
+    )
+})
 
 // Files
 

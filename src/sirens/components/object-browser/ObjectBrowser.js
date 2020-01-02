@@ -1,11 +1,9 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 
 const ObjectPropertiesComponent = require('./ObjectPropertiesComponent')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
-const ObjectBrowserFlow = require('../../flows/object-browser/ObjectBrowserFlow')
 
 class ObjectBrowser {
     /// Definition
@@ -14,21 +12,6 @@ class ObjectBrowser {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
-    }
-
-    /// Initializing
-
-    defaultModel() {
-        const props = this.getProps()
-
-        const browsedObject = props.object
-
-        const flow = ObjectBrowserFlow.new().asFlowPoint()
-
-        flow.browseObject( browsedObject )
-
-        return flow
     }
 
     /// Building

@@ -1,8 +1,5 @@
 const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
-const MenuItem = require('../components/menus/MenuItem')
-const MenuItemSeparator = require('../components/menus/MenuItemSeparator')
-const MenuGroup = require('../components/menus/MenuGroup')
 
 /*
  Class(`
@@ -167,9 +164,11 @@ class MenuGroupBuilder {
 
         const label = this.getProps().label
 
-        const menuGroup = MenuGroup.new({
+        const menuGroup = this.namespace().MenuGroup.new({
             label: label
         })
+
+        menuGroup.assemble()
 
         menuGroup.addAllChildrenComponents( this.menuItems )
 
@@ -253,11 +252,13 @@ class MenuGroupBuilder {
         if( label === undefined ) { label = '' }
         if( enabled === undefined ) { enabled = true }
 
-        const menuItem = MenuItem.new({
+        const menuItem = this.namespace().MenuItem.new({
             label: label,
             enabled: enabled,
             action: action
         })
+
+        menuItem.assemble()
 
         this.menuItems.push( menuItem )
     }
@@ -272,7 +273,9 @@ class MenuGroupBuilder {
      ])
     */
     separator() {
-        const menuItemSeparator = MenuItemSeparator.new()
+        const menuItemSeparator = this.namespace().MenuItemSeparator.new()
+
+        menuItemSeparator.assemble()
 
         this.menuItems.push( menuItemSeparator )
     }

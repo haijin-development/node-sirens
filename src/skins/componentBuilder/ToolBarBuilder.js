@@ -1,9 +1,5 @@
 const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
-const ToolBar = require('../components/menus/ToolBar')
-const ToolButton = require('../components/menus/ToolButton')
-const ToogleToolButton = require('../components/menus/ToogleToolButton')
-const ToolBarSeparator = require('../components/menus/ToolBarSeparator')
 
 /*
  Class(`
@@ -158,7 +154,9 @@ class ToolBarBuilder {
     createFromClosure(closure) {
         this.build(closure)
 
-        const toolBar = ToolBar.new( this.getProps() )
+        const toolBar = this.namespace().ToolBar.new( this.getProps() )
+
+        toolBar.assemble()
 
         toolBar.addAllChildrenComponents( this.toolBarItems )
 
@@ -285,13 +283,15 @@ class ToolBarBuilder {
         if( imageProps === undefined ) { throw new Error(`button({imageProps: }) must be defined.`) }
         if( action === undefined ) { throw new Error(`button({handleAction: }) must be defined.`) }
 
-        const menuItem = ToolButton.new({
+        const menuItem = this.namespace().ToolButton.new({
             label: label,
             imageProps: imageProps,
             tooltip: tooltip,
             enabled: enabled,
             action: action,
         })
+
+        menuItem.assemble()
 
         this.toolBarItems.push(menuItem)
     }
@@ -413,13 +413,15 @@ class ToolBarBuilder {
         if( tooltip === undefined ) { tooltip = '' }
         if( enabled === undefined ) { enabled = true }
 
-        const menuItem = ToogleToolButton.new({
+        const menuItem = this.namespace().ToogleToolButton.new({
             model: model,
             label: label,
             imageProps: imageProps,
             tooltip: tooltip,
             enabled: enabled,
         })
+
+        menuItem.assemble()
 
         this.toolBarItems.push(menuItem)
     }
@@ -474,7 +476,9 @@ class ToolBarBuilder {
      ])
     */
     separator() {
-        const separator = ToolBarSeparator.new()
+        const separator = this.namespace().ToolBarSeparator.new()
+
+        separator.assemble()
 
         this.toolBarItems.push(separator)
     }

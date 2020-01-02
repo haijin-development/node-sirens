@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ToolButtonView = require('../../gtk-views/ToolButtonView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class ToolButton {
@@ -21,12 +20,16 @@ class ToolButton {
     createView() {
         const props = this.getProps()
 
-        return ToolButtonView.new({
+        const view = this.namespace().Views.ToolButtonView.new({
             imageProps: props.imageProps,
             label: props.label,
             tooltip: props.tooltip,
             action: (...params) => { this.handleAction(...params) },
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

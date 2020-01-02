@@ -49,10 +49,18 @@ class CommandsController {
 
         const ids = bottomFlowId.split( '.' )
 
+        const reversedFlowsPath = []
+
         let currentFlow = this.mainFlow
 
         for( const eachId of ids.slice(1) ) {
-            const commandResult = currentFlow.handleBubbledUpCommand({
+            reversedFlowsPath.unshift( currentFlow )
+
+            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
+        }
+
+        for( const eachFlowInPath of reversedFlowsPath ) {
+            const commandResult = eachFlowInPath.handleBubbledUpCommand({
                 commandName: commandName,
                 params: params,
                 startingAtFlow: flow,
@@ -62,8 +70,6 @@ class CommandsController {
             if( commandResult.wasHandled === true ) {
                 return commandResult.result
             }
-
-            currentFlow = currentFlow.findDirectChildFlow({ id: eachId })
         }
 
         if( unhandledClosure === undefined ) {

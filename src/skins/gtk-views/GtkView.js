@@ -1,18 +1,18 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const Gdk = require('node-gtk').require('Gdk', '3.0')
 const Classification = require('../../O').Classification
-const AnnouncementsSubscriptor = require('../../finger-tips/announcements/AnnouncementsSubscriptor')
-const Sirens = require('../../Sirens')
-const MenuView = require('./MenuView')
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
+const SkinsGtk = require('./SkinsGtk')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
+const AnnouncementsSubscriptor = require('../../finger-tips/announcements/AnnouncementsSubscriptor')
 
-Sirens.initialize()
+SkinsGtk.initialize()
 
 class GtkView {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['childViews', 'viewAttributes', 'parentHandleOwnerView', 'eventsSubscriptor']
+        this.assumes = [ObjectWithNamespace]
         this.expects = [GtkViewProtocol_Implementation]
     }
 
@@ -35,6 +35,9 @@ class GtkView {
     afterInstantiation() {
         this.childViews = []
         this.viewAttributes = []
+    }
+
+    assemble() {
         this.eventsSubscriptor = AnnouncementsSubscriptor.new()
     }
 

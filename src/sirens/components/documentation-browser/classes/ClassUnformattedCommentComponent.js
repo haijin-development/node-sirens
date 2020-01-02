@@ -1,8 +1,8 @@
 const Classification = require('../../../../O').Classification
-const Component = require('../../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+const Component = require('../../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../Skins').GtkIcons
+const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 
 class ClassUnformattedCommentComponent {
     /// Definition

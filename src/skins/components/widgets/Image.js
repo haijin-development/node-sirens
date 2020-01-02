@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ImageView = require('../../gtk-views/ImageView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Image {
@@ -21,7 +20,7 @@ class Image {
     createView() {
         const props = this.getProps()
 
-        return ImageView.new({
+        const view = this.namespace().Views.ImageView.new({
             imageProps: {
                 filename: props.filename,
                 width: props.width,
@@ -30,6 +29,10 @@ class Image {
                 size: props.size,
             }
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

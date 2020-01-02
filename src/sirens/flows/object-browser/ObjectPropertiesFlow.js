@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
-const Sirens = require('../../../Sirens')
 
 class ObjectPropertiesFlow {
     /// Definition
@@ -27,7 +26,15 @@ class ObjectPropertiesFlow {
 
         flow.main({ id: 'main' },  function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'inspectSelectedObject',
+                    'browseSelectedObjectPrototypes',
+                    'getMainObject',
+                    'getRootProperties',
+                    'getSelectedPropertyValue',
+                ],
+            })
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 const rootProperties = thisFlow.getRootProperties()
@@ -50,32 +57,15 @@ class ObjectPropertiesFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'inspectSelectedObject',
-                    'browseSelectedObjectPrototypes',
-                    'getMainObject',
-                    'getRootProperties',
-                    'getSelectedPropertyValue',
-                ],
-            })
-
-        })
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.inspectSelectedObject',
-            'flow-commands.browseSelectedObjectPrototypes',
-            'flow-commands.getMainObject',
-            'flow-commands.getRootProperties',
-            'flow-commands.getSelectedPropertyValue',
+            'inspectSelectedObject',
+            'browseSelectedObjectPrototypes',
+            'getMainObject',
+            'getRootProperties',
+            'getSelectedPropertyValue',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -89,13 +79,19 @@ class ObjectPropertiesFlow {
     inspectSelectedObject() {
         const selectedValue = this.getSelectedPropertyValue()
 
-        Sirens.browseObject(selectedValue)
+        this.bubbleUp({
+            command: 'browseObject',
+            param: selectedValue
+        })
     }
 
     browseSelectedObjectPrototypes() {
         const selectedValue = this.getSelectedPropertyValue()
 
-        Sirens.browsePrototypes(selectedValue)
+        this.bubbleUp({
+            command: 'browsePrototypes',
+            param: selectedValue
+        })
     }
 
     getMainObject() {

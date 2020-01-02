@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const FolderChooserView = require('../../gtk-views/FolderChooserView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class FolderChooser {
@@ -24,12 +23,16 @@ class FolderChooser {
 
         const windowView = window !== undefined ? window.getView() : undefined
 
-        return FolderChooserView.new({
+        const view = this.namespace().Views.FolderChooserView.new({
             title: this.getProps().title,
             mode: this.getProps().mode,
             windowView: windowView,
             initialFolder: this.getProps().initialFolder,
         })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {
@@ -38,6 +41,20 @@ class FolderChooser {
     open() {
         return this.getView().open()
     }
+
+    chooseFolder({ title: title,  window: windowComponent, initialFolder: initialFolder }) {
+        this.setProps({
+            title: title,
+            mode: 'chooseFolder',
+            window: windowComponent,
+            initialFolder: initialFolder,
+        })
+
+        this.assemble()
+
+        return this.open()
+    }
+
 }
 
 FolderChooser = Classification.define(FolderChooser)

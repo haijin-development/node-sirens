@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const {AnotherClassificationMustImplementMethod} = require('../../O').Errors
 const CommandsController = require('../commands/CommandsController')
 
 /*
@@ -70,11 +71,13 @@ class FlowNode {
     }
 
     build(closure) {
-        const FlowBuilder = require('./FlowBuilder')
-
-        const flowBuilder = FlowBuilder.new({ flow: this })
+        const flowBuilder = this.newFlowBuilder()
 
         flowBuilder.evaluate({ closure: closure, with: this })
+    }
+
+    newFlowBuilder() {
+        throw new AnotherClassificationMustImplementMethod()
     }
 
     releaseFlow() {

@@ -13,7 +13,6 @@ class Command {
 
     initialize({ id: id, idPath: idPath, actionHandlerClosure: actionHandlerClosure }) {
         if( id === undefined ) { throw new Error(`An id must be provided.`) }
-        if( idPath === undefined ) { throw new Error(`An idPath must be provided.`) }
 
         this.actionHandlerClosure = actionHandlerClosure
 

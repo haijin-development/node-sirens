@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const MenuGroupView = require('../../gtk-views/MenuGroupView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class MenuGroup {
@@ -21,7 +20,11 @@ class MenuGroup {
     createView() {
         const label = this.getProps().label
 
-        return MenuGroupView.new({ label: label })
+        const view = this.namespace().Views.MenuGroupView.new({ label: label })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

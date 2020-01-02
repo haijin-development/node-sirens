@@ -1,11 +1,13 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/O').Classification
-const Component = require('../../../../src/skins/components/Component')
-const LabelView = require('../../../../src/skins/gtk-views/LabelView')
+const SkinsNamespace = require('../../../../src/skins/SkinsNamespace')
+
+const Skins = SkinsNamespace.new()
 
 describe('When skipping a component', () => {
     it('does not add the sub-component', () => {
-        const window = Component.render( function(renderer) {
+        const componentRenderer = Skins.ComponentRenderer.new()
+
+        const window = componentRenderer.render( function(renderer) {
             this.window( function() {
                 this.skip().label().anyOtherMethod()
                 this.skip().anyOtherMethod()

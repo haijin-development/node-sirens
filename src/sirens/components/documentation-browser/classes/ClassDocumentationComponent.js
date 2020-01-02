@@ -1,6 +1,6 @@
 const Classification = require('../../../../O').Classification
-const Component = require('../../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../../Skins').ComponentProtocol_Implementation
+const Component = require('../../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
 const ClassSummaryComponent = require ('./ClassSummaryComponent')
 const ClassDetailsComponent = require ('./ClassDetailsComponent')
@@ -34,6 +34,7 @@ class ClassDocumentationComponent {
                         ClassSummaryComponent.new({
                             model: flow,
                             viewAttributes: { stackSize: 'fixed' },
+                            window: this.getProps().window,
                         })
                     )
 

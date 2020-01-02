@@ -1,3 +1,5 @@
+// review in the next iteration
+
 const PlainTextStructureParser = require('./objects/file-structure-parsers/PlainTextStructureParser')
 const JSFileStructureParser = require('./objects/file-structure-parsers/JSFileStructureParser')
 const JsonStructureParser = require('./objects/file-structure-parsers/JsonStructureParser')

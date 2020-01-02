@@ -7,10 +7,26 @@
 - Renamed .beSuchThat to .be .suchThat
 - Reimplemented assertion expressions on methods activation.
 - Improved error handling.
+- Added .to .be .oInstance expectation
+- Added .atIndex expectation
+- Added .count expectation
+- Implemented setUnclassifiedProperty to set unclassified properties to an OInstance.
+- Implemented the ObjectWithNamespace classification to replace the use of global classes in the methods.
 
 ### FingerTips
 
 - Cleaned up Flows and Commands classifications.
+- Implemented NamespaceFlow and CreateObjectCommand. It needs more iterations.
+
+### Skins
+
+- Rewrote all aClassification.new() with this.namespace().aClassification.new() to make
+use of the namespaces.
+- Removed the Sirens dependency.
+
+### Sirens
+
+- Rewrote all components using SkinNamespace. It needs more iterations.
 
 ## v0.15.0
 

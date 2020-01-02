@@ -1,81 +1,58 @@
 const Classification = require('../../O').Classification
-const ColumnsBuilder = require('./ColumnsBuilder')
-const MenuBuilder = require('./MenuBuilder')
-const ToolBarBuilder = require('./ToolBarBuilder')
-
-const Window = require('../components/containers/Window')
-const Dialog = require('../components/dialogs/Dialog')
-const Container = require('../components/containers/Container')
-const Stack = require('../components/containers/Stack')
-const Splitter = require('../components/containers/Splitter')
-const Tabs = require('../components/containers/Tabs')
-const TabPage = require('../components/containers/TabPage')
-const Separator = require('../components/widgets/Separator')
-const ChoicesList = require('../components/widgets/ChoicesList')
-const ChoicesTree = require('../components/widgets/ChoicesTree')
-const Label = require('../components/widgets/Label')
-const Text = require('../components/widgets/Text')
-const SingleSelectionCheckBox = require('../components/widgets/SingleSelectionCheckBox')
-const MultipleSelectionCheckBox = require('../components/widgets/MultipleSelectionCheckBox')
-const TextButton = require('../components/widgets/TextButton')
-const RadioButton = require('../components/widgets/RadioButton')
-const Image = require('../components/widgets/Image')
-
 const WidgetBuilder = require('./WidgetBuilder')
 
+
 /*
- Class(`
-    This object is used to build a container widget using the builder DSL.
+    Class(`
+        This object is used to build a container widget using the builder DSL.
 
-    A container widget can have one or more children.
+        A container widget can have one or more children.
 
-    This ContainerWidgetBuilder defines the DSL methods to create and add these children.
+        This ContainerWidgetBuilder defines the DSL methods to create and add these children.
 
-    The usage of a ContainerWidgetBuilder typically consists in instantiating it, calling its
+        The usage of a ContainerWidgetBuilder typically consists in instantiating it, calling its
 
-    	containerWidgetBuilder.build()
+            containerWidgetBuilder.build()
 
-    getting the defined props and children and setting them to the container widget.
- `)
+        getting the defined props and children and setting them to the container widget.
+    `)
 
- Example({
-    Description: `
-       Builds a Window using a ContainerWidgetBuilder object.
-    `,
-    Code: `
+    Example({
+        Description: `
+            Builds a Window using a ContainerWidgetBuilder object.
+        `,
+        Code: `
+           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+           const Window = require('sirens/src/skins/components/containers/Window')
 
-       const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
-       const Window = require('sirens/src/skins/components/containers/Window')
+           const builder = ContainerWidgetBuilder.new({ title: 'A window' })
 
-       const builder = ContainerWidgetBuilder.new({ title: 'A window' })
+            builder.build( function() {
+                this.styles({
+           	        width: 100,
+                    height: 100,
+           	    })
 
-       builder.build( function() {
-       	this.styles({
-       		width: 100,
-       		height: 100,
-       	})
+       	        this.checkBox({ label: 'A checkbox' })
+            })
 
-       	this.checkBox({ label: 'A checkbox' })
-       })
+            const window = Window.new( builder.getProps() )
 
-       const window = Window.new( builder.getProps() )
-
-       window.addAllChildrenComponents( builder.getChildComponents() )
-
-    `,
- })
+            window.addAllChildrenComponents( builder.getChildComponents() )
+        `,
+    })
 */
 class ContainerWidgetBuilder {
     /// Definition
 
     /*
-     Method(`
-        This classification definition.
-     `)
+        Method(`
+            This classification definition.
+        `)
 
-     Tags([
-        'definition', 'implementation'
-     ])
+        Tags([
+            'definition', 'implementation'
+        ])
     */
     static definition() {
         this.instanceVariables = ['childComponents']
@@ -85,47 +62,47 @@ class ContainerWidgetBuilder {
     /// Initializing
 
     /*
-     Method(`
-        Initializes this ContainerWidgetBuilder and sets its initial properties with the given props.
-     `)
+        Method(`
+            Initializes this ContainerWidgetBuilder and sets its initial properties with the given props.
+        `)
 
-     Param({
-        Name: `
-           props
-        `,
-        Description: `
-           object.
-           An object of the form
+        Param({
+            Name: `
+                props
+            `,
+            Description: `
+                object.
+                An object of the form
 
-           	{
-           		propName: propValue,
-           		...
-           	}
-        `,
-     })
+               	{
+           		   propName: propValue,
+           		   ...
+           	    }
+            `,
+        })
 
-     Example({
-        Description: `
-           Creates a ContainerWidgetBuilder and initializes it with some properties.
-        `,
-        Code: `
-           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+        Example({
+            Description: `
+                Creates a ContainerWidgetBuilder and initializes it with some properties.
+            `,
+            Code: `
+                const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
 
-           const initialContainerProps = {
-           	title: 'A window',
-           	width: 100,
-           	height: 100,
-           }
+                const initialContainerProps = {
+           	        title: 'A window',
+           	        width: 100,
+           	        height: 100,
+                }
 
-           const builder = ContainerWidgetBuilder.new( initialContainerProps )
+               const builder = ContainerWidgetBuilder.new( initialContainerProps )
 
-           builder.getProps()
-        `,
-     })
+               builder.getProps()
+            `,
+        })
 
-     Tags([
-        'initializing', 'public'
-     ])
+        Tags([
+            'initializing', 'public'
+        ])
     */
     initialize(props = {}) {
         this.previousClassificationDo( () => {
@@ -138,93 +115,91 @@ class ContainerWidgetBuilder {
     /// Accessing
 
     /*
-     Method(`
-        Returns the components created during the call of the
+        Method(`
+            Returns the components created during the call of the
 
-        	builder.build( function() {
-        		// ...
-        	})
+        	   builder.build( function() {
+        		  // ...
+        	   })
 
+            method.
 
-        method.
-
-        Typically these components are added to a parent container component.
+            Typically these components are added to a parent container component.
      `)
-     Returns({
-        Description: `
-           Array of ComponentBehaviour.
-           An array with the built components.
-        `,
-     })
+        Returns({
+            Description: `
+                Array of ComponentBehaviour.
+                An array with the built components.
+            `,
+        })
 
-     Example({
-        Description: `
-           Builds 3 components using a ContainerWidgetBuilder object and gets them.
-        `,
-        Code: `
-           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+        Example({
+            Description: `
+                Builds 3 components using a ContainerWidgetBuilder object and gets them.
+            `,
+            Code: `
+                const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
 
-           const builder = ContainerWidgetBuilder.new()
+                const builder = ContainerWidgetBuilder.new()
 
-           builder.build( function() {
-           	this.label({ label: 'A label' })
-           	this.checkBox({ label: 'A checkbox' })
-           	this.text()
-           })
+                builder.build( function() {
+           	        this.label({ label: 'A label' })
+           	        this.checkBox({ label: 'A checkbox' })
+           	        this.text()
+                })
 
-           builder.getChildComponents()
-        `,
-     })
+                builder.getChildComponents()
+            `,
+        })
 
-     Tags([
-        'getters', 'querying', 'public'
-     ])
+        Tags([
+            'getters', 'querying', 'public'
+        ])
     */
     getChildComponents() {
         return this.childComponents
     }
 
     /*
-     Method(`
-        Returns the last components created during the call of the
+        Method(`
+            Returns the last components created during the call of the
 
-        	builder.build( function() {
-        		// ...
-        	})
+        	   builder.build( function() {
+        		  // ...
+        	   })
 
+            method.
+        `)
 
+        Returns({
+            Description: `
+                ComponentBehaviour.
+                The last component build or undefined.
+            `,
+        })
 
-        method.
-     `)
-     Returns({
-        Description: `
-           ComponentBehaviour.
-           The last component build or undefined.
-        `,
-     })
+        Example({
+            Description: `
+                Builds 3 components using a ContainerWidgetBuilder object and gets the last one.
+            `,
+            Code: `
+                const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
 
-     Example({
-        Description: `
-           Builds 3 components using a ContainerWidgetBuilder object and gets the last one.
-        `,
-        Code: `
-           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+                const builder = ContainerWidgetBuilder.new()
 
-           const builder = ContainerWidgetBuilder.new()
+                builder.build( function() {
+           	        this.label({ label: 'A label' })
+           	        this.checkBox({ label: 'A checkbox' })
+           	        this.text()
+                })
 
-           builder.build( function() {
-           	this.label({ label: 'A label' })
-           	this.checkBox({ label: 'A checkbox' })
-           	this.text()
-           })
+                builder.getLastChildComponent()
+            `,
+        })
 
-           builder.getLastChildComponent()
-        `,
-     })
-
-     Tags([
-        'querying', 'implementation'
-     ])
+        Tags([
+            'querying', 'implementation'
+        ])
     */
     getLastChildComponent() {
         return this.childComponents[ this.childComponents.length - 1 ]
@@ -233,220 +208,222 @@ class ContainerWidgetBuilder {
     /// Building
 
     /*
-     Method(`
-        Adds the given component to the array of built components.
+        Method(`
+            Adds the given component to the array of built components.
 
-        The given component is expected to behave as a Component.
+            The given component is expected to behave as a Component.
 
-        A Component groups one or more sub-components or widgets but it does not have a visual representation of its own.
+            A Component groups one or more sub-components or widgets but it does not have a visual representation of its own.
 
-        Components are used to
-        	- group sub-components and widgets that are logically related
-        	- define the behaviour and interaction between those sub-components
-        	- allow to reuse and share that grouping and common behaviour from other components on top of this component
-     `)
+            Components are used to
+        	   - group sub-components and widgets that are logically related
+        	   - define the behaviour and interaction between those sub-components
+        	   - allow to reuse and share that grouping and common behaviour from other components on top of this component
+        `)
 
-     Param({
-        Name: `
-           component
-        `,
-        Description: `
-           A Component object.
-           The given Component is already created, this method just adds it to its list of built components.
-        `,
-     })
+        Param({
+            Name: `
+                component
+            `,
+            Description: `
+                A Component object.
+                The given Component is already created, this method just adds it to its list of built components.
+            `,
+        })
 
-     Example({
-        Description: `
-           Adds a custom component.
-        `,
-        Code: `
-           const Classification = require('sirens/src/O').Classification
-           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
-           const Component = require('sirens/src/skins/components/Component')
-           const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
+        Example({
+            Description: `
+                Adds a custom component.
+            `,
+            Code: `
+                const Classification = require('sirens/src/O').Classification
+                const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+                const Component = require('sirens/src/skins/components/Component')
+                const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
 
-           // Create a custom component that groups other sub-components
+                // Create a custom component that groups other sub-components
 
-           class CustomForm {
-           	/// Definition
+                class CustomForm {
+           	        /// Definition
 
-           	static definition() {
-           		this.instanceVariables = []
-           		this.assumes = [Component]
-           		this.implements = [ComponentProtocol_Implementation]
-           		this.classificationBehaviours = []
-           	}
+           	        static definition() {
+                   		this.instanceVariables = []
+                   		this.assumes = [Component]
+                   		this.implements = [ComponentProtocol_Implementation]
+                   		this.classificationBehaviours = []
+                   	}
 
-           	/// Building
+                   	/// Building
 
-           	renderWith(componentsRenderer) {
-           		const label = this.getProps().labelText
+           	        renderWith(componentsRenderer) {
+           		       const label = this.getProps().labelText
 
-           		componentsRenderer.render(function (component) {
-           			this.label({ text: label })
-           			this.text()
-           		})
-           	}
-           }
+                   		componentsRenderer.render(function (component) {
+                   			this.label({ text: label })
+                   			this.text()
+                   		})
+                    }
+                }
 
-           CustomForm = Classification.define(CustomForm)
+                CustomForm = Classification.define(CustomForm)
 
 
 
-           // Createa ContainerWidgetBuilder
+                // Createa ContainerWidgetBuilder
 
-           const builder = ContainerWidgetBuilder.new({ title: 'A window' })
-           // Add the custom component to the builder
+                const builder = ContainerWidgetBuilder.new({ title: 'A window' })
+                // Add the custom component to the builder
 
-           builder.build( function() {
-           	this.component(
-           		CustomForm.new({
-           			labelText: 'Text: '
-           		})
-           	)
-           })
-           // Ask for the built components
+                builder.build( function() {
+               	    this.component(
+           		       CustomForm.new({
+           		   	  labelText: 'Text: '
+           	    	   })
+               	    )
+                })
+    
+                // Ask for the built components
+                builder.getChildComponents()
+            `,
+        })
 
-           builder.getChildComponents()
-        `,
-     })
-
-     Tags([
-        'dsl', 'public'
-     ])
+        Tags([
+            'dsl', 'public'
+        ])
     */
     component(component) {
         if( component === undefined ) {
             throw new Error(`The component can not be undefined.`)
         }
 
+        // Since the given component might have been built without a namespace
+        // ensure it uses this builder namespace
+        component.setNamespace( this.namespace() )
+
+        component.assemble()
+
         this.childComponents.push(component)
     }
 
     /*
-     Method(`
-        Adds a Window component to the array of built components.
+        Method(`
+            Adds a Window component to the array of built components.
 
-        The window is expected to be the top most component, otherwise the behaviour is undefined.
+            The window is expected to be the top most component, otherwise the behaviour is undefined.
 
-        The first parameter can be an object with the window props:
+            The first parameter can be an object with the window props:
 
+            	this.window({ width: 100, height: 100, }, function(){
 
+            	})
 
-        	this.window({ width: 100, height: 100, }, function(){
-
-        	})
-
-
-
-        The props can also be defined with the methods
+            The props can also be defined with the methods
 
         		styles(props)
         		model(model)
         		handlers(props)
 
-        within the window closure:
+            within the window closure:
 
-        	this.window( function(component) {
-        		this.styles({
-        			width: 100,
-        			height: 100,
-        		})
+                this.window( function(component) {
+        	       this.styles({
+                        width: 100,
+                        height: 100,
+                    })
 
-        		this.model( aModel )
+            		this.model( aModel )
 
-        		this.handlers({
-        			onClosed: component.onClosed.bind(component),
-        		})
-        	})
+            		this.handlers({
+            			onClosed: component.onClosed.bind(component),
+        	       })
+        	   })
 
-        this.styles() and this.handlers() methods do the same, they just have intention revealing names to add different kind of properties.
-     `)
+            this.styles() and this.handlers() methods do the same, they just have intention revealing names to add different kind of properties.
+        `)
 
-     Param({
-        Name: `
-           props
-        `,
-        Description: `
-           Optional.
-           Object.
-           An optional object defining one or more of the following styles for the window
+        Param({
+            Name: `
+                props
+            `,
+            Description: `
+                Optional.
+                Object.
+                An optional object defining one or more of the following styles for the window
 
-           [
-           	// Common properties
+                [
+           	        // Common properties
 
-           	'width',
-           	'height',
-           	'alignHorizontal',
-           	'alignVertical',
-           	'marginLeft',
-           	'marginRight',
-           	'marginTop',
-           	'marginBottom',
-           	'marginHorizontal',
-           	'marginVertical',
-           	'populatePopupMenuBlock',
-           	'viewAttributes',
+                   	'width',
+                   	'height',
+                   	'alignHorizontal',
+                   	'alignVertical',
+                   	'marginLeft',
+                   	'marginRight',
+                   	'marginTop',
+                   	'marginBottom',
+                   	'marginHorizontal',
+                   	'marginVertical',
+                   	'populatePopupMenuBlock',
+                   	'viewAttributes',
 
-           	// Window properties
+                    // Window properties
 
-           	'title',
-           ]
+           	        'title',
+                ]
 
-           Each of these styles can be a value or a ValueModelBehaviour.
-        `,
-     })
+            Each of these styles can be a value or a ValueModelBehaviour.
+            `,
+        })
 
-     Param({
-        Name: `
-           closure
-        `,
-        Description: `
-           An optional closure to evaluate and set additional properties and child components calling any of ContainerWidgetBuilder methods
-           in it.
-        `,
-     })
+        Param({
+            Name: `
+                closure
+            `,
+            Description: `
+                An optional closure to evaluate and set additional properties and child components calling any of ContainerWidgetBuilder methods
+                in it.
+            `,
+        })
 
-     Example({
-        Description: `
-           Builds a Window.
-        `,
-        Code: `
-           const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
+        Example({
+            Description: `
+                Builds a Window.
+            `,
+            Code: `
+                const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
 
-           const builder = ContainerWidgetBuilder.new()
+                const builder = ContainerWidgetBuilder.new()
 
-           builder.build( function() {
+                builder.build( function() {
 
-           	this.window( function() {
+               	    this.window( function() {
 
-           		this.styles({
-           			title: 'A window',
-           			width: 100,
-           			height: 100,
-           		})
+                        this.styles({
+                            title: 'A window',
+                            width: 100,
+                            height: 100,
+           		       })
+           	        })
+                })
 
-           	})
+                builder.getChildComponents()
+            `,
+        })
 
-           })
-
-           builder.getChildComponents()
-        `,
-     })
-
-     Tags([
-        'dsl', 'public'
-     ])
+        Tags([
+            'dsl', 'public'
+        ])
     */
     window(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const window = Window.new( builder.getProps() )
+        const window = this.namespace().Window.new( builder.getProps() )
+
+        window.assemble()
 
         window.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -569,11 +546,13 @@ class ContainerWidgetBuilder {
     dialog(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const window = Dialog.new( builder.getProps() )
+        const window = this.namespace().Dialog.new( builder.getProps() )
+
+        window.assemble()
 
         window.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -697,11 +676,13 @@ class ContainerWidgetBuilder {
     container(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const container = Container.new( builder.getProps() )
+        const container = this.namespace().Container.new( builder.getProps() )
+
+        container.assemble()
 
         container.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -846,13 +827,15 @@ class ContainerWidgetBuilder {
     verticalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
         props = Object.assign( builder.getProps(), { orientation: 'vertical' })
 
-        const stack = Stack.new( props )
+        const stack = this.namespace().Stack.new( props )
+
+        stack.assemble()
 
         stack.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -999,13 +982,15 @@ class ContainerWidgetBuilder {
     horizontalStack(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
         props = Object.assign( builder.getProps(), { orientation: 'horizontal' })
 
-        const stack = Stack.new( props )
+        const stack = this.namespace().Stack.new( props )
+
+        stack.assemble()
 
         stack.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -1138,13 +1123,15 @@ class ContainerWidgetBuilder {
     verticalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
         props = Object.assign( builder.getProps(), { orientation: 'vertical' })
 
-        const splitter = Splitter.new( props )
+        const splitter = this.namespace().Splitter.new( props )
+
+        splitter.assemble()
 
         splitter.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -1276,13 +1263,15 @@ class ContainerWidgetBuilder {
     horizontalSplitter(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
         props = Object.assign( builder.getProps(), { orientation: 'horizontal' })
 
-        const splitter = Splitter.new( props )
+        const splitter = this.namespace().Splitter.new( props )
+
+        splitter.assemble()
 
         splitter.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -1408,11 +1397,13 @@ class ContainerWidgetBuilder {
     tabs(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const tabs = Tabs.new( props )
+        const tabs = this.namespace().Tabs.new( props )
+
+        tabs.assemble()
 
         tabs.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -1524,11 +1515,13 @@ class ContainerWidgetBuilder {
     tabPage(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = this.thisClassification().new(props).yourself( (builder) => {
+        const builder = this.namespace().ContainerWidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const tabPage = TabPage.new( props )
+        const tabPage = this.namespace().TabPage.new( props )
+
+        tabPage.assemble()
 
         tabPage.addAllChildrenComponents( builder.getChildComponents() )
 
@@ -1590,7 +1583,9 @@ class ContainerWidgetBuilder {
         props = Object.assign(defaultProps, props)
         props = Object.assign(props, { orientation: 'vertical' })
 
-        const separator = Separator.new(props)
+        const separator = this.namespace().Separator.new(props)
+
+        separator.assemble()
 
         this.childComponents.push(separator)
     }
@@ -1650,7 +1645,9 @@ class ContainerWidgetBuilder {
         props = Object.assign(defaultProps, props)
         props = Object.assign(props, { orientation: 'horizontal' })
 
-        const separator = Separator.new(props)
+        const separator = this.namespace().Separator.new(props)
+
+        separator.assemble()
 
         this.childComponents.push(separator)
     }
@@ -1791,13 +1788,15 @@ class ContainerWidgetBuilder {
     listChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = ColumnsBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().ColumnsBuilder.new(props).yourself( (builder) => {
             builder.build(closure)
         })
 
-        const tree = ChoicesList.new( builder.getProps() )
+        const choicesList = this.namespace().ChoicesList.new( builder.getProps() )
 
-        this.childComponents.push(tree)
+        choicesList.assemble()
+
+        this.childComponents.push(choicesList)
     }
 
     /*
@@ -1936,11 +1935,13 @@ class ContainerWidgetBuilder {
     treeChoice(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = ColumnsBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().ColumnsBuilder.new(props).yourself( (builder) => {
             builder.build(closure)
         })
 
-        const tree = ChoicesTree.new( builder.getProps() )
+        const tree = this.namespace().ChoicesTree.new( builder.getProps() )
+
+        tree.assemble()
 
         this.childComponents.push(tree)
     }
@@ -2026,11 +2027,13 @@ class ContainerWidgetBuilder {
     label(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const label = Label.new( builder.getProps() )
+        const label = this.namespace().Label.new( builder.getProps() )
+
+        label.assemble()
 
         this.childComponents.push(label)
     }
@@ -2129,11 +2132,13 @@ class ContainerWidgetBuilder {
     text(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const text = Text.new( builder.getProps() )
+        const text = this.namespace().Text.new( builder.getProps() )
+
+        text.assemble()
 
         this.childComponents.push(text)
     }
@@ -2222,11 +2227,13 @@ class ContainerWidgetBuilder {
     checkBox(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const text = SingleSelectionCheckBox.new( builder.getProps() )
+        const text = this.namespace().SingleSelectionCheckBox.new( builder.getProps() )
+
+        text.assemble()
 
         this.childComponents.push(text)
     }
@@ -2292,11 +2299,13 @@ class ContainerWidgetBuilder {
     multipleCheckBox(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const text = MultipleSelectionCheckBox.new( builder.getProps() )
+        const text = this.namespace().MultipleSelectionCheckBox.new( builder.getProps() )
+
+        text.assemble()
 
         this.childComponents.push(text)
     }
@@ -2392,13 +2401,15 @@ class ContainerWidgetBuilder {
     textButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const text = TextButton.new( builder.getProps() )
+        const textButton = this.namespace().TextButton.new( builder.getProps() )
 
-        this.childComponents.push(text)
+        textButton.assemble()
+
+        this.childComponents.push(textButton)
     }
 
     /*
@@ -2508,13 +2519,15 @@ class ContainerWidgetBuilder {
     radioButton(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const text = RadioButton.new( builder.getProps() )
+        const radioButton = this.namespace().RadioButton.new( builder.getProps() )
 
-        this.childComponents.push(text)
+        radioButton.assemble()
+
+        this.childComponents.push(radioButton)
     }
 
     /*
@@ -2578,7 +2591,7 @@ class ContainerWidgetBuilder {
     menuBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const menuBar = MenuBuilder.new(props).createFromClosure(closure)
+        const menuBar = this.namespace().MenuBuilder.new(props).createFromClosure( closure )
 
         this.childComponents.push(menuBar)
     }
@@ -2655,7 +2668,7 @@ class ContainerWidgetBuilder {
     toolBar(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const toolBar = ToolBarBuilder.new(props).createFromClosure(closure)
+        const toolBar = this.namespace().ToolBarBuilder.new(props).createFromClosure(closure)
 
         this.childComponents.push(toolBar)
     }
@@ -2750,11 +2763,13 @@ class ContainerWidgetBuilder {
     image(props, closure) {
         [props, closure] = this.normalizeArguments(props, closure)
 
-        const builder = WidgetBuilder.new(props).yourself( (builder) => {
+        const builder = this.namespace().WidgetBuilder.new(props).yourself( (builder) => {
                 builder.build(closure)
             })
 
-        const image = Image.new( builder.getProps() )
+        const image = this.namespace().Image.new( builder.getProps() )
+
+        image.assemble()
 
         this.childComponents.push(image)
     }

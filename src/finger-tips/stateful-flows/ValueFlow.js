@@ -35,7 +35,7 @@ class ValueFlow {
         return null
     }
 
-    /// Converting
+    /// Exporting
 
     asFlowPoint() {
         const flowPoint = ValueFlowPoint.new({ flow: this })

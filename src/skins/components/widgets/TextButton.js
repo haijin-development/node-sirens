@@ -1,7 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const TextButtonView = require('../../gtk-views/TextButtonView')
-const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class TextButton {
@@ -19,14 +17,18 @@ class TextButton {
         const value = this.getProps().text !== undefined ? 
                         this.getProps().text : ''
 
-        return ValueModel.new({ value: value })
+        return this.namespace().Models.ValueModel.new({ value: value })
     }
 
     createView() {
-        return TextButtonView.new({
+        const view = this.namespace().Views.TextButtonView.new({
             onClicked: this.onClicked.bind(this),
             image: this.getProps().image,
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

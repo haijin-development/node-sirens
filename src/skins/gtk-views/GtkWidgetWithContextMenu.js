@@ -1,5 +1,4 @@
 const Classification = require('../../O').Classification
-const MenuView = require('./MenuView')
 
 class GtkWidgetWithContextMenu {
     /// Definition
@@ -11,7 +10,9 @@ class GtkWidgetWithContextMenu {
     /// Actions
 
     showPopupMenu() {
-        const menu = MenuView.new()
+        const menu = this.namespace().MenuView.new()
+
+        menu.assemble()
 
         this.populatePopupMenu({menu: menu})
 

@@ -1,9 +1,6 @@
-const path = require('path')
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const Sirens = require('../../../Sirens')
-const ClassPropertiesFlow = require('../../flows/prototypes/ClassPropertiesFlow')
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 
 class ClassPropertiesComponent {
     /// Definition

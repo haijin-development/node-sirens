@@ -80,6 +80,15 @@ Assertion.addMethod('haveChildFlows', function (
         .eql(expectedChildFlowIds)
 })
 
+Assertion.addMethod('childFlow', function ({ id: childFlowId }) {
+    var flow = this._obj;
+
+    const childFlow = flow.getChildFlow({ id: childFlowId })
+
+    return new Assertion( childFlow )
+})
+
+
 Assertion.addProperty('withValue', function (expectedValue) {
     var flow = this._obj;
 

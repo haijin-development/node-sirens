@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const MenuBarView = require('../../gtk-views/MenuBarView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class MenuBar {
@@ -21,7 +20,11 @@ class MenuBar {
     createView() {
         const label = this.getProps().label
 
-        return MenuBarView.new()
+        const view = this.namespace().Views.MenuBarView.new()
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

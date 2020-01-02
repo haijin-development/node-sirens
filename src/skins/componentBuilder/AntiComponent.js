@@ -34,7 +34,6 @@ const Classification = require('../../O').Classification
        const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/skins/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-       const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
        class ExampleComponent {
        	/// Definition
@@ -43,8 +42,7 @@ const Classification = require('../../O').Classification
        		this.instanceVariables = []
        		this.assumes = [Component]
        		this.implements = [ComponentProtocol_Implementation]
-       		this.classificationBehaviours = [ComponentInstantiator]
-           	}
+        }
 
            	/// Building
 

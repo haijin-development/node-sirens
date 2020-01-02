@@ -33,14 +33,12 @@ describe('When using an FileInspectorFlow', () => {
 
             'main.selectedFileObject',
             'main.selectedFileObject.text',
-            'main.selectedFileObject.flow-commands',
-            'main.selectedFileObject.flow-commands.getText',
+            'main.selectedFileObject.getText',
 
-            'main.flow-commands',
-            'main.flow-commands.getFileObjectComponent',
-            'main.flow-commands.getSelectedFileObject',
-            'main.flow-commands.getFileObjectInspectorFlow',
-            'main.flow-commands.getSourceFile',
+            'main.getFileObjectComponent',
+            'main.getSelectedFileObject',
+            'main.getFileObjectInspectorFlow',
+            'main.getSourceFile',
 
         ])
     })

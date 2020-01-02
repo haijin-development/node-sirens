@@ -1,8 +1,6 @@
 const Classification = require('../../O').Classification
 const CommandsControllerProtocol = require('../../finger-tips/protocols/CommandsControllerProtocol')
 const CommandsController = require('../../finger-tips/commands/CommandsController')
-const FileChooser = require('../../Skins').FileChooser
-const Pluggables = require('../Pluggables')
 
 class ApplicationCommandsController {
 
@@ -28,9 +26,9 @@ class ApplicationCommandsController {
 
     overrideCommands() {
         // An example of overriding a command and implementing a Depedency Injection pattern.
-        if( this.mainFlow.findChildFlow({ id: 'selectedFile.flow-commands.getFileObjectInspectorFlow' }) ) {
+        if( this.mainFlow.findChildFlow({ id: 'selectedFile.getFileObjectInspectorFlow' }) ) {
             this.mainFlow.overrideCommand({
-                id: 'selectedFile.flow-commands.getFileObjectInspectorFlow',
+                id: 'selectedFile.getFileObjectInspectorFlow',
                 enabledIf: true,
                 whenActioned: this.getFileObjectInspectorFlow.bind(this),
             })
@@ -58,6 +56,7 @@ class ApplicationCommandsController {
 
     doExecuteCommand({ command: command, params: params }) {
         // An example of changing the command evaluation on the doExecuteCommand method.
+        // This is not the recomended way of overriding a Command but it is feasable.
         if( command.getId() === 'pickFile' ) {
             return this.pickFile(...params)
         }
@@ -70,7 +69,9 @@ class ApplicationCommandsController {
     // Commands definitions and overrides
 
     pickFile({ parentWindow: parentWindow }) {
-        const filename = FileChooser.openFile({
+        const namespace = this.mainFlow.skinsNamespace()
+
+        const filename = namespace.FileChooser.new().openFile({
             title: 'Choose a file',
             window: parentWindow,
             initialFolder: this.mainFlow.getLastOpenedFolder(),
@@ -88,10 +89,10 @@ class ApplicationCommandsController {
             'null'
 
         const fileObjectInspectorFlowClassification =
-            Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType] ?
-                Pluggables.fileInspector.fileObjectInspectorFlows[fileObjectType]
+            require('../Pluggables').fileInspector.fileObjectInspectorFlows[fileObjectType] ?
+                require('../Pluggables').fileInspector.fileObjectInspectorFlows[fileObjectType]
                 :
-                Pluggables.fileInspector.fileObjectInspectorFlows.default            
+                require('../Pluggables').fileInspector.fileObjectInspectorFlows.default            
 
         return fileObjectInspectorFlowClassification.new({
             setIsBrowsingDocumentationClosure: mainFlow.setIsBrowsingDocumentation.bind(mainFlow),

@@ -1,5 +1,4 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/O').Classification
 const Flow = require('../../../../src/finger-tips/flows/Flow')
 
 describe('When using a StatefulCommand', () => {

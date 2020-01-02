@@ -3,14 +3,25 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ApplicationCommandsController = require('../ApplicationCommandsController')
 const SourceFile = require('../../objects/SourceFile')
-const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowserFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['lastOpenedFolder']
+        this.instanceVariables = ['mainFlow', 'lastOpenedFolder']
         this.assumes = [ValueFlow]
+    }
+
+    // review along with acceptedBubbledUps
+    setMainFlow(mainFlow) {
+        this.mainFlow = mainFlow
+    }
+
+    bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
+        return this.mainFlow.executeCommand({
+            id: commandName,
+            withAll: params,
+        })
     }
 
     /// Building
@@ -20,9 +31,27 @@ class PlaygroundBrowserFlow {
 
         this.setCommandsController( commandsController )
 
-        flowBuilder.main({ id: 'playground' }, function(application) {
+        flowBuilder.main({ id: 'playground' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: application.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'openFile',
+                    'openFileInNewWindow',
+                    'openPlayground',
+                    'pickAndOpenFile',
+                    'pickAndOpenFileInNewWindow',
+                    'pickFile',
+                    'getLastOpenedFolder',
+                ],
+            })
+
+            this.command({
+                id: 'saveFile',
+                enabledIf: function() {
+                    return thisFlow.hasSourceFile()
+                },
+                whenActioned: thisFlow.saveFile.bind(thisFlow),
+            })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
@@ -47,51 +76,30 @@ class PlaygroundBrowserFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'openFile',
-                    'openFileInNewWindow',
-                    'openPlayground',
-                    'pickAndOpenFile',
-                    'pickAndOpenFileInNewWindow',
-                    'pickFile',
-                    'getLastOpenedFolder',
-                ],
-            })
-
-            this.command({
-                id: 'saveFile',
-                enabledIf: function() {
-                    return thisFlow.hasSourceFile()
-                },
-                whenActioned: thisFlow.saveFile.bind(thisFlow),
-            })
-
-        })
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.openFile',
-            'flow-commands.openFileInNewWindow',
-            'flow-commands.saveFile',
-            'flow-commands.openPlayground',
-            'flow-commands.pickAndOpenFile',
-            'flow-commands.pickAndOpenFileInNewWindow',
-            'flow-commands.pickFile',
-            'flow-commands.getLastOpenedFolder',
+            'openFile',
+            'openFileInNewWindow',
+            'saveFile',
+            'openPlayground',
+            'pickAndOpenFile',
+            'pickAndOpenFileInNewWindow',
+            'pickFile',
+            'getLastOpenedFolder',
         ]
 
         this.exportCommandsToFlowPoint({
             commandsIds: exportedCommands,
             flowPoint: flowPoint
         })
+    }
+
+    /// Accessing namespaces
+
+    skinsNamespace() {
+        return this.mainFlow.skinsNamespace()
     }
 
     /// Actions
@@ -111,7 +119,7 @@ class PlaygroundBrowserFlow {
     openFileInNewWindow({ filename: filename }) {
         if( ! filename ) { return }
 
-        Sirens.openPlayground({ filename: filename })
+        this.openPlayground({ filename: filename })
     }
 
     saveFile() {
@@ -124,12 +132,18 @@ class PlaygroundBrowserFlow {
         sourceFile.saveFileContents( fileNewContents )
     }
 
-    openPlayground() {
-        Sirens.openPlayground()
+    openPlayground({ filename: filename } = {}) {
+        this.mainFlow.executeCommand({
+            id: 'openPlayground',
+            with: { filename: filename }
+        })
     }
 
     pickAndOpenFile({ parentWindow: parentWindow }) {
-        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+        const filename = this.executeCommand({
+            id: 'pickFile',
+            with: { parentWindow: parentWindow }
+        })
 
         if( filename === null ) { return }
 
@@ -141,7 +155,10 @@ class PlaygroundBrowserFlow {
 
         if( filename === null ) { return }
 
-        this.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
+        this.executeCommand({
+            id: 'openFileInNewWindow',
+            with: { filename: filename }
+        })
     }
 
     pickFile() {

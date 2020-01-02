@@ -86,24 +86,29 @@ class FlowWithChildren {
     defineCommand({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
         const commandFlow = this.searchCommandParentFlowFromId({ id: commandId })
 
-        const command = typeof( calculateEnabledClosure ) !== undefined ?
+        const id = commandFlow.commandId
+        const idPath = commandFlow.parent.idPath + '.' + commandFlow.commandId
+
+        const command = calculateEnabledClosure !== undefined ?
             StatefulCommand.new({
-                id: commandFlow.commandId,
-                idPath: commandFlow.parent.idPath + '.' + commandFlow.commandId,
+                id: id,
+                idPath: idPath,
                 calculateEnabledClosure: calculateEnabledClosure,
                 actionHandlerClosure: actionHandlerClosure
             })
             :
             StatelessCommand.new({
-                id: commandFlow.commandId,
-                idPath: commandFlow.parent.idPath + '.' + commandFlow.commandId,
+                id: id,
+                idPath: idPath,
                 actionHandlerClosure: actionHandlerClosure,
             })
 
         commandFlow.parent.addChildFlow({
-            id: commandFlow.commandId,
+            id: id,
             flow: command,
         })
+
+        return command
     }
 
     overrideCommand({ id: commandId, enabledIf: calculateEnabledClosure, whenActioned: actionHandlerClosure }) {
@@ -381,6 +386,8 @@ class FlowWithChildren {
     }
 
     acceptAllBubbledUps({ commands: methodNames, defaultHandler: defaultHandlerClosure }) {
+        if( methodNames === undefined ) { methodNames = [] }
+
         for( const eachMethodName of methodNames ) {
             this.acceptBubbledUp( eachMethodName )
         }

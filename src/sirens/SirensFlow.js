@@ -1,0 +1,174 @@
+const Classification = require('../O').Classification
+const Flow = require('../finger-tips/flows/Flow')
+
+const ApplicationCommandsController = require('./flows/ApplicationCommandsController')
+const SirensNamespace = require('./flows/SirensNamespace')
+
+const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
+const Preferences = require('./Preferences')
+
+SkinsGtk.setGlobalStyles({ cssFile: Preferences.cssFile })
+
+/*
+    Class(`
+        The main flow of every Component, Namespace, Command and nested Flow in the
+        Sirens application.
+
+        This Flow has all the definitions and implementations ( although sometimes
+        it wraps the implementation to another library) related with the application.
+    `)
+*/
+class SirensFlow {
+
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = []
+        this.assumes = [Flow]
+    }
+
+    /// Building
+
+    buildWith(flow) {
+        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
+
+        this.setCommandsController( commandsController )
+
+        flow.main({ id: 'main' }, function(thisFlow) {
+
+            this.namespace({ id: 'SirensNamespace', from: SirensNamespace.new() })
+
+            this.defineMethodsAsCommands({
+                methods: [
+                    'mainNamespace',
+                    'guiNamespace',
+                    'browseObject',
+                    'browsePrototypes',
+                    'openAppBrowser',
+                    'openPlayground',
+                ],
+            })
+
+        })
+    }
+
+    /// Exported commands
+
+    /*
+        Method(`
+            This method is called when a FlowPoint is created.
+
+            It picks and attachs the commands that the given flowPoint will
+            have access to.
+        `)
+    */
+    attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
+        const exportedCommands = [
+            'mainNamespace',
+            'guiNamespace',
+            'browseObject',
+            'browsePrototypes',
+            'openAppBrowser',
+            'openPlayground',
+        ]
+
+        this.exportCommandsToFlowPoint({
+            commandsIds: exportedCommands,
+            flowPoint: flowPoint
+        })
+    }
+
+    /// Accessing namespaces
+
+    mainNamespace() {
+        return this.getChildFlow({ id: 'SirensNamespace' })
+    }
+
+    skinsNamespace() {
+        return this.getChildFlow({ id: 'SirensNamespace.Skins' })
+    }
+
+    guiNamespace() {
+        return this.getChildFlow({ id: 'SirensNamespace.GUI' })        
+    }
+
+    /// Browsers
+
+    browseObject(object) {
+        SkinsGtk.do( () => {
+            const namespace = this.mainNamespace()
+
+            const objectBrowserFlow = namespace.ObjectBrowserFlow.new()
+
+            objectBrowserFlow.setMainFlow( this ) 
+
+            objectBrowserFlow.setBrowsedObject( object )
+
+            const browser = namespace.ObjectBrowser.new({
+                model: objectBrowserFlow.asFlowPoint(),
+            })
+
+            browser.open()
+        })
+    }
+
+    browsePrototypes(object) {
+        SkinsGtk.do( () => {
+            const namespace = this.mainNamespace()
+
+            const prototypesBrowserFlow = namespace.PrototypesBrowserFlow.new()
+
+            prototypesBrowserFlow.setMainFlow( this ) 
+
+            prototypesBrowserFlow.setBrowsedObject( object )
+
+            const browser = namespace.PrototypeBrowser.new({
+                model: prototypesBrowserFlow.asFlowPoint(),
+            })
+
+            browser.open()
+        })
+    }
+
+    openAppBrowser({ appFolder: appFolderPath } = { appFolder: undefined }) {
+        SkinsGtk.do( () => {
+            const namespace = this.mainNamespace()
+
+            const appBrowserFlow = namespace.AppBrowserFlow.new()
+
+            appBrowserFlow.setMainFlow( this ) 
+
+            if( appFolderPath ) {
+                appBrowserFlow.openFolder({ folderPath: appFolderPath })
+            }
+
+            const appBrowser = namespace.AppBrowser.new({
+                model: appBrowserFlow.asFlowPoint(),
+            })
+
+            appBrowser.open()
+        })
+    }
+
+    openPlayground({ filename: filename } = { filename: undefined }) {
+        SkinsGtk.do( () => {
+            const namespace = this.mainNamespace()
+
+            const playgroundBrowserFlow = namespace.PlaygroundBrowserFlow.new()
+
+            playgroundBrowserFlow.setMainFlow( this ) 
+
+            if( filename !== undefined ) {
+                playgroundBrowserFlow.openFile({ filename: filename })
+            }
+
+            const playground = namespace.PlaygroundBrowser.new({
+                model: playgroundBrowserFlow.asFlowPoint(),
+            })
+
+            playground.open()
+        })
+    }
+}
+
+module.exports = Classification.define(SirensFlow)

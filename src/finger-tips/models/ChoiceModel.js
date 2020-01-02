@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const ListModel = require('./ListModel')
 const ValueModel = require('./ValueModel')
 
@@ -7,6 +8,7 @@ class ChoiceModel {
 
     static definition() {
         this.instanceVariables = ['listModel', 'selectionModel']
+        this.assumes = [Model]
     }
 
     /// Initializing

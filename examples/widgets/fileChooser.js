@@ -1,9 +1,10 @@
-const FileChooser = require('../../src/Skins').FileChooser
-const Sirens = require('../../src/Sirens')
+const SkinsNamespace = require('../../src/skins/SkinsNamespace')
 
+const namespace = SkinsNamespace.new()
 
-const selectedFilename = FileChooser.openFile({
-    title: 'Choose a file'
-})
+const selectedFilename = namespace.FileChooser.new()
+    .openFile({
+        title: 'Choose a file'
+    })
 
 console.info(selectedFilename)

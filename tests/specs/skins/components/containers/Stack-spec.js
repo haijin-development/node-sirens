@@ -1,11 +1,12 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
-const LabelView = require('../../../../../src/skins/gtk-views/LabelView')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const Skins = SkinsNamespace.new()
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {
         it('instantiates an empty one', () => {
-            const stack = Component.render( function(renderer) {
+            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalStack()
             })
 
@@ -13,7 +14,7 @@ describe('When using a Stack', () => {
         })
 
         it('adds sub-components', () => {
-            const stack = Component.render( function(renderer) {
+            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalStack( function() {
                     this.label()
 
@@ -22,14 +23,20 @@ describe('When using a Stack', () => {
             })
 
             expect( stack.getChildComponents() ) .count .to .eql(2)
-            expect( stack.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( stack.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+
+            expect( stack.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( stack.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
     })
 
     describe('vertical', () => {
         it('instantiates an empty one', () => {
-            const stack = Component.render( function(renderer) {
+            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
                 this.verticalStack( function() {
                 })
             })
@@ -38,7 +45,7 @@ describe('When using a Stack', () => {
         })
 
         it('adds sub-components', () => {
-            const stack = Component.render( function(renderer) {
+            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
                 this.verticalStack( function() {
                     this.label()
 
@@ -47,8 +54,14 @@ describe('When using a Stack', () => {
             })
 
             expect( stack.getChildComponents() ) .count .to .eql(2)
-            expect( stack.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( stack.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+
+            expect( stack.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( stack.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
     })
 })

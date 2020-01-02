@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const Gtk = require('node-gtk').require('Gtk')
-const GtkImage = require ('../GtkImage')
+const GtkImage = require('../GtkImage')
 
 class GtkImageBuilder {
 

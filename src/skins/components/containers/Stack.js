@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const StackView = require('../../gtk-views/StackView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Stack {
@@ -19,7 +18,11 @@ class Stack {
     }
 
     createView() {
-        return StackView.new({ orientation: this.getProps().orientation })
+        const view = this.namespace().Views.StackView.new({ orientation: this.getProps().orientation })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

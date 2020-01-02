@@ -17,42 +17,14 @@ class ApplicationCommandsController {
             this.initialize({ mainFlow: mainFlow })
         })
 
-        // This instance variable is redundant with the one in the previous classification
+        // This instance variable is redundant with the one in CommandsController classification
         // but a CommandsController should not have a getter on the main Flow object since
         // it would allow any child flow to access the main Flow, breaking the tree 
         // encapsulation.
         this.mainFlow = mainFlow
     }
 
-    overrideCommands() {
-        // An example of overriding a command and implementing a Depedency Injection pattern.
-        if( this.mainFlow.findChildFlow({ id: 'selectedFile.getFileObjectInspectorFlow' }) ) {
-            this.mainFlow.overrideCommand({
-                id: 'selectedFile.getFileObjectInspectorFlow',
-                enabledIf: true,
-                whenActioned: this.getFileObjectInspectorFlow.bind(this),
-            })
-        }
-    }
-
     // Executing
-
-    doExecuteEventHandler({
-        flowId: flowId, event: eventName, params: params, eventHandler: eventHandler,
-    }) {
-        if( eventName === 'main-flow-built' ) {
-            this.overrideCommands()
-        }
-
-        return this.previousClassificationDo( () => {
-            return this.doExecuteEventHandler({
-                flowId: flowId,
-                event: eventName,
-                params: params,
-                eventHandler: eventHandler,
-            })
-        })
-    }
 
     doExecuteCommand({ command: command, params: params }) {
         // An example of changing the command evaluation on the doExecuteCommand method.
@@ -78,26 +50,6 @@ class ApplicationCommandsController {
         })
 
         return filename
-    }
-
-    getFileObjectInspectorFlow({ fileObject: fileObject }) {
-        const mainFlow = this.mainFlow
-
-        const fileObjectType = fileObject ?
-            fileObject.getFileObjectType()
-            :
-            'null'
-
-        const fileObjectInspectorFlowClassification =
-            require('../Pluggables').fileInspector.fileObjectInspectorFlows[fileObjectType] ?
-                require('../Pluggables').fileInspector.fileObjectInspectorFlows[fileObjectType]
-                :
-                require('../Pluggables').fileInspector.fileObjectInspectorFlows.default            
-
-        return fileObjectInspectorFlowClassification.new({
-            setIsBrowsingDocumentationClosure: mainFlow.setIsBrowsingDocumentation.bind(mainFlow),
-            getIsBrowsingDocumentationClosure: mainFlow.isBrowsingDocumentation.bind(mainFlow),
-        })
     }
 }
 

@@ -1,6 +1,7 @@
 const expect = require('chai').expect
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
+const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+
+const namespace = SirensNamespace.new()
 
 const samplesFolder = 'tests/samples/js-objects/'
 
@@ -8,9 +9,9 @@ describe('When parsing a Js file', () => {
     it('with no functions or classes gets the text', () => {
         const filename = samplesFolder + 'text-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -32,9 +33,9 @@ n += 1`
     it('with only functions gets the functions', () => {
         const filename = samplesFolder + 'functions-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -62,9 +63,9 @@ n += 1`
     it('with only classes gets the classes', () => {
         const filename = samplesFolder + 'classes-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -92,9 +93,9 @@ n += 1`
     it('with classes, functions and initial text', () => {
         const filename = samplesFolder + 'text-function-class.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -110,9 +111,9 @@ n += 1`
     it('with classes, functions and ending text', () => {
         const filename = samplesFolder + 'function-class-text.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -128,9 +129,9 @@ n += 1`
     it('with classes, functions and text in the middle', () => {
         const filename = samplesFolder + 'function-text-class.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })

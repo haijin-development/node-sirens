@@ -1,8 +1,7 @@
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
-const ApplicationCommandsController = require('../ApplicationCommandsController')
-const Folder = require('../../objects/paths/Folder')
 const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')
+const Folder = require('../../objects/paths/Folder')
 const SourceFile = require('../../objects/SourceFile')
 
 class AppBrowserFlow {
@@ -29,10 +28,6 @@ class AppBrowserFlow {
     /// Building
 
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
-
-        this.setCommandsController( commandsController )
-
         flow.main({ id: 'main' }, function(thisFlow) {
 
             this.defineMethodsAsCommands({
@@ -170,9 +165,9 @@ class AppBrowserFlow {
     }
 
     pickFolder({ parentWindow: parentWindow }) {
-        // review in the next iteration
-        const SirensNamespace = require('../SirensNamespace')
-        const namespace = SirensNamespace.new().getChildFlow({ id: 'Skins' })
+        const namespace = this.mainFlow.executeCommand({
+            id: 'skinsNamespace',
+        })
 
         const chosenFolder = namespace.FolderChooser.new().chooseFolder({
             title: 'Choose a folder',

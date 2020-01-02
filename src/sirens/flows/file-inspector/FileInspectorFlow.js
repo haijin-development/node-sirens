@@ -2,13 +2,7 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 
 const FolderObject = require('../../objects/file-structure/FolderObject')
-
-const SourceFileStructureParser = require('../../objects/SourceFileStructureParser')
-const UknownFileStructure = require('../../objects/file-structure/UknownFileStructure')
-
 const TextualContentInspectorFlow = require('../file-object-inspectors/TextualContentInspectorFlow')
-const JsClassInspectorFlow = require('../file-object-inspectors/JsClassInspectorFlow')
-const JsMethodInspectorFlow = require('../file-object-inspectors/JsMethodInspectorFlow')
 
 class FileInspectorFlow {
     /// Definition
@@ -83,6 +77,12 @@ class FileInspectorFlow {
         })
     }
 
+    mainNamespace() {
+        return this.bubbleUp({
+            command: 'mainNamespace'
+        })
+    }
+
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
@@ -127,13 +127,6 @@ class FileInspectorFlow {
                     .setSelection(pathToObject)
     }
 
-    getFileObjectInspectorFlow({ fileObject: fileObject }) {
-        return this.executeCommand({
-            id: 'getFileObjectInspectorFlow',
-            with: { fileObject: fileObject },
-        })
-    }
-
     getFileObjectComponent() {
         const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFileObject' })
 
@@ -145,12 +138,15 @@ class FileInspectorFlow {
             return FolderObject.new()
         }
 
-        try {
-            return SourceFileStructureParser.new()
-                .parseSourceFile({ sourceFile: sourceFile })
-        } catch(error) {
-            return UknownFileStructure.new()
-        }
+        const namespace = this.mainNamespace()
+
+        const fileStructuredContentsParser =
+            namespace.SourceFileStructureParser.new()
+
+        return fileStructuredContentsParser.parseSourceFile({
+                sourceFile: sourceFile,
+                onParsingErrorDo: function() { return namespace.UknownFileStructure.new() },
+            })
     }
 
     setShowUnformattedComments({ value: boolean }) {
@@ -177,15 +173,14 @@ class FileInspectorFlow {
     }
 
     getFileObjectInspectorFlow({ fileObject: fileObject }){
-        if( fileObject && fileObject.respondsTo('isJsClass') ) {
-            return JsClassInspectorFlow.new()
-        }
+        if( ! fileObject ) { return TextualContentInspectorFlow.new() }
 
-        if( fileObject && fileObject.respondsTo('isJsMethod') ) {
-            return JsMethodInspectorFlow.new()
-        }
+        const fileObjectInspectorFlowPicker = 
+            this.mainNamespace().FileInspectorPicker.new()
 
-        return TextualContentInspectorFlow.new()
+        return fileObjectInspectorFlowPicker.pickFileObjectInspectorFlowFor({
+            fileObject: fileObject,
+        })
     }
 }
 

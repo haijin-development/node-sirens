@@ -1,10 +1,13 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
+
+const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+
+const namespace = SirensNamespace.new()
+
 const JsMethodDocumentationFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsMethodDocumentationFlow')
 const JsMethodInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsMethodInspectorFlow')
 
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
@@ -20,8 +23,8 @@ describe('When using an JsMethodDocumentationFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        const sourceFile = SourceFile.new({ filepath: filePath  })
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
         jsMethod = jsFile.getMethods()[0]

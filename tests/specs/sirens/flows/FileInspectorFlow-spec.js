@@ -1,12 +1,16 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
-const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 
+const FilesRepository = require('../FilesRepository')
+const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+
+const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
+
+    const namespace = SirensNamespace.new()
 
     let filePath
     let sourceFile
@@ -21,6 +25,14 @@ describe('When using an FileInspectorFlow', () => {
 
         flow = FileInspectorFlow.new()
         flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+
+        // stub the .mainNamespace() for these tests since that namespace is
+        // bubbled up and in the context of this tests FileInspectorFlow does
+        // no have a parent flow.
+        flow.setUnclassifiedProperty({
+            name: 'mainNamespace',
+            value: function() { return namespace }
+        })        
     })
 
     after( () => {

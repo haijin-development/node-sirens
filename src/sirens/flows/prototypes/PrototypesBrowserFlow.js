@@ -1,5 +1,4 @@
 const Classification = require('../../../O').Classification
-const ApplicationCommandsController = require('../ApplicationCommandsController')
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesFlow = require('./ClassPropertiesFlow')
@@ -25,10 +24,6 @@ class PrototypesBrowserFlow {
     }
 
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
-
-        this.setCommandsController( commandsController )
-
         flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
             this.command({

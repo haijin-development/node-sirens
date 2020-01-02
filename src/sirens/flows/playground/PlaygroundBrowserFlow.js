@@ -1,7 +1,6 @@
 const path = require('path')
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
-const ApplicationCommandsController = require('../ApplicationCommandsController')
 const SourceFile = require('../../objects/SourceFile')
 
 class PlaygroundBrowserFlow {
@@ -27,10 +26,6 @@ class PlaygroundBrowserFlow {
     /// Building
 
     buildWith(flowBuilder) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
-
-        this.setCommandsController( commandsController )
-
         flowBuilder.main({ id: 'playground' }, function(thisFlow) {
 
             this.defineMethodsAsCommands({

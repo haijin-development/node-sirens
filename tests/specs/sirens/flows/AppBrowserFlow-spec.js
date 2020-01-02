@@ -1,9 +1,11 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const AppBrowserFlow = require('../../../../src/sirens/flows/app-browser/AppBrowserFlow')
+const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
 
 describe('When using an AppBrowserFlow', () => {
     const sampleFolder = __dirname + '/../../../samples'
+
+    const namespace = SirensNamespace.new()
 
     let folder
 
@@ -18,16 +20,9 @@ describe('When using an AppBrowserFlow', () => {
         FilesRepository.cleanUp()
     })
 
-    it('has an ApplicationCommandsController', () => {
-
-        const flow = AppBrowserFlow.new()
-
-        expect( flow ) .commandsController .to .behaveAs('ApplicationCommandsController')
-    })
-
     it('has all these child flows defined', () => {
 
-        const flow = AppBrowserFlow.new()
+        const flow = namespace.AppBrowserFlow.new()
 
         expect( flow ) .to .haveChildFlows([
             'main.windowTitle',
@@ -61,7 +56,7 @@ describe('When using an AppBrowserFlow', () => {
     })
 
     describe('browing mode', () => {
-        const flow = AppBrowserFlow.new()
+        const flow = namespace.AppBrowserFlow.new()
 
         it('showsUnformattedComments is set to false', () => {
             expect(flow) .withId( 'main.browsingMode.showsUnformattedComments' )
@@ -78,7 +73,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new()
 
             flow.openFolder({ folderPath: folder })
         })
@@ -114,7 +109,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new()
 
             flow.openFolder({ folderPath: folder })
             flow.openFolder({ folderPath: null })
@@ -149,12 +144,19 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new()
 
             flow.openFolder({ folderPath: folder })
         })
 
         it('sets the selectedFile', () => {
+            // stub the getMainNamespace for this test
+            flow.acceptAllBubbledUps({
+                defaultHandler: function({ commandName: commandName, params: params }) {
+                    return namespace
+                }
+            })
+
             const filesTree = flow.getChildFlow({ id: 'filesTree' })
 
             const rootFolder = filesTree.getRoots()[0]
@@ -175,9 +177,16 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new()
 
             flow.openFolder({ folderPath: folder })
+
+            // stub the getMainNamespace for this test
+            flow.acceptAllBubbledUps({
+                defaultHandler: function({ commandName: commandName, params: params }) {
+                    return namespace
+                }
+            })
 
             const filesTree = flow.getChildFlow({ id: 'filesTree' })
 
@@ -204,7 +213,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new()
 
             flow.openFolder({ folderPath: folder })
         })

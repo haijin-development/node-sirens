@@ -2,9 +2,7 @@ const fs = require('fs')
 const Classification = require('../O').Classification
 const Flow = require('../finger-tips/flows/Flow')
 
-const ApplicationCommandsController = require('./flows/ApplicationCommandsController')
 const SirensNamespace = require('./flows/SirensNamespace')
-
 const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
 
 /*
@@ -28,18 +26,24 @@ class SirensFlow {
     /// Building
 
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
+        const sirensNamespace = SirensNamespace.new()
+
+        const commandsController = sirensNamespace.ApplicationCommandsController.new({
+            mainFlow: this,
+            mainNamespace: sirensNamespace,
+        })
 
         this.setCommandsController( commandsController )
 
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.namespace({ id: 'SirensNamespace', from: SirensNamespace.new() })
+            this.namespace({ id: 'SirensNamespace', from: sirensNamespace })
 
             this.defineMethodsAsCommands({
                 methods: [
                     'mainNamespace',
                     'guiNamespace',
+                    'skinsNamespace',
                     'browseObject',
                     'browsePrototypes',
                     'openAppBrowser',
@@ -77,6 +81,7 @@ class SirensFlow {
         const exportedCommands = [
             'mainNamespace',
             'guiNamespace',
+            'skinsNamespace',
             'browseObject',
             'browsePrototypes',
             'openAppBrowser',
@@ -109,7 +114,9 @@ class SirensFlow {
         SkinsGtk.do( () => {
             const namespace = this.mainNamespace()
 
-            const objectBrowserFlow = namespace.ObjectBrowserFlow.new()
+            const objectBrowserFlow = namespace.ObjectBrowserFlow.new({
+                mainFlow: this,
+            })
 
             objectBrowserFlow.setMainFlow( this ) 
 
@@ -127,7 +134,9 @@ class SirensFlow {
         SkinsGtk.do( () => {
             const namespace = this.mainNamespace()
 
-            const prototypesBrowserFlow = namespace.PrototypesBrowserFlow.new()
+            const prototypesBrowserFlow = namespace.PrototypesBrowserFlow.new({
+                mainFlow: this,
+            })
 
             prototypesBrowserFlow.setMainFlow( this ) 
 
@@ -145,9 +154,9 @@ class SirensFlow {
         SkinsGtk.do( () => {
             const namespace = this.mainNamespace()
 
-            const appBrowserFlow = namespace.AppBrowserFlow.new()
-
-            appBrowserFlow.setMainFlow( this ) 
+            const appBrowserFlow = namespace.AppBrowserFlow.new({
+                mainFlow: this,
+            })
 
             if( appFolderPath ) {
                 appBrowserFlow.openFolder({ folderPath: appFolderPath })
@@ -165,7 +174,9 @@ class SirensFlow {
         SkinsGtk.do( () => {
             const namespace = this.mainNamespace()
 
-            const playgroundBrowserFlow = namespace.PlaygroundBrowserFlow.new()
+            const playgroundBrowserFlow = namespace.PlaygroundBrowserFlow.new({
+                mainFlow: this,
+            })
 
             playgroundBrowserFlow.setMainFlow( this ) 
 

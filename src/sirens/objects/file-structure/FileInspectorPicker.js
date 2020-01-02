@@ -1,0 +1,89 @@
+const Classification = require('../../../O').Classification
+
+const PlainTextStructureParser = require('../file-structure-parsers/PlainTextStructureParser')
+const JSFileStructureParser = require('../file-structure-parsers/JSFileStructureParser')
+const JsonStructureParser = require('../file-structure-parsers/JsonStructureParser')
+
+const TextualContentInspectorFlow = require('../../flows/file-object-inspectors/TextualContentInspectorFlow')
+const JsClassInspectorFlow = require('../../flows/file-object-inspectors/JsClassInspectorFlow')
+const JsMethodInspectorFlow = require('../../flows/file-object-inspectors/JsMethodInspectorFlow')
+const JsonContentInspectorFlow = require('../../flows/file-object-inspectors/JsonContentInspectorFlow')
+
+/*
+    Class(`
+        A fileObject contents may vary depending on the type of the file.
+        It could be a plain text file like a readme, a .json file, a .yaml
+        file, a js script file, a js containing classes, a js containing
+        tests, a js containing html components, etc.
+        It could even be a script writen in a different language.
+
+        Since the dynamic nature of the possible content types a file
+        may have and the possibilities to show and edit those contents
+        (the same file can have many different views, for example a script defining
+        a ComponentView may be edited as plain text or with an WYSIWYG editor,
+        or even may mix both modes, it may handle metadata of the file
+        contents like its git history and diffs, etc) it is not possible to have
+        a static decision tree to handle them all in advance.
+        Instead the application should provide a way to define and plug in
+        new FileObjectInspectorFlows dynamically.
+
+        This Classification is a means to dynamically load and pick a FileObjectInspectorFlow
+        to show and edit a fileObject based on its contents among all the available
+        ones.
+    `)
+*/
+class FileInspectorPicker {
+    /// Definition
+
+    static definition() {
+        this.instanceVariables = [
+            'availableFileParsers',
+            'availableFileObjectInspectors'
+        ]
+    }
+
+    initialize() {
+        // review
+        this.availableFileParsers = {
+            default: PlainTextStructureParser,
+            '.js': JSFileStructureParser,
+            '.json': JsonStructureParser,
+        }
+
+        this.availableFileObjectInspectors = {
+            default: TextualContentInspectorFlow,
+            jsClass: JsClassInspectorFlow,
+            jsMethod: JsMethodInspectorFlow,
+            jsonContent: JsonContentInspectorFlow,
+        }
+    }
+
+    pickFileParserFor({ sourceFile: sourceFile }) {
+        const fileType = sourceFile.getFileType()
+
+        const parser = this.availableFileParsers[fileType] ?
+            this.availableFileParsers[fileType]
+            :
+            this.availableFileParsers.default
+
+        return parser.new()
+
+    }
+
+    pickFileObjectInspectorFlowFor({ fileObject: fileObject }) {
+        const fileObjectType = fileObject ?
+            fileObject.getFileObjectType()
+            :
+            'null'
+
+        const fileObjectInspectorFlowClassification =
+            this.availableFileObjectInspectors[fileObjectType] ?
+                this.availableFileObjectInspectors[fileObjectType]
+                :
+                this.availableFileObjectInspectors.default            
+
+        return fileObjectInspectorFlowClassification.new()
+    }
+}
+
+module.exports = Classification.define(FileInspectorPicker)

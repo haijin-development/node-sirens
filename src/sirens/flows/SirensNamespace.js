@@ -14,6 +14,14 @@ const PrototypeBrowser = require('../components/prototype-browser/PrototypeBrows
 const PlaygroundBrowser = require('../components/playground-browser/PlaygroundBrowser')
 const AppBrowser = require('../components/app-browser/AppBrowser')
 
+const FileInspectorPicker = require('../objects/file-structure/FileInspectorPicker')
+const SourceFile = require('../objects/SourceFile')
+const SourceFileStructureParser = require('../objects/SourceFileStructureParser')
+const UknownFileStructure = require('../objects/file-structure/UknownFileStructure')
+
+const ApplicationCommandsController = require('./ApplicationCommandsController')
+
+
 class SirensNamespace {
     /// Definition
 
@@ -38,6 +46,12 @@ class SirensNamespace {
                     'PrototypesBrowserFlow',
                     'AppBrowserFlow',
                     'PlaygroundBrowserFlow',
+                    'FileInspectorFlow',
+                    'ApplicationCommandsController',
+                    'SourceFile',
+                    'SourceFileStructureParser',
+                    'FileInspectorPicker',
+                    'UknownFileStructure',
                 ],
             })
 
@@ -63,38 +77,101 @@ class SirensNamespace {
         return this.getChildFlow({ id: 'GUI' })
     }
 
-    // 
+    // Flow objects
 
-    ObjectBrowserFlow() {
-        return ObjectBrowserFlow.new()
+    ObjectBrowserFlow({ mainFlow: mainFlow } = {}) {
+        const objectBrowserFlow = ObjectBrowserFlow.new()
+
+        const appCommandsController = this.ApplicationCommandsController.new({
+            mainFlow: objectBrowserFlow,
+        })
+
+        objectBrowserFlow.setMainFlow( mainFlow )
+        objectBrowserFlow.setCommandsController( appCommandsController )
+
+        return objectBrowserFlow
     }
 
-    PrototypesBrowserFlow() {
-        return PrototypesBrowserFlow.new()
+    PrototypesBrowserFlow({ mainFlow: mainFlow } = {}) {
+        const prototypesFlow = PrototypesBrowserFlow.new()
+
+        const appCommandsController = this.ApplicationCommandsController.new({
+            mainFlow: prototypesFlow,
+        })
+
+        prototypesFlow.setMainFlow( mainFlow )
+        prototypesFlow.setCommandsController( appCommandsController )
+
+        return prototypesFlow
     }
 
-    AppBrowserFlow() {
-        return AppBrowserFlow.new()
+    AppBrowserFlow({ mainFlow: mainFlow } = {}) {
+        const appBrowserFlow = AppBrowserFlow.new()
+
+        const appCommandsController = this.ApplicationCommandsController.new({
+            mainFlow: appBrowserFlow,
+        })
+
+        appBrowserFlow.setMainFlow( mainFlow )
+        appBrowserFlow.setCommandsController( appCommandsController )
+
+        return appBrowserFlow
     }
 
-    PlaygroundBrowserFlow() {
-        return PlaygroundBrowserFlow.new()
+    PlaygroundBrowserFlow({ mainFlow: mainFlow } = {}) {
+        const playgroundBrowserFlow = PlaygroundBrowserFlow.new()
+
+        const appCommandsController = this.ApplicationCommandsController.new({
+            mainFlow: playgroundBrowserFlow,
+        })
+
+        playgroundBrowserFlow.setMainFlow( mainFlow )
+        playgroundBrowserFlow.setCommandsController( appCommandsController )
+
+        return playgroundBrowserFlow
+
     }
 
-    ObjectBrowser(props) {
-        return ObjectBrowser.new(props)
+    /// Browser objects
+
+    ObjectBrowser(...params) {
+        return ObjectBrowser.new(...params)
     }
 
-    PrototypeBrowser(props) {
-        return PrototypeBrowser.new(props)
+    PrototypeBrowser(...params) {
+        return PrototypeBrowser.new(...params)
     }
 
-    PlaygroundBrowser(props) {
-        return PlaygroundBrowser.new(props)
+    PlaygroundBrowser(...params) {
+        return PlaygroundBrowser.new(...params)
     }
 
-    AppBrowser(props) {
-        return AppBrowser.new(props)
+    AppBrowser(...params) {
+        return AppBrowser.new(...params)
+    }
+
+    /// Parser objects
+
+    FileInspectorPicker(...params) {
+        return FileInspectorPicker.new(...params)
+    }
+
+    SourceFile(...params) {
+        return SourceFile.new(...params)
+    }
+
+    SourceFileStructureParser(...params) {
+        return SourceFileStructureParser.new(...params)
+    }
+
+    UknownFileStructure(...params) {
+        return UknownFileStructure.new(...params)
+    }
+
+    /// ApplicationCommandsController
+
+    ApplicationCommandsController(...params) {
+        return ApplicationCommandsController.new(...params)
     }
 }
 

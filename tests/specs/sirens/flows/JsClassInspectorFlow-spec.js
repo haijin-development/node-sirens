@@ -1,9 +1,12 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
+
+const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+
+const namespace = SirensNamespace.new()
+
 const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassInspectorFlow')
 
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
 const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
@@ -22,8 +25,8 @@ describe('When using an JsClassInspectorFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = SourceFile.new({ filepath: filePath  })
-        sourceFileParser = SourceFileStructureParser.new()
+        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsClass = jsFile.getClasses()[0]
 

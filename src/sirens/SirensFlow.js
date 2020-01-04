@@ -1,5 +1,5 @@
-const fs = require('fs')
 const Classification = require('../O').Classification
+const FilePath = require('../O').FilePath
 const Flow = require('../finger-tips/flows/Flow')
 
 const SirensNamespace = require('./flows/SirensNamespace')
@@ -57,7 +57,9 @@ class SirensFlow {
                 this.whenValueChanges( function({ newValue: preferences }) {
                     preferences.freeze
 
-                    SkinsGtk.setGlobalStyles({ cssFile: preferences.cssFile })
+                    const cssFilePath = FilePath.new({ path: preferences.cssFile })
+
+                    SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
                 })
 
             })
@@ -199,7 +201,9 @@ class SirensFlow {
     }
 
     loadPreferencesFromFile({ filename: jsonFilename }) {
-        const jsonContents = fs.readFileSync( jsonFilename ).toString()
+        const filePath = FilePath.new({ path: jsonFilename })
+
+        const jsonContents = filePath.readFileContents()
 
         const preferences = JSON.parse( jsonContents )
 

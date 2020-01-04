@@ -1,4 +1,5 @@
 const Classification = require('../../../O').Classification
+const FolderPath = require('../../../O').FolderPath
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')
 const Folder = require('../../objects/paths/Folder')
@@ -50,11 +51,11 @@ class AppBrowserFlow {
                 ],
             })
 
-            this.whenObjectChanges( ({ newValue: appFolder }) => {
-                const filesTreeRoots = appFolder ? [ appFolder ] : []
+            this.whenObjectChanges( ({ newValue: appFolderPath }) => {
+                const filesTreeRoots = appFolderPath ? [ appFolderPath ] : []
 
                 thisFlow.getChildFlow({ id: 'windowTitle' })
-                    .setObject( appFolder )
+                    .setObject( appFolderPath )
                 thisFlow.getChildFlow({ id: 'filesTree' })
                     .setRoots({ items: filesTreeRoots })
             })
@@ -85,7 +86,7 @@ class AppBrowserFlow {
                 id: 'windowTitle',
                 convertToValueWith: ({ object: appFolder }) => {
                     return appFolder ?
-                        `App Browser - ${appFolder.getPath()}` :
+                        `App Browser - ${appFolder.getPath().getPath()}` :
                         'App Browser - No folder selected.'
                 },
             })
@@ -179,7 +180,10 @@ class AppBrowserFlow {
     }
 
     openFolder({ folderPath: folderPath } = {}) {
-        const appFolder = folderPath ? Folder.new({ path: folderPath }) : null
+        const appFolder = folderPath ?
+            Folder.new({ path: FolderPath.new({ path: folderPath }) })
+            :
+            null
 
         if( folderPath !== null ) {
             this.lastOpenedFolder = folderPath
@@ -197,7 +201,7 @@ class AppBrowserFlow {
 
         if( ! currentSourceFile ) { return null }
 
-        return currentSourceFile.getFilePath()
+        return currentSourceFile.getFilePath().getPath()
     }
 
     hasAClassSelected() {

@@ -1,4 +1,3 @@
-const path = require('path')
 const nodeGtk = require('node-gtk')
 const Gtk = nodeGtk.require('Gtk', '3.0')
 const Gdk = nodeGtk.require('Gdk')
@@ -142,16 +141,14 @@ class SkinsGtk {
         Gtk.init()
     }
 
-    static setGlobalStyles({ cssFile: cssFile }) {
+    static setGlobalStyles({ cssFilePath: cssFilePath }) {
       this.initialize()
 
       const screen = Gdk.Screen.getDefault()
 
       const cssProvider = new Gtk.CssProvider()
 
-      const cssFilePath = path.resolve( cssFile )
-
-      cssProvider.loadFromPath( cssFilePath )
+      cssProvider.loadFromPath( cssFilePath.getPath() )
 
       Gtk.StyleContext.addProviderForScreen(
         screen,

@@ -1,4 +1,3 @@
-const path = require('path')
 const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')

@@ -14,11 +14,6 @@ const PrototypeBrowser = require('../components/prototype-browser/PrototypeBrows
 const PlaygroundBrowser = require('../components/playground-browser/PlaygroundBrowser')
 const AppBrowser = require('../components/app-browser/AppBrowser')
 
-const FileInspectorPicker = require('../objects/file-structure/FileInspectorPicker')
-const SourceFile = require('../objects/SourceFile')
-const SourceFileStructureParser = require('../objects/SourceFileStructureParser')
-const UknownFileStructure = require('../objects/file-structure/UknownFileStructure')
-
 const ApplicationCommandsController = require('./ApplicationCommandsController')
 
 
@@ -37,6 +32,12 @@ class SirensNamespace {
             const skinsNamespace = SkinsNamespace.new()
             const guiNamespace = GuiNamespace.new({ skinsNamespace: skinsNamespace })
 
+            this.createObjectCommandsFromFilesIn({
+                folders: [
+                    __dirname + '/../objects'
+                ]
+            })
+
             this.namespace({ id: 'Skins', from: skinsNamespace })
             this.namespace({ id: 'GUI', from: guiNamespace })
 
@@ -48,10 +49,6 @@ class SirensNamespace {
                     'PlaygroundBrowserFlow',
                     'FileInspectorFlow',
                     'ApplicationCommandsController',
-                    'SourceFile',
-                    'SourceFileStructureParser',
-                    'FileInspectorPicker',
-                    'UknownFileStructure',
                 ],
             })
 
@@ -148,24 +145,6 @@ class SirensNamespace {
 
     AppBrowser(...params) {
         return AppBrowser.new(...params)
-    }
-
-    /// Parser objects
-
-    FileInspectorPicker(...params) {
-        return FileInspectorPicker.new(...params)
-    }
-
-    SourceFile(...params) {
-        return SourceFile.new(...params)
-    }
-
-    SourceFileStructureParser(...params) {
-        return SourceFileStructureParser.new(...params)
-    }
-
-    UknownFileStructure(...params) {
-        return UknownFileStructure.new(...params)
     }
 
     /// ApplicationCommandsController

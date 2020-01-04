@@ -12,6 +12,8 @@
 - Added .count expectation
 - Implemented setUnclassifiedProperty to set unclassified properties to an OInstance.
 - Implemented the ObjectWithNamespace classification to replace the use of global classes in the methods.
+- Implemented FolderPath and FilePath.
+- Replaced all ocurrences of 'path' and 'js' with FolderPath and FilePath.
 
 ### FingerTips
 
@@ -19,6 +21,7 @@
 - Implemented namespaces using NamespaceFlow.
 - Cleaned up builders and flows dependencies.
 - Rewrote the definitions of Commands and Flow methods.
+- Implemented an autoloader alike utility for NamespaceFlow.
 
 ### Skins
 
@@ -38,6 +41,7 @@ use of the namespaces.
 - Moved Sirens dialogs to a different namespace.
 - Fixed FileDialog and FolderDialog open warnings.
 - Removed file Skins.js since the SkinsNamepace made it obsolete.
+- Rewrote FilesRepository test utility.
 
 ## v0.15.0
 

@@ -1,88 +1,146 @@
-const fs = require('fs')
-const path = require('path')
+const FolderPath = require('./../../../src/O').FolderPath
+const FilePath = require('./../../../src/O').FilePath
 
-const tmpFilesFolderPath = path.resolve( __dirname + '/../../tmp-files-repository/' ) + '/'
+/*
+    Class(`
+        This class copies files and folders from a source to a temporary folder.
 
+        It can be used in tests that needs to create, modify or delete files.
+
+        Before running the test use this object to make a temporary copy of the
+        source files, then use the copy and finally tell this object to cleanup
+        the temporary files.
+
+        The exported object is not the class FilesRepository but a singleton instance
+        of it that acts as a global object between tests.
+        This is to allow some setup and cleanup in the outerscope of a test that might
+        not be located in the same file as the test.
+    `)
+*/
 class FilesRepository {
-    constructor() {
+    constructor({ baseSourceFolder: baseSourceFolder, tmpFolderPath: tmpFolderPath }) {
+        this.baseSourceFolder = FolderPath.new({ path: baseSourceFolder })
+        this.tmpFolderPath = FolderPath.new({ path: tmpFolderPath })
         this.managedFiles = new Map()
     }
 
-    pathTo( filePath ) {
-        if( ! this.managedFiles.has(filePath) ) {
-            throw new Error(`File ${filePath} was not initialized in this FilesRepository.`)
-        }
-
-        return this.managedFiles.get( filePath )
+    defaultTmpFolderPath() {
+        return FolderPath.new({
+            path: __dirname + '/../../tmp-files-repository'
+        })
     }
 
-    manageFolder({ folder: folderPath }) {
+    /*
+        Method(`
+            Makes a copy of the given sourceFilePath to the temporary directory
+            and maps the path of the sourceFilePath to the temporary path so it can
+            be correctly referenced.
+        `)
+    */
+    manageFile({ file: sourceFilePath }) {
         this.ensureTmpFolderExists()
 
-        const folderCopyPath = tmpFilesFolderPath
+        const resolvedSourceFilePath = FilePath.new({ path: sourceFilePath })
 
-        this.managedFiles.set( folderPath, folderCopyPath )        
+        const pathToBaseSourceFolder = this.pathToBaseSourceFolder({
+            sourcePath: resolvedSourceFilePath
+        })
 
-        const folderContents = fs.readdirSync( folderPath, { withFileTypes: true } )
+        const temporaryFilePath = this.tmpFolderPath
+            .append({ path: pathToBaseSourceFolder })
+            .appendFile({ path: resolvedSourceFilePath.getFileName() })
 
-        folderContents.forEach( (eachPath) => {
-            const fullPath = path.join( folderPath, eachPath.name )
+        resolvedSourceFilePath.copyFileTo({ path: temporaryFilePath })
 
-            if( eachPath.isFile() ) {
-                this.manageFile({ file: fullPath })
+        this.managedFiles.set(
+            sourceFilePath,
+            temporaryFilePath.getPath(),
+        )
+    }
+
+    manageFolder({ folder: folderPathString }) {
+        this.ensureTmpFolderExists()
+
+        const resolvedSourceFolderPath = FolderPath.new({ path: folderPathString })
+
+        const pathToBaseSourceFolder = this.pathToBaseSourceFolder({
+            sourcePath: resolvedSourceFolderPath
+        })
+
+        const temporaryFolderPath = this.tmpFolderPath
+            .append({ path: pathToBaseSourceFolder })
+
+        temporaryFolderPath.createFolder()
+
+        this.managedFiles.set(
+            folderPathString,
+            temporaryFolderPath.getPath(),
+        )
+
+        resolvedSourceFolderPath.allFilesAndFoldersBfsDo( (eachSourcePath) => {
+            if( eachSourcePath.isFilePath() ) {
+                this.manageFile({ file: eachSourcePath.getPath() })
             }
         })
     }
 
-    manageAllFiles({ files: filePaths }) {
-        filePaths.forEach( (filePath) => {
-            this.manageFile({ file: filePath })
-        })
+    /*
+        Method(`
+            Returns the temporary file copied from the given sourceFilePath.
+        `)
+    */
+    pathTo(sourceFilePath) {
+        return this.managedFiles.get(
+            sourceFilePath
+        )
     }
 
-    manageFile({ file: filePath }) {
-        this.ensureTmpFolderExists()
+    /*
+        Method(`
+            Returns the relative path from the given sourceFilePath to
+            this.baseSourceFolder.
+        `)
+    */
+    pathToBaseSourceFolder({ sourcePath: sourcePath }) {
+        const sourceFileFolder = sourcePath.isFilePath() ?
+            sourcePath.getFolderPath()
+            :
+            sourcePath
 
-        const fileCopyPath = tmpFilesFolderPath + path.basename( filePath )
-
-        fs.copyFileSync( filePath, fileCopyPath )
-
-        this.managedFiles.set( filePath, fileCopyPath )
+        return this.baseSourceFolder.getPathTo( sourceFileFolder )
     }
 
-    cleanUp() {
-        this.deleteFolder({ folder: tmpFilesFolderPath })
-
-        this.managedFiles = new Map()
-    }
-
+    /*
+        Method(`
+            If the temporary folder does not exist it creates it with no contents.
+            If it already exists does nothing.
+        `)
+    */
     ensureTmpFolderExists() {
-        if( fs.existsSync( tmpFilesFolderPath ) ) { return }
+        if( this.tmpFolderPath.exists() ) { return }
 
-        fs.mkdirSync( tmpFilesFolderPath )        
+        this.tmpFolderPath.createFolder()
     }
 
-    deleteFolder({ folder: folderPath }) {
-        if( ! fs.existsSync( folderPath ) ) { return }
-
-        const folderContents = fs.readdirSync( folderPath, { withFileTypes: true } )
-
-        folderContents.forEach( (eachPath) => {
-            const fullPath = path.join( folderPath, eachPath.name )
-
-            if( eachPath.isFile() ) {
-                fs.unlinkSync( fullPath )
-            }
-
-            if( eachPath.isDirectory() ) {
-                this.deleteFolder({ folder: fullPath })
-            }
+    /*
+        Method(`
+            Deletes the temporary folder and its contents and clears the managed files
+            table.
+        `)
+    */
+    cleanUp() {
+        this.tmpFolderPath.delete({
+            deleteContents: true,
+            ifNotExists: function() {},
         })
 
-        fs.rmdirSync( folderPath )
+        this.managedFiles = new Map()
     }
 }
 
-const filesRepository = new FilesRepository()
+const filesRepository = new FilesRepository({
+    baseSourceFolder: __dirname + '/../../samples',
+    tmpFolderPath: __dirname + '/../../tmp-files-repository',
+})
 
 module.exports = filesRepository

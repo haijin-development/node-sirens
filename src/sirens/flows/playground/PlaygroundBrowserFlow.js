@@ -1,4 +1,3 @@
-const path = require('path')
 const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const SourceFile = require('../../objects/SourceFile')
@@ -57,7 +56,7 @@ class PlaygroundBrowserFlow {
                 id: 'windowTitle',
                 convertToValueWith: ({ object: sourceFile }) => {
                     return sourceFile ?
-                        `Playground - ${sourceFile.getFilePath()}` :
+                        `Playground - ${sourceFile.getFilePath().getPath()}` :
                         'Playground - No source file selected.'
                 },
             })
@@ -104,9 +103,7 @@ class PlaygroundBrowserFlow {
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        if( filename !== null ) {
-            this.lastOpenedFolder = path.dirname( filename )
-        }
+        this.lastOpenedFolder = sourceFile.getFilePath().getFolderPath().getPath()
 
         this.setSourceFile({ sourceFile: sourceFile })
     }

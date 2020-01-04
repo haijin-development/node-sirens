@@ -1,4 +1,3 @@
-const path = require('path')
 const Classification = require('../../O').Classification
 const ValueType = require('../../O').ValueType
 const PropertyValueToText = require('./value-displayers/PropertyValueToText')

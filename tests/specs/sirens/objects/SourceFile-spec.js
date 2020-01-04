@@ -34,7 +34,7 @@ const absentSourceFile = namespace.SourceFile.new({ filepath: absentFilename })
 
 describe('When using a SourceFile', () => {
     it('gets the file path', () => {
-        expect(sourceFile.getFilePath()) .to .match(/^.*tests[/]samples[/]index.js$/)
+        expect(sourceFile.getFilePath().getPath()) .to .match(/^.*tests[/]samples[/]index.js$/)
     })
 
     it('gets the file name', () => {

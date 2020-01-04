@@ -1,5 +1,5 @@
-const fs = require('fs')
 const Classification = require('../../../../O').Classification
+const FilePath = require('../../../../O').FilePath
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
@@ -20,7 +20,7 @@ class EditDialogHeaderComponent {
         const title = this.getProps().title
         const subtitle = this.getProps().subtitle
 
-        const imageIsFile = fs.existsSync( mainIcon )
+        const imageIsFile = FilePath.new({ path: mainIcon }).exists()
 
         componentsRenderer.render( function(component) {
 

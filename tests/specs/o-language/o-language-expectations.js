@@ -1,7 +1,7 @@
 const Assertion = require('chai').Assertion
 const assert = require('chai').assert
-const fs = require('fs')
 const OInstance = require('../../../src/O').OInstance
+const FilePath = require('../../../src/O').FilePath
 
 // Classifications
 
@@ -45,7 +45,7 @@ Assertion.addProperty('oInstance', function () {
 Assertion.addProperty('withFileContents', function () {
     var filePath = this._obj;
 
-    const fileContents = fs.readFileSync(filePath).toString()
+    const fileContents = FilePath.new({ path: filePath }).readFileContents()
 
     return new Assertion( fileContents )
 })

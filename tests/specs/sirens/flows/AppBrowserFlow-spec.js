@@ -80,13 +80,13 @@ describe('When using an AppBrowserFlow', () => {
 
         it('sets the folder to the main flow', () => {
             expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect( value.getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( value.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
         })
 
         it('sets the window title', () => {
             expect(flow) .withId( 'main.windowTitle' ) .withObject .suchThat( (object) => {
-                expect( object.getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( object.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
             expect(flow) .withId( 'main.windowTitle' ) .withValue .suchThat( (title) => {
@@ -98,7 +98,7 @@ describe('When using an AppBrowserFlow', () => {
             const path = flow.getValue()
 
             expect(flow) .withId( 'main.filesTree' ) .withRoots .eachSuchThat( (eachRoot) => {
-                expect( eachRoot.getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( eachRoot.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
             })
 
         })
@@ -167,7 +167,7 @@ describe('When using an AppBrowserFlow', () => {
             filesTree.setSelection([ rootFolder, file ])
 
             expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath() ) .to
+                expect( sourceFile.getFilePath().getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition.js$/)
             })
         })

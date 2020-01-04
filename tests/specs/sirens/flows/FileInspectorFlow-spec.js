@@ -62,7 +62,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile to the main flow', () => {
             expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath() ) .to
+                expect( sourceFile.getFilePath().getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })

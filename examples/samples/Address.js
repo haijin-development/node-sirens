@@ -1,6 +1,3 @@
-const path = require('path')
-const fs = require('fs')
-
 function globalFunction_1(param) {
     return param + 1
 }

@@ -103,7 +103,9 @@ class ObjectPropertiesFlow {
     }
 
     getRootProperties() {
-        const rootObjectAsProperty = this.mainNamespace().ObjectProperty.new({
+        const objectPropertyPlugins = this.mainNamespace().ObjectPropertyPlugins.new()
+
+        const rootObjectAsProperty = objectPropertyPlugins.newObjectProperty({
             key: null,
             value: this.getMainObject()
         })

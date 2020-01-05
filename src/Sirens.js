@@ -1,25 +1,9 @@
 const SirensFlow = require('./sirens/SirensFlow')
+const O = require('./O')
 
 const sirensFlowSingleton = SirensFlow.new()
 const sirensNamespace = sirensFlowSingleton.getChildFlow({ id: 'SirensNamespace' })
 
-// As an example, add a customization to the SirensFlow. This could be improved.
-{
-    const ObjectProperty = require('./sirens/objects/ObjectProperty')
-    const OInstanceObjectProperty = require('./sirens/objects/OInstanceObjectProperty')
-
-    // get the original object creator from the main namespace
-    const newObjectPropertyCommand = sirensNamespace.getChildFlow({ id: 'ObjectProperty' })
-
-    // change the instance returned adding an additional classification
-    newObjectPropertyCommand.setActionHandlerClosure( (...params) => {
-        const objectProperty = ObjectProperty.new(...params)
-
-        objectProperty.behaveAs( OInstanceObjectProperty )
-
-        return objectProperty
-    })
-}
 
 // Create the MainFlow. All the application is built from this main object.
 // See the Sirens class implementation note for more details.
@@ -275,6 +259,38 @@ class Sirens {
     static openPlayground({ filename: filename } = { filename: undefined }) {
         mainFlow.openPlayground({ filename: filename })
     }
+
+    /*
+        Method(`
+            Load all the expected plugins.
+        `)
+    */
+    static loadPlugins() {
+        this.loadObjectBrowserPlugins()
+    }
+
+    /*
+        Method(`
+            Load the ObjectBrowser plugins.
+        `)
+    */
+    static loadObjectBrowserPlugins() {
+        // get the ObjectPropertyPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'ObjectPropertyPlugins' }).new()
+
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/object-browser'
+        })
+
+        folder.filesDo( (pluginFile) => {
+            const pluginClassification = require( pluginFile.getPath() )
+
+            objectPropertyPlugins.addPlugin( pluginClassification )
+        })
+    }
 }
+
+Sirens.loadPlugins()
 
 module.exports = Sirens

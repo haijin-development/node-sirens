@@ -4,6 +4,7 @@ const NamespaceFlow = require('../finger-tips/flows/NamespaceFlow')
 const SkinsNamespace = require('../skins/SkinsNamespace')
 const GuiNamespace = require('./GuiNamespace')
 
+const ObjectPropertyPlugins = require('./objects/ObjectPropertyPlugins')
 const DocumentationReaderPicker = require('./objects/documentation/DocumentationReaderPicker')
 const FileInspectorPicker = require('./objects/file-structure/FileInspectorPicker')
 
@@ -40,6 +41,15 @@ class SirensNamespace {
             })
 
             // Override commands with singleton instances
+
+            thisFlow.removeChildFlow({ id: 'ObjectPropertyPlugins' })
+            this.createSingletonObject({
+                id: 'ObjectPropertyPlugins',
+                singletonCreator: function() {
+                    return ObjectPropertyPlugins.new()
+                },
+            })
+
 
             thisFlow.removeChildFlow({ id: 'DocumentationReaderPicker' })
             this.createSingletonObject({

@@ -1,12 +1,12 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 describe('When using a Splitter', () => {
     describe('horizontal', () => {
         it('instantiates an empty one', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter()
             })
 
@@ -14,7 +14,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 1 sub-component', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -35,7 +35,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 2 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -64,7 +64,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 3 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -101,7 +101,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 4 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -148,7 +148,7 @@ describe('When using a Splitter', () => {
 
     describe('vertical', () => {
         it('instantiates an empty one', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter()
             })
 
@@ -156,7 +156,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 1 sub-component', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -177,7 +177,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 2 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -206,7 +206,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 3 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -243,7 +243,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 4 sub-components', () => {
-            const splitter = Skins.ComponentRenderer.new().render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,

@@ -3,7 +3,7 @@ const Classification = require('../../../../../src/O').Classification
 const Component = require('../../../../../src/skins/components/Component')
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 class CustomComponent {
     /// Definition
@@ -26,7 +26,7 @@ CustomComponent = Classification.define(CustomComponent)
 
 describe('When using a Component', () => {
     it('instantiates an empty one', () => {
-        const component = Skins.ComponentRenderer.new().render( function(renderer) {
+        const component = namespace.ComponentRenderer.new().render( function(renderer) {
             this.component(
                 CustomComponent.new()
             )

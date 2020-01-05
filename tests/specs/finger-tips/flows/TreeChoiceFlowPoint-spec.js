@@ -1,13 +1,14 @@
 const expect = require('chai').expect
-const Flow = require('../../../../src/finger-tips/flows/Flow')
-const TreeChoiceModel = require('../../../../src/finger-tips/models/TreeChoiceModel')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a TreeChoiceFlowPoint', () => {
 
     describe('ids', () => {
 
         it('gets a flow point id', () => {
-           const flow = Flow.new({ id: 'main' })
+           const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -22,7 +23,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
         })
 
         it('gets a flow point id path', () => {
-           const flow = Flow.new({ id: 'main' })
+           const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -41,7 +42,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
     describe('searches', () => {
 
         it('gets a child flow point', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -56,7 +57,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
         })
 
         it('returns null if the child does not exist', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
 
             const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
@@ -68,7 +69,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
     describe('protocol', () => {
 
         it('complies with the TreeChoiceModel protocol', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -79,7 +80,7 @@ describe('When using a TreeChoiceFlowPoint', () => {
 
             const childFlowPoint = flow.findFlowPoint({ id: 'flow-1' })
 
-            expect( childFlowPoint.isBehavingAs(TreeChoiceModel) ) .to .be .true
+            expect( childFlowPoint ) .to .behaveAs( 'TreeChoiceModel' )
         })
 
     })

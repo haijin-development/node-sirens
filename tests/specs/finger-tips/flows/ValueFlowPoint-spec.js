@@ -1,12 +1,14 @@
 const expect = require('chai').expect
-const Flow = require('../../../../src/finger-tips/flows/Flow')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a ValueFlowPoint', () => {
 
     describe('ids', () => {
 
         it('gets a flow point id', () => {
-           const flow = Flow.new({ id: 'main' })
+           const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -18,7 +20,7 @@ describe('When using a ValueFlowPoint', () => {
         })
 
         it('gets a flow point id path', () => {
-           const flow = Flow.new({ id: 'main' })
+           const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -34,7 +36,7 @@ describe('When using a ValueFlowPoint', () => {
     describe('searches', () => {
 
         it('gets a child flow point', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -46,7 +48,7 @@ describe('When using a ValueFlowPoint', () => {
         })
 
         it('returns null if the child does not exist', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             const childFlow = flow.findFlowPoint({ id: 'flow-1' })
 
@@ -57,7 +59,7 @@ describe('When using a ValueFlowPoint', () => {
     describe('values', () => {
 
         it('gets a child flow point value', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -69,7 +71,7 @@ describe('When using a ValueFlowPoint', () => {
         })
 
         it('sets a child flow point value', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -88,7 +90,7 @@ describe('When using a ValueFlowPoint', () => {
     describe('events', () => {
 
         it('announces value changes to its listeners', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -111,7 +113,7 @@ describe('When using a ValueFlowPoint', () => {
         })
 
         it('receives changes from its flow and announces it to its listeners', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })

@@ -1,16 +1,12 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
+const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
 
 const namespace = SirensNamespace.new()
 
-const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassInspectorFlow')
-
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
-const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
-
-describe('When using an JsClassInspectorFlow', () => {
+describe('When using an namespace.JsClassInspectorFlow.new', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
 
     let filePath
@@ -30,10 +26,10 @@ describe('When using an JsClassInspectorFlow', () => {
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsClass = jsFile.getClasses()[0]
 
-        flow = JsClassInspectorFlow.new()
+        flow = namespace.JsClassInspectorFlow.new()
 
         const commandsController =
-            ApplicationCommandsController.new({ mainFlow: flow })
+            namespace.ApplicationCommandsController.new({ mainFlow: flow })
                 .behaveAs( UnhandledBubbledUpCommandHandler )
 
         flow.setCommandsController( commandsController )

@@ -1,12 +1,14 @@
 const expect = require('chai').expect
-const Flow = require('../../../../src/finger-tips/flows/Flow')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a TreeChoiceFlow', () => {
 
     describe('ids', () => {
 
         it('gets a flow id', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -21,7 +23,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('gets a flow id path', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -40,7 +42,7 @@ describe('When using a TreeChoiceFlow', () => {
     describe('searches', () => {
 
         it('raises an error if the child does not exist', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             expect( () => {
 
@@ -50,7 +52,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('gets a child flow', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -69,7 +71,7 @@ describe('When using a TreeChoiceFlow', () => {
     describe('values', () => {
 
         it('gets a flow roots', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -85,7 +87,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('sets a flow roots', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -103,7 +105,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('sets the flow selection', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.treeChoice({
@@ -125,7 +127,7 @@ describe('When using a TreeChoiceFlow', () => {
     describe('events', () => {
 
         it('evaluates the flow onSelectionChanged handler when setting its selection', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             let onSelectionChanged = false
 
@@ -153,7 +155,7 @@ describe('When using a TreeChoiceFlow', () => {
         const CustomCommandsController = require('./CustomCommandsController')
 
         it('propagates the commandsController set before adding a child flow', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -172,7 +174,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('propagates the commandsController set before after a child flow', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -191,7 +193,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('receives a set roots event notification', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -219,7 +221,7 @@ describe('When using a TreeChoiceFlow', () => {
         })
 
         it('receives a set selection event notification', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 

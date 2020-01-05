@@ -1,5 +1,7 @@
 const expect = require('chai').expect
-const ListModel = require('../../../../src/finger-tips/models/ListModel')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a ListModel', () => {
     beforeEach( () => {
@@ -8,13 +10,13 @@ describe('When using a ListModel', () => {
 
     describe('when setting and getting its list', () => {
         it('sets its list in its constructor', () => {
-            const list_model = ListModel.new({ list: [1, 2, 3] })
+            const list_model = namespace.ListModel.new({ list: [1, 2, 3] })
 
             expect(list_model.getList()) .to .eql([1, 2, 3])
         })
 
         it('sets and gets its list', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.setList([1, 2, 3])
 
@@ -22,7 +24,7 @@ describe('When using a ListModel', () => {
         })
 
         it('sets and gets a lits over an existent list', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.setList([1, 2, 3])
 
@@ -32,7 +34,7 @@ describe('When using a ListModel', () => {
         })
 
         it('triggers a list-changed event', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.onListChanged({
                 with: this,
@@ -52,7 +54,7 @@ describe('When using a ListModel', () => {
 
     describe('when adding items', () => {
         it('adds an item', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.onItemsAdded({
                 with: this,
@@ -72,7 +74,7 @@ describe('When using a ListModel', () => {
         })
 
         it('adds many items', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.onItemsAdded({
                 with: this,
@@ -92,7 +94,7 @@ describe('When using a ListModel', () => {
         })
 
         it('adds an item at a position', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.push(1, 2, 3)
 
@@ -114,7 +116,7 @@ describe('When using a ListModel', () => {
         })
 
         it('adds many items at a position', () => {
-            const list_model = ListModel.new()
+            const list_model = namespace.ListModel.new()
 
             list_model.push(1, 2, 3)
 
@@ -138,7 +140,7 @@ describe('When using a ListModel', () => {
 
     describe('when updating items', () => {
         it('updates an item', () => {
-            const list_model = ListModel.new({ list: [1, 2, 3] })
+            const list_model = namespace.ListModel.new({ list: [1, 2, 3] })
 
             list_model.onItemsUpdated({
                 with: this,
@@ -158,7 +160,7 @@ describe('When using a ListModel', () => {
         })
 
         it('updates many items', () => {
-            const list_model = ListModel.new({ list: [1, 2, 3] })
+            const list_model = namespace.ListModel.new({ list: [1, 2, 3] })
 
             list_model.onItemsUpdated({
                 with: this,
@@ -180,7 +182,7 @@ describe('When using a ListModel', () => {
 
     describe('when removing items', () => {
         it('removes an item', () => {
-            const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
+            const list_model = namespace.ListModel.new({ list: ['a', 'b', 'c'] })
 
             list_model.onItemsRemoved({
                 with: this,
@@ -200,7 +202,7 @@ describe('When using a ListModel', () => {
         })
 
         it('removes many items', () => {
-            const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
+            const list_model = namespace.ListModel.new({ list: ['a', 'b', 'c'] })
 
             list_model.onItemsRemoved({
                 with: this,
@@ -220,7 +222,7 @@ describe('When using a ListModel', () => {
         })
 
         it('removes an item at an index', () => {
-            const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
+            const list_model = namespace.ListModel.new({ list: ['a', 'b', 'c'] })
 
             list_model.onItemsRemoved({
                 with: this,
@@ -240,7 +242,7 @@ describe('When using a ListModel', () => {
         })
 
         it('removes many items at indices', () => {
-            const list_model = ListModel.new({ list: ['a', 'b', 'c'] })
+            const list_model = namespace.ListModel.new({ list: ['a', 'b', 'c'] })
 
             list_model.onItemsRemoved({
                 with: this,

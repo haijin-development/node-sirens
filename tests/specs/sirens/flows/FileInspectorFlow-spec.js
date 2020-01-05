@@ -3,10 +3,6 @@ const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
 const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
 
-const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
-
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
 
@@ -21,10 +17,10 @@ describe('When using an FileInspectorFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = SourceFile.new({ filepath: filePath  })
+        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
 
-        flow = FileInspectorFlow.new()
-        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+        flow = namespace.FileInspectorFlow.new()
+        flow.setCommandsController( namespace.ApplicationCommandsController.new({ mainFlow: flow }) )
 
         // stub the .mainNamespace() for these tests since that namespace is
         // bubbled up and in the context of this tests FileInspectorFlow does

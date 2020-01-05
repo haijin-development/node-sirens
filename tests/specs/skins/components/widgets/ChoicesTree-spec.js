@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 
 describe('When using a ChoicesTree', () => {
@@ -9,13 +9,13 @@ describe('When using a ChoicesTree', () => {
     let tree
 
     beforeEach( () => {
-        componentRenderer = Skins.ComponentRenderer.new()
+        componentRenderer = namespace.ComponentRenderer.new()
         tree = null
     })
 
     describe('model', () => {
         beforeEach( () => {
-            const treeModel = Skins.Models.TreeChoiceModel.new({
+            const treeModel = namespace.Models.TreeChoiceModel.new({
                 roots: [],
                 getChildrenClosure: () => { return ['1', '2', '3'] }
             })

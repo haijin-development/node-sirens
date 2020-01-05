@@ -1,11 +1,11 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 describe('When using a MenuBar', () => {
     it('instantiates an empty one', () => {
-        const menuBar = Skins.ComponentRenderer.new().render( function(renderer) {
+        const menuBar = namespace.ComponentRenderer.new().render( function(renderer) {
             this.menuBar()
         })
 
@@ -13,7 +13,7 @@ describe('When using a MenuBar', () => {
     })
 
     it('adds 1 menu group', () => {
-        const menuBar = Skins.ComponentRenderer.new().render( function(renderer) {
+        const menuBar = namespace.ComponentRenderer.new().render( function(renderer) {
             this.menuBar( function() {
                 this.menuGroup({ label: 'group 1' })
             })
@@ -27,7 +27,7 @@ describe('When using a MenuBar', () => {
     })
 
     it('adds 1 menu group with 1 menu item', () => {
-        const menuBar = Skins.ComponentRenderer.new().render( function(renderer) {
+        const menuBar = namespace.ComponentRenderer.new().render( function(renderer) {
             this.menuBar( function() {
                 this.menuGroup({ label: 'group 1' }, function() {
                     this.item({ label: 'item 1', action: () => {} })

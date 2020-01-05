@@ -90,7 +90,7 @@ class NamespaceFlowBuilder {
         ])
     */
     createObject({
-        id: objectCreatorName, with: createObjectClosure, inNamespace: namespace
+        id: objectCreatorName, with: createObjectClosure, inNamespace: namespace,
     }) {
         if( objectCreatorName === undefined ) { throw new Error(`The id must be defined.`) }
 
@@ -101,11 +101,7 @@ class NamespaceFlowBuilder {
             actionHandlerClosure: function(...props) {
                 const newObject = createObjectClosure(...props)
 
-                if(
-                    OInstance.isOInstance( newObject )
-                    &&
-                    newObject.respondsTo('setNamespace')
-                  )
+                if( OInstance.isOInstance( newObject ) && newObject.respondsTo('setNamespace') )
                 {
                     if( namespace === undefined ) {
                         namespace = thisFlow
@@ -118,6 +114,52 @@ class NamespaceFlowBuilder {
                 return newObject
             },
         })
+
+        this.getRootFlow().addChildFlow({
+            id: objectCreatorName,
+            flow: createObjectCommand,
+        })
+
+        this.defineNamespaceAccessor({
+            accessor: objectCreatorName,
+            value: createObjectCommand,
+        })
+    }
+
+    createSingletonObject({
+        id: objectCreatorName, singletonCreator: singletonCreatorClosure, inNamespace: namespace
+    }) {
+        if( objectCreatorName === undefined ) { throw new Error(`The id must be defined.`) }
+
+        const thisFlow = this.getRootFlow()
+
+        const createObjectCommand = CreateObjectCommand.new({
+            id: objectCreatorName,
+            actionHandlerClosure: null,
+        })
+
+        createObjectCommand.setActionHandlerClosure( function(...props) {
+            const singleton = this.getSingleton()
+
+            if( singleton !== undefined ) { return singleton }
+
+            const newObject = singletonCreatorClosure(...props)
+
+            if( OInstance.isOInstance( newObject ) && newObject.respondsTo('setNamespace') )
+            {
+                if( namespace === undefined ) {
+                    namespace = thisFlow
+                }
+
+                newObject.setNamespace( namespace )
+                newObject.lockNamespace()
+            }
+        
+            this.setSingleton( newObject )
+
+            return newObject
+
+        }.bind(createObjectCommand) )
 
         this.getRootFlow().addChildFlow({
             id: objectCreatorName,

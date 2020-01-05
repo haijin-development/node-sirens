@@ -1,11 +1,11 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 describe('When using a Window', () => {
     it('instantiates an empty one', () => {
-        const window = Skins.ComponentRenderer.new().render( function(renderer) {
+        const window = namespace.ComponentRenderer.new().render( function(renderer) {
             this.window()
         })
 
@@ -13,7 +13,7 @@ describe('When using a Window', () => {
     })
 
     it('adds a sub-component', () => {
-        const window = Skins.ComponentRenderer.new().render( function(renderer) {
+        const window = namespace.ComponentRenderer.new().render( function(renderer) {
             this.window( function() {
                 this.label()
             })

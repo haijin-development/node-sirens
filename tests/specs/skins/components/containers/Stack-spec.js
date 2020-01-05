@@ -1,12 +1,12 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {
         it('instantiates an empty one', () => {
-            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
+            const stack = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalStack()
             })
 
@@ -14,7 +14,7 @@ describe('When using a Stack', () => {
         })
 
         it('adds sub-components', () => {
-            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
+            const stack = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalStack( function() {
                     this.label()
 
@@ -36,7 +36,7 @@ describe('When using a Stack', () => {
 
     describe('vertical', () => {
         it('instantiates an empty one', () => {
-            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
+            const stack = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalStack( function() {
                 })
             })
@@ -45,7 +45,7 @@ describe('When using a Stack', () => {
         })
 
         it('adds sub-components', () => {
-            const stack = Skins.ComponentRenderer.new().render( function(renderer) {
+            const stack = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalStack( function() {
                     this.label()
 

@@ -1,8 +1,29 @@
 const SirensFlow = require('./sirens/SirensFlow')
 
+const sirensFlowSingleton = SirensFlow.new()
+const sirensNamespace = sirensFlowSingleton.getChildFlow({ id: 'SirensNamespace' })
+
+// As an example, add a customization to the SirensFlow. This could be improved.
+{
+    const ObjectProperty = require('./sirens/objects/ObjectProperty')
+    const OInstanceObjectProperty = require('./sirens/objects/OInstanceObjectProperty')
+
+    // get the original object creator from the main namespace
+    const newObjectPropertyCommand = sirensNamespace.getChildFlow({ id: 'ObjectProperty' })
+
+    // change the instance returned adding an additional classification
+    newObjectPropertyCommand.setActionHandlerClosure( (...params) => {
+        const objectProperty = ObjectProperty.new(...params)
+
+        objectProperty.behaveAs( OInstanceObjectProperty )
+
+        return objectProperty
+    })
+}
+
 // Create the MainFlow. All the application is built from this main object.
 // See the Sirens class implementation note for more details.
-const mainFlow = SirensFlow.new().asFlowPoint()
+const mainFlow = sirensFlowSingleton.asFlowPoint()
 
 
 /*

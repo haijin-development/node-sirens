@@ -13,10 +13,6 @@ class _ObjectProperty {
     /// Initializing
 
     initialize({ key: key, value: value }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
         this.key = key
         this.value = value
     }

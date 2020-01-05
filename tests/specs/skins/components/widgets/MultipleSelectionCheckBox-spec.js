@@ -1,13 +1,13 @@
 const expect = require('chai').expect
 const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const Skins = SkinsNamespace.new()
+const namespace = SkinsNamespace.new()
 
 describe('When using a MultipleSelectionCheckBox-spec', () => {
     let componentRenderer
 
     beforeEach( () => {
-        componentRenderer = Skins.ComponentRenderer.new()
+        componentRenderer = namespace.ComponentRenderer.new()
     })
 
     describe('model', () => {
@@ -91,7 +91,7 @@ describe('When using a MultipleSelectionCheckBox-spec', () => {
         })
 
         it('sets a true value if the model includes the item', () => {
-            const model = Skins.Models.ValueModel.new({ value: ['Item 1'] })
+            const model = namespace.Models.ValueModel.new({ value: ['Item 1'] })
 
             const widget = componentRenderer.render( function() {
                 this.multipleCheckBox({

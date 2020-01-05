@@ -1,15 +1,11 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
+const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
 
 const namespace = SirensNamespace.new()
 
-const JsClassDocumentationFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassDocumentationFlow')
-const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassInspectorFlow')
-
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
-const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
 describe('When using an JsClassDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -178,9 +174,9 @@ describe('When using an JsClassDocumentationFlow', () => {
 })
 
 function createClassDocumentationFlow() {
-    const classDocumentationFlow = JsClassDocumentationFlow.new()
+    const classDocumentationFlow = namespace.JsClassDocumentationFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: classDocumentationFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: classDocumentationFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     classDocumentationFlow.setCommandsController( commandsController )
@@ -189,9 +185,9 @@ function createClassDocumentationFlow() {
 }
 
 function createClassInspectorFlow() {
-    const classInspectorFlow = JsClassInspectorFlow.new()
+    const classInspectorFlow = namespace.JsClassInspectorFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: classInspectorFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: classInspectorFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     classInspectorFlow.setCommandsController( commandsController )

@@ -37,14 +37,18 @@ class ObjectPropertiesFlow {
             })
 
             this.whenObjectChanges( ({ newValue: object }) => {
-                const rootProperties = thisFlow.getRootProperties()
+                const rootProperties = object ?
+                    thisFlow.getRootProperties()
+                    :
+                    []
 
-                thisFlow.getChildFlow({ id: 'properties' }).setRoots({ items: rootProperties })
+                thisFlow.getChildFlow({ id: 'properties' })
+                    .setRoots({ items: rootProperties })
             })
 
             this.treeChoice({
                 id: 'properties',
-                roots: thisFlow.getRootProperties(),
+                roots: [],
                 getChildrenClosure: function (objectProperty) {
                     return objectProperty.getChildProperties()
                 },
@@ -99,7 +103,10 @@ class ObjectPropertiesFlow {
     }
 
     getRootProperties() {
-        const rootObjectAsProperty = ObjectProperty.new({ key: null, value: this.getMainObject() })
+        const rootObjectAsProperty = this.mainNamespace().ObjectProperty.new({
+            key: null,
+            value: this.getMainObject()
+        })
 
         return [rootObjectAsProperty]
     }
@@ -108,6 +115,10 @@ class ObjectPropertiesFlow {
         const objectProperty = this.getChildFlow({ id: 'properties' }).getSelectionValue()
 
         return objectProperty ? objectProperty.getValue() : null
+    }
+
+    mainNamespace() {
+        return this.bubbleUp({ command: 'mainNamespace' })
     }
 }
 

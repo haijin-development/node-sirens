@@ -6,7 +6,7 @@ class CreateObjectCommand {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['singleton']
         this.assumes = [Command]
     }
 
@@ -14,6 +14,14 @@ class CreateObjectCommand {
         const newObject = this.execute({ params: params })
 
         return newObject
+    }
+
+    getSingleton() {
+        return this.singleton
+    }
+
+    setSingleton(object) {
+        this.singleton = object
     }
 }
 

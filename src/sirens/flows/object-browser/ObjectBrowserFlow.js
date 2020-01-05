@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
 
-
 class ObjectBrowserFlow {
     /// Definition
 

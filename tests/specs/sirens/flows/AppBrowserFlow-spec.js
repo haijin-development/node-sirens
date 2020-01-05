@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
 
 describe('When using an AppBrowserFlow', () => {
     const sampleFolder = __dirname + '/../../../samples'
@@ -22,7 +22,7 @@ describe('When using an AppBrowserFlow', () => {
 
     it('has all these child flows defined', () => {
 
-        const flow = namespace.AppBrowserFlow.new()
+        const flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
         expect( flow ) .to .haveChildFlows([
             'main.windowTitle',
@@ -56,7 +56,7 @@ describe('When using an AppBrowserFlow', () => {
     })
 
     describe('browing mode', () => {
-        const flow = namespace.AppBrowserFlow.new()
+        const flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
         it('showsUnformattedComments is set to false', () => {
             expect(flow) .withId( 'main.browsingMode.showsUnformattedComments' )
@@ -73,7 +73,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = namespace.AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
             flow.openFolder({ folderPath: folder })
         })
@@ -109,7 +109,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = namespace.AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
             flow.openFolder({ folderPath: folder })
             flow.openFolder({ folderPath: null })
@@ -144,7 +144,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = namespace.AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
             flow.openFolder({ folderPath: folder })
         })
@@ -177,7 +177,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = namespace.AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
             flow.openFolder({ folderPath: folder })
 
@@ -213,7 +213,7 @@ describe('When using an AppBrowserFlow', () => {
         let flow
 
         beforeEach( () => {
-            flow = namespace.AppBrowserFlow.new()
+            flow = namespace.AppBrowserFlow.new({ mainFlow: null })
 
             flow.openFolder({ folderPath: folder })
         })

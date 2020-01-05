@@ -1,6 +1,7 @@
 const expect = require('chai').expect
-const MethodDocumentation = require('../../../../../src/sirens/objects/documentation/MethodDocumentation')
-const DocumentationReader = require('../../../../../src/sirens/objects/documentation/DocumentationReader')
+const SirensNamespace = require('../../../../../src/sirens/SirensNamespace')
+
+const namespace = SirensNamespace.new()
 
 describe('When using a MethodDocumentation', () => {
     describe('to document a Method description', () => {
@@ -14,7 +15,7 @@ describe('When using a MethodDocumentation', () => {
     \`)
     `
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: methodComment })
 
             expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
@@ -30,7 +31,7 @@ describe('When using a MethodDocumentation', () => {
         "A regular js class to use in the FileEditor example."
     )`
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: methodComment })
 
             expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
@@ -57,7 +58,7 @@ describe('When using a MethodDocumentation', () => {
     })
     `
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
@@ -75,7 +76,7 @@ describe('When using a MethodDocumentation', () => {
         Code: "const o = 'abc'",
     })`
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
@@ -98,7 +99,7 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const params = methodDocumentation.getParams()
 
@@ -121,7 +122,7 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const returns = methodDocumentation.getReturnValue()
 
@@ -142,7 +143,7 @@ describe('When using a MethodDocumentation', () => {
         Assumes that the street is not empty.
     \`)
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const implementationNotes = methodDocumentation.getImplementationNotes()
 
@@ -166,7 +167,7 @@ describe('When using a MethodDocumentation', () => {
 
         it('builds a Method Tag from a template literal', () => {
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const tags = methodDocumentation.getTags()
 

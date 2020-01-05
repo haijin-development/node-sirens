@@ -1,4 +1,5 @@
 const Classification = require('../../../O').Classification
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 const PlainTextStructureParser = require('../file-structure-parsers/PlainTextStructureParser')
 const JSFileStructureParser = require('../file-structure-parsers/JSFileStructureParser')
@@ -40,6 +41,7 @@ class FileInspectorPicker {
             'availableFileParsers',
             'availableFileObjectInspectors'
         ]
+        this.assumes = [ObjectWithNamespace]
     }
 
     initialize() {
@@ -61,13 +63,16 @@ class FileInspectorPicker {
     pickFileParserFor({ sourceFile: sourceFile }) {
         const fileType = sourceFile.getFileType()
 
-        const parser = this.availableFileParsers[fileType] ?
+        const parserClassification = this.availableFileParsers[fileType] ?
             this.availableFileParsers[fileType]
             :
             this.availableFileParsers.default
 
-        return parser.new()
+        const parser = parserClassification.new()
 
+        parser.setNamespace( this.namespace() )
+
+        return parser
     }
 
     pickFileObjectInspectorFlowFor({ fileObject: fileObject }) {

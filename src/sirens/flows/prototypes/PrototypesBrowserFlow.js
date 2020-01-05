@@ -11,9 +11,12 @@ class PrototypesBrowserFlow {
         this.assumes = [ValueFlow]
     }
 
-    // review along with acceptedBubbledUps
-    setMainFlow(mainFlow) {
+    initialize({ mainFlow: mainFlow }) {
         this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {

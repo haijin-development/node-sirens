@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const JsFileObject = require('./JsFileObject')
-const DocumentationReader = require('../documentation/DocumentationReader')
 
 class JsClass {
     /// Definition
@@ -41,7 +40,9 @@ class JsClass {
     getDocumentation() {
         const commentBodyContents = this.getClassComment().getBodyContents()
 
-        return DocumentationReader.readClassDocumentationFromString({
+        const documentationReader = this.namespace().DocumentationReader.new()
+        
+        return documentationReader.readClassDocumentationFromString({
             string: commentBodyContents,
             className: this.className,
         })

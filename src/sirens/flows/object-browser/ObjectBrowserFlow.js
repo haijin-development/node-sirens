@@ -11,9 +11,12 @@ class ObjectBrowserFlow {
         this.assumes = [ValueFlow]
     }
 
-    // review along with acceptedBubbledUps
-    setMainFlow(mainFlow) {
+    initialize({ mainFlow: mainFlow }) {
         this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
@@ -21,6 +24,10 @@ class ObjectBrowserFlow {
             id: commandName,
             withAll: params,
         })
+    }
+
+    mainNamespace() {
+        return this.mainFlow.mainNamespace()
     }
 
     /// Building
@@ -91,12 +98,10 @@ class ObjectBrowserFlow {
     }
 
     propertySelectionValueStringFrom({ value: value }) {
-        const valueToTextClassification =
-            require('../../Pluggables').objectPropertiesInspector.playgroundTextConverter
+        const valueToTextConverter =
+            this.mainNamespace().PropertyValueToPlaygroundText.new()
 
-        const valueToText = valueToTextClassification.new()
-
-        return valueToText.getDisplayValueFrom({ value: value })
+        return valueToTextConverter.getDisplayValueFrom({ value: value })
     }
 }
 

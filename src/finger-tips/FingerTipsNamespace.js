@@ -1,10 +1,6 @@
 const Classification = require('../O').Classification
 const NamespaceFlow = require('./flows/NamespaceFlow')
 
-const ValueModel = require('./models/ValueModel')
-const ChoiceModel = require('./models/ChoiceModel')
-const TreeChoiceModel = require('./models/TreeChoiceModel')
-
 class FingerTipsNamespace {
     /// Definition
 
@@ -17,32 +13,16 @@ class FingerTipsNamespace {
 
     buildWith(flow) {
         flow.main({ id: 'FingerTipsNamespace' }, function(thisFlow) {
-            this.defineMethodsAsCreateObjectCommands({
-                methods: [
-                    'ValueModel',
-                    'TreeChoiceModel',
-                    'ChoiceModel',
-                ],
+
+            this.createObjectCommandsFromFilesIn({
+                folders: [
+                    __dirname + '/announcements',
+                    __dirname + '/flow-builders',
+                    __dirname + '/flows',
+                    __dirname + '/models',
+                    __dirname + '/stateful-flows',
+                ]
             })
-        })
-    }
-
-    ValueModel({ value: value } = { value: null }) {
-        return ValueModel.new({ value: value })
-    }
-
-    TreeChoiceModel({ selectionModel: selectionModel, roots: roots, getChildrenClosure: getChildrenClosure }) {
-        return TreeChoiceModel.new({
-            selectionModel: selectionModel,
-            roots: roots,
-            getChildrenClosure: getChildrenClosure,
-        })
-    }
-
-    ChoiceModel({ choices: choices, selection: selection } = { choices: [], selection: null }) {
-        return ChoiceModel.new({
-            choices: choices,
-            selection: selection
         })
     }
 }

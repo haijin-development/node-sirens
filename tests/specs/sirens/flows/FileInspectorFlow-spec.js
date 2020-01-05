@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 
 const FilesRepository = require('../FilesRepository')
-const SirensNamespace = require('../../../../src/sirens/flows/SirensNamespace')
+const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
 
 const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 const SourceFile = require('../../../../src/sirens/objects/SourceFile')

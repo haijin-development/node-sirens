@@ -13,9 +13,12 @@ class AppBrowserFlow {
         this.assumes = [ValueFlow]
     }
 
-    // review along with acceptedBubbledUps
-    setMainFlow(mainFlow) {
+    initialize({ mainFlow: mainFlow }) {
         this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
     }
 
     // review in the next iteration

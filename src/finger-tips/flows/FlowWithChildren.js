@@ -30,6 +30,48 @@ class FlowWithChildren {
     afterInstantiation() {
         this.childFlows = new Map()
         this.bubbledUpCommands = new Set()
+
+        // attach a per object classification to define the command methods
+        // This classification allows to execute commands using the regular
+        // methods sintax.
+        const CommandsMethodsDynamicClassification =
+            Classification.define( class _CommandsMethodsDynamicClassification {} )
+
+        this.behaveAs( CommandsMethodsDynamicClassification )
+    }
+
+    /*
+        Method(`
+            Defines a method in this object CommandsMethodsDynamicClassification
+            that executes the command named commandName.
+
+            This allows to execute the command with
+
+                    flow.doSomething(...params)
+
+            intead of
+
+                    flow.executeCommand({ id: 'doSomething', withAll: params })
+
+            but still goes through the CommandsController.
+        `)
+
+        Implementation(`
+            The method is defined as an unclassified property of this object
+            because unclassified methods have the highest priority in the method
+            lookup and ensures that the command method overrides the original method.
+        `)
+    */
+    defineCommandMethod({ named: commandName }) {
+        this.setUnclassifiedProperty({
+            name: commandName,
+            value: function(...params) {
+                return this.executeCommand({
+                    id: commandName,
+                    withAll: params,
+                })
+            }
+        })
     }
 
     releaseFlow() {

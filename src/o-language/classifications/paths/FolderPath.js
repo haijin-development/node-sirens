@@ -184,7 +184,7 @@ class FolderPath {
 
             // First queue the next folder for the iteration, then evaluate the
             // closure on the current file or folder.
-            // This ensure that if the iteration performs some operation with
+            // This ensures that if the iteration performs some operation with
             // secondary effects on the folder (like deleting it) its children
             // were already queuded
             if( current.isFolderPath() ) {
@@ -255,7 +255,7 @@ class FolderPath {
 
             // First queue the next folder for the iteration, then evaluate the
             // closure on the current file or folder.
-            // This ensure that if the iteration performs some operation with
+            // This ensures that if the iteration performs some operation with
             // secondary effects on the folder (like deleting it) its children
             // were already queuded
             if( current.isFolderPath() ) {

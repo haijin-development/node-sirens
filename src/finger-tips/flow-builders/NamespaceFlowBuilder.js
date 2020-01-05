@@ -29,8 +29,8 @@ const FolderPath = require('../../O').FolderPath
             namespace.SomeObject.new()
 
     The sintax is similar and fluent but it uses a Command which allows to
-    override it, trace it, nested it with child namespaces and the rest of
-    the thing that can be done with a Flow. 
+    override it, trace it, nest it with child namespaces and the rest of
+    the things that can be done with a Flow. 
  `)
 */
 class NamespaceFlowBuilder {
@@ -247,7 +247,7 @@ class NamespaceFlowBuilder {
 
                 SomeModel.new()
 
-              has many advantages: it is readable, expressive and declarative
+              has many advantages: it is a readable, expressive and declarative
               statement.
 
               With the use of the bubbling up mechanism it possible to accomplish
@@ -256,7 +256,7 @@ class NamespaceFlowBuilder {
 
                     class AComponent {
                         aMethod() {
-                            // modelNamespace object request is bubbled up and resolved in by the MainNamespace
+                            // modelNamespace object request is bubbled up and resolved in the MainNamespace
                             const modelsNamespace = this.bubbleUp({ command: 'modelsNamespace' })
 
                             modelsNamespace.SomeModel.new()
@@ -278,37 +278,28 @@ class NamespaceFlowBuilder {
             'dsl'
         ])
     */
-    defineMethodsAsCreateObjectCommands({ methods: methodNames, inNamespace: namespace }) {
+    createObjectCommandsFromMethods({ methods: methods, inNamespace: namespace }) {
+        for( const eachMethod of methods ) {
+            this.createObjectCommandFromMethod({
+                method: eachMethod,
+                inNamespace: namespace
+            })
+        }
+    }
+
+    createObjectCommandFromMethod({ method: methodName, inNamespace: namespace }) {
         if( namespace === undefined ) { namespace = this.getRootFlow() }
 
         const targetFlow = this.getRootFlow()
 
-        const CommandsMethodsDynamicClassification =
-            Classification.define( class _CommandsMethodsDynamicClassification {} )
+        const method = targetFlow[methodName]
 
-        for( const eachMethodName of methodNames ) {
-            const method = targetFlow[eachMethodName]
+        this.createObject({
+            id: methodName,
+            with: method.bind(targetFlow),
+            inNamespace: namespace,
+        })
 
-            this.createObject({
-                id: eachMethodName,
-                with: method.bind(targetFlow),
-                inNamespace: namespace,
-            })
-
-            const commandMethodReplacement = function(...params) {
-                return this.executeCommand({
-                    id: eachMethodName,
-                    withAll: params,
-                })
-            }
-
-            CommandsMethodsDynamicClassification.defineMethod({
-                methodName: eachMethodName,
-                methodClosure: commandMethodReplacement,
-            })
-        }
-
-        targetFlow.behaveAs( CommandsMethodsDynamicClassification )
     }
 
     /*

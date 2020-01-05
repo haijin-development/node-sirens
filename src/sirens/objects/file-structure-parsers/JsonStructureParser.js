@@ -1,5 +1,6 @@
 const splitLines = require('split-lines')
 const Classification = require('../../../O').Classification
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 const FileObject = require('../file-structure/FileObject')
 const JsonContent = require('../file-structure/JsonContent')
 
@@ -7,6 +8,7 @@ class JsonStructureParser {
 
     static definition() {
         this.instanceVariables = []
+        this.assumes = [ObjectWithNamespace]
     }
 
     /// Parsing
@@ -53,7 +55,7 @@ class JsonStructureParser {
         endColumn: endColumn,
         fileContents: fileContents,
     }) {
-        const jsonContent = JsonContent.new()
+        const jsonContent = this.namespace().JsonContent.new()
 
         jsonContent.setFileLocation({
             sourceFile: sourceFile,
@@ -78,7 +80,7 @@ class JsonStructureParser {
         endLine: endLine,
         endColumn: endColumn,
     }) {
-        const file = FileObject.new()
+        const file = this.namespace().FileObject.new()
 
         file.setFileLocation({
             sourceFile: sourceFile,

@@ -12,15 +12,6 @@ class _ObjectProperty {
 
     /// Initializing
 
-    afterInstantiation() {
-        const Pluggables = require('../Pluggables')
-
-        const pluggableClassifications =
-            Pluggables.objectPropertiesInspector.availablePropertiesInspectors
-
-        this.behaveAsAll( pluggableClassifications )
-    }
-
     initialize({ key: key, value: value }) {
         this.previousClassificationDo( () => {
             this.initialize()

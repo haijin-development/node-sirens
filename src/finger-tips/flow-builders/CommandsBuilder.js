@@ -52,34 +52,49 @@ class CommandsBuilder {
         }
     }
 
+    /*
+        Method(`
+            This method converts the given methodNames into Commands, preserving
+            the original behaviour and the calling sintax.
+        `)
+    */
     defineMethodsAsCommands({ flow: targetFlow, methods: methodNames }) {
-        if( targetFlow === undefined ) { targetFlow = this.getRootFlow() }
-
-        const CommandsMethodsDynamicClassification =
-            Classification.define( class _CommandsMethodsDynamicClassification {} )
-
         for( const eachMethodName of methodNames ) {
-            const method = targetFlow[eachMethodName]
-
-            targetFlow.defineCommand({
-                id: eachMethodName,
-                whenActioned: method.bind(targetFlow),
-            })
-
-            const commandMethodReplacement = function(...params) {
-                return this.executeCommand({
-                    id: eachMethodName,
-                    withAll: params,
-                })
-            }
-
-            CommandsMethodsDynamicClassification.defineMethod({
-                methodName: eachMethodName,
-                methodClosure: commandMethodReplacement,
+            this.defineMethodAsCommand({
+                flow: targetFlow,
+                method: eachMethodName
             })
         }
+    }
 
-        targetFlow.behaveAs( CommandsMethodsDynamicClassification )
+    /*
+        Method(`
+            This method converts the given methodName into a Command preserving
+            its behaviour and the calling sintax of the method but going through the
+            CommandsController mechanism.
+
+            It assumes that the given methodName is a method defined in a classification
+            of the targetFlow.
+
+            The implementation does not modify the original method, instead it defines
+            a new method to override it.
+        `)
+    */
+    defineMethodAsCommand({ flow: targetFlow, method: methodName }) {
+        if( targetFlow === undefined ) { targetFlow = this.getRootFlow() }
+
+        const method = targetFlow[methodName]
+
+        const commandName = methodName
+
+        targetFlow.defineCommand({
+            id: commandName,
+            whenActioned: method.bind(targetFlow),
+        })
+
+        targetFlow.defineCommandMethod({
+            named: commandName
+        })
     }
 }
 

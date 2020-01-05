@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const JsFileObject = require('./JsFileObject')
-const DocumentationReader = require('../documentation/DocumentationReader')
 
 class JsMethod {
     /// Definition
@@ -53,7 +52,9 @@ class JsMethod {
     getDocumentation() {
         const commentBodyContents = this.getMethodComment().getBodyContents()
 
-        return DocumentationReader.readMethodDocumentationFromString({
+        const documentationReader = this.namespace().DocumentationReader.new()
+
+        return documentationReader.readMethodDocumentationFromString({
             string: commentBodyContents,
             methodName: this.methodName,
             params: this.methodParams,

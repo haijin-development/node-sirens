@@ -2,7 +2,7 @@ const Classification = require('../O').Classification
 const FilePath = require('../O').FilePath
 const Flow = require('../finger-tips/flows/Flow')
 
-const SirensNamespace = require('./flows/SirensNamespace')
+const SirensNamespace = require('./SirensNamespace')
 const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
 
 /*
@@ -120,7 +120,10 @@ class SirensFlow {
                 mainFlow: this,
             })
 
-            objectBrowserFlow.setMainFlow( this ) 
+            const commandsController =
+                this.newApplicationCommandsControllerFor({ mainFlow: objectBrowserFlow })
+
+            objectBrowserFlow.setCommandsController( commandsController )
 
             objectBrowserFlow.setBrowsedObject( object )
 
@@ -140,7 +143,10 @@ class SirensFlow {
                 mainFlow: this,
             })
 
-            prototypesBrowserFlow.setMainFlow( this ) 
+            const commandsController =
+                this.newApplicationCommandsControllerFor({ mainFlow: prototypesBrowserFlow })
+
+            prototypesBrowserFlow.setCommandsController( commandsController )
 
             prototypesBrowserFlow.setBrowsedObject( object )
 
@@ -159,6 +165,11 @@ class SirensFlow {
             const appBrowserFlow = namespace.AppBrowserFlow.new({
                 mainFlow: this,
             })
+
+            const commandsController =
+                this.newApplicationCommandsControllerFor({ mainFlow: appBrowserFlow })
+
+            appBrowserFlow.setCommandsController( commandsController )
 
             if( appFolderPath ) {
                 appBrowserFlow.openFolder({ folderPath: appFolderPath })
@@ -180,7 +191,10 @@ class SirensFlow {
                 mainFlow: this,
             })
 
-            playgroundBrowserFlow.setMainFlow( this ) 
+            const commandsController =
+                this.newApplicationCommandsControllerFor({ mainFlow: playgroundBrowserFlow })
+
+            playgroundBrowserFlow.setCommandsController( commandsController )
 
             if( filename !== undefined ) {
                 playgroundBrowserFlow.openFile({ filename: filename })
@@ -218,6 +232,15 @@ class SirensFlow {
     getPreferences() {
         return this.getChildFlow({ id: 'preferences' })
             .getValue()
+    }
+
+    newApplicationCommandsControllerFor({ mainFlow: flow }) {
+        const namespace = this.mainNamespace()
+
+        return namespace.ApplicationCommandsController.new({
+            mainFlow: flow,
+            mainNamespace: namespace,
+        })
     }
 }
 

@@ -1,8 +1,10 @@
 const expect = require('chai').expect
-const ClassDocumentation = require('../../../../../src/sirens/objects/documentation/ClassDocumentation')
-const DocumentationReader = require('../../../../../src/sirens/objects/documentation/DocumentationReader')
+const SirensNamespace = require('../../../../../src/sirens/SirensNamespace')
+
+const namespace = SirensNamespace.new()
 
 describe('When reading a ClassDocumentation', () => {
+
     describe('to document a Class description', () => {
 
         it('builds a Class description from a template literal', () => {
@@ -15,7 +17,7 @@ describe('When reading a ClassDocumentation', () => {
     `
 
             const classDocumentation =
-                DocumentationReader.readClassDocumentationFromString({ string: classComment })
+                namespace.DocumentationReader.new().readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .be .suchThat( (description) => {
                 expect( description.getText() ) .to .equal(
@@ -31,7 +33,7 @@ describe('When reading a ClassDocumentation', () => {
         "A regular js class to use in the FileEditor example."
     )`
 
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: classComment })
+            const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: classComment })
 
             expect( classDocumentation.getDescription() ) .to .be .suchThat( (description) => {
                 expect( description.getText() ) .to .equal(
@@ -52,7 +54,7 @@ describe('When reading a ClassDocumentation', () => {
         Assumes that the street is not empty.
     \`)
     `
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
+            const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: exampleComment })
 
             const implementationNotes = classDocumentation.getImplementationNotes()
 
@@ -81,7 +83,7 @@ describe('When reading a ClassDocumentation', () => {
     })
     `
 
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
+            const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: exampleComment })
 
             const examples = classDocumentation.getExamples()
 
@@ -100,7 +102,7 @@ describe('When reading a ClassDocumentation', () => {
     })`
 
             const classDocumentation =
-                DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
+                namespace.DocumentationReader.new().readClassDocumentationFromString({ string: exampleComment })
 
             const examples = classDocumentation.getExamples()
 
@@ -123,7 +125,7 @@ describe('When reading a ClassDocumentation', () => {
         "getters", "accessors"
     ])
     `
-            const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: exampleComment })
+            const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: exampleComment })
 
             const tags = classDocumentation.getTags()
 
@@ -144,7 +146,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates a Class description', () => {
 
-        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
+        const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setDescriptionFrom({ text: 'A class description.' })
 
@@ -164,7 +166,7 @@ describe('When writing a ClassDocumentation', () => {
     it('generates the implementation notes', () => {
 
         const classDocumentation = 
-            DocumentationReader.readClassDocumentationFromString({ string: '' })
+            namespace.DocumentationReader.new().readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 1.' })
         classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 2.' })
@@ -188,7 +190,7 @@ describe('When writing a ClassDocumentation', () => {
 
     it('generates the implementation notes', () => {
 
-        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
+        const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: '' })
 
         classDocumentation.addExampleFrom({
             description: 'Example 1.',
@@ -239,7 +241,7 @@ o.toUpperCase()`,
 
     it('generates the tags', () => {
 
-        const classDocumentation = DocumentationReader.readClassDocumentationFromString({ string: '' })
+        const classDocumentation = namespace.DocumentationReader.new().readClassDocumentationFromString({ string: '' })
 
         classDocumentation.setTagsFrom({ tagsStrings: [ 'tag1', 'tag2' ] })
 

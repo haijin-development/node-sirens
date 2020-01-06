@@ -31,6 +31,11 @@ use of the namespaces.
 
 ### Sirens
 
+- Implemented JsFileParser as plugin
+- Implemented Json file inspector as plugin.
+- Implemented documentation format reader as plugin.
+- Implemented ObjectBrowser plugins.
+- Cleaned up and removed Pluggables file.
 - Rewrote all components using SkinNamespace. It needs more iterations.
 - Moved Sirens.js code to SirensFlow.
 - Cleaned up browser components models.

@@ -2,9 +2,9 @@ const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
 
-const namespace = SirensNamespace.new()
+const namespace = Sirens.namespace()
 
 
 describe('When using an JsMethodDocumentationFlow', () => {

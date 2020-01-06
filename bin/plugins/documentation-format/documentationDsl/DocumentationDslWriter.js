@@ -1,5 +1,5 @@
-const Classification = require('../../../../O').Classification
-const IndentedStringStream = require('../../../../O').IndentedStringStream
+const Classification = require('../../../../src/O').Classification
+const IndentedStringStream = require('../../../../src/O').IndentedStringStream
 
 class DocumentationDslWriter {
     /// Definition
@@ -12,25 +12,6 @@ class DocumentationDslWriter {
 
     /// Generating comment
 
-    generateClassComment({ classDocumentation: classDocumentation }) {
-        const stringStream = IndentedStringStream.new()
-
-        stringStream.append({ string: '/*' })
-
-        stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
-
-            this.appendClassDocumentationDslTo({
-                classDocumentation: classDocumentation,
-                stringStream: stringStream,
-            })
-
-        })
-
-        stringStream.appendLine({ string: '*/' })
-
-        return stringStream.getString()
-    }
-
     generateClassCommentContents({ classDocumentation: classDocumentation }) {
         const stringStream = IndentedStringStream.new()
 
@@ -38,25 +19,6 @@ class DocumentationDslWriter {
             classDocumentation: classDocumentation,
             stringStream: stringStream,
         })
-
-        return stringStream.getString()
-    }
-
-    generateMethodComment({ methodDocumentation: methodDocumentation }) {
-        const stringStream = IndentedStringStream.new()
-
-        stringStream.append({ string: '/*' })
-
-        stringStream.whileIncrementingIndentationDo({ by: 1 }, () => {
-
-            this.appendMethodDocumentationDslTo({
-                methodDocumentation: methodDocumentation,
-                stringStream: stringStream,
-            })
-
-        })
-
-        stringStream.appendLine({ string: '*/' })
 
         return stringStream.getString()
     }

@@ -1,33 +1,28 @@
 const Classification = require('../../../O').Classification
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
-const DocumentationDsl = require('./documentationDsl/DocumentationDsl')
 
 /*
     Class(`
         This objects picks a DocumentationReader for a given documentationString.
 
         A documentation can be writen in different formats, this object iterates
-        through all avaialable format readers and picks the first that can parse
+        through all available format readers and picks the first that can parse
         the given format.
     `)
 */
-class DocumentationReaderPicker {
+class DocumentationFormatPlugins {
 
     static definition() {
-        this.instanceVariables = ['availableDocumentationReaders']
+        this.instanceVariables = ['documentationReaders']
         this.assumes = [ObjectWithNamespace]
     }
 
-    afterInstantiation() {
-        this.availableDocumentationReaders = []
-    }
-
     initialize() {
-        this.addDocumentationReader( DocumentationDsl )
+        this.documentationReaders = []
     }
 
     addDocumentationReader(documentationReaderClassification) {
-        this.availableDocumentationReaders.push( documentationReaderClassification )
+        this.documentationReaders.push( documentationReaderClassification )
     }
 
     /*
@@ -38,7 +33,7 @@ class DocumentationReaderPicker {
         className: className, documentationString: documentationString,
         ifFound: foundClosure, ifNotFound: notFoundClosure,
     }) {
-        const documentationReaderClassifications = this.availableDocumentationReaders
+        const documentationReaderClassifications = this.documentationReaders
 
         for( const documentationReaderClassification of documentationReaderClassifications ) {
 
@@ -72,7 +67,7 @@ class DocumentationReaderPicker {
         methodName: methodName, documentationString: documentationString,
         ifFound: foundClosure, ifNotFound: notFoundClosure,
     }) {
-        const documentationReaderClassifications = this.availableDocumentationReaders
+        const documentationReaderClassifications = this.documentationReaders
 
         for( const documentationReaderClassification of documentationReaderClassifications ) {
 
@@ -99,4 +94,4 @@ class DocumentationReaderPicker {
     }
 }
 
-module.exports = Classification.define(DocumentationReaderPicker)
+module.exports = Classification.define(DocumentationFormatPlugins)

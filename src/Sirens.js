@@ -12,94 +12,94 @@ const mainFlow = sirensFlowSingleton.asFlowPoint()
 
 /*
     Class(`
-        Sirens is a set of interactive browsers to ease learning, debugging and developing applications with Node.js.
+       Sirens is a set of interactive browsers to ease learning, debugging and developing applications with Node.js.
 
-        It allows to inspect an object during the execution of an application, to browse its prototypes chain and,
-        if the object is an instace of a class, to browse the documentation of the class.
+       It allows to inspect an object during the execution of an application, to browse its prototypes chain and,
+       if the object is an instace of a class, to browse the documentation of the class.
 
-        The browsers can evaluate code on the fly allowing developers not only to read static documentation
-        but also to experiment with different uses of a given object, sending messages to it and inspecting the results.
+       The browsers can evaluate code on the fly allowing developers not only to read static documentation
+       but also to experiment with different uses of a given object, sending messages to it and inspecting the results.
 
-        Try it: with the mouse select the text below, open a context menu and choose 'Inspect selected code':
+       Try it: with the mouse select the text below, open a context menu and choose 'Inspect selected code':
 
-            [ 1, 2, 3 ].map( function(i) { return i * 10 })
+           [ 1, 2, 3 ].map( function(i) { return i * 10 })
 
-        This Sirens object  has the public methods of the library API.
+       This Sirens object  has the public methods of the library API.
 
-        To use the Sirens library in your application first require it with
+       To use the Sirens library in your application first require it with
 
-            const Sirens = require('sirens')
+           const Sirens = require('sirens')
 
-        and then call any of the methods in its API:
+       and then call any of the methods in its API:
 
-            const Sirens = require('sirens')
+           const Sirens = require('sirens')
 
-            const anyObject = [ 1, 2, 3 ]
+           const anyObject = [ 1, 2, 3 ]
 
-            Sirens.browseObject( anyObject )
+           Sirens.browseObject( anyObject )
 
-        Please see the examples below for more details about the different browsers available.
+       Please see the examples below for more details about the different browsers available.
     `)
-
-    Example({
-        Description: `
-            Opens an interactive browser on an given object.
-        `,
-        Code: `
-            const Sirens = require('sirens')
-
-            const anyObject = [ 1, 2, 3 ]
-
-            Sirens.browseObject( anyObject )
-        `,
-    })
-
-    Example({
-        Description: `
-            Browses the functions defined on each prototype of an object of a given object.
-
-            The browser includes the function source code if available.
-        `,
-        Code: `
-            const Sirens = require('sirens')
-
-            const anyObject = [ 1, 2, 3 ]
-
-            Sirens.browsePrototypes( anyObject )
-        `,
-    })
-
-    Example({
-        Description: `
-            Opens an application browser.
-
-            A application browser allows to browse the files in a folder and for a selected file it shows
-            its source code and for some specific types of files it uses a custom visualization component.
-        `,
-        Code: `
-            const Sirens = require('sirens')
-
-            Sirens.openAppBrowser()
-        `,
-    })
 
     Implementation(`
-        This class is a thin wrapper on a SirensFlow singleton.
+       This class is a thin wrapper on a SirensFlow singleton.
 
-        Would you like to tweak the current Sirens applications (to, for example, use a
-        different implementation of the Skins bindings or a different object browser) create
-        another file like this one customize the mainFlow
+       Would you like to tweak the current Sirens applications (to, for example, use a
+       different implementation of the Skins bindings or a different object browser) create
+       another file like this one customize the mainFlow
 
-            const SirensFlow = require('./sirens/SirensFlow')
+           const SirensFlow = require('./sirens/SirensFlow')
 
-            const mainFlow = SirensFlow.new().asFlowPoint()
-            // configure and customize the mainFlow instance
- 
-        and then define a covenient thin wrapper like the one in this file.
+           const mainFlow = SirensFlow.new().asFlowPoint()
+           // configure and customize the mainFlow instance
 
-        SirensFlow internally does not reference this class but access the main flow
-        and will correctly use the customizations and configurations.
+       and then define a covenient thin wrapper like the one in this file.
+
+       SirensFlow internally does not reference this class but access the main flow
+       and will correctly use the customizations and configurations.
     `)
+
+    Example({
+       Description: `
+          Opens an interactive browser on an given object.
+       `,
+       Code: `
+          const Sirens = require('sirens')
+
+          const anyObject = [ 1, 2, 3 ]
+
+          Sirens.browseObject( anyObject )
+       `,
+    })
+
+    Example({
+       Description: `
+          Browses the functions defined on each prototype of an object of a given object.
+
+          The browser includes the function source code if available.
+       `,
+       Code: `
+          const Sirens = require('sirens')
+
+          const anyObject = [ 1, 2, 3 ]
+
+          Sirens.browsePrototypes( anyObject )
+       `,
+    })
+
+    Example({
+       Description: `
+          Opens an application browser.
+
+          A application browser allows to browse the files in a folder and for a selected file it shows
+          its source code and for some specific types of files it uses a custom visualization component.
+       `,
+       Code: `
+          const Sirens = require('sirens')
+
+          Sirens.openAppBrowser()
+       `,
+    })
 */
 class Sirens {
     /*
@@ -267,6 +267,7 @@ class Sirens {
     */
     static loadPlugins() {
         this.loadObjectBrowserPlugins()
+        this.loadDocumentationFormatPlugins()
     }
 
     /*
@@ -288,6 +289,31 @@ class Sirens {
 
             objectPropertyPlugins.addPlugin( pluginClassification )
         })
+    }
+
+    /*
+        Method(`
+            Load the Documentation format reader and writer plugins.
+        `)
+    */
+    static loadDocumentationFormatPlugins() {
+        // get the DocumentationFormatPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'DocumentationFormatPlugins' }).new()
+
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/documentation-format'
+        })
+
+        folder.filesDo( (pluginFile) => {
+            const pluginClassification = require( pluginFile.getPath() )
+
+            objectPropertyPlugins.addDocumentationReader( pluginClassification )
+        })
+    }
+
+    static namespace() {
+        return sirensNamespace
     }
 }
 

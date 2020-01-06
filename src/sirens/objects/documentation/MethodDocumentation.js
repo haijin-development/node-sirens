@@ -198,16 +198,10 @@ class MethodDocumentation {
 
     /// Generating method comment
 
-    generateComment() {
-        return this.generateMethodComment({
-            methodDocumentation: this
-        })
-    }
-
     generateCommentContents() {
         return this.generateMethodCommentContents({
             methodDocumentation: this
-        })
+        })            
     }
 }
 

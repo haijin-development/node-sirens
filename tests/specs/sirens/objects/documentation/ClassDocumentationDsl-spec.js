@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const SirensNamespace = require('../../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../../src/Sirens')
 
-const namespace = SirensNamespace.new()
+const namespace = Sirens.namespace()
 
 describe('When reading a ClassDocumentation', () => {
 
@@ -150,14 +150,13 @@ describe('When writing a ClassDocumentation', () => {
 
         classDocumentation.setDescriptionFrom({ text: 'A class description.' })
 
-        const generatedClassComment = classDocumentation.generateComment()
+        const generatedClassComment = classDocumentation.generateCommentContents()
 
         const expectedClassComment =
-`/*
-   Class(\`
-      A class description.
-   \`)
-*/`
+`
+Class(\`
+   A class description.
+\`)`
 
         expect( generatedClassComment ) .to .equal( expectedClassComment )
 
@@ -171,18 +170,17 @@ describe('When writing a ClassDocumentation', () => {
         classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 1.' })
         classDocumentation.addImplementationNoteFrom({ text: 'Implementation note 2.' })
 
-        const generatedClassComment = classDocumentation.generateComment()
+        const generatedClassComment = classDocumentation.generateCommentContents()
 
         const expectedClassComment =
-`/*
-   Implementation(\`
-      Implementation note 1.
-   \`)
+`
+Implementation(\`
+   Implementation note 1.
+\`)
 
-   Implementation(\`
-      Implementation note 2.
-   \`)
-*/`
+Implementation(\`
+   Implementation note 2.
+\`)`
 
         expect( generatedClassComment ) .to .equal( expectedClassComment )
 
@@ -208,32 +206,31 @@ o.toUpperCase()`,
 o.toUpperCase()`,
         })
 
-        const generatedClassComment = classDocumentation.generateComment()
+        const generatedClassComment = classDocumentation.generateCommentContents()
 
         const expectedClassComment =
-`/*
-   Example({
-      Description: \`
-         Example 1.
-      \`,
-      Code: \`
-         const o = 'abc'
+`
+Example({
+   Description: \`
+      Example 1.
+   \`,
+   Code: \`
+      const o = 'abc'
 
-         o.toUpperCase()
-      \`,
-   })
+      o.toUpperCase()
+   \`,
+})
 
-   Example({
-      Description: \`
-         Example 2.
-      \`,
-      Code: \`
-         const o = 'cba'
+Example({
+   Description: \`
+      Example 2.
+   \`,
+   Code: \`
+      const o = 'cba'
 
-         o.toUpperCase()
-      \`,
-   })
-*/`
+      o.toUpperCase()
+   \`,
+})`
 
         expect( generatedClassComment ) .to .equal( expectedClassComment )
 
@@ -245,14 +242,13 @@ o.toUpperCase()`,
 
         classDocumentation.setTagsFrom({ tagsStrings: [ 'tag1', 'tag2' ] })
 
-        const generatedClassComment = classDocumentation.generateComment()
+        const generatedClassComment = classDocumentation.generateCommentContents()
 
         const expectedClassComment =
-`/*
-   Tags([
-      'tag1', 'tag2'
-   ])
-*/`
+`
+Tags([
+   'tag1', 'tag2'
+])`
 
         expect( generatedClassComment ) .to .equal( expectedClassComment )
 

@@ -10,7 +10,7 @@ class DocumentationReader {
 
     readClassDocumentationFromString({ string: documentationString, className: className }) {
         const documentationReaderPicker =
-            this.namespace().DocumentationReaderPicker.new()
+            this.namespace().DocumentationFormatPlugins.new()
 
         return documentationReaderPicker.pickReaderForClass({
             className: className,
@@ -34,7 +34,7 @@ class DocumentationReader {
     })
     {
         const documentationReaderPicker =
-            this.namespace().DocumentationReaderPicker.new()
+            this.namespace().DocumentationFormatPlugins.new()
 
         return documentationReaderPicker.pickReaderForMethod({
             methodName: methodName,

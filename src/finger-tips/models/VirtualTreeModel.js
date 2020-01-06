@@ -126,13 +126,16 @@ class VirtualTreeModel {
 
         const hierarchy = []
 
-        pathIndices.forEach((index) => {
+        for( const index of pathIndices ) {
             const node = nodes[index]
+
+            if( node === undefined ) { return hierarchy }
+            if( node === undefined ) { throw new Error(`Tree index ${pathIndices} does not exist.`) }
 
             hierarchy.push(node.getValue())
 
             nodes = node.getChildren()
-        })
+        }
 
         return hierarchy
     }

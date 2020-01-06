@@ -27,7 +27,7 @@ class JsonContentInspectorFlow {
                 const jsonObject = jsonContent.getJsonObject()
 
                 const roots = [
-                        ObjectProperty.new({ key: null, value: jsonObject })
+                        thisFlow.mainNamespace().ObjectProperty.new({ key: null, value: jsonObject })
                     ]
 
                 this.getChildFlow({ id: 'jsonProperties' }).setRoots({ items: roots })

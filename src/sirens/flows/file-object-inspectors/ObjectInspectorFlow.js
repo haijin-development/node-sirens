@@ -61,6 +61,14 @@ class ObjectInspectorFlow {
 
         return result
     }
+
+    mainNamespace() {
+        const result = this.bubbleUp({
+            command: 'mainNamespace',
+        })
+
+        return result        
+    }
 }
 
 module.exports = Classification.define(ObjectInspectorFlow)

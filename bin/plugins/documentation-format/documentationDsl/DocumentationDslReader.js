@@ -1,7 +1,7 @@
-const Classification = require('../../../../O').Classification
-const ParseTreeVisitor = require('../../js-parser/ParseTreeVisitor')
-const FullParseTreeVisitorProtocol_Implementation = require('../../../protocols/FullParseTreeVisitorProtocol_Implementation')
-const SourceCodeText = require('../../SourceCodeText')
+const Classification = require('../../../../src/O').Classification
+const ParseTreeVisitor = require('../../../../src/sirens/objects/js-parser/ParseTreeVisitor')
+const FullParseTreeVisitorProtocol_Implementation = require('../../../../src/sirens/protocols/FullParseTreeVisitorProtocol_Implementation')
+const SourceCodeText = require('../../../../src/sirens/objects//SourceCodeText')
 
 /*
  * A visitor of a javascript parse tree that collects the documentation of a class.

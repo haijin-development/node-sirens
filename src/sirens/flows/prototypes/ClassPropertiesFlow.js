@@ -126,7 +126,7 @@ class ClassPropertiesFlow {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            const objectProperty = ObjectProperty.new({
+            const objectProperty = this.mainNamespace().ObjectProperty.new({
                 key: key,
                 value: object[key]
             })
@@ -149,6 +149,10 @@ class ClassPropertiesFlow {
                 return objectProperty.getValue().toString()
             }
         }
+    }
+
+    mainNamespace() {
+        return this.bubbleUp({ command: 'mainNamespace' })
     }
 }
 

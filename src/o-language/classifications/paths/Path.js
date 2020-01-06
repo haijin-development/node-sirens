@@ -55,6 +55,25 @@ class Path {
 
     /*
         Method(`
+            Returns true if this FilePath is relative, false if not.
+        `)
+    */
+    isRelative() {
+        return ! this.isAbsolute()
+    }
+
+    /*
+        Method(`
+            Returns true if this FilePath is absolute, false if not.
+        `)
+    */
+    isAbsolute() {
+        return pathLib.isAbsolute( this.getPath() )
+    }
+
+
+    /*
+        Method(`
             Appends the given stringOrPath to a relative folder.
         `)
     */

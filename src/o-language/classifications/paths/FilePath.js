@@ -31,6 +31,7 @@ class FilePath {
         return fs.existsSync( this.getPath() )
     }
 
+
     /*
         Method(`
             Returns the name of the file, including its extesion.

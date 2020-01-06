@@ -57,7 +57,13 @@ class SirensFlow {
                 this.whenValueChanges( function({ newValue: preferences }) {
                     preferences.freeze
 
-                    const cssFilePath = FilePath.new({ path: preferences.cssFile })
+                    let cssFilePath = FilePath.new({ path: preferences.cssFile })
+
+                    if( cssFilePath.isRelative() ) {
+                        cssFilePath = FilePath.new({ path: __dirname })
+                            .append({ path: '../..' })
+                            .append({ path: cssFilePath })
+                    }
 
                     SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
                 })

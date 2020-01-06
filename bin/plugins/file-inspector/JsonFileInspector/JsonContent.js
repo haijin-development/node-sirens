@@ -1,5 +1,5 @@
-const Classification = require('../../../O').Classification
-const FileObject = require('./FileObject')
+const Classification = require('../../../../src/O').Classification
+const FileObject = require('../../../../src/sirens/objects/file-structure/FileObject')
 
 class JsonContent {
     /// Definition

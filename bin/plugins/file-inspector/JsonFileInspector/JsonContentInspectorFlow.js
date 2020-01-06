@@ -1,7 +1,6 @@
-const Classification = require('../../../O').Classification
-const ObjectInspectorFlow = require('./ObjectInspectorFlow')
-const JsonContentComponent = require('../../components/file-object-inspectors/JsonContentComponent')
-const ObjectProperty = require('../../objects/ObjectProperty')
+const Classification = require('../../../../src/O').Classification
+const ObjectInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/ObjectInspectorFlow')
+const JsonContentComponent = require('./JsonContentComponent')
 
 class JsonContentInspectorFlow {
     /// Definition

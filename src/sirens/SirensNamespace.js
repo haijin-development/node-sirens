@@ -6,7 +6,7 @@ const GuiNamespace = require('./GuiNamespace')
 
 const ObjectPropertyPlugins = require('./objects/ObjectPropertyPlugins')
 const DocumentationFormatPlugins = require('./objects/documentation/DocumentationFormatPlugins')
-const FileInspectorPicker = require('./objects/file-structure/FileInspectorPicker')
+const FileInspectorPlugins = require('./objects/file-structure/FileInspectorPlugins')
 
 class SirensNamespace {
     /// Definition
@@ -59,11 +59,11 @@ class SirensNamespace {
                 },
             })
 
-            thisFlow.removeChildFlow({ id: 'FileInspectorPicker' })
+            thisFlow.removeChildFlow({ id: 'FileInspectorPlugins' })
             this.createSingletonObject({
-                id: 'FileInspectorPicker',
+                id: 'FileInspectorPlugins',
                 singletonCreator: function() {
-                    return FileInspectorPicker.new()
+                    return FileInspectorPlugins.new()
                 },
             })
         })

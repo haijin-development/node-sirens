@@ -1,6 +1,6 @@
-const Classification = require('../../../O').Classification
-const Component = require('../../../skins/components/Component')
-const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
+const Classification = require('../../../../src/O').Classification
+const Component = require('../../../../src/skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../../src/skins/protocols/ComponentProtocol_Implementation')
 
 class JsonContentComponent {
     /// Definition

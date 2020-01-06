@@ -3,12 +3,10 @@ const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 const PlainTextStructureParser = require('../file-structure-parsers/PlainTextStructureParser')
 const JSFileStructureParser = require('../file-structure-parsers/JSFileStructureParser')
-const JsonStructureParser = require('../file-structure-parsers/JsonStructureParser')
 
 const TextualContentInspectorFlow = require('../../flows/file-object-inspectors/TextualContentInspectorFlow')
 const JsClassInspectorFlow = require('../../flows/file-object-inspectors/JsClassInspectorFlow')
 const JsMethodInspectorFlow = require('../../flows/file-object-inspectors/JsMethodInspectorFlow')
-const JsonContentInspectorFlow = require('../../flows/file-object-inspectors/JsonContentInspectorFlow')
 
 /*
     Class(`
@@ -33,7 +31,7 @@ const JsonContentInspectorFlow = require('../../flows/file-object-inspectors/Jso
         ones.
     `)
 */
-class FileInspectorPicker {
+class FileInspectorPlugins {
     /// Definition
 
     static definition() {
@@ -49,14 +47,28 @@ class FileInspectorPicker {
         this.availableFileParsers = {
             default: PlainTextStructureParser,
             '.js': JSFileStructureParser,
-            '.json': JsonStructureParser,
         }
 
         this.availableFileObjectInspectors = {
             default: TextualContentInspectorFlow,
             jsClass: JsClassInspectorFlow,
             jsMethod: JsMethodInspectorFlow,
-            jsonContent: JsonContentInspectorFlow,
+        }
+    }
+
+    addFileInspectorPlugin(pluginObject) {
+        if( pluginObject.parser !== undefined ) {
+            const fileType = pluginObject.parser.fileType
+            const parser = pluginObject.parser.parser
+
+            this.availableFileParsers[fileType] = parser
+        }
+
+        if( pluginObject.content !== undefined ) {
+            const contentType = pluginObject.content.contentType
+            const fileInspectorFlow = pluginObject.content.fileInspectorFlow
+
+            this.availableFileObjectInspectors[contentType] = fileInspectorFlow
         }
     }
 
@@ -91,4 +103,4 @@ class FileInspectorPicker {
     }
 }
 
-module.exports = Classification.define(FileInspectorPicker)
+module.exports = Classification.define(FileInspectorPlugins)

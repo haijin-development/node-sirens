@@ -268,11 +268,15 @@ class Sirens {
     static loadPlugins() {
         this.loadObjectBrowserPlugins()
         this.loadDocumentationFormatPlugins()
+        this.loadFileInspectorPlugins()
     }
 
     /*
         Method(`
             Load the ObjectBrowser plugins.
+
+            An ObjectBrowser plugin adds or modifies the way an object is displayed
+            and browsed by an ObjectBrowser.
         `)
     */
     static loadObjectBrowserPlugins() {
@@ -294,6 +298,10 @@ class Sirens {
     /*
         Method(`
             Load the Documentation format reader and writer plugins.
+
+            An Documentation format plugin converts class and methods
+            documentation strings into ClassDocumentation and MethodDocumentation
+            objects, making the documentation available for the DocumentationBrowser.
         `)
     */
     static loadDocumentationFormatPlugins() {
@@ -309,6 +317,31 @@ class Sirens {
             const pluginClassification = require( pluginFile.getPath() )
 
             objectPropertyPlugins.addDocumentationReader( pluginClassification )
+        })
+    }
+
+    /*
+        Method(`
+            Load the FileInspector plugins.
+
+            A FileInspector plugin displays and browses a type of file, such as a
+            .js file, a js class file, a .json file, or a spec file with a browser
+            that the plugin defines.
+        `)
+    */
+    static loadFileInspectorPlugins() {
+        // get the FileInspectorPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'FileInspectorPlugins' }).new()
+
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/file-inspector'
+        })
+
+        folder.filesDo( (pluginFile) => {
+            const pluginObject = require( pluginFile.getPath() )
+
+            objectPropertyPlugins.addFileInspectorPlugin( pluginObject )
         })
     }
 

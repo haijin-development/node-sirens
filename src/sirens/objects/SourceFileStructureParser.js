@@ -50,7 +50,7 @@ class SourceFileStructureParser {
     // Parser selection
 
     getParserForFileType({ sourceFile: sourceFile }) {
-        const fileParser = this.namespace().FileInspectorPicker.new()
+        const fileParser = this.namespace().FileInspectorPlugins.new()
             .pickFileParserFor({ sourceFile: sourceFile })
 
         return fileParser

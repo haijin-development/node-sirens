@@ -176,7 +176,7 @@ class FileInspectorFlow {
         if( ! fileObject ) { return TextualContentInspectorFlow.new() }
 
         const fileObjectInspectorFlowPicker = 
-            this.mainNamespace().FileInspectorPicker.new()
+            this.mainNamespace().FileInspectorPlugins.new()
 
         return fileObjectInspectorFlowPicker.pickFileObjectInspectorFlowFor({
             fileObject: fileObject,

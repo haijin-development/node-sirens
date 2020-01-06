@@ -1,11 +1,11 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using an AppBrowserFlow', () => {
     const sampleFolder = __dirname + '/../../../samples'
-
-    const namespace = SirensNamespace.new()
 
     let folder
 

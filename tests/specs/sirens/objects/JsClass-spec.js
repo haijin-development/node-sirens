@@ -1,7 +1,7 @@
 const expect = require('chai').expect
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
 
-const namespace = SirensNamespace.new()
+const namespace = Sirens.namespace()
 
 const filename = 'tests/samples/class-definition.js'
 

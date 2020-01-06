@@ -2,8 +2,6 @@ const Classification = require('../../../O').Classification
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
 const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
-const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
-const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
 class JsClassInspectorFlow {
     /// Definition
@@ -46,7 +44,7 @@ class JsClassInspectorFlow {
                     return
                 }
 
-                const classDocumentation = jsClass.getDocumentation()
+                const classDocumentation = thisFlow.getDocumentationOf({ jsClass: jsClass })
                 const methods = jsClass.getMethods()
 
                 thisFlow.getChildFlow({ id: 'classDocumentation' })
@@ -188,8 +186,9 @@ class JsClassInspectorFlow {
 
         const allMethodsDefinition = jsClass.getMethods()
 
-        allMethodsDefinition.forEach( (methodDefinition) => {
-            const methodTags = methodDefinition.getDocumentation().getTags()
+        allMethodsDefinition.forEach( (jsMethod) => {
+            const methodTags = this.getMethodDocumentationOf({ jsMethod: jsMethod })
+                .getTags()
 
             methodTags.forEach( (documentationTag) => {
                 const tagLabel = documentationTag.getLabel()
@@ -212,8 +211,8 @@ class JsClassInspectorFlow {
 
         const methodsWithSelectedTags = []
 
-        methods.forEach( (methodDefinition) => {
-            const methodTags = methodDefinition.getDocumentation()
+        methods.forEach( (jsMethod) => {
+            const methodTags = his.getMethodDocumentationOf({ jsMethod: jsMethod })
                 .getTagLabels()
 
             const includeMethod = tagsFilter.every( (eachTagFilter) => {
@@ -221,7 +220,7 @@ class JsClassInspectorFlow {
             })
 
             if( includeMethod === true ) {
-                methodsWithSelectedTags.push( methodDefinition )
+                methodsWithSelectedTags.push( jsMethod )
             }
         })
 
@@ -232,6 +231,16 @@ class JsClassInspectorFlow {
         return this.bubbleUp({
             command: 'guiNamespace',
         })
+    }
+
+    getDocumentationOf({ jsClass: jsClass }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readClassDocumentationFrom({ jsClass: jsClass })
+    }
+
+    getMethodDocumentationOf({ jsMethod: jsMethod }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
 }
 

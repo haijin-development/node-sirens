@@ -6,7 +6,6 @@ const Sirens = require('../../../../src/Sirens')
 
 const namespace = Sirens.namespace()
 
-
 describe('When using an JsMethodDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
 
@@ -24,7 +23,9 @@ describe('When using an JsMethodDocumentationFlow', () => {
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
         jsMethod = jsFile.getMethods()[0]
-        methodDocumentation = jsMethod.getDocumentation()
+
+        methodDocumentation = namespace.DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
 
         flow = createMethodDocumentationFlow()
     })
@@ -107,6 +108,14 @@ describe('When using an JsMethodDocumentationFlow', () => {
 
         beforeEach( () => {
             methodInspectorFlow = createMethodInspectorFlow()
+
+            // stub the .mainNamespace() for these tests since that namespace is
+            // bubbled up and in the context of this tests FileInspectorFlow does
+            // no have a parent flow.
+            methodInspectorFlow.setUnclassifiedProperty({
+                name: 'mainNamespace',
+                value: function() { return namespace }
+            })        
 
             methodInspectorFlow.setInspectedObject( jsMethod )
 

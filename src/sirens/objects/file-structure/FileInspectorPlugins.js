@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 const PlainTextStructureParser = require('../file-structure-parsers/PlainTextStructureParser')
-const JSFileStructureParser = require('../file-structure-parsers/JSFileStructureParser')
 
 const TextualContentInspectorFlow = require('../../flows/file-object-inspectors/TextualContentInspectorFlow')
 const JsClassInspectorFlow = require('../../flows/file-object-inspectors/JsClassInspectorFlow')
@@ -46,7 +45,6 @@ class FileInspectorPlugins {
         // review
         this.availableFileParsers = {
             default: PlainTextStructureParser,
-            '.js': JSFileStructureParser,
         }
 
         this.availableFileObjectInspectors = {

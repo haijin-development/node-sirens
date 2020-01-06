@@ -1,6 +1,6 @@
-const Classification = require('../../../O').Classification
-const FileObject = require('./FileObject')
-const SourceCodeText = require('../SourceCodeText')
+const Classification = require('../../../../../src/O').Classification
+const FileObject = require('../../../../../src/sirens/objects/file-structure/FileObject')
+const SourceCodeText = require('../../../../../src/sirens/objects/SourceCodeText')
 
 class JsFileObject {
     /// Definition

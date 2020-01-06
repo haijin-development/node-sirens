@@ -1,11 +1,11 @@
-const Classification = require('../../../O').Classification
-const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
-const FullParseTreeVisitorProtocol_Implementation = require('../../protocols/FullParseTreeVisitorProtocol_Implementation')
-const JsFileParser = require('../js-parser/JsFileParser')
-const JsFileStructure = require('../file-structure/JsFileStructure')
-const JsComment = require('../file-structure/JsComment')
-const JsClass = require('../file-structure/JsClass')
-const JsMethod = require('../file-structure/JsMethod')
+const Classification = require('../../../../src/O').Classification
+const ObjectWithNamespace = require('../../../../src/O').ObjectWithNamespace
+const FullParseTreeVisitorProtocol_Implementation = require('../../../../src/sirens/protocols/FullParseTreeVisitorProtocol_Implementation')
+const JsFileParser = require('../../../../src/sirens/objects/js-parser/JsFileParser')
+const JsFileStructure = require('./structure-objects/JsFileStructure')
+const JsComment = require('./structure-objects/JsComment')
+const JsClass = require('./structure-objects/JsClass')
+const JsMethod = require('./structure-objects/JsMethod')
 
 class JSFileStructureParser {
 
@@ -20,7 +20,7 @@ class JSFileStructureParser {
     visitTree(treeNode) {
         this.fileObjects = []
 
-        const jsFileStructure = this.namespace().JsFileStructure.new()
+        const jsFileStructure = JsFileStructure.new()
 
         jsFileStructure.setFileLocation({
             sourceFile: this.getSourceFile(),
@@ -44,7 +44,7 @@ class JSFileStructureParser {
 
         const classComment = this.getCommentOn({ parseNode: classDeclaration })
 
-        const jsClass = this.namespace().JsClass.new()
+        const jsClass = JsClass.new()
 
         jsClass.setFileLocation({
             sourceFile: this.getSourceFile(),
@@ -94,7 +94,7 @@ class JSFileStructureParser {
 
         const methodComment = this.getCommentOn({ parseNode: functionNode })
 
-        const method = this.namespace().JsMethod.new()
+        const method = JsMethod.new()
 
         method.setFileLocation({
             sourceFile: this.getSourceFile(),
@@ -157,7 +157,7 @@ class JSFileStructureParser {
     }
 
     getCommentOn({ parseNode: parseNode }) {
-        const comment = this.namespace().JsComment.new()
+        const comment = JsComment.new()
 
         if( parseNode.comment !== undefined ) {
             let commentNode = parseNode.comment

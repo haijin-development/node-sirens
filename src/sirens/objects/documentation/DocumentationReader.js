@@ -8,6 +8,25 @@ class DocumentationReader {
         this.assumes = [ObjectWithNamespace]
     }
 
+    readClassDocumentationFrom({ jsClass: jsClass }) {
+        const commentBodyContents = jsClass.getClassComment().getBodyContents()
+
+        return this.readClassDocumentationFromString({
+            string: commentBodyContents,
+            className: jsClass.getClassName(),
+        })
+    }
+
+    readMethodDocumentationFrom({ jsMethod: jsMethod }) {
+        const commentBodyContents = jsMethod.getMethodComment().getBodyContents()
+
+        return this.readMethodDocumentationFromString({
+            string: commentBodyContents,
+            methodName: jsMethod.getMethodName(),
+            params: jsMethod.getMethodParams(),
+        })
+    }
+
     readClassDocumentationFromString({ string: documentationString, className: className }) {
         const documentationReaderPlugins =
             this.namespace().DocumentationFormatPlugins.new()

@@ -47,7 +47,7 @@ class JsMethodInspectorFlow {
                 }
 
                 const formattedSourceCode = jsMethod.getFormattedSourceCode()
-                const methodDocumentation = jsMethod.getDocumentation()
+                const methodDocumentation = thisFlow.getDocumentationOf({ jsMethod: jsMethod })
 
                 this.getChildFlow({ id: 'methodSourceCode' }).setValue( formattedSourceCode )
 
@@ -150,6 +150,11 @@ class JsMethodInspectorFlow {
         return this.bubbleUp({
             command: 'guiNamespace',
         })
+    }
+
+    getDocumentationOf({ jsMethod: jsMethod }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
 }
 

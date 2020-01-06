@@ -1,4 +1,4 @@
-const Classification = require('../../../O').Classification
+const Classification = require('../../../../../src/O').Classification
 const JsFileObject = require('./JsFileObject')
 
 class JsClass {
@@ -35,17 +35,6 @@ class JsClass {
 
     setClassName(className) {
         this.className = className
-    }
-
-    getDocumentation() {
-        const commentBodyContents = this.getClassComment().getBodyContents()
-
-        const documentationReader = this.namespace().DocumentationReader.new()
-        
-        return documentationReader.readClassDocumentationFromString({
-            string: commentBodyContents,
-            className: this.className,
-        })
     }
 
     // Displaying

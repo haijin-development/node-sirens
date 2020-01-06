@@ -1,4 +1,4 @@
-const Classification = require('../../../O').Classification
+const Classification = require('../../../../../src/O').Classification
 const JsFileObject = require('./JsFileObject')
 
 class JsMethod {
@@ -47,18 +47,6 @@ class JsMethod {
 
     getFileObjectDescription() {
         return `${this.methodName}(...)`
-    }
-
-    getDocumentation() {
-        const commentBodyContents = this.getMethodComment().getBodyContents()
-
-        const documentationReader = this.namespace().DocumentationReader.new()
-
-        return documentationReader.readMethodDocumentationFromString({
-            string: commentBodyContents,
-            methodName: this.methodName,
-            params: this.methodParams,
-        })
     }
 
     getSignatureString() {

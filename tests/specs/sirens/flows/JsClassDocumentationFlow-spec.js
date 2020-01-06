@@ -24,7 +24,8 @@ describe('When using an JsClassDocumentationFlow', () => {
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
         jsClass = jsFile.getClasses()[0]
-        classDocumentation = jsClass.getDocumentation()
+        classDocumentation =
+            namespace.DocumentationReader.new().readClassDocumentationFrom({ jsClass: jsClass })
 
         flow = createClassDocumentationFlow()
     })
@@ -97,6 +98,14 @@ describe('When using an JsClassDocumentationFlow', () => {
     describe('when updating the method documentation', () => {
         beforeEach( () => {
             const classInspectorFlow = createClassInspectorFlow()
+
+            // stub the .mainNamespace() for these tests since that namespace is
+            // bubbled up and in the context of this tests FileInspectorFlow does
+            // no have a parent flow.
+            classInspectorFlow.setUnclassifiedProperty({
+                name: 'mainNamespace',
+                value: function() { return namespace }
+            })        
 
             classInspectorFlow.setInspectedObject( jsClass )
 

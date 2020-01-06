@@ -2,9 +2,9 @@ const expect = require('chai').expect
 const parser = require('esprima')
 const jsSintax = require('../../../samples/JsSintax')
 
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
 
-const namespace = SirensNamespace.new()
+const namespace = Sirens.namespace()
 
 describe('When visiting js parse tree it visits the expression', () => {
 

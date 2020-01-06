@@ -2,9 +2,9 @@ const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
 
-const namespace = SirensNamespace.new()
+const namespace = Sirens.namespace()
 
 describe('When using an namespace.JsClassInspectorFlow.new', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -33,6 +33,20 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
                 .behaveAs( UnhandledBubbledUpCommandHandler )
 
         flow.setCommandsController( commandsController )
+
+        // stub the .mainNamespace() for these tests since that namespace is
+        // bubbled up and in the context of this tests FileInspectorFlow does
+        // no have a parent flow.
+        flow.setUnclassifiedProperty({
+            name: 'mainNamespace',
+            value: function() { return namespace }
+        })        
+
+        flow.acceptAllBubbledUps({
+            defaultHandler: function({ commandName: commandName, params: params }) {
+                return namespace
+            }
+        })
     })
 
     after( () => {

@@ -1,12 +1,12 @@
 const expect = require('chai').expect
 
 const FilesRepository = require('../FilesRepository')
-const SirensNamespace = require('../../../../src/sirens/SirensNamespace')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
-
-    const namespace = SirensNamespace.new()
 
     let filePath
     let sourceFile
@@ -28,7 +28,13 @@ describe('When using an FileInspectorFlow', () => {
         flow.setUnclassifiedProperty({
             name: 'mainNamespace',
             value: function() { return namespace }
-        })        
+        })
+
+        flow.acceptAllBubbledUps({
+            defaultHandler: function({ commandName: commandName, params: params }) {
+                return namespace
+            }
+        })
     })
 
     after( () => {

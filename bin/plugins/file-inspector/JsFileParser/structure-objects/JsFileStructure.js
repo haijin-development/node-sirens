@@ -1,4 +1,4 @@
-const Classification = require('../../../O').Classification
+const Classification = require('../../../../../src/O').Classification
 const JsFileObject = require('./JsFileObject')
 
 class JsFileStructure {

@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const RadioButtonView = require('../../gtk-views/RadioButtonView')
-const ChoiceModel = require('../../../finger-tips/models/ChoiceModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class RadioButton {
@@ -17,11 +15,15 @@ class RadioButton {
     /// Initializing
 
     createView() {
-        return RadioButtonView.new()
+        const view = this.namespace().Views.RadioButtonView.new()
+
+        view.assemble()
+
+        return view
     }
 
     defaultModel() {
-        return ChoiceModel.new()
+        return this.namespace().Models.ChoiceModel.new()
     }
 
     /// Synchronizing

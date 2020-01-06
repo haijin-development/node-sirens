@@ -1,5 +1,5 @@
 const Classification = require('./Classification')
-const MethodCallConstraintsValidator = require('./params-validation/MethodCallConstraintsValidator')
+const MethodCallConstraintsValidator = require('./method-call-validation/MethodCallConstraintsValidator')
 
 /*
  Class(`
@@ -261,11 +261,7 @@ class MethodCallConstraints {
             //      }
             protocolInstance[ methodName ]( ...params )
 
-            protocolInstance.validatePreConditions({ onObject: this })
-
             protocolInstance.evaluateParametersValidations()
-
-            protocolInstance.validatePostConditions({ onObject: this })
         })
     }
 }

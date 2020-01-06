@@ -59,6 +59,6 @@ describe('When creating a new O instance', () => {
     it('it has only one classification', () => {
         const object = OInstance.new()
 
-        expect(object.classifications().length) .to .equal(1)
+        expect( object.classifications() ) .count .to .equal(1)
     })
 })

@@ -154,7 +154,7 @@ and a javascript AppBrowser from the project folder with
 
 **Browsing class documentation**
 
-![Class documentation browser](./docs/browsing-methods.png)
+![Class documentation browser](./docs/browsing-class-documentation.png)
 
 **Browsing method documentation**
 

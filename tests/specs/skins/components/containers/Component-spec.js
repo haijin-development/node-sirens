@@ -1,7 +1,9 @@
 const expect = require('chai').expect
 const Classification = require('../../../../../src/O').Classification
 const Component = require('../../../../../src/skins/components/Component')
-const LabelView = require('../../../../../src/skins/gtk-views/LabelView')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 class CustomComponent {
     /// Definition
@@ -24,13 +26,16 @@ CustomComponent = Classification.define(CustomComponent)
 
 describe('When using a Component', () => {
     it('instantiates an empty one', () => {
-        const component = Component.render( function(renderer) {
+        const component = namespace.ComponentRenderer.new().render( function(renderer) {
             this.component(
                 CustomComponent.new()
             )
         })
 
-        expect( component.getChildComponents().length ) .to .eql(1)
-        expect( component.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+        expect( component.getChildComponents() ) .count .to .eql(1)
+
+        expect( component.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+            expect( component.getView() ) .to .behaveAs( 'LabelView' )
+        })
     })
 })

@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const TreeChoiceModel = require('../../../finger-tips/models/TreeChoiceModel')
-const TreeView = require('../../gtk-views/TreeView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class ChoicesTree {
@@ -23,7 +21,7 @@ class ChoicesTree {
     }
 
     defaultModel() {
-        const model = TreeChoiceModel.new({
+        const model = this.namespace().Models.TreeChoiceModel.new({
             roots: [],
             getChildrenClosure: () => { return [] }
         })
@@ -50,11 +48,15 @@ class ChoicesTree {
     }
 
     createView() {
-        return TreeView.new({
+        const view = this.namespace().Views.TreeView.new({
             getChildrenClosure: this.getChildrenAt.bind(this),
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this)
         })
+
+        view.assemble()
+
+        return view
     }
 
     getChildrenAt(itemPath) {

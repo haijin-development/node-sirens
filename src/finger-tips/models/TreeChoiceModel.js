@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const VirtualTreeModel = require('./VirtualTreeModel')
 const ValueModel = require('./ValueModel')
 
@@ -7,6 +8,7 @@ class TreeChoiceModel {
 
     static definition() {
         this.instanceVariables = ['selectionModel', 'treeModel']
+        this.assumes = [Model]
     }
 
     /// Initializing

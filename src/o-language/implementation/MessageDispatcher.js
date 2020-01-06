@@ -121,6 +121,20 @@ class MessageDispatcher {
     }
 
     /*
+        Method(`
+            Sets the given value to the property of the given object instead of
+            setting it to the object active classification.
+        `)
+    */
+    setUnclassifiedProperty({ object: object, name: propertyName, value: value }) {
+        O_Object.setUnclassifiedProperty({
+            object: object,
+            name: propertyName,
+            value: value
+        })
+    }
+
+    /*
      * Sets the top most - 3 classification as the initial classification in the classifications lookup
      * and evaluates the given closure.
      * After the clsoure evaluation restores the initial classification in the classifications lookup to
@@ -514,6 +528,7 @@ class MessageDispatcher {
             activeClassificationStack: [],
             initialClassificationLookup: [null],
             objectId: objectId,
+            object: object,
         }
 
         return this.createProxyOn(object)

@@ -1,9 +1,9 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
-const FileInspectorFlow = require('../../../../src/sirens/flows/file-inspector/FileInspectorFlow')
 
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
+const FilesRepository = require('../FilesRepository')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -17,10 +17,24 @@ describe('When using an FileInspectorFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = SourceFile.new({ filepath: filePath  })
+        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
 
-        flow = FileInspectorFlow.new()
-        flow.setCommandsController( ApplicationCommandsController.new({ mainFlow: flow }) )
+        flow = namespace.FileInspectorFlow.new()
+        flow.setCommandsController( namespace.ApplicationCommandsController.new({ mainFlow: flow }) )
+
+        // stub the .mainNamespace() for these tests since that namespace is
+        // bubbled up and in the context of this tests FileInspectorFlow does
+        // no have a parent flow.
+        flow.setUnclassifiedProperty({
+            name: 'mainNamespace',
+            value: function() { return namespace }
+        })
+
+        flow.acceptAllBubbledUps({
+            defaultHandler: function({ commandName: commandName, params: params }) {
+                return namespace
+            }
+        })
     })
 
     after( () => {
@@ -33,14 +47,12 @@ describe('When using an FileInspectorFlow', () => {
 
             'main.selectedFileObject',
             'main.selectedFileObject.text',
-            'main.selectedFileObject.flow-commands',
-            'main.selectedFileObject.flow-commands.getText',
+            'main.selectedFileObject.getText',
 
-            'main.flow-commands',
-            'main.flow-commands.getFileObjectComponent',
-            'main.flow-commands.getSelectedFileObject',
-            'main.flow-commands.getFileObjectInspectorFlow',
-            'main.flow-commands.getSourceFile',
+            'main.getFileObjectComponent',
+            'main.getSelectedFileObject',
+            'main.getFileObjectInspectorFlow',
+            'main.getSourceFile',
 
         ])
     })
@@ -52,7 +64,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile to the main flow', () => {
             expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath() ) .to
+                expect( sourceFile.getFilePath().getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })
@@ -65,7 +77,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile sections selection to the first fileObject', () => {
             expect(flow) .withId( 'main.fileObjects' ) .withSelection .suchThat( (selection) =>{
-                expect(selection.length) .to .equal( 1 )
+                expect(selection) .count .to .equal( 1 )
                 expect(selection[0]) .to .behaveAs( 'JsFileObject' )
             })
         })

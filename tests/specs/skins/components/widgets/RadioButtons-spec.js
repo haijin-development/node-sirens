@@ -1,47 +1,26 @@
 const expect = require('chai').expect
-const ChoiceModel = require('../../../../../src/finger-tips/models/ChoiceModel')
-const Component = require('../../../../../src/skins/components/Component')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a RadioButton group', () => {
+    let componentRenderer
+
     beforeEach( () => {
-        this.model = ChoiceModel.new({ choices: ['a', 'b', 'c'] })
-
-        const model = this.model
-
-        this.container = Component.render( function(renderer) {
-            this.verticalStack( function() {
-                this.radioButton({
-                    model: model,
-                    id: 'a',
-                    text: 'Option 1'
-                })
-
-                this.radioButton({
-                    model: model,
-                    id: 'b',
-                    text: 'Option 2'
-                })
-
-                this.radioButton({
-                    model: model,
-                    id: 'c',
-                    text: 'Option 3'
-                })
-            })
-        })
+        componentRenderer = namespace.ComponentRenderer.new()
     })
 
     describe( 'constructor', () =>{
         it('has a empty label', () => {
-            const radioButton = Component.render( function(renderer) {
-                this.radioButton()
+            const radioButton = componentRenderer.render( function() {
+                this.radioButton({ id: 'radioButton' })
             })
 
             expect(radioButton.getView().getText()) .to .eql('')
         })
 
         it('sets a text on its constructor', () => {
-            const radioButton = Component.render( function(renderer) {
+            const radioButton = componentRenderer.render( function() {
                 this.radioButton({
                     text: 'label'
                 })
@@ -52,6 +31,35 @@ describe('When using a RadioButton group', () => {
     })
 
     describe('model', () => {
+        beforeEach( () => {
+            this.model = namespace.Models.ChoiceModel.new({ choices: ['a', 'b', 'c'] })
+
+            const model = this.model
+
+            this.container = componentRenderer.render( function() {
+                this.verticalStack( function() {
+                    this.radioButton({
+                        model: model,
+                        id: 'a',
+                        text: 'Option 1'
+                    })
+
+                    this.radioButton({
+                        model: model,
+                        id: 'b',
+                        text: 'Option 2'
+                    })
+
+                    this.radioButton({
+                        model: model,
+                        id: 'c',
+                        text: 'Option 3'
+                    })
+                })
+            })
+        })
+
+
         it('updates the selection when the model selection changes', () => {
             this.model.setSelectionValue('c')
 

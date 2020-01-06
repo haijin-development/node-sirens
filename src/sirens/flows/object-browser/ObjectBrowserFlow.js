@@ -1,14 +1,32 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectPropertiesFlow = require('./ObjectPropertiesFlow')
-const Pluggables = require('../../Pluggables')
 
 class ObjectBrowserFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['mainFlow']
         this.assumes = [ValueFlow]
+    }
+
+    initialize({ mainFlow: mainFlow }) {
+        this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+    }
+
+    bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
+        return this.mainFlow.executeCommand({
+            id: commandName,
+            withAll: params,
+        })
+    }
+
+    mainNamespace() {
+        return this.mainFlow.mainNamespace()
     }
 
     /// Building
@@ -16,7 +34,12 @@ class ObjectBrowserFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'setBrowsedObject',
+                    'propertySelectionValueStringFrom',
+                ],
+            })
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 thisFlow.getChildFlow({ id: 'objectProperties' }).setValue( object )
@@ -39,21 +62,17 @@ class ObjectBrowserFlow {
                 },
             })
 
-            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
-        })
-    }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'browseObject',
-                    'propertySelectionValueStringFrom',
-                ],
+            this.acceptedBubbledUps({
+                defaultHandler: function({ commandName: commandName, params: params }) {
+                    return thisFlow.bubbleUpCommandToMainFlow({
+                        commandName: commandName,
+                        params: params
+                    })
+                }
             })
 
+            thisFlow.evaluateEventHandler({ event: 'application-flow-built', eventHandler: () => {} })
         })
     }
 
@@ -61,8 +80,8 @@ class ObjectBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.browseObject',
-            'flow-commands.propertySelectionValueStringFrom',
+            'setBrowsedObject',
+            'propertySelectionValueStringFrom',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -73,17 +92,15 @@ class ObjectBrowserFlow {
 
     /// Flow methods
 
-    browseObject(object) {
+    setBrowsedObject(object) {
         this.setValue( object )
     }
 
     propertySelectionValueStringFrom({ value: value }) {
-        const valueToTextClassification =
-            Pluggables.objectPropertiesInspector.playgroundTextConverter
+        const valueToTextConverter =
+            this.mainNamespace().PropertyValueToPlaygroundText.new()
 
-        const valueToText = valueToTextClassification.new()
-
-        return valueToText.getDisplayValueFrom({ value: value })
+        return valueToTextConverter.getDisplayValueFrom({ value: value })
     }
 }
 

@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const ValueModelProtocol_Implementation = require('../protocols/ValueModelProtocol_Implementation')
 const Announcer = require('../announcements/Announcer')
 
@@ -7,7 +8,7 @@ class ValueModelBehaviour {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [Announcer]
+        this.assumes = [Model, Announcer]
         this.expects = [ValueModelProtocol_Implementation]
     }
 

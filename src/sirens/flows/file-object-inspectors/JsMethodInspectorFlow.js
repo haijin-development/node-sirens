@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsMethodInspectorComponent = require('../../components/file-object-inspectors/JsMethodInspectorComponent')
 const JsMethodDocumentationFlow = require('./JsMethodDocumentationFlow')
-const EditMethodCommentDialog = require('../../components/documentation-browser/edition/EditMethodCommentDialog')
 
 class JsMethodInspectorFlow {
     /// Definition
@@ -17,7 +16,24 @@ class JsMethodInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getMethod',
+                    'getMethodSignature',
+                    'isInEditionMode',
+                    'showsUnformattedComments',
+                    'getMethodUnformattedComment',
+                    'editMethodUnformattedComment',
+                    'setIsBrowsingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
+            })
+
+            this.acceptedBubbledUps({
+                commands: [
+                    'updateMethodDocumentation'
+                ]
+            })
 
             this.whenObjectChanges( ({ newValue: jsMethod }) => {
 
@@ -31,7 +47,7 @@ class JsMethodInspectorFlow {
                 }
 
                 const formattedSourceCode = jsMethod.getFormattedSourceCode()
-                const methodDocumentation = jsMethod.getDocumentation()
+                const methodDocumentation = thisFlow.getDocumentationOf({ jsMethod: jsMethod })
 
                 this.getChildFlow({ id: 'methodSourceCode' }).setValue( formattedSourceCode )
 
@@ -49,44 +65,18 @@ class JsMethodInspectorFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getMethod',
-                    'getMethodSignature',
-                    'isInEditionMode',
-                    'showsUnformattedComments',
-                    'getMethodUnformattedComment',
-                    'editMethodUnformattedComment',
-                    'setIsBrowsingDocumentation',
-                    'isBrowsingDocumentation',
-                ],
-            })
-
-        })
-
-        this.acceptedBubbledUps({
-            commands: [
-                'updateMethodDocumentation'
-            ]
-        })
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getMethod',
-            'flow-commands.getMethodSignature',
-            'flow-commands.isInEditionMode',
-            'flow-commands.showsUnformattedComments',
-            'flow-commands.getMethodUnformattedComment',
-            'flow-commands.editMethodUnformattedComment',
-            'flow-commands.setIsBrowsingDocumentation',
-            'flow-commands.isBrowsingDocumentation',
+            'getMethod',
+            'getMethodSignature',
+            'isInEditionMode',
+            'showsUnformattedComments',
+            'getMethodUnformattedComment',
+            'editMethodUnformattedComment',
+            'setIsBrowsingDocumentation',
+            'isBrowsingDocumentation',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -118,7 +108,7 @@ class JsMethodInspectorFlow {
     editMethodUnformattedComment({ parentWindow: parentWindow }) {
         const method = this.getMethod()
 
-        const dialog = EditMethodCommentDialog.new({
+        const dialog = this.guiNamespace().EditMethodCommentDialog.new({
             method: method,
             window: parentWindow,
             onUpdateMethodComment: ({ methodNewComment: methodNewComment }) => {
@@ -154,6 +144,17 @@ class JsMethodInspectorFlow {
         })
 
         this.reloadSourceFile()
+    }
+
+    guiNamespace() {
+        return this.bubbleUp({
+            command: 'guiNamespace',
+        })
+    }
+
+    getDocumentationOf({ jsMethod: jsMethod }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
 }
 

@@ -1,11 +1,10 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const JsMethodInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsMethodInspectorFlow')
-
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
+
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using an JsMethodInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -22,18 +21,32 @@ describe('When using an JsMethodInspectorFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = SourceFile.new({ filepath: filePath  })
-        sourceFileParser = SourceFileStructureParser.new()
+        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsMethod = jsFile.getMethods()[0]
 
-        flow = JsMethodInspectorFlow.new()
+        flow = namespace.JsMethodInspectorFlow.new()
 
         const commandsController =
-            ApplicationCommandsController.new({ mainFlow: flow })
+            namespace.ApplicationCommandsController.new({ mainFlow: flow })
                 .behaveAs( UnhandledBubbledUpCommandHandler )
 
         flow.setCommandsController( commandsController )
+
+        // stub the .mainNamespace() for these tests since that namespace is
+        // bubbled up and in the context of this tests FileInspectorFlow does
+        // no have a parent flow.
+        flow.setUnclassifiedProperty({
+            name: 'mainNamespace',
+            value: function() { return namespace }
+        })        
+
+        flow.acceptAllBubbledUps({
+            defaultHandler: function({ commandName: commandName, params: params }) {
+                return namespace
+            }
+        })
     })
 
     after( () => {
@@ -44,44 +57,42 @@ describe('When using an JsMethodInspectorFlow', () => {
         expect( flow ) .to .haveChildFlows([
             'main.methodSourceCode',
 
-            'main.flow-commands',
-            'main.flow-commands.showsUnformattedComments',
-            'main.flow-commands.getMethod',
-            'main.flow-commands.getMethodSignature',
-            'main.flow-commands.getMethodUnformattedComment',
-            'main.flow-commands.isInEditionMode',
-            'main.flow-commands.editMethodUnformattedComment',
-            'main.flow-commands.isBrowsingDocumentation',
-            'main.flow-commands.setIsBrowsingDocumentation',
+            'main.showsUnformattedComments',
+            'main.getMethod',
+            'main.getMethodSignature',
+            'main.getMethodUnformattedComment',
+            'main.isInEditionMode',
+            'main.editMethodUnformattedComment',
+            'main.isBrowsingDocumentation',
+            'main.setIsBrowsingDocumentation',
 
             'main.methodDocumentation',
             'main.methodDocumentation.documentationIndex',
             'main.methodDocumentation.documentationIndex.selectedDocumentationItem',
 
-            'main.methodDocumentation.flow-commands',
-            'main.methodDocumentation.flow-commands.getMethodDocumentation',
-            'main.methodDocumentation.flow-commands.getMethodExamples',
-            'main.methodDocumentation.flow-commands.getMethodImplementationNotes',
-            'main.methodDocumentation.flow-commands.getMethodParams',
-            'main.methodDocumentation.flow-commands.getMethodReturnValue',
-            'main.methodDocumentation.flow-commands.getSelectedDocumentationItemFlowPoint',
-            'main.methodDocumentation.flow-commands.getSelectedDocumentationItemComponent',
-            'main.methodDocumentation.flow-commands.getMethodDescription',
-            'main.methodDocumentation.flow-commands.getMethodSignature',
-            'main.methodDocumentation.flow-commands.getTagsSortedByPriority',
-            'main.methodDocumentation.flow-commands.isInEditionMode',
-            'main.methodDocumentation.flow-commands.createMethodDocumentationExample',
-            'main.methodDocumentation.flow-commands.createMethodDocumentationImplementationNote',
-            'main.methodDocumentation.flow-commands.createMethodDocumentationParam',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationDescription',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationExample',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationImplementationNote',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationParam',
-            'main.methodDocumentation.flow-commands.editMethodDocumentationReturnValue',
-            'main.methodDocumentation.flow-commands.editMethodTags',
-            'main.methodDocumentation.flow-commands.deleteMethodDocumentationImplementationNote',
-            'main.methodDocumentation.flow-commands.deleteMethodDocumentationParam',
-            'main.methodDocumentation.flow-commands.deleteMethodDocumentationExample',
+            'main.methodDocumentation.getMethodDocumentation',
+            'main.methodDocumentation.getMethodExamples',
+            'main.methodDocumentation.getMethodImplementationNotes',
+            'main.methodDocumentation.getMethodParams',
+            'main.methodDocumentation.getMethodReturnValue',
+            'main.methodDocumentation.getSelectedDocumentationItemFlowPoint',
+            'main.methodDocumentation.getSelectedDocumentationItemComponent',
+            'main.methodDocumentation.getMethodDescription',
+            'main.methodDocumentation.getMethodSignature',
+            'main.methodDocumentation.getTagsSortedByPriority',
+            'main.methodDocumentation.isInEditionMode',
+            'main.methodDocumentation.createMethodDocumentationExample',
+            'main.methodDocumentation.createMethodDocumentationImplementationNote',
+            'main.methodDocumentation.createMethodDocumentationParam',
+            'main.methodDocumentation.editMethodDocumentationDescription',
+            'main.methodDocumentation.editMethodDocumentationExample',
+            'main.methodDocumentation.editMethodDocumentationImplementationNote',
+            'main.methodDocumentation.editMethodDocumentationParam',
+            'main.methodDocumentation.editMethodDocumentationReturnValue',
+            'main.methodDocumentation.editMethodTags',
+            'main.methodDocumentation.deleteMethodDocumentationImplementationNote',
+            'main.methodDocumentation.deleteMethodDocumentationParam',
+            'main.methodDocumentation.deleteMethodDocumentationExample',
         ])
     })
 

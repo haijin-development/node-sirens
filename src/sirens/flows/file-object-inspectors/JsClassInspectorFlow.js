@@ -2,9 +2,6 @@ const Classification = require('../../../O').Classification
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
 const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
-const EditClassCommentDialog = require('../../components/documentation-browser/edition/EditClassCommentDialog')
-const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
-const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
 class JsClassInspectorFlow {
     /// Definition
@@ -19,7 +16,24 @@ class JsClassInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getClass',
+                    'getMethodUnformattedComment',
+                    'getAllMethodsTagLabels',
+                    'isInEditionMode',
+                    'showsUnformattedComments',
+                    'editClassUnformattedComment',
+                    'setIsBrowsingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
+            })
+
+            this.acceptedBubbledUps({
+                commands: [
+                    'updateClassDocumentation',
+                ]
+            })
 
             this.whenObjectChanges( ({ newValue: jsClass }) => {
 
@@ -30,7 +44,7 @@ class JsClassInspectorFlow {
                     return
                 }
 
-                const classDocumentation = jsClass.getDocumentation()
+                const classDocumentation = thisFlow.getDocumentationOf({ jsClass: jsClass })
                 const methods = jsClass.getMethods()
 
                 thisFlow.getChildFlow({ id: 'classDocumentation' })
@@ -81,44 +95,18 @@ class JsClassInspectorFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getClass',
-                    'getMethodUnformattedComment',
-                    'getAllMethodsTagLabels',
-                    'isInEditionMode',
-                    'showsUnformattedComments',
-                    'editClassUnformattedComment',
-                    'setIsBrowsingDocumentation',
-                    'isBrowsingDocumentation',
-                ],
-            })
-
-        })
-
-        this.acceptedBubbledUps({
-            commands: [
-                'updateClassDocumentation',
-            ]
-        })
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getClass',
-            'flow-commands.getMethodUnformattedComment',
-            'flow-commands.getAllMethodsTagLabels',
-            'flow-commands.isInEditionMode',
-            'flow-commands.showsUnformattedComments',
-            'flow-commands.editClassUnformattedComment',
-            'flow-commands.setIsBrowsingDocumentation',
-            'flow-commands.isBrowsingDocumentation',
+            'getClass',
+            'getMethodUnformattedComment',
+            'getAllMethodsTagLabels',
+            'isInEditionMode',
+            'showsUnformattedComments',
+            'editClassUnformattedComment',
+            'setIsBrowsingDocumentation',
+            'isBrowsingDocumentation',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -150,7 +138,7 @@ class JsClassInspectorFlow {
 
         const classComment = jsClass.getClassComment().getContents()
 
-        const dialog = EditClassCommentDialog.new({
+        const dialog = this.guiNamespace().EditClassCommentDialog.new({
             className: className,
             classComment: classComment,
             window: parentWindow,
@@ -198,8 +186,9 @@ class JsClassInspectorFlow {
 
         const allMethodsDefinition = jsClass.getMethods()
 
-        allMethodsDefinition.forEach( (methodDefinition) => {
-            const methodTags = methodDefinition.getDocumentation().getTags()
+        allMethodsDefinition.forEach( (jsMethod) => {
+            const methodTags = this.getMethodDocumentationOf({ jsMethod: jsMethod })
+                .getTags()
 
             methodTags.forEach( (documentationTag) => {
                 const tagLabel = documentationTag.getLabel()
@@ -222,8 +211,8 @@ class JsClassInspectorFlow {
 
         const methodsWithSelectedTags = []
 
-        methods.forEach( (methodDefinition) => {
-            const methodTags = methodDefinition.getDocumentation()
+        methods.forEach( (jsMethod) => {
+            const methodTags = his.getMethodDocumentationOf({ jsMethod: jsMethod })
                 .getTagLabels()
 
             const includeMethod = tagsFilter.every( (eachTagFilter) => {
@@ -231,11 +220,27 @@ class JsClassInspectorFlow {
             })
 
             if( includeMethod === true ) {
-                methodsWithSelectedTags.push( methodDefinition )
+                methodsWithSelectedTags.push( jsMethod )
             }
         })
 
         return methodsWithSelectedTags
+    }
+
+    guiNamespace() {
+        return this.bubbleUp({
+            command: 'guiNamespace',
+        })
+    }
+
+    getDocumentationOf({ jsClass: jsClass }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readClassDocumentationFrom({ jsClass: jsClass })
+    }
+
+    getMethodDocumentationOf({ jsMethod: jsMethod }) {
+        return this.mainNamespace().DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
 }
 

@@ -1,19 +1,20 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
-const LabelView = require('../../../../../src/skins/gtk-views/LabelView')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a Splitter', () => {
     describe('horizontal', () => {
         it('instantiates an empty one', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter()
             })
 
-            expect( splitter.getChildComponents() ) .to .eql([])
+            expect( splitter.getChildComponents() ) .count .to .eql( 0 )
         })
 
         it('adds 1 sub-component', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -26,12 +27,15 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(1)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents()) .count .to .eql(1)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 2 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -48,13 +52,19 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(2)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(2)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 3 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -75,14 +85,23 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(3)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(3)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(2) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 4 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.horizontalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -107,17 +126,29 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(4)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[3].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(4)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(2) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(3) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
     })
 
     describe('vertical', () => {
         it('instantiates an empty one', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter()
             })
 
@@ -125,7 +156,7 @@ describe('When using a Splitter', () => {
         })
 
         it('adds 1 sub-component', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -138,12 +169,15 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(1)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(1)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 2 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -160,13 +194,19 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(2)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(2)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 3 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -187,14 +227,23 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length) .to .eql(3)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents()) .count .to .eql(3)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(2) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
 
         it('adds 4 sub-components', () => {
-            const splitter = Component.render( function(renderer) {
+            const splitter = namespace.ComponentRenderer.new().render( function(renderer) {
                 this.verticalSplitter( function() {
                     this.styles({
                         width: 300,
@@ -219,11 +268,23 @@ describe('When using a Splitter', () => {
                 })
             })
 
-            expect( splitter.getChildComponents().length ) .to .eql(4)
-            expect( splitter.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[1].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[2].getView().isBehavingAs(LabelView) ) .to .be .true
-            expect( splitter.getChildComponents()[3].getView().isBehavingAs(LabelView) ) .to .be .true
+            expect( splitter.getChildComponents() ) .count .to .eql(4)
+
+            expect( splitter.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(1) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(2) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
+
+            expect( splitter.getChildComponents() ) .atIndex(3) .to .be .suchThat( (component) => {
+                expect( component.getView() ) .to .behaveAs( 'LabelView' )
+            })
         })
     })
 })

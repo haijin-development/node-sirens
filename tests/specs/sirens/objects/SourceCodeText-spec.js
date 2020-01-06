@@ -1,5 +1,7 @@
 const expect = require('chai').expect
-const SourceCodeText = require('../../../../src/sirens/objects/SourceCodeText')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using a SourceCodeText', () => {
 
@@ -8,7 +10,7 @@ describe('When using a SourceCodeText', () => {
         const sourceCodeText = `const n = 0`
 
         it('removeIndentation === true', () => {
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getRemoveIndentation() ) .to .be .true
         })
@@ -20,7 +22,7 @@ describe('When using a SourceCodeText', () => {
         const sourceCodeText = `const n = 0`
 
         it('removeIndentation === false', () => {
-            const sourceCode = SourceCodeText.new({
+            const sourceCode = namespace.SourceCodeText.new({
                 text: sourceCodeText,
                 removeIdentation: false,
             })
@@ -35,7 +37,7 @@ describe('When using a SourceCodeText', () => {
         const sourceCodeText = `const n = 0`
 
         it('removeIndentation === false', () => {
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             sourceCode.setRemoveIndentation(false)
 
@@ -50,13 +52,13 @@ describe('When using a SourceCodeText', () => {
         const formattedText = `const n = 0`
 
         it('gets the source code text', () => {
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getOriginalText() ) .to .equal( sourceCodeText )
         })
 
         it('gets the formatted source code text', () => {
-            const sourceCode = SourceCodeText.new({
+            const sourceCode = namespace.SourceCodeText.new({
                 text: sourceCodeText,
             })
 
@@ -64,7 +66,7 @@ describe('When using a SourceCodeText', () => {
         })
 
         it('converts a given formatted text to its original form', () => {
-            const sourceCode = SourceCodeText.new({
+            const sourceCode = namespace.SourceCodeText.new({
                 text: sourceCodeText,
             })
 
@@ -89,20 +91,20 @@ return n + m`
 
         it('gets the source code text', () => {
 
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getOriginalText() ) .to .equal( sourceCodeText )
         })
 
         it('gets the formatted source code text', () => {
 
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getFormattedText() ) .to .equal( formattedText )
         })
 
         it('converts a given formatted text to its original form', () => {
-            const sourceCode = SourceCodeText.new({
+            const sourceCode = namespace.SourceCodeText.new({
                 text: sourceCodeText,
             })
 
@@ -130,20 +132,20 @@ if( true ) {
 
         it('gets the source code text', () => {
 
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getOriginalText() ) .to .equal( sourceCodeText )
         })
 
         it('gets the formatted source code text', () => {
 
-            const sourceCode = SourceCodeText.new({ text: sourceCodeText })
+            const sourceCode = namespace.SourceCodeText.new({ text: sourceCodeText })
 
             expect( sourceCode.getFormattedText() ) .to .equal( formattedText )
         })
 
         it('converts a given formatted text to its original form', () => {
-            const sourceCode = SourceCodeText.new({
+            const sourceCode = namespace.SourceCodeText.new({
                 text: sourceCodeText,
             })
 

@@ -26,6 +26,4 @@ const user = new User({
     addresses: []
 })
 
-Sirens.do( () => {
-    Sirens.browsePrototypes( user )
-})
+Sirens.browsePrototypes( user )

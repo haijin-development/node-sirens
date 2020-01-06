@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const Protocol = require('../../../../src/O').Protocol
+const Errors = require('../../../../src/O').Errors
 
 class PointProcotol {
     getX() {}
@@ -58,7 +59,10 @@ describe('A Protocol classification', () => {
     it('raises an error if it is not implemented by a concrete classification', () => {
         expect( () => {
             PointProcotol.isImplementedBy({ classification: Circle })
-        }) .to .throw(Error, 'Circle classification must implement the method PointProcotol.getX to comply with the protocol implementation.')
+        }) .to .raise({
+            error: Errors.ProtocolError,
+            withMessage: 'Circle classification must implement the method PointProcotol.getX to comply with the protocol implementation.'
+        })
     })
 
     it('evaluates a given closure if it is not implemented by a concrete classification', () => {
@@ -115,7 +119,10 @@ describe('A Protocol classification', () => {
         it('raises an error if the classification does not implement the protocol', () => {
             expect( () => {
                 Classification.define(Circle)
-            }) .to .throw(Error, 'Circle classification must implement the method PointProcotol.getX to comply with the protocol implementation.')
+            }) .to .raise({
+                error: Errors.ProtocolError,
+                withMessage: 'Circle classification must implement the method PointProcotol.getX to comply with the protocol implementation.',
+            })
         })
 
     })

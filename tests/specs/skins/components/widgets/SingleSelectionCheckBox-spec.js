@@ -1,10 +1,18 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a SingleSelectionCheckBox', () => {
+    let componentRenderer
+
+    beforeEach( () => {
+        componentRenderer = namespace.ComponentRenderer.new()
+    })
+
     describe('model', () => {
         it('has a ValueModel with a false value', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox()
             })
 
@@ -12,7 +20,7 @@ describe('When using a SingleSelectionCheckBox', () => {
         })
 
         it('updates the view value when the model value changes', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox()
             })
 
@@ -22,7 +30,7 @@ describe('When using a SingleSelectionCheckBox', () => {
         })
 
         it('updates the model value when the view changes', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox()
             })
 
@@ -35,7 +43,7 @@ describe('When using a SingleSelectionCheckBox', () => {
 
     describe( 'constructor', () =>{
         it('has a false value by default', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox()
             })
 
@@ -43,7 +51,7 @@ describe('When using a SingleSelectionCheckBox', () => {
         })
 
         it('sets a value on its constructor', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox({ value: true })
             })
 
@@ -54,7 +62,7 @@ describe('When using a SingleSelectionCheckBox', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox({ width: 10 })
             })
 
@@ -62,7 +70,7 @@ describe('When using a SingleSelectionCheckBox', () => {
         })
 
         it('sets and gets the height', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.checkBox({ height: 10 })
             })
 

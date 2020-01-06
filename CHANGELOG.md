@@ -1,5 +1,54 @@
 # Changelog
 
+## v0.16.0
+
+### O language
+
+- Renamed .beSuchThat to .be .suchThat
+- Reimplemented assertion expressions on methods activation.
+- Improved error handling.
+- Added .to .be .oInstance expectation
+- Added array .atIndex expectation
+- Added array .count expectation
+- Implemented setUnclassifiedProperty to set unclassified properties to an OInstance.
+- Implemented the ObjectWithNamespace classification to replace the use of global classes and new in methods.
+- Implemented FolderPath and FilePath.
+- Replaced all uses of 'path' and 'js' modules with FolderPath and FilePath.
+
+### FingerTips
+
+- Cleaned up Flows and Commands classifications.
+- Implemented namespaces using NamespaceFlow.
+- Cleaned up builders and flows dependencies.
+- Rewrote the definitions of Commands and Flow methods.
+- Implemented an autoloader alike utility for NamespaceFlow. It seems to gain ease
+ of use and simplicity but it loses a lot of expressivity.
+
+### Skins
+
+- Rewrote all aClassification.new() with this.namespace().aClassification.new() to make
+use of the namespaces.
+- Removed the dependency to Sirens.
+
+### Sirens
+
+- Implemented JsFileParser as a plugin
+- Implemented JsonFileInspector as a plugin.
+- Implemented documentation format reader as a plugin.
+- Implemented ObjectBrowser plugins.
+- Cleaned up and removed Pluggables file.
+- Rewrote all components using SkinNamespace.
+- Moved Sirens.js code to SirensFlow.
+- Cleaned up browser components models.
+- Cleaned up Sirens components require statements.
+- Cleaned up references to global namespace from components. Remains to clean up GtkIcons and Resources references.
+- Cleaned up Preferences and moved it to SirensFlow.
+- Rewrote the definitions of Commands and Flow methods.
+- Moved Sirens edition dialogs to a different namespace.
+- Fixed FileDialog and FolderDialog open warnings.
+- Removed file Skins.js since the SkinsNamepace made it obsolete.
+- Rewrote FilesRepository test utility.
+
 ## v0.15.0
 
 ### Sirens

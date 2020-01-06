@@ -1,7 +1,6 @@
-const path = require('path')
-const fs = require('fs')
+const FilePath = require('./../../../o-language/classifications/paths/FilePath')
 const Gtk = require('node-gtk').require('Gtk')
-const GtkImage = require ('../GtkImage')
+const GtkImage = require('../GtkImage')
 
 class GtkImageBuilder {
 
@@ -11,12 +10,12 @@ class GtkImageBuilder {
         }
 
         if( imageProps.filename !== undefined ) {
-            const resolvedPath = path.resolve( imageProps.filename )
+            const imageFilePath = FilePath.new({ path: imageProps.filename})
 
-            this.validateFilename({ filename: imageProps.filename, resolvedPath: resolvedPath })
+            this.validateFilename({ filename: imageProps.filename, imageFilePath: imageFilePath })
 
             const pixbuf = GtkImage.pixbufAt({
-                    filename: resolvedPath,
+                    filename: imageFilePath.getPath(),
                     width: imageProps.width,
                     height: imageProps.height,
                 })
@@ -29,11 +28,12 @@ class GtkImageBuilder {
 
     /// Validating
 
-    static validateFilename({ filename: filename, resolvedPath: resolvedPath }) {
-        const exists = fs.existsSync( resolvedPath )
+    static validateFilename({ imageFilePath: imageFilePath }) {
+        if( imageFilePath.exists() === false ) {
+            const path = imageFilePath.getPath()
+            const filename = imageFilePath.getFileName({ withExtension: false })
 
-        if( exists === false ) {
-            throw new Error(`The image file '${filename}', resolved to '${resolvedPath}', does not exist.`)
+            throw new Error(`The image file '${filename}', resolved to '${path}', does not exist.`)
         }
     }
 }

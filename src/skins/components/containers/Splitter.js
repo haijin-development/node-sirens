@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const SplitterView = require('../../gtk-views/SplitterView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Splitter {
@@ -19,7 +18,11 @@ class Splitter {
     }
 
     createView() {
-        return SplitterView.new({ orientation: this.getProps().orientation })
+        const view = this.namespace().Views.SplitterView.new({ orientation: this.getProps().orientation })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

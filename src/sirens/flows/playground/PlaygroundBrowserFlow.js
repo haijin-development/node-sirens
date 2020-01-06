@@ -1,58 +1,37 @@
-const path = require('path')
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const ApplicationCommandsController = require('../ApplicationCommandsController')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const SourceFile = require('../../objects/SourceFile')
-const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowserFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['lastOpenedFolder']
+        this.instanceVariables = ['mainFlow', 'lastOpenedFolder']
         this.assumes = [ValueFlow]
+    }
+
+    initialize({ mainFlow: mainFlow }) {
+        this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+    }
+
+    bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
+        return this.mainFlow.executeCommand({
+            id: commandName,
+            withAll: params,
+        })
     }
 
     /// Building
 
     buildWith(flowBuilder) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
+        flowBuilder.main({ id: 'playground' }, function(thisFlow) {
 
-        this.setCommandsController( commandsController )
-
-        flowBuilder.main({ id: 'playground' }, function(application) {
-
-            this.defineFlowCommandsIn({ method: application.flowCommands })
-
-            this.whenObjectChanges( ({ newValue: sourceFile }) => {
-                this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
-                this.getChildFlow({ id: 'fileContents' }).setObject( sourceFile )
-            })
-
-            this.bufferedValue({
-                id: 'windowTitle',
-                convertToValueWith: ({ object: sourceFile }) => {
-                    return sourceFile ?
-                        `Playground - ${sourceFile.getFilePath()}` :
-                        'Playground - No source file selected.'
-                },
-            })
-
-            this.bufferedValue({
-                id: 'fileContents',
-                convertToValueWith: ({ object: sourceFile }) => {
-                    return sourceFile ? sourceFile.getFileContents() : ''
-                },
-            })
-        })
-    }
-
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
+            this.defineMethodsAsCommands({
+                methods: [
                     'openFile',
                     'openFileInNewWindow',
                     'openPlayground',
@@ -71,6 +50,26 @@ class PlaygroundBrowserFlow {
                 whenActioned: thisFlow.saveFile.bind(thisFlow),
             })
 
+            this.whenObjectChanges( ({ newValue: sourceFile }) => {
+                this.getChildFlow({ id: 'windowTitle' }).setObject( sourceFile )
+                this.getChildFlow({ id: 'fileContents' }).setObject( sourceFile )
+            })
+
+            this.bufferedValue({
+                id: 'windowTitle',
+                convertToValueWith: ({ object: sourceFile }) => {
+                    return sourceFile ?
+                        `Playground - ${sourceFile.getFilePath().getPath()}` :
+                        'Playground - No source file selected.'
+                },
+            })
+
+            this.bufferedValue({
+                id: 'fileContents',
+                convertToValueWith: ({ object: sourceFile }) => {
+                    return sourceFile ? sourceFile.getFileContents() : ''
+                },
+            })
         })
     }
 
@@ -78,20 +77,26 @@ class PlaygroundBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.openFile',
-            'flow-commands.openFileInNewWindow',
-            'flow-commands.saveFile',
-            'flow-commands.openPlayground',
-            'flow-commands.pickAndOpenFile',
-            'flow-commands.pickAndOpenFileInNewWindow',
-            'flow-commands.pickFile',
-            'flow-commands.getLastOpenedFolder',
+            'openFile',
+            'openFileInNewWindow',
+            'saveFile',
+            'openPlayground',
+            'pickAndOpenFile',
+            'pickAndOpenFileInNewWindow',
+            'pickFile',
+            'getLastOpenedFolder',
         ]
 
         this.exportCommandsToFlowPoint({
             commandsIds: exportedCommands,
             flowPoint: flowPoint
         })
+    }
+
+    /// Accessing namespaces
+
+    skinsNamespace() {
+        return this.mainFlow.skinsNamespace()
     }
 
     /// Actions
@@ -101,9 +106,7 @@ class PlaygroundBrowserFlow {
 
         const sourceFile = SourceFile.new({ filepath: filename })
 
-        if( filename !== null ) {
-            this.lastOpenedFolder = path.dirname( filename )
-        }
+        this.lastOpenedFolder = sourceFile.getFilePath().getFolderPath().getPath()
 
         this.setSourceFile({ sourceFile: sourceFile })
     }
@@ -111,7 +114,7 @@ class PlaygroundBrowserFlow {
     openFileInNewWindow({ filename: filename }) {
         if( ! filename ) { return }
 
-        Sirens.openPlayground({ filename: filename })
+        this.openPlayground({ filename: filename })
     }
 
     saveFile() {
@@ -124,12 +127,18 @@ class PlaygroundBrowserFlow {
         sourceFile.saveFileContents( fileNewContents )
     }
 
-    openPlayground() {
-        Sirens.openPlayground()
+    openPlayground({ filename: filename } = {}) {
+        this.mainFlow.executeCommand({
+            id: 'openPlayground',
+            with: { filename: filename }
+        })
     }
 
     pickAndOpenFile({ parentWindow: parentWindow }) {
-        const filename = this.executeCommand({ id: 'pickFile', with: { parentWindow: parentWindow } })
+        const filename = this.executeCommand({
+            id: 'pickFile',
+            with: { parentWindow: parentWindow }
+        })
 
         if( filename === null ) { return }
 
@@ -141,7 +150,10 @@ class PlaygroundBrowserFlow {
 
         if( filename === null ) { return }
 
-        this.executeCommand({ id: 'openFileInNewWindow',  with: {filename: filename} })
+        this.executeCommand({
+            id: 'openFileInNewWindow',
+            with: { filename: filename }
+        })
     }
 
     pickFile() {

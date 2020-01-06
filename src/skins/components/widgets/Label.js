@@ -1,14 +1,12 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const LabelView = require('../../gtk-views/LabelView')
-const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Label {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['namespaceFlow']
         this.assumes = [Widget]
         this.implements = [ComponentBehaviourProtocol_Implementation]
     }
@@ -19,11 +17,15 @@ class Label {
         const value = this.getProps().text !== undefined ? 
                         this.getProps().text : ''
 
-        return ValueModel.new({ value: value })
+        return this.namespace().Models.ValueModel.new({ value: value })
     }
 
     createView() {
-        return LabelView.new()
+        const view = this.namespace().Views.LabelView.new()
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

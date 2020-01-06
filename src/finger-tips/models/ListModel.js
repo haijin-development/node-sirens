@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const Announcer = require('../announcements/Announcer')
 const ListModelProtocol = require('../protocols/ListModelProtocol')
 
@@ -7,7 +8,7 @@ class ListModel {
 
     static definition() {
         this.instanceVariables = ['list']
-        this.assumes = [Announcer]
+        this.assumes = [Model, Announcer]
         this.implements = [ListModelProtocol]
     }
 

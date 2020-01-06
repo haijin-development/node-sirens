@@ -1,12 +1,14 @@
 const expect = require('chai').expect
-const ValueFlow = require('../../../../src/finger-tips/flows/ValueFlow')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a ValueFlow', () => {
 
     describe('ids', () => {
 
         it('gets a flow id', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -18,7 +20,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('gets a flow id path', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -34,7 +36,7 @@ describe('When using a ValueFlow', () => {
     describe('searches', () => {
 
         it('raises an error if the child does not exist', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             expect( () => {
 
@@ -44,7 +46,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('gets a child flow', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -60,7 +62,7 @@ describe('When using a ValueFlow', () => {
     describe('values', () => {
 
         it('gets a flow value', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -72,7 +74,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('sets a flow value', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -86,7 +88,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('returns the flow when setting its value', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow-1' })
@@ -104,7 +106,7 @@ describe('When using a ValueFlow', () => {
     describe('events', () => {
 
         it('defines an whenValueChanges handler', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             let onValueChanged = false
 
@@ -120,7 +122,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('evaluates the flow onValueChanged handler when setting its value', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             let onValueChanged = false
 
@@ -146,7 +148,7 @@ describe('When using a ValueFlow', () => {
         const CustomCommandsController = require('./CustomCommandsController')
 
         it('propagates the commandsController set before adding a child flow', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -162,7 +164,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('propagates the commandsController set before after a child flow', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -178,7 +180,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives an root flow event notification', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -201,7 +203,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives a child root event notification', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -226,7 +228,7 @@ describe('When using a ValueFlow', () => {
         })
 
         it('receives a command execution notification', () => {
-            const flow = ValueFlow.new({ id: 'main' })
+            const flow = namespace.ValueFlow.new({ id: 'main' })
 
             const commandsController = CustomCommandsController.new({ mainFlow: flow })
 
@@ -243,7 +245,7 @@ describe('When using a ValueFlow', () => {
 
             const commands = commandsController.getCommands()
 
-            expect( commands.length ).to .eql( 1 )
+            expect( commands ) .count .to .eql( 1 )
             expect( commands[0].command.getIdPath() ).to .eql( 'main.command-1' )
             expect( commands[0].params ).to .eql( [1,2] )
             expect( commands[0].result ).to .eql( 3 )

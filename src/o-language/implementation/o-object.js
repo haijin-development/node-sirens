@@ -145,6 +145,16 @@ class O_Object {
     static implementsBeforeAfterMethods({ object: object }) {
         return object.impl.implementsBeforeAfterMethods === true
     }
+
+    /*
+        Method(`
+            Sets the given value to the property of the given object instead of
+            setting it to the object active classification.
+        `)
+    */
+    static setUnclassifiedProperty({ object: proxyObject, name: propertyName, value: value }) {
+        proxyObject.impl.object[propertyName] = value
+    }
 }
 
 

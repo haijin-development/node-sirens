@@ -1,5 +1,7 @@
 const expect = require('chai').expect
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 const fileContents = '' +
 `const path = require('path')
@@ -26,13 +28,13 @@ const filename = 'tests/samples/index.js'
 
 const absentFilename = 'tests/samples/absentFile.js'
 
-const sourceFile = SourceFile.new({ filepath: filename })
+const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-const absentSourceFile = SourceFile.new({ filepath: absentFilename })
+const absentSourceFile = namespace.SourceFile.new({ filepath: absentFilename })
 
 describe('When using a SourceFile', () => {
     it('gets the file path', () => {
-        expect(sourceFile.getFilePath()) .to .match(/^.*tests[/]samples[/]index.js$/)
+        expect(sourceFile.getFilePath().getPath()) .to .match(/^.*tests[/]samples[/]index.js$/)
     })
 
     it('gets the file name', () => {

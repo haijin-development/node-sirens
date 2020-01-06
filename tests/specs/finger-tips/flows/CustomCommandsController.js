@@ -56,6 +56,8 @@ class CustomCommandsController {
             params: params,
             result: result,
         })
+
+        return result
     }
 }
 

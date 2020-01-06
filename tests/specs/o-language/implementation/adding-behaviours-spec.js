@@ -58,7 +58,7 @@ describe('When adding behaviour to an O instance', () => {
 
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
 
-        expect(object.classifications().length) .to .eql(2)
+        expect(object.classifications() ) .count .to .eql(2)
     })
 
     it('behaves as more than one classification', () => {
@@ -73,7 +73,7 @@ describe('When adding behaviour to an O instance', () => {
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
         expect(object.getRadius()) .to .eql(3)
 
-        expect(object.classifications().length) .to .eql(3)
+        expect(object.classifications() ) .count .to .eql(3)
     })
 
     it('does nothing if the object already is behaving as the given classification', () => {
@@ -90,6 +90,6 @@ describe('When adding behaviour to an O instance', () => {
 
         expect(object.getPosition()) .to .eql({ x: 10, y: 20})
 
-        expect(object.classifications().length) .to .eql(3)
+        expect(object.classifications() ) .count .to .eql(3)
     })
 })

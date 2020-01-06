@@ -1,0 +1,7 @@
+{
+    "cssFile": "resources/css/sirens.css",
+
+    "methodTags": {
+        "prioritizedTags": [ "public", "implementation" ]
+    }
+}

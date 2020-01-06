@@ -1,5 +1,6 @@
 const esprima = require('esprima')
 const Classification = require('../../../O').Classification
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 /*
  * A visitor of a javascript parse tree.
@@ -9,6 +10,7 @@ class ParseTreeVisitor {
 
     static definition() {
         this.instanceVariables = []
+        this.assumes = [ObjectWithNamespace]
     }
 
     /// Parsing

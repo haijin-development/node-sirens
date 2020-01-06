@@ -125,12 +125,6 @@ class ClassDocumentation {
 
     /// Generating class comment
 
-    generateComment() {
-        return this.generateClassComment({
-            classDocumentation: this
-        })
-    }
-
     generateCommentContents() {
         return this.generateClassCommentContents({
             classDocumentation: this

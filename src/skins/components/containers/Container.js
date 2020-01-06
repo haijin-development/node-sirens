@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ContainerView = require('../../gtk-views/ContainerView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Container {
@@ -22,7 +21,11 @@ class Container {
     createView() {
         const hasScrollBars = this.getProps().hasScrollBars
 
-        return ContainerView.new({ hasScrollBars: hasScrollBars })
+        const view = this.namespace().Views.ContainerView.new({ hasScrollBars: hasScrollBars })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

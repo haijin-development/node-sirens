@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const Sirens = require('../../../Sirens')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const TextualContentComponent = require('../../components/file-object-inspectors/TextualContentComponent')
 
 class TextualContentInspectorFlow {
@@ -16,7 +15,11 @@ class TextualContentInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getText',
+                ],
+            })
 
             this.whenObjectChanges( ({ newValue: textualContent }) => {
 
@@ -31,25 +34,11 @@ class TextualContentInspectorFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getText',
-                ],
-            })
-
-        })
-
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getText',
+            'getText',
         ]
 
         this.exportCommandsToFlowPoint({

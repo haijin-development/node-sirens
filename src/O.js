@@ -1,53 +1,24 @@
-const path = require('path')
-const fs = require('fs')
+const FolderPath = require('./o-language/classifications/paths/FolderPath')
 
 const O = {
     protocols: {},
 }
 
+const classificationsFolder = __dirname + '/o-language/classifications'
+const protocolsFolder = __dirname +  '/o-language/protocols'
 
-function requireClassification({
-    namespace: namespace, classificationName: classificationName, path: filePath
-}) {
-    if( namespace !== undefined ) {
-        if( O[namespace][classificationName] !== undefined ) {
-            throw new Error(`${namespace}.${classificationName} already defined.`)
-        }
+FolderPath.new({ path: classificationsFolder }).allFilesDo( (filePath) => {
+    const classificationName = filePath.getFileName({ withExtension: false })
+    const filePathString = filePath.getPath()
 
-        O[namespace][classificationName] = require(filePath)
-    } else {
-        if( O[classificationName] !== undefined ) {
-            throw new Error(`${classificationName} already defined.`)
-        }
+    O[ classificationName ] = require( filePathString )
+})
 
-        O[classificationName] = require(filePath)
-    }
-}
+FolderPath.new({ path: protocolsFolder }).allFilesDo( (filePath) => {
+    const protocolName = filePath.getFileName({ withExtension: false })
+    const filePathString = filePath.getPath()
 
-function addClassificationsInFolder({ path: folderPath, namespace: namespace }) {
-    const folderContents = fs.readdirSync( folderPath, { withFileTypes: true } )
-
-    folderContents.forEach( (eachPath) => {
-        const fullPath = path.join( folderPath, eachPath.name )
-
-        if( eachPath.isDirectory() ) {
-            child = addClassificationsInFolder({ path: fullPath, namespace: namespace })
-        } else {
-            const classificationName = path.basename( eachPath.name, '.js' )
-
-            requireClassification({
-                namespace: namespace,
-                path: fullPath,
-                classificationName: classificationName,
-            })
-        }
-    })
-}
-
-const classificationsFolder = path.resolve( __dirname + '/o-language/classifications' )
-const protocolsFolder = path.resolve( __dirname +  '/o-language/protocols' )
-
-addClassificationsInFolder({ path: classificationsFolder })
-addClassificationsInFolder({ path: protocolsFolder, namespace: 'protocols' })
+    O.protocols[ protocolName ] = require( filePathString )
+})
 
 module.exports = O

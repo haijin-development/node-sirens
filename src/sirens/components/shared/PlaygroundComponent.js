@@ -1,9 +1,8 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ValueModel = require('../../../Skins').ValueModel
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
+const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ScriptEvaluator = require('../../objects/ScriptEvaluator')
-const Sirens = require('../../../Sirens')
 
 class PlaygroundComponent {
     /// Definition
@@ -16,14 +15,16 @@ class PlaygroundComponent {
 
     /// Initializing
 
-    initialize(props) {
+    assemble() {
         this.previousClassificationDo( () => {
-            this.initialize( props )
+            this.assemble()
         })
 
         this.evaluationContext = {}
 
-        if( this.getProps().text !== undefined ) {
+        const props = this.getProps()
+
+        if( props.text !== undefined ) {
             this.getModel().setValue( props.text )
 
             this.removeProp({ key: 'text' })
@@ -31,6 +32,7 @@ class PlaygroundComponent {
     }
 
     defaultModel() {
+        // review to use this.namespace() instead
         return ValueModel.new({ value: '' })
     }
 
@@ -53,7 +55,7 @@ class PlaygroundComponent {
     inspectSelectedCode() {
         const evaluationResult = this.evaluateSelectedCode()
 
-        Sirens.browseObject( evaluationResult )
+        require('../../../Sirens').browseObject( evaluationResult )
     }
 
     evaluateSelectedCode() {

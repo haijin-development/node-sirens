@@ -1,7 +1,10 @@
 const expect = require('chai').expect
 const parser = require('esprima')
-const JsSintaxVisitor = require('../../../../src/sirens/objects/js-parser/JsSintaxVisitor')
 const jsSintax = require('../../../samples/JsSintax')
+
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When visiting js parse tree it visits the expression', () => {
 
@@ -208,7 +211,7 @@ function parse(string) {
 }
 
 function visit(string) {
-    const visitor = JsSintaxVisitor.new()
+    const visitor = namespace.JsSintaxVisitor.new()
 
     const treeNode = parse(string)
 

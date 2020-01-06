@@ -125,7 +125,7 @@ describe('When adding classifications that assumes previous classifications', ()
         expect(object.isBehavingAs(Positionable)) .to .be .true
         expect(object.isBehavingAs(Shape)) .to .be .true
 
-        expect(object.classifications().length) .to .eql(4)
+        expect(object.classifications() ) .count .to .eql(4)
     })
 
     it('adds the indirect assumed classifications if they are not present already', () => {
@@ -138,6 +138,6 @@ describe('When adding classifications that assumes previous classifications', ()
         expect(object.isBehavingAs(Shape)) .to .be .true
         expect(object.isBehavingAs(Circle)) .to .be .true
 
-        expect(object.classifications().length) .to .eql(5)
+        expect(object.classifications() ) .count .to .eql(5)
     })
 })

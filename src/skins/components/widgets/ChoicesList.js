@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const ChoiceModel = require('../../../finger-tips/models/ChoiceModel')
-const ListView = require('../../gtk-views/ListView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 const ListModelComponentProtocol_Implementation = require('../../../finger-tips/protocols/ListModelComponentProtocol_Implementation')
 
@@ -27,7 +25,7 @@ class ChoicesList {
     }
 
     defaultModel() {
-        const model = ChoiceModel.new()
+        const model = this.namespace().Models.ChoiceModel.new()
 
         if(this.getProps().choices !== undefined) {
             model.setChoices( this.getProps().choices )
@@ -41,12 +39,16 @@ class ChoicesList {
     }
 
     createView() {
-        return ListView.new({
+        const view = this.namespace().Views.ListView.new({
             onSelectionChanged: this.onUserSelectionChanged.bind(this),
             onSelectionAction: this.onUserSelectionAction.bind(this),
             allowSelectionChange: this.allowSelectionChange.bind(this),
             hasScrollBars: this.getProps().hasScrollBars,
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

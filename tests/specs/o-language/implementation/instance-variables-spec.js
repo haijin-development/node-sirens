@@ -43,6 +43,7 @@
 const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const OInstance = require('../../../../src/O').OInstance
+const Errors = require('../../../../src/O').Errors
 
 const Shape = Classification.define( class Shape {
     static definition() {
@@ -66,11 +67,18 @@ const Shape = Classification.define( class Shape {
     }
 
     getMissingInstanceVariable() {
-        return this.missingInstanceVariable;
+        return this.missingInstanceVariable
     }
 
     setMissingInstanceVariable() {
-        this.missingInstanceVariable = 1;
+        this.missingInstanceVariable = 1
+    }
+
+    setUnclassifiedPropertyValue(value) {
+        this.setUnclassifiedProperty({
+            name: 'unclassifiedValue',
+            value: value,
+        })
     }
 })
 
@@ -163,6 +171,16 @@ describe('When setting instance variables values to an O instance', () => {
         expect(object.getX()) .to .be .equal(0)
     })
 
+    it('sets the given value on the object as an unclassified property', () => {
+        const object = OInstance.new()
+
+        object.behaveAs(Shape)
+
+        object.setUnclassifiedPropertyValue( 0 )
+
+        expect( object.unclassifiedValue ) .to .equal(0)
+    })
+
     it('raises an error if a classification tries to set the value to an inexistent instance variable of its own', () => {
         const object = OInstance.new()
 
@@ -170,6 +188,9 @@ describe('When setting instance variables values to an O instance', () => {
 
         expect( () => {
             object.setMissingInstanceVariable()
-        }) .to .throw(Error, `'missingInstanceVariable' is not an instance variable of Shape Classification.`)
+        }) .to .raise({
+            error: Errors.InstanceVariableNotFoundError,
+            withMessage: `'missingInstanceVariable' is not an instance variable of Shape Classification.`
+        })
     })
 })

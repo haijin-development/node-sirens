@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const SeparatorView = require('../../gtk-views/SeparatorView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Separator {
@@ -22,7 +21,11 @@ class Separator {
     createView() {
         const orientation = this.getProps().orientation
 
-        return SeparatorView.new({ orientation: orientation })
+        const view = this.namespace().Views.SeparatorView.new({ orientation: orientation })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

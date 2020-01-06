@@ -1,10 +1,18 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a Label', () => {
+    let componentRenderer
+
+    beforeEach( () => {
+        componentRenderer = namespace.ComponentRenderer.new()
+    })
+
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label()
             })
 
@@ -12,7 +20,7 @@ describe('When using a Label', () => {
         })
 
         it('updates the view value when the model text changes', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label()
             })
 
@@ -25,7 +33,7 @@ describe('When using a Label', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label()
             })
 
@@ -33,7 +41,7 @@ describe('When using a Label', () => {
         })
 
         it('sets a text on its constructor', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label({ text: 'label' })
             })
 
@@ -44,7 +52,7 @@ describe('When using a Label', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label()
             })
 
@@ -56,7 +64,7 @@ describe('When using a Label', () => {
         })
 
         it('sets and gets the height', () => {
-            const label = Component.render( function(renderer) {
+            const label = componentRenderer.render( function() {
                 this.label()
             })
 

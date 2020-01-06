@@ -1,6 +1,7 @@
 const expect = require('chai').expect
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 const samplesFolder = 'tests/samples/js-objects/'
 
@@ -8,9 +9,9 @@ describe('When parsing a Js file', () => {
     it('with no functions or classes gets the text', () => {
         const filename = samplesFolder + 'text-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -24,7 +25,7 @@ let n = 1
 
 n += 1`
 
-        expect( fileObjects.length ) .to .equal( 1 )
+        expect( fileObjects ) .count .to .equal( 1 )
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[0].getContents() ) .to .equal( expectedContents )
     })
@@ -32,9 +33,9 @@ n += 1`
     it('with only functions gets the functions', () => {
         const filename = samplesFolder + 'functions-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -50,7 +51,7 @@ n += 1`
 
 }`
 
-        expect( fileObjects.length ) .to .equal( 2 )
+        expect( fileObjects ) .count .to .equal( 2 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[0].getContents() ) .to .equal( expectedContents1 )
@@ -62,9 +63,9 @@ n += 1`
     it('with only classes gets the classes', () => {
         const filename = samplesFolder + 'classes-only.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
@@ -80,7 +81,7 @@ n += 1`
 
 }`
 
-        expect( fileObjects.length ) .to .equal( 2 )
+        expect( fileObjects ) .count .to .equal( 2 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'C1 class' )
         expect( fileObjects[0].getContents() ) .to .equal( expectedContents1 )
@@ -92,15 +93,15 @@ n += 1`
     it('with classes, functions and initial text', () => {
         const filename = samplesFolder + 'text-function-class.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
-        expect( fileObjects.length ) .to .equal( 3 )
+        expect( fileObjects ) .count .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'plain text' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'f1(...)' )
@@ -110,15 +111,15 @@ n += 1`
     it('with classes, functions and ending text', () => {
         const filename = samplesFolder + 'function-class-text.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
-        expect( fileObjects.length ) .to .equal( 3 )
+        expect( fileObjects ) .count .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'C1 class' )
@@ -128,15 +129,15 @@ n += 1`
     it('with classes, functions and text in the middle', () => {
         const filename = samplesFolder + 'function-text-class.js'
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ filepath: filename })
 
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
 
         const fileObjects = sourceFileParser
             .parseSourceFile({ sourceFile: sourceFile })
             .getChildObjects()
 
-        expect( fileObjects.length ) .to .equal( 3 )
+        expect( fileObjects ) .count .to .equal( 3 )
 
         expect( fileObjects[0].getFileObjectDescription() ) .to .equal( 'f1(...)' )
         expect( fileObjects[1].getFileObjectDescription() ) .to .equal( 'plain text' )

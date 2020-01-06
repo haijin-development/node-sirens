@@ -1,12 +1,8 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
-const FileChooser = require('../../../Skins').FileChooser
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 const PlaygroundComponent = require('../shared/PlaygroundComponent')
 const PlaygroundBrowserMenu = require('./PlaygroundBrowserMenu')
-const PlaygroundBrowserFlow = require('../../flows/playground/PlaygroundBrowserFlow')
-const Sirens = require('../../../Sirens')
 
 class PlaygroundBrowser {
     /// Definition
@@ -15,25 +11,6 @@ class PlaygroundBrowser {
         this.instanceVariables = ['playgroundTextModel']
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
-    }
-
-    /// Initializing
-
-    /**
-     * Returns a new PlaygroundBrowserFlow.
-     * If the props include a props.object defined the that props.object is the browsed object,
-     * otherwise the browsed object is undefined.
-     */
-    defaultModel() {
-        const flow = PlaygroundBrowserFlow.new().asFlowPoint()
-
-        if( this.getProps().filename !== undefined ) {
-            const filename = this.getProps().filename
-            flow.openFile({ filename: filename })
-        }
-
-        return flow
     }
 
     /// Building
@@ -42,6 +19,7 @@ class PlaygroundBrowser {
         const flow = this.getModel()
 
         componentsRenderer.render( function(component) {
+
             this.window( function() { 
                 this.styles({
                     id: 'window',
@@ -55,8 +33,14 @@ class PlaygroundBrowser {
                     this.component(
                         PlaygroundBrowserMenu.new({
                             model: flow,
-                            openFile: () => { flow.pickAndOpenFile({ parentWindowd: component }) },
-                            openFileInNewWindow: () => { flow.pickAndOpenFileInNewWindow({ parentWindowd: component }) },
+                            openFile: () => {
+                                const window = component.getChildComponent({ id: 'window' })
+                                flow.pickAndOpenFile({ parentWindow: window })
+                            },
+                            openFileInNewWindow: () => {
+                                const window = component.getChildComponent({ id: 'window' })
+                                flow.pickAndOpenFileInNewWindow({ parentWindowd: window })
+                            },
                             saveFile: () => { flow.saveFile() },
                             openPlayground: () => { flow.openPlayground() },
                         })

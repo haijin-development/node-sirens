@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const Classification = require('../../../../src/O').Classification
 const OInstance = require('../../../../src/O').OInstance
 const Protocol = require('../../../../src/O').Protocol
+const Errors = require('../../../../src/O').Errors
 
 let extendedBehaviours
 let pointDefinition
@@ -47,7 +48,7 @@ describe('The Classification classification', () => {
         const object = Point.createObject()
 
         expect( object.isBehavingAs(OInstance) ) .to .be .true
-        expect( object.classifications().length ) .to .eql(1)
+        expect( object.classifications() ) .count .to .eql(1)
     })
 
     it('creates a classification object', () => {
@@ -56,7 +57,7 @@ describe('The Classification classification', () => {
         expect( object.isBehavingAs(OInstance) ) .to .be .true
         expect( object.isBehavingAs(Point) ) .to .be .true
 
-        expect( object.classifications().length ) .to .eql(2)
+        expect( object.classifications() ) .count .to .eql(2)
     })
 
     it('creates a classification object and calls its initialize methods with its parameters', () => {
@@ -110,10 +111,10 @@ describe('The Classification classification', () => {
 
             Point.implements({ protocol: PointProtocol })
 
-        }).to .throw(
-            Error,
-            'Point classification must implement the method PointProcotol.getZ to comply with the protocol implementation.'
-        )
+        }).to .raise({
+            error: Errors.ProtocolError,
+            withMessage: 'Point classification must implement the method PointProcotol.getZ to comply with the protocol implementation.',
+        })
     })
 
     it('returns a copy of its instance variables', () => {

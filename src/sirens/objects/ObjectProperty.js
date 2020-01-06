@@ -1,32 +1,42 @@
-const path = require('path')
 const Classification = require('../../O').Classification
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
 const ValueType = require('../../O').ValueType
-const PropertyValueToText = require('./value-displayers/PropertyValueToText')
-const PropertyValueToImage = require('./value-displayers/PropertyValueToImage')
 
+/*
+    Class(`
+        This object models a (key, value) pair of an object property.
+
+        For example the object
+
+            user = {
+                name: 'John'
+            }
+
+        has the pair {key: 'name', value: 'John'}.
+
+        The ObjectProperty answers its child ObjectProperties and can be used
+        to inspect an object in a browsable tree. Also it handles indexed properties
+        in the case of Arrays.
+
+        This is the default implementation of an ObjectsProperties but additional
+        classifications may be attached to this object to extend, modify or filter
+        the properties and its displayable formats.
+
+        The attachment of additional classifications is done by the ObjectPropertyPlugins
+        object.
+    `)
+*/
 class _ObjectProperty {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['key', 'value']
+        this.assumes = [ObjectWithNamespace]
     }
 
     /// Initializing
 
-    afterInstantiation() {
-        const Pluggables = require('../Pluggables')
-
-        const pluggableClassifications =
-            Pluggables.objectPropertiesInspector.availablePropertiesInspectors
-
-        this.behaveAsAll( pluggableClassifications )
-    }
-
     initialize({ key: key, value: value }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
         this.key = key
         this.value = value
     }
@@ -57,7 +67,10 @@ class _ObjectProperty {
 
     getArrayIndexedProperties() {
         return this.value.map( (item, index) => {
-            return ObjectProperty.new({
+            const objectPropertyPlugins =
+                this.namespace().ObjectPropertyPlugins.new()
+
+            return objectPropertyPlugins.newObjectProperty({
                 key: index,
                 value: item
             })
@@ -76,7 +89,10 @@ class _ObjectProperty {
                 continue
             }
 
-            const instVar = ObjectProperty.new({
+            const objectPropertyPlugins =
+                this.namespace().ObjectPropertyPlugins.new()
+
+            const instVar = objectPropertyPlugins.newObjectProperty({
                 key: key,
                 value: instVarValue
             })
@@ -114,13 +130,13 @@ class _ObjectProperty {
     }
 
     valueDisplayString() {
-        const displayer = PropertyValueToText.new()
+        const displayer = this.namespace().PropertyValueToText.new()
 
         return displayer.getDisplayValueFrom({ value: this.value })
     }
 
     icon() {
-        const displayer = PropertyValueToImage.new()
+        const displayer = this.namespace().PropertyValueToImage.new()
 
         return displayer.getDisplayValueFrom({ value: this.value })
     }

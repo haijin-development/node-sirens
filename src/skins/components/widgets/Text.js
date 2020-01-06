@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const TextView = require('../../gtk-views/TextView')
-const ValueModel = require('../../../finger-tips/models/ValueModel')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Text {
@@ -20,14 +18,18 @@ class Text {
         const value = this.getProps().text !== undefined ? 
                         this.getProps().text : ''
 
-        return ValueModel.new({ value: value })
+        return this.namespace().Models.ValueModel.new({ value: value })
     }
 
     createView() {
-        return TextView.new({
+        const view = this.namespace().Views.TextView.new({
             onTextChanged: (text) => { this.onTextChanged(text) },
             hasScrollBars: this.getProps().hasScrollBars,
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Querying

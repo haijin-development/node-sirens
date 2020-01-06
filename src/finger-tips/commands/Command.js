@@ -1,65 +1,41 @@
 const Classification = require('../../O').Classification
+const FlowNode = require('../flows/FlowNode')
 
 class Command {
     /// Definition
 
     static definition() {
-        this.instanceVariables = [
-            'id', 'idPath',
-            'actionHandlerClosure',
-            'commandsController',
-        ]
+        this.instanceVariables = ['actionHandlerClosure']
+        this.assumes = [FlowNode]
     }
 
     /// Initializing
 
     initialize({ id: id, idPath: idPath, actionHandlerClosure: actionHandlerClosure }) {
         if( id === undefined ) { throw new Error(`An id must be provided.`) }
-        if( idPath === undefined ) { throw new Error(`An idPath must be provided.`) }
 
-        this.id = id
-        this.idPath = idPath
         this.actionHandlerClosure = actionHandlerClosure
-    }
 
-    releaseFlow() {
-        this.thisClassification().getDefinedInstanceVariables().forEach( (instVar) => {
-            this[instVar] = null
+        this.previousClassificationDo( () => {
+            this.initialize({ id: id, idPath: idPath })
         })
     }
 
+    releaseFlow() {
+        this.previousClassificationDo( () => {
+            this.releaseFlow()
+        })
+
+        this.actionHandlerClosure = null
+    }
+
     /// Id
-
-    getId() {
-        return this.id
-    }
-
-    setId({ id: id, idPath: idPath }) {
-        this.id = id
-        this.idPath = idPath
-    }
-
-    getIdPath() {
-        return this.idPath
-    }
-
-    setIdPath(idPath) {
-        this.idPath = idPath
-    }
 
     setActionHandlerClosure(actionHandlerClosure) {
         this.actionHandlerClosure = actionHandlerClosure
     }
 
     // Commands
-
-    setCommandsController(commandsController) {
-        this.commandsController = commandsController
-    }
-
-    getCommandsController() {
-        return this.commandsController
-    }
 
     hasActionHandler() {
         return typeof( this.actionHandlerClosure ) === 'function'
@@ -70,12 +46,6 @@ class Command {
     }
 
     /// Flow
-
-    allChildFlowsDo(closure) {}
-
-    findDirectChildFlow() { return undefined }
-
-    getChildFlows() { return [] }
 
     asFlowPoint() {
         throw new Error(`Another classification should implement this method.`)
@@ -100,7 +70,9 @@ class Command {
 
     executeActionHandlerClosure({ params: params }) {
         if( ! this.hasActionHandler() ) {
-            throw new Error(`The actionHandler for the command '${this.idPath}' is not defined, the application should define it.`)
+            const idPath = this.getIdPath()
+
+            throw new Error(`The actionHandler for the command '${idPath}' is not defined, the application should define it.`)
         }
 
         const actionHandler = this.actionHandlerClosure

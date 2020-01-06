@@ -1,11 +1,13 @@
 const splitLines = require('split-lines')
 const Classification = require('../../../O').Classification
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 const TextualContent = require('../file-structure/TextualContent')
 
 class PlainTextStructureParser {
 
     static definition() {
         this.instanceVariables = []
+        this.assumes = [ObjectWithNamespace]
     }
 
     /// Parsing
@@ -17,7 +19,7 @@ class PlainTextStructureParser {
 
         const lastLine = allLines[ allLines.length -1 ]
 
-        const textualContent = TextualContent.new()
+        const textualContent = this.namespace().TextualContent.new()
 
         textualContent.setFileLocation({
             sourceFile: sourceFile,

@@ -1,11 +1,15 @@
-const path = require('path')
-const fs = require('fs')
 const Classification = require('../../../O').Classification
+const FolderPath = require('../../../O').FolderPath
 const Path = require('./Path')
 const PathProtocol = require('../../protocols/PathProtocol')
 const Resource = require('../Resource')
 const File = require('./File')
 
+/*
+    Wrapper on a Folder suitable for a tree folders browser.
+
+    It is not redundant with O.FolderPath, it wraps it and adapts it to a tree component.
+*/
 class Folder {
     /// Definition
 
@@ -32,20 +36,15 @@ class Folder {
     }
 
     getChildren() {
-        const folderContents = fs.readdirSync( this.getPath(), { withFileTypes: true } )
-
         const children = []
 
-        folderContents.forEach( (eachPath) => {
-            const fullPath = path.join( this.getPath(), eachPath.name )
+        const folderPath = FolderPath.new({ path: this.getPath() })
 
-            let child = null
-
-            if( eachPath.isDirectory() ) {
-                child = _Folder.new({ path: fullPath })
-            } else {
-                child = File.new({ path: fullPath })
-            }
+        folderPath.filesAndFoldersDo( (childPath) => {
+            const child = childPath.isFolderPath() ?
+                _Folder.new({ path: childPath })
+                :
+                File.new({ path: childPath })
 
             children.push( child )
         })

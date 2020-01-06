@@ -1,5 +1,6 @@
 const ClassificationDefinition = require('./classification-definition')
 const O_Object = require('./o-object')
+const {InstanceVariableNotFoundError} = require('../classifications/Errors')
 
 class ClassificationInstantiation {
     /*
@@ -95,7 +96,7 @@ class ClassificationInstantiation {
                 classificationDefinition: classificationDefinition
             })
 
-            throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
+            throw new InstanceVariableNotFoundError(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
         }
 
         return classificationInstantiation[instanceVariableName]
@@ -120,7 +121,7 @@ class ClassificationInstantiation {
                 classificationDefinition: classificationDefinition
             })
 
-            throw new Error(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
+            throw new InstanceVariableNotFoundError(`'${instanceVariableName}' is not an instance variable of ${classificationsName} Classification.`)
         }
 
         classificationInstantiation[instanceVariableName] = value

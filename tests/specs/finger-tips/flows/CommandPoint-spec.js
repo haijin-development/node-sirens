@@ -1,13 +1,14 @@
 const expect = require('chai').expect
-const Classification = require('../../../../src/O').Classification
-const Flow = require('../../../../src/finger-tips/flows/Flow')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a StatefulCommand', () => {
 
     describe('ids', () => {
 
         it('gets a command point id', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({ id: 'command-1' })
@@ -19,7 +20,7 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('gets a command point id path', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({ id: 'command-1' })
@@ -35,7 +36,7 @@ describe('When using a StatefulCommand', () => {
     describe('searches', () => {
 
         it('raises an error if the child flow exists but it is not a command', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'value-1' })
@@ -53,7 +54,7 @@ describe('When using a StatefulCommand', () => {
     describe('enabled state', () => {
 
         it('gets a command enabled state', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -72,7 +73,7 @@ describe('When using a StatefulCommand', () => {
     describe('events', () => {
 
         it('receives enables status changes from its flow and announces it to its listeners', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -102,7 +103,7 @@ describe('When using a StatefulCommand', () => {
     describe('commands', () => {
 
         it('executes a command', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -119,7 +120,7 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('executes a command with a true ifEnabled', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -137,7 +138,7 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('does not execute a command with a false ifEnabled', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.command({
@@ -155,7 +156,7 @@ describe('When using a StatefulCommand', () => {
         })
 
         it('executes an action handler', () => {
-            const flow = Flow.new({ id: 'main' })
+            const flow = namespace.Flow.new({ id: 'main' })
 
             flow.build( function({ rootFlow: flow }) {
                 this.value({ id: 'flow' }, function() {

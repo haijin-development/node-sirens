@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ToolBarSeparatorView = require('../../gtk-views/ToolBarSeparatorView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class ToolBarSeparator {
@@ -19,7 +18,11 @@ class ToolBarSeparator {
     }
 
     createView() {
-        return ToolBarSeparatorView.new()
+        const view = this.namespace().Views.ToolBarSeparatorView.new()
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

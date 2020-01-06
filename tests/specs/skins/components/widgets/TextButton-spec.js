@@ -1,10 +1,18 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a TextButton', () => {
+    let componentRenderer
+
+    beforeEach( () => {
+        componentRenderer = namespace.ComponentRenderer.new()
+    })
+
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton()
             })
 
@@ -12,7 +20,7 @@ describe('When using a TextButton', () => {
         })
 
         it('updates the view value when the model text changes', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton()
             })
 
@@ -25,7 +33,7 @@ describe('When using a TextButton', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton()
             })
 
@@ -33,7 +41,7 @@ describe('When using a TextButton', () => {
         })
 
         it('sets a text on its constructor', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton({ text: 'label' })
             })
 
@@ -43,26 +51,24 @@ describe('When using a TextButton', () => {
     })
 
     describe( 'events', () =>{
-        beforeEach( () => {
-            this.clicked = false
-        })
-
         it('calls the onClicked callback', () => {
-            const widget = Component.render( (renderer) => {
-                renderer.textButton({
-                    onClicked: () => { this.clicked = true }
+            let clicked = false
+
+            const widget = componentRenderer.render( function() {
+                this.textButton({
+                    onClicked: () => { clicked = true }
                 })
             })
 
             widget.getView().handleClick()
 
-            expect( this.clicked ) .to .be .true
+            expect( clicked ) .to .be .true
         })
     })
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton()
             })
 
@@ -74,7 +80,7 @@ describe('When using a TextButton', () => {
         })
 
         it('sets and gets the height', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.textButton()
             })
 

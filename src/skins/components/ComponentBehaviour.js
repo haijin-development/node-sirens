@@ -1,6 +1,7 @@
 const Classification = require('../../O').Classification
 const OInstance = require('../../O').OInstance
 const ObjectWithProps = require('../../O').ObjectWithProps
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
 const ComponentBehaviourProtocol = require('../protocols/ComponentBehaviourProtocol')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 
@@ -17,8 +18,8 @@ const EventsSubscritions = require('./EventsSubscritions')
 
  Example({
     Description: `
-       This classification does not define all the method it needs and requires one or more additional classifications to define the
-       complete behaviour of an object.
+       This classification does not define all the methods it needs and requires one or
+       more additional classifications to define the complete behaviour of an object.
 
        Concrete examples can be found in 'sirens/skins/components/'.
     `,
@@ -43,7 +44,7 @@ class ComponentBehaviour {
     */
     static definition() {
         this.instanceVariables = ['childComponents', 'view', 'eventsSubscriptions']
-        this.assumes = [ObjectWithProps]
+        this.assumes = [ObjectWithProps, ObjectWithNamespace]
         this.expects = [ComponentBehaviourProtocol, ComponentBehaviourProtocol_Implementation]
     }
 
@@ -109,6 +110,68 @@ class ComponentBehaviour {
         })
 
         this.setProps( props )
+    }
+
+    /*
+     Method(`
+        Assembles this object with the proper initializations.
+
+        The initialization of a component object does the following initializations, in this given order:
+
+            // Other classifications may use this method to add, edit, remove or validate properties
+            // The default is to do nothing
+                this.initializeProps()
+
+            // The component properties may be values, objects or ValueModels. For those that are value models
+            // this method hooks its changes to update the component calling this.onPropValueChanged()
+                this.initializePropModels()
+
+            // If the current properties do not include a property named 'model' ask the component for a default model and set it
+                this.initializeModel()
+
+            // All components have a View of its own. This method create it and initializes it
+                this.initializeView()
+
+            // In this method the component calls one or more methods to hook changes in its model and its view to keep
+            // them in sync. The default is to call this.subscribeToModelEvents
+                this.initializeEvents()
+
+        The assemblance of the components to its collaborators, events and resuorces is
+        deferred and different from the initializtion of the Component object:
+
+            const component = AComponent.new()
+
+            component.assemble()
+
+        Including complex logic and objects creation in the initialization of an object
+        is a discouraged pattern.
+
+        Splitting the initialization of a component in two steps, initialize and assemble,
+        first it creates the Component blue print, an object almost ready to be used,
+
+            const component = AComponent.new()
+
+        but without adquiring any resource such a Views and event hooks, and then it
+        assembles the component
+
+            component.assemble()
+
+        to be fully initialized.
+
+        This allows to tweak the Component object before it is assembled, something that
+        some users of the Component may want to do, and to defer the expensive initialization
+        of the Component like adquiring file handles and hooking up events until they
+        are actually used.
+     `)
+
+     Tags([
+        'implementation', 'initializing'
+     ])
+    */
+    assemble() {
+        if( this.view !== null ) {
+            throw new Error(`The method .assemble() was already called.`)
+        }
 
         this.initializeProps()
 

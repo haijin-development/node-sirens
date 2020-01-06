@@ -1,5 +1,3 @@
-const path = require('path')
-const fs = require('fs')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../O').Classification
 const GtkWidget = require('./GtkWidget')

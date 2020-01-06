@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const ComponentBehaviour = require('../ComponentBehaviour')
-const TabPageView = require('../../gtk-views/TabPageView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class TabPage {
@@ -19,7 +18,11 @@ class TabPage {
     }
 
     createView() {
-        return TabPageView.new()
+        const view = this.namespace().Views.TabPageView.new()
+
+        view.assemble()
+
+        return view
     }
 
     getMainComponent() {

@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const WindowView = require('../../gtk-views/WindowView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class Window {
@@ -20,9 +19,13 @@ class Window {
     }
 
     createView() {
-        return WindowView.new({
+        const view = this.namespace().Views.WindowView.new({
             onClosed: this.onClosed.bind(this),
         })
+
+        view.assemble()
+
+        return view
     }
 
     synchronizeViewFromModel() {

@@ -1,41 +1,59 @@
 const Classification = require('../../O').Classification
-const Pluggables = require('../Pluggables')
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
 
+/*
+    Class(`
+        This object parses a File (usually a textual source code file) to create
+        and return a structured model of the file contents.
+
+        For example for a .json file it might return a structure representing the
+        json contents and for a js it might return a structured model of the js methods
+        and function.
+
+        This object does not implement the parsing and convertion into a strutured model
+        but it plays the role of a Facade pattern.
+
+        The actual parsing is done by specific file contents parsers that can be
+        dynamically plugged into this SourceFileStructureParser object.
+    `)
+*/
 class SourceFileStructureParser {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
+        this.assumes = [ObjectWithNamespace]
     }
 
     // Parsing
 
-    parseSourceFile({ sourceFile: sourceFile }) {
-        const fileType = sourceFile.getFileType()
+    parseSourceFile({ sourceFile: sourceFile, onParsingErrorDo: errorHandler }) {
+        try {
 
-        return this.parseFile({
-            sourceFile: sourceFile,
-            fileType: fileType
-        })
+            return this.parseFile({ sourceFile: sourceFile })
+
+        } catch(error) {
+            if( errorHandler !== undefined ) {
+                return errorHandler(error)
+            }
+
+            throw error
+        }
     }
 
-    parseFile({ sourceFile: sourceFile, fileType: fileType }) {
-        const parser = this.getParserForFileType({ fileType: fileType })
+    parseFile({ sourceFile: sourceFile }) {
+        const parser = this.getParserForFileType({ sourceFile: sourceFile })
 
         return parser.parse({ sourceFile: sourceFile })  
     }
 
     // Parser selection
 
-    getParserForFileType({ fileType: fileType }) {
-        const fileTypeParsers = Pluggables.fileInspector.fileTypeParsers
+    getParserForFileType({ sourceFile: sourceFile }) {
+        const fileParser = this.namespace().FileInspectorPlugins.new()
+            .pickFileParserFor({ sourceFile: sourceFile })
 
-        const parser = fileTypeParsers[fileType] ?
-            fileTypeParsers[fileType]
-            :
-            fileTypeParsers.default
-
-        return parser.new()
+        return fileParser
     }
 }
 

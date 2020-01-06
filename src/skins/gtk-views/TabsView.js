@@ -23,8 +23,8 @@ class TabsView {
 
     /// Initializing
 
-    initialize(props) {
-        this.onTabPageChanged = props.onTabPageChanged
+    initialize({ onTabPageChanged: onTabPageChanged } = {}) {
+        this.onTabPageChanged = onTabPageChanged
 
         this.previousClassificationDo( () => {
             this.initialize()

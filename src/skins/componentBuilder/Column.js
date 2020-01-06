@@ -1,5 +1,6 @@
 const Classification = require('../../O').Classification
 const ObjectWithProps = require('../../O').ObjectWithProps
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
 
 /*
  Class(`
@@ -21,7 +22,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/skins/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-       const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
        class ExampleComponent {
        	/// Definition
@@ -30,7 +30,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        		this.instanceVariables = []
        		this.assumes = [Component]
        		this.implements = [ComponentProtocol_Implementation]
-       		this.classificationBehaviours = [ComponentInstantiator]
        	}
 
        	/// Building
@@ -68,7 +67,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/skins/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-       const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
        class ExampleComponent {
        	/// Definition
@@ -77,7 +75,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        		this.instanceVariables = []
        		this.assumes = [Component]
        		this.implements = [ComponentProtocol_Implementation]
-       		this.classificationBehaviours = [ComponentInstantiator]
        	}
 
        	imageForItem(item) {
@@ -123,7 +120,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/skins/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-       const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
        class ExampleComponent {
        	/// Definition
@@ -132,7 +128,6 @@ const ObjectWithProps = require('../../O').ObjectWithProps
        		this.instanceVariables = []
        		this.assumes = [Component]
        		this.implements = [ComponentProtocol_Implementation]
-       		this.classificationBehaviours = [ComponentInstantiator]
        	}
 
        	imageForItem(item) {
@@ -189,7 +184,7 @@ class Column {
     */
     static definition() {
         this.instanceVariables = []
-        this.assumes = [ObjectWithProps]
+        this.assumes = [ObjectWithNamespace, ObjectWithProps]
     }
 
     /// Initializing

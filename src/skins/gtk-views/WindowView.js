@@ -1,7 +1,7 @@
 const Classification = require('../../O').Classification
 const GtkWidget = require('./GtkWidget')
 const Gtk = require('node-gtk').require('Gtk', '3.0')
-const Sirens = require('../../Sirens')
+const SkinsGtk = require('./SkinsGtk')
 const GtkWidgetProtocol_Implementation = require('../protocols/GtkWidgetProtocol_Implementation')
 
 class WindowView {
@@ -30,7 +30,7 @@ class WindowView {
             this.initialize()
         })
 
-        Sirens.registerWindow()
+        SkinsGtk.registerWindow()
     }
 
     initializeHandles() {
@@ -108,7 +108,7 @@ class WindowView {
     handleDestroy() {
         this.onClosed()
 
-        Sirens.unregisterWindow()
+        SkinsGtk.unregisterWindow()
     }
 
     releaseHandles() {

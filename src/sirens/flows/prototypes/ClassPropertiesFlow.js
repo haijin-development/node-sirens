@@ -1,7 +1,6 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
-const Sirens = require('../../../Sirens')
 
 class ClassPropertiesFlow {
     /// Definition
@@ -12,36 +11,42 @@ class ClassPropertiesFlow {
     }
 
     buildWith(flow) {
-        flow.main({ id: 'playground' }, function(classProperties) {
+        flow.main({ id: 'playground' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: classProperties.flowCommands })
+            this.command({
+                id: 'browseSelectedProperty',
+                enabledIf: function() {
+                    return thisFlow.getSelectedPropertyValue() != undefined
+                },
+                whenActioned: thisFlow.browseSelectedProperty.bind(thisFlow),
+            })
 
             this.whenObjectChanges( ({ newValue: aClass }) => {
-                classProperties.updatePropertyChoices()
+                thisFlow.updatePropertyChoices()
             })
 
             this.toggle({
                 id: 'showInheritedProps',
-                whenValueChanges: () => { classProperties.updatePropertyChoices() },
+                whenValueChanges: () => { thisFlow.updatePropertyChoices() },
             })
             
             this.toggle({
                 id: 'showFunctionProps',
                 value: true,
-                whenValueChanges: () => { classProperties.updatePropertyChoices() },
+                whenValueChanges: () => { thisFlow.updatePropertyChoices() },
             })
 
             this.toggle({
                 id: 'showNonFunctionProps',
-                whenValueChanges: () => { classProperties.updatePropertyChoices() },
+                whenValueChanges: () => { thisFlow.updatePropertyChoices() },
             })
 
             this.choice({
                 id: 'properties',
                 choices: [],
                 whenSelectionChanges: ({ newValue: objectProperty }) => {
-                    const text = classProperties.displayStringOf( objectProperty )
-                    classProperties.getChildFlow({ id: 'selectedProp' }).setValue(text)
+                    const text = thisFlow.displayStringOf( objectProperty )
+                    thisFlow.getChildFlow({ id: 'selectedProp' }).setValue(text)
                 },
             })
 
@@ -51,24 +56,12 @@ class ClassPropertiesFlow {
 
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-            this.command({
-                id: 'browseSelectedProperty',
-                enabledIf: function() {
-                    return thisFlow.getSelectedPropertyValue() != undefined
-                },
-                whenActioned: thisFlow.browseSelectedProperty.bind(thisFlow),
-            })
-        })
-    }
-
     /// Actions
 
     browseSelectedProperty() {
         const selectedPropertyValue = this.getSelectedPropertyValue()
 
-        Sirens.browseObject( selectedPropertyValue )        
+        require('../../../Sirens').browseObject( selectedPropertyValue )        
     }
 
     setBrowsedObject(object) {
@@ -133,7 +126,7 @@ class ClassPropertiesFlow {
         const propertyNames = Object.getOwnPropertyNames(object)
 
         return propertyNames.map( (key) => {
-            const objectProperty = ObjectProperty.new({
+            const objectProperty = this.mainNamespace().ObjectProperty.new({
                 key: key,
                 value: object[key]
             })
@@ -156,6 +149,10 @@ class ClassPropertiesFlow {
                 return objectProperty.getValue().toString()
             }
         }
+    }
+
+    mainNamespace() {
+        return this.bubbleUp({ command: 'mainNamespace' })
     }
 }
 

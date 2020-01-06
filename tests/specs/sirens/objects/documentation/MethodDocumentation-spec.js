@@ -1,6 +1,7 @@
 const expect = require('chai').expect
-const MethodDocumentation = require('../../../../../src/sirens/objects/documentation/MethodDocumentation')
-const DocumentationReader = require('../../../../../src/sirens/objects/documentation/DocumentationReader')
+const Sirens = require('../../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using a MethodDocumentation', () => {
     describe('to document a Method description', () => {
@@ -14,9 +15,9 @@ describe('When using a MethodDocumentation', () => {
     \`)
     `
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+            expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -30,9 +31,9 @@ describe('When using a MethodDocumentation', () => {
         "A regular js class to use in the FileEditor example."
     )`
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: methodComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: methodComment })
 
-            expect( methodDocumentation.getDescription() ) .to .beSuchThat( (description) =>
+            expect( methodDocumentation.getDescription() ) .to .be .suchThat( (description) =>
                 expect( description.getText() ) .to .equal(
                     'A regular js class to use in the FileEditor example.'
                 )
@@ -57,11 +58,11 @@ describe('When using a MethodDocumentation', () => {
     })
     `
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'\n\no.toUpperCase()" )
             })
@@ -75,11 +76,11 @@ describe('When using a MethodDocumentation', () => {
         Code: "const o = 'abc'",
     })`
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const examples = methodDocumentation.getExamples()
 
-            expect( examples[0] ) .to .beSuchThat( (example) => {
+            expect( examples[0] ) .to .be .suchThat( (example) => {
                 expect( example.getDescription() ) .to .equal( 'An example' )
                 expect( example.getCode() ) .to .equal( "const o = 'abc'" )
             })
@@ -98,11 +99,11 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const params = methodDocumentation.getParams()
 
-            expect( params[0] ) .to .beSuchThat( (param) => {
+            expect( params[0] ) .to .be .suchThat( (param) => {
                 expect( param.getName() ) .to .eql( 'streetName' )
                 expect( param.getDescription() ) .to .eql( 'The name of the street. Does not include the street number.' )
             })
@@ -121,7 +122,7 @@ describe('When using a MethodDocumentation', () => {
         Description: "The name of the street. Does not include the street number.",
     })
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const returns = methodDocumentation.getReturnValue()
 
@@ -142,7 +143,7 @@ describe('When using a MethodDocumentation', () => {
         Assumes that the street is not empty.
     \`)
     `
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const implementationNotes = methodDocumentation.getImplementationNotes()
 
@@ -166,7 +167,7 @@ describe('When using a MethodDocumentation', () => {
 
         it('builds a Method Tag from a template literal', () => {
 
-            const methodDocumentation = DocumentationReader.readMethodDocumentationFromString({ string: exampleComment })
+            const methodDocumentation = namespace.DocumentationReader.new().readMethodDocumentationFromString({ string: exampleComment })
 
             const tags = methodDocumentation.getTags()
 

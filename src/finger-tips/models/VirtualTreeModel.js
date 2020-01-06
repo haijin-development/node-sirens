@@ -1,4 +1,5 @@
 const Classification = require('../../O').Classification
+const Model = require('./Model')
 const Announcer = require('../announcements/Announcer')
 const VirtualTreeModelProtocol = require('../protocols/VirtualTreeModelProtocol')
 
@@ -7,7 +8,7 @@ class VirtualTreeModel {
 
     static definition() {
         this.instanceVariables = ['getChildrenClosure', 'roots']
-        this.assumes = [Announcer]
+        this.assumes = [Model, Announcer]
         this.implements = [VirtualTreeModelProtocol]
     }
 
@@ -125,13 +126,16 @@ class VirtualTreeModel {
 
         const hierarchy = []
 
-        pathIndices.forEach((index) => {
+        for( const index of pathIndices ) {
             const node = nodes[index]
+
+            if( node === undefined ) { return hierarchy }
+            if( node === undefined ) { throw new Error(`Tree index ${pathIndices} does not exist.`) }
 
             hierarchy.push(node.getValue())
 
             nodes = node.getChildren()
-        })
+        }
 
         return hierarchy
     }

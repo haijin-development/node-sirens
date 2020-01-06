@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const MenuItemSeparatorView = require('../../gtk-views/MenuItemSeparatorView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class MenuItemSeparator {
@@ -19,7 +18,11 @@ class MenuItemSeparator {
     }
 
     createView() {
-        return MenuItemSeparatorView.new( this.getProps() )
+        const view = this.namespace().Views.MenuItemSeparatorView.new( this.getProps() )
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

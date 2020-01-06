@@ -1,30 +1,30 @@
-const path = require('path')
 const Classification = require('../../O').Classification
+const FolderPath = require('../../O').FolderPath
 
-const resourcesFolder = path.resolve( __dirname + '/../../../resources' )
-const iconsFolder = resourcesFolder + '/icons/'
+const resourcesFolder = FolderPath.new({ path: __dirname + '/../../../resources' })
+const iconsFolder = resourcesFolder.append({ path: 'icons' })
 
 const Resource = {
     image: {
-        array: iconsFolder + 'array.png',
-        class: iconsFolder + 'class.png',
-        false: iconsFolder + 'false.png',
-        file: iconsFolder + 'file.png',
-        folder: iconsFolder + 'folder.png',
-        function: iconsFolder + 'function.png',
-        haiku: iconsFolder + 'haiku.png',
-        implementationNote: iconsFolder + 'implementation-note.png',
-        method: iconsFolder + 'method.png',
-        null: iconsFolder + 'null.png',
-        number: iconsFolder + 'number.png',
-        object: iconsFolder + 'object.png',
-        param: iconsFolder + 'param.png',
-        prototype: iconsFolder + 'prototype.png',
-        returnValue: iconsFolder + 'return-value.png',
-        string: iconsFolder + 'string.png',
-        tag: iconsFolder + 'tag.png',
-        true: iconsFolder + 'true.png',
-        undefined: iconsFolder + 'undefined.png',
+        array: iconsFolder.append({ path: 'array.png' }).getPath(),
+        class: iconsFolder.append({ path: 'class.png' }).getPath(),
+        false: iconsFolder.append({ path: 'false.png' }).getPath(),
+        file: iconsFolder.append({ path: 'file.png' }).getPath(),
+        folder: iconsFolder.append({ path: 'folder.png' }).getPath(),
+        function: iconsFolder.append({ path: 'function.png' }).getPath(),
+        haiku: iconsFolder.append({ path: 'haiku.png' }).getPath(),
+        implementationNote: iconsFolder.append({ path: 'implementation-note.png' }).getPath(),
+        method: iconsFolder.append({ path: 'method.png' }).getPath(),
+        null: iconsFolder.append({ path: 'null.png' }).getPath(),
+        number: iconsFolder.append({ path: 'number.png' }).getPath(),
+        object: iconsFolder.append({ path: 'object.png' }).getPath(),
+        param: iconsFolder.append({ path: 'param.png' }).getPath(),
+        prototype: iconsFolder.append({ path: 'prototype.png' }).getPath(),
+        returnValue: iconsFolder.append({ path: 'return-value.png' }).getPath(),
+        string: iconsFolder.append({ path: 'string.png' }).getPath(),
+        tag: iconsFolder.append({ path: 'tag.png' }).getPath(),
+        true: iconsFolder.append({ path: 'true.png' }).getPath(),
+        undefined: iconsFolder.append({ path: 'undefined.png' }).getPath(),
     }
 }
 

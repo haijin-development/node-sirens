@@ -1,10 +1,11 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
-const LabelView = require('../../../../../src/skins/gtk-views/LabelView')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a Window', () => {
     it('instantiates an empty one', () => {
-        const window = Component.render( function(renderer) {
+        const window = namespace.ComponentRenderer.new().render( function(renderer) {
             this.window()
         })
 
@@ -12,13 +13,16 @@ describe('When using a Window', () => {
     })
 
     it('adds a sub-component', () => {
-        const window = Component.render( function(renderer) {
+        const window = namespace.ComponentRenderer.new().render( function(renderer) {
             this.window( function() {
                 this.label()
             })
         })
 
-        expect( window.getChildComponents().length ) .to .eql(1)
-        expect( window.getChildComponents()[0].getView().isBehavingAs(LabelView) ) .to .be .true
+        expect( window.getChildComponents() ) .count .to .eql(1)
+
+        expect( window.getChildComponents() ) .atIndex(0) .to .be .suchThat( (component) => {
+            expect( component.getView() ) .to .behaveAs( 'LabelView' )
+        })
     })
 })

@@ -1,10 +1,18 @@
 const expect = require('chai').expect
-const Component = require('../../../../../src/skins/components/Component')
+const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
+
+const namespace = SkinsNamespace.new()
 
 describe('When using a Text', () => {
+    let componentRenderer
+
+    beforeEach( () => {
+        componentRenderer = namespace.ComponentRenderer.new()
+    })
+
     describe('model', () => {
         it('has a ValueModel with an empty text', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 
@@ -12,7 +20,7 @@ describe('When using a Text', () => {
         })
 
         it('updates the view value when the model text changes', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 
@@ -25,7 +33,7 @@ describe('When using a Text', () => {
 
     describe( 'constructor', () =>{
         it('has a empty text', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 
@@ -33,7 +41,7 @@ describe('When using a Text', () => {
         })
 
         it('sets a text on its constructor', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text({ text: '123' })
             })
 
@@ -44,7 +52,7 @@ describe('When using a Text', () => {
 
     describe('styles', () => {
         it('sets and gets the width', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 
@@ -56,7 +64,7 @@ describe('When using a Text', () => {
         })
 
         it('sets and gets the height', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 
@@ -68,7 +76,7 @@ describe('When using a Text', () => {
         })
 
         it('sets and gets the wrapMode', () => {
-            const widget = Component.render( function(renderer) {
+            const widget = componentRenderer.render( function() {
                 this.text()
             })
 

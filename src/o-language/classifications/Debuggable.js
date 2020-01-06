@@ -2,7 +2,7 @@ const Classification = require('./Classification')
 const OInstance = require('./OInstance')
 const DebuggableProtocol = require('../protocols/DebuggableProtocol')
 const IndentedStringStream = require('./IndentedStringStream')
-const Sirens = require('../../Sirens')
+const {AnotherClassificationMustImplementMethod} = require('./Errors')
 
 /*
  Class(`
@@ -190,7 +190,7 @@ class Debuggable {
      ])
     */
     browse() {
-      Sirens.browseObject( this )
+        throw new AnotherClassificationMustImplementMethod()
     }
 }
 

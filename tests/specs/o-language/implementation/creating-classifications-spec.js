@@ -269,6 +269,7 @@ describe('The OInstance classification', () => {
             'getClassificationNamed',
             'getClassificationInstanceVariableValue',
             'withClassificationDo',
+            'setUnclassifiedProperty',
             'bindYourself',
             'beforeMethod',
             'afterMethod',

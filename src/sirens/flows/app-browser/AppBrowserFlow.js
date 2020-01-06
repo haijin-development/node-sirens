@@ -1,37 +1,64 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const ApplicationCommandsController = require('../ApplicationCommandsController')
-const Folder = require('../../objects/paths/Folder')
+const FolderPath = require('../../../O').FolderPath
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const FileInspectorFlow = require('../file-inspector/FileInspectorFlow')
+const Folder = require('../../objects/paths/Folder')
 const SourceFile = require('../../objects/SourceFile')
-const Sirens = require('../../../Sirens')
-const FolderChooser = require('../../../Skins').FolderChooser
 
 class AppBrowserFlow {
-
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['lastOpenedFolder']
+        this.instanceVariables = ['mainFlow', 'lastOpenedFolder']
         this.assumes = [ValueFlow]
+    }
+
+    initialize({ mainFlow: mainFlow }) {
+        this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+    }
+
+    // review in the next iteration
+    bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
+        return this.mainFlow.executeCommand({
+            id: commandName,
+            withAll: params,
+        })
     }
 
     /// Building
 
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
-
-        this.setCommandsController( commandsController )
-
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'pickAndOpenFolder',
+                    'openPlayground',
+                    'pickFolder',
+                    'openFolder',
+                    'getSelectedFilePath',
+                    'hasAClassSelected',
+                ],
+            })
 
-            this.whenObjectChanges( ({ newValue: appFolder }) => {
-                const filesTreeRoots = appFolder ? [ appFolder ] : []
+            this.acceptedBubbledUps({
+                commands: [
+                    'setIsBrowsingDocumentation',
+                    'showsUnformattedComments',
+                    'isEditingDocumentation',
+                    'isBrowsingDocumentation',
+                ],
+            })
+
+            this.whenObjectChanges( ({ newValue: appFolderPath }) => {
+                const filesTreeRoots = appFolderPath ? [ appFolderPath ] : []
 
                 thisFlow.getChildFlow({ id: 'windowTitle' })
-                    .setObject( appFolder )
+                    .setObject( appFolderPath )
                 thisFlow.getChildFlow({ id: 'filesTree' })
                     .setRoots({ items: filesTreeRoots })
             })
@@ -62,7 +89,7 @@ class AppBrowserFlow {
                 id: 'windowTitle',
                 convertToValueWith: ({ object: appFolder }) => {
                     return appFolder ?
-                        `App Browser - ${appFolder.getPath()}` :
+                        `App Browser - ${appFolder.getPath().getPath()}` :
                         'App Browser - No folder selected.'
                 },
             })
@@ -94,33 +121,15 @@ class AppBrowserFlow {
                 definedWith: FileInspectorFlow.new(),
             })
 
-        })
-    }
-
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'pickAndOpenFolder',
-                    'openPlayground',
-                    'pickFolder',
-                    'openFolder',
-                    'getSelectedFilePath',
-                    'hasAClassSelected',
-                ],
+            this.acceptedBubbledUps({
+                defaultHandler: function({ commandName: commandName, params: params }) {
+                    return thisFlow.bubbleUpCommandToMainFlow({
+                        commandName: commandName,
+                        params: params
+                    })
+                }
             })
 
-        })
-
-        this.acceptedBubbledUps({
-            commands: [
-                'setIsBrowsingDocumentation',
-                'showsUnformattedComments',
-                'isEditingDocumentation',
-                'isBrowsingDocumentation',
-            ],
         })
     }
 
@@ -128,11 +137,11 @@ class AppBrowserFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.pickAndOpenFolder',
-            'flow-commands.openPlayground',
-            'flow-commands.openFolder',
-            'flow-commands.getSelectedFilePath',
-            'flow-commands.hasAClassSelected',
+            'pickAndOpenFolder',
+            'openPlayground',
+            'openFolder',
+            'getSelectedFilePath',
+            'hasAClassSelected',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -154,11 +163,17 @@ class AppBrowserFlow {
     }
 
     openPlayground() {
-        Sirens.openPlayground()
+        this.mainFlow.executeCommand({
+            id: 'openPlayground',
+        })
     }
 
     pickFolder({ parentWindow: parentWindow }) {
-        const chosenFolder = FolderChooser.chooseFolder({
+        const namespace = this.mainFlow.executeCommand({
+            id: 'skinsNamespace',
+        })
+
+        const chosenFolder = namespace.FolderChooser.new().chooseFolder({
             title: 'Choose a folder',
             window: parentWindow,
             initialFolder: this.getLastOpenedFolder(),
@@ -167,8 +182,11 @@ class AppBrowserFlow {
         return chosenFolder        
     }
 
-    openFolder({ folderPath: folderPath }) {
-        const appFolder = folderPath ? Folder.new({ path: folderPath }) : null
+    openFolder({ folderPath: folderPath } = {}) {
+        const appFolder = folderPath ?
+            Folder.new({ path: FolderPath.new({ path: folderPath }) })
+            :
+            null
 
         if( folderPath !== null ) {
             this.lastOpenedFolder = folderPath
@@ -186,7 +204,7 @@ class AppBrowserFlow {
 
         if( ! currentSourceFile ) { return null }
 
-        return currentSourceFile.getFilePath()
+        return currentSourceFile.getFilePath().getPath()
     }
 
     hasAClassSelected() {

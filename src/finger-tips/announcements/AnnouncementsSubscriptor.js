@@ -1,11 +1,13 @@
 const Classification = require('../../O').Classification
 const EventEmitter = require('events')
+const ObjectWithNamespace = require('../../O').ObjectWithNamespace
 
 class AnnouncementsSubscriptor {
     /// Definition
 
     static definition() {
         this.instanceVariables = ['subscriptions']
+        this.assumes = [ObjectWithNamespace]
     }
 
     // Initializing

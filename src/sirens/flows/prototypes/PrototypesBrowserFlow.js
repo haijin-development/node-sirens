@@ -1,26 +1,49 @@
 const Classification = require('../../../O').Classification
-const ApplicationCommandsController = require('../ApplicationCommandsController')
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const ObjectProperty = require('../../objects/ObjectProperty')
 const ClassPropertiesFlow = require('./ClassPropertiesFlow')
-const Sirens = require('../../../Sirens')
 
 class PrototypesBrowserFlow {
     /// Definition
 
     static definition() {
-        this.instanceVariables = []
+        this.instanceVariables = ['mainFlow']
         this.assumes = [ValueFlow]
     }
 
+    initialize({ mainFlow: mainFlow }) {
+        this.mainFlow = mainFlow
+
+        this.previousClassificationDo( () => {
+            this.initialize()
+        })
+    }
+
+    bubbleUpCommandToMainFlow({ commandName: commandName, params: params }) {
+        return this.mainFlow.executeCommand({
+            id: commandName,
+            withAll: params,
+        })
+    }
+
     buildWith(flow) {
-        const commandsController = ApplicationCommandsController.new({ mainFlow: this })
-
-        this.setCommandsController( commandsController )
-
         flow.main({ id: 'propertiesBrowser' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.command({
+                id: 'browseSelectedPrototype',
+                enabledIf: function() {
+                    return thisFlow.hasAClassSelected()
+                },
+                whenActioned: thisFlow.browseSelectedPrototype.bind(thisFlow)
+            })
+
+            this.defineMethodsAsCommands({
+                methods: [
+                    'setBrowsedObject',
+                    'getSelectedClass',
+                    'hasAClassSelected',
+                ],
+            })
 
             this.whenObjectChanges( ({ newValue: object }) => {
                 const classes = thisFlow.getChildFlow({ id: 'classes' })
@@ -41,28 +64,17 @@ class PrototypesBrowserFlow {
                 id: 'playground',
                 definedWith: ClassPropertiesFlow.new(),
             })
-        })
-    }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-            this.command({
-                id: 'browseSelectedPrototype',
-                enabledIf: function() {
-                    return thisFlow.hasAClassSelected()
-                },
-                whenActioned: thisFlow.browseSelectedPrototype.bind(thisFlow)
+
+
+            this.acceptedBubbledUps({
+                defaultHandler: function({ commandName: commandName, params: params }) {
+                    return thisFlow.bubbleUpCommandToMainFlow({
+                        commandName: commandName,
+                        params: params
+                    })
+                }
             })
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'setBrowsedObject',
-                    'getSelectedClass',
-                    'hasAClassSelected',
-                ],
-            })
-
         })
     }
 
@@ -71,7 +83,7 @@ class PrototypesBrowserFlow {
     browseSelectedPrototype() {
         const selectedClass = this.getSelectedClass()
 
-        Sirens.browsePrototypes(selectedClass)
+        require('../../../Sirens').browsePrototypes(selectedClass)
     }
 
     hasAClassSelected() {

@@ -1,81 +1,105 @@
-const path = require('path')
-const nodeGtk = require('node-gtk')
-const Gtk = nodeGtk.require('Gtk', '3.0')
-const Gdk = nodeGtk.require('Gdk')
-const Preferences = require('./sirens/Preferences')
+const SirensFlow = require('./sirens/SirensFlow')
+const O = require('./O')
+
+const sirensFlowSingleton = SirensFlow.new()
+const sirensNamespace = sirensFlowSingleton.getChildFlow({ id: 'SirensNamespace' })
+
+
+// Create the MainFlow. All the application is built from this main object.
+// See the Sirens class implementation note for more details.
+const mainFlow = sirensFlowSingleton.asFlowPoint()
+
 
 /*
- Class(`
-    Sirens is a set of interactive browsers to ease learning, debugging and developing applications with Node.js.
+    Class(`
+       Sirens is a set of interactive browsers to ease learning, debugging and developing applications with Node.js.
 
-    It allows to inspect an object during the execution of an application, to browse its prototypes chain and,
-    if the object is an instace of a class, to browse the documentation of the class.
+       It allows to inspect an object during the execution of an application, to browse its prototypes chain and,
+       if the object is an instace of a class, to browse the documentation of the class.
 
-    The browsers can evaluate code on the fly allowing developers not only to read static documentation
-    but also to experiment with different uses of a given object, sending messages to it and inspecting the results.
+       The browsers can evaluate code on the fly allowing developers not only to read static documentation
+       but also to experiment with different uses of a given object, sending messages to it and inspecting the results.
 
-    Try it: with the mouse select the text below, open a context menu and choose 'Inspect selected code':
+       Try it: with the mouse select the text below, open a context menu and choose 'Inspect selected code':
 
-          [ 1, 2, 3 ].map( function(i) { return i * 10 })
+           [ 1, 2, 3 ].map( function(i) { return i * 10 })
 
-    This Sirens object  has the public methods of the library API.
+       This Sirens object  has the public methods of the library API.
 
-    To use the Sirens library in your application first require it with
+       To use the Sirens library in your application first require it with
 
-          const Sirens = require('sirens')
+           const Sirens = require('sirens')
 
-    and then call any of the methods in its API:
+       and then call any of the methods in its API:
 
+           const Sirens = require('sirens')
+
+           const anyObject = [ 1, 2, 3 ]
+
+           Sirens.browseObject( anyObject )
+
+       Please see the examples below for more details about the different browsers available.
+    `)
+
+    Implementation(`
+       This class is a thin wrapper on a SirensFlow singleton.
+
+       Would you like to tweak the current Sirens applications (to, for example, use a
+       different implementation of the Skins bindings or a different object browser) create
+       another file like this one customize the mainFlow
+
+           const SirensFlow = require('./sirens/SirensFlow')
+
+           const mainFlow = SirensFlow.new().asFlowPoint()
+           // configure and customize the mainFlow instance
+
+       and then define a covenient thin wrapper like the one in this file.
+
+       SirensFlow internally does not reference this class but access the main flow
+       and will correctly use the customizations and configurations.
+    `)
+
+    Example({
+       Description: `
+          Opens an interactive browser on an given object.
+       `,
+       Code: `
           const Sirens = require('sirens')
 
           const anyObject = [ 1, 2, 3 ]
 
           Sirens.browseObject( anyObject )
+       `,
+    })
 
-    Please see the examples below for more details about the different browsers available.
- `)
+    Example({
+       Description: `
+          Browses the functions defined on each prototype of an object of a given object.
 
- Example({
-    Description: `
-       Opens an interactive browser on an given object.
-    `,
-    Code: `
-       const Sirens = require('sirens')
+          The browser includes the function source code if available.
+       `,
+       Code: `
+          const Sirens = require('sirens')
 
-       const anyObject = [ 1, 2, 3 ]
+          const anyObject = [ 1, 2, 3 ]
 
-       Sirens.browseObject( anyObject )
-    `,
- })
+          Sirens.browsePrototypes( anyObject )
+       `,
+    })
 
- Example({
-    Description: `
-       Browses the functions defined on each prototype of an object of a given object.
+    Example({
+       Description: `
+          Opens an application browser.
 
-       The browser includes the function source code if available.
-    `,
-    Code: `
-       const Sirens = require('sirens')
+          A application browser allows to browse the files in a folder and for a selected file it shows
+          its source code and for some specific types of files it uses a custom visualization component.
+       `,
+       Code: `
+          const Sirens = require('sirens')
 
-       const anyObject = [ 1, 2, 3 ]
-
-       Sirens.browsePrototypes( anyObject )
-    `,
- })
-
- Example({
-    Description: `
-       Opens an application browser.
-
-       A application browser allows to browse the files in a folder and for a selected file it shows
-       its source code and for some specific types of files it uses a custom visualization component.
-    `,
-    Code: `
-       const Sirens = require('sirens')
-
-       Sirens.openAppBrowser()
-    `,
- })
+          Sirens.openAppBrowser()
+       `,
+    })
 */
 class Sirens {
     /*
@@ -112,11 +136,7 @@ class Sirens {
      ])
     */
     static browseObject(object) {
-        this.do( () => {
-            const ObjectBrowser = require('../src/sirens/components/object-browser/ObjectBrowser')
-
-            ObjectBrowser.openOn({object: object})
-        })
+        mainFlow.browseObject(object)
     }
 
     /*
@@ -155,11 +175,7 @@ class Sirens {
      ])
     */
     static browsePrototypes(object) {
-        this.do( () => {
-            const PrototypeBrowser = require('../src/sirens/components/prototype-browser/PrototypeBrowser')
-
-            PrototypeBrowser.openOn({prototype: object})
-        })
+        mainFlow.browsePrototypes(object)
     }
 
 
@@ -183,53 +199,7 @@ class Sirens {
      ])
     */
     static openAppBrowser({ appFolder: appFolder } = { appFolder: undefined }) {
-        this.do( () => {
-            const AppBrowser = require('../src/sirens/components/app-browser/AppBrowser')
-
-            AppBrowser.openOn({ appFolder: appFolder })
-        })
-    }
-
-    /*
-     Method(`
-        Opens a class documentation browser on the given JsClass.
-     `)
-
-     Param({
-        Name: `
-           jsClass
-        `,
-        Description: `
-           JsClass.
-           The JsClass object to browse its documentation.
-        `,
-     })
-
-     Param({
-        Name: `
-           methodName
-        `,
-        Description: `
-           Optional.
-           String, null or undefined.
-           A method name to open the browser on.
-           It is expected to be the name of a method defined in the given jsClass.
-        `,
-     })
-
-     Tags([
-        'browsers', 'public'
-     ])
-    */
-    static browseClassDocumentation({ jsClass: jsClass, methodName: methodName }) {
-        this.do( () => {
-            const ClassDocumentationBrowser = require('../src/sirens/components/documentation-browser/ClassDocumentationBrowser')
-
-            ClassDocumentationBrowser.openOn({
-              jsClass: jsClass,
-              methodName: methodName
-            })
-        })
+        mainFlow.openAppBrowser({ appFolder: appFolder })
     }
 
     /*
@@ -287,235 +257,99 @@ class Sirens {
      ])
     */
     static openPlayground({ filename: filename } = { filename: undefined }) {
-        this.do( () => {
-            const PlaygroundBrowser = require('../src/sirens/components/playground-browser/PlaygroundBrowser')
+        mainFlow.openPlayground({ filename: filename })
+    }
 
-            PlaygroundBrowser.openOn({ filename: filename })
+    /*
+        Method(`
+            Load all the expected plugins.
+        `)
+    */
+    static loadPlugins() {
+        this.loadObjectBrowserPlugins()
+        this.loadDocumentationFormatPlugins()
+        this.loadFileInspectorPlugins()
+    }
+
+    /*
+        Method(`
+            Load the ObjectBrowser plugins.
+
+            An ObjectBrowser plugin adds or modifies the way an object is displayed
+            and browsed by an ObjectBrowser.
+        `)
+    */
+    static loadObjectBrowserPlugins() {
+        // get the ObjectPropertyPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'ObjectPropertyPlugins' }).new()
+
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/object-browser'
+        })
+
+        folder.filesDo( (pluginFile) => {
+            const pluginClassification = require( pluginFile.getPath() )
+
+            objectPropertyPlugins.addPlugin( pluginClassification )
         })
     }
 
-    static openDocumentationBrowserOn({ object: selectedFileObject }) {
-        this.do( () => {
-            const DocumentationBrowser = require('../src/sirens/components/documentation-browser/DocumentationBrowser')
+    /*
+        Method(`
+            Load the Documentation format reader and writer plugins.
 
-            DocumentationBrowser.openOn({ object: selectedFileObject })
-        })      
+            An Documentation format plugin converts class and methods
+            documentation strings into ClassDocumentation and MethodDocumentation
+            objects, making the documentation available for the DocumentationBrowser.
+        `)
+    */
+    static loadDocumentationFormatPlugins() {
+        // get the DocumentationFormatPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'DocumentationFormatPlugins' }).new()
+
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/documentation-format'
+        })
+
+        folder.filesDo( (pluginFile) => {
+            const pluginClassification = require( pluginFile.getPath() )
+
+            objectPropertyPlugins.addDocumentationReader( pluginClassification )
+        })
     }
 
     /*
-     Method(`
-        Initializes GTK, or the GUI framework, and starts its main event loop.
+        Method(`
+            Load the FileInspector plugins.
 
-        Then it evaluates the given closure.
-
-        When all the windows are closed the event loop is released and the main program continues with its execution flow as usual.
-     `)
-
-     Param({
-        Name: `
-           closure
-        `,
-        Description: `
-           A closure to evaluate after GTK is initialized and its main event loop is running.
-
-           The closure has no parameters:
-
-                 () => {
-                       ...
-                 }
-        `,
-     })
-
-     Example({
-        Description: `
-           Creates a custom GUI Component and opens it in a window within a
-
-                 Sirens.do( () => {
-                       // ...
-                 })
-
-           call.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-           const Classification = require('sirens/src/O').Classification
-           const Component = require('sirens/src/skins/components/Component')
-           const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-
-           const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
-
-           class CustomComponent {
-               /// Definition
-
-               static definition() {
-                   this.instanceVariables = []
-                   this.assumes = [Component]
-                   this.implements = [ComponentProtocol_Implementation]
-                   this.classificationBehaviours = [ComponentInstantiator]
-               }
-
-               /// Building
-
-               renderWith(componentsRenderer) {
-                   componentsRenderer.render(function (component) {
-                       this.window( function() {
-                           this.styles({
-                               width: 100,
-                               height: 100,
-                           })
-
-                           this.label({text: 'A text label'})
-                       })
-                   })
-               }
-           }
-
-           CustomComponent = Classification.define(CustomComponent)
-
-           Sirens.do( () => {
-               CustomComponent.new().open()
-           })
-        `,
-     })
-
-     Tags([
-        'evaluating', 'public'
-     ])
+            A FileInspector plugin displays and browses a type of file, such as a
+            .js file, a js class file, a .json file, or a spec file with a browser
+            that the plugin defines.
+        `)
     */
-    static do(closure) {
-        if(this.gtkIsRunningTheMainLoop === true) {
-            closure.call(this)
-            return
-        }
+    static loadFileInspectorPlugins() {
+        // get the FileInspectorPlugins singleton
+        const objectPropertyPlugins =
+            sirensNamespace.getChildFlow({ id: 'FileInspectorPlugins' }).new()
 
-        try {
-            this.initialize()
+        const folder = O.FolderPath.new({
+            path: __dirname + '/../bin/plugins/file-inspector'
+        })
 
-            this.gtkIsRunningTheMainLoop = true
+        folder.filesDo( (pluginFile) => {
+            const pluginObject = require( pluginFile.getPath() )
 
-            closure.call(this)
-
-            Gtk.main()
-
-        } finally {
-            this.gtkIsRunningTheMainLoop = false
-        }
+            objectPropertyPlugins.addFileInspectorPlugin( pluginObject )
+        })
     }
 
-    /*
-     Method(`
-        Initializes the GTK library.
-
-        Usually this method is not called by the main program since the method
-
-              Sirens.do
-
-        calls it.
-
-        This mehtod can be safely called many times that the initialization will be evaluated only on the first call.
-
-               Sirens.initialize()
-     `)
-
-     Example({
-        Description: `
-           Initializes the Sirens library.
-        `,
-        Code: `
-           const Sirens = require('sirens')
-
-           Sirens.initialize()
-        `,
-     })
-
-     Tags([
-        'initializing', 'implementation'
-     ])
-    */
-    static initialize() {
-        if(this.gtkWasInitialize === true) {
-            return
-        }
-
-        this.gtkWasInitialize = true
-
-        nodeGtk.startLoop()
-        Gtk.init()
-
-        this.setGlobalStyles()
-    }
-
-    static setGlobalStyles() {
-      if( ! Preferences.cssFile ) { return }
-
-      const screen = Gdk.Screen.getDefault()
-
-      const cssProvider = new Gtk.CssProvider()
-
-      const cssFilePath = path.resolve( Preferences.cssFile )
-
-      cssProvider.loadFromPath( cssFilePath )
-
-      Gtk.StyleContext.addProviderForScreen(
-        screen,
-        cssProvider,
-        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-      )
-    }
-
-    /*
-     Method(`
-        This method is private and must not be called by the main program.
-
-        Every time a new Window or Dialog is opened this method is called to keep track of all of
-        the GTK windows opened.
-
-        The tracking of the opened windows is used to release the GTK main event loop once the last
-        opened window is closed by the user.
-     `)
-
-     Implementation(`
-        See also WindowView.initialize() method.
-     `)
-
-     Tags([
-        'implementation'
-     ])
-    */
-    static registerWindow() {
-        if(this.registeredWindows === undefined) {
-            this.registeredWindows = 0
-        }
-
-        this.registeredWindows += 1
-    }
-
-    /*
-     Method(`
-        This method is private and must not be called by the main program.
-
-        Every time a Window or Dialog is closed this method is called to keep track of all of
-        the GTK windows that remain opened.
-
-        The tracking of the opened windows is used to release the GTK main event loop once the last
-        opened window is closed by the user.
-     `)
-
-     Implementation(`
-        See also WindowView.handleDestroy() method.
-     `)
-
-     Tags([
-        'implementation'
-     ])
-    */
-    static unregisterWindow() {
-        this.registeredWindows -= 1
-
-        if(this.registeredWindows === 0) {
-            Gtk.mainQuit()
-        }
+    static namespace() {
+        return sirensNamespace
     }
 }
+
+Sirens.loadPlugins()
 
 module.exports = Sirens

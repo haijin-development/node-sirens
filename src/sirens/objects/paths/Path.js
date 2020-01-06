@@ -2,6 +2,11 @@ const path = require('path')
 const Classification = require('../../../O').Classification
 const PathProtocol = require('../../protocols/PathProtocol')
 
+/*
+    Wrapper on a path suitable for a tree folders browser.
+
+    It is not redundant with O.Path, it wraps it and adapts it to a tree component.
+*/
 class Path {
     /// Definition
 
@@ -12,8 +17,8 @@ class Path {
 
     /// Initializing
 
-    initialize({ path: appPath }) {
-        this.path = path.resolve(appPath)
+    initialize({ path: path }) {
+        this.path = path
     }
 
     /// Accessing
@@ -25,7 +30,7 @@ class Path {
     /// Querying
 
     getBaseName() {
-        return path.basename( this.path )
+        return this.path.getBaseName()
     }
 }
 

@@ -84,7 +84,7 @@ describe('When calling the afterMethod hook', () => {
 
         const afterMethodsCalled = object.getFirstProxyAfterMethodCalls()
 
-        expect( afterMethodsCalled.length ) .to .equal( 2 )
+        expect( afterMethodsCalled ) .count .to .equal( 2 )
 
         expect( afterMethodsCalled[0].proxy ) .to .eql( 'ShapeProxy' )
         expect( afterMethodsCalled[0].methodName ) .to .eql( 'setPosition' )

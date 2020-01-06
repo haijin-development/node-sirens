@@ -1,6 +1,5 @@
 const Classification = require('../../O').Classification
-const path = require('path')
-const fs = require('fs')
+const FilePath = require('../../O').FilePath
 const splitLines = require('split-lines')
 const StringStream = require('../../O').StringStream
 
@@ -21,7 +20,7 @@ class SourceFile {
             this.initialize()
         })
 
-        this.filepath = path.resolve(filepath)
+        this.filepath = FilePath.new({ path: filepath })
     }
 
     /// Accessing
@@ -31,29 +30,25 @@ class SourceFile {
     }
 
     getFileName() {
-        return path.basename(this.filepath)
+        return this.filepath.getFileName()
     }
 
     getFileContents() {
-        try {
-            return fs.readFileSync(this.filepath).toString()
-        } catch(e) {
-            return null
-        }
+        return this.filepath.readFileContents()
     }
 
     getFileType() {
-        return path.extname( this.filepath )
+        return this.filepath.getFileNameExtension()
     }
 
     /// Querying
 
     isFolder() {
-        return fs.existsSync( this.filepath ) && fs.statSync( this.filepath ).isDirectory()
+        return this.filepath.isFolderPath()
     }
 
     existsFile() {
-        return fs.existsSync( this.filepath )
+        return this.filepath.isFilePath() && this.filepath.exists()
     }
 
     getOriginalSourceCode({
@@ -100,7 +95,7 @@ class SourceFile {
     /// Actions
 
     saveFileContents(newFileContents) {
-        fs.writeFileSync( this.filepath, newFileContents )
+        this.filepath.writeFileContents( newFileContents )
     }
 }
 

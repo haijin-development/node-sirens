@@ -1,4 +1,5 @@
 const Classification = require('../../../O').Classification
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
@@ -9,6 +10,7 @@ class FileObject {
 
     static definition() {
         this.instanceVariables = ['childObjects', 'fileLocation']
+        this.assumes = [ObjectWithNamespace]
     }
 
     afterInstantiation() {

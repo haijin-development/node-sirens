@@ -65,7 +65,7 @@ describe('When dropping behaviour from an instance', () => {
 
         expect(object.respondsTo('getPosition')) .to .be .false
 
-        expect(object.classifications().length) .to .eql(1)
+        expect(object.classifications()) .count .to .eql(1)
     })
 
     it('does not drop other classifications', () => {
@@ -79,7 +79,7 @@ describe('When dropping behaviour from an instance', () => {
         expect(object.respondsTo('getPosition')) .to .be .true
         expect(object.respondsTo('getRadius')) .to .be .false
 
-        expect(object.classifications().length) .to .eql(2)
+        expect(object.classifications()) .count .to .eql(2)
     })
 
     it('does not fail if the classification was not previously added', () => {
@@ -89,6 +89,6 @@ describe('When dropping behaviour from an instance', () => {
 
         expect(object.respondsTo('getPosition')) .to .be .false
 
-        expect(object.classifications().length) .to .eql(1)
+        expect(object.classifications()) .count .to .eql(1)
     })
 })

@@ -1,12 +1,11 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const JsClassDocumentationFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassDocumentationFlow')
-const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassInspectorFlow')
-
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
+
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
+
 
 describe('When using an JsClassDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -20,12 +19,13 @@ describe('When using an JsClassDocumentationFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        const sourceFile = SourceFile.new({ filepath: filePath  })
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
         jsClass = jsFile.getClasses()[0]
-        classDocumentation = jsClass.getDocumentation()
+        classDocumentation =
+            namespace.DocumentationReader.new().readClassDocumentationFrom({ jsClass: jsClass })
 
         flow = createClassDocumentationFlow()
     })
@@ -39,22 +39,21 @@ describe('When using an JsClassDocumentationFlow', () => {
             'main.documentationIndex',
             'main.documentationIndex.selectedDocumentationItem',
 
-            'main.flow-commands',
-            'main.flow-commands.getClassDocumentation',
-            'main.flow-commands.getClassName',
-            'main.flow-commands.getClassDescription',
-            'main.flow-commands.getClassImplementationNotes',
-            'main.flow-commands.getClassExamples',
-            'main.flow-commands.getSelectedDocumentationItemFlowPoint',
-            'main.flow-commands.getSelectedDocumentationItemComponent',
-            'main.flow-commands.isInEditionMode',
-            'main.flow-commands.editClassDocumentationDescription',
-            'main.flow-commands.createClassDocumentationImplementationNote',
-            'main.flow-commands.editClassDocumentationImplementationNote',
-            'main.flow-commands.deleteClassDocumentationImplementationNote',
-            'main.flow-commands.createClassDocumentationExample',
-            'main.flow-commands.editClassDocumentationExample',
-            'main.flow-commands.deleteClassDocumentationExample',
+            'main.getClassDocumentation',
+            'main.getClassName',
+            'main.getClassDescription',
+            'main.getClassImplementationNotes',
+            'main.getClassExamples',
+            'main.getSelectedDocumentationItemFlowPoint',
+            'main.getSelectedDocumentationItemComponent',
+            'main.isInEditionMode',
+            'main.editClassDocumentationDescription',
+            'main.createClassDocumentationImplementationNote',
+            'main.editClassDocumentationImplementationNote',
+            'main.deleteClassDocumentationImplementationNote',
+            'main.createClassDocumentationExample',
+            'main.editClassDocumentationExample',
+            'main.deleteClassDocumentationExample',
         ])
     })
 
@@ -99,6 +98,14 @@ describe('When using an JsClassDocumentationFlow', () => {
     describe('when updating the method documentation', () => {
         beforeEach( () => {
             const classInspectorFlow = createClassInspectorFlow()
+
+            // stub the .mainNamespace() for these tests since that namespace is
+            // bubbled up and in the context of this tests FileInspectorFlow does
+            // no have a parent flow.
+            classInspectorFlow.setUnclassifiedProperty({
+                name: 'mainNamespace',
+                value: function() { return namespace }
+            })        
 
             classInspectorFlow.setInspectedObject( jsClass )
 
@@ -176,9 +183,9 @@ describe('When using an JsClassDocumentationFlow', () => {
 })
 
 function createClassDocumentationFlow() {
-    const classDocumentationFlow = JsClassDocumentationFlow.new()
+    const classDocumentationFlow = namespace.JsClassDocumentationFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: classDocumentationFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: classDocumentationFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     classDocumentationFlow.setCommandsController( commandsController )
@@ -187,9 +194,9 @@ function createClassDocumentationFlow() {
 }
 
 function createClassInspectorFlow() {
-    const classInspectorFlow = JsClassInspectorFlow.new()
+    const classInspectorFlow = namespace.JsClassInspectorFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: classInspectorFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: classInspectorFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     classInspectorFlow.setCommandsController( commandsController )

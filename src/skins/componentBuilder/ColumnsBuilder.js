@@ -1,6 +1,5 @@
 const Classification = require('../../O').Classification
 const WidgetBuilder = require('./WidgetBuilder')
-const Column = require('./Column')
 
 /*
  Class(`
@@ -143,7 +142,7 @@ class ColumnsBuilder {
      ])
     */
     column(columnProps) {
-        const column = Column.new(columnProps)
+        const column = this.namespace().Column.new(columnProps)
 
         this.getProps().columns.push(column)
     }

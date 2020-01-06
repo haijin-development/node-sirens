@@ -1,9 +1,7 @@
 const Classification = require('../../../O').Classification
 const UpdatingModel = require('../UpdatingModel')
 const Widget = require('../Widget')
-const CheckBoxView = require('../../gtk-views/CheckBoxView')
 const CheckBoxProtocol_Implementation = require('../../protocols/CheckBoxProtocol_Implementation')
-const ValueModel = require('../../../finger-tips/models/ValueModel')
 
 class CheckBox {
     /// Definition
@@ -20,13 +18,17 @@ class CheckBox {
         const value = this.getProps().value !== undefined ? 
                         this.getProps().value : this.defaultModelValue()
 
-        return ValueModel.new({ value: value })
+        return this.namespace().Models.ValueModel.new({ value: value })
     }
 
     createView() {
-        return CheckBoxView.new({
+        const view = this.namespace().Views.CheckBoxView.new({
             onClicked: this.handleClicked.bind(this)
         })
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

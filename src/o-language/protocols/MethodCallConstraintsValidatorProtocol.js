@@ -4,18 +4,6 @@ class MethodCallConstraintsValidatorProtocol {
 
 	/*
 		Method(`
-			Declares one or more constraints that the receiver object is expected to meet right before
-			the method call activation.
-		`)
-
- 		Tags([
-    		'public', 'dsl'
- 		])
-	*/
-	preConditions(receiverConstraintsClosure) {}
-
-	/*
-		Method(`
 			Declares one or more constraints that the given parameter is expected to meet right before
 			the method call activation.
 		`)
@@ -25,18 +13,6 @@ class MethodCallConstraintsValidatorProtocol {
  		])
 	*/
 	param(parameter) {}
-
-	/*
-		Method(`
-			Declares one or more constraints that the receiver object is expected to meet right after
-			the method call activation.
-		`)
-
- 		Tags([
-    		'public', 'dsl'
- 		])
-	*/
-	postConditions(receiverConstraintsClosure) {}
 
     /*
     	Method(`

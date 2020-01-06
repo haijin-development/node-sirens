@@ -1,5 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 
 class ObjectInspectorFlow {
     /// Definition
@@ -60,6 +60,14 @@ class ObjectInspectorFlow {
         })
 
         return result
+    }
+
+    mainNamespace() {
+        const result = this.bubbleUp({
+            command: 'mainNamespace',
+        })
+
+        return result        
     }
 }
 

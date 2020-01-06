@@ -874,6 +874,51 @@ class OInstance {
     }
 
     /*
+      Method(`
+        Sets the given value to the property of object with no classification.
+
+        In some circumstances the developer might want to set a property value to the
+        object itself instead of to any Classification. A reason could be that the
+        object handles some dynamic properties on a per instance basis.
+
+        In Javascript that is accomplished doing
+
+          this.xyz = value
+
+        In the scope of a Classification method that won't work because 'this' points to
+        that Classification lookup table:
+
+          setXyz(value) {
+            this.xyz = value
+          }
+
+        sets the value to the Classification instance variable named 'xyz'.
+
+        Using
+
+          setXyz(value) {
+            this.setUnclassifiedProperty({
+              name: 'xyz',
+              value: value,
+            })
+          }
+
+        adds the unclassified property 'xyz' to the object.
+
+        The property can later be read with
+
+          object.xyz
+      `)
+    */
+    setUnclassifiedProperty({ name: propertyName, value: value }) {
+        return MessageDispatcherInstance.setUnclassifiedProperty({
+          object: this,
+          name: propertyName,
+          value: value
+        })
+    }
+
+    /*
      Method(`
         Evaluates the given closure binding
 

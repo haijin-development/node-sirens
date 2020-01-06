@@ -1,12 +1,10 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const JsMethodDocumentationFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsMethodDocumentationFlow')
-const JsMethodInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsMethodInspectorFlow')
-
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
+
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 describe('When using an JsMethodDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -20,12 +18,14 @@ describe('When using an JsMethodDocumentationFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        const sourceFile = SourceFile.new({ filepath: filePath  })
-        const sourceFileParser = SourceFileStructureParser.new()
+        const sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        const sourceFileParser = namespace.SourceFileStructureParser.new()
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
         jsMethod = jsFile.getMethods()[0]
-        methodDocumentation = jsMethod.getDocumentation()
+
+        methodDocumentation = namespace.DocumentationReader.new()
+            .readMethodDocumentationFrom({ jsMethod: jsMethod })
 
         flow = createMethodDocumentationFlow()
     })
@@ -39,30 +39,29 @@ describe('When using an JsMethodDocumentationFlow', () => {
             'main.documentationIndex',
             'main.documentationIndex.selectedDocumentationItem',
 
-            'main.flow-commands',
-            'main.flow-commands.getSelectedDocumentationItemFlowPoint',
-            'main.flow-commands.getSelectedDocumentationItemComponent',
-            'main.flow-commands.getMethodDocumentation',
-            'main.flow-commands.getMethodExamples',
-            'main.flow-commands.getMethodImplementationNotes',
-            'main.flow-commands.getMethodParams',
-            'main.flow-commands.getMethodReturnValue',
-            'main.flow-commands.getMethodDescription',
-            'main.flow-commands.getMethodSignature',
-            'main.flow-commands.getTagsSortedByPriority',
-            'main.flow-commands.isInEditionMode',
-            'main.flow-commands.createMethodDocumentationExample',
-            'main.flow-commands.createMethodDocumentationImplementationNote',
-            'main.flow-commands.createMethodDocumentationParam',
-            'main.flow-commands.editMethodDocumentationDescription',
-            'main.flow-commands.editMethodDocumentationExample',
-            'main.flow-commands.editMethodDocumentationImplementationNote',
-            'main.flow-commands.editMethodDocumentationParam',
-            'main.flow-commands.editMethodDocumentationReturnValue',
-            'main.flow-commands.editMethodTags',
-            'main.flow-commands.deleteMethodDocumentationImplementationNote',
-            'main.flow-commands.deleteMethodDocumentationParam',
-            'main.flow-commands.deleteMethodDocumentationExample',
+            'main.getSelectedDocumentationItemFlowPoint',
+            'main.getSelectedDocumentationItemComponent',
+            'main.getMethodDocumentation',
+            'main.getMethodExamples',
+            'main.getMethodImplementationNotes',
+            'main.getMethodParams',
+            'main.getMethodReturnValue',
+            'main.getMethodDescription',
+            'main.getMethodSignature',
+            'main.getTagsSortedByPriority',
+            'main.isInEditionMode',
+            'main.createMethodDocumentationExample',
+            'main.createMethodDocumentationImplementationNote',
+            'main.createMethodDocumentationParam',
+            'main.editMethodDocumentationDescription',
+            'main.editMethodDocumentationExample',
+            'main.editMethodDocumentationImplementationNote',
+            'main.editMethodDocumentationParam',
+            'main.editMethodDocumentationReturnValue',
+            'main.editMethodTags',
+            'main.deleteMethodDocumentationImplementationNote',
+            'main.deleteMethodDocumentationParam',
+            'main.deleteMethodDocumentationExample',
         ])
     })
 
@@ -109,6 +108,14 @@ describe('When using an JsMethodDocumentationFlow', () => {
 
         beforeEach( () => {
             methodInspectorFlow = createMethodInspectorFlow()
+
+            // stub the .mainNamespace() for these tests since that namespace is
+            // bubbled up and in the context of this tests FileInspectorFlow does
+            // no have a parent flow.
+            methodInspectorFlow.setUnclassifiedProperty({
+                name: 'mainNamespace',
+                value: function() { return namespace }
+            })        
 
             methodInspectorFlow.setInspectedObject( jsMethod )
 
@@ -224,9 +231,9 @@ describe('When using an JsMethodDocumentationFlow', () => {
 })
 
 function createMethodDocumentationFlow() {
-    const documentationFlow = JsMethodDocumentationFlow.new()
+    const documentationFlow = namespace.JsMethodDocumentationFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: documentationFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: documentationFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     documentationFlow.setCommandsController( commandsController )
@@ -235,9 +242,9 @@ function createMethodDocumentationFlow() {
 }
 
 function createMethodInspectorFlow() {
-    const methodInspectorFlow = JsMethodInspectorFlow.new()
+    const methodInspectorFlow = namespace.JsMethodInspectorFlow.new()
 
-    const commandsController = ApplicationCommandsController.new({ mainFlow: methodInspectorFlow })
+    const commandsController = namespace.ApplicationCommandsController.new({ mainFlow: methodInspectorFlow })
         .behaveAs( UnhandledBubbledUpCommandHandler )
 
     methodInspectorFlow.setCommandsController( commandsController )

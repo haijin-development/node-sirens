@@ -1,93 +1,78 @@
 const Classification = require('../../../O').Classification
-const ClassDocumentation = require('./ClassDocumentation')
-const MethodDocumentation = require('./MethodDocumentation')
+const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 class DocumentationReader {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = []
+        this.assumes = [ObjectWithNamespace]
+    }
+
+    readClassDocumentationFrom({ jsClass: jsClass }) {
+        const commentBodyContents = jsClass.getClassComment().getBodyContents()
+
+        return this.readClassDocumentationFromString({
+            string: commentBodyContents,
+            className: jsClass.getClassName(),
+        })
+    }
+
+    readMethodDocumentationFrom({ jsMethod: jsMethod }) {
+        const commentBodyContents = jsMethod.getMethodComment().getBodyContents()
+
+        return this.readMethodDocumentationFromString({
+            string: commentBodyContents,
+            methodName: jsMethod.getMethodName(),
+            params: jsMethod.getMethodParams(),
+        })
     }
 
     readClassDocumentationFromString({ string: documentationString, className: className }) {
-        const Pluggables = require('../../Pluggables')
+        const documentationReaderPlugins =
+            this.namespace().DocumentationFormatPlugins.new()
 
-        const classDocumentation = ClassDocumentation.new()
+        return documentationReaderPlugins.pickReaderForClass({
+            className: className,
+            documentationString: documentationString,
+            ifFound: (classDocumentation) => {
+                return classDocumentation 
+            },
+            ifNotFound: () => {
+                const classDocumentation = this.namespace().ClassDocumentation.new()
 
-        classDocumentation.setClassName( className )
-
-        const documentationReaderClassifications = Pluggables.documentationFormats.available
-
-        for( const readerClassification of documentationReaderClassifications ) {
-
-            try {
-                const documentationReader = readerClassification.new()
-
-                documentationReader.readClassDocumentationFromString({
-                    string: documentationString,
-                    into: classDocumentation
-                })
-
-                // Attaching this behaviour the classDocumentation already knows how to write itself back to its
-                // original format
-                classDocumentation.behaveAs( readerClassification )
+                classDocumentation.setClassName( className )
+                classDocumentation.setDescriptionFrom({ text: documentationString })
 
                 return classDocumentation
-
-            } catch( e ) {}
-        }
-
-        classDocumentation.setDescriptionFrom({ text: documentationString })
-
-        return classDocumentation
+            }
+        })
     }
 
     readMethodDocumentationFromString({
         string: documentationString, methodName: methodName, params: params
     })
     {
-        const Pluggables = require('../../Pluggables')
+        const documentationReaderPlugins =
+            this.namespace().DocumentationFormatPlugins.new()
 
-        const methodDocumentation = MethodDocumentation.new()
+        return documentationReaderPlugins.pickReaderForMethod({
+            methodName: methodName,
+            documentationString: documentationString,
+            ifFound: (methodDocumentation) => {
+                methodDocumentation.setMethodParams( params )
+                return methodDocumentation 
+            },
+            ifNotFound: () => {
+                const methodDocumentation = this.namespace().MethodDocumentation.new()
 
-        methodDocumentation.setMethodName( methodName )
-        methodDocumentation.setMethodParams( params )
-
-        const documentationReaderClassifications = Pluggables.documentationFormats.available
-
-        for( const readerClassification of documentationReaderClassifications ) {
-
-            try {
-                const documentationReader = readerClassification.new({ methodDocumentation: methodDocumentation })
-                
-                documentationReader.readMethodDocumentationFromString({
-                    string: documentationString,
-                    into: methodDocumentation
-                })
-
-                // Attaching this behaviour the methodDocumentation already knows how to write itself back to its
-                // original format
-                methodDocumentation.behaveAs( readerClassification )
+                methodDocumentation.setMethodName( methodName )
+                methodDocumentation.setMethodParams( params )
+                methodDocumentation.setDescriptionFrom({ text: documentationString })
 
                 return methodDocumentation
-
-            } catch( e ) {}
-        }
-
-        methodDocumentation.setDescriptionFrom({ text: documentationString })
-
-        return methodDocumentation
+            }
+        })
     }
 }
 
-DocumentationReader = Classification.define(DocumentationReader)
-
-DocumentationReader.readClassDocumentationFromString = function(...params) {
-    return this.new().readClassDocumentationFromString( ...params )
-}
-
-DocumentationReader.readMethodDocumentationFromString = function(...params) {
-    return this.new().readMethodDocumentationFromString( ...params )
-}
-
-module.exports = DocumentationReader
+module.exports = Classification.define(DocumentationReader)

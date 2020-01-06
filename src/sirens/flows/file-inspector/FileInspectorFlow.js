@@ -1,14 +1,8 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 
 const FolderObject = require('../../objects/file-structure/FolderObject')
-
-const SourceFileStructureParser = require('../../objects/SourceFileStructureParser')
-const UknownFileStructure = require('../../objects/file-structure/UknownFileStructure')
-
 const TextualContentInspectorFlow = require('../file-object-inspectors/TextualContentInspectorFlow')
-const JsClassInspectorFlow = require('../file-object-inspectors/JsClassInspectorFlow')
-const JsMethodInspectorFlow = require('../file-object-inspectors/JsMethodInspectorFlow')
 
 class FileInspectorFlow {
     /// Definition
@@ -23,7 +17,20 @@ class FileInspectorFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getSourceFile',
+                    'getSelectedFileObject',
+                    'getFileObjectComponent',
+                    'getFileObjectInspectorFlow'
+                ],
+            })
+
+            this.acceptedBubbledUps({
+                commands: [
+                    'reloadSourceFile',
+                ]
+            })
 
             this.whenObjectChanges( ({ newValue: sourceFile }) => {
                 const fileObjects = this.getChildFlow({ id: 'fileObjects' })
@@ -70,40 +77,9 @@ class FileInspectorFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getSourceFile',
-                    'getSelectedFileObject',
-                    'getFileObjectComponent',
-                ],
-            })
-
-            // This is a Command to allow the main application to override it.
-            this.command({
-                id: 'getFileObjectInspectorFlow',
-                whenActioned: function({ fileObject: fileObject }) {
-                    if( fileObject && fileObject.respondsTo('isJsClass') ) {
-                        return JsClassInspectorFlow.new()
-                    }
-
-                    if( fileObject && fileObject.respondsTo('isJsMethod') ) {
-                        return JsMethodInspectorFlow.new()
-                    }
-
-                    return TextualContentInspectorFlow.new()
-                }
-            })
-
-        })
-
-        this.acceptedBubbledUps({
-            commands: [
-                'reloadSourceFile',
-            ]
+    mainNamespace() {
+        return this.bubbleUp({
+            command: 'mainNamespace'
         })
     }
 
@@ -111,10 +87,10 @@ class FileInspectorFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getSourceFile',
-            'flow-commands.getSelectedFileObject',
-            'flow-commands.getFileObjectInspectorFlow',
-            'flow-commands.getFileObjectComponent',
+            'getSourceFile',
+            'getSelectedFileObject',
+            'getFileObjectInspectorFlow',
+            'getFileObjectComponent',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -151,13 +127,6 @@ class FileInspectorFlow {
                     .setSelection(pathToObject)
     }
 
-    getFileObjectInspectorFlow({ fileObject: fileObject }) {
-        return this.executeCommand({
-            id: 'getFileObjectInspectorFlow',
-            with: { fileObject: fileObject },
-        })
-    }
-
     getFileObjectComponent() {
         const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFileObject' })
 
@@ -169,12 +138,15 @@ class FileInspectorFlow {
             return FolderObject.new()
         }
 
-        try {
-            return SourceFileStructureParser.new()
-                .parseSourceFile({ sourceFile: sourceFile })
-        } catch(error) {
-            return UknownFileStructure.new()
-        }
+        const namespace = this.mainNamespace()
+
+        const fileStructuredContentsParser =
+            namespace.SourceFileStructureParser.new()
+
+        return fileStructuredContentsParser.parseSourceFile({
+                sourceFile: sourceFile,
+                onParsingErrorDo: function() { return namespace.UknownFileStructure.new() },
+            })
     }
 
     setShowUnformattedComments({ value: boolean }) {
@@ -198,6 +170,17 @@ class FileInspectorFlow {
         })
 
         fileObjectsTree.setSelectionIndexPath({ indexPath: currentSelectionIndexPath })
+    }
+
+    getFileObjectInspectorFlow({ fileObject: fileObject }){
+        if( ! fileObject ) { return TextualContentInspectorFlow.new() }
+
+        const fileObjectInspectorFlowPicker = 
+            this.mainNamespace().FileInspectorPlugins.new()
+
+        return fileObjectInspectorFlowPicker.pickFileObjectInspectorFlowFor({
+            fileObject: fileObject,
+        })
     }
 }
 

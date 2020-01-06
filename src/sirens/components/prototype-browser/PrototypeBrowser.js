@@ -1,9 +1,6 @@
 const Classification = require('../../../O').Classification
-const Component = require('../../../Skins').Component
-const ComponentProtocol_Implementation = require('../../../Skins').ComponentProtocol_Implementation
-const ComponentInstantiator = require('../../../Skins').ComponentInstantiator
-const Sirens = require('../../../Sirens')
-const PrototypesBrowserFlow = require('../../flows/prototypes/PrototypesBrowserFlow')
+const Component = require('../../../skins/components/Component')
+const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 const ClassPropertiesComponent = require('./ClassPropertiesComponent')
 
 const Resource = require('../../objects/Resource')
@@ -15,19 +12,6 @@ class PrototypeBrowser {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
-    }
-
-    /// Initializing
-
-    defaultModel() {
-        const object = this.getProps().prototype
-
-        const flow = PrototypesBrowserFlow.new().asFlowPoint()
-
-        flow.setBrowsedObject( object )
-
-        return flow
     }
 
     /// Icons

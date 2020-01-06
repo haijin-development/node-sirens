@@ -1,13 +1,10 @@
 const Classification = require('../../O').Classification
 const ComponentBehaviour = require('./ComponentBehaviour')
-const ComponentView = require('../gtk-views/ComponentView')
-const ComponentRenderer = require('../componentBuilder/ComponentRenderer')
 
 const ComponentProtocol = require('../protocols/ComponentProtocol')
 const ComponentBehaviourProtocol_Implementation = require('../protocols/ComponentBehaviourProtocol_Implementation')
 
 const ComponentProtocol_Implementation = require('../protocols/ComponentProtocol_Implementation')
-const ComponentInstantiator = require('./ComponentInstantiator')
 
 /*
  Class(`
@@ -22,23 +19,6 @@ const ComponentInstantiator = require('./ComponentInstantiator')
     	- it assigns a meaningful and descriptive name to the Component
 
     A Component can be configured and parametrized when it is created through its properties.
-
-
-
-    To make a Component a top level component, such as a Window or Dialog, make the Component itself to behave as a
-    ComponentInstantiator:
-
-    	static definition() {
-    		...
-    		this.classificationBehaviours = [ComponentInstantiator]
-    	}
-
-    and then open it with
-
-    	CustomComponent.open()
-
-    See the first example for more details.
-
  `)
 
  Implementation(`
@@ -57,7 +37,6 @@ const ComponentInstantiator = require('./ComponentInstantiator')
        const Classification = require('sirens/src/O').Classification
        const Component = require('sirens/src/skins/components/Component')
        const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-       const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
 
        class CustomComponent {
        	/// Definition
@@ -66,7 +45,6 @@ const ComponentInstantiator = require('./ComponentInstantiator')
        		this.instanceVariables = []
        		this.assumes = [Component]
        		this.implements = [ComponentProtocol_Implementation]
-       		this.classificationBehaviours = [ComponentInstantiator]
        	}
 
        	/// Building
@@ -89,7 +67,7 @@ const ComponentInstantiator = require('./ComponentInstantiator')
 
        CustomComponent = Classification.define(CustomComponent)
 
-       CustomComponent.open()
+       CustomComponent.new().open()
     `,
  })
 */
@@ -110,70 +88,13 @@ class Component {
         this.assumes = [ComponentBehaviour]
         this.implements = [ComponentBehaviourProtocol_Implementation, ComponentProtocol]
         this.expects = [ComponentProtocol_Implementation]
-        this.classificationBehaviours = [ComponentInstantiator]
     }
 
     /// Initializing
 
-    /*
-     Method(`
-        Initializes a Component object with the props given in the
-
-        		.new(props)
-
-        method.
-     `)
-
-     Example({
-        Description: `
-           Creates a new Component object with given properties and gets them.
-        `,
-        Code: `
-           const Classification = require('sirens/src/O').Classification
-           const Component = require('sirens/src/skins/components/Component')
-           const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-
-           class CustomComponent {
-           	/// Definition
-
-           	static definition() {
-           		this.instanceVariables = []
-           		this.assumes = [Component]
-           		this.implements = [ComponentProtocol_Implementation]
-           		this.classificationBehaviours = []
-           	}
-
-           	/// Building
-
-           	renderWith(componentsRenderer) {
-           		componentsRenderer.render(function (component) {
-           			this.checkBox({ label: 'A checkbox' })
-           		})
-           	}
-
-           }
-
-           CustomComponent = Classification.define(CustomComponent)
-
-           // Create a CustomComponent object with some props
-
-           const component = CustomComponent.new({
-           	title: 'A title',
-           	color: 'blue',
-           	onClicked: () => {},
-           })
-
-           component.getProps()
-        `,
-     })
-
-     Tags([
-        'initializing', 'public'
-     ])
-    */
-    initialize(props = {}) {
+    assemble() {
         this.previousClassificationDo( () => {
-            this.initialize(props)
+            this.assemble()
         })
 
         this.reRenderWhen()
@@ -212,7 +133,6 @@ class Component {
            const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/skins/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-           const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
            const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
            // Create a model external to the Component
            const model1 = ValueModel.new({ value: 'Text 1' })
@@ -266,7 +186,6 @@ class Component {
            		this.instanceVariables = []
            		this.assumes = [Component]
            		this.implements = [ComponentProtocol_Implementation]
-           		this.classificationBehaviours = [ComponentInstantiator]
            	}
            	/// Building
 
@@ -328,7 +247,6 @@ class Component {
            const Classification = require('sirens/src/O').Classification
            const Component = require('sirens/src/skins/components/Component')
            const ComponentProtocol_Implementation = require('sirens/src/skins/protocols/ComponentProtocol_Implementation')
-           const ComponentInstantiator = require('sirens/src/skins/components/ComponentInstantiator')
            const ValueModel = require('sirens/src/finger-tips/models/ValueModel')
 
            class Window {
@@ -338,7 +256,6 @@ class Component {
            		this.instanceVariables = []
            		this.assumes = [Component]
            		this.implements = [ComponentProtocol_Implementation]
-           		this.classificationBehaviours = [ComponentInstantiator]
            	}
            	defaultModel() {
            		return ValueModel.new({ value: 'Text 1' })
@@ -450,7 +367,8 @@ class Component {
      ])
     */
     build() {
-        const componentsRenderer = ComponentRenderer.new({ rootComponent: this })
+        const componentsRenderer =
+          this.namespace().ComponentRenderer.new({ rootComponent: this })
 
         this.renderWith(componentsRenderer)
     }
@@ -470,7 +388,11 @@ class Component {
      ])
     */
     createView() {
-        return ComponentView.new()
+        const view = this.namespace().Views.ComponentView.new()
+
+        view.assemble()
+
+        return view
     }
 
     /*
@@ -632,6 +554,8 @@ Tags([
      ])
     */
     open() {
+        this.assemble()
+
         return this.getMainComponent().open()
     }
 }

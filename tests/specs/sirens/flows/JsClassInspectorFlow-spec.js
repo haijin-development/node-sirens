@@ -1,13 +1,12 @@
 const expect = require('chai').expect
 const FilesRepository = require('../FilesRepository')
-const JsClassInspectorFlow = require('../../../../src/sirens/flows/file-object-inspectors/JsClassInspectorFlow')
-
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const ApplicationCommandsController = require('../../../../src/sirens/flows/ApplicationCommandsController')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
 
-describe('When using an JsClassInspectorFlow', () => {
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
+
+describe('When using an namespace.JsClassInspectorFlow.new', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
 
     let filePath
@@ -22,18 +21,32 @@ describe('When using an JsClassInspectorFlow', () => {
         FilesRepository.manageFile({ file: fileSample })
 
         filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = SourceFile.new({ filepath: filePath  })
-        sourceFileParser = SourceFileStructureParser.new()
+        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsClass = jsFile.getClasses()[0]
 
-        flow = JsClassInspectorFlow.new()
+        flow = namespace.JsClassInspectorFlow.new()
 
         const commandsController =
-            ApplicationCommandsController.new({ mainFlow: flow })
+            namespace.ApplicationCommandsController.new({ mainFlow: flow })
                 .behaveAs( UnhandledBubbledUpCommandHandler )
 
         flow.setCommandsController( commandsController )
+
+        // stub the .mainNamespace() for these tests since that namespace is
+        // bubbled up and in the context of this tests FileInspectorFlow does
+        // no have a parent flow.
+        flow.setUnclassifiedProperty({
+            name: 'mainNamespace',
+            value: function() { return namespace }
+        })        
+
+        flow.acceptAllBubbledUps({
+            defaultHandler: function({ commandName: commandName, params: params }) {
+                return namespace
+            }
+        })
     })
 
     after( () => {
@@ -46,36 +59,34 @@ describe('When using an JsClassInspectorFlow', () => {
             'main.classMethods.selectedMethod',
             'main.selectedTags',
 
-            'main.flow-commands',
-            'main.flow-commands.getClass',
-            'main.flow-commands.getMethodUnformattedComment',
-            'main.flow-commands.getAllMethodsTagLabels',
-            'main.flow-commands.showsUnformattedComments',
-            'main.flow-commands.isInEditionMode',
-            'main.flow-commands.editClassUnformattedComment',
-            'main.flow-commands.isBrowsingDocumentation',
-            'main.flow-commands.setIsBrowsingDocumentation',
+            'main.getClass',
+            'main.getMethodUnformattedComment',
+            'main.getAllMethodsTagLabels',
+            'main.showsUnformattedComments',
+            'main.isInEditionMode',
+            'main.editClassUnformattedComment',
+            'main.isBrowsingDocumentation',
+            'main.setIsBrowsingDocumentation',
 
             'main.classDocumentation',
             'main.classDocumentation.documentationIndex',
             'main.classDocumentation.documentationIndex.selectedDocumentationItem',
 
-            'main.classDocumentation.flow-commands',
-            'main.classDocumentation.flow-commands.getClassDocumentation',
-            'main.classDocumentation.flow-commands.getClassName',
-            'main.classDocumentation.flow-commands.getClassDescription',
-            'main.classDocumentation.flow-commands.getClassImplementationNotes',
-            'main.classDocumentation.flow-commands.getClassExamples',
-            'main.classDocumentation.flow-commands.getSelectedDocumentationItemFlowPoint',
-            'main.classDocumentation.flow-commands.getSelectedDocumentationItemComponent',
-            'main.classDocumentation.flow-commands.isInEditionMode',
-            'main.classDocumentation.flow-commands.createClassDocumentationExample',
-            'main.classDocumentation.flow-commands.createClassDocumentationImplementationNote',
-            'main.classDocumentation.flow-commands.editClassDocumentationDescription',
-            'main.classDocumentation.flow-commands.editClassDocumentationExample',
-            'main.classDocumentation.flow-commands.editClassDocumentationImplementationNote',
-            'main.classDocumentation.flow-commands.deleteClassDocumentationImplementationNote',
-            'main.classDocumentation.flow-commands.deleteClassDocumentationExample',
+            'main.classDocumentation.getClassDocumentation',
+            'main.classDocumentation.getClassName',
+            'main.classDocumentation.getClassDescription',
+            'main.classDocumentation.getClassImplementationNotes',
+            'main.classDocumentation.getClassExamples',
+            'main.classDocumentation.getSelectedDocumentationItemFlowPoint',
+            'main.classDocumentation.getSelectedDocumentationItemComponent',
+            'main.classDocumentation.isInEditionMode',
+            'main.classDocumentation.createClassDocumentationExample',
+            'main.classDocumentation.createClassDocumentationImplementationNote',
+            'main.classDocumentation.editClassDocumentationDescription',
+            'main.classDocumentation.editClassDocumentationExample',
+            'main.classDocumentation.editClassDocumentationImplementationNote',
+            'main.classDocumentation.deleteClassDocumentationImplementationNote',
+            'main.classDocumentation.deleteClassDocumentationExample',
         ])
     })
 

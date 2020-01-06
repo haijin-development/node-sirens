@@ -1,6 +1,6 @@
 const Classification = require('../../O').Classification
-const StatefulCommand = require('./StatefulCommand')
-const Flow = require('../flows/Flow')
+const FlowNode = require('../flows/FlowNode')
+const FlowWithChildren = require('../flows/FlowWithChildren')
 
 class CommandsGroup {
 
@@ -8,13 +8,24 @@ class CommandsGroup {
 
     static definition() {
         this.instanceVariables = []
-        this.assumes = [Flow]
+        this.assumes = [FlowNode, FlowWithChildren]
     }
 
     isCommandsGroup() {
         return true
     }
 
+    /*
+        Method(`
+            Returns a CommandsBuilder to build this NamespaceFlow using a DSL.
+        `)
+    */
+    newFlowBuilder() {
+        // review
+        const CommandsBuilder = require('../flow-builders/CommandsBuilder')
+        return CommandsBuilder.new({ flow: this })
+    }
+    
     /// Iterating
 
     evaluateCommandsEnabledClosure({ application: application }) {

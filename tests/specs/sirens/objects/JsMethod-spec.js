@@ -1,11 +1,12 @@
 const expect = require('chai').expect
-const SourceFile = require('../../../../src/sirens/objects/SourceFile')
-const SourceFileStructureParser = require('../../../../src/sirens/objects/SourceFileStructureParser')
+const Sirens = require('../../../../src/Sirens')
+
+const namespace = Sirens.namespace()
 
 const filename = 'tests/samples/functions-sample.js'
 
-const sourceFile = SourceFile.new({ filepath: filename })
-const sourceFileParser = SourceFileStructureParser.new()
+const sourceFile = namespace.SourceFile.new({ filepath: filename })
+const sourceFileParser = namespace.SourceFileStructureParser.new()
 const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 const methods = jsFile.getMethods()
 

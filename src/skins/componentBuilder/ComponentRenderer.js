@@ -84,7 +84,7 @@ class ComponentRenderer {
         'initializing', 'public'
      ])
     */
-    initialize({ rootComponent: rootComponent }) {
+    initialize({ rootComponent: rootComponent } = {}) {
         this.previousClassificationDo( () => {
             this.initialize()
         })
@@ -134,6 +134,10 @@ class ComponentRenderer {
         this.build(closure, this.rootComponent)
 
         const childComponents = this.getChildComponents()
+
+        if( this.rootComponent === undefined ) {
+            return childComponents[0]
+        }
 
         this.rootComponent.addAllChildrenComponents( childComponents )
 

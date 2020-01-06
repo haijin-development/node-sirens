@@ -1,11 +1,13 @@
 const expect = require('chai').expect
-const ValueModel = require('../../../../src/finger-tips/models/ValueModel')
+const FingerTipsNamespace = require('../../../../src/finger-tips/FingerTipsNamespace')
+
+const namespace = FingerTipsNamespace.new()
 
 describe('When using a ValueModel', () => {
     describe('when setting and getting its value', () => {
 
         it('sets its value in its constructor', () => {
-            const model = ValueModel.new({
+            const model = namespace.ValueModel.new({
                     value: 2
                 })
 
@@ -13,7 +15,7 @@ describe('When using a ValueModel', () => {
         })
 
         it('sets and gets its value', () => {
-            const model = ValueModel.new()
+            const model = namespace.ValueModel.new()
 
             model.setValue(1)
 
@@ -21,7 +23,7 @@ describe('When using a ValueModel', () => {
         })
 
         it('sets and gets an existent value', () => {
-            const model = ValueModel.new()
+            const model = namespace.ValueModel.new()
 
             model.setValue(1)
 
@@ -33,7 +35,7 @@ describe('When using a ValueModel', () => {
         it('triggers a value-changed event', () => {
             this.triggeredEvent = false
 
-            const model = ValueModel.new()
+            const model = namespace.ValueModel.new()
 
             model.onValueChanged({
                 with: this,

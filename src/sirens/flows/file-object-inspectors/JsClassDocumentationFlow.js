@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const EditClassDescriptionDialog = require('../../components/documentation-browser/edition/EditClassDescriptionDialog')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
 const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
 
@@ -25,7 +24,25 @@ class JsClassDocumentationFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getClassDocumentation',
+                    'getClassName',
+                    'getClassDescription',
+                    'getClassImplementationNotes',
+                    'getClassExamples',
+                    'getSelectedDocumentationItemFlowPoint',
+                    'getSelectedDocumentationItemComponent',
+                    'isInEditionMode',
+                    'editClassDocumentationDescription',
+                    'createClassDocumentationImplementationNote',
+                    'editClassDocumentationImplementationNote',
+                    'deleteClassDocumentationImplementationNote',
+                    'createClassDocumentationExample',
+                    'editClassDocumentationExample',
+                    'deleteClassDocumentationExample',
+                ],
+            })
 
             this.whenObjectChanges( function({ newValue: classDocumentation }) {
                 const documentationIndex = this.getChildFlow({ id: 'documentationIndex' })
@@ -68,53 +85,25 @@ class JsClassDocumentationFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getClassDocumentation',
-                    'getClassName',
-                    'getClassDescription',
-                    'getClassImplementationNotes',
-                    'getClassExamples',
-                    'getSelectedDocumentationItemFlowPoint',
-                    'getSelectedDocumentationItemComponent',
-                    'isInEditionMode',
-                    'editClassDocumentationDescription',
-                    'createClassDocumentationImplementationNote',
-                    'editClassDocumentationImplementationNote',
-                    'deleteClassDocumentationImplementationNote',
-                    'createClassDocumentationExample',
-                    'editClassDocumentationExample',
-                    'deleteClassDocumentationExample',
-                ],
-            })
-
-        })
-
-    }
-
     /// Exported commands
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getClassDocumentation',
-            'flow-commands.getClassName',
-            'flow-commands.getClassDescription',
-            'flow-commands.getClassImplementationNotes',
-            'flow-commands.getClassExamples',
-            'flow-commands.getSelectedDocumentationItemFlowPoint',
-            'flow-commands.getSelectedDocumentationItemComponent',
-            'flow-commands.isInEditionMode',
-            'flow-commands.editClassDocumentationDescription',
-            'flow-commands.createClassDocumentationImplementationNote',
-            'flow-commands.editClassDocumentationImplementationNote',
-            'flow-commands.deleteClassDocumentationImplementationNote',
-            'flow-commands.createClassDocumentationExample',
-            'flow-commands.editClassDocumentationExample',
-            'flow-commands.deleteClassDocumentationExample',
+            'getClassDocumentation',
+            'getClassName',
+            'getClassDescription',
+            'getClassImplementationNotes',
+            'getClassExamples',
+            'getSelectedDocumentationItemFlowPoint',
+            'getSelectedDocumentationItemComponent',
+            'isInEditionMode',
+            'editClassDocumentationDescription',
+            'createClassDocumentationImplementationNote',
+            'editClassDocumentationImplementationNote',
+            'deleteClassDocumentationImplementationNote',
+            'createClassDocumentationExample',
+            'editClassDocumentationExample',
+            'deleteClassDocumentationExample',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -162,7 +151,7 @@ class JsClassDocumentationFlow {
         const flowPoint = this.getChildFlow({ id: 'selectedDocumentationItem' }).asFlowPoint()
 
         this.exportCommandsToFlowPoint({
-            commandsIds: [ 'flow-commands.isInEditionMode' ],
+            commandsIds: [ 'isInEditionMode' ],
             flowPoint: flowPoint
         })
 
@@ -202,7 +191,7 @@ class JsClassDocumentationFlow {
     editClassDocumentationDescription({ parentWindow: parentWindow }) {
         const classDocumentation = this.getClassDocumentation()
 
-        const dialog = EditClassDescriptionDialog.new({
+        const dialog = this.guiNamespace().EditClassDescriptionDialog.new({
             classDocumentation: classDocumentation,
             window: parentWindow,
             onUpdateClassDescription: ({ classNewDescription: descriptionText }) => {
@@ -226,7 +215,7 @@ class JsClassDocumentationFlow {
     createClassDocumentationImplementationNote({ parentWindow: parentWindow }) {
         const className = this.getClassDocumentation().getClassName()
 
-        const dialog = EditImplementationNoteDialog.new({
+        const dialog = this.guiNamespace().EditImplementationNoteDialog.new({
             className: className,
             implementationNoteText: 'Add the new implementation note here ...',
             window: parentWindow,
@@ -258,7 +247,7 @@ class JsClassDocumentationFlow {
 
         const className = this.getClassDocumentation().getClassName()
 
-        const dialog = EditImplementationNoteDialog.new({
+        const dialog = this.guiNamespace().EditImplementationNoteDialog.new({
             className: className,
             implementationNoteText: implementationNoteText,
             window: parentWindow,
@@ -309,7 +298,7 @@ class JsClassDocumentationFlow {
             code: 'Add the example code here ...',
         })
 
-        const dialog = EditExampleDialog.new({
+        const dialog = this.guiNamespace().EditExampleDialog.new({
             className: className,
             example: newExample,
             window: parentWindow,
@@ -337,7 +326,7 @@ class JsClassDocumentationFlow {
     editClassDocumentationExample({ parentWindow: parentWindow, example: example }) {
         const className = this.getClassDocumentation().getClassName()
 
-        const dialog = EditExampleDialog.new({
+        const dialog = this.guiNamespace().EditExampleDialog.new({
             className: className,
             example: example,
             window: parentWindow,
@@ -386,6 +375,12 @@ class JsClassDocumentationFlow {
         this.bubbleUp({
             command: 'updateClassDocumentation',
             param: { classDocumentation: classDocumentation },
+        })
+    }
+
+    guiNamespace() {
+        return this.bubbleUp({
+            command: 'guiNamespace',
         })
     }
 }

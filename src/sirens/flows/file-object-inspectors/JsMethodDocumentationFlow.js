@@ -1,11 +1,5 @@
 const Classification = require('../../../O').Classification
-const ValueFlow = require('../../../finger-tips/flows/ValueFlow')
-const EditTagsDialog = require ('../../components/documentation-browser/edition/EditTagsDialog')
-const EditMethodDescriptionDialog = require('../../components/documentation-browser/edition/EditMethodDescriptionDialog')
-const EditParamDialog = require ('../../components/documentation-browser/edition/EditParamDialog')
-const EditReturnValueDialog = require('../../components/documentation-browser/edition/EditReturnValueDialog')
-const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
-const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
+const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 
 const DocumentationExampleComponent = require('../../components/documentation-browser/examples/DocumentationExampleComponent')
 const DocumentationExample = require('../../objects/documentation/sections/DocumentationExample')
@@ -21,8 +15,6 @@ const DocumentationReturnValue = require('../../objects/documentation/sections/D
 
 const DocumentationIndexSection = require('./DocumentationIndexSection')
 
-const Preferences = require('../../Preferences')
-
 class JsMethodDocumentationFlow {
     /// Definition
 
@@ -36,7 +28,33 @@ class JsMethodDocumentationFlow {
     buildWith(flow) {
         flow.main({ id: 'main' }, function(thisFlow) {
 
-            this.defineFlowCommandsIn({ method: thisFlow.flowCommands })
+            this.defineMethodsAsCommands({
+                methods: [
+                    'getMethodDocumentation',
+                    'getMethodSignature',
+                    'getMethodDescription',
+                    'getMethodImplementationNotes',
+                    'getMethodParams',
+                    'getMethodReturnValue',
+                    'getMethodExamples',
+                    'getSelectedDocumentationItemFlowPoint',
+                    'getSelectedDocumentationItemComponent',
+                    'getTagsSortedByPriority',
+                    'isInEditionMode',
+                    'editMethodTags',
+                    'editMethodDocumentationDescription',
+                    'createMethodDocumentationImplementationNote',
+                    'editMethodDocumentationImplementationNote',
+                    'deleteMethodDocumentationImplementationNote',
+                    'createMethodDocumentationExample',
+                    'editMethodDocumentationExample',
+                    'deleteMethodDocumentationExample',
+                    'createMethodDocumentationParam',
+                    'editMethodDocumentationParam',
+                    'deleteMethodDocumentationParam',
+                    'editMethodDocumentationReturnValue',
+                ],
+            })
 
             this.whenObjectChanges( function({ newValue: classDocumentation }) {
                 const documentationIndex = this.getChildFlow({ id: 'documentationIndex' })
@@ -79,42 +97,6 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    flowCommands(thisFlow) {
-        this.commandsGroup({ id: 'flow-commands' }, function() {
-
-            this.statelessCommands({
-                definedInFlow: thisFlow,
-                withMethods: [
-                    'getMethodDocumentation',
-                    'getMethodSignature',
-                    'getMethodDescription',
-                    'getMethodImplementationNotes',
-                    'getMethodParams',
-                    'getMethodReturnValue',
-                    'getMethodExamples',
-                    'getSelectedDocumentationItemFlowPoint',
-                    'getSelectedDocumentationItemComponent',
-                    'getTagsSortedByPriority',
-                    'isInEditionMode',
-                    'editMethodTags',
-                    'editMethodDocumentationDescription',
-                    'createMethodDocumentationImplementationNote',
-                    'editMethodDocumentationImplementationNote',
-                    'deleteMethodDocumentationImplementationNote',
-                    'createMethodDocumentationExample',
-                    'editMethodDocumentationExample',
-                    'deleteMethodDocumentationExample',
-                    'createMethodDocumentationParam',
-                    'editMethodDocumentationParam',
-                    'deleteMethodDocumentationParam',
-                    'editMethodDocumentationReturnValue',
-                ],
-            })
-
-        })
-
-    }
-
     getDocumentIndexSections() {
         return [
             DocumentationIndexSection.new({
@@ -137,28 +119,28 @@ class JsMethodDocumentationFlow {
 
     attachCommandsToFlowPoint({ flowPoint: flowPoint }) {
         const exportedCommands = [
-            'flow-commands.getMethodDocumentation',
-            'flow-commands.getMethodSignature',
-            'flow-commands.getMethodDescription',
-            'flow-commands.getMethodImplementationNotes',
-            'flow-commands.getMethodParams',
-            'flow-commands.getMethodReturnValue',
-            'flow-commands.getSelectedDocumentationItemFlowPoint',
-            'flow-commands.getSelectedDocumentationItemComponent',
-            'flow-commands.getTagsSortedByPriority',
-            'flow-commands.isInEditionMode',
-            'flow-commands.editMethodTags',
-            'flow-commands.editMethodDocumentationDescription',
-            'flow-commands.createMethodDocumentationImplementationNote',
-            'flow-commands.editMethodDocumentationImplementationNote',
-            'flow-commands.deleteMethodDocumentationImplementationNote',
-            'flow-commands.createMethodDocumentationExample',
-            'flow-commands.editMethodDocumentationExample',
-            'flow-commands.deleteMethodDocumentationExample',
-            'flow-commands.createMethodDocumentationParam',
-            'flow-commands.editMethodDocumentationParam',
-            'flow-commands.deleteMethodDocumentationParam',
-            'flow-commands.editMethodDocumentationReturnValue',
+            'getMethodDocumentation',
+            'getMethodSignature',
+            'getMethodDescription',
+            'getMethodImplementationNotes',
+            'getMethodParams',
+            'getMethodReturnValue',
+            'getSelectedDocumentationItemFlowPoint',
+            'getSelectedDocumentationItemComponent',
+            'getTagsSortedByPriority',
+            'isInEditionMode',
+            'editMethodTags',
+            'editMethodDocumentationDescription',
+            'createMethodDocumentationImplementationNote',
+            'editMethodDocumentationImplementationNote',
+            'deleteMethodDocumentationImplementationNote',
+            'createMethodDocumentationExample',
+            'editMethodDocumentationExample',
+            'deleteMethodDocumentationExample',
+            'createMethodDocumentationParam',
+            'editMethodDocumentationParam',
+            'deleteMethodDocumentationParam',
+            'editMethodDocumentationReturnValue',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -201,7 +183,7 @@ class JsMethodDocumentationFlow {
         const flowPoint = this.getChildFlow({ id: 'selectedDocumentationItem' }).asFlowPoint()
 
         this.exportCommandsToFlowPoint({
-            commandsIds: [ 'flow-commands.isInEditionMode' ],
+            commandsIds: [ 'isInEditionMode' ],
             flowPoint: flowPoint
         })
 
@@ -258,7 +240,7 @@ class JsMethodDocumentationFlow {
         const prioritizedTags = []
 
         const unprioritizedTags = tagsSortedAlphabetically.filter( (tag) => {
-            const prioritizesTag = Preferences.prioritizesTag({ tag: tag })
+            const prioritizesTag = this.prioritizesTag({ tag: tag })
 
             if( prioritizesTag === true ) {
                 prioritizedTags.push( tag )
@@ -283,7 +265,7 @@ class JsMethodDocumentationFlow {
 
         const tags = methodDocumentation.getTags()
 
-        const dialog = EditTagsDialog.new({
+        const dialog = this.guiNamespace().EditTagsDialog.new({
             methodDocumentation: methodDocumentation,
             tags: tags,
             window: parentWindow,
@@ -309,7 +291,7 @@ class JsMethodDocumentationFlow {
     editMethodDocumentationDescription({ parentWindow: parentWindow }) {
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditMethodDescriptionDialog.new({
+        const dialog = this.guiNamespace().EditMethodDescriptionDialog.new({
             methodDocumentation: methodDocumentation,
             window: parentWindow,
             onUpdateMethodComment: ({ methodNewDescription: descriptionText }) => {
@@ -339,7 +321,7 @@ class JsMethodDocumentationFlow {
             description: 'Add the parameter description ...',
         })
 
-        const dialog = EditParamDialog.new({
+        const dialog = this.guiNamespace().EditParamDialog.new({
             methodDocumentation: methodDocumentation,
             param: newParam,
             window: parentWindow,
@@ -365,7 +347,7 @@ class JsMethodDocumentationFlow {
     editMethodDocumentationParam({ parentWindow: parentWindow, param: param, paramIndex: paramIndex }) {
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditParamDialog.new({
+        const dialog = this.guiNamespace().EditParamDialog.new({
             methodDocumentation: methodDocumentation,
             param: param,
             window: parentWindow,
@@ -409,7 +391,7 @@ class JsMethodDocumentationFlow {
     editMethodDocumentationReturnValue({ parentWindow: parentWindow }) {
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditReturnValueDialog.new({
+        const dialog = this.guiNamespace().EditReturnValueDialog.new({
             methodDocumentation: methodDocumentation,
             returnValue: methodDocumentation.getReturnValue(),
             window: parentWindow,
@@ -435,7 +417,7 @@ class JsMethodDocumentationFlow {
     createMethodDocumentationImplementationNote({ parentWindow: parentWindow }) {
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditImplementationNoteDialog.new({
+        const dialog = this.guiNamespace().EditImplementationNoteDialog.new({
             methodDocumentation: methodDocumentation,
             implementationNoteText: 'Add the new implementation note here ...',
             window: parentWindow,
@@ -465,7 +447,7 @@ class JsMethodDocumentationFlow {
 
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditImplementationNoteDialog.new({
+        const dialog = this.guiNamespace().EditImplementationNoteDialog.new({
             implementationNoteText: implementationNoteText,
             window: parentWindow,
             onUpdateImplementationNote: ({ implementationNoteText: implementationNoteText }) => {
@@ -515,7 +497,7 @@ class JsMethodDocumentationFlow {
             code: 'Add the example code here ...',
         })
 
-        const dialog = EditExampleDialog.new({
+        const dialog = this.guiNamespace().EditExampleDialog.new({
             methodDocumentation: methodDocumentation,
             example: newExample,
             window: parentWindow,
@@ -543,7 +525,7 @@ class JsMethodDocumentationFlow {
     editMethodDocumentationExample({ parentWindow: parentWindow, atIndex: index, example: example }) {
         const methodDocumentation = this.getMethodDocumentation()
 
-        const dialog = EditExampleDialog.new({
+        const dialog = this.guiNamespace().EditExampleDialog.new({
             methodDocumentation: methodDocumentation,
             example: example,
             window: parentWindow,
@@ -592,6 +574,24 @@ class JsMethodDocumentationFlow {
         this.bubbleUp({
             command: 'updateMethodDocumentation',
             param: { methodDocumentation: methodDocumentation },
+        })
+    }
+
+    guiNamespace() {
+        return this.bubbleUp({
+            command: 'guiNamespace',
+        })
+    }
+
+    prioritizesTag({ tag: tag }) {
+        const preferences = this.getPreferences()
+
+        return preferences.methodTags.prioritizedTags.includes( tag )
+    }
+
+    getPreferences() {
+        return this.bubbleUp({
+            command: 'getPreferences'
         })
     }
 }

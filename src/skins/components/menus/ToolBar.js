@@ -1,6 +1,5 @@
 const Classification = require('../../../O').Classification
 const Widget = require('../Widget')
-const ToolBarView = require('../../gtk-views/ToolBarView')
 const ComponentBehaviourProtocol_Implementation = require('../../protocols/ComponentBehaviourProtocol_Implementation')
 
 class ToolBar {
@@ -21,7 +20,11 @@ class ToolBar {
     createView() {
         const label = this.getProps().label
 
-        return ToolBarView.new()
+        const view = this.namespace().Views.ToolBarView.new()
+
+        view.assemble()
+
+        return view
     }
 
     /// Synchronizing

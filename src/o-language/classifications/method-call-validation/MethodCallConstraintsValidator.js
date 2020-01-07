@@ -23,7 +23,6 @@ class MethodCallConstraintsValidator {
     */
     static definition() {
         this.instanceVariables = [
-            'methodInfo',
             'paramsValidations',
         ]
         this.assumes = []
@@ -39,15 +38,6 @@ class MethodCallConstraintsValidator {
     */
     afterInstantiation() {
         this.paramsValidations = []
-        this.methodInfo = {}
-    }
-
-    setMethodInfo(methodInfo) {
-        this.methodInfo = methodInfo
-    }
-
-    getMethodInfo() {
-        return this.methodInfo
     }
 
     /*
@@ -81,7 +71,6 @@ class MethodCallConstraintsValidator {
     param(paramValue) {
         const paramValidation = ObjectValidation.new({
             objectToValidate: paramValue,
-            methodInfo: this.methodInfo,
         })
 
         this.addParamValidation(paramValidation)
@@ -100,9 +89,11 @@ class MethodCallConstraintsValidator {
             'public', 'evaluating'
         ])
     */
-    evaluateParametersValidations() {
+    evaluateParametersValidationsOn({ methodCallInfo: methodCallInfo }) {
         this.paramsValidations.forEach( (eachValidation) => {
-            eachValidation.validate()
+            eachValidation.validate({
+                methodCallInfo: methodCallInfo
+            })
         })
     }
 }

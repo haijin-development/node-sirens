@@ -19,7 +19,7 @@ class ObjectValidation {
         ])
     */
     static definition() {
-        this.instanceVariables = ['objectToValidate', 'methodInfo', 'assertionCompiler']
+        this.instanceVariables = ['objectToValidate', 'assertionCompiler']
     }
 
     afterInstantiation() {
@@ -31,9 +31,8 @@ class ObjectValidation {
         this.behaveAs( ValidationFailureMessageFormatter )
     }
 
-    initialize({ objectToValidate: objectToValidate, methodInfo: methodInfo }) {
+    initialize({ objectToValidate: objectToValidate }) {
         this.objectToValidate = objectToValidate
-        this.methodInfo = methodInfo
     }
 
     /*
@@ -65,7 +64,7 @@ class ObjectValidation {
             If any assertion fails it raises a FailedAssertionError.
         `)
     */
-    validate() {
+    validate({ methodCallInfo: methodCallInfo }) {
         const compiledAssertion = this.getCompiledAssertion()
 
         const validationResult =
@@ -75,7 +74,7 @@ class ObjectValidation {
             const firstValidationFailure = validationResult.getFailedValidations()[0]
 
             const failedAssertionMessage = this.formatFailureMessageFor({
-                methodInfo: this.methodInfo,
+                methodCallInfo: methodCallInfo,
                 validationFailure: firstValidationFailure,
             })
 

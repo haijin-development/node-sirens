@@ -2,6 +2,7 @@ const Classification = require('../Classification')
 const MethodCallConstraintsValidatorProtocol = require('../../protocols/MethodCallConstraintsValidatorProtocol')
 const ObjectValidation = require('./ObjectValidation')
 const AssertionCompiler = require('../assertions/AssertionCompiler')
+const MethodCallConstraintsParamsCollector = require('./MethodCallConstraintsParamsCollector')
 
 /*
     Class(`
@@ -128,13 +129,56 @@ class MethodCallConstraintsValidator {
         return this.temporaryAssertionCompiler
     }
 
+    /// Compiling
+
+    /*
+        Method(`
+            Evaluate the method of the protocol that validates the method in the classification.
+            It would look like
+                append({ string: string, if: condition }) {
+                param(string) .string()
+                param(condition) .undefined() .or() .boolean()
+            }
+        `)
+    */
+    compileAssertions({ methodName: methodName, params: params }) {
+        this[ methodName ]( ...params )
+
+        this.endCurrentAssertionCompilation()
+    }
+
+    /*
+        Method(`
+            Gets the CompiledAssertion from the current temporaryAssertionCompiler
+            that is compiling the assertions and sets the CompiledAssertion to the
+            current param validation.
+
+            This method is called if a new
+
+                    .param(...)
+
+            is received since that means that the previous param has no more
+            assertion statements, but for the last
+
+                    .param(...)
+
+            expression it must be called explicitly, which is done in the
+
+                    .compileAssertions(...)
+
+            method.
+
+            This method also cleans up the current this.temporaryAssertionCompiler
+            and a new one must be created to compile the next assertion.
+        `)
+    */
     endCurrentAssertionCompilation() {
         if( this.temporaryAssertionCompiler === undefined ) { return }
 
         const compiledAssertion =
             this.temporaryAssertionCompiler.getCompiledAssertion()
 
-        const currentParamValidation = this.getCurrentParamValidation()
+        const currentParamValidation = this.getCurrentParamValidationBeingCompiled()
 
         currentParamValidation.setCompiledAssertion({
             compiledAssertion: compiledAssertion
@@ -143,7 +187,12 @@ class MethodCallConstraintsValidator {
         this.temporaryAssertionCompiler = null
     }
 
-    getCurrentParamValidation() {
+    /*
+        Method(`
+            Returns the current param whose assertions are being compiled.
+        `)
+    */
+    getCurrentParamValidationBeingCompiled() {
         return this.paramsValidations[ this.paramsValidations.length - 1 ]
     }
 
@@ -158,12 +207,29 @@ class MethodCallConstraintsValidator {
             'public', 'evaluating'
         ])
     */
-    evaluateParametersValidationsOn({ methodCallInfo: methodCallInfo }) {
-        this.paramsValidations.forEach( (eachValidation) => {
+    evaluateParametersValidationsOn({ methodCallInfo: methodCallInfo, params: params }) {
+        const paramsInOrder =
+            this.collectParamsToValidateInTheSameOrderAsTheValidationsAreDefined({
+                methodName: methodCallInfo.methodName,
+                params: params,
+            })
+
+        this.paramsValidations.forEach( (eachValidation, i) => {
+            const paramValue = paramsInOrder[i]
+
             eachValidation.validate({
-                methodCallInfo: methodCallInfo
+                methodCallInfo: methodCallInfo,
+                objectToValidate: paramValue,
             })
         })
+    }
+
+    collectParamsToValidateInTheSameOrderAsTheValidationsAreDefined({ methodName: methodName, params: params }) {
+        const paramsCollector = MethodCallConstraintsParamsCollector.new()
+
+        this[ methodName ].call( paramsCollector, ...params )
+
+        return paramsCollector.getParamsToValidate()
     }
 }
 

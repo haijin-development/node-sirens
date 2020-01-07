@@ -4,12 +4,20 @@
 
 ### O language
 
+- Rewrote the MethodCallConstraintsValidator to compile a method CompiledAssertion
+ on its first use and reuse the same CompiledAssertion from there on.
+ Using the tests as a quick benchmark shows an optimization in the code that validates the assertions of a method call of around 150 times.
+
 ### FingerTips
 
 ### Skins
 
 ### Sirens
 
+- Moved the min-size out from the css files to the ComponentBuilder since it is a functional requirement, not a style.
+- Improved and cleaned up the stacks layout definition. Now the layout is done through
+ the use of a concrete .spaceFiller() component between consecutive components
+ instead of using configuration parameters.
 
 ## v0.16.0
 

@@ -4,9 +4,12 @@ const ValidationFailureMessageFormatter = require('./ValidationFailureMessageFor
 
 /*
     Class(`
-        An ObjectValidation is a pair of (object, CompiledAsssertion).
-        It's purpose is to allow to collect several objects with the assertions
-        to validate on them and later validate all them all.
+        An ObjectValidation is a validation of an object during a message call.
+        The validated object is a parameter of the method call.
+
+        This object wraps the CompiledAssertion that does the actual validation,
+        formats the error message and throws a FailedAssertionError when a validation
+        fails.
     `)
 */
 class ObjectValidation {
@@ -18,7 +21,7 @@ class ObjectValidation {
         ])
     */
     static definition() {
-        this.instanceVariables = ['objectToValidate', 'compiledAssertion']
+        this.instanceVariables = ['compiledAssertion']
     }
 
     afterInstantiation() {
@@ -26,10 +29,6 @@ class ObjectValidation {
         // ObjectValidation in the object evaluating the assertions
         // it might format the error messages as well.
         this.behaveAs( ValidationFailureMessageFormatter )
-    }
-
-    initialize({ objectToValidate: objectToValidate }) {
-        this.objectToValidate = objectToValidate
     }
 
     /*
@@ -46,13 +45,15 @@ class ObjectValidation {
 
     /*
         Method(`
-            Validates the assertions compiled in the assertionCompiler on the objectToValidate.
+            Validates the assertions compiled in the assertionCompiler on the
+            given objectToValidate.
+
             If any assertion fails it raises a FailedAssertionError.
         `)
     */
-    validate({ methodCallInfo: methodCallInfo }) {
+    validate({ methodCallInfo: methodCallInfo, objectToValidate: objectToValidate }) {
         const validationResult =
-            this.compiledAssertion.validate({ target: this.objectToValidate })
+            this.compiledAssertion.validate({ target: objectToValidate })
 
         if( validationResult.hasFailedValidations() ) {
             const firstValidationFailure = validationResult.getFailedValidations()[0]

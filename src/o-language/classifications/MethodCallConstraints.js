@@ -204,7 +204,6 @@ class MethodCallConstraints {
 
            makes the method to activate as usual.
 
-
            If the validation of the method protocol fails it raises an error.
         `,
      })
@@ -236,26 +235,12 @@ class MethodCallConstraints {
 
             if( ! protocolDefinesMethod ) { return }
 
-            // Instantiate the protocol
-            const protocolInstance = protocol.new()
-
-            // A protocol declaration should not assume any other classification to not polute
-            // the protocol it defines.
-            // The protocol may also be used for documentation purposes, to perform other validations
-            // different than the ones this MethodCallConstraints does or to do static type inference.
-            // Instead of making the protocol to assume the MethodCallConstraintsValidator behaviour
-            // add it dynamically to this created instance only.
-            protocolInstance.behaveAs( MethodCallConstraintsValidator )
-
-            // Evaluate the method of the protocol that validates the method in the classification.
-            // It would look like
-            //      append({ string: string, if: condition }) {
-            //          param(string) .string()
-            //          param(condition) .undefined() .or() .boolean()
-            //      }
-            protocolInstance[ methodName ]( ...params )
-
-            protocolInstance.endCurrentAssertionCompilation()
+            const methodCallConstraintsValidator =
+                protocolsAssertionsCache.getCompiledAssertionFor({
+                    protocol: protocol,
+                    methodName: methodName,
+                    params: params,
+                })
 
             const methodCallInfo = {
                 protocolName: protocol.getName(),
@@ -263,11 +248,89 @@ class MethodCallConstraints {
                 methodName: methodName,
             }
 
-            protocolInstance.evaluateParametersValidationsOn({
-                methodCallInfo: methodCallInfo
+            methodCallConstraintsValidator.evaluateParametersValidationsOn({
+                methodCallInfo: methodCallInfo,
+                params: params,
             })
         })
     }
 }
+
+/*
+    Class(`
+        This object holds a collection of CompiledAssertions of Protocols.
+
+        The CompiledAssertions are held using a WeakMap since a Protocol may
+        be ephemeral and not necesarily defined as an immutable variable in a
+        module. Using a regular Map could leak ephemeral Protocols objects.
+    `)
+*/
+class ProtocolAssertionChache {
+    constructor() {
+        this.protocols = new WeakMap()
+    }
+
+    /*
+        Method(`
+            Returns the methodCallConstraintsValidator that holds the CompiledAssertions
+            for the given protocol.methodName method.
+
+            If it previously compiled the assertions for that protocol.method it returns
+            the previously CompiledAssertion.
+
+            Otherwise it compiles the assertions for the first time and keeps them
+            for later requests. 
+        `)
+    */
+    getCompiledAssertionFor({ protocol: protocol, methodName: methodName, params: params }) {
+        let protocolMethodsMap = this.protocols.get( protocol )
+
+        if( protocolMethodsMap === undefined ) {
+            protocolMethodsMap = {}
+
+            this.protocols.set( protocol, protocolMethodsMap )
+        }
+
+        if( protocolMethodsMap[ methodName ] === undefined ) {
+            const compiledMethodCallAssertion = this.compileMethodCallAssertions({
+                protocol: protocol,
+                methodName: methodName,
+                params: params,
+            })
+
+            protocolMethodsMap[ methodName ] = compiledMethodCallAssertion
+        }
+
+        return protocolMethodsMap[ methodName ]
+    }
+
+    /*
+        Method(`
+            Compiles and returns the MethodCallConstraintsValidation for the given
+            protocol.methodName.
+        `)
+    */
+    compileMethodCallAssertions({ protocol: protocol, methodName: methodName, params: params }) {
+        // Instantiate the protocol
+        const methodCallConstraintsValidator = protocol.new()
+
+        // A protocol declaration should not assume any other classification to not polute
+        // the protocol it defines.
+        // The protocol may also be used for documentation purposes, to perform other validations
+        // different than the ones this MethodCallConstraints does or to do static type inference.
+        // Instead of making the protocol to assume the MethodCallConstraintsValidator behaviour
+        // add it dynamically to this created instance only.
+        methodCallConstraintsValidator.behaveAs( MethodCallConstraintsValidator )
+
+        methodCallConstraintsValidator.compileAssertions({
+            methodName: methodName,
+            params: params,
+        })
+
+        return methodCallConstraintsValidator
+    }
+}
+
+protocolsAssertionsCache = new ProtocolAssertionChache()
 
 module.exports = Classification.define(MethodCallConstraints)

@@ -35,50 +35,42 @@ class ClassDetailsComponent {
                 css: [ 'title-1', ],
             })
 
-            this.container( function() {
+            this.treeChoice( function() {
+                this.model( documentationIndexFlow )
 
                 this.styles({
-                    hasScrollBars: false,
-                    css: [ 'documentation-index', ],
+                    id: 'documentationIndexTree',
+                    vScroll: 'always',
+                    showHeaders: false,
+                    clickableHeaders: false,
+                    height: 150,
                 })
 
-                this.treeChoice( function() {
-                    this.model( documentationIndexFlow )
 
-                    this.styles({
-                        id: 'documentationIndexTree',
-                        vScroll: 'always',
-                        showHeaders: false,
-                        clickableHeaders: false,
-                    })
+                this.column({
+                    label: '',
+                    getImageClosure: function(documentSection) {
+                        return component.iconFor({ documentSection: documentSection })
+                    },
+                    imageWidth: 16,
+                    imageHeight: 16,
+                })
 
+                this.column({
+                    label: '',
+                    getTextClosure: function(documentSection) {
+                        return component.displayTextFor({ documentSection: documentSection })
+                    },
+                })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(documentSection) {
-                            return component.iconFor({ documentSection: documentSection })
-                        },
-                        imageWidth: 16,
-                        imageHeight: 16,
-                    })
-
-                    this.column({
-                        label: '',
-                        getTextClosure: function(documentSection) {
-                            return component.displayTextFor({ documentSection: documentSection })
-                        },
-                    })
-
-                    if( isInEditionMode === true ) {
-                        this.popupMenu( function() {
-                            component.populatePopupMenu({
-                                menu: this,
-                                documentationIndexFlow: documentationIndexFlow,
-                            })
+                if( isInEditionMode === true ) {
+                    this.popupMenu( function() {
+                        component.populatePopupMenu({
+                            menu: this,
+                            documentationIndexFlow: documentationIndexFlow,
                         })
-                    }
-                })
-
+                    })
+                }
             })
 
             this.container( function() {

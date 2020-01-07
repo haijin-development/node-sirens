@@ -50,34 +50,14 @@ class StackView {
             fill = false
         }
 
-        const packAlign = childView.getViewAttribute({ at: 'stackAlign', ifAbsent: 'begining' })
-
         const childHandle = childView.getMainHandle()
 
-        switch( packAlign ) {
-            case 'begining':
-                this.box.packStart(
-                    childHandle,
-                    expand,
-                    fill,
-                    padding
-                )
-                break
-
-            case 'end':
-                this.box.packEnd(
-                    childHandle,
-                    expand,
-                    fill,
-                    padding
-                )
-                break
-
-            default:
-                throw new Error(`Uknown stack aligment: '${packAlign}'`)
-                break
-        }
-
+        this.box.packStart(
+            childHandle,
+            expand,
+            fill,
+            padding
+        )
 
         this.box.showAll()
     }

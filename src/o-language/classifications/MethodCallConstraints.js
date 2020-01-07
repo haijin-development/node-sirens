@@ -255,6 +255,8 @@ class MethodCallConstraints {
             //      }
             protocolInstance[ methodName ]( ...params )
 
+            protocolInstance.endCurrentAssertionCompilation()
+
             const methodCallInfo = {
                 protocolName: protocol.getName(),
                 classificationName: classification.getName(),

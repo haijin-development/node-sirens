@@ -33,7 +33,8 @@
 - Cleaned up builders and flows dependencies.
 - Rewrote the definitions of Commands and Flow methods.
 - Implemented an autoloader alike utility for NamespaceFlow. It seems to gain ease
- of use and simplicity but it loses a lot of expressivity.
+ of use and simplicity but it loses a lot of expressiveness and makes it very difficult
+ to find out in which namespace an object is created.
 
 ### Skins
 

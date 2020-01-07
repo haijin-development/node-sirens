@@ -1,5 +1,4 @@
 const Classification = require('../Classification')
-const AssertionCompiler = require('../assertions/AssertionCompiler')
 const {FailedAssertionError} = require('../Errors')
 const ValidationFailureMessageFormatter = require('./ValidationFailureMessageFormatter')
 
@@ -7,7 +6,7 @@ const ValidationFailureMessageFormatter = require('./ValidationFailureMessageFor
     Class(`
         An ObjectValidation is a pair of (object, CompiledAsssertion).
         It's purpose is to allow to collect several objects with the assertions
-        to validate on them and later validate all the collected objects.
+        to validate on them and later validate all them all.
     `)
 */
 class ObjectValidation {
@@ -19,12 +18,10 @@ class ObjectValidation {
         ])
     */
     static definition() {
-        this.instanceVariables = ['objectToValidate', 'assertionCompiler']
+        this.instanceVariables = ['objectToValidate', 'compiledAssertion']
     }
 
     afterInstantiation() {
-        this.assertionCompiler = AssertionCompiler.new()
-
         // This behaviour could be split to a different object but since the
         // ObjectValidation in the object evaluating the assertions
         // it might format the error messages as well.
@@ -37,25 +34,14 @@ class ObjectValidation {
 
     /*
         Method(`
-            Returns an AssertionCompiler to compile assertions on the object to validate.
-            The AssertionCompiler is initially empty but it can be used to progressively
-            compile new assertions on the validated object.
-        `)
-    */
-    getAssertionCompiler() {
-        return this.assertionCompiler
-    }
-
-    /*
-        Method(`
             Returns the CompiledAssertion.
 
             With the returned CompiledAssertion it is possible to evaluate its assertions
             to validate one or more objects.
         `)
     */
-    getCompiledAssertion() {
-        return this.assertionCompiler.getCompiledAssertion()
+    setCompiledAssertion({ compiledAssertion: compiledAssertion }) {
+        return this.compiledAssertion = compiledAssertion
     }
 
     /*
@@ -65,10 +51,8 @@ class ObjectValidation {
         `)
     */
     validate({ methodCallInfo: methodCallInfo }) {
-        const compiledAssertion = this.getCompiledAssertion()
-
         const validationResult =
-            compiledAssertion.validate({ target: this.objectToValidate })
+            this.compiledAssertion.validate({ target: this.objectToValidate })
 
         if( validationResult.hasFailedValidations() ) {
             const firstValidationFailure = validationResult.getFailedValidations()[0]

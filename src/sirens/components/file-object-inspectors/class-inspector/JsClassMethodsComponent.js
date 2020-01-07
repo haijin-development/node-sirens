@@ -62,7 +62,6 @@ class JsClassMethodsComponent {
                                     model: selectedTagsFlow,
                                     item: tagLabel,
                                     label: tagLabel,
-                                    viewAttributes: { stackSize: 'fixed' },
                                 })
                             })
 

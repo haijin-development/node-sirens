@@ -52,14 +52,12 @@ class EditClassDescriptionDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'classDescription',
-                        text: descriptionText,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'classDescription',
+                            text: descriptionText,
+                        })
                     })
-
                 })
 
             })

@@ -39,7 +39,6 @@ class EditReturnValueDialog {
                 })
 
                 this.verticalStack( function() {
-
                     this.component(
                         EditDialogHeaderComponent.new({
                             mainIcon: Resource.image.returnValue,
@@ -50,11 +49,12 @@ class EditReturnValueDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'returnsDescription',
-                        text: returnValueDescription,
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'returnsDescription',
+                            text: returnValueDescription,
+                        })
                     })
-
                 })
 
             })

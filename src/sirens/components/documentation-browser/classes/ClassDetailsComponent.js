@@ -33,7 +33,6 @@ class ClassDetailsComponent {
             this.label({
                 text: 'Details',
                 css: [ 'title-1', ],
-                viewAttributes: { stackSize: 'fixed' },
             })
 
             this.container( function() {
@@ -41,7 +40,6 @@ class ClassDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-index', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.treeChoice( function() {
@@ -88,7 +86,6 @@ class ClassDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-section', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.component(

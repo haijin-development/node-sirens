@@ -35,7 +35,6 @@ class MethodDetailsComponent {
             this.label({
                 text: 'Details',
                 css: [ 'title-1', ],
-                viewAttributes: { stackSize: 'fixed' },
             })
 
             this.container( function() {
@@ -43,7 +42,6 @@ class MethodDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-index', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.treeChoice( function() {
@@ -89,7 +87,6 @@ class MethodDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-section', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.component(

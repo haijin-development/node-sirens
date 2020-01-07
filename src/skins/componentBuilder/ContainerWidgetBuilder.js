@@ -690,6 +690,24 @@ class ContainerWidgetBuilder {
     }
 
     /*
+      Method(`
+        Creates a container wrapper for the given closure that expands
+        to fill the space left in a stack.
+
+        If the method is used on a parent different that a Stack component
+        it simply creates a container but does not expand to fit.
+      `)
+    */
+    spaceFiller(props, closure) {
+      [props, closure] = this.normalizeArguments(props, closure)
+
+      props.viewAttributes = { expandsToFit: true }
+
+      this.container(props, closure)
+    }
+
+
+    /*
      Method(`
         Adds a vertical Stack component to the array of built components.
 
@@ -1636,13 +1654,6 @@ class ContainerWidgetBuilder {
      ])
     */
     horizontalSeparator(props) {
-        const defaultProps = {
-            viewAttributes: {
-                stackSize: 'fixed',
-            }
-        }
-
-        props = Object.assign(defaultProps, props)
         props = Object.assign(props, { orientation: 'horizontal' })
 
         const separator = this.namespace().Separator.new(props)
@@ -1651,6 +1662,8 @@ class ContainerWidgetBuilder {
 
         this.childComponents.push(separator)
     }
+
+    
 
     /*
      Method(`

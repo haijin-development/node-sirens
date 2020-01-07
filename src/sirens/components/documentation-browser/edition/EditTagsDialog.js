@@ -28,7 +28,6 @@ class EditTagsDialog {
         componentsRenderer.render( function(component) {
 
             this.dialog( function() {
-
                 this.styles({
                     title: `Tags edition`,
                     width: 900,
@@ -50,20 +49,18 @@ class EditTagsDialog {
 
                     this.label({
                         text: 'Tags list separated by a character ",".',
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
                     })
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'tags',
-                        text: tagsString,
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'tags',
+                            text: tagsString,
+                        })
+
                     })
-
                 })
-
             })
 
         })

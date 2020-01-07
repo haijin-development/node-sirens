@@ -31,7 +31,6 @@ class DocumentationExampleComponent {
                     text: exampleDescription,
                     css: [ 'title-2', ],
                     wrapMode: 'wordChar',
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.verticalSeparator()
@@ -41,7 +40,6 @@ class DocumentationExampleComponent {
                         id: 'playground',
                         text: "\n" + example.getCode() + "\n",
                         hasScrollBars: false,
-                        viewAttributes: { stackSize: 'fixed' },
                     })
                 )
 

@@ -26,48 +26,36 @@ class EditDialogHeaderComponent {
 
             this.horizontalStack( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
-                })
-
                 if( imageIsFile ) {
 
                     this.image({
                         filename: mainIcon,
-                        width: 48,
-                        height: 48,
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
+                        width: 32,
+                        height: 32,
                     })
 
                 } else {
 
                     this.image({
                         iconName: mainIcon,
-                        size: GtkIcons.size._48x48,
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
+                        size: GtkIcons.size._32x32,
                     })
 
                 }
 
+                this.spaceFiller()
+
                 this.image({
                     iconName: GtkIcons.edit,
-                    size: GtkIcons.size._48x48,
-                    marginLeft: 15,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
+                    size: GtkIcons.size._24x24,
+                    marginRight: 10,
                 })
 
                 this.verticalStack( function() {
 
                     this.label({
                         text: title,
+                        css: [ 'title-1', ],
                     })
 
                     this.label({
@@ -75,6 +63,8 @@ class EditDialogHeaderComponent {
                     })
 
                 })
+
+                this.spaceFiller()
 
             })
 

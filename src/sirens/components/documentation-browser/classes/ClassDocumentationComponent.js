@@ -33,7 +33,6 @@ class ClassDocumentationComponent {
                     this.component(
                         ClassSummaryComponent.new({
                             model: flow,
-                            viewAttributes: { stackSize: 'fixed' },
                             window: this.getProps().window,
                         })
                     )
@@ -44,7 +43,6 @@ class ClassDocumentationComponent {
                         ClassDetailsComponent.new({
                             model: flow,
                             window: this.getProps().window,
-                            viewAttributes: { stackSize: 'fixed' },
                         })
                     )
 

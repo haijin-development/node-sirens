@@ -43,14 +43,12 @@ class EditImplementationNoteDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'implementationNote',
-                        text: implementationNoteText,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'implementationNote',
+                            text: implementationNoteText,
+                        })
                     })
-
                 })
 
             })

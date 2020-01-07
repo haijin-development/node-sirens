@@ -22,15 +22,10 @@ class DocumentationParamComponent {
 
             this.verticalStack( function() {
 
-                this.styles({
-                    viewAttributes: { stackSize: 'fixed' },
-                })
-
                 this.label({
                     text: param.getName(),
                     css: [ 'title-2', ],
                     wrapeMode: 'wordChar',
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.text({

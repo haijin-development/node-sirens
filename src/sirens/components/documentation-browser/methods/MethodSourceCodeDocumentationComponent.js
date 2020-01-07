@@ -27,18 +27,20 @@ class MethodSourceCodeDocumentationComponent {
             this.verticalStack( function() {
                 this.horizontalStack( function() {
 
+                    this.spaceFiller()
+
+                    this.label({ text: 'Method source code' })
+
+                    this.spaceFiller()
+
                     this.image({
                         filename: Resource.image.file,
                         width: 32,
                         height: 32,
                         viewAttributes: {
-                            stackSize: 'fixed',
                             stackPadding: 10,
-                            stackAlign: 'end',
                         },
                     })
-
-                    this.label({ text: 'Method source code' })
 
                 })
 

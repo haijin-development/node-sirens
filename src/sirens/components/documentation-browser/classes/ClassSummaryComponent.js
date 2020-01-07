@@ -33,19 +33,15 @@ class ClassSummaryComponent {
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
-                this.styles({
-                    viewAttributes: { stackSize: 'fixed' },
-                })
 
-                this.label({ viewAttributes: { stackSize: 'filled' } })
+                this.spaceFiller()
 
                 this.label({
                     text: `${className} class`,
                     css: [ 'title-1', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
-                this.label({ viewAttributes: { stackSize: 'filled' } })
+                this.spaceFiller()
 
                 if( isInEditionMode ) {
                     this.textButton({
@@ -53,7 +49,6 @@ class ClassSummaryComponent {
                             iconName: GtkIcons.edit,
                             size: GtkIcons.size._16x16,
                         },
-                        viewAttributes: { stackSize: 'fixed' },
                         onClicked: () => {
                             flow.editClassDocumentationDescription({
                                 parentWindow: this.getProps().window

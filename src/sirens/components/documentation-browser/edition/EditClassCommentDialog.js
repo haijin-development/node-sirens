@@ -45,14 +45,12 @@ class EditClassCommentDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'classDescription',
-                        text: description,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'classDescription',
+                            text: description,
+                        })
                     })
-
                 })
 
             })

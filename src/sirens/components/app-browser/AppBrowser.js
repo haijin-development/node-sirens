@@ -44,11 +44,13 @@ class AppBrowser {
                         })
                     )
 
-                    this.component(
-                        AppBrowserBody.new({
-                            model: flow,
-                        })
-                    )
+                    this.spaceFiller( function() {
+                        this.component(
+                            AppBrowserBody.new({
+                                model: flow,
+                            })
+                        )
+                    })
 
                 })
 

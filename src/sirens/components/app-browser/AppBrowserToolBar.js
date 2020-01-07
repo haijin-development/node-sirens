@@ -23,12 +23,6 @@ class AppBrowserToolBar {
 
             this.toolBar( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.button({
                     label: 'Open folder...',
                     image: {

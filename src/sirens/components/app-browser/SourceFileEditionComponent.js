@@ -25,15 +25,12 @@ class SourceFileEditionComponent {
 
         componentsRenderer.render( function(component) {
 
-            this.verticalStack( function() {
+            this.component(
+                FileInspectorBodyComponent.new({
+                    model: flow,
+                })
+            )
 
-                this.component(
-                    FileInspectorBodyComponent.new({
-                        model: flow,
-                    })
-                )
-
-            })
         })
     }
 }

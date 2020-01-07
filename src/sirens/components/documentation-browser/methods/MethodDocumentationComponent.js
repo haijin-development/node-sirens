@@ -30,7 +30,6 @@ class MethodDocumentationComponent {
                     this.component(
                         MethodSummaryComponent.new({
                             model: flow,
-                            viewAttributes: { stackSize: 'fixed' },
                         })
                     )
 
@@ -39,7 +38,6 @@ class MethodDocumentationComponent {
                     this.component(
                         MethodDetailsComponent.new({
                             model: flow,
-                            viewAttributes: { stackSize: 'fixed' },
                         })
                     )
 

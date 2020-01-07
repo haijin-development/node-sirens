@@ -25,15 +25,10 @@ class DocumentationImplementationNoteComponent {
 
             this.verticalStack( function() {
 
-                this.styles({
-                    viewAttributes: { stackSize: 'fixed' },
-                })
-
                 this.label({
                     text: `Implementation note`,
                     css: [ 'title-2', ],
                     wrapMode: 'wordChar',
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.text({
@@ -41,7 +36,6 @@ class DocumentationImplementationNoteComponent {
                     wrapMode: 'wordChar',
                     hasScrollBars: false,
                     editable: false,
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
             })

@@ -44,12 +44,6 @@ class CustomComponent {
 
                     this.toolBar( function() {
 
-                        this.styles({
-                            viewAttributes: {
-                                stackSize: 'fixed',
-                            }
-                        })
-
                         this.button({
                             label: 'Open file...',
                             image: {

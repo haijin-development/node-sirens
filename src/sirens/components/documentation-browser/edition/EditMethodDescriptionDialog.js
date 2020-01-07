@@ -49,14 +49,12 @@ class EditMethodDescriptionDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'methodDescription',
-                        text: descriptionText,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'methodDescription',
+                            text: descriptionText,
+                        })
                     })
-
                 })
 
             })

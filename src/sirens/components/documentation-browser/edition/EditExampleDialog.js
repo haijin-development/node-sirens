@@ -45,26 +45,26 @@ class EditExampleDialog {
 
                     this.verticalSeparator()
 
-                    this.verticalSplitter( function() {
-
-                        this.text({
-                            id: 'exampleDescription',
-                            text: example.getDescription(),
-                            viewAttributes: { splitProportion: 1.0/4.0 },
-                        })
-
-                        this.component(
-                            PlaygroundComponent.new({
-                                id: 'playground',
-                                text: "\n" + example.getCode() + "\n",
-                                hScroll: 'never',
-                                vScroll: 'auto',
-                                viewAttributes: {
-                                    splitProportion: 3.0/4.0
-                                },
+                    this.spaceFiller( function() {
+                        this.verticalSplitter( function() {
+                            this.text({
+                                id: 'exampleDescription',
+                                text: example.getDescription(),
+                                viewAttributes: { splitProportion: 1.0/4.0 },
                             })
-                        )
 
+                            this.component(
+                                PlaygroundComponent.new({
+                                    id: 'playground',
+                                    text: "\n" + example.getCode() + "\n",
+                                    hScroll: 'never',
+                                    vScroll: 'auto',
+                                    viewAttributes: {
+                                        splitProportion: 3.0/4.0
+                                    },
+                                })
+                            )
+                        })                        
                     })
 
                 })

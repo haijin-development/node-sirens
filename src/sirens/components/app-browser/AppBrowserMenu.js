@@ -22,12 +22,6 @@ class AppBrowserMenu {
 
             this.verticalStack( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.component(
                     AppBrowserMenuBar.new( props )
                 )

@@ -44,26 +44,28 @@ class EditParamDialog {
 
                     this.verticalSeparator()
 
-                    this.verticalSplitter( function() {
+                    this.spaceFiller( function() {
+                        this.verticalSplitter( function() {
 
-                        this.container({ viewAttributes: { splitProportion: 1.0/4.0 }}, function() {
+                            this.container({ viewAttributes: { splitProportion: 1.0/4.0 }}, function() {
 
-                            this.text({
-                                id: 'paramName',
-                                text: param.getName(),
+                                this.text({
+                                    id: 'paramName',
+                                    text: param.getName(),
+                                })
+
+                            })
+
+                            this.container({ viewAttributes: { splitProportion: 3.0/4.0 }}, function() {
+
+                                this.text({
+                                    id: 'paramDescription',
+                                    text: param.getDescription(),
+                                })
+
                             })
 
                         })
-
-                        this.container({ viewAttributes: { splitProportion: 3.0/4.0 }}, function() {
-
-                            this.text({
-                                id: 'paramDescription',
-                                text: param.getDescription(),
-                            })
-
-                        })
-
                     })
 
                 })

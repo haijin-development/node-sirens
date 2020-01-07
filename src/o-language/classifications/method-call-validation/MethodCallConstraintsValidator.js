@@ -118,12 +118,6 @@ class MethodCallConstraintsValidator {
     param(paramValue) {
         this.endCurrentAssertionCompilation()
 
-        const paramValidation = ObjectValidation.new({
-            objectToValidate: paramValue,
-        })
-
-        this.addParamValidation(paramValidation)
-
         this.temporaryAssertionCompiler = AssertionCompiler.new()
 
         return this.temporaryAssertionCompiler
@@ -178,22 +172,13 @@ class MethodCallConstraintsValidator {
         const compiledAssertion =
             this.temporaryAssertionCompiler.getCompiledAssertion()
 
-        const currentParamValidation = this.getCurrentParamValidationBeingCompiled()
-
-        currentParamValidation.setCompiledAssertion({
+        const paramValidation = ObjectValidation.new({
             compiledAssertion: compiledAssertion
         })
 
-        this.temporaryAssertionCompiler = null
-    }
+        this.addParamValidation(paramValidation)
 
-    /*
-        Method(`
-            Returns the current param whose assertions are being compiled.
-        `)
-    */
-    getCurrentParamValidationBeingCompiled() {
-        return this.paramsValidations[ this.paramsValidations.length - 1 ]
+        this.temporaryAssertionCompiler = null
     }
 
     /// Evaluating
@@ -224,6 +209,13 @@ class MethodCallConstraintsValidator {
         })
     }
 
+    /*
+        Method(`
+            Collects the parameters to validate in the same order as the validations
+            will be evaluated to correctly pass each parameter to validate to each
+            precompiled ObjectValidation.
+        `)
+    */
     collectParamsToValidateInTheSameOrderAsTheValidationsAreDefined({ methodName: methodName, params: params }) {
         const paramsCollector = MethodCallConstraintsParamsCollector.new()
 

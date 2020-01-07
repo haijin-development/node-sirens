@@ -31,15 +31,7 @@ class ObjectValidation {
         this.behaveAs( ValidationFailureMessageFormatter )
     }
 
-    /*
-        Method(`
-            Returns the CompiledAssertion.
-
-            With the returned CompiledAssertion it is possible to evaluate its assertions
-            to validate one or more objects.
-        `)
-    */
-    setCompiledAssertion({ compiledAssertion: compiledAssertion }) {
+    initialize({ compiledAssertion: compiledAssertion }) {
         return this.compiledAssertion = compiledAssertion
     }
 

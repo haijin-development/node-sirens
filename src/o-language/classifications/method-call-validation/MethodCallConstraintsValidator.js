@@ -26,6 +26,7 @@ class MethodCallConstraintsValidator {
     static definition() {
         this.instanceVariables = [
             'paramsValidations',
+            'preConditionValidations',
             'temporaryAssertionCompiler',
         ]
         this.assumes = []
@@ -41,14 +42,15 @@ class MethodCallConstraintsValidator {
     */
     afterInstantiation() {
         this.paramsValidations = []
+        this.preConditionValidations = []
     }
 
     /*
         Method(`
             Adds the given objectValidation to the collection of validations to evaluate on
             this method call.
-            The given objectValidation holds the object to validate and the CompiledAssertions
-            to evaluate on that object.
+            The given objectValidation holds the CompiledAssertions to evaluate on
+            the parameter object.
         `)
 
         Tags([
@@ -57,6 +59,22 @@ class MethodCallConstraintsValidator {
     */
     addParamValidation(objectValidation) {
         this.paramsValidations.push( objectValidation )
+    }
+
+    /*
+        Method(`
+            Adds the given objectValidation to the collection of validations to evaluate
+            before the activation of this method call.
+            The given objectValidation holds the CompiledAssertions to evaluate on
+            the receiver of the method.
+        `)
+
+        Tags([
+            'implementation', 'adding'
+        ])
+    */
+    addPreConditionValidation(objectValidation) {
+        this.preConditionValidations.push( objectValidation )
     }
 
     /// Validations
@@ -69,13 +87,12 @@ class MethodCallConstraintsValidator {
                     this.param(string) .isString()
                 }
 
-            The method first creates an ObjectValidation on the given paramValue,
-            the parameter string in the example and stores it in this MethodCallConstraintsValidator.
+            The method creates a new temporary AssertionCompiler, keeps it in the
+            instance variable this.temporaryAssertionCompiler and returns it.
 
-            Then it creates a new temporary AssertionCompiler, keeps it and returns it.
+            This temporaryAssertionCompiler will compile the assertions following the
+            param(...) declaration. In the example above it will compile the expression
 
-            This AssertionCompiler will compile the assertions following the param(...)
-            declaration. In the example will compile the expression
                     .isString()
 
             The caller of this method then *must* call the method
@@ -98,10 +115,10 @@ class MethodCallConstraintsValidator {
                 append({ string: string, if: condition }) {
                     this.assertThat({
                         param: string,
-                        fullfills: (param) => { param .isString() }
+                        fulfills: (param) => { param .isString() }
                     })
 
-                    // against
+                    // with
 
                     this.param(string) .isString()
                 }
@@ -121,6 +138,52 @@ class MethodCallConstraintsValidator {
         this.temporaryAssertionCompiler = AssertionCompiler.new()
 
         return this.temporaryAssertionCompiler
+    }
+
+    /*
+        Method(`
+            Creates and sets a method pre condition validation.
+
+            A pre condition is a state that the object is expected to satisfy
+            before activating the method.
+
+            For example if an object has a numeric instance variable named n and a
+            method makes a division by n value
+
+                    calculateSomething(i) {
+                        return i / this.n
+                    }
+
+            a precondition of the method is that this.n is different than 0,
+            othewise the method will throw an division by 0 error or return an undefined
+            value.
+
+            The assertion of such precondition can be done with
+
+                    calculateSomething(i) {
+
+                        this.param(i) .isInteger()
+
+                        this.preCondition( function(receiver) => {
+                            receiver
+                                .isInteger()
+                                .custom( () => { return this.getN() !== 0 } )
+                        })
+                    }
+        `)
+    */
+    preCondition(assertionClosure) {
+        const temporaryAssertionCompiler = AssertionCompiler.new()
+
+        assertionClosure( temporaryAssertionCompiler )
+
+        const compiledAssertion = temporaryAssertionCompiler.getCompiledAssertion()
+
+        const receiverValidation = ObjectValidation.new({
+            compiledAssertion: compiledAssertion
+        })
+
+        this.addPreConditionValidation(receiverValidation)
     }
 
     /// Compiling
@@ -185,7 +248,8 @@ class MethodCallConstraintsValidator {
 
     /*
         Method(`
-            Evaluates the collected params validations on the parameters of a method call.
+            Evaluates the params CompiledAssertions on all of the parameters of a method
+            call.
         `)
 
         Tags([
@@ -205,6 +269,25 @@ class MethodCallConstraintsValidator {
             eachValidation.validate({
                 methodCallInfo: methodCallInfo,
                 objectToValidate: paramValue,
+            })
+        })
+    }
+
+    /*
+        Method(`
+            Evaluates the pre-condition CompiledAssertions on the receiver of the
+            method call.
+        `)
+
+        Tags([
+            'public', 'evaluating'
+        ])
+    */
+    evaluatePreConditionsValidationsOn({ methodCallInfo: methodCallInfo, receiver: receiver }) {
+        this.preConditionValidations.forEach( (eachValidation, i) => {
+            eachValidation.validate({
+                methodCallInfo: methodCallInfo,
+                objectToValidate: receiver,
             })
         })
     }

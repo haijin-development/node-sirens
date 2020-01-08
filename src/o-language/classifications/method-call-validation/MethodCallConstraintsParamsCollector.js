@@ -106,6 +106,16 @@ class MethodCallConstraintsParamsCollector {
 
         return NullAssertionCompiler.new()
     }
+
+    /*
+        Method(`
+            This implementation is only to be polimorphic with
+            MethodCallConstraintsValidator but does nothing since it does not involve
+            any parameter of the method call.
+        `)
+    */
+    preCondition(closure) {
+    }
 }
 
 module.exports = Classification.define(MethodCallConstraintsParamsCollector)

@@ -1,5 +1,6 @@
 const Classification = require('../Classification')
 const CompiledAssertion = require('./CompiledAssertion')
+const Assertion = require('./Assertion')
 const TypesAssertionsDSL = require('./TypesAssertionsDSL')
 const OTypesDSL = require('./OTypesDSL')
 const ContentsAssertionDSL = require('./ContentsAssertionDSL')
@@ -60,6 +61,29 @@ class AssertionCompiler {
     }
 
     // Expressions
+
+    /*
+        Method(`
+            Compiles an expression that, when evaluated, Asserts that a given target object
+            satisfies the given assertionClosure.
+        `)
+    */
+    assert( assertionId, assertionClosure ) {
+        const closure = typeof( assertionClosure ) === 'function' ?
+            assertionClosure : assertionId
+
+        const id = typeof( assertionClosure ) === 'function' ?
+            assertionId : assertionClosure
+
+        const assertion = Assertion.new({
+            id: id,
+            assertWith: closure,
+        })
+
+        this.addAssertion({ assertion: assertion })
+
+        return this
+    }
 
     /*
         Method(`

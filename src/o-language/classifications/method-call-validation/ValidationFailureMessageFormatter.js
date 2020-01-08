@@ -1,6 +1,6 @@
 const Classification = require('../Classification')
 const AssertionCompiler = require('../assertions/AssertionCompiler')
-const {FailedAssertionError} = require('../Errors')
+const {OLanguageError, FailedAssertionError} = require('../Errors')
 
 /*
     Class(`
@@ -75,7 +75,13 @@ class ValidationFailureMessageFormatter {
             return this.formattersMap.get( assertionId )
         }
 
-        throw new OLanguageError(`Unkown validation id '${assertionId}'`)
+        return function({
+            methodCallInfo: methodCallInfo,
+            validatedValue: validatedValue,
+            validationData: validationData,
+        }) {
+            return `Assertion with id '${assertionId}' failed.`
+        }
     }
 
     getMethodInfoString({ methodCallInfo: methodCallInfo }) {

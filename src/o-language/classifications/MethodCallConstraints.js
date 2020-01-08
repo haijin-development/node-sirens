@@ -252,6 +252,11 @@ class MethodCallConstraints {
                 methodCallInfo: methodCallInfo,
                 params: params,
             })
+
+            methodCallConstraintsValidator.evaluatePreConditionsValidationsOn({
+                methodCallInfo: methodCallInfo,
+                receiver: this,
+            })
         })
     }
 }

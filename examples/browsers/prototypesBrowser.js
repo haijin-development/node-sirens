@@ -26,4 +26,5 @@ const user = new User({
     addresses: []
 })
 
+Sirens.useGtkViews()
 Sirens.browsePrototypes( user )

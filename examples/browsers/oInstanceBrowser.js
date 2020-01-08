@@ -61,4 +61,5 @@ address.behaveAs( GeoLocated )
 address.setLat({ lat: 1.1 })
 address.setLong({ long: 1.2 })
 
+Sirens.useGtkViews()
 Sirens.browseObject( address )

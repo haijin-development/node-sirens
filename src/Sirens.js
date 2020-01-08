@@ -103,6 +103,23 @@ const mainFlow = sirensFlowSingleton.asFlowPoint()
 */
 class Sirens {
     /*
+        Method(`
+            Configures Sirens to use the Gtk library for its Views.
+        `)
+    */
+    static useGtkViews() {
+        const skinsNamespace = sirensNamespace.getChildFlow({ id: 'Skins' })
+
+        skinsNamespace.useGtkViews()
+    }
+
+    static useNoViews() {
+        const skinsNamespace = sirensNamespace.getChildFlow({ id: 'Skins' })
+
+        skinsNamespace.useNoViews()
+    }
+
+    /*
      Method(`
         Opens an ObjectBrowser on the given object.
 

@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
@@ -66,19 +65,21 @@ class EditClassDescriptionDialog {
     }
 
     open() {
+        const icon = this.namespace().viewsNamespace().icons
+
         const dialogButtons = [
             {
                 label: 'Cancel',
                 image: {
-                    iconName: GtkIcons.cancel,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.cancel,
+                    size: icon.size._16x16,
                 },
                 action: () => {},
             },
             {
                 image: {
-                    iconName: GtkIcons.ok,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.ok,
+                    size: icon.size._16x16,
                 },
                 label: 'Update class comment',
                 action: () => { this.handleUpdateClassComment() },

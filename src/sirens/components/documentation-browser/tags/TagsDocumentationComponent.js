@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 
 class TagsDocumentationComponent {
@@ -22,6 +21,8 @@ class TagsDocumentationComponent {
         const tags = this.getProps().tags
 
         const isInEditionMode = flow.isInEditionMode()
+
+        const icon = this.namespace().viewsNamespace().icons
 
         componentsRenderer.render( function(component) {
 
@@ -54,8 +55,8 @@ class TagsDocumentationComponent {
 
                     this.textButton({
                         image: {
-                            iconName: GtkIcons.edit,
-                            size: GtkIcons.size._16x16,
+                            iconName: icon.edit,
+                            size: icon.size._16x16,
                         },
                         onClicked: () => {
                             flow.editMethodTags({ parentWindow: this.getProps().window })

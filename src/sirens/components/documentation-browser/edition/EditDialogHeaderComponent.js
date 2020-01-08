@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const FilePath = require('../../../../O').FilePath
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 
 class EditDialogHeaderComponent {
     /// Definition
@@ -22,6 +21,8 @@ class EditDialogHeaderComponent {
 
         const imageIsFile = FilePath.new({ path: mainIcon }).exists()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
@@ -38,7 +39,7 @@ class EditDialogHeaderComponent {
 
                     this.image({
                         iconName: mainIcon,
-                        size: GtkIcons.size._32x32,
+                        size: icon.size._32x32,
                     })
 
                 }
@@ -46,8 +47,8 @@ class EditDialogHeaderComponent {
                 this.spaceFiller()
 
                 this.image({
-                    iconName: GtkIcons.edit,
-                    size: GtkIcons.size._24x24,
+                    iconName: icon.edit,
+                    size: icon.size._24x24,
                     marginRight: 10,
                 })
 

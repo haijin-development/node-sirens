@@ -3,7 +3,6 @@ const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 
 class ClassSummaryComponent {
     /// Definition
@@ -30,6 +29,8 @@ class ClassSummaryComponent {
             :
             'This class has no documentation yet.'
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
@@ -46,8 +47,8 @@ class ClassSummaryComponent {
                 if( isInEditionMode ) {
                     this.textButton({
                         image: {
-                            iconName: GtkIcons.edit,
-                            size: GtkIcons.size._16x16,
+                            iconName: icon.edit,
+                            size: icon.size._16x16,
                         },
                         onClicked: () => {
                             flow.editClassDocumentationDescription({

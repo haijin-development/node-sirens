@@ -1,6 +1,7 @@
 const Classification = require('../O').Classification
 const NamespaceFlow = require('../finger-tips/flows/NamespaceFlow')
 const SkinsGtk = require('./gtk-views/SkinsGtk')
+const GtkIcons = require('./gtk-views/constants/GtkIcons')
 
 class GtkViewsNamespace {
     /// Definition
@@ -24,6 +25,8 @@ class GtkViewsNamespace {
             })
 
         })
+
+        this.defineAvailableIcons()
     }
 
     withGUIDo(closure) {
@@ -32,6 +35,13 @@ class GtkViewsNamespace {
 
     setGlobalStyles({ cssFilePath: cssFilePath }) {
         SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
+    }
+
+    defineAvailableIcons() {
+        this.setUnclassifiedProperty({
+            name: 'icons',
+            value: GtkIcons,
+        })
     }
 }
 

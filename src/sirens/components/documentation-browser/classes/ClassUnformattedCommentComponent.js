@@ -2,8 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
-
 class ClassUnformattedCommentComponent {
     /// Definition
 
@@ -30,6 +28,8 @@ class ClassUnformattedCommentComponent {
 
         const isInEditionMode = flow.isInEditionMode()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.verticalStack( function() {
@@ -48,8 +48,8 @@ class ClassUnformattedCommentComponent {
                     if( isInEditionMode ) {
                         this.textButton({
                             image: {
-                                iconName: GtkIcons.edit,
-                                size: GtkIcons.size._16x16,
+                                iconName: icon.edit,
+                                size: icon.size._16x16,
                             },
                             onClicked: () => {
                                 flow.editClassUnformattedComment({ parentWindow: this.getProps().window })

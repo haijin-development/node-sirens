@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 
 class MethodSourceCodeDocumentationComponent {
@@ -21,6 +20,8 @@ class MethodSourceCodeDocumentationComponent {
         const method = this.getProps().method
 
         const methodSourceCode = method === null ? '' : method.getFormattedSourceCode()
+
+        const icon = this.namespace().viewsNamespace().icons
 
         componentsRenderer.render( function(component) {
 

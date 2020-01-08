@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 
 class DocumentationImplementationNoteComponent {
@@ -20,6 +19,8 @@ class DocumentationImplementationNoteComponent {
         const flow = this.getModel()
 
         const implementationNote = flow.getValue()
+
+        const icon = this.namespace().viewsNamespace().icons
 
         componentsRenderer.render( function(component) {
 

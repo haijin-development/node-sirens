@@ -1,6 +1,5 @@
 const Classification = require('../O').Classification
 const NamespaceFlow = require('../finger-tips/flows/NamespaceFlow')
-const SkinsGtk = require('./gtk-views/SkinsGtk')
 
 class NullViewsNamespace {
     /// Definition

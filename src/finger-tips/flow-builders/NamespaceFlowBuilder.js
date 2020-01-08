@@ -120,7 +120,7 @@ class NamespaceFlowBuilder {
             flow: createObjectCommand,
         })
 
-        this.defineNamespaceAccessor({
+        this.getRootFlow().defineNamespaceAccessor({
             accessor: objectCreatorName,
             value: createObjectCommand,
         })
@@ -166,7 +166,7 @@ class NamespaceFlowBuilder {
             flow: createObjectCommand,
         })
 
-        this.defineNamespaceAccessor({
+        this.getRootFlow().defineNamespaceAccessor({
             accessor: objectCreatorName,
             value: createObjectCommand,
         })
@@ -225,7 +225,7 @@ class NamespaceFlowBuilder {
             anotherNamespaceFlow.build( closure )
         }
 
-        this.defineNamespaceFromNamespaceFlow({
+        this.getRootFlow().addChildNamespaceFlow({
             id: nestedNamespaceId,
             namespaceFlow: anotherNamespaceFlow
         })
@@ -371,44 +371,6 @@ class NamespaceFlowBuilder {
                 })
             })
         }
-    }
-
-    /*
-        Tags([
-            'implementation'
-        ])
-    */
-    defineNamespaceFromNamespaceFlow({ id: nestedNamespaceId, namespaceFlow: namespaceFlow }) {
-        this.getRootFlow().addChildFlow({
-            id: nestedNamespaceId,
-            flow: namespaceFlow
-        })
-
-        const nestedNamespaceAccessor = {}
-
-        for( const childFlow of namespaceFlow.getChildFlows() ) {
-            const nestedId = childFlow.getId()
-
-            nestedNamespaceAccessor[ nestedId ] = namespaceFlow[ nestedId ]
-        }
-
-        this.defineNamespaceAccessor({
-            accessor: nestedNamespaceId,
-            value: nestedNamespaceAccessor
-        })
-    }
-
-    /*
-        Tags([
-            'implementation'
-        ])
-    */
-    defineNamespaceAccessor({ accessor: accessor, value: value })
-    {
-        this.getRootFlow().setUnclassifiedProperty({
-            name: accessor,
-            value: value,
-        })        
     }
 }
 

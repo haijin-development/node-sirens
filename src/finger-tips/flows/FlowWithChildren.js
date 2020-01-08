@@ -440,6 +440,14 @@ class FlowWithChildren {
     acceptBubbledUp(methodName) {
         this.bubbledUpCommands.add( methodName )
     }
+
+
+    addChildNamespaceFlow({ id: nestedNamespaceId, namespaceFlow: namespaceFlow }) {
+        this.addChildFlow({
+            id: nestedNamespaceId,
+            flow: namespaceFlow
+        })
+    }
 }
 
 module.exports = Classification.define(FlowWithChildren)

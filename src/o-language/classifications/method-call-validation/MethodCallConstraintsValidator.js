@@ -27,6 +27,7 @@ class MethodCallConstraintsValidator {
         this.instanceVariables = [
             'paramsValidations',
             'preConditionValidations',
+            'postConditionValidations',
             'temporaryAssertionCompiler',
         ]
         this.assumes = []
@@ -43,6 +44,7 @@ class MethodCallConstraintsValidator {
     afterInstantiation() {
         this.paramsValidations = []
         this.preConditionValidations = []
+        this.postConditionValidations = []
     }
 
     /*
@@ -75,6 +77,22 @@ class MethodCallConstraintsValidator {
     */
     addPreConditionValidation(objectValidation) {
         this.preConditionValidations.push( objectValidation )
+    }
+
+    /*
+        Method(`
+            Adds the given objectValidation to the collection of validations to evaluate
+            after the activation of this method call.
+            The given objectValidation holds the CompiledAssertions to evaluate on
+            the receiver of the method.
+        `)
+
+        Tags([
+            'implementation', 'adding'
+        ])
+    */
+    addPostConditionValidation(objectValidation) {
+        this.postConditionValidations.push( objectValidation )
     }
 
     /// Validations
@@ -142,9 +160,9 @@ class MethodCallConstraintsValidator {
 
     /*
         Method(`
-            Creates and sets a method pre condition validation.
+            Creates and adds a method pre condition validation.
 
-            A pre condition is a state that the object is expected to satisfy
+            A method pre condition is a state that the object is expected to satisfy
             before activating the method.
 
             For example if an object has a numeric instance variable named n and a
@@ -161,13 +179,25 @@ class MethodCallConstraintsValidator {
             The assertion of such precondition can be done with
 
                     calculateSomething(i) {
-
                         this.param(i) .isInteger()
 
                         this.preCondition( function(receiver) => {
-                            receiver
-                                .isInteger()
-                                .custom( () => { return this.getN() !== 0 } )
+                            receiver.assert( 'N not zero', (object) => {
+                                return object.getN() !== 0
+                            })
+                        })
+                    }
+
+            Another example of a pre-condition is that an instance variable of
+            type Array that is accessed during a method call is not empty nor null:
+
+                    calculateSomething(i) {
+                        this.param(i) .isInteger()
+
+                        this.preCondition( function(receiver) => {
+                            receiver.assert( 'Items not empty', (object) => {
+                                return object.getItems().length > 0
+                            })
                         })
                     }
         `)
@@ -184,6 +214,50 @@ class MethodCallConstraintsValidator {
         })
 
         this.addPreConditionValidation(receiverValidation)
+    }
+
+    /*
+        Method(`
+            Creates and adds a method post condition validation.
+
+            A method post condition is a state that the object is expected to satisfy
+            after the method call evaluation.
+
+            For example if an object has a numeric instance variable named n and a
+            method makes a division by n value
+
+                    calculateSomething(i) {
+                        return i / this.n
+                    }
+
+            a post-condition of a setter of this.n is that this.n be different than 0,
+            othewise the method will throw an division by 0 error or return an undefined
+            value when used as a dividend.
+
+            The assertion of such postCondition can be done with
+
+                    setN(n) {
+                        this.param(n) .isInteger()
+
+                        this.postCondition( function(receiver) => {
+                            receiver
+                                .assert( (object) => { return object.getN() !== 0 } )
+                        })
+                    }
+        `)
+    */
+    postCondition(assertionClosure) {
+        const temporaryAssertionCompiler = AssertionCompiler.new()
+
+        assertionClosure( temporaryAssertionCompiler )
+
+        const compiledAssertion = temporaryAssertionCompiler.getCompiledAssertion()
+
+        const receiverValidation = ObjectValidation.new({
+            compiledAssertion: compiledAssertion
+        })
+
+        this.addPostConditionValidation(receiverValidation)
     }
 
     /// Compiling
@@ -285,6 +359,25 @@ class MethodCallConstraintsValidator {
     */
     evaluatePreConditionsValidationsOn({ methodCallInfo: methodCallInfo, receiver: receiver }) {
         this.preConditionValidations.forEach( (eachValidation, i) => {
+            eachValidation.validate({
+                methodCallInfo: methodCallInfo,
+                objectToValidate: receiver,
+            })
+        })
+    }
+
+    /*
+        Method(`
+            Evaluates the pst-condition CompiledAssertions on the receiver of the
+            method call.
+        `)
+
+        Tags([
+            'public', 'evaluating'
+        ])
+    */
+    evaluatePostConditionsValidationsOn({ methodCallInfo: methodCallInfo, receiver: receiver }) {
+        this.postConditionValidations.forEach( (eachValidation, i) => {
             eachValidation.validate({
                 methodCallInfo: methodCallInfo,
                 objectToValidate: receiver,

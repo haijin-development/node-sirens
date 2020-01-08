@@ -259,6 +259,49 @@ class MethodCallConstraints {
             })
         })
     }
+
+    afterMethod({ methodName: methodName, params: params, classification: classification, result: result }) {
+        if( classification === undefined ) { return }
+
+        const protocols = new Set()
+
+        classification.getImplementedProtocols().forEach( (protocol) => {
+            protocol.getAssumptionsChain().forEach( (protocol) => {
+                protocols.add( protocol )
+            }) 
+        })
+
+        classification.getExpectedProtocols().forEach( (protocol) => {
+            protocol.getAssumptionsChain().forEach( (protocol) => {
+                protocols.add( protocol )
+            }) 
+        })
+
+        protocols.forEach( (protocol) => {
+
+            const protocolDefinesMethod = protocol.definesMethod( methodName )
+
+            if( ! protocolDefinesMethod ) { return }
+
+            const methodCallConstraintsValidator =
+                protocolsAssertionsCache.getCompiledAssertionFor({
+                    protocol: protocol,
+                    methodName: methodName,
+                    params: params,
+                })
+
+            const methodCallInfo = {
+                protocolName: protocol.getName(),
+                classificationName: classification.getName(),
+                methodName: methodName,
+            }
+
+            methodCallConstraintsValidator.evaluatePostConditionsValidationsOn({
+                methodCallInfo: methodCallInfo,
+                receiver: this,
+            })
+        })
+    }
 }
 
 /*

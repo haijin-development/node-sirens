@@ -1,8 +1,7 @@
 const expect = require('chai').expect
-const fileSamplesRepository = require('../fileSamplesRepository')
-const Sirens = require('../../../../src/Sirens')
 
-const namespace = Sirens.namespace()
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 
 describe('When using an AppBrowserFlow', () => {
     const sampleFolder = __dirname + '/../../../samples'

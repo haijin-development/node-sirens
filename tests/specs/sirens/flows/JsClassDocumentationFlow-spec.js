@@ -1,11 +1,7 @@
 const expect = require('chai').expect
 const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
-
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
-
 
 describe('When using an JsClassDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'

@@ -1,8 +1,6 @@
 const expect = require('chai').expect
 const fileSamplesRepository = require('../fileSamplesRepository')
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
+const namespace = require('../sirensNamespace')
 
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'

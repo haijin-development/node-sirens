@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
+const fileSamplesRepository = require('../fileSamplesRepository')
 const Sirens = require('../../../../src/Sirens')
 
 const namespace = Sirens.namespace()
@@ -10,14 +10,14 @@ describe('When using an AppBrowserFlow', () => {
     let folder
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFolder({ folder: sampleFolder })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFolder({ folder: sampleFolder })
 
-        folder = FilesRepository.pathTo( sampleFolder )
+        folder = fileSamplesRepository.pathTo( sampleFolder )
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {

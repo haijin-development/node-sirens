@@ -1,6 +1,5 @@
 const expect = require('chai').expect
-
-const FilesRepository = require('../FilesRepository')
+const fileSamplesRepository = require('../fileSamplesRepository')
 const Sirens = require('../../../../src/Sirens')
 
 const namespace = Sirens.namespace()
@@ -13,10 +12,10 @@ describe('When using an FileInspectorFlow', () => {
     let flow
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFile({ file: fileSample })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFile({ file: fileSample })
 
-        filePath = FilesRepository.pathTo( fileSample )
+        filePath = fileSamplesRepository.pathTo( fileSample )
         sourceFile = namespace.SourceFile.new({ filepath: filePath  })
 
         flow = namespace.FileInspectorFlow.new()
@@ -38,7 +37,7 @@ describe('When using an FileInspectorFlow', () => {
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {

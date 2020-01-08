@@ -5,8 +5,6 @@ const SkinsGtk = require('./SkinsGtk')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
 const AnnouncementsSubscriptor = require('../../finger-tips/announcements/AnnouncementsSubscriptor')
 
-SkinsGtk.initialize()
-
 class GtkView {
     /// Definition
 

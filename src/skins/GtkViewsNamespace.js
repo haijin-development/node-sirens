@@ -1,5 +1,6 @@
 const Classification = require('../O').Classification
 const NamespaceFlow = require('../finger-tips/flows/NamespaceFlow')
+const SkinsGtk = require('./gtk-views/SkinsGtk')
 
 class GtkViewsNamespace {
     /// Definition
@@ -12,6 +13,8 @@ class GtkViewsNamespace {
     /// Building
 
     buildWith(flow) {
+        SkinsGtk.initialize()
+
         flow.main({ id: 'GtkViewsNamespace' }, function(thisFlow) {
 
             this.createObjectCommandsFromFilesIn({
@@ -21,6 +24,14 @@ class GtkViewsNamespace {
             })
 
         })
+    }
+
+    withGUIDo(closure) {
+        SkinsGtk.do( closure )
+    }
+
+    setGlobalStyles({ cssFilePath: cssFilePath }) {
+        SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
     }
 }
 

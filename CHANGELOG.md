@@ -4,6 +4,10 @@
 
 ### O language
 
+- Implemented the validation of methods invariant assertions.
+- Implemented method post-condition assertions validations.
+- Implemented method pre-condition assertions.
+- Implemented custom assertions for method calls.
 - Rewrote the MethodCallConstraintsValidator to compile a method CompiledAssertion
  on its first use and reuse the same CompiledAssertion from there on.
  Using the tests as a quick benchmark shows an optimization in the code that validates the assertions of a method call of around 150 times.
@@ -12,8 +16,13 @@
 
 ### Skins
 
+- Moved the initialization of Gtk to GtkViewsNamespace. Now all the code related with Gtk is encapsulated in GtkViewsNamespace and can be switched to a different implementation by replacing the use of GtkViewsNamespace with a different NamespaceFlow.
+
 ### Sirens
 
+- Changed the initialization of Gtk to not assume any particular GUI library.
+- Cleaned up the tests and ensured that no Gtk object is created during the tests of Sirens.
+- Splitted the implementation of the FilesRepository classification from its singleton use in the tests. Now tests can use multiple instances without colliding with each other.
 - Moved the min-size out from the css files to the ComponentBuilder since it is a functional requirement, not a style.
 - Improved and cleaned up the stacks layout definition. Now the layout is done through
  the use of a concrete .spaceFiller() component between consecutive components

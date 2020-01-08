@@ -3,7 +3,6 @@ const FilePath = require('../O').FilePath
 const Flow = require('../finger-tips/flows/Flow')
 
 const SirensNamespace = require('./SirensNamespace')
-const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
 
 /*
     Class(`
@@ -65,7 +64,7 @@ class SirensFlow {
                             .append({ path: cssFilePath })
                     }
 
-                    SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
+                    thisFlow.mainNamespace().setGlobalStyles({ cssFilePath: cssFilePath })
                 })
 
             })
@@ -119,7 +118,7 @@ class SirensFlow {
     /// Browsers
 
     browseObject(object) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const objectBrowserFlow = namespace.ObjectBrowserFlow.new({
@@ -142,7 +141,7 @@ class SirensFlow {
     }
 
     browsePrototypes(object) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const prototypesBrowserFlow = namespace.PrototypesBrowserFlow.new({
@@ -165,7 +164,7 @@ class SirensFlow {
     }
 
     openAppBrowser({ appFolder: appFolderPath } = { appFolder: undefined }) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const appBrowserFlow = namespace.AppBrowserFlow.new({
@@ -190,7 +189,7 @@ class SirensFlow {
     }
 
     openPlayground({ filename: filename } = { filename: undefined }) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const playgroundBrowserFlow = namespace.PlaygroundBrowserFlow.new({

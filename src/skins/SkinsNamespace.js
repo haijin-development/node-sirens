@@ -31,6 +31,12 @@ class SkinsNamespace {
             this.namespace({ id: 'Models', from: fingerTipsNamespace })
         })
     }
+
+    // Namespaces
+
+    viewsNamespace() {
+        return this.getChildFlow({ id: 'Views' })
+    }
 }
 
 module.exports = Classification.define(SkinsNamespace)

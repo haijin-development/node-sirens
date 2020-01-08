@@ -126,6 +126,16 @@ class MethodCallConstraintsParamsCollector {
     */
     postCondition(closure) {
     }
+
+    /*
+        Method(`
+            This implementation is only to be polimorphic with
+            MethodCallConstraintsValidator but does nothing since it does not involve
+            any parameter of the method call.
+        `)
+    */
+    invariant(closure) {
+    }
 }
 
 module.exports = Classification.define(MethodCallConstraintsParamsCollector)

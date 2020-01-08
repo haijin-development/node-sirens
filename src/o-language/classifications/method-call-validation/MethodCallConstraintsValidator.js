@@ -231,7 +231,7 @@ class MethodCallConstraintsValidator {
                     }
 
             a post-condition of a setter of this.n is that this.n be different than 0,
-            othewise the method will throw an division by 0 error or return an undefined
+            otherwise the method will throw an division by 0 error or return an undefined
             value when used as a dividend.
 
             The assertion of such postCondition can be done with
@@ -258,6 +258,70 @@ class MethodCallConstraintsValidator {
         })
 
         this.addPostConditionValidation(receiverValidation)
+    }
+
+    /*
+        Method(`
+            Creates and adds a method invariant validation.
+
+            A method invariant condition is a state that the object is expected to satisfy
+            after and before the evaluation of the method call.
+
+            For example if an object has a numeric instance variable named n and a
+            method makes a division by n value
+
+                    calculateSomething(i) {
+                        return i / this.n
+                    }
+
+            and another method that modifies the value of this.n
+
+                    decreaseValueN({ by: i }) {
+                        this.n -= i
+                    }
+
+            the latter method would had the invariant the this.n be different that 0
+            after and before the variable assingment. Otherwise the method calculateSomething
+            might raise an error or returned an undefined value.
+
+            Note that the validation of the preCondition and postCondition is not possible
+            considering only the given parameter i, it is a combination of the current
+            state of the object (the value of this.n) with the given parameter
+            (the value of i).
+
+            Also note that this example is a simple assignment to an instance variable
+            but a method might evaluate complex loops, conditional statements and
+            calls to other calculations that might modify the state of the object
+            (the value of this.n) and which is not possible to validate in advance only
+            with a static check of the methods and variables signatures, not even using
+            sophisticated type and value inference, since some values might be
+            non-deterministic values like
+
+                    decreaseNByTheCurrentTime() {
+                        this.n -= this.getNumberOfSecondsFromTheBeginningOfDay()
+                    }
+
+            Expressing the assertions as an invariant on the state of the object 
+            receiving the method call both simplifies the logic of the validations
+            and states in a clear and expressive idiom which is the valid state of
+            the object before and after evaluating the method no matter what the
+            method does in between.
+
+            The assertion of such invariant can be done with
+
+                    decreaseValueN({ by: i }) {
+                        this.param(i) .isInteger()
+
+                        this.invariant( function(receiver) => {
+                            receiver
+                                .assert( (object) => { return object.getN() !== 0 } )
+                        })
+                    }
+        `)
+    */
+    invariant(assertionClosure) {
+        this.preCondition( assertionClosure )
+        this.postCondition( assertionClosure )
     }
 
     /// Compiling

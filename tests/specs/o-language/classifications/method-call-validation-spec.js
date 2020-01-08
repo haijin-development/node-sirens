@@ -767,4 +767,79 @@ describe('When validating parameters', () => {
             })
         })
     })
+
+    describe('with a method invariant validation', () => {
+
+        const protocol = Protocol.define( class AProtocol {
+            setN(p1) {
+                this.invariant( function(receiver) {
+                    receiver
+                        .assert( 'N not zero', (object) => {
+                            return object.getN() !== 0
+                        })
+                })
+            }
+
+            decreaseN(p1) {
+                this.invariant( function(receiver) {
+                    receiver
+                        .assert( 'N not zero', (object) => {
+                            return object.getN() !== 0
+                        })
+                })
+            }
+        })
+
+        const AClassification = Classification.define( class A {
+            static definition() {
+                this.instanceVariables = ['n']
+                this.assumes = []
+                this.implements = [ protocol ]
+            }
+
+            afterInstantiation() {
+                this.n = 1
+            }
+
+            getN() {
+                return this.n
+            }
+
+            setN(value) {
+                this.n = value
+            }
+
+            decreaseN() {
+                this.n -= 1
+            }
+        })
+
+        it('the validation passes when the receiver is in a valid state before and after evaluating the method', () => {
+
+            const object = AClassification.new()
+                .behaveAs( MethodCallConstraints )
+
+            expect( () => {
+                object.setN( 2 )
+                object.decreaseN()
+            }).not .to .throw( Error )
+        })
+
+        it('the validation fails when the receiver is not in a valid state', () => {
+
+            const object = AClassification.new()
+                .behaveAs( MethodCallConstraints )
+
+                object.setN( 2 )
+                object.decreaseN()
+ 
+              expect( () => {
+                object.decreaseN()
+            }) .to .raise({
+                error: Errors.FailedAssertionError,
+                withMessage: "Assertion with id 'N not zero' failed.",
+            })
+        })
+    })
+
 })

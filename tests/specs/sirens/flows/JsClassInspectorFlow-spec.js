@@ -18,7 +18,7 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
         fileSamplesRepository.manageFile({ file: fileSample })
 
         filePath = fileSamplesRepository.pathTo( fileSample )
-        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        sourceFile = namespace.SourceFile.new({ path: filePath  })
         sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsClass = jsFile.getClasses()[0]

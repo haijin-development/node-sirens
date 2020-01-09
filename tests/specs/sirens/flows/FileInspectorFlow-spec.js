@@ -14,7 +14,7 @@ describe('When using an FileInspectorFlow', () => {
         fileSamplesRepository.manageFile({ file: fileSample })
 
         filePath = fileSamplesRepository.pathTo( fileSample )
-        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        sourceFile = namespace.SourceFile.new({ path: filePath  })
 
         flow = namespace.FileInspectorFlow.new()
         flow.setCommandsController( namespace.ApplicationCommandsController.new({ mainFlow: flow }) )
@@ -61,7 +61,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile to the main flow', () => {
             expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath().getPath() ) .to
+                expect( sourceFile.getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })

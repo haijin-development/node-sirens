@@ -1,60 +1,30 @@
 const Classification = require('../../O').Classification
 const FilePath = require('../../O').FilePath
-const splitLines = require('split-lines')
-const StringStream = require('../../O').StringStream
 
 /*
- * A source file to query javascript definitions.
+    Class(`
+        A SourceFile object exnteds a FilePath with a method to filter a section of its
+        contents.
+
+        It is not clear yet if the wrapper makes sense or if the method
+        getPartialContents should be moved to the classification FilePath. 
+    `)
  */
 class SourceFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['filepath']
+        this.instanceVariables = []
+        this.assumes = [FilePath]
     }
 
-    /// Initializing
-
-    initialize({ filepath: filepath }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
-
-        this.filepath = FilePath.new({ path: filepath })
-    }
-
-    /// Accessing
-
-    getFilePath() {
-        return this.filepath
-    }
-
-    getFileName() {
-        return this.filepath.getFileName()
-    }
-
-    getFileContents() {
-        return this.filepath.readFileContents()
-    }
-
-    getFileType() {
-        return this.filepath.getFileNameExtension()
-    }
-
-    /// Querying
-
-    isFolder() {
-        return this.filepath.isFolderPath()
-    }
-
-    existsFile() {
-        return this.filepath.isFilePath() && this.filepath.exists()
-    }
-
-    getOriginalSourceCode({
+    getPartialContents({
         fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
     }) {
-        const fileContents = this.getFileContents()
+        const splitLines = require('split-lines')
+        const StringStream = require('../../O').StringStream
+
+        const fileContents = this.readFileContents()
 
         const allLines = splitLines(fileContents)
 
@@ -90,12 +60,6 @@ class SourceFile {
         sourceCode.append({ string: lastLine.slice(0, toColumn) })
 
         return sourceCode.getString()
-    }
-
-    /// Actions
-
-    saveFileContents(newFileContents) {
-        this.filepath.writeFileContents( newFileContents )
     }
 }
 

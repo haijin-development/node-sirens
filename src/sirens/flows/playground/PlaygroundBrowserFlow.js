@@ -59,7 +59,7 @@ class PlaygroundBrowserFlow {
                 id: 'windowTitle',
                 convertToValueWith: ({ object: sourceFile }) => {
                     return sourceFile ?
-                        `Playground - ${sourceFile.getFilePath().getPath()}` :
+                        `Playground - ${sourceFile.getPath()}` :
                         'Playground - No source file selected.'
                 },
             })
@@ -67,7 +67,7 @@ class PlaygroundBrowserFlow {
             this.bufferedValue({
                 id: 'fileContents',
                 convertToValueWith: ({ object: sourceFile }) => {
-                    return sourceFile ? sourceFile.getFileContents() : ''
+                    return sourceFile ? sourceFile.readFileContents() : ''
                 },
             })
         })
@@ -104,9 +104,9 @@ class PlaygroundBrowserFlow {
     openFile({ filename: filename }) {
         if( ! filename ) { return }
 
-        const sourceFile = SourceFile.new({ filepath: filename })
+        const sourceFile = SourceFile.new({ path: filename })
 
-        this.lastOpenedFolder = sourceFile.getFilePath().getFolderPath().getPath()
+        this.lastOpenedFolder = sourceFile.getFolderPath().getPath()
 
         this.setSourceFile({ sourceFile: sourceFile })
     }
@@ -124,7 +124,7 @@ class PlaygroundBrowserFlow {
 
         const fileNewContents = this.getChildFlow({ id: 'fileContents' }).getValue()
 
-        sourceFile.saveFileContents( fileNewContents )
+        sourceFile.writeFileContents( fileNewContents )
     }
 
     openPlayground({ filename: filename } = {}) {

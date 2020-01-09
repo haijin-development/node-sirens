@@ -9,7 +9,7 @@ describe('When parsing a Js file', () => {
     it('with no functions or classes gets the text', () => {
         const filename = samplesFolder + 'text-only.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 
@@ -33,7 +33,7 @@ n += 1`
     it('with only functions gets the functions', () => {
         const filename = samplesFolder + 'functions-only.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 
@@ -63,7 +63,7 @@ n += 1`
     it('with only classes gets the classes', () => {
         const filename = samplesFolder + 'classes-only.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 
@@ -93,7 +93,7 @@ n += 1`
     it('with classes, functions and initial text', () => {
         const filename = samplesFolder + 'text-function-class.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 
@@ -111,7 +111,7 @@ n += 1`
     it('with classes, functions and ending text', () => {
         const filename = samplesFolder + 'function-class-text.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 
@@ -129,7 +129,7 @@ n += 1`
     it('with classes, functions and text in the middle', () => {
         const filename = samplesFolder + 'function-text-class.js'
 
-        const sourceFile = namespace.SourceFile.new({ filepath: filename })
+        const sourceFile = namespace.SourceFile.new({ path: filename })
 
         const sourceFileParser = namespace.SourceFileStructureParser.new()
 

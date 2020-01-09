@@ -10,7 +10,7 @@ class GtkImageBuilder {
         }
 
         if( imageProps.filename !== undefined ) {
-            const imageFilePath = FilePath.new({ path: imageProps.filename})
+            const imageFilePath = FilePath.new({ path: imageProps.filename })
 
             this.validateFilename({ filename: imageProps.filename, imageFilePath: imageFilePath })
 

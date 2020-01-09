@@ -34,7 +34,7 @@ class JsFileParser {
     }
 
     parseFileContents() {
-        const fileContents = this.sourceFile.getFileContents()
+        const fileContents = this.sourceFile.readFileContents()
 
         try {
             return this.parseString({ string: fileContents })

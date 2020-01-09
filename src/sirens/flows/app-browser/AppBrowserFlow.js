@@ -104,7 +104,7 @@ class AppBrowserFlow {
                     let sourceFile = null
 
                     if( selectedFilePath ) {
-                        sourceFile = SourceFile.new({ filepath: selectedFilePath.getPath() })
+                        sourceFile = SourceFile.new({ path: selectedFilePath.getPath() })
                     }
 
                     thisFlow.getChildFlow({ id: 'selectedFile' })
@@ -204,7 +204,7 @@ class AppBrowserFlow {
 
         if( ! currentSourceFile ) { return null }
 
-        return currentSourceFile.getFilePath().getPath()
+        return currentSourceFile.getPath()
     }
 
     hasAClassSelected() {

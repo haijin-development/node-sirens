@@ -53,7 +53,7 @@ class FileObject {
     }
 
     getContents() {
-        return this.fileLocation.getSourceFile().getOriginalSourceCode({
+        return this.fileLocation.getSourceFile().getPartialContents({
             fromLine: this.fileLocation.getStartPos().getLine(),
             fromColumn: this.fileLocation.getStartPos().getColumn(),
             toLine: this.fileLocation.getEndPos().getLine(),
@@ -90,14 +90,14 @@ class FileObject {
 
         const sourceFile = this.fileLocation.getSourceFile()
 
-        const fileContentsBefore = sourceFile.getOriginalSourceCode({
+        const fileContentsBefore = sourceFile.getPartialContents({
             fromLine: 1,
             fromColumn: 0,
             toLine: firstStatementStartLine,
             toColumn: firstStatementStartColumn,
         })
 
-        const fileContentsAfter = sourceFile.getOriginalSourceCode({
+        const fileContentsAfter = sourceFile.getPartialContents({
             fromLine: lastStatementEndLine,
             fromColumn: lastStatementEndColumn,
         })
@@ -110,7 +110,7 @@ class FileObject {
 
         newFileContents.append({ string: fileContentsAfter, if: fileContentsAfter !== '' })
 
-        sourceFile.saveFileContents( newFileContents.getString() )
+        sourceFile.writeFileContents( newFileContents.getString() )
     }
 
     getContentsIndentation() {

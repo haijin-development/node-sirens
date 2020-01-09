@@ -13,7 +13,7 @@ class PlainTextStructureParser {
     /// Parsing
 
     parse({ sourceFile: sourceFile }) {
-        const fileContents = sourceFile.getFileContents()
+        const fileContents = sourceFile.readFileContents()
 
         const allLines = splitLines(fileContents)
 

@@ -166,7 +166,7 @@ describe('When using an AppBrowserFlow', () => {
             filesTree.setSelection([ rootFolder, file ])
 
             expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath().getPath() ) .to
+                expect( sourceFile.getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition.js$/)
             })
         })

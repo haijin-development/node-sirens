@@ -15,7 +15,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
         fileSamplesRepository.manageFile({ file: fileSample })
 
         filePath = fileSamplesRepository.pathTo( fileSample )
-        const sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        const sourceFile = namespace.SourceFile.new({ path: filePath  })
         const sourceFileParser = namespace.SourceFileStructureParser.new()
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 

@@ -71,7 +71,7 @@ class FileInspectorPlugins {
     }
 
     pickFileParserFor({ sourceFile: sourceFile }) {
-        const fileType = sourceFile.getFileType()
+        const fileType = sourceFile.getFileNameExtension()
 
         const parserClassification = this.availableFileParsers[fileType] ?
             this.availableFileParsers[fileType]

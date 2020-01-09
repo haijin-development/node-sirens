@@ -134,7 +134,7 @@ class FileInspectorFlow {
     }
 
     parseSourceFileStructure({ sourceFile: sourceFile }) {
-        if( sourceFile.isFolder() ) {
+        if( sourceFile.isFolderPath() ) {
             return FolderObject.new()
         }
 

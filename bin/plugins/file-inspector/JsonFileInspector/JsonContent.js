@@ -1,5 +1,6 @@
 const Classification = require('../../../../src/O').Classification
 const FileObject = require('../../../../src/sirens/objects/file-structure/FileObject')
+const Resource = require('../../../../src/sirens/objects/Resource')
 
 class JsonContent {
     /// Definition
@@ -29,6 +30,9 @@ class JsonContent {
         return 'json object'
     }
 
+    getIcon() {
+        return Resource.image.object
+    }
 }
 
 module.exports = Classification.define(JsonContent)

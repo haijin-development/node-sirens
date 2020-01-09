@@ -1,6 +1,7 @@
 const Classification = require('../../../../../src/O').Classification
 const FileObject = require('../../../../../src/sirens/objects/file-structure/FileObject')
 const SourceCodeText = require('../../../../../src/sirens/objects/SourceCodeText')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsFileObject {
     /// Definition
@@ -32,6 +33,10 @@ class JsFileObject {
         const sourceCodeText = SourceCodeText.new({ text: originalSourceCode })
 
         return sourceCodeText.getFormattedText()
+    }
+
+    getIcon() {
+        return Resource.image.file
     }
 }
 

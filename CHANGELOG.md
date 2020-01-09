@@ -24,6 +24,8 @@
 
 ### Sirens
 
+- Implemented a YAML files browser.
+- Implemented writing a method to its file from the AppBrowser.
 - Added confirmation to all documentation deletion actions.
 - Changed the initialization of Gtk to not assume any particular GUI library.
 - Cleaned up the tests and ensured that no Gtk object is created during the tests of Sirens.

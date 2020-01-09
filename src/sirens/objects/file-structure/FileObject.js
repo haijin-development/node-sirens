@@ -4,6 +4,7 @@ const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
 const FileObjectLocation = require('./FileObjectLocation')
+const Resource = require('../Resource')
 
 class FileObject {
     /// Definition
@@ -124,6 +125,12 @@ class FileObject {
             level: indentationLevel,
             char: indentationChar,
         }
+    }
+
+    // Displaying
+
+    getIcon() {
+        return Resource.image.haiku
     }
 }
 

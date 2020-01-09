@@ -24,6 +24,14 @@ class JsonStructureParser {
         const endLine = allLines.length
         const endColumn = lastLine.length
 
+        const file = this.createFileObject({
+            sourceFile: sourceFile,
+            startLine: 1,
+            startColumn: 0,
+            endLine: allLines.length,
+            endColumn: lastLine.length,
+        }) 
+
         const jsonContent = this.createJsonContent({
             sourceFile: sourceFile,
             startLine: 1,
@@ -31,14 +39,6 @@ class JsonStructureParser {
             endLine: allLines.length,
             endColumn: lastLine.length,
             fileContents: fileContents,
-        }) 
-
-        const file = this.createFileObject({
-            sourceFile: sourceFile,
-            startLine: 1,
-            startColumn: 0,
-            endLine: allLines.length,
-            endColumn: lastLine.length,
         }) 
 
         file.addChildObject(jsonContent)

@@ -1,5 +1,6 @@
 const Classification = require('../../../../../src/O').Classification
 const JsFileObject = require('./JsFileObject')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsMethod {
     /// Definition
@@ -47,6 +48,10 @@ class JsMethod {
 
     getFileObjectDescription() {
         return `${this.methodName}(...)`
+    }
+
+    getIcon() {
+        return Resource.image.method
     }
 
     getSignatureString() {

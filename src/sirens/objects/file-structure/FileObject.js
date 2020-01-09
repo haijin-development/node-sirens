@@ -53,10 +53,10 @@ class FileObject {
     }
 
     getContents() {
-        return this.fileLocation.getSourceFile().getPartialContents({
-            fromLine: this.fileLocation.getStartPos().getLine(),
+        return this.getSourceFile().getPartialContents({
+            fromLine: this.fileLocation.getStartPos().getLine() - 1,
             fromColumn: this.fileLocation.getStartPos().getColumn(),
-            toLine: this.fileLocation.getEndPos().getLine(),
+            toLine: this.fileLocation.getEndPos().getLine() - 1,
             toColumn: this.fileLocation.getEndPos().getColumn(),
         }) 
     }
@@ -88,17 +88,17 @@ class FileObject {
         const lastStatementEndLine = this.fileLocation.getEndPos().getLine()
         const lastStatementEndColumn = this.fileLocation.getEndPos().getColumn()
 
-        const sourceFile = this.fileLocation.getSourceFile()
+        const sourceFile = this.getSourceFile()
 
         const fileContentsBefore = sourceFile.getPartialContents({
-            fromLine: 1,
+            fromLine: 0,
             fromColumn: 0,
-            toLine: firstStatementStartLine,
+            toLine: firstStatementStartLine - 1,
             toColumn: firstStatementStartColumn,
         })
 
         const fileContentsAfter = sourceFile.getPartialContents({
-            fromLine: lastStatementEndLine,
+            fromLine: lastStatementEndLine - 1,
             fromColumn: lastStatementEndColumn,
         })
 

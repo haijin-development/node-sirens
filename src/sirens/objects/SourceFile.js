@@ -18,48 +18,60 @@ class SourceFile {
         this.assumes = [FilePath]
     }
 
+    /*
+        Method(`
+            Reads and returns the file contents between the given fromLine, fromColumn,
+            toLine and toColumn.
+
+            All lines and colums are 0 based.
+        `)
+    */
     getPartialContents({
         fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
     }) {
-        const splitLines = require('split-lines')
-        const StringStream = require('../../O').StringStream
-
         const fileContents = this.readFileContents()
+        const fileContentsSize = this.readFileContents().length
 
-        const allLines = splitLines(fileContents)
+        let i = 0
+        let linesCount = 0
 
-        if( toLine === undefined && toColumn === undefined ) {
-            toLine = allLines.length
-            toColumn = allLines[toLine - 1].length
+        // make a first pass to collect the partial section indices
+
+        while( i < fileContentsSize ) {
+            if( linesCount === fromLine ) { break }
+
+            if( fileContents[ i ] === `\n` ) {
+                linesCount += 1
+            }
+
+            i += 1
         }
 
-        /// fromLine and toLine are 1 based whilst slice is 0 based.
-        fromLine = fromLine - 1
-        toLine = toLine - 1
+        const partialContentsStart = i + fromColumn
 
-        const firstLine = allLines[fromLine]
+        // toLine can be at most fileContentsSize
+        if( toLine === undefined ) { toLine = fileContentsSize }
 
-        const middleLines = allLines.slice(fromLine + 1, toLine)
+        while( i < fileContentsSize ) {
+            if( linesCount === toLine ) { break }
 
-        const lastLine = allLines[toLine]
+            if( fileContents[ i ] === `\n` ) {
+                linesCount += 1
+            }
 
-        if(fromLine === toLine) {
-            return firstLine.slice(fromColumn, toColumn)
+            i += 1
         }
 
-        let sourceCode = StringStream.new()
+        // toColumn can be at most fileContentsSize
+        if( toColumn === undefined ) { toColumn = fileContentsSize }
 
-        sourceCode.append({ string: firstLine.slice(fromColumn) })
+        const partialContentsEnd = Math.min( i + toColumn, fileContentsSize )
 
-        if( middleLines.length > 0 ) {
-            sourceCode.cr()
-            sourceCode.append({ string: middleLines.join( "\n" ) })
-        }
+        // and in a second pass slice the contents. This avoids concatenating
+        // intermediate partial strings which for small files may be more
+        // inefficient than reading the file stream twice
 
-        sourceCode.cr()
-        sourceCode.append({ string: lastLine.slice(0, toColumn) })
-
-        return sourceCode.getString()
+        return fileContents.slice( partialContentsStart, partialContentsEnd )
     }
 }
 

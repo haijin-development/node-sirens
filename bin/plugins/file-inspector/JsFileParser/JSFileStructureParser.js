@@ -94,9 +94,11 @@ class JSFileStructureParser {
 
         const methodComment = this.getCommentOn({ parseNode: functionNode })
 
-        const method = JsMethod.new()
+        const jsMethod = JsMethod.new()
+        jsMethod.setNamespace( this.namespace() )
+        jsMethod.lockNamespace()
 
-        method.setFileLocation({
+        jsMethod.setFileLocation({
             sourceFile: this.getSourceFile(),
             startLine: functionNode.loc.start.line,
             startColumn: functionNode.loc.start.column,
@@ -104,13 +106,13 @@ class JSFileStructureParser {
             endColumn: functionNode.loc.end.column,
         }) 
 
-        method.setMethodComment( methodComment )
+        jsMethod.setMethodComment( methodComment )
 
-        method.setMethodName( methodName )
+        jsMethod.setMethodName( methodName )
 
-        method.setMethodParams( methodParams )
+        jsMethod.setMethodParams( methodParams )
 
-        this.appendChildTocurrentFileObject({ child: method }) 
+        this.appendChildTocurrentFileObject({ child: jsMethod }) 
     }
 
     visitRestElement(restElement) {

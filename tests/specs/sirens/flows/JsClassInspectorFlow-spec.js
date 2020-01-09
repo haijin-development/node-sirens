@@ -54,6 +54,7 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
         expect( flow ) .to .haveChildFlows([
             'main.classMethods',
             'main.classMethods.selectedMethod',
+            'main.saveSelectedMethod',
             'main.selectedTags',
 
             'main.getClass',

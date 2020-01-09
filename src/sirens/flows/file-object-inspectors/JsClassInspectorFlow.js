@@ -38,6 +38,7 @@ class JsClassInspectorFlow {
                     'editClassUnformattedComment',
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
+                    'saveSelectedMethod',
                 ],
             })
 
@@ -119,6 +120,7 @@ class JsClassInspectorFlow {
             'editClassUnformattedComment',
             'setIsBrowsingDocumentation',
             'isBrowsingDocumentation',
+            'saveSelectedMethod',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -142,54 +144,6 @@ class JsClassInspectorFlow {
 
     getMethodUnformattedComment() {
         return this.getClass().getClassComment().getContents()
-    }
-
-    editClassUnformattedComment({ parentWindow: parentWindow }) {
-        const jsClass = this.getClass()
-
-        const className = jsClass.getClassName()
-
-        const classComment = jsClass.getClassComment().getContents()
-
-        const dialog = this.guiNamespace().EditClassCommentDialog.new({
-            className: className,
-            classComment: classComment,
-            window: parentWindow,
-            onUpdateClassComment: ({ classNewComment: classNewComment }) => {
-                this.updateClassUnformattedComment({
-                    classNewComment: classNewComment
-                })   
-            },
-        })
-
-        dialog.open()
-    }
-
-    updateClassUnformattedComment({ classNewComment: classComment }) {
-        const jsClass = this.getClass()
-
-        jsClass.getClassComment().writeContents({
-            contents: classComment
-        })
-
-        this.reloadSourceFile()
-    }
-
-    updateClassDocumentation({ classDocumentation: classDocumentation }) {
-        const classCommentContents = classDocumentation.generateCommentContents()
-
-        const jsClass = this.getClass()
-
-        const classComment = jsClass.getClassComment()
-
-        const classIndentation = jsClass.getContentsIndentation()
-
-        classComment.writeFormattedContents({
-            commentContents: classCommentContents,
-            outerIndentation: classIndentation,
-        })
-
-        this.reloadSourceFile()
     }
 
     getAllMethodsTagLabels() {
@@ -240,6 +194,94 @@ class JsClassInspectorFlow {
         return methodsWithSelectedTags
     }
 
+    /*
+        Method(`
+            Returns the selected JsMethod of null if no method is selected.
+        `)
+    */
+    getSelectedMethod() {
+        return this.getChildFlow({ id: 'classMethods' }).getSelection()
+    }
+
+    /*
+        Method(`
+            Returns the edited contents of the selected method.
+        `)
+    */
+    getSelectedMethodEditedSourceCode() {
+        return this.getChildFlow({ id: 'selectedMethod' }).getValue()
+    }
+
+    // Actions
+
+    editClassUnformattedComment({ parentWindow: parentWindow }) {
+        const jsClass = this.getClass()
+
+        const className = jsClass.getClassName()
+
+        const classComment = jsClass.getClassComment().getContents()
+
+        const dialog = this.guiNamespace().EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: parentWindow,
+            onUpdateClassComment: ({ classNewComment: classNewComment }) => {
+                this.updateClassUnformattedComment({
+                    classNewComment: classNewComment
+                })   
+            },
+        })
+
+        dialog.open()
+    }
+
+    updateClassUnformattedComment({ classNewComment: classComment }) {
+        const jsClass = this.getClass()
+
+        jsClass.getClassComment().writeContents({
+            contents: classComment
+        })
+
+        this.reloadSourceFile()
+    }
+
+    updateClassDocumentation({ classDocumentation: classDocumentation }) {
+        const classCommentContents = classDocumentation.generateCommentContents()
+
+        const jsClass = this.getClass()
+
+        const classComment = jsClass.getClassComment()
+
+        const classIndentation = jsClass.getContentsIndentation()
+
+        classComment.writeFormattedContents({
+            commentContents: classCommentContents,
+            outerIndentation: classIndentation,
+        })
+
+        this.reloadSourceFile()
+    }
+
+    /*
+        Method(`
+            Writes the contents of the selected method edition to the method file.
+        `)
+    */
+    saveSelectedMethod() {
+        const jsMethod = this.getSelectedMethod()
+        const editedMethodSourceCode = this.getChildFlow({ id: 'selectedMethod' }).getValue()
+
+        jsMethod.writeFormattedContents({ formattedContents: editedMethodSourceCode })
+    }
+
+    // Namespaces
+
+    /*
+        Method(`
+            Returns the namespace where are defined the classes specific to the
+            GUI.
+        `)
+    */
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',

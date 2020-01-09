@@ -78,6 +78,22 @@ class JsMethod {
 
         return `{ ${namedParams.join( ', ' )} }`
     }
+
+    writeFormattedContents({ formattedContents: formattedContents }) {
+        const contentsIndentation = this.getContentsIndentation()
+
+        const sourceCodeText = this.namespace().SourceCodeText.new({
+            text: this.getContents()
+        })
+
+        sourceCodeText.setIndentationChar( contentsIndentation.char )
+        sourceCodeText.setIndentationLevel( contentsIndentation.level )
+
+        const plainContents =
+            sourceCodeText.unformatBackText( formattedContents )
+
+        this.writeContents({ contents: plainContents })
+    }
 }
 
 module.exports = Classification.define(JsMethod)

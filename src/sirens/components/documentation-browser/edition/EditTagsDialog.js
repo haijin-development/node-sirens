@@ -32,6 +32,7 @@ class EditTagsDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -65,12 +66,12 @@ class EditTagsDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
         const icon = this.namespace().viewsNamespace().icons
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
@@ -88,14 +89,6 @@ class EditTagsDialog {
                 action: () => { this.handleUpdateTags() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

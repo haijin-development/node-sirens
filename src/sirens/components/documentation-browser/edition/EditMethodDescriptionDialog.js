@@ -35,6 +35,7 @@ class EditMethodDescriptionDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -62,10 +63,10 @@ class EditMethodDescriptionDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
         const icon = this.namespace().viewsNamespace().icons
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
@@ -83,14 +84,6 @@ class EditMethodDescriptionDialog {
                 action: () => { this.handleUpdateClassComment() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

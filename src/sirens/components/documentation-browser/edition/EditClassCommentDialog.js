@@ -30,6 +30,7 @@ class EditClassCommentDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -57,10 +58,10 @@ class EditClassCommentDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
         const icon = this.namespace().viewsNamespace().icons
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
@@ -78,14 +79,6 @@ class EditClassCommentDialog {
                 action: () => { this.handleUpdateClassComment() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

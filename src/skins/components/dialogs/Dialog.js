@@ -49,17 +49,4 @@ class Dialog {
     }
 }
 
-Dialog = Classification.define(Dialog)
-
-/// Constructors
-
-Dialog.open = function({ window: windowComponent }) {
-    const dialog = this.new({
-        window: windowComponent,
-    })
-
-    return dialog.open()
-}
-
-
-module.exports = Dialog
+module.exports = Classification.define(Dialog)

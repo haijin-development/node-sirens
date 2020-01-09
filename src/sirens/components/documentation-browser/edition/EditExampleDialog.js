@@ -31,6 +31,7 @@ class EditExampleDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -74,12 +75,12 @@ class EditExampleDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
         const icon = this.namespace().viewsNamespace().icons
 
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
@@ -97,14 +98,6 @@ class EditExampleDialog {
                 action: () => { this.handleUpdateExample() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

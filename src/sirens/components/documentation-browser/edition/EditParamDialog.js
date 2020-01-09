@@ -29,6 +29,7 @@ class EditParamDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -74,12 +75,12 @@ class EditParamDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
         const icon = this.namespace().viewsNamespace().icons
 
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
@@ -97,14 +98,6 @@ class EditParamDialog {
                 action: () => { this.handleUpdateParam() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

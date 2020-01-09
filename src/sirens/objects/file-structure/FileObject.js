@@ -74,7 +74,13 @@ class FileObject {
         return this.getContents().trim() !== ''
     }
 
-    writeContents({ contents: contents }) {
+    /*
+        Method(`
+            Writes the given contents to the FileObject location without modifying
+            the contents in any way. 
+        `)
+    */
+    writePlainContents({ contents: contents }) {
         const firstStatementStartLine = this.fileLocation.getStartPos().getLine()
         const firstStatementStartColumn = this.fileLocation.getStartPos().getColumn()
 

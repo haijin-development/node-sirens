@@ -32,17 +32,19 @@ class JsComment {
         return originalSourceCode.slice(2, -2)
     }
 
-    writeContents({ contents: comment }) {
-        if( ! this.hasText() ) {
-            comment = comment + "\n"
-        }
-
+    /*
+        Method(`
+            Writes the given contents to the FileObject location without modifying
+            the contents in any way.
+        `)
+    */
+    writePlainContents({ contents: comment }) {
         this.previousClassificationDo( () => {
-            this.writeContents({ contents: comment })
+            this.writePlainContents({ contents: comment })
         })
     }
 
-    writeFormattedContents({ commentContents: commentContents, outerIndentation: outerIndentation }) {
+    writeContents({ commentContents: commentContents, outerIndentation: outerIndentation }) {
         const innerIndentation = this.getInnerIndentation()
 
         const sourceCodeText = SourceCodeText.new({ text: this.getContents() })
@@ -55,9 +57,10 @@ class JsComment {
         const comment =
             '/*' + 
             unformattedCommentContents +
-            `\n` + outerIndentation.char.repeat( outerIndentation.level ) + '*/'
+            `\n` + outerIndentation.char.repeat( outerIndentation.level ) + '*/' +
+            `\n`
 
-        this.writeContents({ contents: comment })
+        this.writePlainContents({ contents: comment })
     }
 
     getInnerIndentation() {

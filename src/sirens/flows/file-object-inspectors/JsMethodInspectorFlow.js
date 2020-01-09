@@ -113,18 +113,23 @@ class JsMethodInspectorFlow {
             method: method,
             window: parentWindow,
             onUpdateMethodComment: ({ methodNewComment: methodNewComment }) => {
-                this.updateMethodUnformmatedComment({ methodNewComment: methodNewComment })
+                this.updateMethodPlainComment({ methodNewComment: methodNewComment })
             },
         })
 
         dialog.open()
     }
 
-    updateMethodUnformmatedComment({ methodNewComment: methodNewComment }) {
+    updateMethodPlainComment({ methodNewComment: methodNewComment }) {
         const method = this.getMethod()
 
-        method.getMethodComment().writeContents({
-            contents: methodNewComment
+        const methodComment = method.getMethodComment()
+
+        const methodIndentation = method.getContentsIndentation()
+
+        methodComment.writeContents({
+            commentContents: methodNewComment,
+            outerIndentation: methodIndentation,
         })
 
         this.reloadSourceFile()
@@ -133,18 +138,9 @@ class JsMethodInspectorFlow {
     updateMethodDocumentation({ methodDocumentation: methodDocumentation }) {
         const methodCommentContents = methodDocumentation.generateCommentContents()
 
-        const method = this.getMethod()
-
-        const methodComment = method.getMethodComment()
-
-        const methodIndentation = method.getContentsIndentation()
-
-        methodComment.writeFormattedContents({
-            commentContents: methodCommentContents,
-            outerIndentation: methodIndentation,
+        this.updateMethodPlainComment({
+            methodNewComment: methodCommentContents
         })
-
-        this.reloadSourceFile()
     }
 
     guiNamespace() {

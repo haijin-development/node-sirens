@@ -149,7 +149,7 @@ describe('When using an JsMethodInspectorFlow', () => {
         it('writes the updated comment to the file', () => {
             const methodComment = '/* An updated comment */'
 
-            flow.updateMethodUnformmatedComment({
+            flow.updateMethodPlainComment({
                 methodNewComment: methodComment
             })
 
@@ -165,7 +165,7 @@ describe('When using an JsMethodInspectorFlow', () => {
         it('calls the reloadSourceFile callback', () => {
             const methodComment = '/* An updated comment */'
 
-            flow.updateMethodUnformmatedComment({
+            flow.updateMethodPlainComment({
                 methodNewComment: methodComment
             })
 

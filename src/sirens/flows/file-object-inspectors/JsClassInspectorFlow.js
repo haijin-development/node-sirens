@@ -238,7 +238,7 @@ class JsClassInspectorFlow {
     updateClassUnformattedComment({ classNewComment: classComment }) {
         const jsClass = this.getClass()
 
-        jsClass.getClassComment().writeContents({
+        jsClass.getClassComment().writePlainContents({
             contents: classComment
         })
 
@@ -254,7 +254,7 @@ class JsClassInspectorFlow {
 
         const classIndentation = jsClass.getContentsIndentation()
 
-        classComment.writeFormattedContents({
+        classComment.writeContents({
             commentContents: classCommentContents,
             outerIndentation: classIndentation,
         })
@@ -271,8 +271,10 @@ class JsClassInspectorFlow {
         const jsMethod = this.getSelectedMethod()
         const editedMethodSourceCode = this.getChildFlow({ id: 'selectedMethod' }).getValue()
 
-        jsMethod.writeFormattedContents({ formattedContents: editedMethodSourceCode })
-    }
+        jsMethod.writeContents({ methodContents: editedMethodSourceCode })
+
+        this.reloadSourceFile()
+     }
 
     // Namespaces
 

@@ -79,7 +79,13 @@ class JsMethod {
         return `{ ${namedParams.join( ', ' )} }`
     }
 
-    writeFormattedContents({ formattedContents: formattedContents }) {
+    /*
+        Method(`
+            Writes the given methodContents to the method Location
+            preserving the original indentation of the method.
+        `)
+    */
+    writeContents({ methodContents: methodContents }) {
         const contentsIndentation = this.getContentsIndentation()
 
         const sourceCodeText = this.namespace().SourceCodeText.new({
@@ -90,9 +96,9 @@ class JsMethod {
         sourceCodeText.setIndentationLevel( contentsIndentation.level )
 
         const plainContents =
-            sourceCodeText.unformatBackText( formattedContents )
+            sourceCodeText.unformatBackText( methodContents )
 
-        this.writeContents({ contents: plainContents })
+        this.writePlainContents({ contents: plainContents })
     }
 }
 

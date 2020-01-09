@@ -52,7 +52,9 @@ class MethodSummaryComponent {
                             size: icon.size._16x16,
                         },
                         onClicked: () => {
-                            flow.editMethodDocumentationDescription({ parentWindow: this.getProps().window })
+                            flow.editMethodDocumentationDescription({
+                                parentWindow: component.getProps().window
+                            })
                         },
                     })
                 }
@@ -71,7 +73,8 @@ class MethodSummaryComponent {
                 TagsDocumentationComponent.new({
                     model: flow,
                     id: 'tags',
-                    tags: flow.getTagsSortedByPriority()
+                    tags: flow.getTagsSortedByPriority(),
+                    window: component.getProps().window,
                 })
             )
         })

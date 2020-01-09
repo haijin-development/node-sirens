@@ -193,6 +193,7 @@ class MethodDetailsComponent {
                 action: () => {
                     flow.deleteMethodDocumentationImplementationNote({
                         implementationNote: implementationNote,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -229,6 +230,7 @@ class MethodDetailsComponent {
                 action: () => {
                     flow.deleteMethodDocumentationParam({
                         param: param,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -252,6 +254,7 @@ class MethodDetailsComponent {
                 action: () => {
                     flow.deleteMethodDocumentationExample({
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })

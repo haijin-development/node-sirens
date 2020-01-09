@@ -48,6 +48,7 @@ class AppBrowser {
                         this.component(
                             AppBrowserBody.new({
                                 model: flow,
+                                window: component,
                             })
                         )
                     })

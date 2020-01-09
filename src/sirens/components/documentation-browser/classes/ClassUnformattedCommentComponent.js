@@ -52,7 +52,9 @@ class ClassUnformattedCommentComponent {
                                 size: icon.size._16x16,
                             },
                             onClicked: () => {
-                                flow.editClassUnformattedComment({ parentWindow: this.getProps().window })
+                                flow.editClassUnformattedComment({
+                                    parentWindow: component.getProps().window
+                                })
                             },
                         })
                     }

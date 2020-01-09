@@ -26,10 +26,10 @@ class MethodDocumentationComponent {
             this.container({ hScroll: 'never' }, function() {
 
                 this.verticalStack(function() {
-
                     this.component(
                         MethodSummaryComponent.new({
                             model: flow,
+                            window: component.getProps().window,
                         })
                     )
 
@@ -38,9 +38,9 @@ class MethodDocumentationComponent {
                     this.component(
                         MethodDetailsComponent.new({
                             model: flow,
+                            window: component.getProps().window,
                         })
                     )
-
                 })
 
             })

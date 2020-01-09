@@ -72,6 +72,7 @@ class JsMethodInspectorComponent {
         if( showsUnformattedComments ) {
             return MethodUnformattedCommentComponent.new({
                 model: flow,
+                window: this.getProps().window,
             })
         } else {
             const methodDocumentationFlow =
@@ -79,6 +80,7 @@ class JsMethodInspectorComponent {
 
             return MethodDocumentationComponent.new({
                 model: methodDocumentationFlow,
+                window: this.getProps().window,
             })
         }
     }

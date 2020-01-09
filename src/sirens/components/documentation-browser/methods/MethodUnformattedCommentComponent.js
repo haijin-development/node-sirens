@@ -50,7 +50,9 @@ class MethodUnformattedCommentComponent {
                                 size: icon.size._16x16,
                             },
                             onClicked: () => {
-                                flow.editMethodUnformattedComment({ parentWindow: this.getProps().window })
+                                flow.editMethodUnformattedComment({
+                                    parentWindow: component.getProps().window
+                                })
                             },
                         })
                     }

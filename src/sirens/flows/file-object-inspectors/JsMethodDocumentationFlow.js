@@ -378,9 +378,10 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationParam({ param: param }) {
+    deleteMethodDocumentationParam({ param: param, parentWindow: parentWindow }) {
         const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
             confirmationText: 'Delete this parameter documentation?',
+            window: parentWindow,
         }).open()
 
         if( confirmsDelete !== true ) { return }
@@ -485,9 +486,12 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationImplementationNote({ implementationNote: implementationNote }) {
+    deleteMethodDocumentationImplementationNote({
+        implementationNote: implementationNote, parentWindow: parentWindow
+    }) {
         const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
             confirmationText: 'Delete this implementation note?',
+            window: parentWindow,
         }).open()
 
         if( confirmsDelete !== true ) { return }
@@ -570,9 +574,10 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationExample({ example: example }) {
+    deleteMethodDocumentationExample({ example: example, parentWindow: parentWindow }) {
         const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
             confirmationText: 'Delete this example?',
+            window: parentWindow,
         }).open()
 
         if( confirmsDelete !== true ) { return }

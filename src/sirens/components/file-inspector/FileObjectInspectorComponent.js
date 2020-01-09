@@ -30,7 +30,9 @@ class FileObjectInspectorComponent {
         componentsRenderer.render( function(component) {
             this.container({ id: 'selectedFileObject', hasScrollBars: false }, function() {
 
-                const fileComponent = flow.getFileObjectComponent()
+                const fileComponent = flow.getFileObjectComponent({
+                    parentWindow: component.getProps().window
+                })
 
                 if( fileComponent != null ) {
                     this.component( fileComponent )

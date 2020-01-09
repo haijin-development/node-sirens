@@ -1,7 +1,18 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
 const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
+
+
+class JsClassInspectorFlowMethodAssertions {
+    getFlowComponent({ parentWindow: parentWindow }) {
+        this.param( parentWindow ) .isNotNull() .isNotUndefined()        
+    }
+}
+JsClassInspectorFlowMethodAssertions = Protocol.define(JsClassInspectorFlowMethodAssertions)
+
+
 
 class JsClassInspectorFlow {
     /// Definition
@@ -9,6 +20,7 @@ class JsClassInspectorFlow {
     static definition() {
         this.instanceVariables = []
         this.assumes = [ObjectInspectorFlow]
+        this.implements = [JsClassInspectorFlowMethodAssertions]
     }
 
     /// Building
@@ -117,9 +129,10 @@ class JsClassInspectorFlow {
 
     // Methods
 
-    getFlowComponent() {
+    getFlowComponent({ parentWindow: parentWindow }) {
         return JsClassInspectorComponent.new({
             model: this.asFlowPoint(),
+            window: parentWindow,
         })
     }
 

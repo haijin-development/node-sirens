@@ -52,7 +52,7 @@ class ClassSummaryComponent {
                         },
                         onClicked: () => {
                             flow.editClassDocumentationDescription({
-                                parentWindow: this.getProps().window
+                                parentWindow: component.getProps().window
                             })
                         },
                     })

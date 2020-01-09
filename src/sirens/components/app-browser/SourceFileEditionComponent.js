@@ -28,6 +28,7 @@ class SourceFileEditionComponent {
             this.component(
                 FileInspectorBodyComponent.new({
                     model: flow,
+                    window: component.getProps().window,
                 })
             )
 

@@ -33,7 +33,7 @@ class ClassDocumentationComponent {
                     this.component(
                         ClassSummaryComponent.new({
                             model: flow,
-                            window: this.getProps().window,
+                            window: component.getProps().window,
                         })
                     )
 
@@ -42,7 +42,7 @@ class ClassDocumentationComponent {
                     this.component(
                         ClassDetailsComponent.new({
                             model: flow,
-                            window: this.getProps().window,
+                            window: component.getProps().window,
                         })
                     )
 

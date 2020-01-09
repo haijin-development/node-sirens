@@ -28,7 +28,7 @@ class Dialog {
         const view = this.namespace().Views.DialogView.new({
             title: props.title,
             buttons: props.buttons,
-            //windowView: windowView,
+            windowView: windowView,
             dialog: this,
         })
 

@@ -163,6 +163,7 @@ class ClassDetailsComponent {
                 action: () => {
                     flow.deleteClassDocumentationImplementationNote({
                         implementationNote: implementationNote,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -175,8 +176,8 @@ class ClassDetailsComponent {
                 label: 'Edit this example...',
                 action: () => {
                     flow.editClassDocumentationExample({
-                        parentWindow: this.getProps().window,
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -186,6 +187,7 @@ class ClassDetailsComponent {
                 action: () => {
                     flow.deleteClassDocumentationExample({
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })

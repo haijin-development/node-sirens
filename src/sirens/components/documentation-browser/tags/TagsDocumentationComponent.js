@@ -59,7 +59,9 @@ class TagsDocumentationComponent {
                             size: icon.size._16x16,
                         },
                         onClicked: () => {
-                            flow.editMethodTags({ parentWindow: this.getProps().window })
+                            flow.editMethodTags({
+                                parentWindow: component.getProps().window
+                            })
                         },
                     })
                 }

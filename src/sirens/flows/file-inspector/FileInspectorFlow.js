@@ -127,10 +127,10 @@ class FileInspectorFlow {
                     .setSelection(pathToObject)
     }
 
-    getFileObjectComponent() {
+    getFileObjectComponent({ parentWindow: parentWindow }) {
         const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFileObject' })
 
-        return selectedFileObjectFlow.getFlowComponent()
+        return selectedFileObjectFlow.getFlowComponent({ parentWindow: parentWindow })
     }
 
     parseSourceFileStructure({ sourceFile: sourceFile }) {

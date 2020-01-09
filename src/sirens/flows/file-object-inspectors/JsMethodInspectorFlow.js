@@ -87,9 +87,10 @@ class JsMethodInspectorFlow {
 
     // Methods
 
-    getFlowComponent() {
+    getFlowComponent({ parentWindow: parentWindow }) {
         return JsMethodInspectorComponent.new({
             model: this.asFlowPoint(),
+            window: parentWindow,
         })
     }
 

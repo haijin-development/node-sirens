@@ -306,7 +306,7 @@ describe('When using an FileInspectorFlow', () => {
 
             inTreeSelectObjectAtIndex({ indexPath: [0] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'TextualContentComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'TextualContentComponent' )
         })
 
         it('.getFileObjectComponent() returns a JsClassInspectorComponent for a JsClass', () => {
@@ -314,7 +314,7 @@ describe('When using an FileInspectorFlow', () => {
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsClassInspectorComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'JsClassInspectorComponent' )
         })
 
         it('.getFileObjectComponent() returns a JsMethodInspectorComponent for a JsMethod', () => {
@@ -322,7 +322,7 @@ describe('When using an FileInspectorFlow', () => {
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1, 1] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsMethodInspectorComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'JsMethodInspectorComponent' )
         })
 
         it('.setShowUnformattedComments() set the edition mode', () => {

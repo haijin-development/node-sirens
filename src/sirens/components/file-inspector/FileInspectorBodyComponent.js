@@ -72,6 +72,7 @@ class FileInspectorBodyComponent {
                 this.component(
                     FileObjectInspectorComponent.new({
                         model: flow,
+                        window: component.getProps().window,
                     })
                 )
             })

@@ -279,6 +279,12 @@ class JsClassDocumentationFlow {
     }
 
     deleteClassDocumentationImplementationNote({ implementationNote: implementationNote }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this implementation note?',
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const classDocumentation = this.getClassDocumentation()
 
         classDocumentation.deleteImplementationNote({
@@ -360,6 +366,12 @@ class JsClassDocumentationFlow {
     }
 
     deleteClassDocumentationExample({ example: example }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this example?',
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const classDocumentation = this.getClassDocumentation()
 
         classDocumentation.deleteExample({
@@ -381,6 +393,12 @@ class JsClassDocumentationFlow {
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',
+        })
+    }
+
+    skinsNamespace() {
+        return this.bubbleUp({
+            command: 'skinsNamespace',
         })
     }
 }

@@ -16,6 +16,7 @@
 
 ### Skins
 
+- Implemented confirmation dialog.
 - Cleaned up references to GtkIcons and moved them to GtkViewsNamespace.
 - Implemented a NullViewsNamespace and added protocol to choose which Views library to use.
 - Cleaned up NamespaceFlowBuilder, removed duplicated code and moved it to NamespaceFlow.
@@ -23,6 +24,7 @@
 
 ### Sirens
 
+- Added confirmation to all documentation deletion actions.
 - Changed the initialization of Gtk to not assume any particular GUI library.
 - Cleaned up the tests and ensured that no Gtk object is created during the tests of Sirens.
 - Splitted the implementation of the FilesRepository classification from its singleton use in the tests. Now tests can use multiple instances without colliding with each other.

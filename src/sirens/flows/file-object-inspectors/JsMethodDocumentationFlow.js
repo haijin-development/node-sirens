@@ -379,6 +379,12 @@ class JsMethodDocumentationFlow {
     }
 
     deleteMethodDocumentationParam({ param: param }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this parameter documentation?',
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteParam({ param: param })
@@ -480,6 +486,12 @@ class JsMethodDocumentationFlow {
     }
 
     deleteMethodDocumentationImplementationNote({ implementationNote: implementationNote }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this implementation note?',
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteImplementationNote({ implementationNote: implementationNote })
@@ -559,6 +571,12 @@ class JsMethodDocumentationFlow {
     }
 
     deleteMethodDocumentationExample({ example: example }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this example?',
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteExample({
@@ -580,6 +598,12 @@ class JsMethodDocumentationFlow {
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',
+        })
+    }
+
+    skinsNamespace() {
+        return this.bubbleUp({
+            command: 'skinsNamespace',
         })
     }
 

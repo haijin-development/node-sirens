@@ -17,7 +17,7 @@ class ConfirmationDialog {
         const title = this.getProps().title ?
             this.getProps().title
             :
-            'Confirm ...'
+            'Please confirm ...'
 
         const confirmationText = this.getProps().confirmationText
 
@@ -29,15 +29,19 @@ class ConfirmationDialog {
                     title: title,
                     window: component.getProps().window,
                     buttons: component.getDialogButtons(),
+                    css: ['confirmation-dialog-component']
                 })
 
                 this.verticalStack( function() {
 
-                    this.spaceFiller( function() {
-                        this.label({
-                            text: confirmationText,
-                        })
+                    this.styles({
+                        css: ['dialog-component-body'],
                     })
+
+                    this.label({
+                        text: confirmationText,
+                    })
+
                 })
 
             })

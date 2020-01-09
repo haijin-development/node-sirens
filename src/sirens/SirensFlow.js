@@ -48,6 +48,8 @@ class SirensFlow {
                     'openAppBrowser',
                     'openPlayground',
                     'getPreferences',
+                    'useGtkViews',
+                    'useNoViews',
                 ],
             })
 
@@ -93,6 +95,8 @@ class SirensFlow {
             'browsePrototypes',
             'openAppBrowser',
             'openPlayground',
+            'useGtkViews',
+            'useNoViews',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -246,6 +250,45 @@ class SirensFlow {
             mainFlow: flow,
             mainNamespace: namespace,
         })
+    }
+
+    /*
+        Method(`
+            Configures Sirens to use the Gtk library for its Views.
+        `)
+    */
+    useGtkViews() {
+        const skinsNamespace = this.skinsNamespace()
+
+        skinsNamespace.useGtkViews()
+
+        this.setGlobalStylesFromLoadedPreferences()
+    }
+
+    useNoViews() {
+        const skinsNamespace = this.skinsNamespace()
+
+        skinsNamespace.useNoViews()
+
+        this.setGlobalStylesFromLoadedPreferences()
+    }
+
+    setGlobalStylesFromLoadedPreferences() {
+        const preferences = this.getPreferences()
+
+        let cssFilePath = FilePath.new({ path: preferences.cssFile })
+
+        if( cssFilePath.isRelative() ) {
+            cssFilePath = FilePath.new({ path: __dirname })
+                .append({ path: '../..' })
+                .append({ path: cssFilePath })
+        }
+
+        this.mainNamespace().setGlobalStyles({ cssFilePath: cssFilePath })        
+    }
+
+    getPreferences() {
+        return this.getChildFlow({ id: 'preferences' }).getValue()
     }
 }
 

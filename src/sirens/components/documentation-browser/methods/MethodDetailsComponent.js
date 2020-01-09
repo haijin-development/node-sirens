@@ -179,7 +179,7 @@ class MethodDetailsComponent {
             const implementationNote = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this implementation note...',
                 action: () => {
                     flow.editMethodDocumentationImplementationNote({
                         parentWindow: this.getProps().window,
@@ -189,7 +189,7 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this implementation note',
                 action: () => {
                     flow.deleteMethodDocumentationImplementationNote({
                         implementationNote: implementationNote,
@@ -215,7 +215,7 @@ class MethodDetailsComponent {
             const param = treeSelection
 
             menu.item({
-                label: 'Edit param...',
+                label: 'Edit this parameter documentation...',
                 action: () => {
                     flow.editMethodDocumentationParam({
                         parentWindow: this.getProps().window,
@@ -225,7 +225,7 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete param',
+                label: 'Delete this parameter documentation',
                 action: () => {
                     flow.deleteMethodDocumentationParam({
                         param: param,
@@ -238,7 +238,7 @@ class MethodDetailsComponent {
             const example = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this example...',
                 action: () => {
                     flow.editMethodDocumentationExample({
                         parentWindow: this.getProps().window,
@@ -248,7 +248,7 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this example',
                 action: () => {
                     flow.deleteMethodDocumentationExample({
                         example: example,
@@ -271,7 +271,7 @@ class MethodDetailsComponent {
                     break
                 case 'Parameters':
                     menu.item({
-                        label: 'Add a new parameter...',
+                        label: 'Add a new parameter documentation...',
                         action: () => {
                             flow.createMethodDocumentationParam({
                                 parentWindow: this.getProps().window,

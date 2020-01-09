@@ -149,7 +149,7 @@ class ClassDetailsComponent {
             const implementationNote = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this implementation note...',
                 action: () => {
                     flow.editClassDocumentationImplementationNote({
                         parentWindow: this.getProps().window,
@@ -159,7 +159,7 @@ class ClassDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this implementation note',
                 action: () => {
                     flow.deleteClassDocumentationImplementationNote({
                         implementationNote: implementationNote,
@@ -172,7 +172,7 @@ class ClassDetailsComponent {
             const example = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this example...',
                 action: () => {
                     flow.editClassDocumentationExample({
                         parentWindow: this.getProps().window,
@@ -182,7 +182,7 @@ class ClassDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this example',
                 action: () => {
                     flow.deleteClassDocumentationExample({
                         example: example,

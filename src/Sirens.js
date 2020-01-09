@@ -108,15 +108,11 @@ class Sirens {
         `)
     */
     static useGtkViews() {
-        const skinsNamespace = sirensNamespace.getChildFlow({ id: 'Skins' })
-
-        skinsNamespace.useGtkViews()
+        mainFlow.useGtkViews()
     }
 
     static useNoViews() {
-        const skinsNamespace = sirensNamespace.getChildFlow({ id: 'Skins' })
-
-        skinsNamespace.useNoViews()
+        mainFlow.useNoViews()
     }
 
     /*

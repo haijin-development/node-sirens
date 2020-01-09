@@ -37,6 +37,14 @@ class Dialog {
         return view
     }
 
+    initializeProps() {
+        this.addCssProps({ css: ['dialog-component'] })
+
+        this.previousClassificationDo( () => {
+            this.initializeProps()
+        })
+    }
+
     synchronizeViewFromModel() {
     }
 

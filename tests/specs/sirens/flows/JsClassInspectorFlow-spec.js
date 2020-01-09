@@ -65,6 +65,7 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
             'main.editClassUnformattedComment',
             'main.isBrowsingDocumentation',
             'main.setIsBrowsingDocumentation',
+            'main.setMethodSelectionIndex',
 
             'main.classDocumentation',
             'main.classDocumentation.documentationIndex',
@@ -179,7 +180,6 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
             expect( flow.getCommandsController() ) .to
                 .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
                     expect(command.commandName) .to .eql('reloadSourceFile')
-                    expect(command.params) .to .eql([])
                     expect(command.startingAtFlow.getIdPath()) .to .eql('main')
                 })
         })

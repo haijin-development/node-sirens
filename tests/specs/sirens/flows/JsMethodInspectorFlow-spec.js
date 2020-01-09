@@ -53,6 +53,7 @@ describe('When using an JsMethodInspectorFlow', () => {
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
             'main.methodSourceCode',
+            'main.saveSelectedMethod',
 
             'main.showsUnformattedComments',
             'main.getMethod',
@@ -175,7 +176,6 @@ describe('When using an JsMethodInspectorFlow', () => {
             expect( flow.getCommandsController() ) .to
                 .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
                     expect(command.commandName) .to .eql('reloadSourceFile')
-                    expect(command.params) .to .eql([])
                     expect(command.startingAtFlow.getIdPath()) .to .eql('main')
                 })
         })

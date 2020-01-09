@@ -38,9 +38,22 @@ class JsMethodInspectorComponent {
                 })
 
                 this.tabPage({ label: 'Source code' }, function() {
-                    this.text({
-                        model: flow.getFlowPoint({ id: 'methodSourceCode' }),
+
+                    this.text( function() {
+                        this.model(
+                            flow.getFlowPoint({ id: 'methodSourceCode' }),
+                        )
+
+                        this.popupMenu( function() {
+                            this.separator()
+
+                            this.item({
+                                label: 'Save method',
+                                action: function() { flow.saveSelectedMethod() },
+                            })
+                        })
                     })
+
                 })
 
                 this.tabPage({ label: 'Documentation' }, function() {

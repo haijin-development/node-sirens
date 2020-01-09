@@ -39,6 +39,7 @@ class JsClassInspectorFlow {
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
                     'saveSelectedMethod',
+                    'setMethodSelectionIndex',
                 ],
             })
 
@@ -205,6 +206,23 @@ class JsClassInspectorFlow {
 
     /*
         Method(`
+            Returns the index of the selected JsMethod in the list of methods
+            of the class.
+
+            This index is used to restore the same method after a reload of the
+            source code.
+        `)
+    */
+    getSelectedMethodIndex() {
+        return this.getChildFlow({ id: 'classMethods' }).getSelectionIndex()
+    }
+
+    setMethodSelectionIndex({ index: index }) {
+        this.getChildFlow({ id: 'classMethods' }).setSelectionIndex({ index: index })
+    }
+
+    /*
+        Method(`
             Returns the edited contents of the selected method.
         `)
     */
@@ -273,7 +291,16 @@ class JsClassInspectorFlow {
 
         jsMethod.writeContents({ methodContents: editedMethodSourceCode })
 
-        this.reloadSourceFile()
+        const selectionIndex = this.getSelectedMethodIndex()
+
+        this.reloadSourceFile({
+            thenDo: function(mainFlow) {
+                mainFlow.executeCommand({
+                    id: 'setMethodSelectionIndex',
+                    with: { index: selectionIndex },
+                })
+            }
+        })
      }
 
     // Namespaces

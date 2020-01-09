@@ -26,6 +26,7 @@ class JsMethodInspectorFlow {
                     'editMethodUnformattedComment',
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
+                    'saveSelectedMethod',
                 ],
             })
 
@@ -77,6 +78,7 @@ class JsMethodInspectorFlow {
             'editMethodUnformattedComment',
             'setIsBrowsingDocumentation',
             'isBrowsingDocumentation',
+            'saveSelectedMethod',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -153,6 +155,20 @@ class JsMethodInspectorFlow {
         return this.mainNamespace().DocumentationReader.new()
             .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
+
+    /*
+        Method(`
+            Writes the contents of the selected method edition to the method file.
+        `)
+    */
+    saveSelectedMethod() {
+        const jsMethod = this.getMethod()
+        const editedMethodSourceCode = this.getChildFlow({ id: 'methodSourceCode' }).getValue()
+
+        jsMethod.writeContents({ methodContents: editedMethodSourceCode })
+
+        this.reloadSourceFile()
+     }
 }
 
 module.exports = Classification.define(JsMethodInspectorFlow)

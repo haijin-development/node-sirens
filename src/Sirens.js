@@ -347,15 +347,11 @@ class Sirens {
         const objectPropertyPlugins =
             sirensNamespace.getChildFlow({ id: 'FileInspectorPlugins' }).new()
 
-        const folder = O.FolderPath.new({
-            path: __dirname + '/../bin/plugins/file-inspector'
-        })
+        const allPlugins = require( __dirname + '/../bin/plugins/file-inspector/all-plugins' )
 
-        folder.filesDo( (pluginFile) => {
-            const pluginObject = require( pluginFile.getPath() )
-
-            objectPropertyPlugins.addFileInspectorPlugin( pluginObject )
-        })
+        for( const pluginObject of allPlugins ) {
+          objectPropertyPlugins.addFileInspectorPlugin( pluginObject )
+        }
     }
 
     static namespace() {

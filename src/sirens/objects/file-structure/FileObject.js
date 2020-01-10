@@ -35,7 +35,13 @@ class FileObject {
     }
 
     addChildObject(fileObject) {
-        this.childObjects.push(fileObject)
+        this.addChildrenObjects([ fileObject ])
+    }
+
+    addChildrenObjects(fileObjects) {
+        for( const child of fileObjects ) {
+            this.childObjects.push( child )
+        }
     }
 
     getChildObjects() {

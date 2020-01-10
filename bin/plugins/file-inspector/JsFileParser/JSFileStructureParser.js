@@ -1,226 +1,370 @@
 const Classification = require('../../../../src/O').Classification
 const ObjectWithNamespace = require('../../../../src/O').ObjectWithNamespace
-const FullParseTreeVisitorProtocol_Implementation = require('../../../../src/sirens/protocols/FullParseTreeVisitorProtocol_Implementation')
-const JsFileParser = require('../../../../src/sirens/objects/js-parser/JsFileParser')
+const OInstance = require('../../../../src/O').OInstance
+const JsParserDsl = require('../../../../src/sirens/objects/js-parser/JsParserDsl')
 const JsFileStructure = require('./structure-objects/JsFileStructure')
 const JsComment = require('./structure-objects/JsComment')
 const JsClass = require('./structure-objects/JsClass')
 const JsMethod = require('./structure-objects/JsMethod')
 
+
 class JSFileStructureParser {
 
     static definition() {
-        this.instanceVariables = ['fileObjects']
-        this.assumes = [JsFileParser, ObjectWithNamespace]
-        this.implements = [FullParseTreeVisitorProtocol_Implementation]
+        this.instanceVariables = []
+        this.assumes = [ObjectWithNamespace]
     }
 
     /// Visiting
 
-    visitTree(treeNode) {
-        this.fileObjects = []
+    parse({ sourceFile: sourceFile }) {
+        const parser = this.getParserDsl({ sourceFile: sourceFile })
 
-        const jsFileStructure = JsFileStructure.new()
-
-        jsFileStructure.setFileLocation({
-            sourceFile: this.getSourceFile(),
-            startPos: treeNode.range[0],
-            endPos: treeNode.range[1] - 1,
-        }) 
-
-        this.fileObjects.push( jsFileStructure )
-
-        this.visit(treeNode)
-
-        this.appendEndingText()
-
-        return jsFileStructure
+        return parser.parse({ sourceFile: sourceFile })
     }
 
-    visitClassDeclaration(classDeclaration) {
-        const className = classDeclaration.id.name
+    /*
+        Method(`
+            Define the ParserDsl to parse the file contents and convert them to
+            a JsFileStructure object.
+        `)
+    */
+    getParserDsl({ sourceFile: sourceFile }) {
+        const namespace = this.namespace()
 
-        const classComment = this.getCommentOn({ parseNode: classDeclaration })
+        const parser = namespace.JsParserDsl.new()
 
-        const jsClass = JsClass.new()
+        parser.on({
+            expression: 'Program',
+            do: ({ treeNode: childExpressions, treeNodeType: treeNodeType, locationInFile: locationInFile }) => {
+                const jsFileStructure = JsFileStructure.new()
 
-        jsClass.setFileLocation({
-            sourceFile: this.getSourceFile(),
-            startPos: classDeclaration.range[0],
-            endPos: classDeclaration.range[1] - 1,
+                jsFileStructure.setFileLocation({
+                    sourceFile: sourceFile,
+                    startPos: locationInFile.startPos,
+                    endPos: locationInFile.endPos - 1,
+                }) 
+
+                const jsObjects = childExpressions.filter( (expression) => {
+                    return OInstance.isOInstance( expression )
+                })
+
+                if( jsObjects.length > 0 ) {
+
+                    this.addChildrenTo({
+                        parentObject: jsFileStructure,
+                        childrenObjects: jsObjects,
+                        sourceFile: sourceFile,
+                    })
+                } else {
+                    this.appendEndingText({
+                        jsObject: jsFileStructure,
+                        sourceFile: sourceFile,
+                    })
+                }
+
+                return jsFileStructure
+            }
         })
 
-        jsClass.setClassName( className )
+        parser.on({
+            expression: 'ClassDeclaration',
+            do: ({ treeNode: treeNode, treeNodeType: treeNodeType,
+                locationInFile: locationInFile, expressionComment: expressionComment
+            }) => {
+                const className = treeNode.id
 
-        jsClass.setClassComment( classComment )
+                const jsClass = JsClass.new()
 
-        this.appendChildTocurrentFileObject({ child: jsClass })
+                jsClass.setFileLocation({
+                    sourceFile: sourceFile,
+                    startPos: locationInFile.startPos,
+                    endPos: locationInFile.endPos - 1,
+                })
 
-        this.duringFileObject({
-            fileObject: jsClass,
-            do: () => {
-                this.visit( classDeclaration.body )
-            },
+                jsClass.setClassName( className )
+
+                const classComment = this.createJsCommentFrom({
+                    sourceFile: sourceFile,
+                    locationInFile: locationInFile,
+                    expressionComment: expressionComment,
+                })
+
+                jsClass.setClassComment( classComment )
+
+                const jsObjects = treeNode.body.filter( (expression) => {
+                    return OInstance.isOInstance( expression )
+                })
+
+                this.addChildrenTo({
+                    parentObject: jsClass,
+                    childrenObjects: jsObjects,
+                    sourceFile: sourceFile,
+                })
+
+                return jsClass
+            }
         })
+
+        parser.on({
+            expression: 'MethodDefinition',
+            do: ({
+                treeNode: treeNode, treeNodeType: treeNodeType,
+                locationInFile: locationInFile, expressionComment: expressionComment,
+            }) => {
+                const methodName = treeNode.key
+
+                const methodParams = treeNode.value.params
+
+                return this.createJsMethodFrom({
+                    treeNode: treeNode,
+                    methodName: methodName,
+                    params: methodParams,
+                    sourceFile: sourceFile,
+                    locationInFile: locationInFile,
+                    expressionComment: expressionComment,
+                })
+            }
+        })
+
+        parser.on({
+            expression: 'FunctionDeclaration',
+            do: ({
+                treeNode: treeNode, treeNodeType: treeNodeType,
+                locationInFile: locationInFile, expressionComment: expressionComment,
+            }) => {
+                const methodName = treeNode.id
+
+                const methodParams = treeNode.params
+
+                return this.createJsMethodFrom({
+                    treeNode: treeNode,
+                    methodName: methodName,
+                    params: methodParams,
+                    sourceFile: sourceFile,
+                    locationInFile: locationInFile,
+                    expressionComment: expressionComment,
+                })
+            }
+        })
+
+        parser.on({
+            expression: 'RestElement',
+            do: ({ treeNode: paramName, treeNodeType: treeNodeType, locationInFile: locationInFile }) => {
+                return '...' + paramName
+            }
+        })
+
+
+        return parser
     }
 
-    visitMethodDefinition(methodDefinition) {
-        this.createMethodOrFunction(methodDefinition)
-    }
 
-    visitFunctionDeclaration(functionDeclaration) {
-        this.createMethodOrFunction(functionDeclaration)
-    }
-
-    createMethodOrFunction(functionNode) {
-        const methodName = functionNode.id ?
-            this.visit( functionNode.id ) : this.visit( functionNode.key )
-
-        let methodParams = []
-
-        if( functionNode.params !== undefined ) {
-            methodParams  = functionNode.params.map( (param) => {
-                return this.visit( param )
-            })
-        }
-
-        if( functionNode.value !== undefined ) {
-            methodParams = this.visit( functionNode.value ).params
-        }
-
-        const methodComment = this.getCommentOn({ parseNode: functionNode })
-
+    /*
+        Method(`
+            Creates a new JsMethod from the given treeNode.
+        `)
+    */
+    createJsMethodFrom({
+        treeNode: treeNode, methodName: methodName, params: params,
+        sourceFile: sourceFile, locationInFile: locationInFile, expressionComment: expressionComment,
+    }) {
         const jsMethod = JsMethod.new()
+
         jsMethod.setNamespace( this.namespace() )
-        jsMethod.lockNamespace()
 
         jsMethod.setFileLocation({
-            sourceFile: this.getSourceFile(),
-            startPos: functionNode.range[0],
-            endPos: functionNode.range[1] - 1,
+            sourceFile: sourceFile,
+            startPos: locationInFile.startPos,
+            endPos: locationInFile.endPos - 1,
         }) 
-
-        jsMethod.setMethodComment( methodComment )
 
         jsMethod.setMethodName( methodName )
 
-        jsMethod.setMethodParams( methodParams )
+        jsMethod.setMethodParams( params )
 
-        this.appendChildTocurrentFileObject({ child: jsMethod }) 
-    }
+        const methodComment = this.createJsCommentFrom({
+            sourceFile: sourceFile,
+            locationInFile: locationInFile,
+            expressionComment: expressionComment,
+        })
 
-    visitRestElement(restElement) {
-        const paramName = this.visit( restElement.argument )
+        jsMethod.setMethodComment( methodComment )
 
-        return '...' + paramName
-    }
-
-    /// Helper methods
-
-    appendChildTocurrentFileObject({ child: childFileObject }) {
-        const currentFileObject = this.currentFileObject()
-
-        const previousFileObjects = currentFileObject.getChildObjects()
-
-        if( previousFileObjects.length === 0 ) {
-            const textualContent = this.newTextualContent({
-                startPos: 0,
-                endPos: childFileObject.getFileLocation().getStartPos() - 1,
+        if( treeNode.body !== undefined ) {
+            const jsObjects = treeNode.body.filter( (expression) => {
+                return OInstance.isOInstance( expression )
             })
 
-            if( textualContent.hasText() ) {
-                this.currentFileObject().addChildObject( textualContent )
-            }
-        } else {
-
-            const lastFileObject = previousFileObjects[ previousFileObjects.length - 1 ]
-
-            const textualContent = this.newTextualContent({
-                startPos: lastFileObject.getFileLocation().getEndPos() + 1,
-                endPos: childFileObject.getFileLocation().getStartPos() - 1,
+            this.addChildrenTo({
+                parentObject: jsMethod,
+                childrenObjects: jsObjects,
+                sourceFile: sourceFile,
             })
-
-            if( textualContent.hasText() ) {
-                currentFileObject.addChildObject( textualContent )
-            }
         }
 
-        this.currentFileObject().addChildObject( childFileObject )
+        return jsMethod
     }
 
-    getCommentOn({ parseNode: parseNode }) {
+    /*
+        Gets the comment expression bound to the given treeNode and return a new
+        JsComment object from it.
+
+        If the given treeNode does not have a comment create a JsComment of length 0
+        at the position of the begining of the given treeNode. That empty JsComment
+        may be edited later by the application.
+    */
+    createJsCommentFrom({
+        sourceFile: sourceFile, locationInFile: locationInFile, expressionComment: expressionComment
+    }) {
         const comment = JsComment.new()
 
-        if( parseNode.comment !== undefined ) {
-            let commentNode = parseNode.comment
-
+        if( expressionComment !== undefined ) {
             comment.setFileLocation({
-                sourceFile: this.getSourceFile(),
-                startPos: commentNode.range[0],
-                endPos: commentNode.range[1] - 1,
+                sourceFile: sourceFile,
+                startPos: expressionComment.range[0],
+                endPos: expressionComment.range[1] - 1,
             })
 
         } else {
             comment.setFileLocation({
-                sourceFile: this.getSourceFile(),
-                startPos: parseNode.range[0],
-                endPos: parseNode.range[0] - 1,
+                sourceFile: sourceFile,
+                startPos: locationInFile.startPos,
+                endPos: locationInFile.startPos - 1,
             }) 
         }
 
         return comment
     }
 
-    duringFileObject({ fileObject: fileObject, do: closure }) {
-        try {
-            this.fileObjects.push( fileObject )
+    /*
+        Method(`
+            This parser collects classes and methods.
 
-            closure()
+            After the last child method or class there might be additional valid
+            statements like function calls or variable definitions.
 
-            this.appendEndingText()
+            This method gets the statements after the last child of the given
+            JsFileObject and adds a TextualContent object as its last child.
+        `)
+    */
+    appendEndingText({ jsObject: jsObject, sourceFile: sourceFile }) {
+        const textualContent = this.createEndingText({
+            jsObject: jsObject,
+            sourceFile: sourceFile,
+        })
 
-        } finally {
-            this.fileObjects.pop()
+        if( textualContent.hasText() ) {
+            jsObject.addChildObject( textualContent )
         }
     }
 
-    currentFileObject() {
-        return this.fileObjects[ this.fileObjects.length - 1 ]
+    /*
+        Method(`
+            Add the given jsObjects to the given parentObject.
+
+            If between two consecutives children there are more statements
+            other that classes and methods definitions add those statements
+            as TextualContent as well.
+        `)
+    */
+    addChildrenTo({ parentObject: parentObject, childrenObjects: jsObjects, sourceFile: sourceFile }) {
+        let i = 0
+        let last = jsObjects.length - 1
+
+        for( const childObject of jsObjects ) {
+            if( i === 0 ) {
+                const textualContent = this.createTextualContent({
+                    startPos: parentObject.getFileLocation().getStartPos(),
+                    endPos: childObject.getFileLocation().getStartPos() - 1,
+                    sourceFile: sourceFile, 
+                })
+
+                if( textualContent.hasText() ) {
+                    parentObject.addChildObject( textualContent )
+                }
+            }
+
+            if( i > 0 ) {
+                const previousChild = jsObjects[ i - 1 ]
+
+                const textualContent = this.createTextualContent({
+                    startPos: previousChild.getFileLocation().getEndPos() + 1,
+                    endPos: childObject.getFileLocation().getStartPos() - 1,
+                    sourceFile: sourceFile, 
+                })
+
+                if( textualContent.hasText() ) {
+                    parentObject.addChildObject( textualContent )
+                }
+            }
+
+            parentObject.addChildObject( childObject )
+
+            i += 1
+        }
+
+        const lastChild = jsObjects[ jsObjects.length - 1 ]
+
+        if( lastChild !== undefined )
+        {
+            const textualContent = this.createTextualContent({
+                startPos: lastChild.getFileLocation().getEndPos() + 1,
+                endPos: parentObject.getFileLocation().getEndPos() - 1,
+                sourceFile: sourceFile, 
+            })
+
+            if( textualContent.hasText() ) {
+                parentObject.addChildObject( textualContent )
+            }                
+        }
     }
 
-    appendEndingText() {
-        const currentObject = this.currentFileObject()
+    /*
+        Method(`
+            This parser collects classes and methods.
 
-        const objects = currentObject.getChildObjects()
+            After the last child (a method or a class) there might be additional valid
+            statements like function calls or variable definitions.
+
+            This method gets the statements after the last child of the given
+            JsFileObject and returns a TextualContent object on them.
+        `)
+    */
+    createEndingText({ jsObject: jsObject, sourceFile: sourceFile }) {
+        const objects = jsObject.getChildObjects()
 
         if( objects.length === 0 ) {
-            const textualContent = this.newTextualContent({
-                startPos: currentObject.getFileLocation().getStartPos(),
-                endPos: currentObject.getFileLocation().getEndPos(),
+
+            return this.createTextualContent({
+                startPos: jsObject.getFileLocation().getStartPos(),
+                endPos: jsObject.getFileLocation().getEndPos(),
+                sourceFile: sourceFile,
             })
 
-            if( textualContent.hasText() ) {
-                currentObject.addChildObject( textualContent )
-            }
         } else {
+
             const lastObject = objects[ objects.length - 1 ]
 
-            const textualContent = this.newTextualContent({
+            return this.createTextualContent({
                 startPos: lastObject.getFileLocation().getEndPos() + 1,
-                endPos: currentObject.getFileLocation().getEndPos() - 1,
+                endPos: jsObject.getFileLocation().getEndPos() - 1,
+                sourceFile: sourceFile,
             })
 
-            if( textualContent.hasText() ) {
-                currentObject.addChildObject( textualContent )
-            }
         }
     }
 
-    newTextualContent({ startPos: startPos, endPos: endPos }) {
+    /*
+        Method(`
+            Creates a new TextualContent object on the given file position.
+        `)
+    */
+    createTextualContent({ startPos: startPos, endPos: endPos, sourceFile: sourceFile }) {
         const textualContent = this.namespace().TextualContent.new()
 
         textualContent.setFileLocation({
-            sourceFile: this.getSourceFile(),
+            sourceFile: sourceFile,
             startPos: startPos,
             endPos: endPos,
         }) 

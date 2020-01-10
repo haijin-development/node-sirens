@@ -118,7 +118,7 @@ function f2() {
                 .parseSourceFile({ sourceFile: sourceFile })
                 .getChildObjects()
 
-            const firstFunction = fileObjects[1]
+            const firstFunction = fileObjects[0]
 
             const comment = firstFunction.getMethodComment()
 
@@ -153,7 +153,7 @@ function f2() {
                 .parseSourceFile({ sourceFile: sourceFile })
                 .getChildObjects()
 
-            const secondFunction = fileObjects[3]
+            const secondFunction = fileObjects[2]
 
             const comment = secondFunction.getMethodComment()
 

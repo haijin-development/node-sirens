@@ -92,8 +92,12 @@ class ObjectWithNamespace {
             The namespace object can be anything.
         `)
     */
-    setNamespace(namespace) {
+    setNamespace(namespace, { lock: lockAfterSetting } = {}) {
         this.namespace = namespace
+
+        if( lockAfterSetting !== false ) {
+            this.lockNamespace()
+        }
     }
 
     /*

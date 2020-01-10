@@ -19,6 +19,7 @@ class ParseTreeVisitor {
         if( parsingOptions === undefined ) {
             parsingOptions = {
                 loc: true,
+                range: true,
                 comment: true,
                 tokens: false,
                 tolerant: true,

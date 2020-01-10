@@ -1,6 +1,6 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
-const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
 const FileObjectLocation = require('./FileObjectLocation')
@@ -26,17 +26,11 @@ class FileObject {
         return this.fileLocation
     }
 
-    setFileLocation({
-        sourceFile: sourceFile,
-        startLine: startLine, startColumn: startColumn,
-        endLine: endLine, endColumn: endColumn,
-    }) {
+    setFileLocation({ sourceFile: sourceFile, startPos: startPos, endPos: endPos }) {
         this.fileLocation = FileObjectLocation.new({
             sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
+            startPos: startPos,
+            endPos: endPos,
         })
     }
 
@@ -54,10 +48,8 @@ class FileObject {
 
     getContents() {
         return this.getSourceFile().getPartialContents({
-            fromLine: this.fileLocation.getStartPos().getLine() - 1,
-            fromColumn: this.fileLocation.getStartPos().getColumn(),
-            toLine: this.fileLocation.getEndPos().getLine() - 1,
-            toColumn: this.fileLocation.getEndPos().getColumn(),
+            fromStartPos: this.fileLocation.getStartPos(),
+            toEndPos: this.fileLocation.getEndPos(),
         }) 
     }
 
@@ -82,24 +74,16 @@ class FileObject {
         `)
     */
     writePlainContents({ contents: contents }) {
-        const firstStatementStartLine = this.fileLocation.getStartPos().getLine()
-        const firstStatementStartColumn = this.fileLocation.getStartPos().getColumn()
-
-        const lastStatementEndLine = this.fileLocation.getEndPos().getLine()
-        const lastStatementEndColumn = this.fileLocation.getEndPos().getColumn()
-
         const sourceFile = this.getSourceFile()
 
         const fileContentsBefore = sourceFile.getPartialContents({
-            fromLine: 0,
-            fromColumn: 0,
-            toLine: firstStatementStartLine - 1,
-            toColumn: firstStatementStartColumn,
+            fromStartPos: 0,
+            toEndPos: this.fileLocation.getStartPos() - 1,
         })
 
         const fileContentsAfter = sourceFile.getPartialContents({
-            fromLine: lastStatementEndLine - 1,
-            fromColumn: lastStatementEndColumn,
+            fromStartPos: this.fileLocation.getEndPos() + 1,
+            toEndPos: 'eof',
         })
 
         const newFileContents = StringStream.new()

@@ -20,58 +20,17 @@ class SourceFile {
 
     /*
         Method(`
-            Reads and returns the file contents between the given fromLine, fromColumn,
-            toLine and toColumn.
+            Reads and returns the file contents between the given startPos to endPos.
 
-            All lines and colums are 0 based.
+            Both startPos and endPos are 0 based and included in the result.
         `)
     */
-    getPartialContents({
-        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
-    }) {
+    getPartialContents({ fromStartPos: startPos, toEndPos: endPos }) {
         const fileContents = this.readFileContents()
-        const fileContentsSize = this.readFileContents().length
 
-        let i = 0
-        let linesCount = 0
+        endPos = endPos === 'eof' ? this.getFileSize() : endPos
 
-        // make a first pass to collect the partial section indices
-
-        while( i < fileContentsSize ) {
-            if( linesCount === fromLine ) { break }
-
-            if( fileContents[ i ] === `\n` ) {
-                linesCount += 1
-            }
-
-            i += 1
-        }
-
-        const partialContentsStart = i + fromColumn
-
-        // toLine can be at most fileContentsSize
-        if( toLine === undefined ) { toLine = fileContentsSize }
-
-        while( i < fileContentsSize ) {
-            if( linesCount === toLine ) { break }
-
-            if( fileContents[ i ] === `\n` ) {
-                linesCount += 1
-            }
-
-            i += 1
-        }
-
-        // toColumn can be at most fileContentsSize
-        if( toColumn === undefined ) { toColumn = fileContentsSize }
-
-        const partialContentsEnd = Math.min( i + toColumn, fileContentsSize )
-
-        // and in a second pass slice the contents. This avoids concatenating
-        // intermediate partial strings which for small files may be more
-        // inefficient than reading the file stream twice
-
-        return fileContents.slice( partialContentsStart, partialContentsEnd )
+        return fileContents.slice( startPos, endPos + 1 )
     }
 }
 

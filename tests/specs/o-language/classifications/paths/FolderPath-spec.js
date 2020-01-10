@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const FolderPath = require('../../../../../src/O').FolderPath
 
-const folderPath = __dirname + '/../../../../samples'
+const folderPath = __dirname + '/../../../../samples/folder-path'
 
 describe('When using a FolderPath object', () => {
     describe('when creating a FolderPath', () => {
@@ -9,7 +9,7 @@ describe('When using a FolderPath object', () => {
             const folder = FolderPath.new({ path: folderPath })
 
             expect( folder.getPath() ) .to .match(
-                /^.*tests[/]samples$/
+                /^.*tests[/]samples[/]folder[-]path$/
             )
         })
 
@@ -19,7 +19,7 @@ describe('When using a FolderPath object', () => {
             const folder = FolderPath.new({ path: absoluteFolderPath })
 
             expect( folder.getPath() ) .to .match(
-                /^.*tests[/]samples$/
+                /^.*tests[/]samples[/]folder[-]path$/
             )
         })
 
@@ -45,7 +45,7 @@ describe('When using a FolderPath object', () => {
         const newFolder = folder.dotdot()
 
         expect( newFolder.getPath() ) .to .match(
-            /^.*tests$/
+            /^.*samples$/
         )
     })
 
@@ -56,7 +56,7 @@ describe('When using a FolderPath object', () => {
             const newFolder = folder.append({ path: 'js-objects' })
 
             expect( newFolder.getPath() ) .to .match(
-                /^.*tests[/]samples[/]js-objects$/
+                /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
             )
         })
 
@@ -66,7 +66,7 @@ describe('When using a FolderPath object', () => {
             const newFolder = folder.append({ path: 'js-objects' })
 
             expect( folder.getPath() ) .to .match(
-                /^.*tests[/]samples$/
+                /^.*tests[/]samples[/]folder[-]path$/
             )
         })
     })
@@ -80,7 +80,7 @@ describe('When using a FolderPath object', () => {
             const newFolder = folder.append({ path: subFolder })
 
             expect( newFolder.getPath() ) .to .match(
-                /^.*tests[/]samples[/]js-objects$/
+                /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
             )
         })
 
@@ -92,7 +92,7 @@ describe('When using a FolderPath object', () => {
             const newFolder = folder.append({ path: subFolder })
 
             expect( folder.getPath() ) .to .match(
-                /^.*tests[/]samples$/
+                /^.*tests[/]samples[/]folder[-]path$/
             )
         })
     })
@@ -104,7 +104,7 @@ describe('When using a FolderPath object', () => {
             const newFile = folder.append({ path: 'index.js' })
 
             expect( newFile.getPath() ) .to .match(
-                /^.*tests[/]samples[/]index.js$/
+                /^.*tests[/]samples[/]folder[-]path[/]index.js$/
             )
         })
 
@@ -114,7 +114,7 @@ describe('When using a FolderPath object', () => {
             const newFile = folder.append({ path: 'index.js' })
 
             expect( folder.getPath() ) .to .match(
-                /^.*tests[/]samples$/
+                /^.*tests[/]samples[/]folder[-]path$/
             )
         })
     })
@@ -132,7 +132,7 @@ describe('When using a FolderPath object', () => {
             expect( filePathsInFolder ) .count .to .eql(4)
             expect( filePathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]JsSintax.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]file-1.js$/
                 )
             })
         })
@@ -149,7 +149,7 @@ describe('When using a FolderPath object', () => {
             expect( folderPathsInFolder ) .count .to .eql(1)
             expect( folderPathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
                 )
             })
         })
@@ -167,13 +167,13 @@ describe('When using a FolderPath object', () => {
 
             expect( filesAndFolderPathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]JsSintax.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]file-1.js$/
                 )
             })
 
             expect( filesAndFolderPathsInFolder ) .atIndex(4) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
                 )
             })
         })
@@ -189,10 +189,10 @@ describe('When using a FolderPath object', () => {
                 filePathsInFolder.push( filePath )
             })
 
-            expect( filePathsInFolder ) .count .to .eql(10)
+            expect( filePathsInFolder ) .count .to .eql(6)
             expect( filePathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]JsSintax.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]file-1.js$/
                 )
             })
         })
@@ -209,7 +209,7 @@ describe('When using a FolderPath object', () => {
             expect( folderPathsInFolder ) .count .to .eql(1)
             expect( folderPathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
                 )
             })
         })
@@ -223,7 +223,7 @@ describe('When using a FolderPath object', () => {
                 filesAndFolderPathsInFolder.push( pathObject )
             })
 
-            expect( filesAndFolderPathsInFolder ) .count .to .eql(11)
+            expect( filesAndFolderPathsInFolder ) .count .to .eql(7)
         })
     })
 
@@ -237,10 +237,10 @@ describe('When using a FolderPath object', () => {
                 filePathsInFolder.push( filePath )
             })
 
-            expect( filePathsInFolder ) .count .to .eql(10)
+            expect( filePathsInFolder ) .count .to .eql(6)
             expect( filePathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]JsSintax.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]file-1.js$/
                 )
             })
         })
@@ -257,7 +257,7 @@ describe('When using a FolderPath object', () => {
             expect( folderPathsInFolder ) .count .to .eql(1)
             expect( folderPathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
                 )
             })
         })
@@ -271,7 +271,7 @@ describe('When using a FolderPath object', () => {
                 filesAndFolderPathsInFolder.push( pathObject )
             })
 
-            expect( filesAndFolderPathsInFolder ) .count .to .eql(11)
+            expect( filesAndFolderPathsInFolder ) .count .to .eql(7)
         })
     })
 
@@ -285,16 +285,16 @@ describe('When using a FolderPath object', () => {
                 filePathsInFolder.push( filePath )
             })
 
-            expect( filePathsInFolder ) .count .to .eql(10)
+            expect( filePathsInFolder ) .count .to .eql(6)
             expect( filePathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]JsSintax.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]file-1.js$/
                 )
             })
 
-            expect( filePathsInFolder ) .atIndex(9) .to .be .suchThat( (filePath) => {
+            expect( filePathsInFolder ) .atIndex(5) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects[/]text-only.js$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects[/]file-6.js$/
                 )
             })
         })
@@ -311,7 +311,7 @@ describe('When using a FolderPath object', () => {
             expect( folderPathsInFolder ) .count .to .eql(1)
             expect( folderPathsInFolder ) .atIndex(0) .to .be .suchThat( (filePath) => {
                 expect( filePath.getPath() ) .to .match(
-                    /^.*tests[/]samples[/]js-objects$/
+                    /^.*tests[/]samples[/]folder[-]path[/]js-objects$/
                 )
             })
         })
@@ -325,7 +325,7 @@ describe('When using a FolderPath object', () => {
                 filesAndFolderPathsInFolder.push( pathObject )
             })
 
-            expect( filesAndFolderPathsInFolder ) .count .to .eql(11)
+            expect( filesAndFolderPathsInFolder ) .count .to .eql(7)
         })
     })
 

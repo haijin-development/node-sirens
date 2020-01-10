@@ -6,7 +6,6 @@
   "dependencies": {
     "esprima": "^4.0.1",
     "node-gtk": "^0.3",
-    "split-lines": "^2.0.0",
     "yaml": "^1.7.2"
   },
   "devDependencies": {

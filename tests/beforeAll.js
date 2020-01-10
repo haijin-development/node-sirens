@@ -12,5 +12,5 @@ Classification.setExtendedBehaviours([
     MethodCallConstraints,
 ])
 
-require('./specs/o-language/o-language-expectations.js')
-require('./specs/finger-tips/finger-tips-expectations.js')
+require('./o-language-expectations.js')
+require('./finger-tips-expectations.js')

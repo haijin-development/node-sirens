@@ -1,4 +1,3 @@
-const splitLines = require('split-lines')
 const YAML = require('yaml')
 const Classification = require('../../../../src/O').Classification
 const ObjectWithNamespace = require('../../../../src/O').ObjectWithNamespace
@@ -16,29 +15,16 @@ class YamlStructureParser {
     parse({ sourceFile: sourceFile }) {
         const fileContents = sourceFile.readFileContents()
 
-        const allLines = splitLines(fileContents)
+        const file = this.namespace().FileObject.new()
 
-        const lastLine = allLines[ allLines.length -1 ]
-
-        const startLine = 1
-        const startColumn = 0
-        const endLine = allLines.length
-        const endColumn = lastLine.length
-
-        const file = this.createFileObject({
+        file.setFileLocation({
             sourceFile: sourceFile,
-            startLine: 1,
-            startColumn: 0,
-            endLine: allLines.length,
-            endColumn: lastLine.length,
-        }) 
+            startPos: 0,
+            endPos: 'eof',
+        })
 
         const yamlContent = this.createYamlContent({
             sourceFile: sourceFile,
-            startLine: 1,
-            startColumn: 0,
-            endLine: allLines.length,
-            endColumn: lastLine.length,
             fileContents: fileContents,
         }) 
 
@@ -49,10 +35,6 @@ class YamlStructureParser {
 
     createYamlContent({
         sourceFile: sourceFile,
-        startLine: startLine,
-        startColumn: startColumn,
-        endLine: endLine,
-        endColumn: endColumn,
         fileContents: fileContents,
     }) {
         const yamlContent = YamlContent.new()
@@ -61,10 +43,8 @@ class YamlStructureParser {
 
         yamlContent.setFileLocation({
             sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
+            startPos: 0,
+            endPos: 'eof',
         })
 
         const yamlObject = YAML.parse(fileContents)
@@ -72,27 +52,6 @@ class YamlStructureParser {
         yamlContent.setYamlObject({ yamlObject: yamlObject })
 
         return yamlContent
-    }
-
-
-    createFileObject({
-        sourceFile: sourceFile,
-        startLine: startLine,
-        startColumn: startColumn,
-        endLine: endLine,
-        endColumn: endColumn,
-    }) {
-        const file = this.namespace().FileObject.new()
-
-        file.setFileLocation({
-            sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
-        })
-
-        return file
     }
 }
 

@@ -201,6 +201,7 @@ describe('When visiting js parse tree it visits the statement', () => {
 function parse(string) {
     const parsingOptions = {
         loc: true,
+        range: true,
         comment: true,
         tokens: false,
         tolerant: false,

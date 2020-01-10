@@ -21,9 +21,12 @@
 - Implemented a NullViewsNamespace and added protocol to choose which Views library to use.
 - Cleaned up NamespaceFlowBuilder, removed duplicated code and moved it to NamespaceFlow.
 - Moved the initialization of Gtk to GtkViewsNamespace. Now all the code related with Gtk is encapsulated in GtkViewsNamespace and can be switched to a different implementation by replacing the use of GtkViewsNamespace with a different NamespaceFlow.
+- Changed FileLocation to use offsets instead of line-column.
 
 ### Sirens
 
+- Remove split-lines as a dependency.
+- Cleaned up the classification SourceFile.
 - Implemented a YAML files browser.
 - Implemented writing a method to its file from the AppBrowser.
 - Added confirmation to all documentation deletion actions.

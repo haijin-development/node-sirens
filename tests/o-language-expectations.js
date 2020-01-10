@@ -1,7 +1,7 @@
 const Assertion = require('chai').Assertion
 const assert = require('chai').assert
-const OInstance = require('../../../src/O').OInstance
-const FilePath = require('../../../src/O').FilePath
+const OInstance = require('../src/O').OInstance
+const FilePath = require('../src/O').FilePath
 
 // Classifications
 

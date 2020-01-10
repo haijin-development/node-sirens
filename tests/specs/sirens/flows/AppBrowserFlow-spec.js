@@ -4,7 +4,7 @@ const fileSamplesRepository = require('../fileSamplesRepository')
 const namespace = require('../sirensNamespace')
 
 describe('When using an AppBrowserFlow', () => {
-    const sampleFolder = __dirname + '/../../../samples'
+    const sampleFolder = __dirname + '/../../../samples/js-objects'
 
     let folder
 
@@ -79,17 +79,17 @@ describe('When using an AppBrowserFlow', () => {
 
         it('sets the folder to the main flow', () => {
             expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect( value.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( value.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
         })
 
         it('sets the window title', () => {
             expect(flow) .withId( 'main.windowTitle' ) .withObject .suchThat( (object) => {
-                expect( object.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( object.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
 
             expect(flow) .withId( 'main.windowTitle' ) .withValue .suchThat( (title) => {
-                expect( title ) .to .match(/^App Browser -.*tmp-files-repository$/)
+                expect( title ) .to .match(/^App Browser -.*tmp-files-repository[/]js-objects$/)
             })
         })
 
@@ -97,7 +97,7 @@ describe('When using an AppBrowserFlow', () => {
             const path = flow.getValue()
 
             expect(flow) .withId( 'main.filesTree' ) .withRoots .eachSuchThat( (eachRoot) => {
-                expect( eachRoot.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( eachRoot.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
 
         })
@@ -161,13 +161,13 @@ describe('When using an AppBrowserFlow', () => {
             const rootFolder = filesTree.getRoots()[0]
 
             const file = rootFolder.getChildren()
-                .find( (file) => { return file.getBaseName() === 'class-definition.js' })
+                .find( (file) => { return file.getBaseName() === 'classes-only.js' })
 
             filesTree.setSelection([ rootFolder, file ])
 
             expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
                 expect( sourceFile.getPath() ) .to
-                    .match(/^.*tmp-files-repository[/]class-definition.js$/)
+                    .match(/^.*tmp-files-repository[/]js-objects[/]classes-only.js$/)
             })
         })
     })

@@ -108,7 +108,6 @@ class NamespaceFlowBuilder {
                     }
 
                     newObject.setNamespace( namespace )
-                    newObject.lockNamespace()
                 }
 
                 return newObject
@@ -152,7 +151,6 @@ class NamespaceFlowBuilder {
                 }
 
                 newObject.setNamespace( namespace )
-                newObject.lockNamespace()
             }
         
             this.setSingleton( newObject )

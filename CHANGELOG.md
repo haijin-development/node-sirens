@@ -25,6 +25,8 @@
 
 ### Sirens
 
+- Added an icon for JsComment.
+- If a TextualContents is a JsComment then uses a JsComment object.
 - Implemented JsParserDsl.
 - Changed the way file-inspector plugins are loaded to ensure the priority of the plugins. There may be more than one plugin defined for the same file type.
 - Remove split-lines as a dependency.

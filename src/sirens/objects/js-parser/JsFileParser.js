@@ -50,7 +50,13 @@ class JsFileParser {
     parse({ sourceFile: sourceFile }) {
         this.sourceFile = sourceFile
 
-        const parseTree = this.parseFileContents()
+        const fileContents = sourceFile.readFileContents()
+
+        return this.parseString({ string: fileContents })
+    }
+
+    parseString({ string: string }) {
+        const parseTree = this.parseStringContents({ string: string })
 
         if( parseTree !== null ) {
             this.integrateCommentsToExpressions({ parseTree: parseTree })
@@ -61,11 +67,9 @@ class JsFileParser {
         return this.visitTree(parseTree)
     }
 
-    parseFileContents() {
-        const fileContents = this.sourceFile.readFileContents()
-
+    parseStringContents({ string: string }) {
         try {
-            return this.parseString({ string: fileContents })
+            return this.getParseTreeFromString({ string: string })
         } catch(error) {
             return null
         }

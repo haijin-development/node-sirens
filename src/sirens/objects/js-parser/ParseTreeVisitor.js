@@ -17,7 +17,7 @@ class ParseTreeVisitor {
 
     /// Parsing
 
-    parseString({ string: string, parsingOptions: parsingOptions  }) {
+    getParseTreeFromString({ string: string, parsingOptions: parsingOptions  }) {
         if( parsingOptions === undefined ) {
             parsingOptions = {
                 range: true,

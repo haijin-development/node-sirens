@@ -1,6 +1,7 @@
 const Classification = require('../../../../../src/O').Classification
 const FileObject = require('../../../../../src/sirens/objects/file-structure/FileObject')
 const SourceCodeText = require('../../../../../src/sirens/objects/SourceCodeText')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsComment {
     /// Definition
@@ -12,6 +13,10 @@ class JsComment {
 
     getFileObjectType() {
         return 'jsComment'
+    }
+
+    getIcon() {
+        return Resource.image.blockComment
     }
 
     getBodyContents() {

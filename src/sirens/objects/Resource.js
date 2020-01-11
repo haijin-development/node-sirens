@@ -7,6 +7,7 @@ const iconsFolder = resourcesFolder.append({ path: 'icons' })
 const Resource = {
     image: {
         array: iconsFolder.append({ path: 'array.png' }).getPath(),
+        blockComment: iconsFolder.append({ path: 'block-comment.png' }).getPath(),
         class: iconsFolder.append({ path: 'class.png' }).getPath(),
         false: iconsFolder.append({ path: 'false.png' }).getPath(),
         file: iconsFolder.append({ path: 'file.png' }).getPath(),

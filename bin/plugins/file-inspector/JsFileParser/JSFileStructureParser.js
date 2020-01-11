@@ -361,15 +361,38 @@ class JSFileStructureParser {
         `)
     */
     createTextualContent({ startPos: startPos, endPos: endPos, sourceFile: sourceFile }) {
-        const textualContent = this.namespace().TextualContent.new()
+        const textualContent = this.isCommentOnly({ startPos: startPos, endPos: endPos, sourceFile: sourceFile }) ?
+            JsComment.new()
+            :
+            this.namespace().TextualContent.new()
 
         textualContent.setFileLocation({
             sourceFile: sourceFile,
             startPos: startPos,
             endPos: endPos,
-        }) 
+        })
 
         return textualContent
+    }
+
+    isCommentOnly({ startPos: startPos, endPos: endPos, sourceFile: sourceFile }) {
+        const contents = sourceFile.getPartialContents({
+            fromStartPos: startPos,
+            toEndPos: endPos
+        })
+
+        const namespace = this.namespace()
+
+        const parser = namespace.JsParserDsl.new()
+
+        try {
+            const parsedContents = parser.parseString({ string: contents })
+
+            return parsedContents.length === 0
+
+        } catch( error ) {
+            return false
+        }
     }
 }
 

@@ -25,6 +25,7 @@
 
 ### Sirens
 
+- Improved how parsers are loaded and filtered.
 - Added an icon for JsComment.
 - If a TextualContents is a JsComment then uses a JsComment object.
 - Implemented JsParserDsl.

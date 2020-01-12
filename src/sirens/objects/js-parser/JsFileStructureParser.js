@@ -1,23 +1,53 @@
 const Classification = require('../../../../src/O').Classification
 const ObjectWithNamespace = require('../../../../src/O').ObjectWithNamespace
 const OInstance = require('../../../../src/O').OInstance
-const JsParserDsl = require('../../../../src/sirens/objects/js-parser/JsParserDsl')
 const JsFileStructure = require('./structure-objects/JsFileStructure')
 const JsComment = require('./structure-objects/JsComment')
-const JsClass = require('./structure-objects/JsClass')
-const JsMethod = require('./structure-objects/JsMethod')
 
+/*
+    Class(`
+        Base classification for classifications that parses js files.
 
-class JSFileStructureParser {
+        Defines the basic protocol to handle code comments and text and leaves
+        the definition of the javascript expressions of interest to other classification.
+    `)
+*/
+class JsFileStructureParser {
 
     static definition() {
         this.instanceVariables = []
         this.assumes = [ObjectWithNamespace]
     }
 
+    /*
+        Method(`
+            Returns true if the sourceFile is a .js file.
+
+            This is quick check before starting the actual parsing of the file to know
+            if it is a valid .js file since starting the parsing of a file can be
+            an expensive operation.
+        `)
+    */
+    handlesFileTypeOf({ sourceFile: sourceFile }) {
+        const fileExtension = sourceFile.getFileNameExtension()
+
+        return '.js' === fileExtension
+    }
+
     /// Visiting
 
+    /*
+        Method(`
+            Returns the parsed contents of the given sourceFile.
+
+            If the file is not a valid .js file or if there are errors during the
+            file parsing returns null, meaning that the given sourceFile is not
+            parsable by this parser.
+        `)
+    */
     parse({ sourceFile: sourceFile }) {
+        if( ! this.handlesFileTypeOf({ sourceFile: sourceFile }) ) { return null }
+
         const parser = this.getParserDsl({ sourceFile: sourceFile })
 
         return parser.parse({ sourceFile: sourceFile })
@@ -32,21 +62,19 @@ class JSFileStructureParser {
     getParserDsl({ sourceFile: sourceFile }) {
         const namespace = this.namespace()
 
-        const parser = namespace.JsParserDsl.new()
+        const parserDsl = namespace.JsParserDsl.new()
 
-        parser.on({
+        parserDsl.on({
             expression: 'Program',
             do: ({ treeNode: childExpressions, treeNodeType: treeNodeType, locationInFile: locationInFile }) => {
-                const jsFileStructure = JsFileStructure.new()
-
-                jsFileStructure.setFileLocation({
+                const jsFileStructure = this.createJsObject({
+                    jsObjectClassification: JsFileStructure,
                     sourceFile: sourceFile,
-                    startPos: locationInFile.startPos,
-                    endPos: locationInFile.endPos - 1,
-                }) 
+                    locationInFile: locationInFile,
+                })
 
-                const jsObjects = childExpressions.filter( (expression) => {
-                    return OInstance.isOInstance( expression )
+                const jsObjects = this.selectJsObjectsOnlyFrom({
+                    expressions: childExpressions
                 })
 
                 if( jsObjects.length > 0 ) {
@@ -67,143 +95,12 @@ class JSFileStructureParser {
             }
         })
 
-        parser.on({
-            expression: 'ClassDeclaration',
-            do: ({ treeNode: treeNode, treeNodeType: treeNodeType,
-                locationInFile: locationInFile, expressionComment: expressionComment
-            }) => {
-                const className = treeNode.id
-
-                const jsClass = JsClass.new()
-
-                jsClass.setFileLocation({
-                    sourceFile: sourceFile,
-                    startPos: locationInFile.startPos,
-                    endPos: locationInFile.endPos - 1,
-                })
-
-                jsClass.setClassName( className )
-
-                const classComment = this.createJsCommentFrom({
-                    sourceFile: sourceFile,
-                    locationInFile: locationInFile,
-                    expressionComment: expressionComment,
-                })
-
-                jsClass.setClassComment( classComment )
-
-                const jsObjects = treeNode.body.filter( (expression) => {
-                    return OInstance.isOInstance( expression )
-                })
-
-                this.addChildrenTo({
-                    parentObject: jsClass,
-                    childrenObjects: jsObjects,
-                    sourceFile: sourceFile,
-                })
-
-                return jsClass
-            }
-        })
-
-        parser.on({
-            expression: 'MethodDefinition',
-            do: ({
-                treeNode: treeNode, treeNodeType: treeNodeType,
-                locationInFile: locationInFile, expressionComment: expressionComment,
-            }) => {
-                const methodName = treeNode.key
-
-                const methodParams = treeNode.value.params
-
-                return this.createJsMethodFrom({
-                    treeNode: treeNode,
-                    methodName: methodName,
-                    params: methodParams,
-                    sourceFile: sourceFile,
-                    locationInFile: locationInFile,
-                    expressionComment: expressionComment,
-                })
-            }
-        })
-
-        parser.on({
-            expression: 'FunctionDeclaration',
-            do: ({
-                treeNode: treeNode, treeNodeType: treeNodeType,
-                locationInFile: locationInFile, expressionComment: expressionComment,
-            }) => {
-                const methodName = treeNode.id
-
-                const methodParams = treeNode.params
-
-                return this.createJsMethodFrom({
-                    treeNode: treeNode,
-                    methodName: methodName,
-                    params: methodParams,
-                    sourceFile: sourceFile,
-                    locationInFile: locationInFile,
-                    expressionComment: expressionComment,
-                })
-            }
-        })
-
-        parser.on({
-            expression: 'RestElement',
-            do: ({ treeNode: paramName, treeNodeType: treeNodeType, locationInFile: locationInFile }) => {
-                return '...' + paramName
-            }
-        })
-
-
-        return parser
-    }
-
-
-    /*
-        Method(`
-            Creates a new JsMethod from the given treeNode.
-        `)
-    */
-    createJsMethodFrom({
-        treeNode: treeNode, methodName: methodName, params: params,
-        sourceFile: sourceFile, locationInFile: locationInFile, expressionComment: expressionComment,
-    }) {
-        const jsMethod = JsMethod.new()
-
-        jsMethod.setNamespace( this.namespace() )
-
-        jsMethod.setFileLocation({
+        this.defineParserDsl({
             sourceFile: sourceFile,
-            startPos: locationInFile.startPos,
-            endPos: locationInFile.endPos - 1,
-        }) 
-
-        jsMethod.setMethodName( methodName )
-
-        jsMethod.setMethodParams( params )
-
-        const methodComment = this.createJsCommentFrom({
-            sourceFile: sourceFile,
-            locationInFile: locationInFile,
-            expressionComment: expressionComment,
+            parserDsl: parserDsl,
         })
 
-        jsMethod.setMethodComment( methodComment )
-
-        if( treeNode.body !== undefined ) {
-            const jsObjects = treeNode.body.filter( (expression) => {
-                return OInstance.isOInstance( expression )
-            })
-
-            this.addChildrenTo({
-                parentObject: jsMethod,
-                childrenObjects: jsObjects,
-                sourceFile: sourceFile,
-            })
-        }
-
-        return jsMethod
+        return parserDsl
     }
 
     /*
@@ -375,6 +272,12 @@ class JSFileStructureParser {
         return textualContent
     }
 
+    /*
+        Method(`
+            Returns true if the text between the given startPos and endPos of the
+            given sourceFile contains only code comments.
+        `)
+    */
     isCommentOnly({ startPos: startPos, endPos: endPos, sourceFile: sourceFile }) {
         const contents = sourceFile.getPartialContents({
             fromStartPos: startPos,
@@ -394,6 +297,59 @@ class JSFileStructureParser {
             return false
         }
     }
+
+    /*
+        Method(`
+            Given the collection of expressions filters and returns only the
+            ones that are JsObject expressions
+        `)
+    */
+    selectJsObjectsOnlyFrom({ expressions: expressions }) {
+        return expressions.filter( (expression) => {
+            return OInstance.isOInstance( expression )
+        })
+    }
+
+    /*
+        Method(`
+            Creates and returns a new object from the given jsObjectClassification.
+
+            The created object is set with this.namespace and the proper sourceFile
+            and position in the file.
+
+            If the optional parameter childObjects is given it also filters the
+            childObject from the parameter and adds it to the created JsObject.
+        `)
+    */
+    createJsObject({
+        jsObjectClassification: jsObjectClassification,
+        sourceFile: sourceFile, locationInFile: locationInFile,
+        childObjects: childObjects,
+    }) {
+        const jsObject = jsObjectClassification.new()
+
+        jsObject.setNamespace( this.namespace() )
+
+        jsObject.setFileLocation({
+            sourceFile: sourceFile,
+            startPos: locationInFile.startPos,
+            endPos: locationInFile.endPos - 1,
+        })
+
+        if( childObjects !== undefined ) {
+            const jsObjects = this.selectJsObjectsOnlyFrom({
+                expressions: childObjects
+            })
+
+            this.addChildrenTo({
+                parentObject: jsObject,
+                childrenObjects: jsObjects,
+                sourceFile: sourceFile,
+            })
+        }
+
+        return jsObject
+    }
 }
 
-module.exports = Classification.define(JSFileStructureParser)
+module.exports = Classification.define(JsFileStructureParser)

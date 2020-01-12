@@ -6,6 +6,7 @@ const YamlContentInspectorFlow = require('./YamlFileInspector/YamlContentInspect
 
 const JsClassesAndMethodsParser = require('./JsClassesAndMethods/JsClassesAndMethodsParser')
 const JsSpecParser = require('./JsSpec/JsSpecParser')
+const SpecFileContentsInspectorFlow = require('./JsSpec/SpecFileContentsInspectorFlow')
 
 const allPulings = [
     {
@@ -40,6 +41,10 @@ const allPulings = [
                         before
                         after`,
         parser: JsSpecParser,
+        content: {
+            contentType: 'jsSpecFile',
+            fileInspectorFlow: SpecFileContentsInspectorFlow,
+        }
     },
 
     {

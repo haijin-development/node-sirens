@@ -4,6 +4,25 @@ const JsSpecFile = require('./structure-objects/JsSpecFile')
 const JsSpecTest = require('./structure-objects/JsSpecTest')
 const JsSpecDescribe = require('./structure-objects/JsSpecDescribe')
 
+/*
+    Class(`
+        A JsSpecParser object assumes that the given sourceFile is a javascript file
+        defining tests.
+
+        If it is it converts the parsed source code into a tree of
+
+                JsSpecFile
+                    JsSpecDescribe
+                        JsSpecTest
+
+        and returns the tree.
+
+        The objects in the returned tree can be browsed and edited in an application.
+        
+        If the given sourceFile is not a file containing tests the parser will fail
+        and it returns null.
+    `)
+*/
 class JsSpecParser {
 
     static definition() {

@@ -5,7 +5,7 @@ class JsSpecFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['testDescription']
+        this.instanceVariables = []
         this.assumes = [JsFileObject]
     }
 

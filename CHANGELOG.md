@@ -16,6 +16,7 @@
 
 ### Skins
 
+- TreeView now expands the selection when its set.
 - Implemented confirmation dialog.
 - Cleaned up references to GtkIcons and moved them to GtkViewsNamespace.
 - Implemented a NullViewsNamespace and added protocol to choose which Views library to use.
@@ -25,6 +26,7 @@
 
 ### Sirens
 
+- Implemented a basic browser of spec files.
 - Improved how parsers are loaded and filtered.
 - Added an icon for JsComment.
 - If a TextualContents is a JsComment then uses a JsComment object.

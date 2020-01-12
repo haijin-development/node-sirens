@@ -203,6 +203,8 @@ class TreeView {
         })
 
         iterPaths.forEach( (iterPath, i) => {
+            this.treeView.expandToPath( iterPath )
+
             const selection = this.treeView.getSelection()
 
             selection.selectPath(iterPath)

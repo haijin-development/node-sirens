@@ -125,7 +125,7 @@ class ChoicesTree {
 
     onSelectedValueChanged() {
         this.duringClassificationDo( UpdatingView, () => {
-            let selectionIndices = this.getModel().getSelectionIndices()
+            const selectionIndices = this.getModel().getSelectionIndices()
 
             this.getView().setSingleSelection({ indexPath: selectionIndices })
         })

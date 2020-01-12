@@ -43,7 +43,7 @@ const allPulings = [
     },
 
     {
-        name: 'Javascripts',
+        name: 'Classes and methods',
         description: `Recognizes .js files and parses them to produce a tree of javascript high level statements:
             JsFile
                 JsComment

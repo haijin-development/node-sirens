@@ -1,5 +1,6 @@
 const Classification = require('../../../../src/O').Classification
 const JsFileStructureParser = require('../../../../src/sirens/objects/js-parser/JsFileStructureParser')
+const JsSpecFile = require('./structure-objects/JsSpecFile')
 const JsSpecTest = require('./structure-objects/JsSpecTest')
 const JsSpecDescribe = require('./structure-objects/JsSpecDescribe')
 
@@ -28,11 +29,13 @@ class JsSpecParser {
 
         const childObjects = parsedExpression.getChildObjects()
 
-        const hasATest = childObjects.some( (fileObject) => {
+        const isJsSpecObject = childObjects.some( (fileObject) => {
             return fileObject.respondsTo( 'isJsSpecObject' )
         })
 
-        if( ! hasATest ) { return null }
+        if( ! isJsSpecObject ) { return null }
+
+        parsedExpression.behaveAs( JsSpecFile )
 
         return parsedExpression
     }

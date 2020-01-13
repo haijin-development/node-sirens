@@ -1,6 +1,11 @@
 const Classification = require('../../../../../src/O').Classification
 const JsFileObject = require('../../../../../src/sirens/objects/js-parser/structure-objects/JsFileObject')
 
+/*
+    Class(`
+        This object models a file containing tests.
+    `)
+*/
 class JsSpecFile {
     /// Definition
 

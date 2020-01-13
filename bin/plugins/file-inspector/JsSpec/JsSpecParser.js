@@ -3,6 +3,7 @@ const JsFileStructureParser = require('../../../../src/sirens/objects/js-parser/
 const JsSpecFile = require('./structure-objects/JsSpecFile')
 const JsSpecTest = require('./structure-objects/JsSpecTest')
 const JsSpecDescribe = require('./structure-objects/JsSpecDescribe')
+const JsSpecHook = require('./structure-objects/JsSpecHook')
 
 /*
     Class(`
@@ -99,6 +100,21 @@ class JsSpecParser {
                     jsSpecDescribe.setDescribeText( describeText )
 
                     return jsSpecDescribe
+                }
+
+                if( [ 'before', 'after', 'beforeEach', 'afterEach' ].includes( treeNode.callee ) ) {
+                    const childTests = treeNode.arguments[0].body
+
+                    const jsSpecHook = this.createJsObject({
+                        jsObjectClassification: JsSpecHook,
+                        sourceFile: sourceFile,
+                        locationInFile: locationInFile,
+                        childObjects: childTests,
+                    })
+
+                    jsSpecHook.setHookType( treeNode.callee )
+
+                    return jsSpecHook
                 }
 
                 return treeNode

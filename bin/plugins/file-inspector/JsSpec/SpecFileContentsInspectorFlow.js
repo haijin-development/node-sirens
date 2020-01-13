@@ -59,7 +59,7 @@ class SpecFileContentsInspectorFlow {
                     const selection =
                         specOrDescriptionObjectTreePath[ specOrDescriptionObjectTreePath.length - 1 ]
 
-                    const selectedSpec = selection && selection.respondsTo('isJsSpecTest') ?
+                    const selectedSpec = selection && selection.respondsTo('isJsSpecObject') ?
                             selection
                             :
                             null

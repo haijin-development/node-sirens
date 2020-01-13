@@ -160,6 +160,10 @@ and a javascript AppBrowser from the project folder with
 
 ![Method documentation browser](./docs/browsing-method-documentation.png)
 
+**Browsing tests**
+
+![Tests browser](./docs/browsing-tests.png)
+
 ### Pre-requisites
 
 The current version works only with node <= v11.

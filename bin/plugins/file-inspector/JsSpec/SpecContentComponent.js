@@ -35,27 +35,50 @@ class SpecContentComponent {
         componentsRenderer.render( function(component) {
 
             this.verticalSplitter( function() {
-                this.treeChoice( function(tree) {
-                    const treeModel = flow.getFlowPoint({ id: 'specObjects' })
 
-                    this.model( treeModel )
+                this.verticalStack( function() {
 
                     this.styles({
-                        showHeaders: false,
-                        clickableHeaders: false,
                         viewAttributes: { splitProportion: 1.0 / 2 },
                     })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(specObject) { return specObject.getIcon() },
-                        imageWidth: 24,
-                        imageHeight: 24,
-                    })
+                    this.text( function() {
+                        this.model(
+                            flow.getFlowPoint({ id: 'selectedSpecFullDescription' })
+                        )
 
-                    this.column({
-                        label: '',
-                        getTextClosure: function(specObject) { return specObject.getDisplayString() },
+                        this.styles({
+                            editable: false,
+                        })
+                    })                
+
+                    this.spaceFiller( function() {
+
+                        this.treeChoice( function(tree) {
+                            const treeModel = flow.getFlowPoint({ id: 'specObjects' })
+
+                            this.model( treeModel )
+
+                            this.styles({
+                                showHeaders: false,
+                                clickableHeaders: false,
+                                viewAttributes: { splitProportion: 1.0 / 2 },
+                            })
+
+                            this.column({
+                                label: '',
+                                getImageClosure: function(specObject) { return specObject.getIcon() },
+                                imageWidth: 24,
+                                imageHeight: 24,
+                            })
+
+                            this.column({
+                                label: '',
+                                getTextClosure: function(specObject) { return specObject.getDisplayString() },
+                            })
+
+                        })
+
                     })
 
                 })
@@ -77,7 +100,7 @@ class SpecContentComponent {
                             action: function() { flow.saveSelectedSpec() },
                         })
                     })
-                })                
+                })
             })
         })
     }

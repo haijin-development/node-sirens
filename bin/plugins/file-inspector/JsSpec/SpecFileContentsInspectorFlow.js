@@ -64,9 +64,13 @@ class SpecFileContentsInspectorFlow {
                             :
                             null
 
+                    thisFlow.setSelectedSpecFullDescription({ specObjectPath: specOrDescriptionObjectTreePath })
+
                     thisFlow.setSelectedSpecContents({ specObject: selectedSpec })
                 },
             })
+
+            this.value({ id: 'selectedSpecFullDescription' })
 
             this.value({ id: 'selectedSpecContents' })
         })
@@ -117,6 +121,18 @@ class SpecFileContentsInspectorFlow {
         return fileObjects.filter( (jsObject) => {
             return jsObject.respondsTo('isJsSpecObject')
         })
+    }
+
+    setSelectedSpecFullDescription({ specObjectPath: specObjectPath }) {
+        let fullDescriptionParts = specObjectPath.map( (each) => {
+            return each.getDisplayString()
+        })
+
+        const fullDescription = fullDescriptionParts.join(' ')
+
+        const selectedSpecFullDescription = this.getChildFlow({ id: 'selectedSpecFullDescription' })
+
+        selectedSpecFullDescription.setValue( fullDescription )
     }
 
     /*

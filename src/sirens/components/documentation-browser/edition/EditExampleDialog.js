@@ -1,7 +1,7 @@
 const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
+
 const Resource = require('../../../objects/Resource')
 const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
@@ -31,6 +31,7 @@ class EditExampleDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -45,26 +46,26 @@ class EditExampleDialog {
 
                     this.verticalSeparator()
 
-                    this.verticalSplitter( function() {
-
-                        this.text({
-                            id: 'exampleDescription',
-                            text: example.getDescription(),
-                            viewAttributes: { splitProportion: 1.0/4.0 },
-                        })
-
-                        this.component(
-                            PlaygroundComponent.new({
-                                id: 'playground',
-                                text: "\n" + example.getCode() + "\n",
-                                hScroll: 'never',
-                                vScroll: 'auto',
-                                viewAttributes: {
-                                    splitProportion: 3.0/4.0
-                                },
+                    this.spaceFiller( function() {
+                        this.verticalSplitter( function() {
+                            this.text({
+                                id: 'exampleDescription',
+                                text: example.getDescription(),
+                                viewAttributes: { splitProportion: 1.0/4.0 },
                             })
-                        )
 
+                            this.component(
+                                PlaygroundComponent.new({
+                                    id: 'playground',
+                                    text: "\n" + example.getCode() + "\n",
+                                    hScroll: 'never',
+                                    vScroll: 'auto',
+                                    viewAttributes: {
+                                        splitProportion: 3.0/4.0
+                                    },
+                                })
+                            )
+                        })                        
                     })
 
                 })
@@ -74,35 +75,29 @@ class EditExampleDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
+        const icon = this.namespace().viewsNamespace().icons
+
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
-                    iconName: GtkIcons.cancel,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.cancel,
+                    size: icon.size._16x16,
                 },
                 action: () => {},
             },
             {
                 image: {
-                    iconName: GtkIcons.ok,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.ok,
+                    size: icon.size._16x16,
                 },
                 label: acceptButtonLabel,
                 action: () => { this.handleUpdateExample() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

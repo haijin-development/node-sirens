@@ -1,7 +1,18 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
 const ObjectInspectorFlow = require('./ObjectInspectorFlow')
 const JsClassInspectorComponent = require('../../components/file-object-inspectors/JsClassInspectorComponent')
 const JsClassDocumentationFlow = require('./JsClassDocumentationFlow')
+
+
+class JsClassInspectorFlowMethodAssertions {
+    getFlowComponent({ parentWindow: parentWindow }) {
+        this.param( parentWindow ) .isNotNull() .isNotUndefined()        
+    }
+}
+JsClassInspectorFlowMethodAssertions = Protocol.define(JsClassInspectorFlowMethodAssertions)
+
+
 
 class JsClassInspectorFlow {
     /// Definition
@@ -9,6 +20,7 @@ class JsClassInspectorFlow {
     static definition() {
         this.instanceVariables = []
         this.assumes = [ObjectInspectorFlow]
+        this.implements = [JsClassInspectorFlowMethodAssertions]
     }
 
     /// Building
@@ -26,6 +38,8 @@ class JsClassInspectorFlow {
                     'editClassUnformattedComment',
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
+                    'saveSelectedMethod',
+                    'setMethodSelectionIndex',
                 ],
             })
 
@@ -107,6 +121,7 @@ class JsClassInspectorFlow {
             'editClassUnformattedComment',
             'setIsBrowsingDocumentation',
             'isBrowsingDocumentation',
+            'saveSelectedMethod',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -117,9 +132,10 @@ class JsClassInspectorFlow {
 
     // Methods
 
-    getFlowComponent() {
+    getFlowComponent({ parentWindow: parentWindow }) {
         return JsClassInspectorComponent.new({
             model: this.asFlowPoint(),
+            window: parentWindow,
         })
     }
 
@@ -129,54 +145,6 @@ class JsClassInspectorFlow {
 
     getMethodUnformattedComment() {
         return this.getClass().getClassComment().getContents()
-    }
-
-    editClassUnformattedComment({ parentWindow: parentWindow }) {
-        const jsClass = this.getClass()
-
-        const className = jsClass.getClassName()
-
-        const classComment = jsClass.getClassComment().getContents()
-
-        const dialog = this.guiNamespace().EditClassCommentDialog.new({
-            className: className,
-            classComment: classComment,
-            window: parentWindow,
-            onUpdateClassComment: ({ classNewComment: classNewComment }) => {
-                this.updateClassUnformattedComment({
-                    classNewComment: classNewComment
-                })   
-            },
-        })
-
-        dialog.open()
-    }
-
-    updateClassUnformattedComment({ classNewComment: classComment }) {
-        const jsClass = this.getClass()
-
-        jsClass.getClassComment().writeContents({
-            contents: classComment
-        })
-
-        this.reloadSourceFile()
-    }
-
-    updateClassDocumentation({ classDocumentation: classDocumentation }) {
-        const classCommentContents = classDocumentation.generateCommentContents()
-
-        const jsClass = this.getClass()
-
-        const classComment = jsClass.getClassComment()
-
-        const classIndentation = jsClass.getContentsIndentation()
-
-        classComment.writeFormattedContents({
-            commentContents: classCommentContents,
-            outerIndentation: classIndentation,
-        })
-
-        this.reloadSourceFile()
     }
 
     getAllMethodsTagLabels() {
@@ -227,6 +195,122 @@ class JsClassInspectorFlow {
         return methodsWithSelectedTags
     }
 
+    /*
+        Method(`
+            Returns the selected JsMethod of null if no method is selected.
+        `)
+    */
+    getSelectedMethod() {
+        return this.getChildFlow({ id: 'classMethods' }).getSelection()
+    }
+
+    /*
+        Method(`
+            Returns the index of the selected JsMethod in the list of methods
+            of the class.
+
+            This index is used to restore the same method after a reload of the
+            source code.
+        `)
+    */
+    getSelectedMethodIndex() {
+        return this.getChildFlow({ id: 'classMethods' }).getSelectionIndex()
+    }
+
+    setMethodSelectionIndex({ index: index }) {
+        this.getChildFlow({ id: 'classMethods' }).setSelectionIndex({ index: index })
+    }
+
+    /*
+        Method(`
+            Returns the edited contents of the selected method.
+        `)
+    */
+    getSelectedMethodEditedSourceCode() {
+        return this.getChildFlow({ id: 'selectedMethod' }).getValue()
+    }
+
+    // Actions
+
+    editClassUnformattedComment({ parentWindow: parentWindow }) {
+        const jsClass = this.getClass()
+
+        const className = jsClass.getClassName()
+
+        const classComment = jsClass.getClassComment().getContents()
+
+        const dialog = this.guiNamespace().EditClassCommentDialog.new({
+            className: className,
+            classComment: classComment,
+            window: parentWindow,
+            onUpdateClassComment: ({ classNewComment: classNewComment }) => {
+                this.updateClassUnformattedComment({
+                    classNewComment: classNewComment
+                })   
+            },
+        })
+
+        dialog.open()
+    }
+
+    updateClassUnformattedComment({ classNewComment: classComment }) {
+        const jsClass = this.getClass()
+
+        jsClass.getClassComment().writePlainContents({
+            contents: classComment
+        })
+
+        this.reloadSourceFile()
+    }
+
+    updateClassDocumentation({ classDocumentation: classDocumentation }) {
+        const classCommentContents = classDocumentation.generateCommentContents()
+
+        const jsClass = this.getClass()
+
+        const classComment = jsClass.getClassComment()
+
+        const classIndentation = jsClass.getContentsIndentation()
+
+        classComment.writeContents({
+            commentContents: classCommentContents,
+            outerIndentation: classIndentation,
+        })
+
+        this.reloadSourceFile()
+    }
+
+    /*
+        Method(`
+            Writes the contents of the selected method edition to the method file.
+        `)
+    */
+    saveSelectedMethod() {
+        const jsMethod = this.getSelectedMethod()
+        const editedMethodSourceCode = this.getChildFlow({ id: 'selectedMethod' }).getValue()
+
+        jsMethod.writeContents({ methodContents: editedMethodSourceCode })
+
+        const selectionIndex = this.getSelectedMethodIndex()
+
+        this.reloadSourceFile({
+            thenDo: function(mainFlow) {
+                mainFlow.executeCommand({
+                    id: 'setMethodSelectionIndex',
+                    with: { index: selectionIndex },
+                })
+            }
+        })
+     }
+
+    // Namespaces
+
+    /*
+        Method(`
+            Returns the namespace where are defined the classes specific to the
+            GUI.
+        `)
+    */
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',

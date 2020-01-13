@@ -1,10 +1,7 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
-
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
 
 describe('When using an namespace.JsClassInspectorFlow.new', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -17,11 +14,11 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
     let flow
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFile({ file: fileSample })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFile({ file: fileSample })
 
-        filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        filePath = fileSamplesRepository.pathTo( fileSample )
+        sourceFile = namespace.SourceFile.new({ path: filePath  })
         sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsClass = jsFile.getClasses()[0]
@@ -50,13 +47,14 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
             'main.classMethods',
             'main.classMethods.selectedMethod',
+            'main.saveSelectedMethod',
             'main.selectedTags',
 
             'main.getClass',
@@ -67,6 +65,7 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
             'main.editClassUnformattedComment',
             'main.isBrowsingDocumentation',
             'main.setIsBrowsingDocumentation',
+            'main.setMethodSelectionIndex',
 
             'main.classDocumentation',
             'main.classDocumentation.documentationIndex',
@@ -181,7 +180,6 @@ describe('When using an namespace.JsClassInspectorFlow.new', () => {
             expect( flow.getCommandsController() ) .to
                 .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
                     expect(command.commandName) .to .eql('reloadSourceFile')
-                    expect(command.params) .to .eql([])
                     expect(command.startingAtFlow.getIdPath()) .to .eql('main')
                 })
         })

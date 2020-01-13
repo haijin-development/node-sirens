@@ -1,10 +1,7 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
-
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
 
 describe('When using an JsMethodDocumentationFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -14,11 +11,11 @@ describe('When using an JsMethodDocumentationFlow', () => {
     let flow
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFile({ file: fileSample })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFile({ file: fileSample })
 
-        filePath = FilesRepository.pathTo( fileSample )
-        const sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        filePath = fileSamplesRepository.pathTo( fileSample )
+        const sourceFile = namespace.SourceFile.new({ path: filePath  })
         const sourceFileParser = namespace.SourceFileStructureParser.new()
         const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 
@@ -31,7 +28,7 @@ describe('When using an JsMethodDocumentationFlow', () => {
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {

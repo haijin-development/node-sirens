@@ -1,7 +1,7 @@
 const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
+
 const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
 class EditImplementationNoteDialog {
@@ -20,6 +20,8 @@ class EditImplementationNoteDialog {
 
         const implementationNoteText = this.getProps().implementationNoteText
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.dialog( function() {
@@ -29,13 +31,14 @@ class EditImplementationNoteDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
 
                     this.component(
                         EditDialogHeaderComponent.new({
-                            mainIcon: GtkIcons.dialogWarning,
+                            mainIcon: icon.dialogWarning,
                             title:  component.getProps().title,
                             subtitle: component.getProps().subtitle,
                         })
@@ -43,14 +46,12 @@ class EditImplementationNoteDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'implementationNote',
-                        text: implementationNoteText,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'implementationNote',
+                            text: implementationNoteText,
+                        })
                     })
-
                 })
 
             })
@@ -58,35 +59,29 @@ class EditImplementationNoteDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
+        const icon = this.namespace().viewsNamespace().icons
+
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
-                    iconName: GtkIcons.cancel,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.cancel,
+                    size: icon.size._16x16,
                 },
                 action: () => {},
             },
             {
                 image: {
-                    iconName: GtkIcons.ok,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.ok,
+                    size: icon.size._16x16,
                 },
                 label: acceptButtonLabel,
                 action: () => { this.handleUpdateImplementationNote() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

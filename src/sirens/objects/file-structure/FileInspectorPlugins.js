@@ -1,8 +1,6 @@
 const Classification = require('../../../O').Classification
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
-const PlainTextStructureParser = require('../file-structure-parsers/PlainTextStructureParser')
-
 const TextualContentInspectorFlow = require('../../flows/file-object-inspectors/TextualContentInspectorFlow')
 const JsClassInspectorFlow = require('../../flows/file-object-inspectors/JsClassInspectorFlow')
 const JsMethodInspectorFlow = require('../../flows/file-object-inspectors/JsMethodInspectorFlow')
@@ -36,16 +34,14 @@ class FileInspectorPlugins {
     static definition() {
         this.instanceVariables = [
             'availableFileParsers',
-            'availableFileObjectInspectors'
+            'availableFileObjectInspectors',
         ]
         this.assumes = [ObjectWithNamespace]
     }
 
     initialize() {
         // review
-        this.availableFileParsers = {
-            default: PlainTextStructureParser,
-        }
+        this.availableFileParsers = []
 
         this.availableFileObjectInspectors = {
             default: TextualContentInspectorFlow,
@@ -54,12 +50,23 @@ class FileInspectorPlugins {
         }
     }
 
+    // Files parsers
+
+    getAvailableFileParsers() {
+        return this.availableFileParsers.map( (parserClassification) => {
+            const parser = parserClassification.new()
+
+            parser.setNamespace( this.namespace() )
+
+            return parser
+        })
+    }
+
     addFileInspectorPlugin(pluginObject) {
         if( pluginObject.parser !== undefined ) {
-            const fileType = pluginObject.parser.fileType
-            const parser = pluginObject.parser.parser
+            const parserClassification = pluginObject.parser
 
-            this.availableFileParsers[fileType] = parser
+            this.availableFileParsers.push( parserClassification )
         }
 
         if( pluginObject.content !== undefined ) {
@@ -70,20 +77,7 @@ class FileInspectorPlugins {
         }
     }
 
-    pickFileParserFor({ sourceFile: sourceFile }) {
-        const fileType = sourceFile.getFileType()
-
-        const parserClassification = this.availableFileParsers[fileType] ?
-            this.availableFileParsers[fileType]
-            :
-            this.availableFileParsers.default
-
-        const parser = parserClassification.new()
-
-        parser.setNamespace( this.namespace() )
-
-        return parser
-    }
+    // File inspectors
 
     pickFileObjectInspectorFlowFor({ fileObject: fileObject }) {
         const fileObjectType = fileObject ?

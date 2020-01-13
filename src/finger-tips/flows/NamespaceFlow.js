@@ -136,6 +136,39 @@ class NamespaceFlow {
         const NamespaceFlowBuilder = require('../flow-builders/NamespaceFlowBuilder')
         return NamespaceFlowBuilder.new({ flow: this })
     }
+
+    /*
+        Tags([
+            'implementation'
+        ])
+    */
+    addChildNamespaceFlow({ id: nestedNamespaceId, namespaceFlow: namespaceFlow }) {
+        this.addChildFlow({
+            id: nestedNamespaceId,
+            flow: namespaceFlow
+        })
+
+        const nestedNamespaceAccessor = {}
+
+        for( const childFlow of namespaceFlow.getChildFlows() ) {
+            const nestedId = childFlow.getId()
+
+            nestedNamespaceAccessor[ nestedId ] = namespaceFlow[ nestedId ]
+        }
+
+        this.defineNamespaceAccessor({
+            accessor: nestedNamespaceId,
+            value: nestedNamespaceAccessor
+        })
+    }
+
+    defineNamespaceAccessor({ accessor: accessor, value: value })
+    {
+        this.setUnclassifiedProperty({
+            name: accessor,
+            value: value,
+        })        
+    }
 }
 
 module.exports = Classification.define(NamespaceFlow)

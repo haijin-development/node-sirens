@@ -98,7 +98,7 @@ class DocumentationDslWriter {
     appendMethodDocumentationDslTo({ methodDocumentation: methodDocumentation, stringStream: stringStream }) {
         const hasDescription = methodDocumentation.hasDescription()
         const hasParams = methodDocumentation.getParams().length > 0
-        const hasReturns = methodDocumentation.getReturnValue() !== undefined
+        const returnValue = methodDocumentation.getReturnValue()
         const hasImplementationNotes = methodDocumentation.getImplementationNotes().length > 0
         const hasExamples = methodDocumentation.getExamples().length > 0
         const hasTags = methodDocumentation.getTags().length > 0
@@ -129,13 +129,13 @@ class DocumentationDslWriter {
             })
         }
 
-        if( hasReturns ) {
+        if( returnValue !== undefined && returnValue.getDescription().trim() !== '' ) {
             if( hasParams ) {
                 stringStream.cr()
             }
 
             this.appendReturnValueTo({
-                returnValue: methodDocumentation.getReturnValue(),
+                returnValue: returnValue,
                 stringStream: stringStream,
             })
         }

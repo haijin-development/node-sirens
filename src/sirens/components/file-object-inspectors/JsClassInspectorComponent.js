@@ -75,6 +75,7 @@ class JsClassInspectorComponent {
         if( showsUnformattedComments ) {
             return ClassUnformattedCommentComponent.new({
                 model: flow,
+                window: this.getProps().window,
             })
         } else {
             const classDocumentationFlow =

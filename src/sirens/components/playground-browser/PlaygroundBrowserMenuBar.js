@@ -20,12 +20,6 @@ class PlaygroundBrowserMenuBar {
 
             this.menuBar( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.menuGroup({ label: 'File' }, function() {
                     this.item({
                         label: 'Open file...',

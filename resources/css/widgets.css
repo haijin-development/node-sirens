@@ -1,6 +1,1 @@
-.window {
-}
-
-.playground {
-	background-color: #FFF4C2;
-}
+@import url('./confirmation-dialog.css');

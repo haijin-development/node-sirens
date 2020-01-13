@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../objects/Resource')
 
 class AppBrowserToolBar {
@@ -19,21 +18,17 @@ class AppBrowserToolBar {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render(function (component) {
 
             this.toolBar( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.button({
                     label: 'Open folder...',
                     image: {
-                        iconName: GtkIcons.open,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.open,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Opens an app folder.',
                     action: component.getProps().openFolder,
@@ -60,8 +55,8 @@ class AppBrowserToolBar {
                     model: flow.getFlowPoint({ id: 'browsingMode.showsUnformattedComments' }),
                     label: 'Show unformatted comment.',
                     image: {
-                        iconName: GtkIcons.revertToSave,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.revertToSave,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Shows the unformatted comment as it appears in the file.',
                 })
@@ -70,8 +65,8 @@ class AppBrowserToolBar {
                     model: flow.getFlowPoint({ id: 'browsingMode.isEditingDocumentation' }),
                     label: 'Edition mode.',
                     image: {
-                        iconName: GtkIcons.edit,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.edit,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Turn it on to edit the documentation.',
                 })

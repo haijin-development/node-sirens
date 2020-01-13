@@ -1,5 +1,6 @@
 const Classification = require('../../../../../src/O').Classification
-const JsFileObject = require('./JsFileObject')
+const JsFileObject = require('../../../../../src/sirens/objects/js-parser/structure-objects/JsFileObject')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsMethod {
     /// Definition
@@ -49,6 +50,10 @@ class JsMethod {
         return `${this.methodName}(...)`
     }
 
+    getIcon() {
+        return Resource.image.method
+    }
+
     getSignatureString() {
         const methodName = this.getMethodName()
         const methodParams = this.getMethodParams()
@@ -77,6 +82,28 @@ class JsMethod {
         })
 
         return `{ ${namedParams.join( ', ' )} }`
+    }
+
+    /*
+        Method(`
+            Writes the given methodContents to the method Location
+            preserving the original indentation of the method.
+        `)
+    */
+    writeContents({ methodContents: methodContents }) {
+        const contentsIndentation = this.getContentsIndentation()
+
+        const sourceCodeText = this.namespace().SourceCodeText.new({
+            text: this.getContents()
+        })
+
+        sourceCodeText.setIndentationChar( contentsIndentation.char )
+        sourceCodeText.setIndentationLevel( contentsIndentation.level )
+
+        const plainContents =
+            sourceCodeText.unformatBackText( methodContents )
+
+        this.writePlainContents({ contents: plainContents })
     }
 }
 

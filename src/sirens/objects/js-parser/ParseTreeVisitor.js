@@ -3,8 +3,10 @@ const Classification = require('../../../O').Classification
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
 
 /*
- * A visitor of a javascript parse tree.
- */
+    Method(`
+        An implementation of the Visitor pattern for a standard javascript expression.
+    `)
+*/
 class ParseTreeVisitor {
     /// Definition
 
@@ -15,10 +17,10 @@ class ParseTreeVisitor {
 
     /// Parsing
 
-    parseString({ string: string, parsingOptions: parsingOptions  }) {
+    getParseTreeFromString({ string: string, parsingOptions: parsingOptions  }) {
         if( parsingOptions === undefined ) {
             parsingOptions = {
-                loc: true,
+                range: true,
                 comment: true,
                 tokens: false,
                 tolerant: true,
@@ -32,7 +34,7 @@ class ParseTreeVisitor {
     /// Visiting
 
     visitTree(treeNode) {
-        this.visit(treeNode)
+        return this.visit(treeNode)
     }
 
     /*

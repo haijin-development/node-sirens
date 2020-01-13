@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 
 class TagsDocumentationComponent {
@@ -23,62 +22,51 @@ class TagsDocumentationComponent {
 
         const isInEditionMode = flow.isInEditionMode()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
-
-                this.styles({
-                    marginVertical: 10,
+                this.image({
+                    filename: Resource.image.tag,
+                    width: 24,
+                    height: 24,
                     viewAttributes: {
-                        stackSize: 'fixed',
+                        stackPadding: 10,
                     },
                 })
 
                 this.horizontalStack( function() {
+                    tags.forEach( (tag) => {
+                        const tagLabel = tag.getLabel()
 
-                    this.image({
-                        filename: Resource.image.tag,
-                        width: 24,
-                        height: 24,
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                            stackPadding: 10,
+                        this.label({
+                            text: tagLabel,
+                            css: [ 'tag-label', tagLabel ],
+                            viewAttributes: {
+                                stackPadding: 6,
+                            },
+                        })
+                    })
+                })
+
+                if( isInEditionMode ) {
+                    this.spaceFiller()
+
+                    this.textButton({
+                        image: {
+                            iconName: icon.edit,
+                            size: icon.size._16x16,
+                        },
+                        onClicked: () => {
+                            flow.editMethodTags({
+                                parentWindow: component.getProps().window
+                            })
                         },
                     })
+                }
 
-                    this.horizontalStack( function() {
-                        tags.forEach( (tag) => {
-                            const tagLabel = tag.getLabel()
-
-                            this.label({
-                                text: tagLabel,
-                                css: [ 'tag-label', tagLabel ],
-                                viewAttributes: {
-                                    stackSize: 'fixed',
-                                    stackPadding: 6,
-                                },
-                            })
-                        })
-                    })
-
-                    this.label({ viewAttributes: { stackSize: 'filled' } })
-
-                    if( isInEditionMode ) {
-                        this.textButton({
-                            image: {
-                                iconName: GtkIcons.edit,
-                                size: GtkIcons.size._16x16,
-                            },
-                            viewAttributes: { stackSize: 'fixed' },
-                            onClicked: () => {
-                                flow.editMethodTags({ parentWindow: this.getProps().window })
-                            },
-                        })
-                    }
-
-                })
             })
-
         })
     }
 }

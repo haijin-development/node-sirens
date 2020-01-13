@@ -1,9 +1,10 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
 const ObjectWithNamespace = require('../../../O').ObjectWithNamespace
-const PositionInFile = require('./PositionInFile')
 const StringStream = require('../../../O').StringStream
 const SourceCodeText = require('..//SourceCodeText')
 const FileObjectLocation = require('./FileObjectLocation')
+const Resource = require('../Resource')
 
 class FileObject {
     /// Definition
@@ -25,22 +26,22 @@ class FileObject {
         return this.fileLocation
     }
 
-    setFileLocation({
-        sourceFile: sourceFile,
-        startLine: startLine, startColumn: startColumn,
-        endLine: endLine, endColumn: endColumn,
-    }) {
+    setFileLocation({ sourceFile: sourceFile, startPos: startPos, endPos: endPos }) {
         this.fileLocation = FileObjectLocation.new({
             sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
+            startPos: startPos,
+            endPos: endPos,
         })
     }
 
     addChildObject(fileObject) {
-        this.childObjects.push(fileObject)
+        this.addChildrenObjects([ fileObject ])
+    }
+
+    addChildrenObjects(fileObjects) {
+        for( const child of fileObjects ) {
+            this.childObjects.push( child )
+        }
     }
 
     getChildObjects() {
@@ -52,11 +53,9 @@ class FileObject {
     }
 
     getContents() {
-        return this.fileLocation.getSourceFile().getOriginalSourceCode({
-            fromLine: this.fileLocation.getStartPos().getLine(),
-            fromColumn: this.fileLocation.getStartPos().getColumn(),
-            toLine: this.fileLocation.getEndPos().getLine(),
-            toColumn: this.fileLocation.getEndPos().getColumn(),
+        return this.getSourceFile().getPartialContents({
+            fromStartPos: this.fileLocation.getStartPos(),
+            toEndPos: this.fileLocation.getEndPos(),
         }) 
     }
 
@@ -74,25 +73,23 @@ class FileObject {
         return this.getContents().trim() !== ''
     }
 
-    writeContents({ contents: contents }) {
-        const firstStatementStartLine = this.fileLocation.getStartPos().getLine()
-        const firstStatementStartColumn = this.fileLocation.getStartPos().getColumn()
+    /*
+        Method(`
+            Writes the given contents to the FileObject location without modifying
+            the contents in any way. 
+        `)
+    */
+    writePlainContents({ contents: contents }) {
+        const sourceFile = this.getSourceFile()
 
-        const lastStatementEndLine = this.fileLocation.getEndPos().getLine()
-        const lastStatementEndColumn = this.fileLocation.getEndPos().getColumn()
-
-        const sourceFile = this.fileLocation.getSourceFile()
-
-        const fileContentsBefore = sourceFile.getOriginalSourceCode({
-            fromLine: 1,
-            fromColumn: 0,
-            toLine: firstStatementStartLine,
-            toColumn: firstStatementStartColumn,
+        const fileContentsBefore = sourceFile.getPartialContents({
+            fromStartPos: 0,
+            toEndPos: this.fileLocation.getStartPos() - 1,
         })
 
-        const fileContentsAfter = sourceFile.getOriginalSourceCode({
-            fromLine: lastStatementEndLine,
-            fromColumn: lastStatementEndColumn,
+        const fileContentsAfter = sourceFile.getPartialContents({
+            fromStartPos: this.fileLocation.getEndPos() + 1,
+            toEndPos: 'eof',
         })
 
         const newFileContents = StringStream.new()
@@ -103,7 +100,7 @@ class FileObject {
 
         newFileContents.append({ string: fileContentsAfter, if: fileContentsAfter !== '' })
 
-        sourceFile.saveFileContents( newFileContents.getString() )
+        sourceFile.writeFileContents( newFileContents.getString() )
     }
 
     getContentsIndentation() {
@@ -118,6 +115,12 @@ class FileObject {
             level: indentationLevel,
             char: indentationChar,
         }
+    }
+
+    // Displaying
+
+    getIcon() {
+        return Resource.image.haiku
     }
 }
 

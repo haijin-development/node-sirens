@@ -1,5 +1,6 @@
 const Classification = require('../../../../../src/O').Classification
-const JsFileObject = require('./JsFileObject')
+const JsFileObject = require('../../../../../src/sirens/objects/js-parser/structure-objects/JsFileObject')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsClass {
     /// Definition
@@ -41,6 +42,10 @@ class JsClass {
 
     getFileObjectDescription() {
         return `${this.className} class`
+    }
+
+    getIcon() {
+        return Resource.image.class
     }
 }
 

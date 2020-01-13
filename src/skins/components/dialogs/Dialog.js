@@ -28,13 +28,21 @@ class Dialog {
         const view = this.namespace().Views.DialogView.new({
             title: props.title,
             buttons: props.buttons,
-            //windowView: windowView,
+            windowView: windowView,
             dialog: this,
         })
 
         view.assemble()
 
         return view
+    }
+
+    initializeProps() {
+        this.addCssProps({ css: ['dialog-component'] })
+
+        this.previousClassificationDo( () => {
+            this.initializeProps()
+        })
     }
 
     synchronizeViewFromModel() {
@@ -49,17 +57,4 @@ class Dialog {
     }
 }
 
-Dialog = Classification.define(Dialog)
-
-/// Constructors
-
-Dialog.open = function({ window: windowComponent }) {
-    const dialog = this.new({
-        window: windowComponent,
-    })
-
-    return dialog.open()
-}
-
-
-module.exports = Dialog
+module.exports = Classification.define(Dialog)

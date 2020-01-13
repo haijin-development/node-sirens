@@ -17,7 +17,7 @@ class DocumentationDslReader {
     readFromString({ string: documentationString, into: documentation }) {
         this.documentation = documentation
 
-        const parseTree = this.parseString({ string: documentationString, parsingOptions: {} })
+        const parseTree = this.getParseTreeFromString({ string: documentationString, parsingOptions: {} })
 
         this.visitTree( parseTree )
 

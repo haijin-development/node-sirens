@@ -3,7 +3,6 @@ const FilePath = require('../O').FilePath
 const Flow = require('../finger-tips/flows/Flow')
 
 const SirensNamespace = require('./SirensNamespace')
-const SkinsGtk = require('../skins/gtk-views/SkinsGtk')
 
 /*
     Class(`
@@ -49,6 +48,8 @@ class SirensFlow {
                     'openAppBrowser',
                     'openPlayground',
                     'getPreferences',
+                    'useGtkViews',
+                    'useNoViews',
                 ],
             })
 
@@ -65,7 +66,7 @@ class SirensFlow {
                             .append({ path: cssFilePath })
                     }
 
-                    SkinsGtk.setGlobalStyles({ cssFilePath: cssFilePath })
+                    thisFlow.mainNamespace().setGlobalStyles({ cssFilePath: cssFilePath })
                 })
 
             })
@@ -94,6 +95,8 @@ class SirensFlow {
             'browsePrototypes',
             'openAppBrowser',
             'openPlayground',
+            'useGtkViews',
+            'useNoViews',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -119,7 +122,7 @@ class SirensFlow {
     /// Browsers
 
     browseObject(object) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const objectBrowserFlow = namespace.ObjectBrowserFlow.new({
@@ -142,7 +145,7 @@ class SirensFlow {
     }
 
     browsePrototypes(object) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const prototypesBrowserFlow = namespace.PrototypesBrowserFlow.new({
@@ -165,7 +168,7 @@ class SirensFlow {
     }
 
     openAppBrowser({ appFolder: appFolderPath } = { appFolder: undefined }) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const appBrowserFlow = namespace.AppBrowserFlow.new({
@@ -190,7 +193,7 @@ class SirensFlow {
     }
 
     openPlayground({ filename: filename } = { filename: undefined }) {
-        SkinsGtk.do( () => {
+        this.mainNamespace().withGUIDo( () => {
             const namespace = this.mainNamespace()
 
             const playgroundBrowserFlow = namespace.PlaygroundBrowserFlow.new({
@@ -247,6 +250,45 @@ class SirensFlow {
             mainFlow: flow,
             mainNamespace: namespace,
         })
+    }
+
+    /*
+        Method(`
+            Configures Sirens to use the Gtk library for its Views.
+        `)
+    */
+    useGtkViews() {
+        const skinsNamespace = this.skinsNamespace()
+
+        skinsNamespace.useGtkViews()
+
+        this.setGlobalStylesFromLoadedPreferences()
+    }
+
+    useNoViews() {
+        const skinsNamespace = this.skinsNamespace()
+
+        skinsNamespace.useNoViews()
+
+        this.setGlobalStylesFromLoadedPreferences()
+    }
+
+    setGlobalStylesFromLoadedPreferences() {
+        const preferences = this.getPreferences()
+
+        let cssFilePath = FilePath.new({ path: preferences.cssFile })
+
+        if( cssFilePath.isRelative() ) {
+            cssFilePath = FilePath.new({ path: __dirname })
+                .append({ path: '../..' })
+                .append({ path: cssFilePath })
+        }
+
+        this.mainNamespace().setGlobalStyles({ cssFilePath: cssFilePath })        
+    }
+
+    getPreferences() {
+        return this.getChildFlow({ id: 'preferences' }).getValue()
     }
 }
 

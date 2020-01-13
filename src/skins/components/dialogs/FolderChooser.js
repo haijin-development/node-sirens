@@ -57,19 +57,4 @@ class FolderChooser {
 
 }
 
-FolderChooser = Classification.define(FolderChooser)
-
-/// Constructors
-
-FolderChooser.chooseFolder = function({ title: title,  window: windowComponent, initialFolder: initialFolder }) {
-    const dialog = this.new({
-        title: title,
-        mode: 'chooseFolder',
-        window: windowComponent,
-        initialFolder: initialFolder,
-    })
-
-    return dialog.open()
-}
-
-module.exports = FolderChooser
+module.exports = Classification.define(FolderChooser)

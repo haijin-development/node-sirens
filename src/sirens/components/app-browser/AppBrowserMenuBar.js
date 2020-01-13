@@ -20,12 +20,6 @@ class AppBrowserMenuBar {
 
             this.menuBar( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.menuGroup({ label: 'App' }, function() {
                     this.item({
                         label: 'Open folder...',

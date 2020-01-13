@@ -1,4 +1,5 @@
 const Classification = require('../../../O').Classification
+const Protocol = require('../../../O').Protocol
 const ValueFlow = require('../../../finger-tips/stateful-flows/ValueFlow')
 const EditImplementationNoteDialog = require('../../components/documentation-browser/edition/EditImplementationNoteDialog')
 const EditExampleDialog = require('../../components/documentation-browser/edition/EditExampleDialog')
@@ -11,12 +12,22 @@ const DocumentationImplementationNote = require('../../objects/documentation/sec
 
 const DocumentationIndexSection = require('./DocumentationIndexSection')
 
+
+class JsClassDocumentationFlowMethodAssertions {
+    editClassDocumentationDescription({ parentWindow: parentWindow }) {
+        this.param( parentWindow ) .isNotNull() .isNotUndefined()        
+    }
+}
+JsClassDocumentationFlowMethodAssertions = Protocol.define(JsClassDocumentationFlowMethodAssertions)
+
+
 class JsClassDocumentationFlow {
     /// Definition
 
     static definition() {
         this.instanceVariables = []
         this.assumes = [ValueFlow]
+        this.implements = [JsClassDocumentationFlowMethodAssertions]
     }
 
     /// Building
@@ -278,7 +289,16 @@ class JsClassDocumentationFlow {
         })
     }
 
-    deleteClassDocumentationImplementationNote({ implementationNote: implementationNote }) {
+    deleteClassDocumentationImplementationNote({
+        implementationNote: implementationNote, parentWindow: parentWindow,
+    }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this implementation note?',
+            window: parentWindow,
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const classDocumentation = this.getClassDocumentation()
 
         classDocumentation.deleteImplementationNote({
@@ -359,7 +379,14 @@ class JsClassDocumentationFlow {
         })
     }
 
-    deleteClassDocumentationExample({ example: example }) {
+    deleteClassDocumentationExample({ example: example, parentWindow: parentWindow }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this example?',
+            window: parentWindow,
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const classDocumentation = this.getClassDocumentation()
 
         classDocumentation.deleteExample({
@@ -381,6 +408,12 @@ class JsClassDocumentationFlow {
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',
+        })
+    }
+
+    skinsNamespace() {
+        return this.bubbleUp({
+            command: 'skinsNamespace',
         })
     }
 }

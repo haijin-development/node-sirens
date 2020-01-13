@@ -378,7 +378,14 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationParam({ param: param }) {
+    deleteMethodDocumentationParam({ param: param, parentWindow: parentWindow }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this parameter documentation?',
+            window: parentWindow,
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteParam({ param: param })
@@ -479,7 +486,16 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationImplementationNote({ implementationNote: implementationNote }) {
+    deleteMethodDocumentationImplementationNote({
+        implementationNote: implementationNote, parentWindow: parentWindow
+    }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this implementation note?',
+            window: parentWindow,
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteImplementationNote({ implementationNote: implementationNote })
@@ -558,7 +574,14 @@ class JsMethodDocumentationFlow {
         })
     }
 
-    deleteMethodDocumentationExample({ example: example }) {
+    deleteMethodDocumentationExample({ example: example, parentWindow: parentWindow }) {
+        const confirmsDelete = this.skinsNamespace().ConfirmationDialog.new({
+            confirmationText: 'Delete this example?',
+            window: parentWindow,
+        }).open()
+
+        if( confirmsDelete !== true ) { return }
+
         const methodDocumentation = this.getMethodDocumentation()
 
         methodDocumentation.deleteExample({
@@ -580,6 +603,12 @@ class JsMethodDocumentationFlow {
     guiNamespace() {
         return this.bubbleUp({
             command: 'guiNamespace',
+        })
+    }
+
+    skinsNamespace() {
+        return this.bubbleUp({
+            command: 'skinsNamespace',
         })
     }
 

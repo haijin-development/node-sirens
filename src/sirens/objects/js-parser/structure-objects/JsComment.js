@@ -1,6 +1,7 @@
 const Classification = require('../../../../../src/O').Classification
 const FileObject = require('../../../../../src/sirens/objects/file-structure/FileObject')
 const SourceCodeText = require('../../../../../src/sirens/objects/SourceCodeText')
+const Resource = require('../../../../../src/sirens/objects/Resource')
 
 class JsComment {
     /// Definition
@@ -12,6 +13,10 @@ class JsComment {
 
     getFileObjectType() {
         return 'jsComment'
+    }
+
+    getIcon() {
+        return Resource.image.blockComment
     }
 
     getBodyContents() {
@@ -32,17 +37,7 @@ class JsComment {
         return originalSourceCode.slice(2, -2)
     }
 
-    writeContents({ contents: comment }) {
-        if( ! this.hasText() ) {
-            comment = comment + "\n"
-        }
-
-        this.previousClassificationDo( () => {
-            this.writeContents({ contents: comment })
-        })
-    }
-
-    writeFormattedContents({ commentContents: commentContents, outerIndentation: outerIndentation }) {
+    writeContents({ commentContents: commentContents, outerIndentation: outerIndentation }) {
         const innerIndentation = this.getInnerIndentation()
 
         const sourceCodeText = SourceCodeText.new({ text: this.getContents() })
@@ -52,12 +47,20 @@ class JsComment {
 
         const unformattedCommentContents = sourceCodeText.unformatBackText( commentContents )
 
-        const comment =
-            '/*' + 
+        let comment =
+            '/*' +
+            `\n` +
             unformattedCommentContents +
             `\n` + outerIndentation.char.repeat( outerIndentation.level ) + '*/'
 
-        this.writeContents({ contents: comment })
+        // If the comment did have text append a cr to make the method or class
+        // definition to begin in the next line. Otherwise the method or class
+        // is in a new line already.
+        if( ! this.hasText() ) {
+            comment += `\n`
+        }
+
+        this.writePlainContents({ contents: comment })
     }
 
     getInnerIndentation() {

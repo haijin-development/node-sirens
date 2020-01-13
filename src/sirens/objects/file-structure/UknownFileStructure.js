@@ -1,4 +1,5 @@
 const Classification = require('../../../O').Classification
+const Resource = require('../Resource')
 
 class UknownFileStructure {
     /// Definition
@@ -21,6 +22,10 @@ class UknownFileStructure {
 
     getContents() {
         return ''
+    }
+
+    getIcon() {
+        return Resource.image.undefined
     }
 }
 

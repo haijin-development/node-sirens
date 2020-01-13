@@ -46,12 +46,13 @@ class PlaygroundBrowser {
                         })
                     )
 
-                    this.component(
-                        PlaygroundComponent.new({
-                            model: flow.getFlowPoint({ id: 'fileContents' }),
-                        })
-                    )
-
+                    this.spaceFiller( function() {
+                        this.component(
+                            PlaygroundComponent.new({
+                                model: flow.getFlowPoint({ id: 'fileContents' }),
+                            })
+                        )
+                    })
                 })
             })
         })

@@ -1,5 +1,4 @@
 const Classification = require('../../../O').Classification
-const PositionInFile = require('./PositionInFile')
 
 class FileObjectLocation {
     /// Definition
@@ -10,13 +9,10 @@ class FileObjectLocation {
 
     /// Initializing
 
-    initialize({ sourceFile: sourceFile,
-        startLine: startLine, startColumn: startColumn,
-        endLine: endLine, endColumn: endColumn,
-    }) {
+    initialize({ sourceFile: sourceFile, startPos: startPos, endPos: endPos }) {
         this.sourceFile = sourceFile
-        this.startPos = PositionInFile.new({ line: startLine, column: startColumn })
-        this.endPos = PositionInFile.new({ line: endLine, column: endColumn })
+        this.startPos = startPos
+        this.endPos = endPos
     }
 
     setSourceFile(sourceFile) {
@@ -27,16 +23,8 @@ class FileObjectLocation {
         return this.sourceFile
     }
 
-    setStartPos({ line: line, column: column }) {
-        this.startPos = PositionInFile.new({ line: line, column: column })
-    }
-
     getStartPos() {
         return this.startPos
-    }
-
-    setEndPos({ line: line, column: column }) {
-        this.endPos = PositionInFile.new({ line: line, column: column })
     }
 
     getEndPos() {

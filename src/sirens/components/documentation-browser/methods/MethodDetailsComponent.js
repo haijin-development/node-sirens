@@ -35,52 +35,42 @@ class MethodDetailsComponent {
             this.label({
                 text: 'Details',
                 css: [ 'title-1', ],
-                viewAttributes: { stackSize: 'fixed' },
             })
 
-            this.container( function() {
+            this.treeChoice( function() {
+                this.model( documentationIndexFlow )
 
                 this.styles({
-                    hasScrollBars: false,
-                    css: [ 'documentation-index', ],
-                    viewAttributes: { stackSize: 'fixed' },
+                    vScroll: 'always',
+                    showHeaders: false,
+                    clickableHeaders: false,
+                    height: 150,
                 })
 
-                this.treeChoice( function() {
-                    this.model( documentationIndexFlow )
+                this.column({
+                    label: '',
+                    getImageClosure: function(documentSection) {
+                        return component.iconFor({ documentSection: documentSection })
+                    },
+                    imageWidth: 16,
+                    imageHeight: 16,
+                })
 
-                    this.styles({
-                        vScroll: 'always',
-                        showHeaders: false,
-                        clickableHeaders: false,
-                    })
+                this.column({
+                    label: '',
+                    getTextClosure: function(documentSection) {
+                        return component.displayTextFor({ documentSection: documentSection })
+                    },
+                })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(documentSection) {
-                            return component.iconFor({ documentSection: documentSection })
-                        },
-                        imageWidth: 16,
-                        imageHeight: 16,
-                    })
-
-                    this.column({
-                        label: '',
-                        getTextClosure: function(documentSection) {
-                            return component.displayTextFor({ documentSection: documentSection })
-                        },
-                    })
-
-                    if( isInEditionMode === true ) {
-                        this.popupMenu( function() {
-                            component.populatePopupMenu({
-                                menu: this,
-                                documentationIndexFlow: documentationIndexFlow,
-                            })
+                if( isInEditionMode === true ) {
+                    this.popupMenu( function() {
+                        component.populatePopupMenu({
+                            menu: this,
+                            documentationIndexFlow: documentationIndexFlow,
                         })
-                    }
-
-                })
+                    })
+                }
 
             })
 
@@ -89,7 +79,6 @@ class MethodDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-section', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.component(
@@ -190,7 +179,7 @@ class MethodDetailsComponent {
             const implementationNote = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this implementation note...',
                 action: () => {
                     flow.editMethodDocumentationImplementationNote({
                         parentWindow: this.getProps().window,
@@ -200,10 +189,11 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this implementation note',
                 action: () => {
                     flow.deleteMethodDocumentationImplementationNote({
                         implementationNote: implementationNote,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -226,7 +216,7 @@ class MethodDetailsComponent {
             const param = treeSelection
 
             menu.item({
-                label: 'Edit param...',
+                label: 'Edit this parameter documentation...',
                 action: () => {
                     flow.editMethodDocumentationParam({
                         parentWindow: this.getProps().window,
@@ -236,10 +226,11 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete param',
+                label: 'Delete this parameter documentation',
                 action: () => {
                     flow.deleteMethodDocumentationParam({
                         param: param,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -249,7 +240,7 @@ class MethodDetailsComponent {
             const example = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this example...',
                 action: () => {
                     flow.editMethodDocumentationExample({
                         parentWindow: this.getProps().window,
@@ -259,10 +250,11 @@ class MethodDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this example',
                 action: () => {
                     flow.deleteMethodDocumentationExample({
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -282,7 +274,7 @@ class MethodDetailsComponent {
                     break
                 case 'Parameters':
                     menu.item({
-                        label: 'Add a new parameter...',
+                        label: 'Add a new parameter documentation...',
                         action: () => {
                             flow.createMethodDocumentationParam({
                                 parentWindow: this.getProps().window,

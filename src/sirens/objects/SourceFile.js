@@ -1,101 +1,36 @@
 const Classification = require('../../O').Classification
 const FilePath = require('../../O').FilePath
-const splitLines = require('split-lines')
-const StringStream = require('../../O').StringStream
 
 /*
- * A source file to query javascript definitions.
+    Class(`
+        A SourceFile object exnteds a FilePath with a method to filter a section of its
+        contents.
+
+        It is not clear yet if the wrapper makes sense or if the method
+        getPartialContents should be moved to the classification FilePath. 
+    `)
  */
 class SourceFile {
     /// Definition
 
     static definition() {
-        this.instanceVariables = ['filepath']
+        this.instanceVariables = []
+        this.assumes = [FilePath]
     }
 
-    /// Initializing
+    /*
+        Method(`
+            Reads and returns the file contents between the given startPos to endPos.
 
-    initialize({ filepath: filepath }) {
-        this.previousClassificationDo( () => {
-            this.initialize()
-        })
+            Both startPos and endPos are 0 based and included in the result.
+        `)
+    */
+    getPartialContents({ fromStartPos: startPos, toEndPos: endPos }) {
+        const fileContents = this.readFileContents()
 
-        this.filepath = FilePath.new({ path: filepath })
-    }
+        endPos = endPos === 'eof' ? this.getFileSize() : endPos
 
-    /// Accessing
-
-    getFilePath() {
-        return this.filepath
-    }
-
-    getFileName() {
-        return this.filepath.getFileName()
-    }
-
-    getFileContents() {
-        return this.filepath.readFileContents()
-    }
-
-    getFileType() {
-        return this.filepath.getFileNameExtension()
-    }
-
-    /// Querying
-
-    isFolder() {
-        return this.filepath.isFolderPath()
-    }
-
-    existsFile() {
-        return this.filepath.isFilePath() && this.filepath.exists()
-    }
-
-    getOriginalSourceCode({
-        fromLine: fromLine, fromColumn: fromColumn, toLine: toLine, toColumn: toColumn
-    }) {
-        const fileContents = this.getFileContents()
-
-        const allLines = splitLines(fileContents)
-
-        if( toLine === undefined && toColumn === undefined ) {
-            toLine = allLines.length
-            toColumn = allLines[toLine - 1].length
-        }
-
-        /// fromLine and toLine are 1 based whilst slice is 0 based.
-        fromLine = fromLine - 1
-        toLine = toLine - 1
-
-        const firstLine = allLines[fromLine]
-
-        const middleLines = allLines.slice(fromLine + 1, toLine)
-
-        const lastLine = allLines[toLine]
-
-        if(fromLine === toLine) {
-            return firstLine.slice(fromColumn, toColumn)
-        }
-
-        let sourceCode = StringStream.new()
-
-        sourceCode.append({ string: firstLine.slice(fromColumn) })
-
-        if( middleLines.length > 0 ) {
-            sourceCode.cr()
-            sourceCode.append({ string: middleLines.join( "\n" ) })
-        }
-
-        sourceCode.cr()
-        sourceCode.append({ string: lastLine.slice(0, toColumn) })
-
-        return sourceCode.getString()
-    }
-
-    /// Actions
-
-    saveFileContents(newFileContents) {
-        this.filepath.writeFileContents( newFileContents )
+        return fileContents.slice( startPos, endPos + 1 )
     }
 }
 

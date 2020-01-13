@@ -26,6 +26,7 @@ class JsMethodInspectorFlow {
                     'editMethodUnformattedComment',
                     'setIsBrowsingDocumentation',
                     'isBrowsingDocumentation',
+                    'saveSelectedMethod',
                 ],
             })
 
@@ -77,6 +78,7 @@ class JsMethodInspectorFlow {
             'editMethodUnformattedComment',
             'setIsBrowsingDocumentation',
             'isBrowsingDocumentation',
+            'saveSelectedMethod',
         ]
 
         this.exportCommandsToFlowPoint({
@@ -87,9 +89,10 @@ class JsMethodInspectorFlow {
 
     // Methods
 
-    getFlowComponent() {
+    getFlowComponent({ parentWindow: parentWindow }) {
         return JsMethodInspectorComponent.new({
             model: this.asFlowPoint(),
+            window: parentWindow,
         })
     }
 
@@ -112,18 +115,23 @@ class JsMethodInspectorFlow {
             method: method,
             window: parentWindow,
             onUpdateMethodComment: ({ methodNewComment: methodNewComment }) => {
-                this.updateMethodUnformmatedComment({ methodNewComment: methodNewComment })
+                this.updateMethodPlainComment({ methodNewComment: methodNewComment })
             },
         })
 
         dialog.open()
     }
 
-    updateMethodUnformmatedComment({ methodNewComment: methodNewComment }) {
+    updateMethodPlainComment({ methodNewComment: methodNewComment }) {
         const method = this.getMethod()
 
-        method.getMethodComment().writeContents({
-            contents: methodNewComment
+        const methodComment = method.getMethodComment()
+
+        const methodIndentation = method.getContentsIndentation()
+
+        methodComment.writeContents({
+            commentContents: methodNewComment,
+            outerIndentation: methodIndentation,
         })
 
         this.reloadSourceFile()
@@ -132,18 +140,9 @@ class JsMethodInspectorFlow {
     updateMethodDocumentation({ methodDocumentation: methodDocumentation }) {
         const methodCommentContents = methodDocumentation.generateCommentContents()
 
-        const method = this.getMethod()
-
-        const methodComment = method.getMethodComment()
-
-        const methodIndentation = method.getContentsIndentation()
-
-        methodComment.writeFormattedContents({
-            commentContents: methodCommentContents,
-            outerIndentation: methodIndentation,
+        this.updateMethodPlainComment({
+            methodNewComment: methodCommentContents
         })
-
-        this.reloadSourceFile()
     }
 
     guiNamespace() {
@@ -156,6 +155,20 @@ class JsMethodInspectorFlow {
         return this.mainNamespace().DocumentationReader.new()
             .readMethodDocumentationFrom({ jsMethod: jsMethod })
     }
+
+    /*
+        Method(`
+            Writes the contents of the selected method edition to the method file.
+        `)
+    */
+    saveSelectedMethod() {
+        const jsMethod = this.getMethod()
+        const editedMethodSourceCode = this.getChildFlow({ id: 'methodSourceCode' }).getValue()
+
+        jsMethod.writeContents({ methodContents: editedMethodSourceCode })
+
+        this.reloadSourceFile()
+     }
 }
 
 module.exports = Classification.define(JsMethodInspectorFlow)

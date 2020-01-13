@@ -5,7 +5,7 @@ const namespace = Sirens.namespace()
 
 const filename = 'tests/samples/functions-sample.js'
 
-const sourceFile = namespace.SourceFile.new({ filepath: filename })
+const sourceFile = namespace.SourceFile.new({ path: filename })
 const sourceFileParser = namespace.SourceFileStructureParser.new()
 const jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
 const methods = jsFile.getMethods()

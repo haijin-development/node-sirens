@@ -105,6 +105,10 @@ class ChoiceFlow {
         return this.selection
     }
 
+    getSelectionIndex() {
+        return this.choices.indexOf( this.selection )
+    }
+
     updateChoices(choices) {
         const oldChoices = this.choices
 

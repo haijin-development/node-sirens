@@ -1,6 +1,6 @@
 const Classification = require('../Classification')
 const AssertionCompiler = require('../assertions/AssertionCompiler')
-const {FailedAssertionError} = require('../Errors')
+const {OLanguageError, FailedAssertionError} = require('../Errors')
 
 /*
     Class(`
@@ -50,7 +50,7 @@ class ValidationFailureMessageFormatter {
             closure that does the formatting.
         `)
     */
-    formatFailureMessageFor({ methodInfo: methodInfo, validationFailure: validationFailure }) {
+    formatFailureMessageFor({ methodCallInfo: methodCallInfo, validationFailure: validationFailure }) {
         const assertionId = validationFailure.getFailedValidationId()
 
         const formatterClosure = this.getFormatterClosureFor({
@@ -62,7 +62,7 @@ class ValidationFailureMessageFormatter {
         const validationData = validationFailure.getValidationData()
 
         return formatterClosure({
-            methodInfo: methodInfo,
+            methodCallInfo: methodCallInfo,
             validatedValue: validatedValue,
             validationData: validationData,
         })
@@ -75,126 +75,132 @@ class ValidationFailureMessageFormatter {
             return this.formattersMap.get( assertionId )
         }
 
-        throw new OLanguageError(`Unkown validation id '${assertionId}'`)
+        return function({
+            methodCallInfo: methodCallInfo,
+            validatedValue: validatedValue,
+            validationData: validationData,
+        }) {
+            return `Assertion with id '${assertionId}' failed.`
+        }
     }
 
-    getMethodInfoString({ methodInfo: methodInfo }) {
-        return `${methodInfo.protocolName}.${methodInfo.methodName}`
+    getMethodInfoString({ methodCallInfo: methodCallInfo }) {
+        return `${methodCallInfo.protocolName}.${methodCallInfo.methodName}`
     }
 
 
     formatIsNull({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a null value, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected a null value, got ${validatedValue}.`
     }
 
     formatIsNotNull({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a non null value, got null.`
+        return `Method ${methodCallInfoString} expected a non null value, got null.`
     }
 
     formatIsUndefined({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected an undefined value, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected an undefined value, got ${validatedValue}.`
     }
 
     formatIsNotUndefined({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a non undefined value, got undefined.`
+        return `Method ${methodCallInfoString} expected a non undefined value, got undefined.`
     }
 
     formatIsBoolean({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a Boolean, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected a Boolean, got ${validatedValue}.`
     }
 
     formatIsNumber({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a Number, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected a Number, got ${validatedValue}.`
     }
 
     formatIsInteger({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected an Integer, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected an Integer, got ${validatedValue}.`
     }
 
     formatIsString({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a String, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected a String, got ${validatedValue}.`
     }
 
     formatIsArray({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected an Array, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected an Array, got ${validatedValue}.`
     }
 
     formatIsObject({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected an Object, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected an Object, got ${validatedValue}.`
     }
 
     formatIsFunction({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
-        return `Method ${methodInfoString} expected a Function, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected a Function, got ${validatedValue}.`
     }
 
     formatBehavesAs({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
         const classification = validationData.classification
 
-        return `Method ${methodInfoString} expected value to be behaving as a ${classification.getName()}, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected value to be behaving as a ${classification.getName()}, got ${validatedValue}.`
     }
 
     formatCompliesWith({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
         const protocol = validationData.protocol
 
-        return `Method ${methodInfoString} expected value to comply with ${protocol.getName()}, got ${validatedValue}.`
+        return `Method ${methodCallInfoString} expected value to comply with ${protocol.getName()}, got ${validatedValue}.`
     }
 
     formatOr({
-        methodInfo: methodInfo, validatedValue: validatedValue, validationData: validationData
+        methodCallInfo: methodCallInfo, validatedValue: validatedValue, validationData: validationData
     }) {
-        const methodInfoString = this.getMethodInfoString({ methodInfo: methodInfo })
+        const methodCallInfoString = this.getMethodInfoString({ methodCallInfo: methodCallInfo })
 
         const protocol = validationData.protocol
 

@@ -1,23 +1,22 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
-const Sirens = require('../../../../src/Sirens')
 
-const namespace = Sirens.namespace()
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 
 describe('When using an AppBrowserFlow', () => {
-    const sampleFolder = __dirname + '/../../../samples'
+    const sampleFolder = __dirname + '/../../../samples/js-objects'
 
     let folder
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFolder({ folder: sampleFolder })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFolder({ folder: sampleFolder })
 
-        folder = FilesRepository.pathTo( sampleFolder )
+        folder = fileSamplesRepository.pathTo( sampleFolder )
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {
@@ -80,17 +79,17 @@ describe('When using an AppBrowserFlow', () => {
 
         it('sets the folder to the main flow', () => {
             expect( flow ) .withId( 'main' ) .withValue .suchThat( (value) => {
-                expect( value.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( value.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
         })
 
         it('sets the window title', () => {
             expect(flow) .withId( 'main.windowTitle' ) .withObject .suchThat( (object) => {
-                expect( object.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( object.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
 
             expect(flow) .withId( 'main.windowTitle' ) .withValue .suchThat( (title) => {
-                expect( title ) .to .match(/^App Browser -.*tmp-files-repository$/)
+                expect( title ) .to .match(/^App Browser -.*tmp-files-repository[/]js-objects$/)
             })
         })
 
@@ -98,7 +97,7 @@ describe('When using an AppBrowserFlow', () => {
             const path = flow.getValue()
 
             expect(flow) .withId( 'main.filesTree' ) .withRoots .eachSuchThat( (eachRoot) => {
-                expect( eachRoot.getPath().getPath() ) .to .match(/^.*tmp-files-repository$/)
+                expect( eachRoot.getPath().getPath() ) .to .match(/^.*tmp-files-repository[/]js-objects$/)
             })
 
         })
@@ -162,13 +161,13 @@ describe('When using an AppBrowserFlow', () => {
             const rootFolder = filesTree.getRoots()[0]
 
             const file = rootFolder.getChildren()
-                .find( (file) => { return file.getBaseName() === 'class-definition.js' })
+                .find( (file) => { return file.getBaseName() === 'classes-only.js' })
 
             filesTree.setSelection([ rootFolder, file ])
 
             expect(flow) .withId( 'main.selectedFile' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath().getPath() ) .to
-                    .match(/^.*tmp-files-repository[/]class-definition.js$/)
+                expect( sourceFile.getPath() ) .to
+                    .match(/^.*tmp-files-repository[/]js-objects[/]classes-only.js$/)
             })
         })
     })

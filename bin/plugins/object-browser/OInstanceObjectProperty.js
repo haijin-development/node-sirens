@@ -1,6 +1,5 @@
 const Classification = require('../../../src/O').Classification
 const OInstance = require('../../../src/O').OInstance
-const GtkView = require('../../../src/skins/gtk-views/GtkView')
 const ObjectProperty = require('../../../src/sirens/objects/ObjectProperty')
 
 /*
@@ -45,21 +44,6 @@ class OInstanceObjectProperty {
         const instVars = []
 
         const value = this.getValue()
-
-        if( value.isBehavingAs( GtkView ) ) {
-
-            const objectPropertyPlugins =
-                this.namespace().ObjectPropertyPlugins.new()
-
-            const instVar = objectPropertyPlugins.newObjectProperty({
-                key: 'instance variables',
-                value: 'GTKView objects own Gtk handles and its instance variables are not shown.'
-            })
-
-            instVars.push( instVar )
-
-            return instVars
-        }
 
         value.classifications().forEach( (classification) => {
 

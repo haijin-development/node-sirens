@@ -199,6 +199,41 @@ class ComponentBehaviour {
     }
 
     /*
+        Method(`
+            Adds the css classes in the given cssArray to the classes of this component.
+            This method can be used in the method .initializeProps() of a component
+            to define the css of the component in addition to the css defined by the
+            developer.
+        `)
+
+        Example({
+            Description: 'Adds the css props in the initializeProps method of the component.'
+            Code: `
+                initializeProps() {
+                    this.addCssProps({ css: ['dialog-component'] })
+
+                    this.previousClassificationDo( () => {
+                        this.initializeProps()
+                    })
+                }
+            `
+        })
+    */
+    addCssProps({ css: cssArray }) {
+        const props = this.getProps()
+
+        if( props.css === undefined ) {
+            props.css = []
+        }
+
+        if( typeof( props.css ) === 'string' ) {
+            props.css = [ props.css ]
+        }
+
+        props.css = props.css.concat( cssArray )        
+    }
+
+    /*
      Method(`
         The component properties may be values, objects or ValueModels.
 

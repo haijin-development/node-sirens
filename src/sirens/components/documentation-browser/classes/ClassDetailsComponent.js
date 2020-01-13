@@ -33,54 +33,44 @@ class ClassDetailsComponent {
             this.label({
                 text: 'Details',
                 css: [ 'title-1', ],
-                viewAttributes: { stackSize: 'fixed' },
             })
 
-            this.container( function() {
+            this.treeChoice( function() {
+                this.model( documentationIndexFlow )
 
                 this.styles({
-                    hasScrollBars: false,
-                    css: [ 'documentation-index', ],
-                    viewAttributes: { stackSize: 'fixed' },
+                    id: 'documentationIndexTree',
+                    vScroll: 'always',
+                    showHeaders: false,
+                    clickableHeaders: false,
+                    height: 150,
                 })
 
-                this.treeChoice( function() {
-                    this.model( documentationIndexFlow )
 
-                    this.styles({
-                        id: 'documentationIndexTree',
-                        vScroll: 'always',
-                        showHeaders: false,
-                        clickableHeaders: false,
-                    })
+                this.column({
+                    label: '',
+                    getImageClosure: function(documentSection) {
+                        return component.iconFor({ documentSection: documentSection })
+                    },
+                    imageWidth: 16,
+                    imageHeight: 16,
+                })
 
+                this.column({
+                    label: '',
+                    getTextClosure: function(documentSection) {
+                        return component.displayTextFor({ documentSection: documentSection })
+                    },
+                })
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(documentSection) {
-                            return component.iconFor({ documentSection: documentSection })
-                        },
-                        imageWidth: 16,
-                        imageHeight: 16,
-                    })
-
-                    this.column({
-                        label: '',
-                        getTextClosure: function(documentSection) {
-                            return component.displayTextFor({ documentSection: documentSection })
-                        },
-                    })
-
-                    if( isInEditionMode === true ) {
-                        this.popupMenu( function() {
-                            component.populatePopupMenu({
-                                menu: this,
-                                documentationIndexFlow: documentationIndexFlow,
-                            })
+                if( isInEditionMode === true ) {
+                    this.popupMenu( function() {
+                        component.populatePopupMenu({
+                            menu: this,
+                            documentationIndexFlow: documentationIndexFlow,
                         })
-                    }
-                })
-
+                    })
+                }
             })
 
             this.container( function() {
@@ -88,7 +78,6 @@ class ClassDetailsComponent {
                 this.styles({
                     hasScrollBars: false,
                     css: [ 'documentation-section', ],
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
                 this.component(
@@ -160,7 +149,7 @@ class ClassDetailsComponent {
             const implementationNote = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this implementation note...',
                 action: () => {
                     flow.editClassDocumentationImplementationNote({
                         parentWindow: this.getProps().window,
@@ -170,10 +159,11 @@ class ClassDetailsComponent {
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this implementation note',
                 action: () => {
                     flow.deleteClassDocumentationImplementationNote({
                         implementationNote: implementationNote,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
@@ -183,20 +173,21 @@ class ClassDetailsComponent {
             const example = treeSelection
 
             menu.item({
-                label: 'Edit implementation note...',
+                label: 'Edit this example...',
                 action: () => {
                     flow.editClassDocumentationExample({
-                        parentWindow: this.getProps().window,
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })
 
             menu.item({
-                label: 'Delete implementation note',
+                label: 'Delete this example',
                 action: () => {
                     flow.deleteClassDocumentationExample({
                         example: example,
+                        parentWindow: this.getProps().window,
                     })
                 },
             })

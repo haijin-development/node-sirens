@@ -58,4 +58,5 @@ const user = new User({
 })
 
 
+Sirens.useGtkViews()
 Sirens.browseObject( user )

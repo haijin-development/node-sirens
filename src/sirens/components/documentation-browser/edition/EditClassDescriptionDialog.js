@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
@@ -38,6 +37,7 @@ class EditClassDescriptionDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -52,14 +52,12 @@ class EditClassDescriptionDialog {
 
                     this.verticalSeparator()
 
-                    this.text({
-                        id: 'classDescription',
-                        text: descriptionText,
-                        viewAttributes: {
-                            stackSize: 'filled',
-                        },
+                    this.spaceFiller( function() {
+                        this.text({
+                            id: 'classDescription',
+                            text: descriptionText,
+                        })
                     })
-
                 })
 
             })
@@ -67,33 +65,27 @@ class EditClassDescriptionDialog {
         })
     }
 
-    open() {
-        const dialogButtons = [
+    getDialogButtons() {
+        const icon = this.namespace().viewsNamespace().icons
+
+        return [
             {
                 label: 'Cancel',
                 image: {
-                    iconName: GtkIcons.cancel,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.cancel,
+                    size: icon.size._16x16,
                 },
                 action: () => {},
             },
             {
                 image: {
-                    iconName: GtkIcons.ok,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.ok,
+                    size: icon.size._16x16,
                 },
                 label: 'Update class comment',
                 action: () => { this.handleUpdateClassComment() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

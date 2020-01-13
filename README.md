@@ -82,7 +82,7 @@ An AppBrowser lets you browse the files in a selected folder.
 In all cases it shows the contents of the file and for some type of files it also opens a specific browser.
 
 For instance, with .js classes and methods it will open a browser on its documentation.
-With .json files it opens a browser on its structure.
+With .json and .yml files it opens a browser on its structure.
 
 Open an AppBrowser with
 
@@ -159,6 +159,10 @@ and a javascript AppBrowser from the project folder with
 **Browsing method documentation**
 
 ![Method documentation browser](./docs/browsing-method-documentation.png)
+
+**Browsing tests**
+
+![Tests browser](./docs/browsing-tests.png)
 
 ### Pre-requisites
 

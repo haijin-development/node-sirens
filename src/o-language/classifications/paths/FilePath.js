@@ -60,6 +60,15 @@ class FilePath {
 
     /*
         Method(`
+            Returns the size of the file pointed by this FilePath expressed in bytes.
+        `)
+    */
+    getFileSize() {
+        return fs.lstatSync( this.getPath() ).size
+    }
+
+    /*
+        Method(`
             Returns the FolderPath of the directory containing this FilePath.
         `)
     */

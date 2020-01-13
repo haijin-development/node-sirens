@@ -62,7 +62,6 @@ class JsClassMethodsComponent {
                                     model: selectedTagsFlow,
                                     item: tagLabel,
                                     label: tagLabel,
-                                    viewAttributes: { stackSize: 'fixed' },
                                 })
                             })
 
@@ -72,11 +71,24 @@ class JsClassMethodsComponent {
 
                 })
 
-                this.text({
-                    model: flow.getFlowPoint({ id: 'selectedMethod' }),
-                    viewAttributes: { splitProportion: 1.0 / 2 },
-                })
+                this.text( function() {
+                    this.model(
+                        flow.getFlowPoint({ id: 'selectedMethod' })
+                    )
 
+                    this.styles({
+                        viewAttributes: { splitProportion: 1.0 / 2 },
+                    })
+
+                    this.popupMenu( function() {
+                        this.separator()
+
+                        this.item({
+                            label: 'Save method',
+                            action: function() { flow.saveSelectedMethod() },
+                        })
+                    })
+                })
             })
 
         })

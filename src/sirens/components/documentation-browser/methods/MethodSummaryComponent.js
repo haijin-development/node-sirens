@@ -4,7 +4,6 @@ const ComponentProtocol_Implementation = require('../../../../skins/protocols/Co
 
 const PlaygroundComponent = require ('../../shared/PlaygroundComponent')
 const TagsDocumentationComponent = require('../tags/TagsDocumentationComponent')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 
 class MethodSummaryComponent {
     /// Definition
@@ -31,33 +30,31 @@ class MethodSummaryComponent {
 
         const isInEditionMode = flow.isInEditionMode()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
-                this.styles({
-                    viewAttributes: { stackSize: 'fixed' },
-                })
-
-                this.label({ viewAttributes: { stackSize: 'filled' } })
+                this.spaceFiller()
 
                 this.label({
                     text: methodSignature,
                     css: [ 'title-1', ],
                     editable: false,
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
-                this.label({ viewAttributes: { stackSize: 'filled' } })
+                this.spaceFiller()
 
                 if( isInEditionMode ) {
                     this.textButton({
                         image: {
-                            iconName: GtkIcons.edit,
-                            size: GtkIcons.size._16x16,
+                            iconName: icon.edit,
+                            size: icon.size._16x16,
                         },
-                        viewAttributes: { stackSize: 'fixed' },
                         onClicked: () => {
-                            flow.editMethodDocumentationDescription({ parentWindow: this.getProps().window })
+                            flow.editMethodDocumentationDescription({
+                                parentWindow: component.getProps().window
+                            })
                         },
                     })
                 }
@@ -76,7 +73,8 @@ class MethodSummaryComponent {
                 TagsDocumentationComponent.new({
                     model: flow,
                     id: 'tags',
-                    tags: flow.getTagsSortedByPriority()
+                    tags: flow.getTagsSortedByPriority(),
+                    window: component.getProps().window,
                 })
             )
         })

@@ -1,7 +1,6 @@
 const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 const EditDialogHeaderComponent = require('./EditDialogHeaderComponent')
 
@@ -30,6 +29,7 @@ class EditParamDialog {
                     width: 900,
                     height: 600,
                     window: component.getProps().window,
+                    buttons: component.getDialogButtons(),
                 })
 
                 this.verticalStack( function() {
@@ -44,26 +44,28 @@ class EditParamDialog {
 
                     this.verticalSeparator()
 
-                    this.verticalSplitter( function() {
+                    this.spaceFiller( function() {
+                        this.verticalSplitter( function() {
 
-                        this.container({ viewAttributes: { splitProportion: 1.0/4.0 }}, function() {
+                            this.container({ viewAttributes: { splitProportion: 1.0/4.0 }}, function() {
 
-                            this.text({
-                                id: 'paramName',
-                                text: param.getName(),
+                                this.text({
+                                    id: 'paramName',
+                                    text: param.getName(),
+                                })
+
+                            })
+
+                            this.container({ viewAttributes: { splitProportion: 3.0/4.0 }}, function() {
+
+                                this.text({
+                                    id: 'paramDescription',
+                                    text: param.getDescription(),
+                                })
+
                             })
 
                         })
-
-                        this.container({ viewAttributes: { splitProportion: 3.0/4.0 }}, function() {
-
-                            this.text({
-                                id: 'paramDescription',
-                                text: param.getDescription(),
-                            })
-
-                        })
-
                     })
 
                 })
@@ -73,35 +75,29 @@ class EditParamDialog {
         })
     }
 
-    open() {
+    getDialogButtons() {
+        const icon = this.namespace().viewsNamespace().icons
+
         const acceptButtonLabel = this.getProps().acceptButtonLabel
 
-        const dialogButtons = [
+        return [
             {
                 label: 'Cancel',
                 image: {
-                    iconName: GtkIcons.cancel,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.cancel,
+                    size: icon.size._16x16,
                 },
                 action: () => {},
             },
             {
                 image: {
-                    iconName: GtkIcons.ok,
-                    size: GtkIcons.size._16x16,
+                    iconName: icon.ok,
+                    size: icon.size._16x16,
                 },
                 label: acceptButtonLabel,
                 action: () => { this.handleUpdateParam() },
             },
         ]
-
-        this.assemble()
-
-        const dialog = this.getMainComponent()
-
-        dialog.setButtons( dialogButtons )
-
-        return dialog.open()
     }
 
     /// Events

@@ -1,7 +1,6 @@
 const Classification = require('../../src/O').Classification
 const Component = require('../../src/skins/components/Component')
 const ComponentProtocol_Implementation = require('../../src/skins/protocols/ComponentProtocol_Implementation')
-const SkinsGtk = require('../../src/skins/gtk-views/SkinsGtk')
 const SkinsNamespace = require('../../src/skins/SkinsNamespace')
 
 const namespace = SkinsNamespace.new()
@@ -55,12 +54,6 @@ class CustomComponent {
 
                     this.menuBar( function() {
 
-                        this.styles({
-                            viewAttributes: {
-                                stackSize: 'fixed',
-                            }
-                        })
-
                         this.menuGroup({ label: 'File' }, function() {
                             this.item({
                                 label: 'Open file...',
@@ -102,6 +95,7 @@ class CustomComponent {
 
 CustomComponent = Classification.define(CustomComponent)
 
-SkinsGtk.do( () => {
+namespace.useGtkViews()
+namespace.withGUIDo( () => {
     CustomComponent.new().open()
 })

@@ -1,10 +1,7 @@
 const expect = require('chai').expect
-const FilesRepository = require('../FilesRepository')
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 const UnhandledBubbledUpCommandHandler = require('../../finger-tips/UnhandledBubbledUpCommandHandler')
-
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
 
 describe('When using an JsMethodInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -17,11 +14,11 @@ describe('When using an JsMethodInspectorFlow', () => {
     let flow
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFile({ file: fileSample })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFile({ file: fileSample })
 
-        filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        filePath = fileSamplesRepository.pathTo( fileSample )
+        sourceFile = namespace.SourceFile.new({ path: filePath  })
         sourceFileParser = namespace.SourceFileStructureParser.new()
         jsFile = sourceFileParser.parseSourceFile({ sourceFile: sourceFile })
         jsMethod = jsFile.getMethods()[0]
@@ -50,12 +47,13 @@ describe('When using an JsMethodInspectorFlow', () => {
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {
         expect( flow ) .to .haveChildFlows([
             'main.methodSourceCode',
+            'main.saveSelectedMethod',
 
             'main.showsUnformattedComments',
             'main.getMethod',
@@ -152,7 +150,7 @@ describe('When using an JsMethodInspectorFlow', () => {
         it('writes the updated comment to the file', () => {
             const methodComment = '/* An updated comment */'
 
-            flow.updateMethodUnformmatedComment({
+            flow.updateMethodPlainComment({
                 methodNewComment: methodComment
             })
 
@@ -168,7 +166,7 @@ describe('When using an JsMethodInspectorFlow', () => {
         it('calls the reloadSourceFile callback', () => {
             const methodComment = '/* An updated comment */'
 
-            flow.updateMethodUnformmatedComment({
+            flow.updateMethodPlainComment({
                 methodNewComment: methodComment
             })
 
@@ -178,7 +176,6 @@ describe('When using an JsMethodInspectorFlow', () => {
             expect( flow.getCommandsController() ) .to
                 .haveReceived .aBubbledCommandAt({ index: 0 }) .suchThat ( (command) => {
                     expect(command.commandName) .to .eql('reloadSourceFile')
-                    expect(command.params) .to .eql([])
                     expect(command.startingAtFlow.getIdPath()) .to .eql('main')
                 })
         })

@@ -1,11 +1,10 @@
 const Classification = require('../../src/O').Classification
 const Component = require('../../src/skins/components/Component')
 const ComponentProtocol_Implementation = require('../../src/skins/protocols/ComponentProtocol_Implementation')
-const SkinsGtk = require('../../src/skins/gtk-views/SkinsGtk')
-const GtkIcons = require('../../src/skins/gtk-views/constants/GtkIcons')
 const SkinsNamespace = require('../../src/skins/SkinsNamespace')
 
 const namespace = SkinsNamespace.new()
+namespace.useGtkViews()
 
 class CustomComponent {
     /// Definition
@@ -33,6 +32,8 @@ class CustomComponent {
     /// Building
 
     renderWith(componentsRenderer) {
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render(function (component) {
             this.window( function() {
                 this.styles({
@@ -44,17 +45,11 @@ class CustomComponent {
 
                     this.toolBar( function() {
 
-                        this.styles({
-                            viewAttributes: {
-                                stackSize: 'fixed',
-                            }
-                        })
-
                         this.button({
                             label: 'Open file...',
                             image: {
-                                iconName: GtkIcons.open,
-                                size: GtkIcons.size._24x24,
+                                iconName: icon.open,
+                                size: icon.size._24x24,
                             },
                             tooltip: 'Opens a file',
                             enabled: true,
@@ -66,8 +61,8 @@ class CustomComponent {
                         this.button({
                             label: 'Save file',
                             image: {
-                                iconName: GtkIcons.save,
-                                size: GtkIcons.size._24x24,
+                                iconName: icon.save,
+                                size: icon.size._24x24,
                             },
                             tooltip: 'Saves the file',
                             enabled: true,
@@ -85,6 +80,6 @@ class CustomComponent {
 
 CustomComponent = Classification.define(CustomComponent)
 
-SkinsGtk.do( () => {
+namespace.withGUIDo( () => {
     CustomComponent.new().open()
 })

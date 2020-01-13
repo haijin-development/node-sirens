@@ -78,6 +78,14 @@ class SirensNamespace {
     guiNamespace() {
         return this.getChildFlow({ id: 'GUI' })
     }
+
+    withGUIDo(closure) {
+        this.skinsNamespace().viewsNamespace().withGUIDo( closure )
+    }
+
+    setGlobalStyles({ cssFilePath: cssFilePath }) {
+        this.skinsNamespace().viewsNamespace().setGlobalStyles({ cssFilePath: cssFilePath })
+    }
 }
 
 module.exports = Classification.define(SirensNamespace)

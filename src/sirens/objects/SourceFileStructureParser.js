@@ -28,32 +28,41 @@ class SourceFileStructureParser {
     // Parsing
 
     parseSourceFile({ sourceFile: sourceFile, onParsingErrorDo: errorHandler }) {
+        // review
         try {
 
-            return this.parseFile({ sourceFile: sourceFile })
+            const fileInspectors = this.namespace().FileInspectorPlugins.new()
 
-        } catch(error) {
-            if( errorHandler !== undefined ) {
-                return errorHandler(error)
+            for( const eachParser of fileInspectors.getAvailableFileParsers() ) {
+                const parsedContents = eachParser.parse({ sourceFile: sourceFile })
+
+                if( parsedContents ) {
+                    return parsedContents
+                }
             }
 
-            throw error
+            const defaultParser = this.getDefaultParser()
+
+            return defaultParser.parse({ sourceFile: sourceFile })
+
+        } catch( error ) {
+            if( errorHandler !== undefined ) {
+                return errorHandler()
+            }
         }
     }
 
-    parseFile({ sourceFile: sourceFile }) {
-        const parser = this.getParserForFileType({ sourceFile: sourceFile })
+    /*
+        Method(`
+            Returns a default file parser in case none of the existing plugins handle
+            the given sourceFile.
 
-        return parser.parse({ sourceFile: sourceFile })  
-    }
-
-    // Parser selection
-
-    getParserForFileType({ sourceFile: sourceFile }) {
-        const fileParser = this.namespace().FileInspectorPlugins.new()
-            .pickFileParserFor({ sourceFile: sourceFile })
-
-        return fileParser
+            The default parser treats the file as a plain text file, meaning that it
+            its structure has only one JsObject, the textual contents of the whole file.
+        `)
+    */
+    getDefaultParser() {
+        return this.namespace().PlainTextStructureParser.new()
     }
 }
 

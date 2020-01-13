@@ -127,14 +127,14 @@ class FileInspectorFlow {
                     .setSelection(pathToObject)
     }
 
-    getFileObjectComponent() {
+    getFileObjectComponent({ parentWindow: parentWindow }) {
         const selectedFileObjectFlow = this.getChildFlow({ id: 'selectedFileObject' })
 
-        return selectedFileObjectFlow.getFlowComponent()
+        return selectedFileObjectFlow.getFlowComponent({ parentWindow: parentWindow })
     }
 
     parseSourceFileStructure({ sourceFile: sourceFile }) {
-        if( sourceFile.isFolder() ) {
+        if( sourceFile.isFolderPath() ) {
             return FolderObject.new()
         }
 
@@ -159,7 +159,7 @@ class FileInspectorFlow {
             .setIsEditingDocumentation({ value: boolean })        
     }
 
-    reloadSourceFile() {
+    reloadSourceFile({ thenDo: closure } = {}) {
         const fileObjectsTree = this.getChildFlow({ id: 'fileObjects' })
 
         const currentSelectionIndexPath = fileObjectsTree.getSelectionIndexPath()
@@ -170,6 +170,10 @@ class FileInspectorFlow {
         })
 
         fileObjectsTree.setSelectionIndexPath({ indexPath: currentSelectionIndexPath })
+
+        if( closure !== undefined ) {
+            closure( this )
+        }
     }
 
     getFileObjectInspectorFlow({ fileObject: fileObject }){

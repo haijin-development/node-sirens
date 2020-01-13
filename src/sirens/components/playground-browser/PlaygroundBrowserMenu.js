@@ -22,12 +22,6 @@ class PlaygroundBrowserMenu {
 
             this.verticalStack( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.component(
                     PlaygroundBrowserMenuBar.new( props )
                 )

@@ -12,10 +12,5 @@ Classification.setExtendedBehaviours([
     MethodCallConstraints,
 ])
 
-require('./specs/o-language/o-language-expectations.js')
-require('./specs/finger-tips/finger-tips-expectations.js')
-
-require('./specs/finger-tips/finger-tips-expectations.js')
-
-const SkinsGtk = require('../src/skins/gtk-views/SkinsGtk')
-SkinsGtk.setGlobalStyles = function() {}
+require('./o-language-expectations.js')
+require('./finger-tips-expectations.js')

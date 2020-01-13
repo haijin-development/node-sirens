@@ -22,24 +22,20 @@ class DocumentationReturnValueComponent {
 
             this.verticalStack( function() {
 
-                this.styles({
-                    viewAttributes: { stackSize: 'fixed' },
-                })
-
                 this.label({
                     text: 'Returns',
                     css: [ 'title-2', ],
                     wrapeMode: 'wordChar',
-                    viewAttributes: { stackSize: 'fixed' },
                 })
 
-                this.text({
-                    text: returns.getDescription(),
-                    editable: false,
-                    wrapeMode: 'wordChar',
-                    hasScrollBars: false,
+                this.spaceFiller( function() {
+                    this.text({
+                        text: returns.getDescription(),
+                        editable: false,
+                        wrapeMode: 'wordChar',
+                        hasScrollBars: false,
+                    })
                 })
-
             })
 
         })

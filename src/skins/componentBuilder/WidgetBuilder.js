@@ -393,12 +393,17 @@ class WidgetBuilder {
      ])
     */
     normalizeArguments(props, closure) {
-        if (typeof (props) == 'function') {
-            closure = props
-            props = {}
-        }
+      if( props === undefined && closure === undefined ) {
+        props = {}
+        closure = undefined
+      }
 
-        return [props, closure]
+      if( typeof(props) == 'function' ) {
+        closure = props
+        props = {}
+      }
+
+      return [props, closure]
     }
 }
 

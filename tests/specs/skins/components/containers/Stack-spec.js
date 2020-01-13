@@ -1,7 +1,6 @@
 const expect = require('chai').expect
-const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const namespace = SkinsNamespace.new()
+const namespace = require('../../skinsNamespace')
 
 describe('When using a Stack', () => {
     describe('horizontal', () => {

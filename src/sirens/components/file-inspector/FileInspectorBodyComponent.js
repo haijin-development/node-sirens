@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 const FileObjectInspectorComponent = require('./FileObjectInspectorComponent')
-const Resource = require('../../objects/Resource')
 
 class FileInspectorBodyComponent {
     /// Definition
@@ -11,27 +10,6 @@ class FileInspectorBodyComponent {
         this.instanceVariables = []
         this.assumes = [Component]
         this.implements = [ ComponentProtocol_Implementation ]
-    }
-
-
-    /// Displaying
-
-    getIconFor({ fileObject: fileObject }) {
-        const icons = {
-            fileObject: Resource.image.file,
-            jsFileStructure: Resource.image.file,
-            jsClass: Resource.image.class,
-            jsMethod: Resource.image.method,
-            jsonContent: Resource.image.object,
-            default: Resource.image.haiku,
-        }
-
-        const icon = icons[ fileObject.getFileObjectType() ]
-
-        return icon ?
-            icon
-            :
-            icons.default
     }
 
     /// Rendering
@@ -59,7 +37,7 @@ class FileInspectorBodyComponent {
 
                     this.column({
                         label: '',
-                        getImageClosure: function(fileObject) { return component.getIconFor({ fileObject: fileObject }) },
+                        getImageClosure: function(fileObject) { return fileObject.getIcon() },
                         imageWidth: 16,
                         imageHeight: 16,
                     })
@@ -72,6 +50,7 @@ class FileInspectorBodyComponent {
                 this.component(
                     FileObjectInspectorComponent.new({
                         model: flow,
+                        window: component.getProps().window,
                     })
                 )
             })

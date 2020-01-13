@@ -20,65 +20,54 @@ class ClassPropertiesComponent {
             this.verticalStack( function() {
 
                 this.horizontalStack( function() {
-                    this.styles({
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
-                    })
-
                     this.checkBox({
                         model: flow.getFlowPoint({ id: 'showInheritedProps' }),
                         label: 'Show inherited',
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
                     })
 
                     this.checkBox({
                         model: flow.getFlowPoint({ id: 'showFunctionProps' }),
                         label: 'Show functions',
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
                     })
 
                     this.checkBox({
                         model: flow.getFlowPoint({ id: 'showNonFunctionProps' }),
                         label: 'Show props',
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
                     })
                 })
 
-                this.listChoice( function() {
-                    this.model( flow.getFlowPoint({ id: 'properties' }) )
+                this.spaceFiller( function() {
 
-                    this.handlers({
-                        onAction: () => { flow.browseSelectedProperty() }
-                    })
+                    this.listChoice( function() {
+                        this.model( flow.getFlowPoint({ id: 'properties' }) )
 
-                    this.column({
-                        label: '',
-                        getImageClosure: function(objectProperty) { return objectProperty.icon() },
-                        imageWidth: 24,
-                        imageHeight: 24,
-                    })
+                        this.handlers({
+                            onAction: () => { flow.browseSelectedProperty() }
+                        })
 
-                    this.column({
-                        label: 'Properties',
-                        getTextClosure: function(objectProperty) { return objectProperty.getKey() },
-                    })
+                        this.column({
+                            label: '',
+                            getImageClosure: function(objectProperty) { return objectProperty.icon() },
+                            imageWidth: 24,
+                            imageHeight: 24,
+                        })
 
-                    this.popupMenu( function() {
-                        flow.getCommand({ id: 'browseSelectedProperty' }).updateEnabledState()
+                        this.column({
+                            label: 'Properties',
+                            getTextClosure: function(objectProperty) { return objectProperty.getKey() },
+                        })
 
-                        this.item({
-                            label: 'Browse it',
-                            enabled: flow.getFlowPoint({ id: 'browseSelectedProperty' }),
-                            action: () => { flow.browseSelectedProperty() }
+                        this.popupMenu( function() {
+                            flow.getCommand({ id: 'browseSelectedProperty' }).updateEnabledState()
+
+                            this.item({
+                                label: 'Browse it',
+                                enabled: flow.getFlowPoint({ id: 'browseSelectedProperty' }),
+                                action: () => { flow.browseSelectedProperty() }
+                            })
                         })
                     })
+
                 })
 
             })

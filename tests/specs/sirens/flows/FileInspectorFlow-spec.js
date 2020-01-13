@@ -1,9 +1,6 @@
 const expect = require('chai').expect
-
-const FilesRepository = require('../FilesRepository')
-const Sirens = require('../../../../src/Sirens')
-
-const namespace = Sirens.namespace()
+const fileSamplesRepository = require('../fileSamplesRepository')
+const namespace = require('../sirensNamespace')
 
 describe('When using an FileInspectorFlow', () => {
     const fileSample = __dirname + '/../../../samples/class-definition.js'
@@ -13,11 +10,11 @@ describe('When using an FileInspectorFlow', () => {
     let flow
 
     beforeEach( () => {
-        FilesRepository.cleanUp()
-        FilesRepository.manageFile({ file: fileSample })
+        fileSamplesRepository.cleanUp()
+        fileSamplesRepository.manageFile({ file: fileSample })
 
-        filePath = FilesRepository.pathTo( fileSample )
-        sourceFile = namespace.SourceFile.new({ filepath: filePath  })
+        filePath = fileSamplesRepository.pathTo( fileSample )
+        sourceFile = namespace.SourceFile.new({ path: filePath  })
 
         flow = namespace.FileInspectorFlow.new()
         flow.setCommandsController( namespace.ApplicationCommandsController.new({ mainFlow: flow }) )
@@ -38,7 +35,7 @@ describe('When using an FileInspectorFlow', () => {
     })
 
     after( () => {
-        FilesRepository.cleanUp()
+        fileSamplesRepository.cleanUp()
     })
 
     it('has all these child flows defined', () => {
@@ -64,7 +61,7 @@ describe('When using an FileInspectorFlow', () => {
 
         it('sets the SourceFile to the main flow', () => {
             expect(flow) .withId( 'main' ) .withValue .suchThat( (sourceFile) => {
-                expect( sourceFile.getFilePath().getPath() ) .to
+                expect( sourceFile.getPath() ) .to
                     .match(/^.*tmp-files-repository[/]class-definition[.]js$/)
             })
         })
@@ -304,28 +301,28 @@ describe('When using an FileInspectorFlow', () => {
             expect( objectInspectorFlow ) .to .behaveAs( 'JsMethodInspectorFlow' )
         })
 
-        xit('.getFileObjectComponent() returns a TextualContentComponent by default', () => {
+        it('.getFileObjectComponent() returns a TextualContentComponent by default', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'TextualContentComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'TextualContentComponent' )
         })
 
-        xit('.getFileObjectComponent() returns a JsClassInspectorComponent for a JsClass', () => {
+        it('.getFileObjectComponent() returns a JsClassInspectorComponent for a JsClass', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsClassInspectorComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'JsClassInspectorComponent' )
         })
 
-        xit('.getFileObjectComponent() returns a JsMethodInspectorComponent for a JsMethod', () => {
+        it('.getFileObjectComponent() returns a JsMethodInspectorComponent for a JsMethod', () => {
             flow.setSourceFile({ sourceFile: sourceFile })
 
             inTreeSelectObjectAtIndex({ indexPath: [0, 1, 1] })
 
-            expect( flow.getFileObjectComponent() ) .to .behaveAs( 'JsMethodInspectorComponent' )
+            expect( flow.getFileObjectComponent({ parentWindow: '' }) ) .to .behaveAs( 'JsMethodInspectorComponent' )
         })
 
         it('.setShowUnformattedComments() set the edition mode', () => {

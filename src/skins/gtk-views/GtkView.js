@@ -1,11 +1,8 @@
 const Gtk = require('node-gtk').require('Gtk', '3.0')
 const Classification = require('../../O').Classification
 const ObjectWithNamespace = require('../../O').ObjectWithNamespace
-const SkinsGtk = require('./SkinsGtk')
 const GtkViewProtocol_Implementation = require('../protocols/GtkViewProtocol_Implementation')
 const AnnouncementsSubscriptor = require('../../finger-tips/announcements/AnnouncementsSubscriptor')
-
-SkinsGtk.initialize()
 
 class GtkView {
     /// Definition

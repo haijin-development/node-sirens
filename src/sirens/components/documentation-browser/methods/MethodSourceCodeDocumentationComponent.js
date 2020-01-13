@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../../objects/Resource')
 
 class MethodSourceCodeDocumentationComponent {
@@ -22,23 +21,27 @@ class MethodSourceCodeDocumentationComponent {
 
         const methodSourceCode = method === null ? '' : method.getFormattedSourceCode()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.verticalStack( function() {
                 this.horizontalStack( function() {
+
+                    this.spaceFiller()
+
+                    this.label({ text: 'Method source code' })
+
+                    this.spaceFiller()
 
                     this.image({
                         filename: Resource.image.file,
                         width: 32,
                         height: 32,
                         viewAttributes: {
-                            stackSize: 'fixed',
                             stackPadding: 10,
-                            stackAlign: 'end',
                         },
                     })
-
-                    this.label({ text: 'Method source code' })
 
                 })
 

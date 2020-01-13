@@ -14,4 +14,5 @@ const Sirens = require('../../src/Sirens')
 
 const Gdk = require('node-gtk').require('Gdk', '3.0')
 
+Sirens.useGtkViews()
 Sirens.browseObject( Gdk )

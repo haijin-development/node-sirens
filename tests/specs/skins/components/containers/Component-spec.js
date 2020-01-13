@@ -1,9 +1,8 @@
 const expect = require('chai').expect
 const Classification = require('../../../../../src/O').Classification
 const Component = require('../../../../../src/skins/components/Component')
-const SkinsNamespace = require('../../../../../src/skins/SkinsNamespace')
 
-const namespace = SkinsNamespace.new()
+const namespace = require('../../skinsNamespace')
 
 class CustomComponent {
     /// Definition

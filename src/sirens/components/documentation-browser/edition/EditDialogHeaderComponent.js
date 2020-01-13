@@ -2,7 +2,6 @@ const Classification = require('../../../../O').Classification
 const FilePath = require('../../../../O').FilePath
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
 
 class EditDialogHeaderComponent {
     /// Definition
@@ -22,52 +21,42 @@ class EditDialogHeaderComponent {
 
         const imageIsFile = FilePath.new({ path: mainIcon }).exists()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render( function(component) {
 
             this.horizontalStack( function() {
-
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
-                })
 
                 if( imageIsFile ) {
 
                     this.image({
                         filename: mainIcon,
-                        width: 48,
-                        height: 48,
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
+                        width: 32,
+                        height: 32,
                     })
 
                 } else {
 
                     this.image({
                         iconName: mainIcon,
-                        size: GtkIcons.size._48x48,
-                        viewAttributes: {
-                            stackSize: 'fixed',
-                        },
+                        size: icon.size._32x32,
                     })
 
                 }
 
+                this.spaceFiller()
+
                 this.image({
-                    iconName: GtkIcons.edit,
-                    size: GtkIcons.size._48x48,
-                    marginLeft: 15,
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    },
+                    iconName: icon.edit,
+                    size: icon.size._24x24,
+                    marginRight: 10,
                 })
 
                 this.verticalStack( function() {
 
                     this.label({
                         text: title,
+                        css: [ 'title-1', ],
                     })
 
                     this.label({
@@ -75,6 +64,8 @@ class EditDialogHeaderComponent {
                     })
 
                 })
+
+                this.spaceFiller()
 
             })
 

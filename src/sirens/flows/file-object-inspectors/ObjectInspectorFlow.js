@@ -41,9 +41,10 @@ class ObjectInspectorFlow {
         this.reloadObject()
     }
 
-    reloadSourceFile() {
+    reloadSourceFile({ thenDo: closure } = {}) {
         this.bubbleUp({
-            command: 'reloadSourceFile'
+            command: 'reloadSourceFile',
+            param: { thenDo: closure },
         })
     }
 

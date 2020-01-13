@@ -1,5 +1,6 @@
 const Classification = require('../../../O').Classification
 const UknownFileStructure = require('./UknownFileStructure')
+const Resource = require('../Resource')
 
 class FolderObject {
     /// Definition
@@ -15,6 +16,10 @@ class FolderObject {
 
     getFileObjectType() {
         return 'folder'
+    }
+
+    getIcon() {
+        return Resource.image.folder
     }
 }
 

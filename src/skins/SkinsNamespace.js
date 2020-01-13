@@ -2,7 +2,6 @@ const Classification = require('../O').Classification
 const NamespaceFlow = require('../finger-tips/flows/NamespaceFlow')
 
 const FingerTipsNamespace = require('../finger-tips/FingerTipsNamespace')
-const GtkViewsNamespace = require('./GtkViewsNamespace')
 
 class SkinsNamespace {
     /// Definition
@@ -16,7 +15,6 @@ class SkinsNamespace {
 
     buildWith(flow) {
         const fingerTipsNamespace = FingerTipsNamespace.new()
-        const viewsNamespace = GtkViewsNamespace.new()
 
         flow.main({ id: 'SkinsNamespace' }, function(thisFlow) {
 
@@ -27,8 +25,48 @@ class SkinsNamespace {
                 ],
             })
 
-            this.namespace({ id: 'Views', from: viewsNamespace })
             this.namespace({ id: 'Models', from: fingerTipsNamespace })
+        })
+
+        this.useNoViews()
+    }
+
+    // Namespaces
+
+    viewsNamespace() {
+        return this.getChildFlow({ id: 'Views' })
+    }
+
+    withGUIDo(closure) {
+        const viewsNamespace = this.viewsNamespace()
+
+        viewsNamespace.withGUIDo( closure )
+    }
+
+    useNoViews() {
+        const NullViewsNamespace = require('./NullViewsNamespace')
+
+        const nullViewsNamespace = NullViewsNamespace.new()
+
+        this.removeChildFlow({ id: 'Views' })
+
+        this.addChildNamespaceFlow({
+            id: 'Views',
+            namespaceFlow: nullViewsNamespace
+        })
+    }
+
+    useGtkViews() {
+        // only load GtkViewsNamespace on demand to avoid requiring its files
+        const GtkViewsNamespace = require('./GtkViewsNamespace')
+
+        const gtkViewsNamespace = GtkViewsNamespace.new()
+
+        this.removeChildFlow({ id: 'Views' })
+
+        this.addChildNamespaceFlow({
+            id: 'Views',
+            namespaceFlow: gtkViewsNamespace
         })
     }
 }

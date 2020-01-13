@@ -690,58 +690,92 @@ class ContainerWidgetBuilder {
     }
 
     /*
+      Method(`
+        Creates a container wrapper for the given closure that expands
+        to fill the space left in a stack.
+
+        If the method is used on a parent different that a Stack component
+        it simply creates a container but does not expand to fit.
+      `)
+    */
+    spaceFiller(props, closure) {
+      [props, closure] = this.normalizeArguments(props, closure)
+
+      props.viewAttributes = { expandsToFit: true }
+
+      this.container(props, closure)
+    }
+
+
+    /*
      Method(`
-        Adds a vertical Stack component to the array of built components.
+        Adds an vertical Stack component to the array of built components.
 
         A vertical Stack stacks its children one below the other.
 
         Its children can be components of any kind.
 
-        Each child can define optional 'stackSize', 'stackPadding' properties to specify how should it fill the space in the stack:
+        By default each children occupies its own vertical size, but it possible to arrange more
+        customized layouts with the use of spaceFillers.
 
-        	this.verticalStack( function(component) {
-        		this.label({
-        			text: 'A label',
-        			viewAttributes: {
-        				stackSize: 'filled', // 'filled' or 'fixed' or 'spread',
-        				stackPadding: 0,
-        			},
-        		})
-        	})
+        A spaceFiller is a component that fills the remaining available space in a 
+        Stack component. It can also have its own children.
 
-        stackSize: 'filled' means that if there is extra vertical space in the verticalStack the child will be resized to fill that space.
-        stackSize: 'fixed' means that the child height will be defined only by its own contents.
-        stackSize: 'spread' means that the child height will be defined by its own contents but if there is extra space it will filled with blank
-        space instead of stacking one child below the oher one.
+        In the following examples the use of spaceFillers is more clear:
 
-        The 'stackPadding' is an integer defining a number of pixels to leave blank above and below each child. It defaults to 0.
+        1- No fillers. The label occupies it's own size at the beginning of the stack
 
-        Each child can also define a 'stackAlign' property to define whether that child should be stacked from the top or the bottom of the
-        verticalStack:
+          this.horizontalStack( function(component) {
+            this.label({
+              text: 'A label',
+            })              
+          })
 
-        	this.verticalStack( function(component) {
-        		this.label({
-        			text: 'A label',
-        			viewAttributes: {
-        				stackAlign: 'end', // 'begining' or 'end',
-        			},
-        		})
-        	})
+        2- A filler before and another one after the label occupy the space left in the
+          stack, centering the label
 
+          this.horizontalStack( function(component) {
+            this.spaceFiller()
 
-        The first parameter of the method verticalStack() can be an object with the dialog props:
+            this.label({
+              text: 'A label',
+            })              
 
-        	this.container({ width: 100, height: 100, }, function() {
+            this.spaceFiller()
+          })
 
-        	})
+        3- A filler wraps the label making it to adquire the size of the spaceFiller
+          instead of its own size
 
+          this.horizontalStack( function(component) {
+            this.spaceFiller( function() {
+              this.label({
+                text: 'A label',
+              })                
+            })
+          })
 
+        4- A filler before the label makes the label to align to the right of the stacK
+
+          this.horizontalStack( function(component) {
+            this.spaceFiller()
+
+            this.label({
+              text: 'A label',
+            })              
+          })
+
+        The first parameter of the method horizontalStack() can be an object with the dialog props:
+
+          this.container({ width: 100, height: 100, }, function() {
+
+          })
 
         The props can also be defined with the methods
 
-        		styles(props)
-        		model(model)
-        		handlers(props)
+            styles(props)
+            model(model)
+            handlers(props)
 
         within the container closure.
      `)
@@ -753,23 +787,23 @@ class ContainerWidgetBuilder {
         Description: `
            Optional.
            Object.
-           An optional object defining one or more of the following styles for the verticalStack
+           An optional object defining one or more of the following styles for the horizontalStack
 
            [
-           	// Common properties
+            // Common properties
 
-           	'width',
-           	'height',
-           	'alignHorizontal',
-           	'alignVertical',
-           	'marginLeft',
-           	'marginRight',
-           	'marginTop',
-           	'marginBottom',
-           	'marginHorizontal',
-           	'marginVertical',
-           	'populatePopupMenuBlock',
-           	'viewAttributes',
+            'width',
+            'height',
+            'alignHorizontal',
+            'alignVertical',
+            'marginLeft',
+            'marginRight',
+            'marginTop',
+            'marginBottom',
+            'marginHorizontal',
+            'marginVertical',
+            'populatePopupMenuBlock',
+            'viewAttributes',
            ]
 
            Each of these styles can be a value or a ValueModelBehaviour.
@@ -788,7 +822,7 @@ class ContainerWidgetBuilder {
 
      Example({
         Description: `
-           Builds a verticalStack with two labels.
+           Builds an horizontalStack with two labels spread along the stack width.
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
@@ -797,23 +831,21 @@ class ContainerWidgetBuilder {
 
            builder.build( function() {
 
-           	this.verticalStack( function() {
-           		this.label({
-           			text: 'Label 2',
-           			viewAttributes: {
-           				stackSize: 'fixed',
-           				stackAlign: 'end',
-           			},
-           		})
+            this.horizontalStack( function() {
+              this.spaceFiller()
 
-           		this.label({
-           			text: 'Label 1',
-           			viewAttributes: {
-           				stackSize: 'filled',
-           			},
-           		})
-           	})
+              this.label({
+                text: 'Label 2',
+              })
 
+              this.spaceFiller()
+
+              this.label({
+                text: 'Label 1',
+              })
+
+              this.spaceFiller()
+            })
            })
 
            builder.getChildComponents()
@@ -846,51 +878,65 @@ class ContainerWidgetBuilder {
      Method(`
         Adds an horizontal Stack component to the array of built components.
 
-        Aa horizontal Stack stacks its children one next to the other.
+        An horizontal Stack stacks its children one next to the other.
 
         Its children can be components of any kind.
 
-        Each child can define optional 'stackSize' and 'stackPadding' properties to specify how should it fill the space in the stack:
+        By default each children occupies its own horizontal size, but it possible to arrange more
+        customized layouts with the use of spaceFillers.
 
-        	this.horizontalStack( function(component) {
-        		this.label({
-        			text: 'A label',
-        			viewAttributes: {
-        				stackSize: 'filled', // 'filled' or 'fixed' or 'spread',
-        				stackPadding: 0,
-        			},
-        		})
-        	})
+        A spaceFiller is a component that fills the remaining available space in a 
+        Stack component. It can also have its own children.
 
-        stackSize: 'filled' means that if there is extra horizontal space in the horizontalStack the child will be resized to fill that space.
-        stackSize: 'fixed' means that the child width will be defined only by its own contents.
-        stackSize: 'spread' means that the child width will be defined by its own contents but if there is extra space it will filled with blank
-        space instead of stacking one child next to the oher one.
+        In the following examples the use of spaceFillers is more clear:
 
-        The 'stackPadding' is an integer defining a number of pixels to leave blank at the left and right of each child. It defaults to 0.
+        1- No fillers. The label occupies it's own size at the beginning of the stack
 
-        Each child can also define a 'stackAlign' property to define whether that child should be stacked from the left of the right of the
-        horizontalStack:
+          this.horizontalStack( function(component) {
+            this.label({
+              text: 'A label',
+            })              
+          })
 
-        	this.horizontalStack( function(component) {
-        		this.label({
-        			text: 'A label',
-        			viewAttributes: {
-        				stackAlign: 'end', // 'begining' or 'end',
-        			},
-        		})
-        	})
+        2- A filler before and another one after the label occupy the space left in the
+          stack, centering the label
 
+          this.horizontalStack( function(component) {
+            this.spaceFiller()
 
+            this.label({
+              text: 'A label',
+            })              
+
+            this.spaceFiller()
+          })
+
+        3- A filler wraps the label making it to adquire the size of the spaceFiller
+          instead of its own size
+
+          this.horizontalStack( function(component) {
+            this.spaceFiller( function() {
+              this.label({
+                text: 'A label',
+              })                
+            })
+          })
+
+        4- A filler before the label makes the label to align to the right of the stacK
+
+          this.horizontalStack( function(component) {
+            this.spaceFiller()
+
+            this.label({
+              text: 'A label',
+            })              
+          })
 
         The first parameter of the method horizontalStack() can be an object with the dialog props:
 
         	this.container({ width: 100, height: 100, }, function() {
 
         	})
-
-
-
 
         The props can also be defined with the methods
 
@@ -943,7 +989,7 @@ class ContainerWidgetBuilder {
 
      Example({
         Description: `
-           Builds an horizontalStack with two labels.
+           Builds an horizontalStack with two labels spread along the stack width.
         `,
         Code: `
            const ContainerWidgetBuilder = require('sirens/src/skins/componentBuilder/ContainerWidgetBuilder')
@@ -953,22 +999,20 @@ class ContainerWidgetBuilder {
            builder.build( function() {
 
            	this.horizontalStack( function() {
+              this.spaceFiller()
+
            		this.label({
            			text: 'Label 2',
-           			viewAttributes: {
-           				stackSize: 'fixed',
-           				stackAlign: 'end',
-           			},
            		})
+
+              this.spaceFiller()
 
            		this.label({
            			text: 'Label 1',
-           			viewAttributes: {
-           				stackSize: 'filled',
-           			},
            		})
-           	})
 
+              this.spaceFiller()
+           	})
            })
 
            builder.getChildComponents()
@@ -1636,13 +1680,6 @@ class ContainerWidgetBuilder {
      ])
     */
     horizontalSeparator(props) {
-        const defaultProps = {
-            viewAttributes: {
-                stackSize: 'fixed',
-            }
-        }
-
-        props = Object.assign(defaultProps, props)
         props = Object.assign(props, { orientation: 'horizontal' })
 
         const separator = this.namespace().Separator.new(props)
@@ -1651,6 +1688,8 @@ class ContainerWidgetBuilder {
 
         this.childComponents.push(separator)
     }
+
+    
 
     /*
      Method(`

@@ -36,61 +36,28 @@ class StackView {
     }
 
     directChildViewAdd(childView) {
+        const padding = childView.getViewAttribute({ at: 'stackPadding', ifAbsent: 0 })
+        const expandsToFit = childView.getViewAttribute({ at: 'expandsToFit', ifAbsent: false })
+
         let expand = true
         let fill = true
-        const padding = childView.getViewAttribute({ at: 'stackPadding', ifAbsent: 0 })
 
-        const stackSize = childView.getViewAttribute({ at: 'stackSize', ifAbsent: 'filled' })
-
-        switch( stackSize ) {
-            case 'filled':
-                expand = true
-                fill = true
-                break
-
-            case 'fixed':
-                expand = false
-                fill = false
-                break
-
-            case 'spread':
-                expand = false
-                fill = true
-                break
-
-            default:
-                throw new Error(`Uknown stack size: '${stackSize}'`)
-                break
+        if( expandsToFit === true ) {
+            expand = true
+            fill = true
+        } else {
+            expand = false
+            fill = false
         }
-
-        const packAlign = childView.getViewAttribute({ at: 'stackAlign', ifAbsent: 'begining' })
 
         const childHandle = childView.getMainHandle()
 
-        switch( packAlign ) {
-            case 'begining':
-                this.box.packStart(
-                    childHandle,
-                    expand,
-                    fill,
-                    padding
-                )
-                break
-
-            case 'end':
-                this.box.packEnd(
-                    childHandle,
-                    expand,
-                    fill,
-                    padding
-                )
-                break
-
-            default:
-                throw new Error(`Uknown stack aligment: '${packAlign}'`)
-                break
-        }
-
+        this.box.packStart(
+            childHandle,
+            expand,
+            fill,
+            padding
+        )
 
         this.box.showAll()
     }

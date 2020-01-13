@@ -2,7 +2,6 @@ const Classification = require('../../../O').Classification
 const Component = require('../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../skins/gtk-views/constants/GtkIcons')
 const Resource = require('../../objects/Resource')
 
 class PlaygroundBrowserToolBar {
@@ -19,21 +18,17 @@ class PlaygroundBrowserToolBar {
     renderWith(componentsRenderer) {
         const flow = this.getModel()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render(function (component) {
 
             this.toolBar( function() {
 
-                this.styles({
-                    viewAttributes: {
-                        stackSize: 'fixed',
-                    }
-                })
-
                 this.button({
                     label: 'Open file...',
                     image: {
-                        iconName: GtkIcons.open,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.open,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Opens a file.',
                     action: component.getProps().openFile,
@@ -43,8 +38,8 @@ class PlaygroundBrowserToolBar {
                 this.button({
                     label: 'Open file in new window...',
                     image: {
-                        iconName: GtkIcons.add,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.add,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Opens a file in a new window.',
                     action: component.getProps().openFileInNewWindow,
@@ -56,8 +51,8 @@ class PlaygroundBrowserToolBar {
                 this.button({
                     label: 'Save file',
                     image: {
-                        iconName: GtkIcons.save,
-                        size: GtkIcons.size._24x24,
+                        iconName: icon.save,
+                        size: icon.size._24x24,
                     },
                     tooltip: 'Saves the opened file.',
                     action: component.getProps().saveFile,

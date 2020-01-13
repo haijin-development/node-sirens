@@ -23,7 +23,7 @@ class MethodCallConstraintsValidatorProtocol {
     		'public', 'evaluating'
  		])
 	*/
-	evaluateParametersValidations() {}
+	evaluateParametersValidationsOn({ methodCallInfo: methodCallInfo }) {}
 }
 
 module.exports = Protocol.define(MethodCallConstraintsValidatorProtocol)

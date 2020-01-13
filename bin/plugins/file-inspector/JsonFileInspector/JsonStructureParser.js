@@ -1,4 +1,3 @@
-const splitLines = require('split-lines')
 const Classification = require('../../../../src/O').Classification
 const ObjectWithNamespace = require('../../../../src/O').ObjectWithNamespace
 const JsonContent = require('./JsonContent')
@@ -10,35 +9,48 @@ class JsonStructureParser {
         this.assumes = [ObjectWithNamespace]
     }
 
+    /*
+        Method(`
+            Returns true if the sourceFile is a .json file.
+
+            This is quick check before starting the actual parsing of the file to know
+            if it is a valid .json file since starting the parsing of a file can be
+            an expensive operation.
+        `)
+    */
+    handlesFileTypeOf({ sourceFile: sourceFile }) {
+        const fileExtension = sourceFile.getFileNameExtension()
+
+        return '.json' === fileExtension
+    }
+
     /// Parsing
 
+    /*
+        Method(`
+            Returns the parsed contents of the given sourceFile.
+
+            If the file is not a valid .json file or if there are errors during the
+            file parsing returns null, meaning that the given sourceFile is not
+            parsable by this parser.
+        `)
+    */
     parse({ sourceFile: sourceFile }) {
-        const fileContents = sourceFile.getFileContents()
+        if( ! this.handlesFileTypeOf({ sourceFile: sourceFile }) ) { return null }
 
-        const allLines = splitLines(fileContents)
+        const fileContents = sourceFile.readFileContents()
 
-        const lastLine = allLines[ allLines.length -1 ]
+        const file = this.namespace().FileObject.new()
 
-        const startLine = 1
-        const startColumn = 0
-        const endLine = allLines.length
-        const endColumn = lastLine.length
+        file.setFileLocation({
+            sourceFile: sourceFile,
+            startPos: 0,
+            endPos: 'eof',
+        })
 
         const jsonContent = this.createJsonContent({
             sourceFile: sourceFile,
-            startLine: 1,
-            startColumn: 0,
-            endLine: allLines.length,
-            endColumn: lastLine.length,
             fileContents: fileContents,
-        }) 
-
-        const file = this.createFileObject({
-            sourceFile: sourceFile,
-            startLine: 1,
-            startColumn: 0,
-            endLine: allLines.length,
-            endColumn: lastLine.length,
         }) 
 
         file.addChildObject(jsonContent)
@@ -48,50 +60,23 @@ class JsonStructureParser {
 
     createJsonContent({
         sourceFile: sourceFile,
-        startLine: startLine,
-        startColumn: startColumn,
-        endLine: endLine,
-        endColumn: endColumn,
         fileContents: fileContents,
     }) {
+        const jsonObject = JSON.parse(fileContents)
+
         const jsonContent = JsonContent.new()
 
         jsonContent.setNamespace( this.namespace() )
 
         jsonContent.setFileLocation({
             sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
-        })
-
-        const jsonObject = JSON.parse(fileContents)
+            startPos: 0,
+            endPos: 'eof',
+       })
 
         jsonContent.setJsonObject({ jsonObject: jsonObject })
 
         return jsonContent
-    }
-
-
-    createFileObject({
-        sourceFile: sourceFile,
-        startLine: startLine,
-        startColumn: startColumn,
-        endLine: endLine,
-        endColumn: endColumn,
-    }) {
-        const file = this.namespace().FileObject.new()
-
-        file.setFileLocation({
-            sourceFile: sourceFile,
-            startLine: startLine,
-            startColumn: startColumn,
-            endLine: endLine,
-            endColumn: endColumn,
-        })
-
-        return file
     }
 }
 

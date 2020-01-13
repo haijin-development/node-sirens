@@ -2,8 +2,6 @@ const Classification = require('../../../../O').Classification
 const Component = require('../../../../skins/components/Component')
 const ComponentProtocol_Implementation = require('../../../../skins/protocols/ComponentProtocol_Implementation')
 
-const GtkIcons = require('../../../../skins/gtk-views/constants/GtkIcons')
-
 class MethodUnformattedCommentComponent {
     /// Definition
 
@@ -28,43 +26,43 @@ class MethodUnformattedCommentComponent {
 
         const isInEditionMode = flow.isInEditionMode()
 
+        const icon = this.namespace().viewsNamespace().icons
+
         componentsRenderer.render(function (component) {
 
             this.verticalStack({ width: 600, }, function() {
 
                 this.horizontalStack( function() {
-                    this.styles({
-                        viewAttributes: { stackSize: 'fixed' },
-                    })
-
-                    this.label({ viewAttributes: { stackSize: 'filled' } })
+                    this.spaceFiller()
 
                     this.label({
                         text: methodSignature,
                         css: [ 'title-1', ],
                         editable: false,
-                        viewAttributes: { stackSize: 'fixed' },
                     })
 
-                    this.label({ viewAttributes: { stackSize: 'filled' } })
+                    this.spaceFiller()
 
                     if( isInEditionMode ) {
                         this.textButton({
                             image: {
-                                iconName: GtkIcons.edit,
-                                size: GtkIcons.size._16x16,
+                                iconName: icon.edit,
+                                size: icon.size._16x16,
                             },
-                            viewAttributes: { stackSize: 'fixed' },
                             onClicked: () => {
-                                flow.editMethodUnformattedComment({ parentWindow: this.getProps().window })
+                                flow.editMethodUnformattedComment({
+                                    parentWindow: component.getProps().window
+                                })
                             },
                         })
                     }
 
                 })
 
-                this.text({
-                    text: methodUnformattedComment,
+                this.spaceFiller( function() {
+                    this.text({
+                        text: methodUnformattedComment,
+                    })
                 })
 
             })

@@ -13,7 +13,7 @@ I will continue to look for alternatives better suited for me to continue with t
 **2020-12 update**
 
 A yet not fully stable new project related to what Sirens was can be found in this [project](https://bitbucket.org/haijin-development/pm/src/development/)
-The name's temporary. It runs in plain JS, no other binaries that node and a browser are required
+The name's temporary. It runs in plain JS, no other binaries than node and a browser are required
 
 # Sirens
 

@@ -1,15 +1,19 @@
 # Note
 
-This project is discontinued for technical reasons and I will not update it nor maintain it any more. I won't delete the repository in case somebody can take something useful from it.
+This project is discontinued for technical reasons, and I will not update it nor maintain it any more. I won't delete the repository in case somebody can take something useful from it
 
-The intention was to have a set of development utilities to make the experience of writing programs pleasant and fun but the technology of my choice was not the right one for that matter.
+The intention was to have a set of development utilities to make the experience of writing programs pleasant and fun, but the technology of my choice was not the right one for that matter
 
-Gtk+ proved to be too low level, too complex, too error prone and too bound to its Python implementation to be a good choice for me.
+Gtk+ proved to be too low level, too complex, too error prone and too bound to its Python implementation to be a good choice for me
 
-I don't want to just write programs. I also want to write them in a clean object oriented way and to have a pleasant experience while I do and with Gtk+ that simply was not the case.
+I don't want to just write programs. I also want to write them in a clean object oriented way and to have a pleasant experience while I do and with Gtk+ that simply was not the case
 
-I will continue to look for alternatives better suited for me to continue with these developments.
+I will continue to look for alternatives better suited for me to continue with these developments
 
+**2020-12 update**
+
+A yet not fully stable new project related to what Sirens was can be found in this [project](https://bitbucket.org/haijin-development/pm/src/development/)
+The name's temporary. It runs in plain JS, no other binaries that node and a browser are required
 
 # Sirens
 
